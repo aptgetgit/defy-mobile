@@ -7,6 +7,12 @@ targets:
         generate_for:
           - lib/**.dart
 
+      # GoRouter Builder configuration
+      go_router_builder:
+        enabled: true
+        generate_for:
+          - lib/**.dart
+
       # JSON Serializable configuration
       json_serializable:json_serializable:
         enabled: true

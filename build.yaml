@@ -1,0 +1,44 @@
+targets:
+  $default:
+    builders:
+      # Riverpod configuration
+      riverpod_generator:
+        enabled: true
+        generate_for:
+          - lib/**.dart
+
+      # JSON Serializable configuration
+      json_serializable:json_serializable:
+        enabled: true
+        generate_for:
+          - lib/**.dart
+        options:
+          any_map: false
+          checked: false
+          create_factory: true
+          create_to_json: true
+          disallow_unrecognized_keys: false
+          explicit_to_json: false
+          field_rename: snake
+          generic_argument_factories: false
+          ignore_unannotated: false
+          include_if_null: true
+
+      # Freezed configuration
+      freezed:freezed:
+        enabled: true
+        generate_for:
+          - lib/**.freezed.dart
+          - lib/**.dart
+          - test/**.dart
+        options:
+          copy_with: true
+          equal: true
+          to_string: true
+
+      # Source Gen combining builder configuration
+      source_gen:combining_builder:
+        options:
+          build_extensions:
+            '^lib/{{dir}}/{{file}}.dart': 'lib/{{dir}}/generated/{{file}}.g.dart'
+            '^test/{{dir}}/{{file}}.dart': 'test/{{dir}}/generated/{{file}}.g.dart'

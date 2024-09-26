@@ -36,7 +36,7 @@ extension $SplashRouteExtension on SplashRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'f4d684700f739137516c4536e3cad47136cd3abf';
+String _$routerHash() => r'60fed1d1dbe92d6c98b56898ded863665c52b48c';
 
 /// See also [router].
 @ProviderFor(router)

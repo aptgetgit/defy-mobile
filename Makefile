@@ -2,12 +2,13 @@
 FLUTTER = flutter
 DART = dart
 BUILD_RUNNER = $(DART) run build_runner
+FLUTTER_LAUNCHER_ICONS = $(DART) run flutter_launcher_icons
 
 # Phony targets
-.PHONY: all clean generate build_apk build_ios
+.PHONY: all clean generate build_apk build_ios run dependencies upgrade icons
 
 # Default target
-all: generate build_apk
+all: icons generate build_apk
 
 # Clean the project
 clean:
@@ -45,3 +46,8 @@ dependencies:
 upgrade:
 	@echo "Upgrading dependencies..."
 	@$(FLUTTER) pub upgrade
+
+# Generate launcher icons
+icons:
+	@echo "Generating launcher icons..."
+	@$(FLUTTER_LAUNCHER_ICONS)

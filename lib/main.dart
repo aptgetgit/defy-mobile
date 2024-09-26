@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:defy/app.dart';
+import 'package:defy/core/logging/app_logger.dart';
+import 'package:defy/core/logging/riverpod_observer.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void logError(String message, dynamic error, StackTrace? stackTrace) {
@@ -15,15 +18,26 @@ void logError(String message, dynamic error, StackTrace? stackTrace) {
 }
 
 Future<void> main() async {
+  // Initialize the AppLogger
+  AppLogger.init(
+    logLevel: Level.debug,
+    useColors: true,
+    printEmojis: true,
+    dateTimeFormatter: DateTimeFormat.onlyTimeAndSinceStart,
+  );
+
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
+    // Set up Flutter error handling
     FlutterError.onError = (FlutterErrorDetails details) {
-      logError('Flutter error', details.exception, details.stack);
+      AppLogger.error('Flutter error',
+          error: details.exception, stackTrace: details.stack);
     };
 
+    // Set up platform dispatcher error handling
     PlatformDispatcher.instance.onError = (error, stack) {
-      logError('Platform error', error, stack);
+      AppLogger.error('Platform error', error: error, stackTrace: stack);
       return true;
     };
 
@@ -35,7 +49,22 @@ Future<void> main() async {
             .overrideWithValue(sharedPreferences),
       ],
       observers: [
-        _ProviderLogger(),
+        ProviderLogger(
+            logAdditions: true,
+            logDisposals: true,
+            logErrors: true,
+            logUpdates: true,
+            logOnlySignificantUpdates: true,
+            maxCollectionLogLength: 5,
+            updateFrequencyThreshold: Duration(milliseconds: 500),
+            logger: (String message) {
+              // Use AppLogger here
+              if (message.startsWith('Provider Error:')) {
+                AppLogger.error(message);
+              } else {
+                AppLogger.debug(message);
+              }
+            }),
       ],
     );
 
@@ -46,29 +75,7 @@ Future<void> main() async {
       ),
     );
   }, (error, stackTrace) {
-    logError('Uncaught asynchronous error', error, stackTrace);
+    AppLogger.fatal('Uncaught asynchronous error',
+        error: error, stackTrace: stackTrace);
   });
-}
-
-class _ProviderLogger extends ProviderObserver {
-  @override
-  void didUpdateProvider(
-    ProviderBase provider,
-    Object? previousValue,
-    Object? newValue,
-    ProviderContainer container,
-  ) {
-    debugPrint('''
-{
-  "provider": "${provider.name ?? provider.runtimeType}",
-  "newValue": "$newValue"
-}''');
-  }
-
-  @override
-  void providerDidFail(ProviderBase provider, Object error,
-      StackTrace stackTrace, ProviderContainer container) {
-    logError('Provider ${provider.name ?? provider.runtimeType} failed', error,
-        stackTrace);
-  }
 }

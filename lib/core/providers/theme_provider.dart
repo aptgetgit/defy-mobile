@@ -6,7 +6,7 @@ part 'generated/theme_provider.g.dart';
 
 @riverpod
 class ThemeNotifier extends _$ThemeNotifier {
-  static const _themeKey = 'appTheme';
+  static const _themeKey = 'APP_THEME';
 
   @override
   ThemeMode build() {

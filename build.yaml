@@ -1,7 +1,11 @@
 targets:
   $default:
     builders:
-      # Flutter Gen configuration
+      # Envied Builder configuration
+      envied_generator|envied:
+        enabled: true
+
+      # Flutter Gen Builder configuration
       flutter_gen_runner:
         enabled: true
 

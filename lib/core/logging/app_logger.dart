@@ -15,12 +15,12 @@ class AppLogger {
     _logger = Logger(
       level: logLevel,
       printer: PrettyPrinter(
-        methodCount: 2,
+        methodCount: 0,
         errorMethodCount: 8,
         lineLength: 120,
         colors: useColors,
         printEmojis: printEmojis,
-        noBoxingByDefault: true,
+        noBoxingByDefault: false,
         dateTimeFormat: dateTimeFormatter
       ),
       output: ConsoleOutput(),
@@ -37,24 +37,39 @@ class AppLogger {
   }) {
     if (!_initialized) init();
 
-    _logger.log(level, message, error: error, stackTrace: stackTrace);
+    String fullMessage = message.toString();
+
+    if (error != null) {
+      fullMessage += '\nError: $error';
+      if (stackTrace != null) {
+        fullMessage += '\nStack trace:\n${_formatStackTrace(stackTrace)}';
+      }
+    } else if (stackTrace != null && (level == Level.error || level == Level.fatal)) {
+      fullMessage += '\nStack trace:\n${_formatStackTrace(stackTrace)}';
+    }
+
+    _logger.log(level, fullMessage);
+  }
+
+  static String _formatStackTrace(StackTrace stackTrace) {
+    return stackTrace.toString().split('\n').take(8).join('\n');
   }
 
   static void trace(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-      log(Level.trace, message, error: error, stackTrace: stackTrace);
+    log(Level.trace, message, error: error, stackTrace: stackTrace);
 
   static void debug(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-      log(Level.debug, message, error: error, stackTrace: stackTrace);
+    log(Level.debug, message, error: error, stackTrace: stackTrace);
 
   static void info(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-      log(Level.info, message, error: error, stackTrace: stackTrace);
+    log(Level.info, message, error: error, stackTrace: stackTrace);
 
   static void warning(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-      log(Level.warning, message, error: error, stackTrace: stackTrace);
+    log(Level.warning, message, error: error, stackTrace: stackTrace);
 
   static void error(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-      log(Level.error, message, error: error, stackTrace: stackTrace);
+    log(Level.error, message, error: error, stackTrace: stackTrace);
 
   static void fatal(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-      log(Level.fatal, message, error: error, stackTrace: stackTrace);
+    log(Level.fatal, message, error: error, stackTrace: stackTrace);
 }

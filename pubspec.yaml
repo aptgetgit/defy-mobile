@@ -58,9 +58,14 @@ dev_dependencies:
   custom_lint: ^0.6.7
   riverpod_lint: ^2.3.13
   go_router_builder: ^2.7.1
+  flutter_gen_runner: ^5.7.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+# Flutter Gen Config
+flutter_gen:
+  output: lib/config
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -75,6 +80,7 @@ flutter:
     - assets/images/
     - assets/videos/
     - assets/animations/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

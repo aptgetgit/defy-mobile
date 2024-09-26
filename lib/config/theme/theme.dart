@@ -1,10 +1,11 @@
+import 'package:defy/config/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 import 'colors.dart';
 
 class AppTheme {
   static String get _primaryFont =>
-      Platform.isIOS ? 'SFCompactRounded' : 'Nunito';
+      Platform.isIOS ? FontFamily.sFCompactRounded : FontFamily.nunito;
   static ThemeData get lightTheme => _buildTheme(isDark: false);
   static ThemeData get darkTheme => _buildTheme(isDark: true);
 

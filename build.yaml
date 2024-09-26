@@ -1,6 +1,10 @@
 targets:
   $default:
     builders:
+      # Flutter Gen configuration
+      flutter_gen_runner:
+        enabled: true
+
       # Riverpod configuration
       riverpod_generator:
         enabled: true

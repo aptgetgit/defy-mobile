@@ -1,21 +1,20 @@
 import 'dart:async';
+import 'package:credential_manager/credential_manager.dart';
 import 'package:defy/app.dart';
+import 'package:defy/config/env.dart';
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/logging/riverpod_observer.dart';
+import 'package:defy/core/providers/dio_provider.dart';
+import 'package:defy/core/providers/ory_kratos_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
+import 'package:defy/core/providers/secure_storage_provider.dart';
+import 'package:defy/core/providers/credential_manager_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-void logError(String message, dynamic error, StackTrace? stackTrace) {
-  debugPrint('ERROR: $message');
-  debugPrint('Error details: $error');
-  if (stackTrace != null) {
-    debugPrint('Stack trace:\n$stackTrace');
-  }
-}
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<void> main() async {
   // Initialize the AppLogger
@@ -41,32 +40,63 @@ Future<void> main() async {
       return true;
     };
 
+    final overrides = <Override>[];
+
     final sharedPreferences = await SharedPreferences.getInstance();
 
+    // Initialize FlutterSecureStorage
+    final secureStorage = FlutterSecureStorage(
+      aOptions: AndroidOptions(
+        encryptedSharedPreferences: true,
+        preferencesKeyPrefix: 'id.avex.defy.securestorage',
+        resetOnError: true,
+      ),
+      iOptions: IOSOptions(
+        accessibility: KeychainAccessibility.first_unlock,
+        synchronizable: false,
+      ),
+    );
+    if (Platform.isAndroid) {
+      final credentialManager = CredentialManager();
+      await credentialManager.init(
+          preferImmediatelyAvailableCredentials: true,
+          googleClientId: Env.googleWebApplicationClientId);
+      overrides.add(
+        credentialManagerInitializerProvider.overrideWithValue(
+          credentialManager,
+        ),
+      );
+    }
+
+    overrides.addAll([
+      sharedPreferencesInitializerProvider.overrideWithValue(sharedPreferences),
+      secureStorageInitializerProvider.overrideWithValue(secureStorage),
+    ]);
+
     final container = ProviderContainer(
-      overrides: [
-        sharedPreferencesInitializerProvider
-            .overrideWithValue(sharedPreferences),
-      ],
+      overrides: overrides,
       observers: [
         ProviderLogger(
-            logAdditions: true,
-            logDisposals: true,
-            logErrors: true,
-            logUpdates: true,
-            logOnlySignificantUpdates: true,
-            maxCollectionLogLength: 5,
-            updateFrequencyThreshold: Duration(milliseconds: 500),
-            logger: (String message) {
-              // Use AppLogger here
-              if (message.startsWith('Provider Error:')) {
-                AppLogger.error(message);
-              } else {
-                AppLogger.debug(message);
-              }
-            }),
+          logAdditions: true,
+          logDisposals: true,
+          logErrors: true,
+          logUpdates: true,
+          logOnlySignificantUpdates: true,
+          maxCollectionLogLength: 5,
+          updateFrequencyThreshold: Duration(milliseconds: 500),
+          logger: (String message) {
+            if (message.startsWith('Provider Error:')) {
+              AppLogger.error(message);
+            } else {
+              AppLogger.debug(message);
+            }
+          },
+        ),
       ],
     );
+    container.read(dioInitializerProvider(Env.apiBaseUrl));
+    container.read(dioInitializerProvider(Env.oryKratosEndpoint));
+    container.read(oryKratosClientInitializerProvider);
 
     runApp(
       UncontrolledProviderScope(

@@ -31,6 +31,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  ory_kratos_client:
+    path: packages/ory-sdk/clients/kratos/dart
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +47,14 @@ dependencies:
   dio: ^5.7.0
   logger: ^2.4.0
   envied: ^0.5.4+1
+  flutter_animate: ^4.5.0
+  phosphor_flutter: ^2.1.0
+  gap: ^3.0.1
+  flutter_secure_storage: ^9.2.2
+  crypto: ^3.0.5
+  freezed_annotation: ^2.4.4
+  credential_manager: ^1.0.4+1
+  isar: ^3.1.0+1
 
 dev_dependencies:
   flutter_test:

@@ -4,10 +4,14 @@ targets:
       # Envied Builder configuration
       envied_generator|envied:
         enabled: true
+        generate_for:
+          - lib/**.dart
 
       # Flutter Gen Builder configuration
       flutter_gen_runner:
         enabled: true
+        generate_for:
+          - lib/**.dart
 
       # Riverpod configuration
       riverpod_generator:

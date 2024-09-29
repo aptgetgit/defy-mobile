@@ -21,5 +21,18 @@ class CredentialManagerService {
 
   CredentialManagerService(this._credentialManager);
 
-  CredentialManager get credentialManager => _credentialManager;
+  /// Saves Google credential
+  Future<GoogleIdTokenCredential?> saveGoogleCredential(
+      {bool useButtonFlow = false}) {
+    return _credentialManager.saveGoogleCredential(
+        useButtonFlow: useButtonFlow);
+  }
+
+  /// Logs out the user and clears credentials
+  Future<void> logout() {
+    return _credentialManager.logout();
+  }
+
+  /// Checks if the Credential Manager is supported on the current platform
+  bool get isSupportedPlatform => _credentialManager.isSupportedPlatform;
 }

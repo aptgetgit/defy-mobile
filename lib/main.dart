@@ -53,6 +53,7 @@ Future<void> main() async {
       ),
       iOptions: IOSOptions(
         accessibility: KeychainAccessibility.first_unlock,
+        accountName: 'id.avex.defy.keychain',
         synchronizable: false,
       ),
     );

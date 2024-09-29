@@ -53,6 +53,7 @@ targets:
           copy_with: true
           equal: true
           to_string: true
+          from_json: true
 
       # Source Gen combining builder configuration
       source_gen:combining_builder:
@@ -60,3 +61,10 @@ targets:
           build_extensions:
             '^lib/{{dir}}/{{file}}.dart': 'lib/{{dir}}/generated/{{file}}.g.dart'
             '^test/{{dir}}/{{file}}.dart': 'test/{{dir}}/generated/{{file}}.g.dart'
+      
+      # Freezed builder configuration
+      freezed:
+        options:
+          build_extensions:
+            '^lib/{{dir}}/{{file}}.dart': 'lib/{{dir}}/generated/{{file}}.freezed.dart'
+            '^test/{{dir}}/{{file}}.dart': 'test/{{dir}}/generated/{{file}}.freezed.dart'

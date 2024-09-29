@@ -55,6 +55,9 @@ dependencies:
   freezed_annotation: ^2.4.4
   credential_manager: ^1.0.4+1
   isar: ^3.1.0+1
+  json_annotation: ^4.9.0
+  built_value: ^8.9.2
+  one_of: ^1.5.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +77,8 @@ dev_dependencies:
   go_router_builder: ^2.7.1
   flutter_gen_runner: ^5.7.0
   envied_generator: ^0.5.4+1
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -49,8 +49,8 @@ class KratosUpdateNativeLoginFlowOptions with _$KratosUpdateNativeLoginFlowOptio
 }
 
 abstract class KratosDataSource {
-  Future<RegistrationFlow> createNativeRegistrationFlow(KratosCreateNativeRegistrationFlowOptions options);
-  Future<LoginFlow> createNativeLoginFlow(KratosCreateNativeLoginFlowOptions options);
+  Future<RegistrationFlow?> createNativeRegistrationFlow(KratosCreateNativeRegistrationFlowOptions options);
+  Future<LoginFlow?> createNativeLoginFlow(KratosCreateNativeLoginFlowOptions options);
   Future<Session?> getCurrentSession(String sessionToken);
   Future<SuccessfulNativeLogin?> updateNativeLoginFlow(KratosUpdateNativeLoginFlowOptions options);
   Future<SuccessfulNativeRegistration?> updateNativeRegistrationFlow(KratosUpdateNativeRegistrationFlowOptions options);
@@ -78,21 +78,24 @@ class KratosDataSourceImpl implements KratosDataSource {
   }
 
   @override
-  Future<RegistrationFlow> createNativeRegistrationFlow(KratosCreateNativeRegistrationFlowOptions options) async {
+  Future<RegistrationFlow?> createNativeRegistrationFlow(KratosCreateNativeRegistrationFlowOptions options) async {
     final response = await options.when(
       withCode: () => _frontendApi.createNativeRegistrationFlow(),
       withOIDC: () => _frontendApi.createNativeRegistrationFlow(),
     );
-    return response.data!;
+    if (response.data == null) {
+      throw StateError('Failed to create native login flow');
+    }
+    return response.data;
   }
 
   @override
-  Future<LoginFlow> createNativeLoginFlow(KratosCreateNativeLoginFlowOptions options) async {
+  Future<LoginFlow?> createNativeLoginFlow(KratosCreateNativeLoginFlowOptions options) async {
     final response = await options.when(
       withCode: () => _frontendApi.createNativeLoginFlow(),
       withOIDC: () => _frontendApi.createNativeLoginFlow(),
     );
-    return response.data!;
+    return response.data;
   }
 
   @override

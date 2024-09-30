@@ -25,8 +25,9 @@ enum AssuranceLevel {
 @freezed
 class SessionEntity with _$SessionEntity {
   factory SessionEntity({
+    required bool active,
     required IdentityEntity identity,
-    required String id,  // Changed from 'session' to 'sessionId'
+    required String id,
     required DateTime issuedAt,
     required DateTime expiresAt,
     required DateTime authenticatedAt,
@@ -36,7 +37,7 @@ class SessionEntity with _$SessionEntity {
   SessionEntity._();
 
   factory SessionEntity.fromJson(Map<String, dynamic> json) => _$SessionEntityFromJson(json);
-
+  bool get isActive => active;
   bool get isExpired => DateTime.now().isAfter(expiresAt);
 }
 

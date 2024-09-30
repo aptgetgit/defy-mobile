@@ -8,6 +8,7 @@ part of '../session_entity.dart';
 
 _$SessionEntityImpl _$$SessionEntityImplFromJson(Map<String, dynamic> json) =>
     _$SessionEntityImpl(
+      active: json['active'] as bool,
       identity:
           IdentityEntity.fromJson(json['identity'] as Map<String, dynamic>),
       id: json['id'] as String,
@@ -20,6 +21,7 @@ _$SessionEntityImpl _$$SessionEntityImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$SessionEntityImplToJson(_$SessionEntityImpl instance) =>
     <String, dynamic>{
+      'active': instance.active,
       'identity': instance.identity,
       'id': instance.id,
       'issued_at': instance.issuedAt.toIso8601String(),

@@ -1,76 +1,89 @@
+import 'package:credential_manager/credential_manager.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../entities/session_entity.dart';
 
 part 'generated/authentication_repository.freezed.dart';
 
 @freezed
-class InitiateSignUpOptions with _$InitiateSignUpOptions {
-  const factory InitiateSignUpOptions.withEmailCode({
+class InitiateRegistrationOptions with _$InitiateRegistrationOptions {
+  const factory InitiateRegistrationOptions.withEmailCode({
     required String email,
     required String username,
     required String name,
-  }) = InitiateSignUpOptionsWithEmailCode;
+  }) = InitiateRegistrationOptionsWithEmailCode;
 
-  const factory InitiateSignUpOptions.withOIDC({
+  const factory InitiateRegistrationOptions.withOIDC({
     required String username,
     required String name,
-  }) = InitiateSignUpOptionsWithOIDC;
+  }) = InitiateRegistrationOptionsWithOIDC;
 }
 
 @freezed
-class CompleteSignUpOptions with _$CompleteSignUpOptions {
-  const factory CompleteSignUpOptions.withEmailCode({
+class CompleteRegistrationOptions with _$CompleteRegistrationOptions {
+  const factory CompleteRegistrationOptions.withEmailCode({
     required String flowId,
     required String username,
     required String name,
     required String email,
     required String code,
-  }) = CompleteSignUpOptionsWithEmailCode;
+  }) = CompleteRegistrationOptionsWithEmailCode;
 
-  const factory CompleteSignUpOptions.withOIDC({
+  const factory CompleteRegistrationOptions.withOIDC({
     required String flowId,
     required String username,
     required String name,
     required String email,
     required String provider,
     required String idToken,
-  }) = CompleteSignUpOptionsWithOIDC;
+  }) = CompleteRegistrationOptionsWithOIDC;
 }
 
 @freezed
-class InitiateSignInOptions with _$InitiateSignInOptions {
-  const factory InitiateSignInOptions.withEmailCode({
+class InitiateLoginOptions with _$InitiateLoginOptions {
+  const factory InitiateLoginOptions.withEmailCode({
     required String email,
-  }) = InitiateSignInOptionsWithEmailCode;
+  }) = InitiateLoginOptionsWithEmailCode;
 
-  const factory InitiateSignInOptions.withOIDC() = InitiateSignInOptionsWithOIDC;
+  const factory InitiateLoginOptions.withOIDC() = InitiateLoginOptionsWithOIDC;
 }
 
 @freezed
-class CompleteSignInOptions with _$CompleteSignInOptions {
-  const factory CompleteSignInOptions.withEmailCode({
+class CompleteLoginOptions with _$CompleteLoginOptions {
+  const factory CompleteLoginOptions.withEmailCode({
     required String flowId,
     required String identifier,
     required String code,
-  }) = CompleteSignInOptionsWithEmailCode;
+  }) = CompleteLoginOptionsWithEmailCode;
 
-  const factory CompleteSignInOptions.withOIDC({
+  const factory CompleteLoginOptions.withOIDC({
     required String flowId,
     required String provider,
     required String idToken,
-  }) = CompleteSignInOptionsWithOIDC;
+  }) = CompleteLoginOptionsWithOIDC;
 }
 
 abstract class AuthenticationRepository {
-  Future<String> initiateSignUp(InitiateSignUpOptions options);
-  Future<String> initiateSignIn(InitiateSignInOptions options);
-  Future<SessionEntity> completeSignUp(CompleteSignUpOptions options);
-  Future<SessionEntity> completeSignIn(CompleteSignInOptions options);
-  Future<void> signOut(String identityId);
+  Future<GoogleIdTokenCredential> signInWithGoogle();
+
+  Future<String> initiateRegistration(InitiateRegistrationOptions options);
+  Future<String> initiateLogin(InitiateLoginOptions options);
+  Future<SessionEntity> completeRegistration(
+      CompleteRegistrationOptions options);
+  Future<SessionEntity> completeLogin(CompleteLoginOptions options);
+  Future<void> logout(String identityId);
+
   Future<List<IdentityEntity>> getLoggedInIdentities();
   Future<String> getSessionToken(String identityId);
   Future<void> saveSessionToken(String identityId, String token);
   Future<void> deleteSessionToken(String identityId);
+
+  Future<SessionEntity> getSessionDetails(String identityId);
+  Future<void> saveSessionDetails(SessionEntity session);
+  Future<void> deleteSessionDetails(String identityId);
+
   Future<void> setActiveIdentity(String identityId);
+  Future<void> deleteActiveIdentity();
   String? getActiveIdentity();
+
+  Future<SessionEntity> getCurrentSession(String sessionToken);
 }

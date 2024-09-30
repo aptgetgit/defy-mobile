@@ -20,9 +20,9 @@ SessionEntity _$SessionEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SessionEntity {
+  bool get active => throw _privateConstructorUsedError;
   IdentityEntity get identity => throw _privateConstructorUsedError;
-  String get id =>
-      throw _privateConstructorUsedError; // Changed from 'session' to 'sessionId'
+  String get id => throw _privateConstructorUsedError;
   DateTime get issuedAt => throw _privateConstructorUsedError;
   DateTime get expiresAt => throw _privateConstructorUsedError;
   DateTime get authenticatedAt => throw _privateConstructorUsedError;
@@ -46,7 +46,8 @@ abstract class $SessionEntityCopyWith<$Res> {
       _$SessionEntityCopyWithImpl<$Res, SessionEntity>;
   @useResult
   $Res call(
-      {IdentityEntity identity,
+      {bool active,
+      IdentityEntity identity,
       String id,
       DateTime issuedAt,
       DateTime expiresAt,
@@ -71,6 +72,7 @@ class _$SessionEntityCopyWithImpl<$Res, $Val extends SessionEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? active = null,
     Object? identity = null,
     Object? id = null,
     Object? issuedAt = null,
@@ -79,6 +81,10 @@ class _$SessionEntityCopyWithImpl<$Res, $Val extends SessionEntity>
     Object? authenticatorAssuranceLevel = null,
   }) {
     return _then(_value.copyWith(
+      active: null == active
+          ? _value.active
+          : active // ignore: cast_nullable_to_non_nullable
+              as bool,
       identity: null == identity
           ? _value.identity
           : identity // ignore: cast_nullable_to_non_nullable
@@ -126,7 +132,8 @@ abstract class _$$SessionEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {IdentityEntity identity,
+      {bool active,
+      IdentityEntity identity,
       String id,
       DateTime issuedAt,
       DateTime expiresAt,
@@ -150,6 +157,7 @@ class __$$SessionEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? active = null,
     Object? identity = null,
     Object? id = null,
     Object? issuedAt = null,
@@ -158,6 +166,10 @@ class __$$SessionEntityImplCopyWithImpl<$Res>
     Object? authenticatorAssuranceLevel = null,
   }) {
     return _then(_$SessionEntityImpl(
+      active: null == active
+          ? _value.active
+          : active // ignore: cast_nullable_to_non_nullable
+              as bool,
       identity: null == identity
           ? _value.identity
           : identity // ignore: cast_nullable_to_non_nullable
@@ -190,7 +202,8 @@ class __$$SessionEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SessionEntityImpl extends _SessionEntity {
   _$SessionEntityImpl(
-      {required this.identity,
+      {required this.active,
+      required this.identity,
       required this.id,
       required this.issuedAt,
       required this.expiresAt,
@@ -202,10 +215,11 @@ class _$SessionEntityImpl extends _SessionEntity {
       _$$SessionEntityImplFromJson(json);
 
   @override
+  final bool active;
+  @override
   final IdentityEntity identity;
   @override
   final String id;
-// Changed from 'session' to 'sessionId'
   @override
   final DateTime issuedAt;
   @override
@@ -217,7 +231,7 @@ class _$SessionEntityImpl extends _SessionEntity {
 
   @override
   String toString() {
-    return 'SessionEntity(identity: $identity, id: $id, issuedAt: $issuedAt, expiresAt: $expiresAt, authenticatedAt: $authenticatedAt, authenticatorAssuranceLevel: $authenticatorAssuranceLevel)';
+    return 'SessionEntity(active: $active, identity: $identity, id: $id, issuedAt: $issuedAt, expiresAt: $expiresAt, authenticatedAt: $authenticatedAt, authenticatorAssuranceLevel: $authenticatorAssuranceLevel)';
   }
 
   @override
@@ -225,6 +239,7 @@ class _$SessionEntityImpl extends _SessionEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SessionEntityImpl &&
+            (identical(other.active, active) || other.active == active) &&
             (identical(other.identity, identity) ||
                 other.identity == identity) &&
             (identical(other.id, id) || other.id == id) &&
@@ -242,7 +257,7 @@ class _$SessionEntityImpl extends _SessionEntity {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, identity, id, issuedAt,
+  int get hashCode => Object.hash(runtimeType, active, identity, id, issuedAt,
       expiresAt, authenticatedAt, authenticatorAssuranceLevel);
 
   /// Create a copy of SessionEntity
@@ -263,7 +278,8 @@ class _$SessionEntityImpl extends _SessionEntity {
 
 abstract class _SessionEntity extends SessionEntity {
   factory _SessionEntity(
-          {required final IdentityEntity identity,
+          {required final bool active,
+          required final IdentityEntity identity,
           required final String id,
           required final DateTime issuedAt,
           required final DateTime expiresAt,
@@ -276,9 +292,11 @@ abstract class _SessionEntity extends SessionEntity {
       _$SessionEntityImpl.fromJson;
 
   @override
+  bool get active;
+  @override
   IdentityEntity get identity;
   @override
-  String get id; // Changed from 'session' to 'sessionId'
+  String get id;
   @override
   DateTime get issuedAt;
   @override

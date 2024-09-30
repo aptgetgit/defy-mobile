@@ -15,8 +15,20 @@ class $AssetsIconsGen {
   /// File path: assets/icons/app-icon.png
   AssetGenImage get appIcon => const AssetGenImage('assets/icons/app-icon.png');
 
+  /// File path: assets/icons/app-logo-dark.png
+  AssetGenImage get appLogoDark =>
+      const AssetGenImage('assets/icons/app-logo-dark.png');
+
+  /// File path: assets/icons/app-logo-light.png
+  AssetGenImage get appLogoLight =>
+      const AssetGenImage('assets/icons/app-logo-light.png');
+
+  /// File path: assets/icons/google.png
+  AssetGenImage get google => const AssetGenImage('assets/icons/google.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [appIcon];
+  List<AssetGenImage> get values =>
+      [appIcon, appLogoDark, appLogoLight, google];
 }
 
 class Assets {

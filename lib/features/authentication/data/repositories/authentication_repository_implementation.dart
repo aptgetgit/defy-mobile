@@ -24,14 +24,25 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final KratosDataSource _kratosClient;
   final CredentialManagerService _credentialManager;
   final SecureStorageService _secureStorage;
-  final SharedPreferencesService _sharedPref;
+  final SharedPreferencesService _sharedPreferences;
 
   AuthenticationRepositoryImpl(this._kratosClient, this._credentialManager,
-      this._secureStorage, this._sharedPref);
+      this._secureStorage, this._sharedPreferences);
 
+  @override
+  Future<SessionEntity> getCurrentSession(String sessionToken) async {
+    final session = await _kratosClient.getCurrentSession(sessionToken);
+    if (session == null) {
+      throw StateError('Failed to get current session');
+    }
+    return _mapToSessionEntity(session);
+  }
+
+  @override
   Future<GoogleIdTokenCredential> signInWithGoogle() async {
     if (!_credentialManager.isSupportedPlatform) {
-      throw UnsupportedError('Google Sign-In is not supported on this platform');
+      throw UnsupportedError(
+          'Google Sign-In is not supported on this platform');
     }
     final credential = await _credentialManager.saveGoogleCredential();
     if (credential == null) {
@@ -41,53 +52,53 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<String> initiateSignUp(InitiateSignUpOptions options) async {
+  Future<String> initiateRegistration(
+      InitiateRegistrationOptions options) async {
     return options.when(
-      withEmailCode: (email, username, name) => _initiateSignUpWithEmail(email),
-      withOIDC: (username, name) => _initiateSignUpWithOIDC(),
+      withEmailCode: (email, username, name) =>
+          _initiateRegistrationWithEmail(email),
+      withOIDC: (username, name) => _initiateRegistrationWithOIDC(),
     );
   }
 
   @override
-  Future<String> initiateSignIn(InitiateSignInOptions options) async {
+  Future<String> initiateLogin(InitiateLoginOptions options) async {
     return options.when(
       withEmailCode: (email) async {
-        final flowId = await _initiateSignInWithEmail();
-        await _requestCodeForSignInWithEmail(flowId, email);
+        final flowId = await _initiateLoginWithEmail();
+        await _requestCodeForLoginWithEmail(flowId, email);
         return flowId;
       },
-      withOIDC: () => _initiateSignInWithOIDC(),
+      withOIDC: () => _initiateLoginWithOIDC(),
     );
   }
 
   @override
-  Future<SessionEntity> completeSignUp(CompleteSignUpOptions options) async {
+  Future<SessionEntity> completeRegistration(
+      CompleteRegistrationOptions options) async {
     return options.when(
-      withEmailCode: (flowId, username, name, email, code) => 
-          _completeSignUpWithEmail(flowId, username, name, email, code),
-      withOIDC: (flowId, username, name, email, provider, idToken) => 
-          _completeSignUpWithOIDC(flowId, username, name, email, provider, idToken),
+      withEmailCode: (flowId, username, name, email, code) =>
+          _completeRegistrationWithEmail(flowId, username, name, email, code),
+      withOIDC: (flowId, username, name, email, provider, idToken) =>
+          _completeRegistrationWithOIDC(
+              flowId, username, name, email, provider, idToken),
     );
   }
 
   @override
-  Future<SessionEntity> completeSignIn(CompleteSignInOptions options) async {
+  Future<SessionEntity> completeLogin(CompleteLoginOptions options) async {
     return options.when(
-      withEmailCode: (flowId, identifier, code) => 
-          _completeSignInWithEmail(flowId, identifier, code),
-      withOIDC: (flowId, provider, idToken) => 
-          _completeSignInWithOIDC(flowId, provider, idToken),
+      withEmailCode: (flowId, identifier, code) =>
+          _completeLoginWithEmail(flowId, identifier, code),
+      withOIDC: (flowId, provider, idToken) =>
+          _completeLoginWithOIDC(flowId, provider, idToken),
     );
   }
 
   @override
-  Future<void> signOut(String identityId) async {
-    final activeIdentity = _getActiveIdentity();
+  Future<void> logout(String identityId) async {
     await _deleteSessionToken(identityId);
     await _deleteSessionDetails(identityId);
-    if (activeIdentity == identityId) {
-      await _deleteActiveIdentity();
-    }
   }
 
   @override
@@ -110,8 +121,32 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
+  Future<SessionEntity> getSessionDetails(String identityId) async {
+    final sessionDetails = _getSessionDetails(identityId);
+    if (sessionDetails == null) {
+      throw StateError('Session details not found');
+    }
+    return sessionDetails;
+  }
+
+  @override
+  Future<void> saveSessionDetails(SessionEntity session) async {
+    await _saveSessionDetails(session);
+  }
+
+  @override
+  Future<void> deleteSessionDetails(String identityId) async {
+    await _deleteSessionDetails(identityId);
+  }
+
+  @override
   Future<void> setActiveIdentity(String identityId) async {
     await _setActiveIdentity(identityId);
+  }
+
+  @override
+  Future<void> deleteActiveIdentity() async {
+    await _deleteActiveIdentity();
   }
 
   @override
@@ -119,13 +154,17 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return _getActiveIdentity();
   }
 
-  Future<String> _initiateSignUpWithEmail(String email) async {
+  Future<String> _initiateRegistrationWithEmail(String email) async {
     final flow = await _kratosClient.createNativeRegistrationFlow(
         KratosCreateNativeRegistrationFlowOptions.withCode());
+    if (flow == null) {
+      throw StateError('Failed to create registration flow');
+    }
     return flow.id;
   }
 
-  Future<void> _requestCodeForSignInWithEmail(String flowId, String email) async {
+  Future<void> _requestCodeForLoginWithEmail(
+      String flowId, String email) async {
     await _kratosClient
         .updateNativeLoginFlow(KratosUpdateNativeLoginFlowOptions.withCode(
       flowId: flowId,
@@ -133,98 +172,103 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     ));
   }
 
-  Future<String> _initiateSignUpWithOIDC() async {
+  Future<String> _initiateRegistrationWithOIDC() async {
     final flow = await _kratosClient.createNativeRegistrationFlow(
         KratosCreateNativeRegistrationFlowOptions.withOIDC());
+    if (flow == null) {
+      throw StateError('Failed to create registration flow');
+    }
     return flow.id;
   }
 
-  Future<String> _initiateSignInWithEmail() async {
+  Future<String> _initiateLoginWithEmail() async {
     final flow = await _kratosClient
         .createNativeLoginFlow(KratosCreateNativeLoginFlowOptions.withCode());
+    if (flow == null) {
+      throw StateError('Failed to create login flow');
+    }
     return flow.id;
   }
 
-  Future<String> _initiateSignInWithOIDC() async {
+  Future<String> _initiateLoginWithOIDC() async {
     final flow = await _kratosClient
         .createNativeLoginFlow(KratosCreateNativeLoginFlowOptions.withOIDC());
+    if (flow == null) {
+      throw StateError('Failed to create login flow');
+    }
     return flow.id;
   }
 
-  Future<SessionEntity> _completeSignUpWithEmail(
-      String flowId, String username, String name, String email, String code) async {
-    final traits = JsonObject({
-      "email": email,
-      "username": username,
-      "name": name
-    });
+  Future<SessionEntity> _completeRegistrationWithEmail(String flowId,
+      String username, String name, String email, String code) async {
+    final traits =
+        JsonObject({"email": email, "username": username, "name": name});
     final response = await _kratosClient.updateNativeRegistrationFlow(
       KratosUpdateNativeRegistrationFlowOptions.withCode(
           flowId: flowId, traits: traits, code: code),
     );
-    if (response == null || response.session == null || response.sessionToken == null) {
+    if (response == null ||
+        response.session == null ||
+        response.sessionToken == null) {
       throw StateError('Invalid response from registration flow');
     }
     final sessionEntity = _mapToSessionEntity(response.session!);
     await _saveSessionToken(sessionEntity.identity.id, response.sessionToken!);
-    await _saveSessionDetails(sessionEntity.identity.id, sessionEntity);
+    await _saveSessionDetails(sessionEntity);
     return sessionEntity;
   }
 
-  Future<SessionEntity> _completeSignUpWithOIDC(
-      String flowId, String username, String name, String email, String provider, String idToken) async {
-    final traits = JsonObject({
-      "email": email,
-      "username": username,
-      "name": name
-    });
+  Future<SessionEntity> _completeRegistrationWithOIDC(
+      String flowId,
+      String username,
+      String name,
+      String email,
+      String provider,
+      String idToken) async {
+    final traits =
+        JsonObject({"email": email, "username": username, "name": name});
     final response = await _kratosClient.updateNativeRegistrationFlow(
       KratosUpdateNativeRegistrationFlowOptions.withOIDC(
-          flowId: flowId,
-          traits: traits,
-          provider: provider,
-          idToken: idToken),
+          flowId: flowId, traits: traits, provider: provider, idToken: idToken),
     );
-    if (response == null || response.session == null || response.sessionToken == null) {
+    if (response == null ||
+        response.session == null ||
+        response.sessionToken == null) {
       throw StateError('Invalid response from registration flow');
     }
     final sessionEntity = _mapToSessionEntity(response.session!);
     await _saveSessionToken(sessionEntity.identity.id, response.sessionToken!);
-    await _saveSessionDetails(sessionEntity.identity.id, sessionEntity);
+    await _saveSessionDetails(sessionEntity);
     return sessionEntity;
   }
 
-  Future<SessionEntity> _completeSignInWithEmail(
+  Future<SessionEntity> _completeLoginWithEmail(
       String flowId, String identifier, String code) async {
     final response = await _kratosClient.updateNativeLoginFlow(
       KratosUpdateNativeLoginFlowOptions.withCode(
-          flowId: flowId,
-          identifier: identifier,
-          code: code),
+          flowId: flowId, identifier: identifier, code: code),
     );
     if (response == null || response.sessionToken == null) {
       throw StateError('Invalid response from login flow');
     }
     final sessionEntity = _mapToSessionEntity(response.session);
     await _saveSessionToken(sessionEntity.identity.id, response.sessionToken!);
-    await _saveSessionDetails(sessionEntity.identity.id, sessionEntity);
+    await _saveSessionDetails(sessionEntity);
     return sessionEntity;
   }
 
-  Future<SessionEntity> _completeSignInWithOIDC(
+  Future<SessionEntity> _completeLoginWithOIDC(
       String flowId, String provider, String idToken) async {
     final response = await _kratosClient.updateNativeLoginFlow(
       KratosUpdateNativeLoginFlowOptions.withOIDC(
-          flowId: flowId,
-          provider: provider,
-          idToken: idToken),
+          flowId: flowId, provider: provider, idToken: idToken),
     );
     if (response == null || response.sessionToken == null) {
       throw StateError('Invalid response from login flow');
     }
     final sessionEntity = _mapToSessionEntity(response.session);
     await _saveSessionToken(sessionEntity.identity.id, response.sessionToken!);
-    await _saveSessionDetails(sessionEntity.identity.id, sessionEntity);
+    await _saveSessionDetails(sessionEntity);
     return sessionEntity;
   }
 
@@ -241,20 +285,20 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   Future<void> _setActiveIdentity(String identityId) async {
-    await _sharedPref.set<String>(activeIdentityKey(), identityId);
+    await _sharedPreferences.set<String>(activeIdentityKey(), identityId);
   }
 
   String? _getActiveIdentity() {
-    return _sharedPref.get<String>(activeIdentityKey());
+    return _sharedPreferences.get<String>(activeIdentityKey());
   }
 
   Future<void> _deleteActiveIdentity() async {
-    await _sharedPref.remove(activeIdentityKey());
+    await _sharedPreferences.remove(activeIdentityKey());
   }
 
   @override
   Future<List<IdentityEntity>> getLoggedInIdentities() async {
-    final allKeys = _sharedPref.getKeys();
+    final allKeys = _sharedPreferences.getKeys();
     final sessionKeys = allKeys.where(
         (key) => key.startsWith(_prefix) && key.endsWith(':session:details'));
 
@@ -266,29 +310,29 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         final hasToken =
             await _secureStorage.containsKey(sessionTokenKey(identityId));
         final isExpired = sessionDetailsJson.isExpired;
-
-        if (hasToken && !isExpired) {
+        final isActive = sessionDetailsJson.isActive;
+        if (hasToken && !isExpired && isActive) {
           identities.add(IdentityEntity(
               id: sessionDetailsJson.identity.id,
               createdAt: sessionDetailsJson.identity.createdAt,
               updatedAt: sessionDetailsJson.identity.updatedAt));
         } else {
           await _deleteSessionDetails(identityId);
+          await _deleteSessionToken(identityId);
         }
       }
     }
     return identities;
   }
 
-  Future<void> _saveSessionDetails(
-      String identityId, SessionEntity session) async {
-    await _sharedPref.set<String>(
-        sessionDetailsKey(identityId), jsonEncode(session.toJson()));
+  Future<void> _saveSessionDetails(SessionEntity session) async {
+    await _sharedPreferences.set<String>(
+        sessionDetailsKey(session.identity.id), jsonEncode(session.toJson()));
   }
 
   SessionEntity? _getSessionDetails(String identityId) {
     final sessionDetails =
-        _sharedPref.get<String>(sessionDetailsKey(identityId));
+        _sharedPreferences.get<String>(sessionDetailsKey(identityId));
     if (sessionDetails != null) {
       Map<String, dynamic> sessionMap = jsonDecode(sessionDetails);
       return SessionEntity.fromJson(sessionMap);
@@ -297,7 +341,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   Future<void> _deleteSessionDetails(String identityId) async {
-    await _sharedPref.remove(sessionDetailsKey(identityId));
+    await _sharedPreferences.remove(sessionDetailsKey(identityId));
   }
 
   SessionEntity _mapToSessionEntity(Session session) {
@@ -306,15 +350,22 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     }
     return SessionEntity(
       id: session.id,
-      identity: IdentityEntity(
-          id: session.identity!.id,
-          createdAt: session.identity!.createdAt ?? DateTime.now(),
-          updatedAt: session.identity!.updatedAt ?? DateTime.now()),
+      active: session.active ?? false,
+      identity: _mapToIdentityEntity(session.identity!),
       authenticatedAt: session.authenticatedAt ?? DateTime.now(),
-      expiresAt: session.expiresAt ?? DateTime.now().add(const Duration(hours: 1)),
+      expiresAt:
+          session.expiresAt ?? DateTime.now().add(const Duration(hours: 1)),
       issuedAt: session.issuedAt ?? DateTime.now(),
       authenticatorAssuranceLevel: AssuranceLevel.fromString(
           session.authenticatorAssuranceLevel.toString()),
+    );
+  }
+
+  IdentityEntity _mapToIdentityEntity(Identity identity) {
+    return IdentityEntity(
+      id: identity.id,
+      createdAt: identity.createdAt ?? DateTime.now(),
+      updatedAt: identity.updatedAt ?? DateTime.now(),
     );
   }
 }

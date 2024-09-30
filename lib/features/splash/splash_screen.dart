@@ -78,6 +78,6 @@ class SplashScreen extends HookConsumerWidget {
     // } else {
     //   context.go('/onboarding'); // Go to OnboardingRoute
     // }
-    OnboardingRoute().push(context);
+    OnboardingRoute().pushReplacement(context);
   }
 }

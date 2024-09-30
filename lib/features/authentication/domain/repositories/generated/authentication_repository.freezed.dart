@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$InitiateSignUpOptions {
+mixin _$InitiateRegistrationOptions {
   String get username => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -41,53 +41,58 @@ mixin _$InitiateSignUpOptions {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(InitiateSignUpOptionsWithEmailCode value)
+    required TResult Function(InitiateRegistrationOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(InitiateSignUpOptionsWithOIDC value) withOIDC,
+    required TResult Function(InitiateRegistrationOptionsWithOIDC value)
+        withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(InitiateSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(InitiateSignUpOptionsWithOIDC value)? withOIDC,
+    TResult? Function(InitiateRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult? Function(InitiateRegistrationOptionsWithOIDC value)? withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(InitiateSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(InitiateSignUpOptionsWithOIDC value)? withOIDC,
+    TResult Function(InitiateRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult Function(InitiateRegistrationOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 
-  /// Create a copy of InitiateSignUpOptions
+  /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $InitiateSignUpOptionsCopyWith<InitiateSignUpOptions> get copyWith =>
-      throw _privateConstructorUsedError;
+  $InitiateRegistrationOptionsCopyWith<InitiateRegistrationOptions>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $InitiateSignUpOptionsCopyWith<$Res> {
-  factory $InitiateSignUpOptionsCopyWith(InitiateSignUpOptions value,
-          $Res Function(InitiateSignUpOptions) then) =
-      _$InitiateSignUpOptionsCopyWithImpl<$Res, InitiateSignUpOptions>;
+abstract class $InitiateRegistrationOptionsCopyWith<$Res> {
+  factory $InitiateRegistrationOptionsCopyWith(
+          InitiateRegistrationOptions value,
+          $Res Function(InitiateRegistrationOptions) then) =
+      _$InitiateRegistrationOptionsCopyWithImpl<$Res,
+          InitiateRegistrationOptions>;
   @useResult
   $Res call({String username, String name});
 }
 
 /// @nodoc
-class _$InitiateSignUpOptionsCopyWithImpl<$Res,
-        $Val extends InitiateSignUpOptions>
-    implements $InitiateSignUpOptionsCopyWith<$Res> {
-  _$InitiateSignUpOptionsCopyWithImpl(this._value, this._then);
+class _$InitiateRegistrationOptionsCopyWithImpl<$Res,
+        $Val extends InitiateRegistrationOptions>
+    implements $InitiateRegistrationOptionsCopyWith<$Res> {
+  _$InitiateRegistrationOptionsCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of InitiateSignUpOptions
+  /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -109,28 +114,28 @@ class _$InitiateSignUpOptionsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$InitiateSignUpOptionsWithEmailCodeImplCopyWith<$Res>
-    implements $InitiateSignUpOptionsCopyWith<$Res> {
-  factory _$$InitiateSignUpOptionsWithEmailCodeImplCopyWith(
-          _$InitiateSignUpOptionsWithEmailCodeImpl value,
-          $Res Function(_$InitiateSignUpOptionsWithEmailCodeImpl) then) =
-      __$$InitiateSignUpOptionsWithEmailCodeImplCopyWithImpl<$Res>;
+abstract class _$$InitiateRegistrationOptionsWithEmailCodeImplCopyWith<$Res>
+    implements $InitiateRegistrationOptionsCopyWith<$Res> {
+  factory _$$InitiateRegistrationOptionsWithEmailCodeImplCopyWith(
+          _$InitiateRegistrationOptionsWithEmailCodeImpl value,
+          $Res Function(_$InitiateRegistrationOptionsWithEmailCodeImpl) then) =
+      __$$InitiateRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String email, String username, String name});
 }
 
 /// @nodoc
-class __$$InitiateSignUpOptionsWithEmailCodeImplCopyWithImpl<$Res>
-    extends _$InitiateSignUpOptionsCopyWithImpl<$Res,
-        _$InitiateSignUpOptionsWithEmailCodeImpl>
-    implements _$$InitiateSignUpOptionsWithEmailCodeImplCopyWith<$Res> {
-  __$$InitiateSignUpOptionsWithEmailCodeImplCopyWithImpl(
-      _$InitiateSignUpOptionsWithEmailCodeImpl _value,
-      $Res Function(_$InitiateSignUpOptionsWithEmailCodeImpl) _then)
+class __$$InitiateRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>
+    extends _$InitiateRegistrationOptionsCopyWithImpl<$Res,
+        _$InitiateRegistrationOptionsWithEmailCodeImpl>
+    implements _$$InitiateRegistrationOptionsWithEmailCodeImplCopyWith<$Res> {
+  __$$InitiateRegistrationOptionsWithEmailCodeImplCopyWithImpl(
+      _$InitiateRegistrationOptionsWithEmailCodeImpl _value,
+      $Res Function(_$InitiateRegistrationOptionsWithEmailCodeImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of InitiateSignUpOptions
+  /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -139,7 +144,7 @@ class __$$InitiateSignUpOptionsWithEmailCodeImplCopyWithImpl<$Res>
     Object? username = null,
     Object? name = null,
   }) {
-    return _then(_$InitiateSignUpOptionsWithEmailCodeImpl(
+    return _then(_$InitiateRegistrationOptionsWithEmailCodeImpl(
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -158,9 +163,9 @@ class __$$InitiateSignUpOptionsWithEmailCodeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InitiateSignUpOptionsWithEmailCodeImpl
-    implements InitiateSignUpOptionsWithEmailCode {
-  const _$InitiateSignUpOptionsWithEmailCodeImpl(
+class _$InitiateRegistrationOptionsWithEmailCodeImpl
+    implements InitiateRegistrationOptionsWithEmailCode {
+  const _$InitiateRegistrationOptionsWithEmailCodeImpl(
       {required this.email, required this.username, required this.name});
 
   @override
@@ -172,14 +177,14 @@ class _$InitiateSignUpOptionsWithEmailCodeImpl
 
   @override
   String toString() {
-    return 'InitiateSignUpOptions.withEmailCode(email: $email, username: $username, name: $name)';
+    return 'InitiateRegistrationOptions.withEmailCode(email: $email, username: $username, name: $name)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$InitiateSignUpOptionsWithEmailCodeImpl &&
+            other is _$InitiateRegistrationOptionsWithEmailCodeImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.username, username) ||
                 other.username == username) &&
@@ -189,15 +194,16 @@ class _$InitiateSignUpOptionsWithEmailCodeImpl
   @override
   int get hashCode => Object.hash(runtimeType, email, username, name);
 
-  /// Create a copy of InitiateSignUpOptions
+  /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$InitiateSignUpOptionsWithEmailCodeImplCopyWith<
-          _$InitiateSignUpOptionsWithEmailCodeImpl>
-      get copyWith => __$$InitiateSignUpOptionsWithEmailCodeImplCopyWithImpl<
-          _$InitiateSignUpOptionsWithEmailCodeImpl>(this, _$identity);
+  _$$InitiateRegistrationOptionsWithEmailCodeImplCopyWith<
+          _$InitiateRegistrationOptionsWithEmailCodeImpl>
+      get copyWith =>
+          __$$InitiateRegistrationOptionsWithEmailCodeImplCopyWithImpl<
+              _$InitiateRegistrationOptionsWithEmailCodeImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -235,9 +241,10 @@ class _$InitiateSignUpOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(InitiateSignUpOptionsWithEmailCode value)
+    required TResult Function(InitiateRegistrationOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(InitiateSignUpOptionsWithOIDC value) withOIDC,
+    required TResult Function(InitiateRegistrationOptionsWithOIDC value)
+        withOIDC,
   }) {
     return withEmailCode(this);
   }
@@ -245,8 +252,9 @@ class _$InitiateSignUpOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(InitiateSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(InitiateSignUpOptionsWithOIDC value)? withOIDC,
+    TResult? Function(InitiateRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult? Function(InitiateRegistrationOptionsWithOIDC value)? withOIDC,
   }) {
     return withEmailCode?.call(this);
   }
@@ -254,8 +262,9 @@ class _$InitiateSignUpOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(InitiateSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(InitiateSignUpOptionsWithOIDC value)? withOIDC,
+    TResult Function(InitiateRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult Function(InitiateRegistrationOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withEmailCode != null) {
@@ -265,12 +274,13 @@ class _$InitiateSignUpOptionsWithEmailCodeImpl
   }
 }
 
-abstract class InitiateSignUpOptionsWithEmailCode
-    implements InitiateSignUpOptions {
-  const factory InitiateSignUpOptionsWithEmailCode(
-      {required final String email,
-      required final String username,
-      required final String name}) = _$InitiateSignUpOptionsWithEmailCodeImpl;
+abstract class InitiateRegistrationOptionsWithEmailCode
+    implements InitiateRegistrationOptions {
+  const factory InitiateRegistrationOptionsWithEmailCode(
+          {required final String email,
+          required final String username,
+          required final String name}) =
+      _$InitiateRegistrationOptionsWithEmailCodeImpl;
 
   String get email;
   @override
@@ -278,38 +288,38 @@ abstract class InitiateSignUpOptionsWithEmailCode
   @override
   String get name;
 
-  /// Create a copy of InitiateSignUpOptions
+  /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$InitiateSignUpOptionsWithEmailCodeImplCopyWith<
-          _$InitiateSignUpOptionsWithEmailCodeImpl>
+  _$$InitiateRegistrationOptionsWithEmailCodeImplCopyWith<
+          _$InitiateRegistrationOptionsWithEmailCodeImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$InitiateSignUpOptionsWithOIDCImplCopyWith<$Res>
-    implements $InitiateSignUpOptionsCopyWith<$Res> {
-  factory _$$InitiateSignUpOptionsWithOIDCImplCopyWith(
-          _$InitiateSignUpOptionsWithOIDCImpl value,
-          $Res Function(_$InitiateSignUpOptionsWithOIDCImpl) then) =
-      __$$InitiateSignUpOptionsWithOIDCImplCopyWithImpl<$Res>;
+abstract class _$$InitiateRegistrationOptionsWithOIDCImplCopyWith<$Res>
+    implements $InitiateRegistrationOptionsCopyWith<$Res> {
+  factory _$$InitiateRegistrationOptionsWithOIDCImplCopyWith(
+          _$InitiateRegistrationOptionsWithOIDCImpl value,
+          $Res Function(_$InitiateRegistrationOptionsWithOIDCImpl) then) =
+      __$$InitiateRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String username, String name});
 }
 
 /// @nodoc
-class __$$InitiateSignUpOptionsWithOIDCImplCopyWithImpl<$Res>
-    extends _$InitiateSignUpOptionsCopyWithImpl<$Res,
-        _$InitiateSignUpOptionsWithOIDCImpl>
-    implements _$$InitiateSignUpOptionsWithOIDCImplCopyWith<$Res> {
-  __$$InitiateSignUpOptionsWithOIDCImplCopyWithImpl(
-      _$InitiateSignUpOptionsWithOIDCImpl _value,
-      $Res Function(_$InitiateSignUpOptionsWithOIDCImpl) _then)
+class __$$InitiateRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>
+    extends _$InitiateRegistrationOptionsCopyWithImpl<$Res,
+        _$InitiateRegistrationOptionsWithOIDCImpl>
+    implements _$$InitiateRegistrationOptionsWithOIDCImplCopyWith<$Res> {
+  __$$InitiateRegistrationOptionsWithOIDCImplCopyWithImpl(
+      _$InitiateRegistrationOptionsWithOIDCImpl _value,
+      $Res Function(_$InitiateRegistrationOptionsWithOIDCImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of InitiateSignUpOptions
+  /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -317,7 +327,7 @@ class __$$InitiateSignUpOptionsWithOIDCImplCopyWithImpl<$Res>
     Object? username = null,
     Object? name = null,
   }) {
-    return _then(_$InitiateSignUpOptionsWithOIDCImpl(
+    return _then(_$InitiateRegistrationOptionsWithOIDCImpl(
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -332,9 +342,9 @@ class __$$InitiateSignUpOptionsWithOIDCImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InitiateSignUpOptionsWithOIDCImpl
-    implements InitiateSignUpOptionsWithOIDC {
-  const _$InitiateSignUpOptionsWithOIDCImpl(
+class _$InitiateRegistrationOptionsWithOIDCImpl
+    implements InitiateRegistrationOptionsWithOIDC {
+  const _$InitiateRegistrationOptionsWithOIDCImpl(
       {required this.username, required this.name});
 
   @override
@@ -344,14 +354,14 @@ class _$InitiateSignUpOptionsWithOIDCImpl
 
   @override
   String toString() {
-    return 'InitiateSignUpOptions.withOIDC(username: $username, name: $name)';
+    return 'InitiateRegistrationOptions.withOIDC(username: $username, name: $name)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$InitiateSignUpOptionsWithOIDCImpl &&
+            other is _$InitiateRegistrationOptionsWithOIDCImpl &&
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.name, name) || other.name == name));
@@ -360,15 +370,15 @@ class _$InitiateSignUpOptionsWithOIDCImpl
   @override
   int get hashCode => Object.hash(runtimeType, username, name);
 
-  /// Create a copy of InitiateSignUpOptions
+  /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$InitiateSignUpOptionsWithOIDCImplCopyWith<
-          _$InitiateSignUpOptionsWithOIDCImpl>
-      get copyWith => __$$InitiateSignUpOptionsWithOIDCImplCopyWithImpl<
-          _$InitiateSignUpOptionsWithOIDCImpl>(this, _$identity);
+  _$$InitiateRegistrationOptionsWithOIDCImplCopyWith<
+          _$InitiateRegistrationOptionsWithOIDCImpl>
+      get copyWith => __$$InitiateRegistrationOptionsWithOIDCImplCopyWithImpl<
+          _$InitiateRegistrationOptionsWithOIDCImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -406,9 +416,10 @@ class _$InitiateSignUpOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(InitiateSignUpOptionsWithEmailCode value)
+    required TResult Function(InitiateRegistrationOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(InitiateSignUpOptionsWithOIDC value) withOIDC,
+    required TResult Function(InitiateRegistrationOptionsWithOIDC value)
+        withOIDC,
   }) {
     return withOIDC(this);
   }
@@ -416,8 +427,9 @@ class _$InitiateSignUpOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(InitiateSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(InitiateSignUpOptionsWithOIDC value)? withOIDC,
+    TResult? Function(InitiateRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult? Function(InitiateRegistrationOptionsWithOIDC value)? withOIDC,
   }) {
     return withOIDC?.call(this);
   }
@@ -425,8 +437,9 @@ class _$InitiateSignUpOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(InitiateSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(InitiateSignUpOptionsWithOIDC value)? withOIDC,
+    TResult Function(InitiateRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult Function(InitiateRegistrationOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
@@ -436,27 +449,28 @@ class _$InitiateSignUpOptionsWithOIDCImpl
   }
 }
 
-abstract class InitiateSignUpOptionsWithOIDC implements InitiateSignUpOptions {
-  const factory InitiateSignUpOptionsWithOIDC(
+abstract class InitiateRegistrationOptionsWithOIDC
+    implements InitiateRegistrationOptions {
+  const factory InitiateRegistrationOptionsWithOIDC(
       {required final String username,
-      required final String name}) = _$InitiateSignUpOptionsWithOIDCImpl;
+      required final String name}) = _$InitiateRegistrationOptionsWithOIDCImpl;
 
   @override
   String get username;
   @override
   String get name;
 
-  /// Create a copy of InitiateSignUpOptions
+  /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$InitiateSignUpOptionsWithOIDCImplCopyWith<
-          _$InitiateSignUpOptionsWithOIDCImpl>
+  _$$InitiateRegistrationOptionsWithOIDCImplCopyWith<
+          _$InitiateRegistrationOptionsWithOIDCImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-mixin _$CompleteSignUpOptions {
+mixin _$CompleteRegistrationOptions {
   String get flowId => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
@@ -494,53 +508,58 @@ mixin _$CompleteSignUpOptions {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(CompleteSignUpOptionsWithEmailCode value)
+    required TResult Function(CompleteRegistrationOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(CompleteSignUpOptionsWithOIDC value) withOIDC,
+    required TResult Function(CompleteRegistrationOptionsWithOIDC value)
+        withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(CompleteSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(CompleteSignUpOptionsWithOIDC value)? withOIDC,
+    TResult? Function(CompleteRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult? Function(CompleteRegistrationOptionsWithOIDC value)? withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(CompleteSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(CompleteSignUpOptionsWithOIDC value)? withOIDC,
+    TResult Function(CompleteRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult Function(CompleteRegistrationOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 
-  /// Create a copy of CompleteSignUpOptions
+  /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CompleteSignUpOptionsCopyWith<CompleteSignUpOptions> get copyWith =>
-      throw _privateConstructorUsedError;
+  $CompleteRegistrationOptionsCopyWith<CompleteRegistrationOptions>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CompleteSignUpOptionsCopyWith<$Res> {
-  factory $CompleteSignUpOptionsCopyWith(CompleteSignUpOptions value,
-          $Res Function(CompleteSignUpOptions) then) =
-      _$CompleteSignUpOptionsCopyWithImpl<$Res, CompleteSignUpOptions>;
+abstract class $CompleteRegistrationOptionsCopyWith<$Res> {
+  factory $CompleteRegistrationOptionsCopyWith(
+          CompleteRegistrationOptions value,
+          $Res Function(CompleteRegistrationOptions) then) =
+      _$CompleteRegistrationOptionsCopyWithImpl<$Res,
+          CompleteRegistrationOptions>;
   @useResult
   $Res call({String flowId, String username, String name, String email});
 }
 
 /// @nodoc
-class _$CompleteSignUpOptionsCopyWithImpl<$Res,
-        $Val extends CompleteSignUpOptions>
-    implements $CompleteSignUpOptionsCopyWith<$Res> {
-  _$CompleteSignUpOptionsCopyWithImpl(this._value, this._then);
+class _$CompleteRegistrationOptionsCopyWithImpl<$Res,
+        $Val extends CompleteRegistrationOptions>
+    implements $CompleteRegistrationOptionsCopyWith<$Res> {
+  _$CompleteRegistrationOptionsCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CompleteSignUpOptions
+  /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -572,12 +591,12 @@ class _$CompleteSignUpOptionsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$CompleteSignUpOptionsWithEmailCodeImplCopyWith<$Res>
-    implements $CompleteSignUpOptionsCopyWith<$Res> {
-  factory _$$CompleteSignUpOptionsWithEmailCodeImplCopyWith(
-          _$CompleteSignUpOptionsWithEmailCodeImpl value,
-          $Res Function(_$CompleteSignUpOptionsWithEmailCodeImpl) then) =
-      __$$CompleteSignUpOptionsWithEmailCodeImplCopyWithImpl<$Res>;
+abstract class _$$CompleteRegistrationOptionsWithEmailCodeImplCopyWith<$Res>
+    implements $CompleteRegistrationOptionsCopyWith<$Res> {
+  factory _$$CompleteRegistrationOptionsWithEmailCodeImplCopyWith(
+          _$CompleteRegistrationOptionsWithEmailCodeImpl value,
+          $Res Function(_$CompleteRegistrationOptionsWithEmailCodeImpl) then) =
+      __$$CompleteRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -585,16 +604,16 @@ abstract class _$$CompleteSignUpOptionsWithEmailCodeImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CompleteSignUpOptionsWithEmailCodeImplCopyWithImpl<$Res>
-    extends _$CompleteSignUpOptionsCopyWithImpl<$Res,
-        _$CompleteSignUpOptionsWithEmailCodeImpl>
-    implements _$$CompleteSignUpOptionsWithEmailCodeImplCopyWith<$Res> {
-  __$$CompleteSignUpOptionsWithEmailCodeImplCopyWithImpl(
-      _$CompleteSignUpOptionsWithEmailCodeImpl _value,
-      $Res Function(_$CompleteSignUpOptionsWithEmailCodeImpl) _then)
+class __$$CompleteRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>
+    extends _$CompleteRegistrationOptionsCopyWithImpl<$Res,
+        _$CompleteRegistrationOptionsWithEmailCodeImpl>
+    implements _$$CompleteRegistrationOptionsWithEmailCodeImplCopyWith<$Res> {
+  __$$CompleteRegistrationOptionsWithEmailCodeImplCopyWithImpl(
+      _$CompleteRegistrationOptionsWithEmailCodeImpl _value,
+      $Res Function(_$CompleteRegistrationOptionsWithEmailCodeImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CompleteSignUpOptions
+  /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -605,7 +624,7 @@ class __$$CompleteSignUpOptionsWithEmailCodeImplCopyWithImpl<$Res>
     Object? email = null,
     Object? code = null,
   }) {
-    return _then(_$CompleteSignUpOptionsWithEmailCodeImpl(
+    return _then(_$CompleteRegistrationOptionsWithEmailCodeImpl(
       flowId: null == flowId
           ? _value.flowId
           : flowId // ignore: cast_nullable_to_non_nullable
@@ -632,9 +651,9 @@ class __$$CompleteSignUpOptionsWithEmailCodeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CompleteSignUpOptionsWithEmailCodeImpl
-    implements CompleteSignUpOptionsWithEmailCode {
-  const _$CompleteSignUpOptionsWithEmailCodeImpl(
+class _$CompleteRegistrationOptionsWithEmailCodeImpl
+    implements CompleteRegistrationOptionsWithEmailCode {
+  const _$CompleteRegistrationOptionsWithEmailCodeImpl(
       {required this.flowId,
       required this.username,
       required this.name,
@@ -654,14 +673,14 @@ class _$CompleteSignUpOptionsWithEmailCodeImpl
 
   @override
   String toString() {
-    return 'CompleteSignUpOptions.withEmailCode(flowId: $flowId, username: $username, name: $name, email: $email, code: $code)';
+    return 'CompleteRegistrationOptions.withEmailCode(flowId: $flowId, username: $username, name: $name, email: $email, code: $code)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CompleteSignUpOptionsWithEmailCodeImpl &&
+            other is _$CompleteRegistrationOptionsWithEmailCodeImpl &&
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.username, username) ||
                 other.username == username) &&
@@ -674,15 +693,16 @@ class _$CompleteSignUpOptionsWithEmailCodeImpl
   int get hashCode =>
       Object.hash(runtimeType, flowId, username, name, email, code);
 
-  /// Create a copy of CompleteSignUpOptions
+  /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CompleteSignUpOptionsWithEmailCodeImplCopyWith<
-          _$CompleteSignUpOptionsWithEmailCodeImpl>
-      get copyWith => __$$CompleteSignUpOptionsWithEmailCodeImplCopyWithImpl<
-          _$CompleteSignUpOptionsWithEmailCodeImpl>(this, _$identity);
+  _$$CompleteRegistrationOptionsWithEmailCodeImplCopyWith<
+          _$CompleteRegistrationOptionsWithEmailCodeImpl>
+      get copyWith =>
+          __$$CompleteRegistrationOptionsWithEmailCodeImplCopyWithImpl<
+              _$CompleteRegistrationOptionsWithEmailCodeImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -730,9 +750,10 @@ class _$CompleteSignUpOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(CompleteSignUpOptionsWithEmailCode value)
+    required TResult Function(CompleteRegistrationOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(CompleteSignUpOptionsWithOIDC value) withOIDC,
+    required TResult Function(CompleteRegistrationOptionsWithOIDC value)
+        withOIDC,
   }) {
     return withEmailCode(this);
   }
@@ -740,8 +761,9 @@ class _$CompleteSignUpOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(CompleteSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(CompleteSignUpOptionsWithOIDC value)? withOIDC,
+    TResult? Function(CompleteRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult? Function(CompleteRegistrationOptionsWithOIDC value)? withOIDC,
   }) {
     return withEmailCode?.call(this);
   }
@@ -749,8 +771,9 @@ class _$CompleteSignUpOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(CompleteSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(CompleteSignUpOptionsWithOIDC value)? withOIDC,
+    TResult Function(CompleteRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult Function(CompleteRegistrationOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withEmailCode != null) {
@@ -760,14 +783,15 @@ class _$CompleteSignUpOptionsWithEmailCodeImpl
   }
 }
 
-abstract class CompleteSignUpOptionsWithEmailCode
-    implements CompleteSignUpOptions {
-  const factory CompleteSignUpOptionsWithEmailCode(
-      {required final String flowId,
-      required final String username,
-      required final String name,
-      required final String email,
-      required final String code}) = _$CompleteSignUpOptionsWithEmailCodeImpl;
+abstract class CompleteRegistrationOptionsWithEmailCode
+    implements CompleteRegistrationOptions {
+  const factory CompleteRegistrationOptionsWithEmailCode(
+          {required final String flowId,
+          required final String username,
+          required final String name,
+          required final String email,
+          required final String code}) =
+      _$CompleteRegistrationOptionsWithEmailCodeImpl;
 
   @override
   String get flowId;
@@ -779,22 +803,22 @@ abstract class CompleteSignUpOptionsWithEmailCode
   String get email;
   String get code;
 
-  /// Create a copy of CompleteSignUpOptions
+  /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CompleteSignUpOptionsWithEmailCodeImplCopyWith<
-          _$CompleteSignUpOptionsWithEmailCodeImpl>
+  _$$CompleteRegistrationOptionsWithEmailCodeImplCopyWith<
+          _$CompleteRegistrationOptionsWithEmailCodeImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$CompleteSignUpOptionsWithOIDCImplCopyWith<$Res>
-    implements $CompleteSignUpOptionsCopyWith<$Res> {
-  factory _$$CompleteSignUpOptionsWithOIDCImplCopyWith(
-          _$CompleteSignUpOptionsWithOIDCImpl value,
-          $Res Function(_$CompleteSignUpOptionsWithOIDCImpl) then) =
-      __$$CompleteSignUpOptionsWithOIDCImplCopyWithImpl<$Res>;
+abstract class _$$CompleteRegistrationOptionsWithOIDCImplCopyWith<$Res>
+    implements $CompleteRegistrationOptionsCopyWith<$Res> {
+  factory _$$CompleteRegistrationOptionsWithOIDCImplCopyWith(
+          _$CompleteRegistrationOptionsWithOIDCImpl value,
+          $Res Function(_$CompleteRegistrationOptionsWithOIDCImpl) then) =
+      __$$CompleteRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -807,16 +831,16 @@ abstract class _$$CompleteSignUpOptionsWithOIDCImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CompleteSignUpOptionsWithOIDCImplCopyWithImpl<$Res>
-    extends _$CompleteSignUpOptionsCopyWithImpl<$Res,
-        _$CompleteSignUpOptionsWithOIDCImpl>
-    implements _$$CompleteSignUpOptionsWithOIDCImplCopyWith<$Res> {
-  __$$CompleteSignUpOptionsWithOIDCImplCopyWithImpl(
-      _$CompleteSignUpOptionsWithOIDCImpl _value,
-      $Res Function(_$CompleteSignUpOptionsWithOIDCImpl) _then)
+class __$$CompleteRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>
+    extends _$CompleteRegistrationOptionsCopyWithImpl<$Res,
+        _$CompleteRegistrationOptionsWithOIDCImpl>
+    implements _$$CompleteRegistrationOptionsWithOIDCImplCopyWith<$Res> {
+  __$$CompleteRegistrationOptionsWithOIDCImplCopyWithImpl(
+      _$CompleteRegistrationOptionsWithOIDCImpl _value,
+      $Res Function(_$CompleteRegistrationOptionsWithOIDCImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CompleteSignUpOptions
+  /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -828,7 +852,7 @@ class __$$CompleteSignUpOptionsWithOIDCImplCopyWithImpl<$Res>
     Object? provider = null,
     Object? idToken = null,
   }) {
-    return _then(_$CompleteSignUpOptionsWithOIDCImpl(
+    return _then(_$CompleteRegistrationOptionsWithOIDCImpl(
       flowId: null == flowId
           ? _value.flowId
           : flowId // ignore: cast_nullable_to_non_nullable
@@ -859,9 +883,9 @@ class __$$CompleteSignUpOptionsWithOIDCImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CompleteSignUpOptionsWithOIDCImpl
-    implements CompleteSignUpOptionsWithOIDC {
-  const _$CompleteSignUpOptionsWithOIDCImpl(
+class _$CompleteRegistrationOptionsWithOIDCImpl
+    implements CompleteRegistrationOptionsWithOIDC {
+  const _$CompleteRegistrationOptionsWithOIDCImpl(
       {required this.flowId,
       required this.username,
       required this.name,
@@ -884,14 +908,14 @@ class _$CompleteSignUpOptionsWithOIDCImpl
 
   @override
   String toString() {
-    return 'CompleteSignUpOptions.withOIDC(flowId: $flowId, username: $username, name: $name, email: $email, provider: $provider, idToken: $idToken)';
+    return 'CompleteRegistrationOptions.withOIDC(flowId: $flowId, username: $username, name: $name, email: $email, provider: $provider, idToken: $idToken)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CompleteSignUpOptionsWithOIDCImpl &&
+            other is _$CompleteRegistrationOptionsWithOIDCImpl &&
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.username, username) ||
                 other.username == username) &&
@@ -906,15 +930,15 @@ class _$CompleteSignUpOptionsWithOIDCImpl
   int get hashCode => Object.hash(
       runtimeType, flowId, username, name, email, provider, idToken);
 
-  /// Create a copy of CompleteSignUpOptions
+  /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CompleteSignUpOptionsWithOIDCImplCopyWith<
-          _$CompleteSignUpOptionsWithOIDCImpl>
-      get copyWith => __$$CompleteSignUpOptionsWithOIDCImplCopyWithImpl<
-          _$CompleteSignUpOptionsWithOIDCImpl>(this, _$identity);
+  _$$CompleteRegistrationOptionsWithOIDCImplCopyWith<
+          _$CompleteRegistrationOptionsWithOIDCImpl>
+      get copyWith => __$$CompleteRegistrationOptionsWithOIDCImplCopyWithImpl<
+          _$CompleteRegistrationOptionsWithOIDCImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -962,9 +986,10 @@ class _$CompleteSignUpOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(CompleteSignUpOptionsWithEmailCode value)
+    required TResult Function(CompleteRegistrationOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(CompleteSignUpOptionsWithOIDC value) withOIDC,
+    required TResult Function(CompleteRegistrationOptionsWithOIDC value)
+        withOIDC,
   }) {
     return withOIDC(this);
   }
@@ -972,8 +997,9 @@ class _$CompleteSignUpOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(CompleteSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(CompleteSignUpOptionsWithOIDC value)? withOIDC,
+    TResult? Function(CompleteRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult? Function(CompleteRegistrationOptionsWithOIDC value)? withOIDC,
   }) {
     return withOIDC?.call(this);
   }
@@ -981,8 +1007,9 @@ class _$CompleteSignUpOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(CompleteSignUpOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(CompleteSignUpOptionsWithOIDC value)? withOIDC,
+    TResult Function(CompleteRegistrationOptionsWithEmailCode value)?
+        withEmailCode,
+    TResult Function(CompleteRegistrationOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
@@ -992,14 +1019,16 @@ class _$CompleteSignUpOptionsWithOIDCImpl
   }
 }
 
-abstract class CompleteSignUpOptionsWithOIDC implements CompleteSignUpOptions {
-  const factory CompleteSignUpOptionsWithOIDC(
-      {required final String flowId,
-      required final String username,
-      required final String name,
-      required final String email,
-      required final String provider,
-      required final String idToken}) = _$CompleteSignUpOptionsWithOIDCImpl;
+abstract class CompleteRegistrationOptionsWithOIDC
+    implements CompleteRegistrationOptions {
+  const factory CompleteRegistrationOptionsWithOIDC(
+          {required final String flowId,
+          required final String username,
+          required final String name,
+          required final String email,
+          required final String provider,
+          required final String idToken}) =
+      _$CompleteRegistrationOptionsWithOIDCImpl;
 
   @override
   String get flowId;
@@ -1012,17 +1041,17 @@ abstract class CompleteSignUpOptionsWithOIDC implements CompleteSignUpOptions {
   String get provider;
   String get idToken;
 
-  /// Create a copy of CompleteSignUpOptions
+  /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CompleteSignUpOptionsWithOIDCImplCopyWith<
-          _$CompleteSignUpOptionsWithOIDCImpl>
+  _$$CompleteRegistrationOptionsWithOIDCImplCopyWith<
+          _$CompleteRegistrationOptionsWithOIDCImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-mixin _$InitiateSignInOptions {
+mixin _$InitiateLoginOptions {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email) withEmailCode,
@@ -1044,76 +1073,76 @@ mixin _$InitiateSignInOptions {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(InitiateSignInOptionsWithEmailCode value)
+    required TResult Function(InitiateLoginOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(InitiateSignInOptionsWithOIDC value) withOIDC,
+    required TResult Function(InitiateLoginOptionsWithOIDC value) withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(InitiateSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(InitiateSignInOptionsWithOIDC value)? withOIDC,
+    TResult? Function(InitiateLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult? Function(InitiateLoginOptionsWithOIDC value)? withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(InitiateSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(InitiateSignInOptionsWithOIDC value)? withOIDC,
+    TResult Function(InitiateLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult Function(InitiateLoginOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $InitiateSignInOptionsCopyWith<$Res> {
-  factory $InitiateSignInOptionsCopyWith(InitiateSignInOptions value,
-          $Res Function(InitiateSignInOptions) then) =
-      _$InitiateSignInOptionsCopyWithImpl<$Res, InitiateSignInOptions>;
+abstract class $InitiateLoginOptionsCopyWith<$Res> {
+  factory $InitiateLoginOptionsCopyWith(InitiateLoginOptions value,
+          $Res Function(InitiateLoginOptions) then) =
+      _$InitiateLoginOptionsCopyWithImpl<$Res, InitiateLoginOptions>;
 }
 
 /// @nodoc
-class _$InitiateSignInOptionsCopyWithImpl<$Res,
-        $Val extends InitiateSignInOptions>
-    implements $InitiateSignInOptionsCopyWith<$Res> {
-  _$InitiateSignInOptionsCopyWithImpl(this._value, this._then);
+class _$InitiateLoginOptionsCopyWithImpl<$Res,
+        $Val extends InitiateLoginOptions>
+    implements $InitiateLoginOptionsCopyWith<$Res> {
+  _$InitiateLoginOptionsCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of InitiateSignInOptions
+  /// Create a copy of InitiateLoginOptions
   /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$InitiateSignInOptionsWithEmailCodeImplCopyWith<$Res> {
-  factory _$$InitiateSignInOptionsWithEmailCodeImplCopyWith(
-          _$InitiateSignInOptionsWithEmailCodeImpl value,
-          $Res Function(_$InitiateSignInOptionsWithEmailCodeImpl) then) =
-      __$$InitiateSignInOptionsWithEmailCodeImplCopyWithImpl<$Res>;
+abstract class _$$InitiateLoginOptionsWithEmailCodeImplCopyWith<$Res> {
+  factory _$$InitiateLoginOptionsWithEmailCodeImplCopyWith(
+          _$InitiateLoginOptionsWithEmailCodeImpl value,
+          $Res Function(_$InitiateLoginOptionsWithEmailCodeImpl) then) =
+      __$$InitiateLoginOptionsWithEmailCodeImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String email});
 }
 
 /// @nodoc
-class __$$InitiateSignInOptionsWithEmailCodeImplCopyWithImpl<$Res>
-    extends _$InitiateSignInOptionsCopyWithImpl<$Res,
-        _$InitiateSignInOptionsWithEmailCodeImpl>
-    implements _$$InitiateSignInOptionsWithEmailCodeImplCopyWith<$Res> {
-  __$$InitiateSignInOptionsWithEmailCodeImplCopyWithImpl(
-      _$InitiateSignInOptionsWithEmailCodeImpl _value,
-      $Res Function(_$InitiateSignInOptionsWithEmailCodeImpl) _then)
+class __$$InitiateLoginOptionsWithEmailCodeImplCopyWithImpl<$Res>
+    extends _$InitiateLoginOptionsCopyWithImpl<$Res,
+        _$InitiateLoginOptionsWithEmailCodeImpl>
+    implements _$$InitiateLoginOptionsWithEmailCodeImplCopyWith<$Res> {
+  __$$InitiateLoginOptionsWithEmailCodeImplCopyWithImpl(
+      _$InitiateLoginOptionsWithEmailCodeImpl _value,
+      $Res Function(_$InitiateLoginOptionsWithEmailCodeImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of InitiateSignInOptions
+  /// Create a copy of InitiateLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? email = null,
   }) {
-    return _then(_$InitiateSignInOptionsWithEmailCodeImpl(
+    return _then(_$InitiateLoginOptionsWithEmailCodeImpl(
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -1124,38 +1153,38 @@ class __$$InitiateSignInOptionsWithEmailCodeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InitiateSignInOptionsWithEmailCodeImpl
-    implements InitiateSignInOptionsWithEmailCode {
-  const _$InitiateSignInOptionsWithEmailCodeImpl({required this.email});
+class _$InitiateLoginOptionsWithEmailCodeImpl
+    implements InitiateLoginOptionsWithEmailCode {
+  const _$InitiateLoginOptionsWithEmailCodeImpl({required this.email});
 
   @override
   final String email;
 
   @override
   String toString() {
-    return 'InitiateSignInOptions.withEmailCode(email: $email)';
+    return 'InitiateLoginOptions.withEmailCode(email: $email)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$InitiateSignInOptionsWithEmailCodeImpl &&
+            other is _$InitiateLoginOptionsWithEmailCodeImpl &&
             (identical(other.email, email) || other.email == email));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, email);
 
-  /// Create a copy of InitiateSignInOptions
+  /// Create a copy of InitiateLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$InitiateSignInOptionsWithEmailCodeImplCopyWith<
-          _$InitiateSignInOptionsWithEmailCodeImpl>
-      get copyWith => __$$InitiateSignInOptionsWithEmailCodeImplCopyWithImpl<
-          _$InitiateSignInOptionsWithEmailCodeImpl>(this, _$identity);
+  _$$InitiateLoginOptionsWithEmailCodeImplCopyWith<
+          _$InitiateLoginOptionsWithEmailCodeImpl>
+      get copyWith => __$$InitiateLoginOptionsWithEmailCodeImplCopyWithImpl<
+          _$InitiateLoginOptionsWithEmailCodeImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1191,9 +1220,9 @@ class _$InitiateSignInOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(InitiateSignInOptionsWithEmailCode value)
+    required TResult Function(InitiateLoginOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(InitiateSignInOptionsWithOIDC value) withOIDC,
+    required TResult Function(InitiateLoginOptionsWithOIDC value) withOIDC,
   }) {
     return withEmailCode(this);
   }
@@ -1201,8 +1230,8 @@ class _$InitiateSignInOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(InitiateSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(InitiateSignInOptionsWithOIDC value)? withOIDC,
+    TResult? Function(InitiateLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult? Function(InitiateLoginOptionsWithOIDC value)? withOIDC,
   }) {
     return withEmailCode?.call(this);
   }
@@ -1210,8 +1239,8 @@ class _$InitiateSignInOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(InitiateSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(InitiateSignInOptionsWithOIDC value)? withOIDC,
+    TResult Function(InitiateLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult Function(InitiateLoginOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withEmailCode != null) {
@@ -1221,59 +1250,59 @@ class _$InitiateSignInOptionsWithEmailCodeImpl
   }
 }
 
-abstract class InitiateSignInOptionsWithEmailCode
-    implements InitiateSignInOptions {
-  const factory InitiateSignInOptionsWithEmailCode(
-      {required final String email}) = _$InitiateSignInOptionsWithEmailCodeImpl;
+abstract class InitiateLoginOptionsWithEmailCode
+    implements InitiateLoginOptions {
+  const factory InitiateLoginOptionsWithEmailCode(
+      {required final String email}) = _$InitiateLoginOptionsWithEmailCodeImpl;
 
   String get email;
 
-  /// Create a copy of InitiateSignInOptions
+  /// Create a copy of InitiateLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$InitiateSignInOptionsWithEmailCodeImplCopyWith<
-          _$InitiateSignInOptionsWithEmailCodeImpl>
+  _$$InitiateLoginOptionsWithEmailCodeImplCopyWith<
+          _$InitiateLoginOptionsWithEmailCodeImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$InitiateSignInOptionsWithOIDCImplCopyWith<$Res> {
-  factory _$$InitiateSignInOptionsWithOIDCImplCopyWith(
-          _$InitiateSignInOptionsWithOIDCImpl value,
-          $Res Function(_$InitiateSignInOptionsWithOIDCImpl) then) =
-      __$$InitiateSignInOptionsWithOIDCImplCopyWithImpl<$Res>;
+abstract class _$$InitiateLoginOptionsWithOIDCImplCopyWith<$Res> {
+  factory _$$InitiateLoginOptionsWithOIDCImplCopyWith(
+          _$InitiateLoginOptionsWithOIDCImpl value,
+          $Res Function(_$InitiateLoginOptionsWithOIDCImpl) then) =
+      __$$InitiateLoginOptionsWithOIDCImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$InitiateSignInOptionsWithOIDCImplCopyWithImpl<$Res>
-    extends _$InitiateSignInOptionsCopyWithImpl<$Res,
-        _$InitiateSignInOptionsWithOIDCImpl>
-    implements _$$InitiateSignInOptionsWithOIDCImplCopyWith<$Res> {
-  __$$InitiateSignInOptionsWithOIDCImplCopyWithImpl(
-      _$InitiateSignInOptionsWithOIDCImpl _value,
-      $Res Function(_$InitiateSignInOptionsWithOIDCImpl) _then)
+class __$$InitiateLoginOptionsWithOIDCImplCopyWithImpl<$Res>
+    extends _$InitiateLoginOptionsCopyWithImpl<$Res,
+        _$InitiateLoginOptionsWithOIDCImpl>
+    implements _$$InitiateLoginOptionsWithOIDCImplCopyWith<$Res> {
+  __$$InitiateLoginOptionsWithOIDCImplCopyWithImpl(
+      _$InitiateLoginOptionsWithOIDCImpl _value,
+      $Res Function(_$InitiateLoginOptionsWithOIDCImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of InitiateSignInOptions
+  /// Create a copy of InitiateLoginOptions
   /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$InitiateSignInOptionsWithOIDCImpl
-    implements InitiateSignInOptionsWithOIDC {
-  const _$InitiateSignInOptionsWithOIDCImpl();
+class _$InitiateLoginOptionsWithOIDCImpl
+    implements InitiateLoginOptionsWithOIDC {
+  const _$InitiateLoginOptionsWithOIDCImpl();
 
   @override
   String toString() {
-    return 'InitiateSignInOptions.withOIDC()';
+    return 'InitiateLoginOptions.withOIDC()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$InitiateSignInOptionsWithOIDCImpl);
+            other is _$InitiateLoginOptionsWithOIDCImpl);
   }
 
   @override
@@ -1313,9 +1342,9 @@ class _$InitiateSignInOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(InitiateSignInOptionsWithEmailCode value)
+    required TResult Function(InitiateLoginOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(InitiateSignInOptionsWithOIDC value) withOIDC,
+    required TResult Function(InitiateLoginOptionsWithOIDC value) withOIDC,
   }) {
     return withOIDC(this);
   }
@@ -1323,8 +1352,8 @@ class _$InitiateSignInOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(InitiateSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(InitiateSignInOptionsWithOIDC value)? withOIDC,
+    TResult? Function(InitiateLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult? Function(InitiateLoginOptionsWithOIDC value)? withOIDC,
   }) {
     return withOIDC?.call(this);
   }
@@ -1332,8 +1361,8 @@ class _$InitiateSignInOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(InitiateSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(InitiateSignInOptionsWithOIDC value)? withOIDC,
+    TResult Function(InitiateLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult Function(InitiateLoginOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
@@ -1343,13 +1372,13 @@ class _$InitiateSignInOptionsWithOIDCImpl
   }
 }
 
-abstract class InitiateSignInOptionsWithOIDC implements InitiateSignInOptions {
-  const factory InitiateSignInOptionsWithOIDC() =
-      _$InitiateSignInOptionsWithOIDCImpl;
+abstract class InitiateLoginOptionsWithOIDC implements InitiateLoginOptions {
+  const factory InitiateLoginOptionsWithOIDC() =
+      _$InitiateLoginOptionsWithOIDCImpl;
 }
 
 /// @nodoc
-mixin _$CompleteSignInOptions {
+mixin _$CompleteLoginOptions {
   String get flowId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -1376,53 +1405,53 @@ mixin _$CompleteSignInOptions {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(CompleteSignInOptionsWithEmailCode value)
+    required TResult Function(CompleteLoginOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(CompleteSignInOptionsWithOIDC value) withOIDC,
+    required TResult Function(CompleteLoginOptionsWithOIDC value) withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(CompleteSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(CompleteSignInOptionsWithOIDC value)? withOIDC,
+    TResult? Function(CompleteLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult? Function(CompleteLoginOptionsWithOIDC value)? withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(CompleteSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(CompleteSignInOptionsWithOIDC value)? withOIDC,
+    TResult Function(CompleteLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult Function(CompleteLoginOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 
-  /// Create a copy of CompleteSignInOptions
+  /// Create a copy of CompleteLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CompleteSignInOptionsCopyWith<CompleteSignInOptions> get copyWith =>
+  $CompleteLoginOptionsCopyWith<CompleteLoginOptions> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CompleteSignInOptionsCopyWith<$Res> {
-  factory $CompleteSignInOptionsCopyWith(CompleteSignInOptions value,
-          $Res Function(CompleteSignInOptions) then) =
-      _$CompleteSignInOptionsCopyWithImpl<$Res, CompleteSignInOptions>;
+abstract class $CompleteLoginOptionsCopyWith<$Res> {
+  factory $CompleteLoginOptionsCopyWith(CompleteLoginOptions value,
+          $Res Function(CompleteLoginOptions) then) =
+      _$CompleteLoginOptionsCopyWithImpl<$Res, CompleteLoginOptions>;
   @useResult
   $Res call({String flowId});
 }
 
 /// @nodoc
-class _$CompleteSignInOptionsCopyWithImpl<$Res,
-        $Val extends CompleteSignInOptions>
-    implements $CompleteSignInOptionsCopyWith<$Res> {
-  _$CompleteSignInOptionsCopyWithImpl(this._value, this._then);
+class _$CompleteLoginOptionsCopyWithImpl<$Res,
+        $Val extends CompleteLoginOptions>
+    implements $CompleteLoginOptionsCopyWith<$Res> {
+  _$CompleteLoginOptionsCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CompleteSignInOptions
+  /// Create a copy of CompleteLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -1439,28 +1468,28 @@ class _$CompleteSignInOptionsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$CompleteSignInOptionsWithEmailCodeImplCopyWith<$Res>
-    implements $CompleteSignInOptionsCopyWith<$Res> {
-  factory _$$CompleteSignInOptionsWithEmailCodeImplCopyWith(
-          _$CompleteSignInOptionsWithEmailCodeImpl value,
-          $Res Function(_$CompleteSignInOptionsWithEmailCodeImpl) then) =
-      __$$CompleteSignInOptionsWithEmailCodeImplCopyWithImpl<$Res>;
+abstract class _$$CompleteLoginOptionsWithEmailCodeImplCopyWith<$Res>
+    implements $CompleteLoginOptionsCopyWith<$Res> {
+  factory _$$CompleteLoginOptionsWithEmailCodeImplCopyWith(
+          _$CompleteLoginOptionsWithEmailCodeImpl value,
+          $Res Function(_$CompleteLoginOptionsWithEmailCodeImpl) then) =
+      __$$CompleteLoginOptionsWithEmailCodeImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String flowId, String identifier, String code});
 }
 
 /// @nodoc
-class __$$CompleteSignInOptionsWithEmailCodeImplCopyWithImpl<$Res>
-    extends _$CompleteSignInOptionsCopyWithImpl<$Res,
-        _$CompleteSignInOptionsWithEmailCodeImpl>
-    implements _$$CompleteSignInOptionsWithEmailCodeImplCopyWith<$Res> {
-  __$$CompleteSignInOptionsWithEmailCodeImplCopyWithImpl(
-      _$CompleteSignInOptionsWithEmailCodeImpl _value,
-      $Res Function(_$CompleteSignInOptionsWithEmailCodeImpl) _then)
+class __$$CompleteLoginOptionsWithEmailCodeImplCopyWithImpl<$Res>
+    extends _$CompleteLoginOptionsCopyWithImpl<$Res,
+        _$CompleteLoginOptionsWithEmailCodeImpl>
+    implements _$$CompleteLoginOptionsWithEmailCodeImplCopyWith<$Res> {
+  __$$CompleteLoginOptionsWithEmailCodeImplCopyWithImpl(
+      _$CompleteLoginOptionsWithEmailCodeImpl _value,
+      $Res Function(_$CompleteLoginOptionsWithEmailCodeImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CompleteSignInOptions
+  /// Create a copy of CompleteLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -1469,7 +1498,7 @@ class __$$CompleteSignInOptionsWithEmailCodeImplCopyWithImpl<$Res>
     Object? identifier = null,
     Object? code = null,
   }) {
-    return _then(_$CompleteSignInOptionsWithEmailCodeImpl(
+    return _then(_$CompleteLoginOptionsWithEmailCodeImpl(
       flowId: null == flowId
           ? _value.flowId
           : flowId // ignore: cast_nullable_to_non_nullable
@@ -1488,9 +1517,9 @@ class __$$CompleteSignInOptionsWithEmailCodeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CompleteSignInOptionsWithEmailCodeImpl
-    implements CompleteSignInOptionsWithEmailCode {
-  const _$CompleteSignInOptionsWithEmailCodeImpl(
+class _$CompleteLoginOptionsWithEmailCodeImpl
+    implements CompleteLoginOptionsWithEmailCode {
+  const _$CompleteLoginOptionsWithEmailCodeImpl(
       {required this.flowId, required this.identifier, required this.code});
 
   @override
@@ -1502,14 +1531,14 @@ class _$CompleteSignInOptionsWithEmailCodeImpl
 
   @override
   String toString() {
-    return 'CompleteSignInOptions.withEmailCode(flowId: $flowId, identifier: $identifier, code: $code)';
+    return 'CompleteLoginOptions.withEmailCode(flowId: $flowId, identifier: $identifier, code: $code)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CompleteSignInOptionsWithEmailCodeImpl &&
+            other is _$CompleteLoginOptionsWithEmailCodeImpl &&
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.identifier, identifier) ||
                 other.identifier == identifier) &&
@@ -1519,15 +1548,15 @@ class _$CompleteSignInOptionsWithEmailCodeImpl
   @override
   int get hashCode => Object.hash(runtimeType, flowId, identifier, code);
 
-  /// Create a copy of CompleteSignInOptions
+  /// Create a copy of CompleteLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CompleteSignInOptionsWithEmailCodeImplCopyWith<
-          _$CompleteSignInOptionsWithEmailCodeImpl>
-      get copyWith => __$$CompleteSignInOptionsWithEmailCodeImplCopyWithImpl<
-          _$CompleteSignInOptionsWithEmailCodeImpl>(this, _$identity);
+  _$$CompleteLoginOptionsWithEmailCodeImplCopyWith<
+          _$CompleteLoginOptionsWithEmailCodeImpl>
+      get copyWith => __$$CompleteLoginOptionsWithEmailCodeImplCopyWithImpl<
+          _$CompleteLoginOptionsWithEmailCodeImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1567,9 +1596,9 @@ class _$CompleteSignInOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(CompleteSignInOptionsWithEmailCode value)
+    required TResult Function(CompleteLoginOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(CompleteSignInOptionsWithOIDC value) withOIDC,
+    required TResult Function(CompleteLoginOptionsWithOIDC value) withOIDC,
   }) {
     return withEmailCode(this);
   }
@@ -1577,8 +1606,8 @@ class _$CompleteSignInOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(CompleteSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(CompleteSignInOptionsWithOIDC value)? withOIDC,
+    TResult? Function(CompleteLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult? Function(CompleteLoginOptionsWithOIDC value)? withOIDC,
   }) {
     return withEmailCode?.call(this);
   }
@@ -1586,8 +1615,8 @@ class _$CompleteSignInOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(CompleteSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(CompleteSignInOptionsWithOIDC value)? withOIDC,
+    TResult Function(CompleteLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult Function(CompleteLoginOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withEmailCode != null) {
@@ -1597,50 +1626,50 @@ class _$CompleteSignInOptionsWithEmailCodeImpl
   }
 }
 
-abstract class CompleteSignInOptionsWithEmailCode
-    implements CompleteSignInOptions {
-  const factory CompleteSignInOptionsWithEmailCode(
+abstract class CompleteLoginOptionsWithEmailCode
+    implements CompleteLoginOptions {
+  const factory CompleteLoginOptionsWithEmailCode(
       {required final String flowId,
       required final String identifier,
-      required final String code}) = _$CompleteSignInOptionsWithEmailCodeImpl;
+      required final String code}) = _$CompleteLoginOptionsWithEmailCodeImpl;
 
   @override
   String get flowId;
   String get identifier;
   String get code;
 
-  /// Create a copy of CompleteSignInOptions
+  /// Create a copy of CompleteLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CompleteSignInOptionsWithEmailCodeImplCopyWith<
-          _$CompleteSignInOptionsWithEmailCodeImpl>
+  _$$CompleteLoginOptionsWithEmailCodeImplCopyWith<
+          _$CompleteLoginOptionsWithEmailCodeImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$CompleteSignInOptionsWithOIDCImplCopyWith<$Res>
-    implements $CompleteSignInOptionsCopyWith<$Res> {
-  factory _$$CompleteSignInOptionsWithOIDCImplCopyWith(
-          _$CompleteSignInOptionsWithOIDCImpl value,
-          $Res Function(_$CompleteSignInOptionsWithOIDCImpl) then) =
-      __$$CompleteSignInOptionsWithOIDCImplCopyWithImpl<$Res>;
+abstract class _$$CompleteLoginOptionsWithOIDCImplCopyWith<$Res>
+    implements $CompleteLoginOptionsCopyWith<$Res> {
+  factory _$$CompleteLoginOptionsWithOIDCImplCopyWith(
+          _$CompleteLoginOptionsWithOIDCImpl value,
+          $Res Function(_$CompleteLoginOptionsWithOIDCImpl) then) =
+      __$$CompleteLoginOptionsWithOIDCImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String flowId, String provider, String idToken});
 }
 
 /// @nodoc
-class __$$CompleteSignInOptionsWithOIDCImplCopyWithImpl<$Res>
-    extends _$CompleteSignInOptionsCopyWithImpl<$Res,
-        _$CompleteSignInOptionsWithOIDCImpl>
-    implements _$$CompleteSignInOptionsWithOIDCImplCopyWith<$Res> {
-  __$$CompleteSignInOptionsWithOIDCImplCopyWithImpl(
-      _$CompleteSignInOptionsWithOIDCImpl _value,
-      $Res Function(_$CompleteSignInOptionsWithOIDCImpl) _then)
+class __$$CompleteLoginOptionsWithOIDCImplCopyWithImpl<$Res>
+    extends _$CompleteLoginOptionsCopyWithImpl<$Res,
+        _$CompleteLoginOptionsWithOIDCImpl>
+    implements _$$CompleteLoginOptionsWithOIDCImplCopyWith<$Res> {
+  __$$CompleteLoginOptionsWithOIDCImplCopyWithImpl(
+      _$CompleteLoginOptionsWithOIDCImpl _value,
+      $Res Function(_$CompleteLoginOptionsWithOIDCImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CompleteSignInOptions
+  /// Create a copy of CompleteLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -1649,7 +1678,7 @@ class __$$CompleteSignInOptionsWithOIDCImplCopyWithImpl<$Res>
     Object? provider = null,
     Object? idToken = null,
   }) {
-    return _then(_$CompleteSignInOptionsWithOIDCImpl(
+    return _then(_$CompleteLoginOptionsWithOIDCImpl(
       flowId: null == flowId
           ? _value.flowId
           : flowId // ignore: cast_nullable_to_non_nullable
@@ -1668,9 +1697,9 @@ class __$$CompleteSignInOptionsWithOIDCImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CompleteSignInOptionsWithOIDCImpl
-    implements CompleteSignInOptionsWithOIDC {
-  const _$CompleteSignInOptionsWithOIDCImpl(
+class _$CompleteLoginOptionsWithOIDCImpl
+    implements CompleteLoginOptionsWithOIDC {
+  const _$CompleteLoginOptionsWithOIDCImpl(
       {required this.flowId, required this.provider, required this.idToken});
 
   @override
@@ -1682,14 +1711,14 @@ class _$CompleteSignInOptionsWithOIDCImpl
 
   @override
   String toString() {
-    return 'CompleteSignInOptions.withOIDC(flowId: $flowId, provider: $provider, idToken: $idToken)';
+    return 'CompleteLoginOptions.withOIDC(flowId: $flowId, provider: $provider, idToken: $idToken)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CompleteSignInOptionsWithOIDCImpl &&
+            other is _$CompleteLoginOptionsWithOIDCImpl &&
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
@@ -1699,15 +1728,15 @@ class _$CompleteSignInOptionsWithOIDCImpl
   @override
   int get hashCode => Object.hash(runtimeType, flowId, provider, idToken);
 
-  /// Create a copy of CompleteSignInOptions
+  /// Create a copy of CompleteLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CompleteSignInOptionsWithOIDCImplCopyWith<
-          _$CompleteSignInOptionsWithOIDCImpl>
-      get copyWith => __$$CompleteSignInOptionsWithOIDCImplCopyWithImpl<
-          _$CompleteSignInOptionsWithOIDCImpl>(this, _$identity);
+  _$$CompleteLoginOptionsWithOIDCImplCopyWith<
+          _$CompleteLoginOptionsWithOIDCImpl>
+      get copyWith => __$$CompleteLoginOptionsWithOIDCImplCopyWithImpl<
+          _$CompleteLoginOptionsWithOIDCImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1747,9 +1776,9 @@ class _$CompleteSignInOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(CompleteSignInOptionsWithEmailCode value)
+    required TResult Function(CompleteLoginOptionsWithEmailCode value)
         withEmailCode,
-    required TResult Function(CompleteSignInOptionsWithOIDC value) withOIDC,
+    required TResult Function(CompleteLoginOptionsWithOIDC value) withOIDC,
   }) {
     return withOIDC(this);
   }
@@ -1757,8 +1786,8 @@ class _$CompleteSignInOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(CompleteSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult? Function(CompleteSignInOptionsWithOIDC value)? withOIDC,
+    TResult? Function(CompleteLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult? Function(CompleteLoginOptionsWithOIDC value)? withOIDC,
   }) {
     return withOIDC?.call(this);
   }
@@ -1766,8 +1795,8 @@ class _$CompleteSignInOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(CompleteSignInOptionsWithEmailCode value)? withEmailCode,
-    TResult Function(CompleteSignInOptionsWithOIDC value)? withOIDC,
+    TResult Function(CompleteLoginOptionsWithEmailCode value)? withEmailCode,
+    TResult Function(CompleteLoginOptionsWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
@@ -1777,22 +1806,22 @@ class _$CompleteSignInOptionsWithOIDCImpl
   }
 }
 
-abstract class CompleteSignInOptionsWithOIDC implements CompleteSignInOptions {
-  const factory CompleteSignInOptionsWithOIDC(
+abstract class CompleteLoginOptionsWithOIDC implements CompleteLoginOptions {
+  const factory CompleteLoginOptionsWithOIDC(
       {required final String flowId,
       required final String provider,
-      required final String idToken}) = _$CompleteSignInOptionsWithOIDCImpl;
+      required final String idToken}) = _$CompleteLoginOptionsWithOIDCImpl;
 
   @override
   String get flowId;
   String get provider;
   String get idToken;
 
-  /// Create a copy of CompleteSignInOptions
+  /// Create a copy of CompleteLoginOptions
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CompleteSignInOptionsWithOIDCImplCopyWith<
-          _$CompleteSignInOptionsWithOIDCImpl>
+  _$$CompleteLoginOptionsWithOIDCImplCopyWith<
+          _$CompleteLoginOptionsWithOIDCImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

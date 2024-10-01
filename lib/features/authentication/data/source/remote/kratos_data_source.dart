@@ -6,53 +6,67 @@ import 'package:built_value/json_object.dart';
 part 'generated/kratos_data_source.freezed.dart';
 
 @freezed
-class KratosCreateNativeRegistrationFlowOptions with _$KratosCreateNativeRegistrationFlowOptions {
-  const factory KratosCreateNativeRegistrationFlowOptions.withCode() = KratosCreateNativeRegistrationFlowWithCodeOptions;
-  const factory KratosCreateNativeRegistrationFlowOptions.withOIDC() = KratosCreateNativeRegistrationFlowWithOIDCOptions;
+class KratosCreateNativeRegistrationFlowOptions
+    with _$KratosCreateNativeRegistrationFlowOptions {
+  const factory KratosCreateNativeRegistrationFlowOptions.withCode() =
+      KratosCreateNativeRegistrationFlowWithCodeOptions;
+  const factory KratosCreateNativeRegistrationFlowOptions.withOIDC() =
+      KratosCreateNativeRegistrationFlowWithOIDCOptions;
 }
 
 @freezed
-class KratosCreateNativeLoginFlowOptions with _$KratosCreateNativeLoginFlowOptions {
-  const factory KratosCreateNativeLoginFlowOptions.withCode() = KratosCreateNativeLoginFlowWithCodeOptions;
-  const factory KratosCreateNativeLoginFlowOptions.withOIDC() = KratosCreateNativeLoginFlowWithOIDCOptions;
+class KratosCreateNativeLoginFlowOptions
+    with _$KratosCreateNativeLoginFlowOptions {
+  const factory KratosCreateNativeLoginFlowOptions.withCode() =
+      KratosCreateNativeLoginFlowWithCodeOptions;
+  const factory KratosCreateNativeLoginFlowOptions.withOIDC() =
+      KratosCreateNativeLoginFlowWithOIDCOptions;
 }
 
 @freezed
-class KratosUpdateNativeRegistrationFlowOptions with _$KratosUpdateNativeRegistrationFlowOptions {
+class KratosUpdateNativeRegistrationFlowOptions
+    with _$KratosUpdateNativeRegistrationFlowOptions {
   const factory KratosUpdateNativeRegistrationFlowOptions.withCode({
     required String flowId,
     required JsonObject traits,
     String? code,
   }) = KratosUpdateNativeRegistrationFlowWithCodeOptions;
 
-  const factory KratosUpdateNativeRegistrationFlowOptions.withOIDC({
-    required String flowId,
-    required JsonObject traits,
-    required String provider,
-    required String idToken,
-  }) = KratosUpdateNativeRegistrationFlowWithOIDCOptions;
+  const factory KratosUpdateNativeRegistrationFlowOptions.withOIDC(
+          {required String flowId,
+          required JsonObject traits,
+          required String provider,
+          required String idToken,
+          required String idTokenNonce}) =
+      KratosUpdateNativeRegistrationFlowWithOIDCOptions;
 }
 
 @freezed
-class KratosUpdateNativeLoginFlowOptions with _$KratosUpdateNativeLoginFlowOptions {
+class KratosUpdateNativeLoginFlowOptions
+    with _$KratosUpdateNativeLoginFlowOptions {
   const factory KratosUpdateNativeLoginFlowOptions.withCode({
     required String flowId,
     required String identifier,
     String? code,
   }) = KratosUpdateNativeLoginFlowWithCodeOptions;
 
-  const factory KratosUpdateNativeLoginFlowOptions.withOIDC({
-    required String flowId,
-    required String provider,
-    required String idToken,
-  }) = KratosUpdateNativeLoginFlowWithOIDCOptions;
+  const factory KratosUpdateNativeLoginFlowOptions.withOIDC(
+          {required String flowId,
+          required String provider,
+          required String idToken,
+          required String idTokenNonce}) =
+      KratosUpdateNativeLoginFlowWithOIDCOptions;
 }
 
 abstract class KratosDataSource {
-  Future<RegistrationFlow?> createNativeRegistrationFlow(KratosCreateNativeRegistrationFlowOptions options);
-  Future<LoginFlow?> createNativeLoginFlow(KratosCreateNativeLoginFlowOptions options);
-  Future<SuccessfulNativeLogin?> updateNativeLoginFlow(KratosUpdateNativeLoginFlowOptions options);
-  Future<SuccessfulNativeRegistration?> updateNativeRegistrationFlow(KratosUpdateNativeRegistrationFlowOptions options);
+  Future<RegistrationFlow?> createNativeRegistrationFlow(
+      KratosCreateNativeRegistrationFlowOptions options);
+  Future<LoginFlow?> createNativeLoginFlow(
+      KratosCreateNativeLoginFlowOptions options);
+  Future<SuccessfulNativeLogin?> updateNativeLoginFlow(
+      KratosUpdateNativeLoginFlowOptions options);
+  Future<SuccessfulNativeRegistration?> updateNativeRegistrationFlow(
+      KratosUpdateNativeRegistrationFlowOptions options);
   Future<void> logout(String sessionToken);
   Future<Session?> getCurrentSession(String sessionToken);
 }
@@ -65,7 +79,8 @@ class KratosDataSourceImpl implements KratosDataSource {
   @override
   Future<void> logout(String sessionToken) async {
     await _frontendApi.performNativeLogout(
-      performNativeLogoutBody: PerformNativeLogoutBody((b) => b..sessionToken = sessionToken),
+      performNativeLogoutBody:
+          PerformNativeLogoutBody((b) => b..sessionToken = sessionToken),
     );
   }
 
@@ -78,7 +93,8 @@ class KratosDataSourceImpl implements KratosDataSource {
   }
 
   @override
-  Future<RegistrationFlow?> createNativeRegistrationFlow(KratosCreateNativeRegistrationFlowOptions options) async {
+  Future<RegistrationFlow?> createNativeRegistrationFlow(
+      KratosCreateNativeRegistrationFlowOptions options) async {
     final response = await options.when(
       withCode: () => _frontendApi.createNativeRegistrationFlow(),
       withOIDC: () => _frontendApi.createNativeRegistrationFlow(),
@@ -87,7 +103,8 @@ class KratosDataSourceImpl implements KratosDataSource {
   }
 
   @override
-  Future<LoginFlow?> createNativeLoginFlow(KratosCreateNativeLoginFlowOptions options) async {
+  Future<LoginFlow?> createNativeLoginFlow(
+      KratosCreateNativeLoginFlowOptions options) async {
     final response = await options.when(
       withCode: () => _frontendApi.createNativeLoginFlow(),
       withOIDC: () => _frontendApi.createNativeLoginFlow(),
@@ -96,7 +113,8 @@ class KratosDataSourceImpl implements KratosDataSource {
   }
 
   @override
-  Future<SuccessfulNativeRegistration?> updateNativeRegistrationFlow(KratosUpdateNativeRegistrationFlowOptions options) async {
+  Future<SuccessfulNativeRegistration?> updateNativeRegistrationFlow(
+      KratosUpdateNativeRegistrationFlowOptions options) async {
     final response = await options.when(
       withCode: (flowId, traits, code) => _frontendApi.updateRegistrationFlow(
         flow: flowId,
@@ -110,7 +128,8 @@ class KratosDataSourceImpl implements KratosDataSource {
             ),
         ),
       ),
-      withOIDC: (flowId, traits, provider, idToken) => _frontendApi.updateRegistrationFlow(
+      withOIDC: (flowId, traits, provider, idToken, idTokenNonce) =>
+          _frontendApi.updateRegistrationFlow(
         flow: flowId,
         updateRegistrationFlowBody: UpdateRegistrationFlowBody(
           (b) => b
@@ -119,6 +138,7 @@ class KratosDataSourceImpl implements KratosDataSource {
                 ..provider = provider
                 ..method = 'oidc'
                 ..idToken = idToken
+                ..idTokenNonce = idTokenNonce
                 ..traits = traits),
             ),
         ),
@@ -128,7 +148,8 @@ class KratosDataSourceImpl implements KratosDataSource {
   }
 
   @override
-  Future<SuccessfulNativeLogin?> updateNativeLoginFlow(KratosUpdateNativeLoginFlowOptions options) async {
+  Future<SuccessfulNativeLogin?> updateNativeLoginFlow(
+      KratosUpdateNativeLoginFlowOptions options) async {
     final response = await options.when(
       withCode: (flowId, identifier, code) => _frontendApi.updateLoginFlow(
         flow: flowId,
@@ -142,7 +163,8 @@ class KratosDataSourceImpl implements KratosDataSource {
             ),
         ),
       ),
-      withOIDC: (flowId, provider, idToken) => _frontendApi.updateLoginFlow(
+      withOIDC: (flowId, provider, idToken, idTokenNonce) =>
+          _frontendApi.updateLoginFlow(
         flow: flowId,
         updateLoginFlowBody: UpdateLoginFlowBody(
           (b) => b
@@ -150,7 +172,8 @@ class KratosDataSourceImpl implements KratosDataSource {
               value: UpdateLoginFlowWithOidcMethod((b) => b
                 ..provider = provider
                 ..method = 'oidc'
-                ..idToken = idToken),
+                ..idToken = idToken
+                ..idTokenNonce = idTokenNonce),
             ),
         ),
       ),

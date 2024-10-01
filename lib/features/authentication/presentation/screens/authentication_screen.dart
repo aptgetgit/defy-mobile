@@ -1,5 +1,6 @@
 import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
+import 'package:defy/core/routes/router.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:defy/features/authentication/presentation/provider/authentication_flow_manager.dart';
 import 'package:defy/core/providers/credential_manager_provider.dart';
@@ -13,7 +14,8 @@ class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key});
 
   @override
-  ConsumerState<AuthenticationScreen> createState() => _AuthenticationScreenState();
+  ConsumerState<AuthenticationScreen> createState() =>
+      _AuthenticationScreenState();
 }
 
 class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
@@ -21,19 +23,19 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     final credentialManager = ref.read(credentialManagerServiceProvider);
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
-    
+
     try {
-      final googleIdTokenCredential = await credentialManager.saveGoogleCredential();
-      
-      if (googleIdTokenCredential!=null ) {
+      final googleIdTokenCredential =
+          await credentialManager.saveGoogleCredential();
+
+      if (googleIdTokenCredential != null) {
         await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
-        
+
         flowManager.updateLoginFlowWithOIDC(
-          provider: 'google',
-          idToken: googleIdTokenCredential.idToken
-        );
-        
+            provider: 'google', idToken: googleIdTokenCredential.idToken);
+
         await notifier.completeLogin();
+        HomeRoute().replace(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Google Sign-In failed')),
@@ -97,20 +99,20 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
               child: OutlinedButton(
                 onPressed: authState.isLoading ? null : googleLogin,
                 child: authState.isLoading
-                  ? const CircularProgressIndicator()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Assets.icons.google.image(width: 32),
-                        const Gap(12),
-                        const Text('Login with Google',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15,
-                            color: Color(0XFF646D80),
-                          )),
-                      ],
-                    ),
+                    ? const CircularProgressIndicator()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.icons.google.image(width: 32),
+                          const Gap(12),
+                          const Text('Login with Google',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                                color: Color(0XFF646D80),
+                              )),
+                        ],
+                      ),
               ),
             ),
             Gap(height * 0.03),
@@ -136,7 +138,8 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                     TextSpan(
                       text: " and ",
                       style: TextStyle(
-                          color: AppColors.greyLight, fontWeight: FontWeight.w500),
+                          color: AppColors.greyLight,
+                          fontWeight: FontWeight.w500),
                     ),
                     TextSpan(
                       text: "Privacy Policy",

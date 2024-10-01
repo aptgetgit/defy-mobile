@@ -6,6 +6,7 @@ import 'package:defy/core/providers/shared_preferences_provider.dart';
 import 'package:defy/features/authentication/data/source/remote/kratos_data_source.dart';
 import 'package:defy/features/authentication/domain/entities/session_entity.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:ory_kratos_client/ory_kratos_client.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
@@ -202,17 +203,20 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return sessionEntity;
   }
 
-  Future<SessionEntity> _completeRegistrationWithOIDC(
-      String flowId,
-      String username,
-      String name,
-      String provider,
-      String idToken) async {
-    final traits =
-        JsonObject({"username": username, "name": name});
+  Future<SessionEntity> _completeRegistrationWithOIDC(String flowId,
+      String username, String name, String provider, String idToken) async {
+    final idTokenNonce = Jwt.parseJwt(idToken)['nonce'];
+    if (idTokenNonce == null) {
+      throw StateError('Invalid id token');
+    }
+    final traits = JsonObject({"username": username, "name": name});
     final response = await _kratosClient.updateNativeRegistrationFlow(
       KratosUpdateNativeRegistrationFlowOptions.withOIDC(
-          flowId: flowId, traits: traits, provider: provider, idToken: idToken),
+          flowId: flowId,
+          traits: traits,
+          provider: provider,
+          idToken: idToken,
+          idTokenNonce: idTokenNonce),
     );
     if (response == null ||
         response.session == null ||
@@ -242,9 +246,16 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   Future<SessionEntity> _completeLoginWithOIDC(
       String flowId, String provider, String idToken) async {
+    final idTokenNonce = Jwt.parseJwt(idToken)['nonce'];
+    if (idTokenNonce == null) {
+      throw StateError('Invalid id token');
+    }
     final response = await _kratosClient.updateNativeLoginFlow(
       KratosUpdateNativeLoginFlowOptions.withOIDC(
-          flowId: flowId, provider: provider, idToken: idToken),
+          flowId: flowId,
+          provider: provider,
+          idToken: idToken,
+          idTokenNonce: idTokenNonce),
     );
     if (response == null || response.sessionToken == null) {
       throw StateError('Invalid response from login flow');

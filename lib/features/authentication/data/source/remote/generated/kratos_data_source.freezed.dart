@@ -659,24 +659,24 @@ mixin _$KratosUpdateNativeRegistrationFlowOptions {
   TResult when<TResult extends Object?>({
     required TResult Function(String flowId, JsonObject traits, String? code)
         withCode,
-    required TResult Function(
-            String flowId, JsonObject traits, String provider, String idToken)
+    required TResult Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String flowId, JsonObject traits, String? code)? withCode,
-    TResult? Function(
-            String flowId, JsonObject traits, String provider, String idToken)?
+    TResult? Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)?
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String flowId, JsonObject traits, String? code)? withCode,
-    TResult Function(
-            String flowId, JsonObject traits, String provider, String idToken)?
+    TResult Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)?
         withOIDC,
     required TResult orElse(),
   }) =>
@@ -863,8 +863,8 @@ class _$KratosUpdateNativeRegistrationFlowWithCodeOptionsImpl
   TResult when<TResult extends Object?>({
     required TResult Function(String flowId, JsonObject traits, String? code)
         withCode,
-    required TResult Function(
-            String flowId, JsonObject traits, String provider, String idToken)
+    required TResult Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)
         withOIDC,
   }) {
     return withCode(flowId, traits, code);
@@ -874,8 +874,8 @@ class _$KratosUpdateNativeRegistrationFlowWithCodeOptionsImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String flowId, JsonObject traits, String? code)? withCode,
-    TResult? Function(
-            String flowId, JsonObject traits, String provider, String idToken)?
+    TResult? Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)?
         withOIDC,
   }) {
     return withCode?.call(flowId, traits, code);
@@ -885,8 +885,8 @@ class _$KratosUpdateNativeRegistrationFlowWithCodeOptionsImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String flowId, JsonObject traits, String? code)? withCode,
-    TResult Function(
-            String flowId, JsonObject traits, String provider, String idToken)?
+    TResult Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)?
         withOIDC,
     required TResult orElse(),
   }) {
@@ -971,7 +971,11 @@ abstract class _$$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImplCopyWith<
   @override
   @useResult
   $Res call(
-      {String flowId, JsonObject traits, String provider, String idToken});
+      {String flowId,
+      JsonObject traits,
+      String provider,
+      String idToken,
+      String idTokenNonce});
 }
 
 /// @nodoc
@@ -996,6 +1000,7 @@ class __$$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImplCopyWithImpl<
     Object? traits = null,
     Object? provider = null,
     Object? idToken = null,
+    Object? idTokenNonce = null,
   }) {
     return _then(_$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImpl(
       flowId: null == flowId
@@ -1014,6 +1019,10 @@ class __$$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImplCopyWithImpl<
           ? _value.idToken
           : idToken // ignore: cast_nullable_to_non_nullable
               as String,
+      idTokenNonce: null == idTokenNonce
+          ? _value.idTokenNonce
+          : idTokenNonce // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -1026,7 +1035,8 @@ class _$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImpl
       {required this.flowId,
       required this.traits,
       required this.provider,
-      required this.idToken});
+      required this.idToken,
+      required this.idTokenNonce});
 
   @override
   final String flowId;
@@ -1036,10 +1046,12 @@ class _$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImpl
   final String provider;
   @override
   final String idToken;
+  @override
+  final String idTokenNonce;
 
   @override
   String toString() {
-    return 'KratosUpdateNativeRegistrationFlowOptions.withOIDC(flowId: $flowId, traits: $traits, provider: $provider, idToken: $idToken)';
+    return 'KratosUpdateNativeRegistrationFlowOptions.withOIDC(flowId: $flowId, traits: $traits, provider: $provider, idToken: $idToken, idTokenNonce: $idTokenNonce)';
   }
 
   @override
@@ -1051,12 +1063,14 @@ class _$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImpl
             (identical(other.traits, traits) || other.traits == traits) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
-            (identical(other.idToken, idToken) || other.idToken == idToken));
+            (identical(other.idToken, idToken) || other.idToken == idToken) &&
+            (identical(other.idTokenNonce, idTokenNonce) ||
+                other.idTokenNonce == idTokenNonce));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, flowId, traits, provider, idToken);
+      Object.hash(runtimeType, flowId, traits, provider, idToken, idTokenNonce);
 
   /// Create a copy of KratosUpdateNativeRegistrationFlowOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -1075,35 +1089,35 @@ class _$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImpl
   TResult when<TResult extends Object?>({
     required TResult Function(String flowId, JsonObject traits, String? code)
         withCode,
-    required TResult Function(
-            String flowId, JsonObject traits, String provider, String idToken)
+    required TResult Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)
         withOIDC,
   }) {
-    return withOIDC(flowId, traits, provider, idToken);
+    return withOIDC(flowId, traits, provider, idToken, idTokenNonce);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String flowId, JsonObject traits, String? code)? withCode,
-    TResult? Function(
-            String flowId, JsonObject traits, String provider, String idToken)?
+    TResult? Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)?
         withOIDC,
   }) {
-    return withOIDC?.call(flowId, traits, provider, idToken);
+    return withOIDC?.call(flowId, traits, provider, idToken, idTokenNonce);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String flowId, JsonObject traits, String? code)? withCode,
-    TResult Function(
-            String flowId, JsonObject traits, String provider, String idToken)?
+    TResult Function(String flowId, JsonObject traits, String provider,
+            String idToken, String idTokenNonce)?
         withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
-      return withOIDC(flowId, traits, provider, idToken);
+      return withOIDC(flowId, traits, provider, idToken, idTokenNonce);
     }
     return orElse();
   }
@@ -1154,7 +1168,8 @@ abstract class KratosUpdateNativeRegistrationFlowWithOIDCOptions
           {required final String flowId,
           required final JsonObject traits,
           required final String provider,
-          required final String idToken}) =
+          required final String idToken,
+          required final String idTokenNonce}) =
       _$KratosUpdateNativeRegistrationFlowWithOIDCOptionsImpl;
 
   @override
@@ -1163,6 +1178,7 @@ abstract class KratosUpdateNativeRegistrationFlowWithOIDCOptions
   JsonObject get traits;
   String get provider;
   String get idToken;
+  String get idTokenNonce;
 
   /// Create a copy of KratosUpdateNativeRegistrationFlowOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -1180,20 +1196,25 @@ mixin _$KratosUpdateNativeLoginFlowOptions {
   TResult when<TResult extends Object?>({
     required TResult Function(String flowId, String identifier, String? code)
         withCode,
-    required TResult Function(String flowId, String provider, String idToken)
+    required TResult Function(
+            String flowId, String provider, String idToken, String idTokenNonce)
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String flowId, String identifier, String? code)? withCode,
-    TResult? Function(String flowId, String provider, String idToken)? withOIDC,
+    TResult? Function(String flowId, String provider, String idToken,
+            String idTokenNonce)?
+        withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String flowId, String identifier, String? code)? withCode,
-    TResult Function(String flowId, String provider, String idToken)? withOIDC,
+    TResult Function(String flowId, String provider, String idToken,
+            String idTokenNonce)?
+        withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -1368,7 +1389,8 @@ class _$KratosUpdateNativeLoginFlowWithCodeOptionsImpl
   TResult when<TResult extends Object?>({
     required TResult Function(String flowId, String identifier, String? code)
         withCode,
-    required TResult Function(String flowId, String provider, String idToken)
+    required TResult Function(
+            String flowId, String provider, String idToken, String idTokenNonce)
         withOIDC,
   }) {
     return withCode(flowId, identifier, code);
@@ -1378,7 +1400,9 @@ class _$KratosUpdateNativeLoginFlowWithCodeOptionsImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String flowId, String identifier, String? code)? withCode,
-    TResult? Function(String flowId, String provider, String idToken)? withOIDC,
+    TResult? Function(String flowId, String provider, String idToken,
+            String idTokenNonce)?
+        withOIDC,
   }) {
     return withCode?.call(flowId, identifier, code);
   }
@@ -1387,7 +1411,9 @@ class _$KratosUpdateNativeLoginFlowWithCodeOptionsImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String flowId, String identifier, String? code)? withCode,
-    TResult Function(String flowId, String provider, String idToken)? withOIDC,
+    TResult Function(String flowId, String provider, String idToken,
+            String idTokenNonce)?
+        withOIDC,
     required TResult orElse(),
   }) {
     if (withCode != null) {
@@ -1465,7 +1491,8 @@ abstract class _$$KratosUpdateNativeLoginFlowWithOIDCOptionsImplCopyWith<$Res>
       __$$KratosUpdateNativeLoginFlowWithOIDCOptionsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String flowId, String provider, String idToken});
+  $Res call(
+      {String flowId, String provider, String idToken, String idTokenNonce});
 }
 
 /// @nodoc
@@ -1486,6 +1513,7 @@ class __$$KratosUpdateNativeLoginFlowWithOIDCOptionsImplCopyWithImpl<$Res>
     Object? flowId = null,
     Object? provider = null,
     Object? idToken = null,
+    Object? idTokenNonce = null,
   }) {
     return _then(_$KratosUpdateNativeLoginFlowWithOIDCOptionsImpl(
       flowId: null == flowId
@@ -1500,6 +1528,10 @@ class __$$KratosUpdateNativeLoginFlowWithOIDCOptionsImplCopyWithImpl<$Res>
           ? _value.idToken
           : idToken // ignore: cast_nullable_to_non_nullable
               as String,
+      idTokenNonce: null == idTokenNonce
+          ? _value.idTokenNonce
+          : idTokenNonce // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -1509,7 +1541,10 @@ class __$$KratosUpdateNativeLoginFlowWithOIDCOptionsImplCopyWithImpl<$Res>
 class _$KratosUpdateNativeLoginFlowWithOIDCOptionsImpl
     implements KratosUpdateNativeLoginFlowWithOIDCOptions {
   const _$KratosUpdateNativeLoginFlowWithOIDCOptionsImpl(
-      {required this.flowId, required this.provider, required this.idToken});
+      {required this.flowId,
+      required this.provider,
+      required this.idToken,
+      required this.idTokenNonce});
 
   @override
   final String flowId;
@@ -1517,10 +1552,12 @@ class _$KratosUpdateNativeLoginFlowWithOIDCOptionsImpl
   final String provider;
   @override
   final String idToken;
+  @override
+  final String idTokenNonce;
 
   @override
   String toString() {
-    return 'KratosUpdateNativeLoginFlowOptions.withOIDC(flowId: $flowId, provider: $provider, idToken: $idToken)';
+    return 'KratosUpdateNativeLoginFlowOptions.withOIDC(flowId: $flowId, provider: $provider, idToken: $idToken, idTokenNonce: $idTokenNonce)';
   }
 
   @override
@@ -1531,11 +1568,14 @@ class _$KratosUpdateNativeLoginFlowWithOIDCOptionsImpl
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
-            (identical(other.idToken, idToken) || other.idToken == idToken));
+            (identical(other.idToken, idToken) || other.idToken == idToken) &&
+            (identical(other.idTokenNonce, idTokenNonce) ||
+                other.idTokenNonce == idTokenNonce));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, flowId, provider, idToken);
+  int get hashCode =>
+      Object.hash(runtimeType, flowId, provider, idToken, idTokenNonce);
 
   /// Create a copy of KratosUpdateNativeLoginFlowOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -1554,30 +1594,35 @@ class _$KratosUpdateNativeLoginFlowWithOIDCOptionsImpl
   TResult when<TResult extends Object?>({
     required TResult Function(String flowId, String identifier, String? code)
         withCode,
-    required TResult Function(String flowId, String provider, String idToken)
+    required TResult Function(
+            String flowId, String provider, String idToken, String idTokenNonce)
         withOIDC,
   }) {
-    return withOIDC(flowId, provider, idToken);
+    return withOIDC(flowId, provider, idToken, idTokenNonce);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String flowId, String identifier, String? code)? withCode,
-    TResult? Function(String flowId, String provider, String idToken)? withOIDC,
+    TResult? Function(String flowId, String provider, String idToken,
+            String idTokenNonce)?
+        withOIDC,
   }) {
-    return withOIDC?.call(flowId, provider, idToken);
+    return withOIDC?.call(flowId, provider, idToken, idTokenNonce);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String flowId, String identifier, String? code)? withCode,
-    TResult Function(String flowId, String provider, String idToken)? withOIDC,
+    TResult Function(String flowId, String provider, String idToken,
+            String idTokenNonce)?
+        withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
-      return withOIDC(flowId, provider, idToken);
+      return withOIDC(flowId, provider, idToken, idTokenNonce);
     }
     return orElse();
   }
@@ -1625,13 +1670,15 @@ abstract class KratosUpdateNativeLoginFlowWithOIDCOptions
   const factory KratosUpdateNativeLoginFlowWithOIDCOptions(
           {required final String flowId,
           required final String provider,
-          required final String idToken}) =
+          required final String idToken,
+          required final String idTokenNonce}) =
       _$KratosUpdateNativeLoginFlowWithOIDCOptionsImpl;
 
   @override
   String get flowId;
   String get provider;
   String get idToken;
+  String get idTokenNonce;
 
   /// Create a copy of KratosUpdateNativeLoginFlowOptions
   /// with the given fields replaced by the non-null parameter values.

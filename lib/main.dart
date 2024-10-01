@@ -85,13 +85,14 @@ Future<void> main() async {
           logOnlySignificantUpdates: true,
           maxCollectionLogLength: 5,
           updateFrequencyThreshold: Duration(milliseconds: 500),
-          logger: (String message) {
-            if (message.startsWith('Provider Error:')) {
-              AppLogger.error(message);
-            } else {
-              AppLogger.debug(message);
-            }
-          },
+          logger: AppLogger().logger
+          // logger: (String message) {
+          //   if (message.startsWith('Provider Error:')) {
+          //     AppLogger.error(message);
+          //   } else {
+          //     AppLogger.debug(message);
+          //   }
+          // },
         ),
       ],
     );

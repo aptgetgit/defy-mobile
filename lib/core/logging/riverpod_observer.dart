@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logger/logger.dart';
 
 class ProviderLogger extends ProviderObserver {
   final bool logAdditions;
@@ -8,11 +9,12 @@ class ProviderLogger extends ProviderObserver {
   final bool logOnlySignificantUpdates;
   final Duration updateFrequencyThreshold;
   final int maxCollectionLogLength;
-  final void Function(String message) logger;
+  final Logger logger;
 
   final Map<String, DateTime> _lastUpdateTimes = {};
 
   ProviderLogger({
+    required this.logger,
     this.logAdditions = true,
     this.logDisposals = true,
     this.logUpdates = true,
@@ -20,21 +22,35 @@ class ProviderLogger extends ProviderObserver {
     this.logOnlySignificantUpdates = true,
     this.updateFrequencyThreshold = const Duration(milliseconds: 500),
     this.maxCollectionLogLength = 5,
-    this.logger = print,
   });
+
+  void _logBlock(String title, List<String> lines, {Level level = Level.debug}) {
+    final buffer = StringBuffer();
+    buffer.writeln('🔍 $title');
+    buffer.writeln('╔${'═' * 78}');
+    for (final line in lines) {
+      buffer.writeln('║ $line');
+    }
+    buffer.writeln('╚${'═' * 78}');
+    
+    logger.log(level, buffer.toString());
+  }
 
   @override
   void didAddProvider(ProviderBase<Object?> provider, Object? value, ProviderContainer container) {
     if (logAdditions) {
-      logger('Provider Added: ${_getProviderName(provider)}');
-      logger(' Initial Value: ${_formatValue(value)}');
+      _logBlock('Provider Added: ${_getProviderName(provider)}', [
+        'Initial Value: ${_formatValue(value)}',
+      ], level: Level.info);
     }
   }
 
   @override
   void didDisposeProvider(ProviderBase<Object?> provider, ProviderContainer container) {
     if (logDisposals) {
-      logger('Provider Disposed: ${_getProviderName(provider)}');
+      _logBlock('Provider Disposed', [
+        _getProviderName(provider),
+      ], level: Level.info);
     }
     _lastUpdateTimes.remove(_getProviderName(provider));
   }
@@ -48,10 +64,11 @@ class ProviderLogger extends ProviderObserver {
 
       if (lastUpdate == null || now.difference(lastUpdate) > updateFrequencyThreshold) {
         if (!logOnlySignificantUpdates || _isSignificantChange(previousValue, newValue)) {
-          logger('Provider Updated: $providerName');
-          logger(' Previous: ${_formatValue(previousValue)}');
-          logger(' New: ${_formatValue(newValue)}');
-          logger(' Changed: ${_describeChange(previousValue, newValue)}');
+          _logBlock('Provider Updated: $providerName', [
+            'Previous: ${_formatValue(previousValue)}',
+            'New: ${_formatValue(newValue)}',
+            'Changed: ${_describeChange(previousValue, newValue)}',
+          ], level: Level.debug);
         }
         _lastUpdateTimes[providerName] = now;
       }
@@ -61,9 +78,12 @@ class ProviderLogger extends ProviderObserver {
   @override
   void providerDidFail(ProviderBase<Object?> provider, Object error, StackTrace stackTrace, ProviderContainer container) {
     if (logErrors) {
-      logger('Provider Error: ${_getProviderName(provider)}');
-      logger(' Error: $error');
-      logger(' Stack Trace:\n$stackTrace');
+      _logBlock('Provider Error: ${_getProviderName(provider)}', [
+        'Error: $error',
+        'Stack Trace:',
+        ...stackTrace.toString().split('\n').take(10),
+        if (stackTrace.toString().split('\n').length > 10) '...',
+      ], level: Level.error);
     }
   }
 

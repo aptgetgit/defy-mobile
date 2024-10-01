@@ -2,6 +2,7 @@ import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/button_size_extension.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
+import 'package:defy/core/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
@@ -20,10 +21,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
 
   final List<(String, String)> _content = const [
-    ("Unified Dapp ☝🏻", "Handle all assets, Access different\nDapps in one Dapp"),
-    ("Community🫂", "Follow Friends, Copy Trade, Coinvest\nwith onchain profile avatar"),
+    (
+      "Unified Dapp ☝🏻",
+      "Handle all assets, Access different\nDapps in one Dapp"
+    ),
+    (
+      "Community🫂",
+      "Follow Friends, Copy Trade, Coinvest\nwith onchain profile avatar"
+    ),
     ("Security🔒", "Handle all assets, Access different\nDapps in one Dapp"),
-    ("Rewards 😉", "Follow Friends, Copy Trade, Coinvest\nwith onchain profile avatar"),
+    (
+      "Rewards 😉",
+      "Follow Friends, Copy Trade, Coinvest\nwith onchain profile avatar"
+    ),
   ];
 
   @override
@@ -43,18 +53,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _skipOnboarding(BuildContext context) {
-    // TODO: Implement skip logic using your preferred navigation method
-    // Example: context.go('/auth');
+    AuthenticationRoute().replace(context);
   }
 
   void _finishOnboarding(BuildContext context) {
-    // TODO: Implement finish logic using your preferred navigation method
-    // Example: context.go('/auth');
+    AuthenticationRoute().replace(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final (width, height) = (context.screenWidth , context.screenHeight);
+    final (width, height) = (context.screenWidth, context.screenHeight);
     final isDark = context.isDarkMode;
 
     return Scaffold(
@@ -81,9 +89,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () => _pageController.animateToPage(0, 
-            duration: const Duration(milliseconds: 300), 
-            curve: Curves.easeInOut),
+          onTap: () => _pageController.animateToPage(0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut),
           child: isDark
               ? Assets.icons.appIcon.image(width: 50)
               : Assets.icons.appIcon.image(width: 50),
@@ -91,9 +99,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         TextButton.icon(
           icon: const Icon(PhosphorIconsRegular.arrowCircleUpRight, size: 30),
           style: TextButton.styleFrom(
-            foregroundColor: isDark ? AppColors.white : AppColors.black,
-            textStyle: context.titleLarge
-          ),
+              foregroundColor: isDark ? AppColors.white : AppColors.black,
+              textStyle: context.titleLarge),
           onPressed: () => _skipOnboarding(context),
           label: const Text('Skip'),
         ),
@@ -204,9 +211,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       ),
     ).animate().slideY(
-      begin: 1.0,
-      end: 0.0,
-      duration: const Duration(milliseconds: 280),
-    );
+          begin: 1.0,
+          end: 0.0,
+          duration: const Duration(milliseconds: 280),
+        );
   }
 }

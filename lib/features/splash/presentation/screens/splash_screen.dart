@@ -76,7 +76,7 @@ class SplashScreen extends HookConsumerWidget {
     if (isLoggedIn) {
       HomeRoute().pushReplacement(context);
     } else {
-      AuthenticationRoute().pushReplacement(context);
+      OnboardingRoute().pushReplacement(context);
     }
   }
 }

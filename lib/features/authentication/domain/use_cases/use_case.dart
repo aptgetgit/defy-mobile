@@ -6,8 +6,8 @@ class GetCurrentSessionUseCase {
 
   GetCurrentSessionUseCase(this._repository);
 
-  Future<SessionEntity> call(String identityId) {
-    return _repository.getSessionDetails(identityId);
+  Future<SessionEntity> call(String sessionToken) {
+    return _repository.getCurrentSession(sessionToken);
   }
 }
 

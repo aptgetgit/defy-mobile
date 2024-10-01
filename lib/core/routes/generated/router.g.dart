@@ -14,7 +14,7 @@ List<RouteBase> get $appRoutes => [
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
-      path: '/',
+      path: '/splash',
       factory: $SplashRouteExtension._fromState,
     );
 
@@ -22,7 +22,7 @@ extension $SplashRouteExtension on SplashRoute {
   static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/splash',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -59,7 +59,7 @@ extension $OnboardingRouteExtension on OnboardingRoute {
 }
 
 RouteBase get $authenticationRoute => GoRouteData.$route(
-      path: '/authentication',
+      path: '/auth',
       factory: $AuthenticationRouteExtension._fromState,
     );
 
@@ -68,7 +68,7 @@ extension $AuthenticationRouteExtension on AuthenticationRoute {
       const AuthenticationRoute();
 
   String get location => GoRouteData.$location(
-        '/authentication',
+        '/auth',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -107,7 +107,7 @@ extension $HomeRouteExtension on HomeRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'4fcf5cd741b9897534e38cadc6002d97a19cd860';
+String _$routerHash() => r'dcdf5f80d87abac2f9a2bc42e84900c03b5384ac';
 
 /// See also [router].
 @ProviderFor(router)

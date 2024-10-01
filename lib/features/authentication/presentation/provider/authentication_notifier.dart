@@ -6,10 +6,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/authentication_notifier.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AuthenticationNotifier extends _$AuthenticationNotifier {
   @override
-  FutureOr<AuthenticationState> build() {
+  Future<AuthenticationState> build() {
     return _initialize();
   }
 

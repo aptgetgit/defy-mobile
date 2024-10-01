@@ -1,4 +1,3 @@
-import 'package:credential_manager/credential_manager.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../entities/session_entity.dart';
 
@@ -32,7 +31,6 @@ class CompleteRegistrationOptions with _$CompleteRegistrationOptions {
     required String flowId,
     required String username,
     required String name,
-    required String email,
     required String provider,
     required String idToken,
   }) = CompleteRegistrationOptionsWithOIDC;
@@ -63,8 +61,6 @@ class CompleteLoginOptions with _$CompleteLoginOptions {
 }
 
 abstract class AuthenticationRepository {
-  Future<GoogleIdTokenCredential> signInWithGoogle();
-
   Future<String> initiateRegistration(InitiateRegistrationOptions options);
   Future<String> initiateLogin(InitiateLoginOptions options);
   Future<SessionEntity> completeRegistration(

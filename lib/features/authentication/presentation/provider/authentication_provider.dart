@@ -1,4 +1,3 @@
-import 'package:defy/core/providers/credential_manager_provider.dart';
 import 'package:defy/core/providers/ory_kratos_provider.dart';
 import 'package:defy/core/providers/secure_storage_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
@@ -16,12 +15,10 @@ AuthenticationRepository authenticationRepository(
   final oryKratosFrontendApi =
       ref.read(oryKratosClientServiceProvider).frontendApi;
   final oryKratosDataSource = KratosDataSourceImpl(oryKratosFrontendApi);
-  final credentialManagerService = ref.read(credentialManagerServiceProvider);
   final secureStorageService = ref.read(secureStorageServiceProvider);
   final sharedPreferencesService = ref.read(sharedPreferencesServiceProvider);
   return AuthenticationRepositoryImpl(
     oryKratosDataSource,
-    credentialManagerService,
     secureStorageService,
     sharedPreferencesService,
   );
@@ -103,13 +100,6 @@ GetActiveIdentityUseCase getActiveIdentityUseCase(
     GetActiveIdentityUseCaseRef ref) {
   final repository = ref.read(authenticationRepositoryProvider);
   return GetActiveIdentityUseCase(repository);
-}
-
-@riverpod
-SignInWithGoogleUseCase signInWithGoogleUseCase(
-    SignInWithGoogleUseCaseRef ref) {
-  final repository = ref.read(authenticationRepositoryProvider);
-  return SignInWithGoogleUseCase(repository);
 }
 
 @riverpod

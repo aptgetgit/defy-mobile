@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:built_value/json_object.dart';
-import 'package:credential_manager/credential_manager.dart';
-import 'package:defy/core/providers/credential_manager_provider.dart';
 import 'package:defy/core/providers/secure_storage_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
 import 'package:defy/features/authentication/data/source/remote/kratos_data_source.dart';
@@ -22,12 +20,11 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   static String activeIdentityKey() => '${_prefix}active';
 
   final KratosDataSource _kratosClient;
-  final CredentialManagerService _credentialManager;
   final SecureStorageService _secureStorage;
   final SharedPreferencesService _sharedPreferences;
 
-  AuthenticationRepositoryImpl(this._kratosClient, this._credentialManager,
-      this._secureStorage, this._sharedPreferences);
+  AuthenticationRepositoryImpl(
+      this._kratosClient, this._secureStorage, this._sharedPreferences);
 
   @override
   Future<SessionEntity> getCurrentSession(String sessionToken) async {
@@ -39,24 +36,11 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<GoogleIdTokenCredential> signInWithGoogle() async {
-    if (!_credentialManager.isSupportedPlatform) {
-      throw UnsupportedError(
-          'Google Sign-In is not supported on this platform');
-    }
-    final credential = await _credentialManager.saveGoogleCredential();
-    if (credential == null) {
-      throw StateError('Failed to obtain Google credentials');
-    }
-    return credential;
-  }
-
-  @override
   Future<String> initiateRegistration(
       InitiateRegistrationOptions options) async {
     return options.when(
       withEmailCode: (email, username, name) =>
-          _initiateRegistrationWithEmail(email),
+          _initiateRegistrationWithEmail(),
       withOIDC: (username, name) => _initiateRegistrationWithOIDC(),
     );
   }
@@ -79,9 +63,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return options.when(
       withEmailCode: (flowId, username, name, email, code) =>
           _completeRegistrationWithEmail(flowId, username, name, email, code),
-      withOIDC: (flowId, username, name, email, provider, idToken) =>
+      withOIDC: (flowId, username, name, provider, idToken) =>
           _completeRegistrationWithOIDC(
-              flowId, username, name, email, provider, idToken),
+              flowId, username, name, provider, idToken),
     );
   }
 
@@ -154,7 +138,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return _getActiveIdentity();
   }
 
-  Future<String> _initiateRegistrationWithEmail(String email) async {
+  Future<String> _initiateRegistrationWithEmail() async {
     final flow = await _kratosClient.createNativeRegistrationFlow(
         KratosCreateNativeRegistrationFlowOptions.withCode());
     if (flow == null) {
@@ -222,11 +206,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       String flowId,
       String username,
       String name,
-      String email,
       String provider,
       String idToken) async {
     final traits =
-        JsonObject({"email": email, "username": username, "name": name});
+        JsonObject({"username": username, "name": name});
     final response = await _kratosClient.updateNativeRegistrationFlow(
       KratosUpdateNativeRegistrationFlowOptions.withOIDC(
           flowId: flowId, traits: traits, provider: provider, idToken: idToken),

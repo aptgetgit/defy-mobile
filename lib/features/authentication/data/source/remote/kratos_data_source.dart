@@ -51,10 +51,10 @@ class KratosUpdateNativeLoginFlowOptions with _$KratosUpdateNativeLoginFlowOptio
 abstract class KratosDataSource {
   Future<RegistrationFlow?> createNativeRegistrationFlow(KratosCreateNativeRegistrationFlowOptions options);
   Future<LoginFlow?> createNativeLoginFlow(KratosCreateNativeLoginFlowOptions options);
-  Future<Session?> getCurrentSession(String sessionToken);
   Future<SuccessfulNativeLogin?> updateNativeLoginFlow(KratosUpdateNativeLoginFlowOptions options);
   Future<SuccessfulNativeRegistration?> updateNativeRegistrationFlow(KratosUpdateNativeRegistrationFlowOptions options);
   Future<void> logout(String sessionToken);
+  Future<Session?> getCurrentSession(String sessionToken);
 }
 
 class KratosDataSourceImpl implements KratosDataSource {
@@ -83,9 +83,6 @@ class KratosDataSourceImpl implements KratosDataSource {
       withCode: () => _frontendApi.createNativeRegistrationFlow(),
       withOIDC: () => _frontendApi.createNativeRegistrationFlow(),
     );
-    if (response.data == null) {
-      throw StateError('Failed to create native login flow');
-    }
     return response.data;
   }
 

@@ -2,12 +2,12 @@ import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:defy/features/authentication/presentation/provider/authentication_flow_manager.dart';
+import 'package:defy/core/providers/credential_manager_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/features/authentication/presentation/provider/authentication_notifier.dart';
-
 
 class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key});
@@ -19,22 +19,29 @@ class AuthenticationScreen extends ConsumerStatefulWidget {
 class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
   Future<void> googleLogin() async {
     final notifier = ref.read(authenticationNotifierProvider.notifier);
+    final credentialManager = ref.read(credentialManagerServiceProvider);
+    final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
     
-    final idToken = await notifier.signInWithGoogle();
-    
-    if (idToken != null) {
-      await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
+    try {
+      final googleIdTokenCredential = await credentialManager.saveGoogleCredential();
       
-      await notifier.completeLogin(
-        CompleteLoginOptions.withOIDC(
-          flowId: ref.read(authenticationFlowManagerProvider)!.flowId,
+      if (googleIdTokenCredential!=null ) {
+        await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
+        
+        flowManager.updateLoginFlowWithOIDC(
           provider: 'google',
-          idToken: idToken,
-        ),
-      );
-    } else {
+          idToken: googleIdTokenCredential.idToken
+        );
+        
+        await notifier.completeLogin();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Google Sign-In failed')),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Google Sign-In failed')),
+        SnackBar(content: Text('Error during Google Sign-In: ${e.toString()}')),
       );
     }
   }

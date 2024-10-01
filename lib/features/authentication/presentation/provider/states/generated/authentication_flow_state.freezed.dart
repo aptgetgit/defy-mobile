@@ -15,93 +15,102 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$RegistrationData {
+mixin _$RegistrationFlowData {
+  String get flowId => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String email, String username, String name, String? code)
-        withEmailCode,
-    required TResult Function(
-            String username, String name, String? provider, String? idToken)
+    required TResult Function(String flowId, String username, String name,
+            String email, String? code)
+        withCode,
+    required TResult Function(String flowId, String username, String name,
+            String? provider, String? idToken)
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String username, String name, String? code)?
-        withEmailCode,
-    TResult? Function(
-            String username, String name, String? provider, String? idToken)?
+    TResult? Function(String flowId, String username, String name, String email,
+            String? code)?
+        withCode,
+    TResult? Function(String flowId, String username, String name,
+            String? provider, String? idToken)?
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String username, String name, String? code)?
-        withEmailCode,
-    TResult Function(
-            String username, String name, String? provider, String? idToken)?
+    TResult Function(String flowId, String username, String name, String email,
+            String? code)?
+        withCode,
+    TResult Function(String flowId, String username, String name,
+            String? provider, String? idToken)?
         withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RegistrationWithEmailCode value) withEmailCode,
-    required TResult Function(RegistrationWithOIDC value) withOIDC,
+    required TResult Function(RegistrationFlowDataWithCode value) withCode,
+    required TResult Function(RegistrationFlowDataWithOIDC value) withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RegistrationWithEmailCode value)? withEmailCode,
-    TResult? Function(RegistrationWithOIDC value)? withOIDC,
+    TResult? Function(RegistrationFlowDataWithCode value)? withCode,
+    TResult? Function(RegistrationFlowDataWithOIDC value)? withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RegistrationWithEmailCode value)? withEmailCode,
-    TResult Function(RegistrationWithOIDC value)? withOIDC,
+    TResult Function(RegistrationFlowDataWithCode value)? withCode,
+    TResult Function(RegistrationFlowDataWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 
-  /// Create a copy of RegistrationData
+  /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $RegistrationDataCopyWith<RegistrationData> get copyWith =>
+  $RegistrationFlowDataCopyWith<RegistrationFlowData> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $RegistrationDataCopyWith<$Res> {
-  factory $RegistrationDataCopyWith(
-          RegistrationData value, $Res Function(RegistrationData) then) =
-      _$RegistrationDataCopyWithImpl<$Res, RegistrationData>;
+abstract class $RegistrationFlowDataCopyWith<$Res> {
+  factory $RegistrationFlowDataCopyWith(RegistrationFlowData value,
+          $Res Function(RegistrationFlowData) then) =
+      _$RegistrationFlowDataCopyWithImpl<$Res, RegistrationFlowData>;
   @useResult
-  $Res call({String username, String name});
+  $Res call({String flowId, String username, String name});
 }
 
 /// @nodoc
-class _$RegistrationDataCopyWithImpl<$Res, $Val extends RegistrationData>
-    implements $RegistrationDataCopyWith<$Res> {
-  _$RegistrationDataCopyWithImpl(this._value, this._then);
+class _$RegistrationFlowDataCopyWithImpl<$Res,
+        $Val extends RegistrationFlowData>
+    implements $RegistrationFlowDataCopyWith<$Res> {
+  _$RegistrationFlowDataCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of RegistrationData
+  /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? flowId = null,
     Object? username = null,
     Object? name = null,
   }) {
     return _then(_value.copyWith(
+      flowId: null == flowId
+          ? _value.flowId
+          : flowId // ignore: cast_nullable_to_non_nullable
+              as String,
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -115,41 +124,47 @@ class _$RegistrationDataCopyWithImpl<$Res, $Val extends RegistrationData>
 }
 
 /// @nodoc
-abstract class _$$RegistrationWithEmailCodeImplCopyWith<$Res>
-    implements $RegistrationDataCopyWith<$Res> {
-  factory _$$RegistrationWithEmailCodeImplCopyWith(
-          _$RegistrationWithEmailCodeImpl value,
-          $Res Function(_$RegistrationWithEmailCodeImpl) then) =
-      __$$RegistrationWithEmailCodeImplCopyWithImpl<$Res>;
+abstract class _$$RegistrationFlowDataWithCodeImplCopyWith<$Res>
+    implements $RegistrationFlowDataCopyWith<$Res> {
+  factory _$$RegistrationFlowDataWithCodeImplCopyWith(
+          _$RegistrationFlowDataWithCodeImpl value,
+          $Res Function(_$RegistrationFlowDataWithCodeImpl) then) =
+      __$$RegistrationFlowDataWithCodeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String username, String name, String? code});
+  $Res call(
+      {String flowId,
+      String username,
+      String name,
+      String email,
+      String? code});
 }
 
 /// @nodoc
-class __$$RegistrationWithEmailCodeImplCopyWithImpl<$Res>
-    extends _$RegistrationDataCopyWithImpl<$Res,
-        _$RegistrationWithEmailCodeImpl>
-    implements _$$RegistrationWithEmailCodeImplCopyWith<$Res> {
-  __$$RegistrationWithEmailCodeImplCopyWithImpl(
-      _$RegistrationWithEmailCodeImpl _value,
-      $Res Function(_$RegistrationWithEmailCodeImpl) _then)
+class __$$RegistrationFlowDataWithCodeImplCopyWithImpl<$Res>
+    extends _$RegistrationFlowDataCopyWithImpl<$Res,
+        _$RegistrationFlowDataWithCodeImpl>
+    implements _$$RegistrationFlowDataWithCodeImplCopyWith<$Res> {
+  __$$RegistrationFlowDataWithCodeImplCopyWithImpl(
+      _$RegistrationFlowDataWithCodeImpl _value,
+      $Res Function(_$RegistrationFlowDataWithCodeImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of RegistrationData
+  /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? email = null,
+    Object? flowId = null,
     Object? username = null,
     Object? name = null,
+    Object? email = null,
     Object? code = freezed,
   }) {
-    return _then(_$RegistrationWithEmailCodeImpl(
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+    return _then(_$RegistrationFlowDataWithCodeImpl(
+      flowId: null == flowId
+          ? _value.flowId
+          : flowId // ignore: cast_nullable_to_non_nullable
               as String,
       username: null == username
           ? _value.username
@@ -158,6 +173,10 @@ class __$$RegistrationWithEmailCodeImplCopyWithImpl<$Res>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       code: freezed == code
           ? _value.code
@@ -169,88 +188,97 @@ class __$$RegistrationWithEmailCodeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RegistrationWithEmailCodeImpl implements RegistrationWithEmailCode {
-  const _$RegistrationWithEmailCodeImpl(
-      {required this.email,
+class _$RegistrationFlowDataWithCodeImpl
+    implements RegistrationFlowDataWithCode {
+  const _$RegistrationFlowDataWithCodeImpl(
+      {required this.flowId,
       required this.username,
       required this.name,
+      required this.email,
       this.code});
 
   @override
-  final String email;
+  final String flowId;
   @override
   final String username;
   @override
   final String name;
   @override
+  final String email;
+  @override
   final String? code;
 
   @override
   String toString() {
-    return 'RegistrationData.withEmailCode(email: $email, username: $username, name: $name, code: $code)';
+    return 'RegistrationFlowData.withCode(flowId: $flowId, username: $username, name: $name, email: $email, code: $code)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RegistrationWithEmailCodeImpl &&
-            (identical(other.email, email) || other.email == email) &&
+            other is _$RegistrationFlowDataWithCodeImpl &&
+            (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.code, code) || other.code == code));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, email, username, name, code);
+  int get hashCode =>
+      Object.hash(runtimeType, flowId, username, name, email, code);
 
-  /// Create a copy of RegistrationData
+  /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$RegistrationWithEmailCodeImplCopyWith<_$RegistrationWithEmailCodeImpl>
-      get copyWith => __$$RegistrationWithEmailCodeImplCopyWithImpl<
-          _$RegistrationWithEmailCodeImpl>(this, _$identity);
+  _$$RegistrationFlowDataWithCodeImplCopyWith<
+          _$RegistrationFlowDataWithCodeImpl>
+      get copyWith => __$$RegistrationFlowDataWithCodeImplCopyWithImpl<
+          _$RegistrationFlowDataWithCodeImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String email, String username, String name, String? code)
-        withEmailCode,
-    required TResult Function(
-            String username, String name, String? provider, String? idToken)
+    required TResult Function(String flowId, String username, String name,
+            String email, String? code)
+        withCode,
+    required TResult Function(String flowId, String username, String name,
+            String? provider, String? idToken)
         withOIDC,
   }) {
-    return withEmailCode(email, username, name, code);
+    return withCode(flowId, username, name, email, code);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String username, String name, String? code)?
-        withEmailCode,
-    TResult? Function(
-            String username, String name, String? provider, String? idToken)?
+    TResult? Function(String flowId, String username, String name, String email,
+            String? code)?
+        withCode,
+    TResult? Function(String flowId, String username, String name,
+            String? provider, String? idToken)?
         withOIDC,
   }) {
-    return withEmailCode?.call(email, username, name, code);
+    return withCode?.call(flowId, username, name, email, code);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String username, String name, String? code)?
-        withEmailCode,
-    TResult Function(
-            String username, String name, String? provider, String? idToken)?
+    TResult Function(String flowId, String username, String name, String email,
+            String? code)?
+        withCode,
+    TResult Function(String flowId, String username, String name,
+            String? provider, String? idToken)?
         withOIDC,
     required TResult orElse(),
   }) {
-    if (withEmailCode != null) {
-      return withEmailCode(email, username, name, code);
+    if (withCode != null) {
+      return withCode(flowId, username, name, email, code);
     }
     return orElse();
   }
@@ -258,87 +286,104 @@ class _$RegistrationWithEmailCodeImpl implements RegistrationWithEmailCode {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RegistrationWithEmailCode value) withEmailCode,
-    required TResult Function(RegistrationWithOIDC value) withOIDC,
+    required TResult Function(RegistrationFlowDataWithCode value) withCode,
+    required TResult Function(RegistrationFlowDataWithOIDC value) withOIDC,
   }) {
-    return withEmailCode(this);
+    return withCode(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RegistrationWithEmailCode value)? withEmailCode,
-    TResult? Function(RegistrationWithOIDC value)? withOIDC,
+    TResult? Function(RegistrationFlowDataWithCode value)? withCode,
+    TResult? Function(RegistrationFlowDataWithOIDC value)? withOIDC,
   }) {
-    return withEmailCode?.call(this);
+    return withCode?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RegistrationWithEmailCode value)? withEmailCode,
-    TResult Function(RegistrationWithOIDC value)? withOIDC,
+    TResult Function(RegistrationFlowDataWithCode value)? withCode,
+    TResult Function(RegistrationFlowDataWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
-    if (withEmailCode != null) {
-      return withEmailCode(this);
+    if (withCode != null) {
+      return withCode(this);
     }
     return orElse();
   }
 }
 
-abstract class RegistrationWithEmailCode implements RegistrationData {
-  const factory RegistrationWithEmailCode(
-      {required final String email,
+abstract class RegistrationFlowDataWithCode implements RegistrationFlowData {
+  const factory RegistrationFlowDataWithCode(
+      {required final String flowId,
       required final String username,
       required final String name,
-      final String? code}) = _$RegistrationWithEmailCodeImpl;
+      required final String email,
+      final String? code}) = _$RegistrationFlowDataWithCodeImpl;
 
-  String get email;
+  @override
+  String get flowId;
   @override
   String get username;
   @override
   String get name;
+  String get email;
   String? get code;
 
-  /// Create a copy of RegistrationData
+  /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RegistrationWithEmailCodeImplCopyWith<_$RegistrationWithEmailCodeImpl>
+  _$$RegistrationFlowDataWithCodeImplCopyWith<
+          _$RegistrationFlowDataWithCodeImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$RegistrationWithOIDCImplCopyWith<$Res>
-    implements $RegistrationDataCopyWith<$Res> {
-  factory _$$RegistrationWithOIDCImplCopyWith(_$RegistrationWithOIDCImpl value,
-          $Res Function(_$RegistrationWithOIDCImpl) then) =
-      __$$RegistrationWithOIDCImplCopyWithImpl<$Res>;
+abstract class _$$RegistrationFlowDataWithOIDCImplCopyWith<$Res>
+    implements $RegistrationFlowDataCopyWith<$Res> {
+  factory _$$RegistrationFlowDataWithOIDCImplCopyWith(
+          _$RegistrationFlowDataWithOIDCImpl value,
+          $Res Function(_$RegistrationFlowDataWithOIDCImpl) then) =
+      __$$RegistrationFlowDataWithOIDCImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String username, String name, String? provider, String? idToken});
+  $Res call(
+      {String flowId,
+      String username,
+      String name,
+      String? provider,
+      String? idToken});
 }
 
 /// @nodoc
-class __$$RegistrationWithOIDCImplCopyWithImpl<$Res>
-    extends _$RegistrationDataCopyWithImpl<$Res, _$RegistrationWithOIDCImpl>
-    implements _$$RegistrationWithOIDCImplCopyWith<$Res> {
-  __$$RegistrationWithOIDCImplCopyWithImpl(_$RegistrationWithOIDCImpl _value,
-      $Res Function(_$RegistrationWithOIDCImpl) _then)
+class __$$RegistrationFlowDataWithOIDCImplCopyWithImpl<$Res>
+    extends _$RegistrationFlowDataCopyWithImpl<$Res,
+        _$RegistrationFlowDataWithOIDCImpl>
+    implements _$$RegistrationFlowDataWithOIDCImplCopyWith<$Res> {
+  __$$RegistrationFlowDataWithOIDCImplCopyWithImpl(
+      _$RegistrationFlowDataWithOIDCImpl _value,
+      $Res Function(_$RegistrationFlowDataWithOIDCImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of RegistrationData
+  /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? flowId = null,
     Object? username = null,
     Object? name = null,
     Object? provider = freezed,
     Object? idToken = freezed,
   }) {
-    return _then(_$RegistrationWithOIDCImpl(
+    return _then(_$RegistrationFlowDataWithOIDCImpl(
+      flowId: null == flowId
+          ? _value.flowId
+          : flowId // ignore: cast_nullable_to_non_nullable
+              as String,
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -361,13 +406,17 @@ class __$$RegistrationWithOIDCImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RegistrationWithOIDCImpl implements RegistrationWithOIDC {
-  const _$RegistrationWithOIDCImpl(
-      {required this.username,
+class _$RegistrationFlowDataWithOIDCImpl
+    implements RegistrationFlowDataWithOIDC {
+  const _$RegistrationFlowDataWithOIDCImpl(
+      {required this.flowId,
+      required this.username,
       required this.name,
       this.provider,
       this.idToken});
 
+  @override
+  final String flowId;
   @override
   final String username;
   @override
@@ -379,14 +428,15 @@ class _$RegistrationWithOIDCImpl implements RegistrationWithOIDC {
 
   @override
   String toString() {
-    return 'RegistrationData.withOIDC(username: $username, name: $name, provider: $provider, idToken: $idToken)';
+    return 'RegistrationFlowData.withOIDC(flowId: $flowId, username: $username, name: $name, provider: $provider, idToken: $idToken)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RegistrationWithOIDCImpl &&
+            other is _$RegistrationFlowDataWithOIDCImpl &&
+            (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.name, name) || other.name == name) &&
@@ -397,55 +447,57 @@ class _$RegistrationWithOIDCImpl implements RegistrationWithOIDC {
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, username, name, provider, idToken);
+      Object.hash(runtimeType, flowId, username, name, provider, idToken);
 
-  /// Create a copy of RegistrationData
+  /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$RegistrationWithOIDCImplCopyWith<_$RegistrationWithOIDCImpl>
-      get copyWith =>
-          __$$RegistrationWithOIDCImplCopyWithImpl<_$RegistrationWithOIDCImpl>(
-              this, _$identity);
+  _$$RegistrationFlowDataWithOIDCImplCopyWith<
+          _$RegistrationFlowDataWithOIDCImpl>
+      get copyWith => __$$RegistrationFlowDataWithOIDCImplCopyWithImpl<
+          _$RegistrationFlowDataWithOIDCImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String email, String username, String name, String? code)
-        withEmailCode,
-    required TResult Function(
-            String username, String name, String? provider, String? idToken)
+    required TResult Function(String flowId, String username, String name,
+            String email, String? code)
+        withCode,
+    required TResult Function(String flowId, String username, String name,
+            String? provider, String? idToken)
         withOIDC,
   }) {
-    return withOIDC(username, name, provider, idToken);
+    return withOIDC(flowId, username, name, provider, idToken);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String username, String name, String? code)?
-        withEmailCode,
-    TResult? Function(
-            String username, String name, String? provider, String? idToken)?
+    TResult? Function(String flowId, String username, String name, String email,
+            String? code)?
+        withCode,
+    TResult? Function(String flowId, String username, String name,
+            String? provider, String? idToken)?
         withOIDC,
   }) {
-    return withOIDC?.call(username, name, provider, idToken);
+    return withOIDC?.call(flowId, username, name, provider, idToken);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String username, String name, String? code)?
-        withEmailCode,
-    TResult Function(
-            String username, String name, String? provider, String? idToken)?
+    TResult Function(String flowId, String username, String name, String email,
+            String? code)?
+        withCode,
+    TResult Function(String flowId, String username, String name,
+            String? provider, String? idToken)?
         withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
-      return withOIDC(username, name, provider, idToken);
+      return withOIDC(flowId, username, name, provider, idToken);
     }
     return orElse();
   }
@@ -453,8 +505,8 @@ class _$RegistrationWithOIDCImpl implements RegistrationWithOIDC {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RegistrationWithEmailCode value) withEmailCode,
-    required TResult Function(RegistrationWithOIDC value) withOIDC,
+    required TResult Function(RegistrationFlowDataWithCode value) withCode,
+    required TResult Function(RegistrationFlowDataWithOIDC value) withOIDC,
   }) {
     return withOIDC(this);
   }
@@ -462,8 +514,8 @@ class _$RegistrationWithOIDCImpl implements RegistrationWithOIDC {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RegistrationWithEmailCode value)? withEmailCode,
-    TResult? Function(RegistrationWithOIDC value)? withOIDC,
+    TResult? Function(RegistrationFlowDataWithCode value)? withCode,
+    TResult? Function(RegistrationFlowDataWithOIDC value)? withOIDC,
   }) {
     return withOIDC?.call(this);
   }
@@ -471,8 +523,8 @@ class _$RegistrationWithOIDCImpl implements RegistrationWithOIDC {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RegistrationWithEmailCode value)? withEmailCode,
-    TResult Function(RegistrationWithOIDC value)? withOIDC,
+    TResult Function(RegistrationFlowDataWithCode value)? withCode,
+    TResult Function(RegistrationFlowDataWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
@@ -482,13 +534,16 @@ class _$RegistrationWithOIDCImpl implements RegistrationWithOIDC {
   }
 }
 
-abstract class RegistrationWithOIDC implements RegistrationData {
-  const factory RegistrationWithOIDC(
-      {required final String username,
+abstract class RegistrationFlowDataWithOIDC implements RegistrationFlowData {
+  const factory RegistrationFlowDataWithOIDC(
+      {required final String flowId,
+      required final String username,
       required final String name,
       final String? provider,
-      final String? idToken}) = _$RegistrationWithOIDCImpl;
+      final String? idToken}) = _$RegistrationFlowDataWithOIDCImpl;
 
+  @override
+  String get flowId;
   @override
   String get username;
   @override
@@ -496,450 +551,88 @@ abstract class RegistrationWithOIDC implements RegistrationData {
   String? get provider;
   String? get idToken;
 
-  /// Create a copy of RegistrationData
+  /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RegistrationWithOIDCImplCopyWith<_$RegistrationWithOIDCImpl>
+  _$$RegistrationFlowDataWithOIDCImplCopyWith<
+          _$RegistrationFlowDataWithOIDCImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-mixin _$LoginData {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String email, String? code) withEmailCode,
-    required TResult Function(String? provider, String? idToken) withOIDC,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String? code)? withEmailCode,
-    TResult? Function(String? provider, String? idToken)? withOIDC,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String? code)? withEmailCode,
-    TResult Function(String? provider, String? idToken)? withOIDC,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LoginWithEmailCode value) withEmailCode,
-    required TResult Function(LoginWithOIDC value) withOIDC,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LoginWithEmailCode value)? withEmailCode,
-    TResult? Function(LoginWithOIDC value)? withOIDC,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoginWithEmailCode value)? withEmailCode,
-    TResult Function(LoginWithOIDC value)? withOIDC,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $LoginDataCopyWith<$Res> {
-  factory $LoginDataCopyWith(LoginData value, $Res Function(LoginData) then) =
-      _$LoginDataCopyWithImpl<$Res, LoginData>;
-}
-
-/// @nodoc
-class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
-    implements $LoginDataCopyWith<$Res> {
-  _$LoginDataCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of LoginData
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-abstract class _$$LoginWithEmailCodeImplCopyWith<$Res> {
-  factory _$$LoginWithEmailCodeImplCopyWith(_$LoginWithEmailCodeImpl value,
-          $Res Function(_$LoginWithEmailCodeImpl) then) =
-      __$$LoginWithEmailCodeImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String email, String? code});
-}
-
-/// @nodoc
-class __$$LoginWithEmailCodeImplCopyWithImpl<$Res>
-    extends _$LoginDataCopyWithImpl<$Res, _$LoginWithEmailCodeImpl>
-    implements _$$LoginWithEmailCodeImplCopyWith<$Res> {
-  __$$LoginWithEmailCodeImplCopyWithImpl(_$LoginWithEmailCodeImpl _value,
-      $Res Function(_$LoginWithEmailCodeImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of LoginData
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? email = null,
-    Object? code = freezed,
-  }) {
-    return _then(_$LoginWithEmailCodeImpl(
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      code: freezed == code
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$LoginWithEmailCodeImpl implements LoginWithEmailCode {
-  const _$LoginWithEmailCodeImpl({required this.email, this.code});
-
-  @override
-  final String email;
-  @override
-  final String? code;
-
-  @override
-  String toString() {
-    return 'LoginData.withEmailCode(email: $email, code: $code)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LoginWithEmailCodeImpl &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.code, code) || other.code == code));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, email, code);
-
-  /// Create a copy of LoginData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LoginWithEmailCodeImplCopyWith<_$LoginWithEmailCodeImpl> get copyWith =>
-      __$$LoginWithEmailCodeImplCopyWithImpl<_$LoginWithEmailCodeImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String email, String? code) withEmailCode,
-    required TResult Function(String? provider, String? idToken) withOIDC,
-  }) {
-    return withEmailCode(email, code);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String? code)? withEmailCode,
-    TResult? Function(String? provider, String? idToken)? withOIDC,
-  }) {
-    return withEmailCode?.call(email, code);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String? code)? withEmailCode,
-    TResult Function(String? provider, String? idToken)? withOIDC,
-    required TResult orElse(),
-  }) {
-    if (withEmailCode != null) {
-      return withEmailCode(email, code);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LoginWithEmailCode value) withEmailCode,
-    required TResult Function(LoginWithOIDC value) withOIDC,
-  }) {
-    return withEmailCode(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LoginWithEmailCode value)? withEmailCode,
-    TResult? Function(LoginWithOIDC value)? withOIDC,
-  }) {
-    return withEmailCode?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoginWithEmailCode value)? withEmailCode,
-    TResult Function(LoginWithOIDC value)? withOIDC,
-    required TResult orElse(),
-  }) {
-    if (withEmailCode != null) {
-      return withEmailCode(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LoginWithEmailCode implements LoginData {
-  const factory LoginWithEmailCode(
-      {required final String email,
-      final String? code}) = _$LoginWithEmailCodeImpl;
-
-  String get email;
-  String? get code;
-
-  /// Create a copy of LoginData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LoginWithEmailCodeImplCopyWith<_$LoginWithEmailCodeImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$LoginWithOIDCImplCopyWith<$Res> {
-  factory _$$LoginWithOIDCImplCopyWith(
-          _$LoginWithOIDCImpl value, $Res Function(_$LoginWithOIDCImpl) then) =
-      __$$LoginWithOIDCImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String? provider, String? idToken});
-}
-
-/// @nodoc
-class __$$LoginWithOIDCImplCopyWithImpl<$Res>
-    extends _$LoginDataCopyWithImpl<$Res, _$LoginWithOIDCImpl>
-    implements _$$LoginWithOIDCImplCopyWith<$Res> {
-  __$$LoginWithOIDCImplCopyWithImpl(
-      _$LoginWithOIDCImpl _value, $Res Function(_$LoginWithOIDCImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of LoginData
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? provider = freezed,
-    Object? idToken = freezed,
-  }) {
-    return _then(_$LoginWithOIDCImpl(
-      provider: freezed == provider
-          ? _value.provider
-          : provider // ignore: cast_nullable_to_non_nullable
-              as String?,
-      idToken: freezed == idToken
-          ? _value.idToken
-          : idToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$LoginWithOIDCImpl implements LoginWithOIDC {
-  const _$LoginWithOIDCImpl({this.provider, this.idToken});
-
-  @override
-  final String? provider;
-  @override
-  final String? idToken;
-
-  @override
-  String toString() {
-    return 'LoginData.withOIDC(provider: $provider, idToken: $idToken)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LoginWithOIDCImpl &&
-            (identical(other.provider, provider) ||
-                other.provider == provider) &&
-            (identical(other.idToken, idToken) || other.idToken == idToken));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, provider, idToken);
-
-  /// Create a copy of LoginData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LoginWithOIDCImplCopyWith<_$LoginWithOIDCImpl> get copyWith =>
-      __$$LoginWithOIDCImplCopyWithImpl<_$LoginWithOIDCImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String email, String? code) withEmailCode,
-    required TResult Function(String? provider, String? idToken) withOIDC,
-  }) {
-    return withOIDC(provider, idToken);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String? code)? withEmailCode,
-    TResult? Function(String? provider, String? idToken)? withOIDC,
-  }) {
-    return withOIDC?.call(provider, idToken);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String? code)? withEmailCode,
-    TResult Function(String? provider, String? idToken)? withOIDC,
-    required TResult orElse(),
-  }) {
-    if (withOIDC != null) {
-      return withOIDC(provider, idToken);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LoginWithEmailCode value) withEmailCode,
-    required TResult Function(LoginWithOIDC value) withOIDC,
-  }) {
-    return withOIDC(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LoginWithEmailCode value)? withEmailCode,
-    TResult? Function(LoginWithOIDC value)? withOIDC,
-  }) {
-    return withOIDC?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoginWithEmailCode value)? withEmailCode,
-    TResult Function(LoginWithOIDC value)? withOIDC,
-    required TResult orElse(),
-  }) {
-    if (withOIDC != null) {
-      return withOIDC(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LoginWithOIDC implements LoginData {
-  const factory LoginWithOIDC({final String? provider, final String? idToken}) =
-      _$LoginWithOIDCImpl;
-
-  String? get provider;
-  String? get idToken;
-
-  /// Create a copy of LoginData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LoginWithOIDCImplCopyWith<_$LoginWithOIDCImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-mixin _$AuthenticationFlowData {
+mixin _$LoginFlowData {
   String get flowId => throw _privateConstructorUsedError;
-  Object get data => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, RegistrationData data) signUp,
-    required TResult Function(String flowId, LoginData data) signIn,
+    required TResult Function(String flowId, String email, String? code)
+        withCode,
+    required TResult Function(String flowId, String? provider, String? idToken)
+        withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, RegistrationData data)? signUp,
-    TResult? Function(String flowId, LoginData data)? signIn,
+    TResult? Function(String flowId, String email, String? code)? withCode,
+    TResult? Function(String flowId, String? provider, String? idToken)?
+        withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, RegistrationData data)? signUp,
-    TResult Function(String flowId, LoginData data)? signIn,
+    TResult Function(String flowId, String email, String? code)? withCode,
+    TResult Function(String flowId, String? provider, String? idToken)?
+        withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RegistrationFlowData value) signUp,
-    required TResult Function(LoginFlowData value) signIn,
+    required TResult Function(LoginFlowDataWithCode value) withCode,
+    required TResult Function(LoginFlowDataWithOIDC value) withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RegistrationFlowData value)? signUp,
-    TResult? Function(LoginFlowData value)? signIn,
+    TResult? Function(LoginFlowDataWithCode value)? withCode,
+    TResult? Function(LoginFlowDataWithOIDC value)? withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RegistrationFlowData value)? signUp,
-    TResult Function(LoginFlowData value)? signIn,
+    TResult Function(LoginFlowDataWithCode value)? withCode,
+    TResult Function(LoginFlowDataWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 
-  /// Create a copy of AuthenticationFlowData
+  /// Create a copy of LoginFlowData
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $AuthenticationFlowDataCopyWith<AuthenticationFlowData> get copyWith =>
+  $LoginFlowDataCopyWith<LoginFlowData> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AuthenticationFlowDataCopyWith<$Res> {
-  factory $AuthenticationFlowDataCopyWith(AuthenticationFlowData value,
-          $Res Function(AuthenticationFlowData) then) =
-      _$AuthenticationFlowDataCopyWithImpl<$Res, AuthenticationFlowData>;
+abstract class $LoginFlowDataCopyWith<$Res> {
+  factory $LoginFlowDataCopyWith(
+          LoginFlowData value, $Res Function(LoginFlowData) then) =
+      _$LoginFlowDataCopyWithImpl<$Res, LoginFlowData>;
   @useResult
   $Res call({String flowId});
 }
 
 /// @nodoc
-class _$AuthenticationFlowDataCopyWithImpl<$Res,
-        $Val extends AuthenticationFlowData>
-    implements $AuthenticationFlowDataCopyWith<$Res> {
-  _$AuthenticationFlowDataCopyWithImpl(this._value, this._then);
+class _$LoginFlowDataCopyWithImpl<$Res, $Val extends LoginFlowData>
+    implements $LoginFlowDataCopyWith<$Res> {
+  _$LoginFlowDataCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AuthenticationFlowData
+  /// Create a copy of LoginFlowData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -956,122 +649,122 @@ class _$AuthenticationFlowDataCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$RegistrationFlowDataImplCopyWith<$Res>
-    implements $AuthenticationFlowDataCopyWith<$Res> {
-  factory _$$RegistrationFlowDataImplCopyWith(_$RegistrationFlowDataImpl value,
-          $Res Function(_$RegistrationFlowDataImpl) then) =
-      __$$RegistrationFlowDataImplCopyWithImpl<$Res>;
+abstract class _$$LoginFlowDataWithCodeImplCopyWith<$Res>
+    implements $LoginFlowDataCopyWith<$Res> {
+  factory _$$LoginFlowDataWithCodeImplCopyWith(
+          _$LoginFlowDataWithCodeImpl value,
+          $Res Function(_$LoginFlowDataWithCodeImpl) then) =
+      __$$LoginFlowDataWithCodeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String flowId, RegistrationData data});
-
-  $RegistrationDataCopyWith<$Res> get data;
+  $Res call({String flowId, String email, String? code});
 }
 
 /// @nodoc
-class __$$RegistrationFlowDataImplCopyWithImpl<$Res>
-    extends _$AuthenticationFlowDataCopyWithImpl<$Res,
-        _$RegistrationFlowDataImpl>
-    implements _$$RegistrationFlowDataImplCopyWith<$Res> {
-  __$$RegistrationFlowDataImplCopyWithImpl(_$RegistrationFlowDataImpl _value,
-      $Res Function(_$RegistrationFlowDataImpl) _then)
+class __$$LoginFlowDataWithCodeImplCopyWithImpl<$Res>
+    extends _$LoginFlowDataCopyWithImpl<$Res, _$LoginFlowDataWithCodeImpl>
+    implements _$$LoginFlowDataWithCodeImplCopyWith<$Res> {
+  __$$LoginFlowDataWithCodeImplCopyWithImpl(_$LoginFlowDataWithCodeImpl _value,
+      $Res Function(_$LoginFlowDataWithCodeImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AuthenticationFlowData
+  /// Create a copy of LoginFlowData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? flowId = null,
-    Object? data = null,
+    Object? email = null,
+    Object? code = freezed,
   }) {
-    return _then(_$RegistrationFlowDataImpl(
+    return _then(_$LoginFlowDataWithCodeImpl(
       flowId: null == flowId
           ? _value.flowId
           : flowId // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as RegistrationData,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
-  }
-
-  /// Create a copy of AuthenticationFlowData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $RegistrationDataCopyWith<$Res> get data {
-    return $RegistrationDataCopyWith<$Res>(_value.data, (value) {
-      return _then(_value.copyWith(data: value));
-    });
   }
 }
 
 /// @nodoc
 
-class _$RegistrationFlowDataImpl implements RegistrationFlowData {
-  const _$RegistrationFlowDataImpl({required this.flowId, required this.data});
+class _$LoginFlowDataWithCodeImpl implements LoginFlowDataWithCode {
+  const _$LoginFlowDataWithCodeImpl(
+      {required this.flowId, required this.email, this.code});
 
   @override
   final String flowId;
   @override
-  final RegistrationData data;
+  final String email;
+  @override
+  final String? code;
 
   @override
   String toString() {
-    return 'AuthenticationFlowData.signUp(flowId: $flowId, data: $data)';
+    return 'LoginFlowData.withCode(flowId: $flowId, email: $email, code: $code)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RegistrationFlowDataImpl &&
+            other is _$LoginFlowDataWithCodeImpl &&
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
-            (identical(other.data, data) || other.data == data));
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.code, code) || other.code == code));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, flowId, data);
+  int get hashCode => Object.hash(runtimeType, flowId, email, code);
 
-  /// Create a copy of AuthenticationFlowData
+  /// Create a copy of LoginFlowData
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$RegistrationFlowDataImplCopyWith<_$RegistrationFlowDataImpl>
-      get copyWith =>
-          __$$RegistrationFlowDataImplCopyWithImpl<_$RegistrationFlowDataImpl>(
-              this, _$identity);
+  _$$LoginFlowDataWithCodeImplCopyWith<_$LoginFlowDataWithCodeImpl>
+      get copyWith => __$$LoginFlowDataWithCodeImplCopyWithImpl<
+          _$LoginFlowDataWithCodeImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, RegistrationData data) signUp,
-    required TResult Function(String flowId, LoginData data) signIn,
+    required TResult Function(String flowId, String email, String? code)
+        withCode,
+    required TResult Function(String flowId, String? provider, String? idToken)
+        withOIDC,
   }) {
-    return signUp(flowId, data);
+    return withCode(flowId, email, code);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, RegistrationData data)? signUp,
-    TResult? Function(String flowId, LoginData data)? signIn,
+    TResult? Function(String flowId, String email, String? code)? withCode,
+    TResult? Function(String flowId, String? provider, String? idToken)?
+        withOIDC,
   }) {
-    return signUp?.call(flowId, data);
+    return withCode?.call(flowId, email, code);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, RegistrationData data)? signUp,
-    TResult Function(String flowId, LoginData data)? signIn,
+    TResult Function(String flowId, String email, String? code)? withCode,
+    TResult Function(String flowId, String? provider, String? idToken)?
+        withOIDC,
     required TResult orElse(),
   }) {
-    if (signUp != null) {
-      return signUp(flowId, data);
+    if (withCode != null) {
+      return withCode(flowId, email, code);
     }
     return orElse();
   }
@@ -1079,167 +772,172 @@ class _$RegistrationFlowDataImpl implements RegistrationFlowData {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RegistrationFlowData value) signUp,
-    required TResult Function(LoginFlowData value) signIn,
+    required TResult Function(LoginFlowDataWithCode value) withCode,
+    required TResult Function(LoginFlowDataWithOIDC value) withOIDC,
   }) {
-    return signUp(this);
+    return withCode(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RegistrationFlowData value)? signUp,
-    TResult? Function(LoginFlowData value)? signIn,
+    TResult? Function(LoginFlowDataWithCode value)? withCode,
+    TResult? Function(LoginFlowDataWithOIDC value)? withOIDC,
   }) {
-    return signUp?.call(this);
+    return withCode?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RegistrationFlowData value)? signUp,
-    TResult Function(LoginFlowData value)? signIn,
+    TResult Function(LoginFlowDataWithCode value)? withCode,
+    TResult Function(LoginFlowDataWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
-    if (signUp != null) {
-      return signUp(this);
+    if (withCode != null) {
+      return withCode(this);
     }
     return orElse();
   }
 }
 
-abstract class RegistrationFlowData implements AuthenticationFlowData {
-  const factory RegistrationFlowData(
+abstract class LoginFlowDataWithCode implements LoginFlowData {
+  const factory LoginFlowDataWithCode(
       {required final String flowId,
-      required final RegistrationData data}) = _$RegistrationFlowDataImpl;
+      required final String email,
+      final String? code}) = _$LoginFlowDataWithCodeImpl;
 
   @override
   String get flowId;
-  @override
-  RegistrationData get data;
+  String get email;
+  String? get code;
 
-  /// Create a copy of AuthenticationFlowData
+  /// Create a copy of LoginFlowData
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RegistrationFlowDataImplCopyWith<_$RegistrationFlowDataImpl>
+  _$$LoginFlowDataWithCodeImplCopyWith<_$LoginFlowDataWithCodeImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LoginFlowDataImplCopyWith<$Res>
-    implements $AuthenticationFlowDataCopyWith<$Res> {
-  factory _$$LoginFlowDataImplCopyWith(
-          _$LoginFlowDataImpl value, $Res Function(_$LoginFlowDataImpl) then) =
-      __$$LoginFlowDataImplCopyWithImpl<$Res>;
+abstract class _$$LoginFlowDataWithOIDCImplCopyWith<$Res>
+    implements $LoginFlowDataCopyWith<$Res> {
+  factory _$$LoginFlowDataWithOIDCImplCopyWith(
+          _$LoginFlowDataWithOIDCImpl value,
+          $Res Function(_$LoginFlowDataWithOIDCImpl) then) =
+      __$$LoginFlowDataWithOIDCImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String flowId, LoginData data});
-
-  $LoginDataCopyWith<$Res> get data;
+  $Res call({String flowId, String? provider, String? idToken});
 }
 
 /// @nodoc
-class __$$LoginFlowDataImplCopyWithImpl<$Res>
-    extends _$AuthenticationFlowDataCopyWithImpl<$Res, _$LoginFlowDataImpl>
-    implements _$$LoginFlowDataImplCopyWith<$Res> {
-  __$$LoginFlowDataImplCopyWithImpl(
-      _$LoginFlowDataImpl _value, $Res Function(_$LoginFlowDataImpl) _then)
+class __$$LoginFlowDataWithOIDCImplCopyWithImpl<$Res>
+    extends _$LoginFlowDataCopyWithImpl<$Res, _$LoginFlowDataWithOIDCImpl>
+    implements _$$LoginFlowDataWithOIDCImplCopyWith<$Res> {
+  __$$LoginFlowDataWithOIDCImplCopyWithImpl(_$LoginFlowDataWithOIDCImpl _value,
+      $Res Function(_$LoginFlowDataWithOIDCImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AuthenticationFlowData
+  /// Create a copy of LoginFlowData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? flowId = null,
-    Object? data = null,
+    Object? provider = freezed,
+    Object? idToken = freezed,
   }) {
-    return _then(_$LoginFlowDataImpl(
+    return _then(_$LoginFlowDataWithOIDCImpl(
       flowId: null == flowId
           ? _value.flowId
           : flowId // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as LoginData,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idToken: freezed == idToken
+          ? _value.idToken
+          : idToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
-  }
-
-  /// Create a copy of AuthenticationFlowData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $LoginDataCopyWith<$Res> get data {
-    return $LoginDataCopyWith<$Res>(_value.data, (value) {
-      return _then(_value.copyWith(data: value));
-    });
   }
 }
 
 /// @nodoc
 
-class _$LoginFlowDataImpl implements LoginFlowData {
-  const _$LoginFlowDataImpl({required this.flowId, required this.data});
+class _$LoginFlowDataWithOIDCImpl implements LoginFlowDataWithOIDC {
+  const _$LoginFlowDataWithOIDCImpl(
+      {required this.flowId, this.provider, this.idToken});
 
   @override
   final String flowId;
   @override
-  final LoginData data;
+  final String? provider;
+  @override
+  final String? idToken;
 
   @override
   String toString() {
-    return 'AuthenticationFlowData.signIn(flowId: $flowId, data: $data)';
+    return 'LoginFlowData.withOIDC(flowId: $flowId, provider: $provider, idToken: $idToken)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoginFlowDataImpl &&
+            other is _$LoginFlowDataWithOIDCImpl &&
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
-            (identical(other.data, data) || other.data == data));
+            (identical(other.provider, provider) ||
+                other.provider == provider) &&
+            (identical(other.idToken, idToken) || other.idToken == idToken));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, flowId, data);
+  int get hashCode => Object.hash(runtimeType, flowId, provider, idToken);
 
-  /// Create a copy of AuthenticationFlowData
+  /// Create a copy of LoginFlowData
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$LoginFlowDataImplCopyWith<_$LoginFlowDataImpl> get copyWith =>
-      __$$LoginFlowDataImplCopyWithImpl<_$LoginFlowDataImpl>(this, _$identity);
+  _$$LoginFlowDataWithOIDCImplCopyWith<_$LoginFlowDataWithOIDCImpl>
+      get copyWith => __$$LoginFlowDataWithOIDCImplCopyWithImpl<
+          _$LoginFlowDataWithOIDCImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, RegistrationData data) signUp,
-    required TResult Function(String flowId, LoginData data) signIn,
+    required TResult Function(String flowId, String email, String? code)
+        withCode,
+    required TResult Function(String flowId, String? provider, String? idToken)
+        withOIDC,
   }) {
-    return signIn(flowId, data);
+    return withOIDC(flowId, provider, idToken);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, RegistrationData data)? signUp,
-    TResult? Function(String flowId, LoginData data)? signIn,
+    TResult? Function(String flowId, String email, String? code)? withCode,
+    TResult? Function(String flowId, String? provider, String? idToken)?
+        withOIDC,
   }) {
-    return signIn?.call(flowId, data);
+    return withOIDC?.call(flowId, provider, idToken);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, RegistrationData data)? signUp,
-    TResult Function(String flowId, LoginData data)? signIn,
+    TResult Function(String flowId, String email, String? code)? withCode,
+    TResult Function(String flowId, String? provider, String? idToken)?
+        withOIDC,
     required TResult orElse(),
   }) {
-    if (signIn != null) {
-      return signIn(flowId, data);
+    if (withOIDC != null) {
+      return withOIDC(flowId, provider, idToken);
     }
     return orElse();
   }
@@ -1247,49 +945,557 @@ class _$LoginFlowDataImpl implements LoginFlowData {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RegistrationFlowData value) signUp,
-    required TResult Function(LoginFlowData value) signIn,
+    required TResult Function(LoginFlowDataWithCode value) withCode,
+    required TResult Function(LoginFlowDataWithOIDC value) withOIDC,
   }) {
-    return signIn(this);
+    return withOIDC(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RegistrationFlowData value)? signUp,
-    TResult? Function(LoginFlowData value)? signIn,
+    TResult? Function(LoginFlowDataWithCode value)? withCode,
+    TResult? Function(LoginFlowDataWithOIDC value)? withOIDC,
   }) {
-    return signIn?.call(this);
+    return withOIDC?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RegistrationFlowData value)? signUp,
-    TResult Function(LoginFlowData value)? signIn,
+    TResult Function(LoginFlowDataWithCode value)? withCode,
+    TResult Function(LoginFlowDataWithOIDC value)? withOIDC,
     required TResult orElse(),
   }) {
-    if (signIn != null) {
-      return signIn(this);
+    if (withOIDC != null) {
+      return withOIDC(this);
     }
     return orElse();
   }
 }
 
-abstract class LoginFlowData implements AuthenticationFlowData {
-  const factory LoginFlowData(
+abstract class LoginFlowDataWithOIDC implements LoginFlowData {
+  const factory LoginFlowDataWithOIDC(
       {required final String flowId,
-      required final LoginData data}) = _$LoginFlowDataImpl;
+      final String? provider,
+      final String? idToken}) = _$LoginFlowDataWithOIDCImpl;
 
   @override
   String get flowId;
-  @override
-  LoginData get data;
+  String? get provider;
+  String? get idToken;
 
-  /// Create a copy of AuthenticationFlowData
+  /// Create a copy of LoginFlowData
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LoginFlowDataImplCopyWith<_$LoginFlowDataImpl> get copyWith =>
+  _$$LoginFlowDataWithOIDCImplCopyWith<_$LoginFlowDataWithOIDCImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$AuthenticationFlowState {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() idle,
+    required TResult Function(RegistrationFlowData data) registrationInProgress,
+    required TResult Function(LoginFlowData data) loginInProgress,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? idle,
+    TResult? Function(RegistrationFlowData data)? registrationInProgress,
+    TResult? Function(LoginFlowData data)? loginInProgress,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? idle,
+    TResult Function(RegistrationFlowData data)? registrationInProgress,
+    TResult Function(LoginFlowData data)? loginInProgress,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Idle value) idle,
+    required TResult Function(_RegistrationInProgress value)
+        registrationInProgress,
+    required TResult Function(_LoginInProgress value) loginInProgress,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Idle value)? idle,
+    TResult? Function(_RegistrationInProgress value)? registrationInProgress,
+    TResult? Function(_LoginInProgress value)? loginInProgress,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Idle value)? idle,
+    TResult Function(_RegistrationInProgress value)? registrationInProgress,
+    TResult Function(_LoginInProgress value)? loginInProgress,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AuthenticationFlowStateCopyWith<$Res> {
+  factory $AuthenticationFlowStateCopyWith(AuthenticationFlowState value,
+          $Res Function(AuthenticationFlowState) then) =
+      _$AuthenticationFlowStateCopyWithImpl<$Res, AuthenticationFlowState>;
+}
+
+/// @nodoc
+class _$AuthenticationFlowStateCopyWithImpl<$Res,
+        $Val extends AuthenticationFlowState>
+    implements $AuthenticationFlowStateCopyWith<$Res> {
+  _$AuthenticationFlowStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$IdleImplCopyWith<$Res> {
+  factory _$$IdleImplCopyWith(
+          _$IdleImpl value, $Res Function(_$IdleImpl) then) =
+      __$$IdleImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$IdleImplCopyWithImpl<$Res>
+    extends _$AuthenticationFlowStateCopyWithImpl<$Res, _$IdleImpl>
+    implements _$$IdleImplCopyWith<$Res> {
+  __$$IdleImplCopyWithImpl(_$IdleImpl _value, $Res Function(_$IdleImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$IdleImpl implements _Idle {
+  const _$IdleImpl();
+
+  @override
+  String toString() {
+    return 'AuthenticationFlowState.idle()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$IdleImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() idle,
+    required TResult Function(RegistrationFlowData data) registrationInProgress,
+    required TResult Function(LoginFlowData data) loginInProgress,
+  }) {
+    return idle();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? idle,
+    TResult? Function(RegistrationFlowData data)? registrationInProgress,
+    TResult? Function(LoginFlowData data)? loginInProgress,
+  }) {
+    return idle?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? idle,
+    TResult Function(RegistrationFlowData data)? registrationInProgress,
+    TResult Function(LoginFlowData data)? loginInProgress,
+    required TResult orElse(),
+  }) {
+    if (idle != null) {
+      return idle();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Idle value) idle,
+    required TResult Function(_RegistrationInProgress value)
+        registrationInProgress,
+    required TResult Function(_LoginInProgress value) loginInProgress,
+  }) {
+    return idle(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Idle value)? idle,
+    TResult? Function(_RegistrationInProgress value)? registrationInProgress,
+    TResult? Function(_LoginInProgress value)? loginInProgress,
+  }) {
+    return idle?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Idle value)? idle,
+    TResult Function(_RegistrationInProgress value)? registrationInProgress,
+    TResult Function(_LoginInProgress value)? loginInProgress,
+    required TResult orElse(),
+  }) {
+    if (idle != null) {
+      return idle(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Idle implements AuthenticationFlowState {
+  const factory _Idle() = _$IdleImpl;
+}
+
+/// @nodoc
+abstract class _$$RegistrationInProgressImplCopyWith<$Res> {
+  factory _$$RegistrationInProgressImplCopyWith(
+          _$RegistrationInProgressImpl value,
+          $Res Function(_$RegistrationInProgressImpl) then) =
+      __$$RegistrationInProgressImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({RegistrationFlowData data});
+
+  $RegistrationFlowDataCopyWith<$Res> get data;
+}
+
+/// @nodoc
+class __$$RegistrationInProgressImplCopyWithImpl<$Res>
+    extends _$AuthenticationFlowStateCopyWithImpl<$Res,
+        _$RegistrationInProgressImpl>
+    implements _$$RegistrationInProgressImplCopyWith<$Res> {
+  __$$RegistrationInProgressImplCopyWithImpl(
+      _$RegistrationInProgressImpl _value,
+      $Res Function(_$RegistrationInProgressImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$RegistrationInProgressImpl(
+      null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as RegistrationFlowData,
+    ));
+  }
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RegistrationFlowDataCopyWith<$Res> get data {
+    return $RegistrationFlowDataCopyWith<$Res>(_value.data, (value) {
+      return _then(_value.copyWith(data: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$RegistrationInProgressImpl implements _RegistrationInProgress {
+  const _$RegistrationInProgressImpl(this.data);
+
+  @override
+  final RegistrationFlowData data;
+
+  @override
+  String toString() {
+    return 'AuthenticationFlowState.registrationInProgress(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegistrationInProgressImpl &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RegistrationInProgressImplCopyWith<_$RegistrationInProgressImpl>
+      get copyWith => __$$RegistrationInProgressImplCopyWithImpl<
+          _$RegistrationInProgressImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() idle,
+    required TResult Function(RegistrationFlowData data) registrationInProgress,
+    required TResult Function(LoginFlowData data) loginInProgress,
+  }) {
+    return registrationInProgress(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? idle,
+    TResult? Function(RegistrationFlowData data)? registrationInProgress,
+    TResult? Function(LoginFlowData data)? loginInProgress,
+  }) {
+    return registrationInProgress?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? idle,
+    TResult Function(RegistrationFlowData data)? registrationInProgress,
+    TResult Function(LoginFlowData data)? loginInProgress,
+    required TResult orElse(),
+  }) {
+    if (registrationInProgress != null) {
+      return registrationInProgress(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Idle value) idle,
+    required TResult Function(_RegistrationInProgress value)
+        registrationInProgress,
+    required TResult Function(_LoginInProgress value) loginInProgress,
+  }) {
+    return registrationInProgress(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Idle value)? idle,
+    TResult? Function(_RegistrationInProgress value)? registrationInProgress,
+    TResult? Function(_LoginInProgress value)? loginInProgress,
+  }) {
+    return registrationInProgress?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Idle value)? idle,
+    TResult Function(_RegistrationInProgress value)? registrationInProgress,
+    TResult Function(_LoginInProgress value)? loginInProgress,
+    required TResult orElse(),
+  }) {
+    if (registrationInProgress != null) {
+      return registrationInProgress(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _RegistrationInProgress implements AuthenticationFlowState {
+  const factory _RegistrationInProgress(final RegistrationFlowData data) =
+      _$RegistrationInProgressImpl;
+
+  RegistrationFlowData get data;
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RegistrationInProgressImplCopyWith<_$RegistrationInProgressImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoginInProgressImplCopyWith<$Res> {
+  factory _$$LoginInProgressImplCopyWith(_$LoginInProgressImpl value,
+          $Res Function(_$LoginInProgressImpl) then) =
+      __$$LoginInProgressImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({LoginFlowData data});
+
+  $LoginFlowDataCopyWith<$Res> get data;
+}
+
+/// @nodoc
+class __$$LoginInProgressImplCopyWithImpl<$Res>
+    extends _$AuthenticationFlowStateCopyWithImpl<$Res, _$LoginInProgressImpl>
+    implements _$$LoginInProgressImplCopyWith<$Res> {
+  __$$LoginInProgressImplCopyWithImpl(
+      _$LoginInProgressImpl _value, $Res Function(_$LoginInProgressImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$LoginInProgressImpl(
+      null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as LoginFlowData,
+    ));
+  }
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LoginFlowDataCopyWith<$Res> get data {
+    return $LoginFlowDataCopyWith<$Res>(_value.data, (value) {
+      return _then(_value.copyWith(data: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$LoginInProgressImpl implements _LoginInProgress {
+  const _$LoginInProgressImpl(this.data);
+
+  @override
+  final LoginFlowData data;
+
+  @override
+  String toString() {
+    return 'AuthenticationFlowState.loginInProgress(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoginInProgressImpl &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoginInProgressImplCopyWith<_$LoginInProgressImpl> get copyWith =>
+      __$$LoginInProgressImplCopyWithImpl<_$LoginInProgressImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() idle,
+    required TResult Function(RegistrationFlowData data) registrationInProgress,
+    required TResult Function(LoginFlowData data) loginInProgress,
+  }) {
+    return loginInProgress(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? idle,
+    TResult? Function(RegistrationFlowData data)? registrationInProgress,
+    TResult? Function(LoginFlowData data)? loginInProgress,
+  }) {
+    return loginInProgress?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? idle,
+    TResult Function(RegistrationFlowData data)? registrationInProgress,
+    TResult Function(LoginFlowData data)? loginInProgress,
+    required TResult orElse(),
+  }) {
+    if (loginInProgress != null) {
+      return loginInProgress(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Idle value) idle,
+    required TResult Function(_RegistrationInProgress value)
+        registrationInProgress,
+    required TResult Function(_LoginInProgress value) loginInProgress,
+  }) {
+    return loginInProgress(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Idle value)? idle,
+    TResult? Function(_RegistrationInProgress value)? registrationInProgress,
+    TResult? Function(_LoginInProgress value)? loginInProgress,
+  }) {
+    return loginInProgress?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Idle value)? idle,
+    TResult Function(_RegistrationInProgress value)? registrationInProgress,
+    TResult Function(_LoginInProgress value)? loginInProgress,
+    required TResult orElse(),
+  }) {
+    if (loginInProgress != null) {
+      return loginInProgress(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _LoginInProgress implements AuthenticationFlowState {
+  const factory _LoginInProgress(final LoginFlowData data) =
+      _$LoginInProgressImpl;
+
+  LoginFlowData get data;
+
+  /// Create a copy of AuthenticationFlowState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoginInProgressImplCopyWith<_$LoginInProgressImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

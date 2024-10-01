@@ -7,7 +7,7 @@ part of '../authentication_provider.dart';
 // **************************************************************************
 
 String _$authenticationRepositoryHash() =>
-    r'43ec48631533f4fdb521e5976950e8ef1b096afe';
+    r'e5cb8798abd0c3c38a0ace72d87bbe8ece88198a';
 
 /// See also [authenticationRepository].
 @ProviderFor(authenticationRepository)
@@ -235,24 +235,6 @@ final getActiveIdentityUseCaseProvider =
 
 typedef GetActiveIdentityUseCaseRef
     = AutoDisposeProviderRef<GetActiveIdentityUseCase>;
-String _$signInWithGoogleUseCaseHash() =>
-    r'3d79f2c6599335ba6da4f2a2aa64efdcda134805';
-
-/// See also [signInWithGoogleUseCase].
-@ProviderFor(signInWithGoogleUseCase)
-final signInWithGoogleUseCaseProvider =
-    AutoDisposeProvider<SignInWithGoogleUseCase>.internal(
-  signInWithGoogleUseCase,
-  name: r'signInWithGoogleUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$signInWithGoogleUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef SignInWithGoogleUseCaseRef
-    = AutoDisposeProviderRef<SignInWithGoogleUseCase>;
 String _$getSessionDetailsUseCaseHash() =>
     r'380e954150c7ad20cff1d4c8adccf0088f2a4477';
 

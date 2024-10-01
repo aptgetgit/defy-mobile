@@ -1,7 +1,6 @@
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:defy/features/authentication/presentation/provider/authentication_flow_manager.dart';
 import 'package:defy/features/authentication/presentation/provider/authentication_provider.dart';
-import 'package:defy/features/authentication/presentation/provider/states/authentication_flow_state.dart';
 import 'package:defy/features/authentication/presentation/provider/states/authentication_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -16,62 +15,45 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
 
   Future<AuthenticationState> _initialize() async {
     try {
-      final activeIdentityId =
-          ref.read(getActiveIdentityUseCaseProvider).call();
+      final activeIdentityId = ref.read(getActiveIdentityUseCaseProvider).call();
       if (activeIdentityId != null) {
-        final token = await ref
-            .read(getSessionTokenUseCaseProvider)
-            .call(activeIdentityId);
-        final sessionDetails = await ref
-            .read(getSessionDetailsUseCaseProvider)
-            .call(activeIdentityId);
+        final token = await ref.read(getSessionTokenUseCaseProvider).call(activeIdentityId);
+        final sessionDetails = await ref.read(getSessionDetailsUseCaseProvider).call(activeIdentityId);
         if (sessionDetails.isActive && !sessionDetails.isExpired) {
-          final currentSession =
-              await ref.read(getCurrentSessionUseCaseProvider).call(token);
-          if (currentSession.isActive &&
-              !currentSession.isExpired) {
+          final currentSession = await ref.read(getCurrentSessionUseCaseProvider).call(token);
+          if (currentSession.isActive && !currentSession.isExpired) {
             return AuthenticationState.authenticated(currentSession);
           }
         }
       }
       return const AuthenticationState.unauthenticated();
     } catch (e) {
-      rethrow;
+      return const AuthenticationState.unauthenticated();
     }
   }
 
   Future<void> initiateLogin(InitiateLoginOptions options) async {
     state = const AsyncValue.loading();
     try {
-      final flowId =
-          await ref.read(initiateLoginUseCaseProvider).call(options);
-      final signInData = options.map(
-        withEmailCode: (e) => LoginData.withEmailCode(email: e.email),
-        withOIDC: (_) => const LoginData.withOIDC(),
-      );
-      ref
-          .read(authenticationFlowManagerProvider.notifier)
-          .initializeLoginFlow(flowId, signInData);
+      final flowId = await ref.read(initiateLoginUseCaseProvider).call(options);
+      ref.read(authenticationFlowManagerProvider.notifier).initializeLoginFlow(flowId, options);
       state = const AsyncValue.data(AuthenticationState.authenticating());
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
   }
 
-  Future<void> completeLogin(CompleteLoginOptions options) async {
+  Future<void> completeLogin() async {
     state = const AsyncValue.loading();
     try {
       final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
-      final flowData = ref.read(authenticationFlowManagerProvider);
-      if (flowData == null || flowData is! LoginFlowData) {
-        throw Exception("Sign-in flow not properly initiated");
+      final completeOptions = flowManager.getCompleteLoginOptions();
+      if (completeOptions == null) {
+        throw Exception("Login flow not properly initiated or missing data");
       }
 
-      final session =
-          await ref.read(completeLoginUseCaseProvider).call(options);
-      await ref
-          .read(setActiveIdentityUseCaseProvider)
-          .call(session.identity.id);
+      final session = await ref.read(completeLoginUseCaseProvider).call(completeOptions);
+      await ref.read(setActiveIdentityUseCaseProvider).call(session.identity.id);
       flowManager.resetFlow();
       state = AsyncValue.data(AuthenticationState.authenticated(session));
     } catch (e) {
@@ -82,42 +64,25 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
   Future<void> initiateRegistration(InitiateRegistrationOptions options) async {
     state = const AsyncValue.loading();
     try {
-      final flowId =
-          await ref.read(initiateRegistrationUseCaseProvider).call(options);
-      final signUpData = options.map(
-        withEmailCode: (e) => RegistrationData.withEmailCode(
-          email: e.email,
-          username: e.username,
-          name: e.name,
-        ),
-        withOIDC: (o) => RegistrationData.withOIDC(
-          username: o.username,
-          name: o.name,
-        ),
-      );
-      ref
-          .read(authenticationFlowManagerProvider.notifier)
-          .initializeRegistrationFlow(flowId, signUpData);
+      final flowId = await ref.read(initiateRegistrationUseCaseProvider).call(options);
+      ref.read(authenticationFlowManagerProvider.notifier).initializeRegistrationFlow(flowId, options);
       state = const AsyncValue.data(AuthenticationState.authenticating());
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
   }
 
-  Future<void> completeRegistration(CompleteRegistrationOptions options) async {
+  Future<void> completeRegistration() async {
     state = const AsyncValue.loading();
     try {
       final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
-      final flowData = ref.read(authenticationFlowManagerProvider);
-      if (flowData == null || flowData is! RegistrationFlowData) {
-        throw Exception("Sign-up flow not properly initiated");
+      final completeOptions = flowManager.getCompleteRegistrationOptions();
+      if (completeOptions == null) {
+        throw Exception("Registration flow not properly initiated or missing data");
       }
 
-      final session =
-          await ref.read(completeRegistrationUseCaseProvider).call(options);
-      await ref
-          .read(setActiveIdentityUseCaseProvider)
-          .call(session.identity.id);
+      final session = await ref.read(completeRegistrationUseCaseProvider).call(completeOptions);
+      await ref.read(setActiveIdentityUseCaseProvider).call(session.identity.id);
       flowManager.resetFlow();
       state = AsyncValue.data(AuthenticationState.authenticated(session));
     } catch (e) {
@@ -128,8 +93,7 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
   Future<void> logout() async {
     state = const AsyncValue.loading();
     try {
-      final activeIdentityId =
-          ref.read(getActiveIdentityUseCaseProvider).call();
+      final activeIdentityId = ref.read(getActiveIdentityUseCaseProvider).call();
       if (activeIdentityId != null) {
         await ref.read(logoutUseCaseProvider).call(activeIdentityId);
       }
@@ -139,12 +103,13 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
     }
   }
 
-  Future<String?> signInWithGoogle() async {
-    try {
-      final credential = await ref.read(signInWithGoogleUseCaseProvider).call();
-      return credential.idToken;
-    } catch (e) {
-      return null;
-    }
-  }
+  // Future<void> updateAuthenticationFlow({String? code, String? provider, String? idToken, String? email}) async {
+  //   final flowManagerState = ref.read(authenticationFlowManagerProvider);
+  //   final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
+  //   flowManagerState.map(
+  //     idle: (_) {},
+  //     registrationInProgress: (_) => flowManager.updateRegistrationFlow(code: code, provider: provider, idToken: idToken, email: email),
+  //     loginInProgress: (_) => flowManager.updateLoginFlow(code: code, provider: provider, idToken: idToken, email: email),
+  //   );
+  // }
 }

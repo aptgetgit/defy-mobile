@@ -9,6 +9,8 @@ part of '../router.dart';
 List<RouteBase> get $appRoutes => [
       $splashRoute,
       $onboardingRoute,
+      $authenticationRoute,
+      $homeRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -44,6 +46,51 @@ extension $OnboardingRouteExtension on OnboardingRoute {
 
   String get location => GoRouteData.$location(
         '/onboarding',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $authenticationRoute => GoRouteData.$route(
+      path: '/authentication',
+      factory: $AuthenticationRouteExtension._fromState,
+    );
+
+extension $AuthenticationRouteExtension on AuthenticationRoute {
+  static AuthenticationRoute _fromState(GoRouterState state) =>
+      const AuthenticationRoute();
+
+  String get location => GoRouteData.$location(
+        '/authentication',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $homeRoute => GoRouteData.$route(
+      path: '/home',
+      factory: $HomeRouteExtension._fromState,
+    );
+
+extension $HomeRouteExtension on HomeRoute {
+  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
+
+  String get location => GoRouteData.$location(
+        '/home',
       );
 
   void go(BuildContext context) => context.go(location);

@@ -29,6 +29,8 @@ class AppLogger {
     _initialized = true;
   }
 
+  Logger get logger => _logger;
+
   static void log(
     Level level,
     dynamic message, {

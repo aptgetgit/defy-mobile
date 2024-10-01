@@ -1,4 +1,3 @@
-import 'package:credential_manager/credential_manager.dart';
 import 'package:defy/features/authentication/domain/entities/session_entity.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 
@@ -159,15 +158,5 @@ class GetActiveIdentityUseCase {
 
   String? call() {
     return _repository.getActiveIdentity();
-  }
-}
-
-class SignInWithGoogleUseCase {
-  final AuthenticationRepository _repository;
-
-  SignInWithGoogleUseCase(this._repository);
-
-  Future<GoogleIdTokenCredential> call() {
-    return _repository.signInWithGoogle();
   }
 }

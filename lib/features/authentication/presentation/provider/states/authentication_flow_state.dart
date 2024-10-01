@@ -3,44 +3,42 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'generated/authentication_flow_state.freezed.dart';
 
 @freezed
-class RegistrationData with _$RegistrationData {
-  const factory RegistrationData.withEmailCode({
-    required String email,
+class RegistrationFlowData with _$RegistrationFlowData {
+  const factory RegistrationFlowData.withCode({
+    required String flowId,
     required String username,
     required String name,
+    required String email,
     String? code,
-  }) = RegistrationWithEmailCode;
+  }) = RegistrationFlowDataWithCode;
 
-  const factory RegistrationData.withOIDC({
+  const factory RegistrationFlowData.withOIDC({
+    required String flowId,
     required String username,
     required String name,
     String? provider,
     String? idToken,
-  }) = RegistrationWithOIDC;
+  }) = RegistrationFlowDataWithOIDC;
 }
 
 @freezed
-class LoginData with _$LoginData {
-  const factory LoginData.withEmailCode({
+class LoginFlowData with _$LoginFlowData {
+  const factory LoginFlowData.withCode({
+    required String flowId,
     required String email,
     String? code,
-  }) = LoginWithEmailCode;
+  }) = LoginFlowDataWithCode;
 
-  const factory LoginData.withOIDC({
+  const factory LoginFlowData.withOIDC({
+    required String flowId,
     String? provider,
     String? idToken,
-  }) = LoginWithOIDC;
+  }) = LoginFlowDataWithOIDC;
 }
 
 @freezed
-class AuthenticationFlowData with _$AuthenticationFlowData {
-  const factory AuthenticationFlowData.signUp({
-    required String flowId,
-    required RegistrationData data,
-  }) = RegistrationFlowData;
-
-  const factory AuthenticationFlowData.signIn({
-    required String flowId,
-    required LoginData data,
-  }) = LoginFlowData;
+class AuthenticationFlowState with _$AuthenticationFlowState {
+  const factory AuthenticationFlowState.idle() = _Idle;
+  const factory AuthenticationFlowState.registrationInProgress(RegistrationFlowData data) = _RegistrationInProgress;
+  const factory AuthenticationFlowState.loginInProgress(LoginFlowData data) = _LoginInProgress;
 }

@@ -155,7 +155,24 @@ class _DioInitializerProviderElement extends ProviderElement<Dio>
   String get baseUrl => (origin as DioInitializerProvider).baseUrl;
 }
 
-String _$baseDioServiceHash() => r'94b3bac838a220ddd9601e74ee4c1e2cc27938cd';
+String _$sessionTokenInterceptorHash() =>
+    r'03441f20b0eab46cc22b55bf50c54771455b2148';
+
+/// See also [sessionTokenInterceptor].
+@ProviderFor(sessionTokenInterceptor)
+final sessionTokenInterceptorProvider =
+    Provider<SessionTokenInterceptor>.internal(
+  sessionTokenInterceptor,
+  name: r'sessionTokenInterceptorProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$sessionTokenInterceptorHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SessionTokenInterceptorRef = ProviderRef<SessionTokenInterceptor>;
+String _$baseDioServiceHash() => r'919ace0a7339d40152e8b0d33f78420453c458d3';
 
 /// See also [baseDioService].
 @ProviderFor(baseDioService)
@@ -170,7 +187,7 @@ final baseDioServiceProvider = Provider<Dio>.internal(
 );
 
 typedef BaseDioServiceRef = ProviderRef<Dio>;
-String _$kratosDioServiceHash() => r'8c9481d41c63f8275d5eebbda1245386a85f76cb';
+String _$kratosDioServiceHash() => r'567f1d16e62e65f557deb85cfbd608be706eb1c6';
 
 /// See also [kratosDioService].
 @ProviderFor(kratosDioService)

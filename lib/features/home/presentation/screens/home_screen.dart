@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:defy/features/authentication/presentation/provider/authentication_notifier.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_notifier.dart';
 import 'package:defy/features/authentication/domain/entities/session_entity.dart';
 import 'package:defy/core/routes/router.dart';
 

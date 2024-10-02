@@ -2,9 +2,9 @@ import 'package:defy/core/providers/ory_kratos_provider.dart';
 import 'package:defy/core/providers/secure_storage_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
 import 'package:defy/features/authentication/data/repositories/authentication_repository_implementation.dart';
-import 'package:defy/features/authentication/data/source/remote/kratos_data_source.dart';
+import 'package:defy/features/authentication/data/sources/remote/kratos_data_source.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
-import 'package:defy/features/authentication/domain/use_cases/use_case.dart';
+import 'package:defy/features/authentication/domain/usecases/use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/authentication_provider.g.dart';

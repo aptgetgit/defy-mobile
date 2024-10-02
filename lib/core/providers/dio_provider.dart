@@ -1,8 +1,8 @@
 import 'package:defy/config/env.dart';
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/logging/dio_logger.dart';
-import 'package:defy/features/authentication/presentation/provider/authentication_notifier.dart';
-import 'package:defy/features/authentication/presentation/provider/authentication_provider.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_notifier.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

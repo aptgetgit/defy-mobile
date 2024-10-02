@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:built_value/json_object.dart';
 import 'package:defy/core/providers/secure_storage_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
-import 'package:defy/features/authentication/data/source/remote/kratos_data_source.dart';
+import 'package:defy/features/authentication/data/sources/remote/kratos_data_source.dart';
 import 'package:defy/features/authentication/domain/entities/session_entity.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:jwt_decode/jwt_decode.dart';

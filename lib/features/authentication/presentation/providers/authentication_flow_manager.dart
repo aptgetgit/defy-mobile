@@ -1,6 +1,6 @@
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
-import 'package:defy/features/authentication/presentation/provider/states/authentication_flow_state.dart';
+import 'package:defy/features/authentication/presentation/providers/states/authentication_flow_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/authentication_flow_manager.g.dart';

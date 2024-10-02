@@ -1,7 +1,7 @@
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
-import 'package:defy/features/authentication/presentation/provider/authentication_flow_manager.dart';
-import 'package:defy/features/authentication/presentation/provider/authentication_provider.dart';
-import 'package:defy/features/authentication/presentation/provider/states/authentication_state.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_flow_manager.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_provider.dart';
+import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/authentication_notifier.g.dart';

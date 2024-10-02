@@ -2,13 +2,13 @@ import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/routes/router.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
-import 'package:defy/features/authentication/presentation/provider/authentication_flow_manager.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_flow_manager.dart';
 import 'package:defy/core/providers/credential_manager_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
-import 'package:defy/features/authentication/presentation/provider/authentication_notifier.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_notifier.dart';
 
 class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key});

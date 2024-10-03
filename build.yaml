@@ -23,6 +23,12 @@ targets:
         generate_for:
           - lib/**.dart
 
+      # Object Box Generator configuration
+      objectbox_generator|resolver:
+        enabled: true
+      objectbox_generator|generator:
+        enabled: true
+
       # JSON Serializable configuration
       json_serializable:json_serializable:
         enabled: true

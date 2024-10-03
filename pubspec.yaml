@@ -59,6 +59,8 @@ dependencies:
   built_value: ^8.9.2
   one_of: ^1.5.0
   jwt_decode: ^0.3.1
+  objectbox: ^4.0.2
+  objectbox_flutter_libs: ^4.0.2
 
 dev_dependencies:
   flutter_test:
@@ -72,7 +74,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.0
   riverpod_generator: ^2.4.3
-  build_runner: ^2.4.12
+  build_runner: ^2.4.13
   custom_lint: ^0.6.7
   riverpod_lint: ^2.3.13
   go_router_builder: ^2.7.1
@@ -80,6 +82,7 @@ dev_dependencies:
   envied_generator: ^0.5.4+1
   freezed: ^2.5.7
   json_serializable: ^6.8.0
+  objectbox_generator: ^4.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -87,6 +90,10 @@ dev_dependencies:
 # Flutter Gen Config
 flutter_gen:
   output: lib/config
+
+# Object Box Config
+objectbox:
+  output_dir: config/objectbox
 
 # The following section is specific to Flutter packages.
 flutter:

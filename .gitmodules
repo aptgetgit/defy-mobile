@@ -1,4 +1,4 @@
 [submodule "packages/ory-sdk"]
 	path = packages/ory-sdk
 	url = git@github.com:avex-id/ory-sdk.git
-	branch = release/v1.2.0
+	branch = release/v1.2.0-kratos-dart

@@ -8,8 +8,8 @@ abstract class UserBlockchainAccountGroupAssignmentRepository {
   List<UserBlockchainAccountGroupAssignment>
       getLocalUserBlockchainAccountGroupAssignmentsByGroup(
           String blockchainAccountGroupId);
-  List<UserBlockchainAccountGroupAssignment>
-      getLocalUserBlockchainAccountGroupAssignmentsByAccount(
+  UserBlockchainAccountGroupAssignment?
+      getLocalUserBlockchainAccountGroupAssignmentByAccount(
           String blockchainAccountId);
   UserBlockchainAccountGroupAssignment?
       getLocalUserBlockchainAccountGroupAssignment(

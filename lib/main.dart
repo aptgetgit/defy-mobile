@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:credential_manager/credential_manager.dart';
 import 'package:defy/app.dart';
 import 'package:defy/config/env.dart';
+import 'package:defy/config/objectbox/objectbox.g.dart';
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/logging/riverpod_observer.dart';
 import 'package:defy/core/providers/dio_provider.dart';
+import 'package:defy/core/providers/object_box_database_provider.dart';
 import 'package:defy/core/providers/ory_kratos_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
 import 'package:defy/core/providers/secure_storage_provider.dart';
@@ -13,8 +15,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path/path.dart';
 
 Future<void> main() async {
   // Initialize the AppLogger
@@ -57,6 +61,11 @@ Future<void> main() async {
         synchronizable: false,
       ),
     );
+
+    final applicationDirectory = await getApplicationDocumentsDirectory();
+    final store =
+        await openStore(directory: join(applicationDirectory.path, "obx-defy"));
+
     if (Platform.isAndroid) {
       final credentialManager = CredentialManager();
       await credentialManager.init(
@@ -72,28 +81,29 @@ Future<void> main() async {
     overrides.addAll([
       sharedPreferencesInitializerProvider.overrideWithValue(sharedPreferences),
       secureStorageInitializerProvider.overrideWithValue(secureStorage),
+      objectBoxDbInitializerProvider.overrideWithValue(store)
     ]);
 
     final container = ProviderContainer(
       overrides: overrides,
       observers: [
         ProviderLogger(
-          logAdditions: true,
-          logDisposals: true,
-          logErrors: true,
-          logUpdates: true,
-          logOnlySignificantUpdates: true,
-          maxCollectionLogLength: 5,
-          updateFrequencyThreshold: Duration(milliseconds: 500),
-          logger: AppLogger().logger
-          // logger: (String message) {
-          //   if (message.startsWith('Provider Error:')) {
-          //     AppLogger.error(message);
-          //   } else {
-          //     AppLogger.debug(message);
-          //   }
-          // },
-        ),
+            logAdditions: true,
+            logDisposals: true,
+            logErrors: true,
+            logUpdates: true,
+            logOnlySignificantUpdates: true,
+            maxCollectionLogLength: 5,
+            updateFrequencyThreshold: Duration(milliseconds: 500),
+            logger: AppLogger().logger
+            // logger: (String message) {
+            //   if (message.startsWith('Provider Error:')) {
+            //     AppLogger.error(message);
+            //   } else {
+            //     AppLogger.debug(message);
+            //   }
+            // },
+            ),
       ],
     );
     container.read(dioInitializerProvider(Env.apiBaseUrl));

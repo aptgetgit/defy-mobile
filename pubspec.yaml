@@ -54,13 +54,15 @@ dependencies:
   crypto: ^3.0.5
   freezed_annotation: ^2.4.4
   credential_manager: ^1.0.4+1
-  isar: ^3.1.0+1
   json_annotation: ^4.9.0
   built_value: ^8.9.2
   one_of: ^1.5.0
   jwt_decode: ^0.3.1
   objectbox: ^4.0.2
   objectbox_flutter_libs: ^4.0.2
+  retrofit: ^4.4.1
+  path_provider: ^2.1.4
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +85,7 @@ dev_dependencies:
   freezed: ^2.5.7
   json_serializable: ^6.8.0
   objectbox_generator: ^4.0.2
+  retrofit_generator: ^9.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

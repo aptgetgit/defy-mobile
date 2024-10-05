@@ -24,6 +24,32 @@ class GetLocalUserBlockchainAccountGroupAssignmentUseCase {
   }
 }
 
+class GetLocalUserBlockchainAccountGroupAssignmentByAccountUseCase {
+  final UserBlockchainAccountGroupAssignmentRepository _repository;
+
+  GetLocalUserBlockchainAccountGroupAssignmentByAccountUseCase(
+      this._repository);
+
+  UserBlockchainAccountGroupAssignment? call(String blockchainAccountId) {
+    return _repository.getLocalUserBlockchainAccountGroupAssignmentByAccount(
+        blockchainAccountId);
+  }
+}
+
+class GetLocalUserBlockchainAccountGroupAssignmentsByGroupUseCase {
+  final UserBlockchainAccountGroupAssignmentRepository _repository;
+
+  GetLocalUserBlockchainAccountGroupAssignmentsByGroupUseCase(
+      this._repository);
+
+  List<UserBlockchainAccountGroupAssignment> call(
+      String blockchainAccountGroupId) {
+    return _repository
+        .getLocalUserBlockchainAccountGroupAssignmentsByGroup(
+            blockchainAccountGroupId);
+  }
+}
+
 class SaveLocalUserBlockchainAccountGroupAssignmentUseCase {
   final UserBlockchainAccountGroupAssignmentRepository _repository;
 

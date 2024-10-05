@@ -29,6 +29,15 @@ targets:
       objectbox_generator|generator:
         enabled: true
 
+      # Retrofit Generator configuration
+      retrofit_generator|retrofit_generator:
+        enabled: true
+        generate_for:
+          - lib/**.dart
+        options:
+          auto_convert_to_null: true
+          nullsafety: true
+
       # JSON Serializable configuration
       json_serializable:json_serializable:
         enabled: true

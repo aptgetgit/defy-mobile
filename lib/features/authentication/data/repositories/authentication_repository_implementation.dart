@@ -10,15 +10,16 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:ory_kratos_client/ory_kratos_client.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
-  static const String _prefix = 'authentication:identity:';
+  // users:$userId:auth:session:token
+  static  String _prefix(String identityId) => 'identity:$identityId:authentication:';
 
   static String sessionTokenKey(String identityId) =>
-      '$_prefix$identityId:session:token';
+      '${_prefix(identityId)}session:token';
 
   static String sessionDetailsKey(String identityId) =>
-      '$_prefix$identityId:session:details';
+      '${_prefix(identityId)}session:details';
 
-  static String activeIdentityKey() => '${_prefix}active';
+  static String activeIdentityKey() => 'app:state:last_active_identity';
 
   final KratosDataSource _kratosClient;
   final SecureStorageService _secureStorage;
@@ -294,7 +295,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   Future<List<IdentityEntity>> getLoggedInIdentities() async {
     final allKeys = _sharedPreferences.getKeys();
     final sessionKeys = allKeys.where(
-        (key) => key.startsWith(_prefix) && key.endsWith(':session:details'));
+        (key) => key.startsWith("identity:") && key.endsWith(':authentication:session:details'));
 
     final List<IdentityEntity> identities = [];
     for (final key in sessionKeys) {

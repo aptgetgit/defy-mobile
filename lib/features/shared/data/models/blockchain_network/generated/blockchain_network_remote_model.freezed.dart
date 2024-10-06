@@ -22,7 +22,9 @@ BlockchainNetworkRemoteModel _$BlockchainNetworkRemoteModelFromJson(
 /// @nodoc
 mixin _$BlockchainNetworkRemoteModel {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'namespace')
   String get namespace => throw _privateConstructorUsedError;
+  @JsonKey(name: 'reference')
   String get reference => throw _privateConstructorUsedError;
 
   /// Serializes this BlockchainNetworkRemoteModel to a JSON map.
@@ -43,7 +45,10 @@ abstract class $BlockchainNetworkRemoteModelCopyWith<$Res> {
       _$BlockchainNetworkRemoteModelCopyWithImpl<$Res,
           BlockchainNetworkRemoteModel>;
   @useResult
-  $Res call({String id, String namespace, String reference});
+  $Res call(
+      {String id,
+      @JsonKey(name: 'namespace') String namespace,
+      @JsonKey(name: 'reference') String reference});
 }
 
 /// @nodoc
@@ -92,7 +97,10 @@ abstract class _$$BlockchainNetworkRemoteModelImplCopyWith<$Res>
       __$$BlockchainNetworkRemoteModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String namespace, String reference});
+  $Res call(
+      {String id,
+      @JsonKey(name: 'namespace') String namespace,
+      @JsonKey(name: 'reference') String reference});
 }
 
 /// @nodoc
@@ -135,7 +143,9 @@ class __$$BlockchainNetworkRemoteModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BlockchainNetworkRemoteModelImpl extends _BlockchainNetworkRemoteModel {
   const _$BlockchainNetworkRemoteModelImpl(
-      {required this.id, required this.namespace, required this.reference})
+      {required this.id,
+      @JsonKey(name: 'namespace') required this.namespace,
+      @JsonKey(name: 'reference') required this.reference})
       : super._();
 
   factory _$BlockchainNetworkRemoteModelImpl.fromJson(
@@ -145,8 +155,10 @@ class _$BlockchainNetworkRemoteModelImpl extends _BlockchainNetworkRemoteModel {
   @override
   final String id;
   @override
+  @JsonKey(name: 'namespace')
   final String namespace;
   @override
+  @JsonKey(name: 'reference')
   final String reference;
 
   @override
@@ -191,9 +203,10 @@ class _$BlockchainNetworkRemoteModelImpl extends _BlockchainNetworkRemoteModel {
 abstract class _BlockchainNetworkRemoteModel
     extends BlockchainNetworkRemoteModel {
   const factory _BlockchainNetworkRemoteModel(
-      {required final String id,
-      required final String namespace,
-      required final String reference}) = _$BlockchainNetworkRemoteModelImpl;
+          {required final String id,
+          @JsonKey(name: 'namespace') required final String namespace,
+          @JsonKey(name: 'reference') required final String reference}) =
+      _$BlockchainNetworkRemoteModelImpl;
   const _BlockchainNetworkRemoteModel._() : super._();
 
   factory _BlockchainNetworkRemoteModel.fromJson(Map<String, dynamic> json) =
@@ -202,8 +215,10 @@ abstract class _BlockchainNetworkRemoteModel
   @override
   String get id;
   @override
+  @JsonKey(name: 'namespace')
   String get namespace;
   @override
+  @JsonKey(name: 'reference')
   String get reference;
 
   /// Create a copy of BlockchainNetworkRemoteModel

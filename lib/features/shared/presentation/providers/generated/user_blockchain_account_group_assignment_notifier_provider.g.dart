@@ -7,7 +7,7 @@ part of '../user_blockchain_account_group_assignment_notifier_provider.dart';
 // **************************************************************************
 
 String _$userBlockchainAccountGroupAssignmentNotifierHash() =>
-    r'32eb622ed299c72a8d0427257aacf4d6cd67b1a1';
+    r'7d9f65b451e98bace1e8ebf395c8225431f4f7ae';
 
 /// See also [UserBlockchainAccountGroupAssignmentNotifier].
 @ProviderFor(UserBlockchainAccountGroupAssignmentNotifier)

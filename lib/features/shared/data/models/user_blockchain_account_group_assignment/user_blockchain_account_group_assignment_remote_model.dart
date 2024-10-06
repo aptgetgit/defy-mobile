@@ -10,8 +10,8 @@ class UserBlockchainAccountGroupAssignmentRemoteModel with _$UserBlockchainAccou
   const UserBlockchainAccountGroupAssignmentRemoteModel._();
 
   const factory UserBlockchainAccountGroupAssignmentRemoteModel({
-    required String blockchainAccountGroupId,
-    required String blockchainAccountId,
+    @JsonKey(name: 'blockchainAccountGroupId') required String blockchainAccountGroupId,
+    @JsonKey(name: 'blockchainAccountId') required String blockchainAccountId,
   }) = _UserBlockchainAccountGroupAssignmentRemoteModel;
 
   factory UserBlockchainAccountGroupAssignmentRemoteModel.fromJson(Map<String, dynamic> json) =>

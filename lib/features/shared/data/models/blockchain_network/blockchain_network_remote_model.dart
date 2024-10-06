@@ -10,8 +10,8 @@ class BlockchainNetworkRemoteModel with _$BlockchainNetworkRemoteModel {
 
   const factory BlockchainNetworkRemoteModel({
     required String id,
-    required String namespace,
-    required String reference,
+    @JsonKey(name: 'namespace') required String namespace,
+    @JsonKey(name: 'reference') required String reference,
   }) = _BlockchainNetworkRemoteModel;
 
   factory BlockchainNetworkRemoteModel.fromJson(Map<String, dynamic> json) =>

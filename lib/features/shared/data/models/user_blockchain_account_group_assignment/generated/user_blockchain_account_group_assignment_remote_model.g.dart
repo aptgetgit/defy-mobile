@@ -10,15 +10,14 @@ _$UserBlockchainAccountGroupAssignmentRemoteModelImpl
     _$$UserBlockchainAccountGroupAssignmentRemoteModelImplFromJson(
             Map<String, dynamic> json) =>
         _$UserBlockchainAccountGroupAssignmentRemoteModelImpl(
-          blockchainAccountGroupId:
-              json['blockchain_account_group_id'] as String,
-          blockchainAccountId: json['blockchain_account_id'] as String,
+          blockchainAccountGroupId: json['blockchainAccountGroupId'] as String,
+          blockchainAccountId: json['blockchainAccountId'] as String,
         );
 
 Map<String, dynamic>
     _$$UserBlockchainAccountGroupAssignmentRemoteModelImplToJson(
             _$UserBlockchainAccountGroupAssignmentRemoteModelImpl instance) =>
         <String, dynamic>{
-          'blockchain_account_group_id': instance.blockchainAccountGroupId,
-          'blockchain_account_id': instance.blockchainAccountId,
+          'blockchainAccountGroupId': instance.blockchainAccountGroupId,
+          'blockchainAccountId': instance.blockchainAccountId,
         };

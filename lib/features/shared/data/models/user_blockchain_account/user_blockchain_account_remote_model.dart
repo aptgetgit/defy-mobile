@@ -10,8 +10,8 @@ class UserBlockchainAccountRemoteModel with _$UserBlockchainAccountRemoteModel {
 
   const factory UserBlockchainAccountRemoteModel({
     required String id,
-    required String blockchainNetworkId,
-    required String accountAddress,
+    @JsonKey(name: 'blockchainNetworkId') required String blockchainNetworkId,
+    @JsonKey(name: 'accountAddress') required String accountAddress,
   }) = _UserBlockchainAccountRemoteModel;
 
   factory UserBlockchainAccountRemoteModel.fromJson(Map<String, dynamic> json) =>
@@ -34,8 +34,8 @@ class UserBlockchainAccountRemoteModel with _$UserBlockchainAccountRemoteModel {
 @freezed
 class CreateUserBlockchainAccountRemoteRequest with _$CreateUserBlockchainAccountRemoteRequest {
   const factory CreateUserBlockchainAccountRemoteRequest({
-    required String blockchainNetworkId,
-    required String accountAddress,
+    @JsonKey(name: 'blockchainNetworkId') required String blockchainNetworkId,
+    @JsonKey(name: 'accountAddress') required String accountAddress,
   }) = _CreateUserBlockchainAccountRemoteRequest;
 
   factory CreateUserBlockchainAccountRemoteRequest.fromJson(Map<String, dynamic> json) =>

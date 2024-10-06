@@ -1,5 +1,4 @@
 import 'package:defy/features/shared/domain/entities/user_blockchain_account_group_assignment.dart';
-import 'package:defy/features/shared/domain/repositories/user_blockchain_account_group_assignment_repository.dart';
 import 'package:defy/features/shared/presentation/providers/user_blockchain_account_group_assignment_provider.dart';
 import 'package:defy/features/shared/presentation/providers/user_blockchain_account_group_notifier_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -10,11 +9,8 @@ part 'generated/user_blockchain_account_group_assignment_notifier_provider.g.dar
 
 @riverpod
 class UserBlockchainAccountGroupAssignmentNotifier extends _$UserBlockchainAccountGroupAssignmentNotifier {
-  late final UserBlockchainAccountGroupAssignmentRepository _repository;
-
   @override
   FutureOr<List<UserBlockchainAccountGroupAssignment>> build() {
-    _repository = ref.watch(userBlockchainAccountGroupAssignmentRepositoryProvider);
     
     final groupsState = ref.watch(userBlockchainAccountGroupNotifierProvider);
     
@@ -31,7 +27,7 @@ class UserBlockchainAccountGroupAssignmentNotifier extends _$UserBlockchainAccou
 
     try {
       await Future.wait(groupIds.map((groupId) => 
-        _repository.syncUserBlockchainAccountGroupAssignments(groupId)
+       ref.read(userBlockchainAccountGroupAssignmentRepositoryProvider).syncUserBlockchainAccountGroupAssignments(groupId)
       ));
 
       List<UserBlockchainAccountGroupAssignment> updatedData = _fetchLocalAssignments();
@@ -47,7 +43,7 @@ class UserBlockchainAccountGroupAssignmentNotifier extends _$UserBlockchainAccou
   }
 
   List<UserBlockchainAccountGroupAssignment> _fetchLocalAssignments() {
-    return _repository.listLocalUserBlockchainAccountGroupAssignments();
+    return ref.read(userBlockchainAccountGroupAssignmentRepositoryProvider).listLocalUserBlockchainAccountGroupAssignments();
   }
 
   Future<void> refresh() async {

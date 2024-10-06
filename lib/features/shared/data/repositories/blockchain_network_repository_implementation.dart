@@ -1,4 +1,3 @@
-import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/features/shared/data/models/blockchain_network/blockchain_network_local_model.dart';
 import 'package:defy/features/shared/data/sources/local/blockchain_network_local_source.dart';
 import 'package:defy/features/shared/data/sources/remote/blockchain_network_remote_source.dart';
@@ -32,7 +31,6 @@ class BlockchainNetworkRepositoryImplementation
   void saveLocalBlockchainNetwork(BlockchainNetwork blockchainNetwork) {
     final existingBlockchainNetwork =
         _localDataSource.getBlockchainNetwork(blockchainNetwork.id);
-        AppLogger.fatal('existingBlockchainNetwork: $existingBlockchainNetwork');
     if (existingBlockchainNetwork == null) {
       _localDataSource.saveBlockchainNetwork(
           BlockchainNetworkLocalModel.fromDomain(blockchainNetwork));

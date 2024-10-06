@@ -12,8 +12,8 @@ _$UserBlockchainAccountGroupRemoteModelImpl
         _$UserBlockchainAccountGroupRemoteModelImpl(
           id: json['id'] as String,
           name: json['name'] as String,
-          animatedIconUrl: json['animated_icon_url'] as String,
-          backgroundColor: json['background_color'] as String,
+          animatedIconUrl: json['animatedIconUrl'] as String,
+          backgroundColor: json['backgroundColor'] as String,
         );
 
 Map<String, dynamic> _$$UserBlockchainAccountGroupRemoteModelImplToJson(
@@ -21,8 +21,8 @@ Map<String, dynamic> _$$UserBlockchainAccountGroupRemoteModelImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'animated_icon_url': instance.animatedIconUrl,
-      'background_color': instance.backgroundColor,
+      'animatedIconUrl': instance.animatedIconUrl,
+      'backgroundColor': instance.backgroundColor,
     };
 
 _$CreateUserBlockchainAccountGroupRemoteRequestImpl
@@ -30,16 +30,16 @@ _$CreateUserBlockchainAccountGroupRemoteRequestImpl
             Map<String, dynamic> json) =>
         _$CreateUserBlockchainAccountGroupRemoteRequestImpl(
           name: json['name'] as String,
-          animatedIconUrl: json['animated_icon_url'] as String,
-          backgroundColor: json['background_color'] as String,
+          animatedIconUrl: json['animatedIconUrl'] as String,
+          backgroundColor: json['backgroundColor'] as String,
         );
 
 Map<String, dynamic> _$$CreateUserBlockchainAccountGroupRemoteRequestImplToJson(
         _$CreateUserBlockchainAccountGroupRemoteRequestImpl instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'animated_icon_url': instance.animatedIconUrl,
-      'background_color': instance.backgroundColor,
+      'animatedIconUrl': instance.animatedIconUrl,
+      'backgroundColor': instance.backgroundColor,
     };
 
 _$UpdateUserBlockchainAccountGroupRemoteRequestImpl
@@ -47,14 +47,14 @@ _$UpdateUserBlockchainAccountGroupRemoteRequestImpl
             Map<String, dynamic> json) =>
         _$UpdateUserBlockchainAccountGroupRemoteRequestImpl(
           name: json['name'] as String,
-          animatedIconUrl: json['animated_icon_url'] as String,
-          backgroundColor: json['background_color'] as String,
+          animatedIconUrl: json['animatedIconUrl'] as String,
+          backgroundColor: json['backgroundColor'] as String,
         );
 
 Map<String, dynamic> _$$UpdateUserBlockchainAccountGroupRemoteRequestImplToJson(
         _$UpdateUserBlockchainAccountGroupRemoteRequestImpl instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'animated_icon_url': instance.animatedIconUrl,
-      'background_color': instance.backgroundColor,
+      'animatedIconUrl': instance.animatedIconUrl,
+      'backgroundColor': instance.backgroundColor,
     };

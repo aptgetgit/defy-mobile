@@ -8,9 +8,9 @@ class UserBlockchainAccountGroupRemoteModel with _$UserBlockchainAccountGroupRem
 
   const factory UserBlockchainAccountGroupRemoteModel({
     required String id,
-    required String name,
-    required String animatedIconUrl,
-    required String backgroundColor,
+    @JsonKey(name: 'name') required String name,
+    @JsonKey(name: 'animatedIconUrl') required String animatedIconUrl,
+    @JsonKey(name: 'backgroundColor') required String backgroundColor,
   }) = _UserBlockchainAccountGroupRemoteModel;
 
   factory UserBlockchainAccountGroupRemoteModel.fromJson(Map<String, dynamic> json) =>
@@ -35,9 +35,9 @@ class UserBlockchainAccountGroupRemoteModel with _$UserBlockchainAccountGroupRem
 @freezed
 class CreateUserBlockchainAccountGroupRemoteRequest with _$CreateUserBlockchainAccountGroupRemoteRequest {
   const factory CreateUserBlockchainAccountGroupRemoteRequest({
-    required String name,
-    required String animatedIconUrl,
-    required String backgroundColor,
+    @JsonKey(name: 'name') required String name,
+    @JsonKey(name: 'animatedIconUrl') required String animatedIconUrl,
+    @JsonKey(name: 'backgroundColor') required String backgroundColor,
   }) = _CreateUserBlockchainAccountGroupRemoteRequest;
 
   factory CreateUserBlockchainAccountGroupRemoteRequest.fromJson(Map<String, dynamic> json) =>
@@ -47,9 +47,9 @@ class CreateUserBlockchainAccountGroupRemoteRequest with _$CreateUserBlockchainA
 @freezed
 class UpdateUserBlockchainAccountGroupRemoteRequest with _$UpdateUserBlockchainAccountGroupRemoteRequest {
   const factory UpdateUserBlockchainAccountGroupRemoteRequest({
-    required String name,
-    required String animatedIconUrl,
-    required String backgroundColor,
+    @JsonKey(name: 'name') required String name,
+    @JsonKey(name: 'animatedIconUrl') required String animatedIconUrl,
+    @JsonKey(name: 'backgroundColor') required String backgroundColor,
   }) = _UpdateUserBlockchainAccountGroupRemoteRequest;
 
   factory UpdateUserBlockchainAccountGroupRemoteRequest.fromJson(Map<String, dynamic> json) =>

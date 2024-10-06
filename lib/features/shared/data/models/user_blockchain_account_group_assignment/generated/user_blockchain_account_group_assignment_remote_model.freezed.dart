@@ -22,7 +22,9 @@ UserBlockchainAccountGroupAssignmentRemoteModel
 
 /// @nodoc
 mixin _$UserBlockchainAccountGroupAssignmentRemoteModel {
+  @JsonKey(name: 'blockchainAccountGroupId')
   String get blockchainAccountGroupId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'blockchainAccountId')
   String get blockchainAccountId => throw _privateConstructorUsedError;
 
   /// Serializes this UserBlockchainAccountGroupAssignmentRemoteModel to a JSON map.
@@ -44,7 +46,10 @@ abstract class $UserBlockchainAccountGroupAssignmentRemoteModelCopyWith<$Res> {
       _$UserBlockchainAccountGroupAssignmentRemoteModelCopyWithImpl<$Res,
           UserBlockchainAccountGroupAssignmentRemoteModel>;
   @useResult
-  $Res call({String blockchainAccountGroupId, String blockchainAccountId});
+  $Res call(
+      {@JsonKey(name: 'blockchainAccountGroupId')
+      String blockchainAccountGroupId,
+      @JsonKey(name: 'blockchainAccountId') String blockchainAccountId});
 }
 
 /// @nodoc
@@ -91,7 +96,10 @@ abstract class _$$UserBlockchainAccountGroupAssignmentRemoteModelImplCopyWith<
       __$$UserBlockchainAccountGroupAssignmentRemoteModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String blockchainAccountGroupId, String blockchainAccountId});
+  $Res call(
+      {@JsonKey(name: 'blockchainAccountGroupId')
+      String blockchainAccountGroupId,
+      @JsonKey(name: 'blockchainAccountId') String blockchainAccountId});
 }
 
 /// @nodoc
@@ -132,8 +140,9 @@ class __$$UserBlockchainAccountGroupAssignmentRemoteModelImplCopyWithImpl<$Res>
 class _$UserBlockchainAccountGroupAssignmentRemoteModelImpl
     extends _UserBlockchainAccountGroupAssignmentRemoteModel {
   const _$UserBlockchainAccountGroupAssignmentRemoteModelImpl(
-      {required this.blockchainAccountGroupId,
-      required this.blockchainAccountId})
+      {@JsonKey(name: 'blockchainAccountGroupId')
+      required this.blockchainAccountGroupId,
+      @JsonKey(name: 'blockchainAccountId') required this.blockchainAccountId})
       : super._();
 
   factory _$UserBlockchainAccountGroupAssignmentRemoteModelImpl.fromJson(
@@ -141,8 +150,10 @@ class _$UserBlockchainAccountGroupAssignmentRemoteModelImpl
       _$$UserBlockchainAccountGroupAssignmentRemoteModelImplFromJson(json);
 
   @override
+  @JsonKey(name: 'blockchainAccountGroupId')
   final String blockchainAccountGroupId;
   @override
+  @JsonKey(name: 'blockchainAccountId')
   final String blockchainAccountId;
 
   @override
@@ -190,7 +201,9 @@ class _$UserBlockchainAccountGroupAssignmentRemoteModelImpl
 abstract class _UserBlockchainAccountGroupAssignmentRemoteModel
     extends UserBlockchainAccountGroupAssignmentRemoteModel {
   const factory _UserBlockchainAccountGroupAssignmentRemoteModel(
-          {required final String blockchainAccountGroupId,
+          {@JsonKey(name: 'blockchainAccountGroupId')
+          required final String blockchainAccountGroupId,
+          @JsonKey(name: 'blockchainAccountId')
           required final String blockchainAccountId}) =
       _$UserBlockchainAccountGroupAssignmentRemoteModelImpl;
   const _UserBlockchainAccountGroupAssignmentRemoteModel._() : super._();
@@ -200,8 +213,10 @@ abstract class _UserBlockchainAccountGroupAssignmentRemoteModel
       _$UserBlockchainAccountGroupAssignmentRemoteModelImpl.fromJson;
 
   @override
+  @JsonKey(name: 'blockchainAccountGroupId')
   String get blockchainAccountGroupId;
   @override
+  @JsonKey(name: 'blockchainAccountId')
   String get blockchainAccountId;
 
   /// Create a copy of UserBlockchainAccountGroupAssignmentRemoteModel

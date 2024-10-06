@@ -22,8 +22,11 @@ UserBlockchainAccountGroupRemoteModel
 /// @nodoc
 mixin _$UserBlockchainAccountGroupRemoteModel {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'animatedIconUrl')
   String get animatedIconUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'backgroundColor')
   String get backgroundColor => throw _privateConstructorUsedError;
 
   /// Serializes this UserBlockchainAccountGroupRemoteModel to a JSON map.
@@ -46,7 +49,10 @@ abstract class $UserBlockchainAccountGroupRemoteModelCopyWith<$Res> {
           UserBlockchainAccountGroupRemoteModel>;
   @useResult
   $Res call(
-      {String id, String name, String animatedIconUrl, String backgroundColor});
+      {String id,
+      @JsonKey(name: 'name') String name,
+      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') String backgroundColor});
 }
 
 /// @nodoc
@@ -101,7 +107,10 @@ abstract class _$$UserBlockchainAccountGroupRemoteModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id, String name, String animatedIconUrl, String backgroundColor});
+      {String id,
+      @JsonKey(name: 'name') String name,
+      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') String backgroundColor});
 }
 
 /// @nodoc
@@ -151,9 +160,9 @@ class _$UserBlockchainAccountGroupRemoteModelImpl
     extends _UserBlockchainAccountGroupRemoteModel {
   const _$UserBlockchainAccountGroupRemoteModelImpl(
       {required this.id,
-      required this.name,
-      required this.animatedIconUrl,
-      required this.backgroundColor})
+      @JsonKey(name: 'name') required this.name,
+      @JsonKey(name: 'animatedIconUrl') required this.animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') required this.backgroundColor})
       : super._();
 
   factory _$UserBlockchainAccountGroupRemoteModelImpl.fromJson(
@@ -163,10 +172,13 @@ class _$UserBlockchainAccountGroupRemoteModelImpl
   @override
   final String id;
   @override
+  @JsonKey(name: 'name')
   final String name;
   @override
+  @JsonKey(name: 'animatedIconUrl')
   final String animatedIconUrl;
   @override
+  @JsonKey(name: 'backgroundColor')
   final String backgroundColor;
 
   @override
@@ -213,11 +225,12 @@ class _$UserBlockchainAccountGroupRemoteModelImpl
 abstract class _UserBlockchainAccountGroupRemoteModel
     extends UserBlockchainAccountGroupRemoteModel {
   const factory _UserBlockchainAccountGroupRemoteModel(
-          {required final String id,
-          required final String name,
-          required final String animatedIconUrl,
-          required final String backgroundColor}) =
-      _$UserBlockchainAccountGroupRemoteModelImpl;
+      {required final String id,
+      @JsonKey(name: 'name') required final String name,
+      @JsonKey(name: 'animatedIconUrl') required final String animatedIconUrl,
+      @JsonKey(name: 'backgroundColor')
+      required final String
+          backgroundColor}) = _$UserBlockchainAccountGroupRemoteModelImpl;
   const _UserBlockchainAccountGroupRemoteModel._() : super._();
 
   factory _UserBlockchainAccountGroupRemoteModel.fromJson(
@@ -227,10 +240,13 @@ abstract class _UserBlockchainAccountGroupRemoteModel
   @override
   String get id;
   @override
+  @JsonKey(name: 'name')
   String get name;
   @override
+  @JsonKey(name: 'animatedIconUrl')
   String get animatedIconUrl;
   @override
+  @JsonKey(name: 'backgroundColor')
   String get backgroundColor;
 
   /// Create a copy of UserBlockchainAccountGroupRemoteModel
@@ -250,8 +266,11 @@ CreateUserBlockchainAccountGroupRemoteRequest
 
 /// @nodoc
 mixin _$CreateUserBlockchainAccountGroupRemoteRequest {
+  @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'animatedIconUrl')
   String get animatedIconUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'backgroundColor')
   String get backgroundColor => throw _privateConstructorUsedError;
 
   /// Serializes this CreateUserBlockchainAccountGroupRemoteRequest to a JSON map.
@@ -273,7 +292,10 @@ abstract class $CreateUserBlockchainAccountGroupRemoteRequestCopyWith<$Res> {
       _$CreateUserBlockchainAccountGroupRemoteRequestCopyWithImpl<$Res,
           CreateUserBlockchainAccountGroupRemoteRequest>;
   @useResult
-  $Res call({String name, String animatedIconUrl, String backgroundColor});
+  $Res call(
+      {@JsonKey(name: 'name') String name,
+      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') String backgroundColor});
 }
 
 /// @nodoc
@@ -325,7 +347,10 @@ abstract class _$$CreateUserBlockchainAccountGroupRemoteRequestImplCopyWith<
       __$$CreateUserBlockchainAccountGroupRemoteRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String animatedIconUrl, String backgroundColor});
+  $Res call(
+      {@JsonKey(name: 'name') String name,
+      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') String backgroundColor});
 }
 
 /// @nodoc
@@ -370,19 +395,22 @@ class __$$CreateUserBlockchainAccountGroupRemoteRequestImplCopyWithImpl<$Res>
 class _$CreateUserBlockchainAccountGroupRemoteRequestImpl
     implements _CreateUserBlockchainAccountGroupRemoteRequest {
   const _$CreateUserBlockchainAccountGroupRemoteRequestImpl(
-      {required this.name,
-      required this.animatedIconUrl,
-      required this.backgroundColor});
+      {@JsonKey(name: 'name') required this.name,
+      @JsonKey(name: 'animatedIconUrl') required this.animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') required this.backgroundColor});
 
   factory _$CreateUserBlockchainAccountGroupRemoteRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$CreateUserBlockchainAccountGroupRemoteRequestImplFromJson(json);
 
   @override
+  @JsonKey(name: 'name')
   final String name;
   @override
+  @JsonKey(name: 'animatedIconUrl')
   final String animatedIconUrl;
   @override
+  @JsonKey(name: 'backgroundColor')
   final String backgroundColor;
 
   @override
@@ -430,8 +458,9 @@ class _$CreateUserBlockchainAccountGroupRemoteRequestImpl
 abstract class _CreateUserBlockchainAccountGroupRemoteRequest
     implements CreateUserBlockchainAccountGroupRemoteRequest {
   const factory _CreateUserBlockchainAccountGroupRemoteRequest(
-          {required final String name,
-          required final String animatedIconUrl,
+          {@JsonKey(name: 'name') required final String name,
+          @JsonKey(name: 'animatedIconUrl') required final String animatedIconUrl,
+          @JsonKey(name: 'backgroundColor')
           required final String backgroundColor}) =
       _$CreateUserBlockchainAccountGroupRemoteRequestImpl;
 
@@ -440,10 +469,13 @@ abstract class _CreateUserBlockchainAccountGroupRemoteRequest
       _$CreateUserBlockchainAccountGroupRemoteRequestImpl.fromJson;
 
   @override
+  @JsonKey(name: 'name')
   String get name;
   @override
+  @JsonKey(name: 'animatedIconUrl')
   String get animatedIconUrl;
   @override
+  @JsonKey(name: 'backgroundColor')
   String get backgroundColor;
 
   /// Create a copy of CreateUserBlockchainAccountGroupRemoteRequest
@@ -463,8 +495,11 @@ UpdateUserBlockchainAccountGroupRemoteRequest
 
 /// @nodoc
 mixin _$UpdateUserBlockchainAccountGroupRemoteRequest {
+  @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'animatedIconUrl')
   String get animatedIconUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'backgroundColor')
   String get backgroundColor => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateUserBlockchainAccountGroupRemoteRequest to a JSON map.
@@ -486,7 +521,10 @@ abstract class $UpdateUserBlockchainAccountGroupRemoteRequestCopyWith<$Res> {
       _$UpdateUserBlockchainAccountGroupRemoteRequestCopyWithImpl<$Res,
           UpdateUserBlockchainAccountGroupRemoteRequest>;
   @useResult
-  $Res call({String name, String animatedIconUrl, String backgroundColor});
+  $Res call(
+      {@JsonKey(name: 'name') String name,
+      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') String backgroundColor});
 }
 
 /// @nodoc
@@ -538,7 +576,10 @@ abstract class _$$UpdateUserBlockchainAccountGroupRemoteRequestImplCopyWith<
       __$$UpdateUserBlockchainAccountGroupRemoteRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String animatedIconUrl, String backgroundColor});
+  $Res call(
+      {@JsonKey(name: 'name') String name,
+      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') String backgroundColor});
 }
 
 /// @nodoc
@@ -583,19 +624,22 @@ class __$$UpdateUserBlockchainAccountGroupRemoteRequestImplCopyWithImpl<$Res>
 class _$UpdateUserBlockchainAccountGroupRemoteRequestImpl
     implements _UpdateUserBlockchainAccountGroupRemoteRequest {
   const _$UpdateUserBlockchainAccountGroupRemoteRequestImpl(
-      {required this.name,
-      required this.animatedIconUrl,
-      required this.backgroundColor});
+      {@JsonKey(name: 'name') required this.name,
+      @JsonKey(name: 'animatedIconUrl') required this.animatedIconUrl,
+      @JsonKey(name: 'backgroundColor') required this.backgroundColor});
 
   factory _$UpdateUserBlockchainAccountGroupRemoteRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$UpdateUserBlockchainAccountGroupRemoteRequestImplFromJson(json);
 
   @override
+  @JsonKey(name: 'name')
   final String name;
   @override
+  @JsonKey(name: 'animatedIconUrl')
   final String animatedIconUrl;
   @override
+  @JsonKey(name: 'backgroundColor')
   final String backgroundColor;
 
   @override
@@ -643,8 +687,9 @@ class _$UpdateUserBlockchainAccountGroupRemoteRequestImpl
 abstract class _UpdateUserBlockchainAccountGroupRemoteRequest
     implements UpdateUserBlockchainAccountGroupRemoteRequest {
   const factory _UpdateUserBlockchainAccountGroupRemoteRequest(
-          {required final String name,
-          required final String animatedIconUrl,
+          {@JsonKey(name: 'name') required final String name,
+          @JsonKey(name: 'animatedIconUrl') required final String animatedIconUrl,
+          @JsonKey(name: 'backgroundColor')
           required final String backgroundColor}) =
       _$UpdateUserBlockchainAccountGroupRemoteRequestImpl;
 
@@ -653,10 +698,13 @@ abstract class _UpdateUserBlockchainAccountGroupRemoteRequest
       _$UpdateUserBlockchainAccountGroupRemoteRequestImpl.fromJson;
 
   @override
+  @JsonKey(name: 'name')
   String get name;
   @override
+  @JsonKey(name: 'animatedIconUrl')
   String get animatedIconUrl;
   @override
+  @JsonKey(name: 'backgroundColor')
   String get backgroundColor;
 
   /// Create a copy of UpdateUserBlockchainAccountGroupRemoteRequest

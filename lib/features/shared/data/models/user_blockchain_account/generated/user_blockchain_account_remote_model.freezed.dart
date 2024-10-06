@@ -22,7 +22,9 @@ UserBlockchainAccountRemoteModel _$UserBlockchainAccountRemoteModelFromJson(
 /// @nodoc
 mixin _$UserBlockchainAccountRemoteModel {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'blockchainNetworkId')
   String get blockchainNetworkId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'accountAddress')
   String get accountAddress => throw _privateConstructorUsedError;
 
   /// Serializes this UserBlockchainAccountRemoteModel to a JSON map.
@@ -43,7 +45,10 @@ abstract class $UserBlockchainAccountRemoteModelCopyWith<$Res> {
       _$UserBlockchainAccountRemoteModelCopyWithImpl<$Res,
           UserBlockchainAccountRemoteModel>;
   @useResult
-  $Res call({String id, String blockchainNetworkId, String accountAddress});
+  $Res call(
+      {String id,
+      @JsonKey(name: 'blockchainNetworkId') String blockchainNetworkId,
+      @JsonKey(name: 'accountAddress') String accountAddress});
 }
 
 /// @nodoc
@@ -92,7 +97,10 @@ abstract class _$$UserBlockchainAccountRemoteModelImplCopyWith<$Res>
       __$$UserBlockchainAccountRemoteModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String blockchainNetworkId, String accountAddress});
+  $Res call(
+      {String id,
+      @JsonKey(name: 'blockchainNetworkId') String blockchainNetworkId,
+      @JsonKey(name: 'accountAddress') String accountAddress});
 }
 
 /// @nodoc
@@ -137,8 +145,8 @@ class _$UserBlockchainAccountRemoteModelImpl
     extends _UserBlockchainAccountRemoteModel {
   const _$UserBlockchainAccountRemoteModelImpl(
       {required this.id,
-      required this.blockchainNetworkId,
-      required this.accountAddress})
+      @JsonKey(name: 'blockchainNetworkId') required this.blockchainNetworkId,
+      @JsonKey(name: 'accountAddress') required this.accountAddress})
       : super._();
 
   factory _$UserBlockchainAccountRemoteModelImpl.fromJson(
@@ -148,8 +156,10 @@ class _$UserBlockchainAccountRemoteModelImpl
   @override
   final String id;
   @override
+  @JsonKey(name: 'blockchainNetworkId')
   final String blockchainNetworkId;
   @override
+  @JsonKey(name: 'accountAddress')
   final String accountAddress;
 
   @override
@@ -196,7 +206,9 @@ abstract class _UserBlockchainAccountRemoteModel
     extends UserBlockchainAccountRemoteModel {
   const factory _UserBlockchainAccountRemoteModel(
           {required final String id,
+          @JsonKey(name: 'blockchainNetworkId')
           required final String blockchainNetworkId,
+          @JsonKey(name: 'accountAddress')
           required final String accountAddress}) =
       _$UserBlockchainAccountRemoteModelImpl;
   const _UserBlockchainAccountRemoteModel._() : super._();
@@ -208,8 +220,10 @@ abstract class _UserBlockchainAccountRemoteModel
   @override
   String get id;
   @override
+  @JsonKey(name: 'blockchainNetworkId')
   String get blockchainNetworkId;
   @override
+  @JsonKey(name: 'accountAddress')
   String get accountAddress;
 
   /// Create a copy of UserBlockchainAccountRemoteModel
@@ -229,7 +243,9 @@ CreateUserBlockchainAccountRemoteRequest
 
 /// @nodoc
 mixin _$CreateUserBlockchainAccountRemoteRequest {
+  @JsonKey(name: 'blockchainNetworkId')
   String get blockchainNetworkId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'accountAddress')
   String get accountAddress => throw _privateConstructorUsedError;
 
   /// Serializes this CreateUserBlockchainAccountRemoteRequest to a JSON map.
@@ -251,7 +267,9 @@ abstract class $CreateUserBlockchainAccountRemoteRequestCopyWith<$Res> {
       _$CreateUserBlockchainAccountRemoteRequestCopyWithImpl<$Res,
           CreateUserBlockchainAccountRemoteRequest>;
   @useResult
-  $Res call({String blockchainNetworkId, String accountAddress});
+  $Res call(
+      {@JsonKey(name: 'blockchainNetworkId') String blockchainNetworkId,
+      @JsonKey(name: 'accountAddress') String accountAddress});
 }
 
 /// @nodoc
@@ -296,7 +314,9 @@ abstract class _$$CreateUserBlockchainAccountRemoteRequestImplCopyWith<$Res>
       __$$CreateUserBlockchainAccountRemoteRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String blockchainNetworkId, String accountAddress});
+  $Res call(
+      {@JsonKey(name: 'blockchainNetworkId') String blockchainNetworkId,
+      @JsonKey(name: 'accountAddress') String accountAddress});
 }
 
 /// @nodoc
@@ -335,15 +355,18 @@ class __$$CreateUserBlockchainAccountRemoteRequestImplCopyWithImpl<$Res>
 class _$CreateUserBlockchainAccountRemoteRequestImpl
     implements _CreateUserBlockchainAccountRemoteRequest {
   const _$CreateUserBlockchainAccountRemoteRequestImpl(
-      {required this.blockchainNetworkId, required this.accountAddress});
+      {@JsonKey(name: 'blockchainNetworkId') required this.blockchainNetworkId,
+      @JsonKey(name: 'accountAddress') required this.accountAddress});
 
   factory _$CreateUserBlockchainAccountRemoteRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$CreateUserBlockchainAccountRemoteRequestImplFromJson(json);
 
   @override
+  @JsonKey(name: 'blockchainNetworkId')
   final String blockchainNetworkId;
   @override
+  @JsonKey(name: 'accountAddress')
   final String accountAddress;
 
   @override
@@ -389,7 +412,9 @@ class _$CreateUserBlockchainAccountRemoteRequestImpl
 abstract class _CreateUserBlockchainAccountRemoteRequest
     implements CreateUserBlockchainAccountRemoteRequest {
   const factory _CreateUserBlockchainAccountRemoteRequest(
-          {required final String blockchainNetworkId,
+          {@JsonKey(name: 'blockchainNetworkId')
+          required final String blockchainNetworkId,
+          @JsonKey(name: 'accountAddress')
           required final String accountAddress}) =
       _$CreateUserBlockchainAccountRemoteRequestImpl;
 
@@ -398,8 +423,10 @@ abstract class _CreateUserBlockchainAccountRemoteRequest
       _$CreateUserBlockchainAccountRemoteRequestImpl.fromJson;
 
   @override
+  @JsonKey(name: 'blockchainNetworkId')
   String get blockchainNetworkId;
   @override
+  @JsonKey(name: 'accountAddress')
   String get accountAddress;
 
   /// Create a copy of CreateUserBlockchainAccountRemoteRequest

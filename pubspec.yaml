@@ -35,6 +35,9 @@ dependencies:
   ory_kratos_client:
     path: packages/ory-sdk/clients/kratos/dart
 
+  defy_graphql:
+    path: packages/defy-graphql
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

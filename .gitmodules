@@ -2,3 +2,7 @@
 	path = packages/ory-sdk
 	url = git@github.com:avex-id/ory-sdk.git
 	branch = release/v1.2.0-kratos-dart
+[submodule "packages/defy-graphql"]
+	path = packages/defy-graphql
+	url = git@github.com:avex-id/defy-graphql.git
+	branch = main

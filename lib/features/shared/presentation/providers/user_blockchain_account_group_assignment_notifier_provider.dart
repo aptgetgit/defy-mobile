@@ -1,5 +1,5 @@
 import 'package:defy/features/shared/domain/entities/user_blockchain_account_group_assignment.dart';
-import 'package:defy/features/shared/presentation/providers/user_blockchain_account_group_assignment_provider.dart';
+import 'package:defy/features/shared/presentation/providers/user_blockchain_account_group_assignment_usecase_provider.dart';
 import 'package:defy/features/shared/presentation/providers/user_blockchain_account_group_notifier_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

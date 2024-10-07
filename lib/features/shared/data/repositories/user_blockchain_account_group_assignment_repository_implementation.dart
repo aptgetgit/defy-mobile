@@ -4,12 +4,12 @@ import 'package:defy/features/shared/domain/entities/user_blockchain_account_gro
 import 'package:defy/features/shared/domain/entities/user_blockchain_account.dart';
 import 'package:defy/features/shared/domain/repositories/user_blockchain_account_group_assignment_repository.dart';
 
-class UserBlockchainAccountGroupAssignmentRepositoryImplementation
-    implements UserBlockchainAccountGroupAssignmentRepository {
+class UserBlockchainAccountGroupAssignmentRepository
+    implements IUserBlockchainAccountGroupAssignmentRepository {
   final UserBlockchainAccountGroupAssignmentLocalDataSource _localDataSource;
   final UserBlockchainAccountGroupAssignmentRemoteDataSource _remoteDataSource;
 
-  UserBlockchainAccountGroupAssignmentRepositoryImplementation(
+  UserBlockchainAccountGroupAssignmentRepository(
       this._localDataSource, this._remoteDataSource);
 
   @override

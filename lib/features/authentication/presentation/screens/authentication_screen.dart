@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
-import 'package:defy/features/authentication/presentation/providers/authentication_notifier.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
 
 class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key});

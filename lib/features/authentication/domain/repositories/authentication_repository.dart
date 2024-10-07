@@ -60,7 +60,7 @@ class CompleteLoginOptions with _$CompleteLoginOptions {
   }) = CompleteLoginOptionsWithOIDC;
 }
 
-abstract class AuthenticationRepository {
+abstract class IAuthenticationRepository {
   Future<String> initiateRegistration(InitiateRegistrationOptions options);
   Future<String> initiateLogin(InitiateLoginOptions options);
   Future<SessionEntity> completeRegistration(

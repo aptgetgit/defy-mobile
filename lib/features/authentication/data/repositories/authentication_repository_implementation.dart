@@ -9,9 +9,10 @@ import 'package:defy/features/authentication/domain/repositories/authentication_
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:ory_kratos_client/ory_kratos_client.dart';
 
-class AuthenticationRepositoryImpl implements AuthenticationRepository {
+class AuthenticationRepository implements IAuthenticationRepository {
   // users:$userId:auth:session:token
-  static  String _prefix(String identityId) => 'identity:$identityId:authentication:';
+  static String _prefix(String identityId) =>
+      'identity:$identityId:authentication:';
 
   static String sessionTokenKey(String identityId) =>
       '${_prefix(identityId)}session:token';
@@ -25,7 +26,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final SecureStorageService _secureStorage;
   final SharedPreferencesService _sharedPreferences;
 
-  AuthenticationRepositoryImpl(
+  AuthenticationRepository(
       this._kratosClient, this._secureStorage, this._sharedPreferences);
 
   @override
@@ -294,8 +295,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<List<IdentityEntity>> getLoggedInIdentities() async {
     final allKeys = _sharedPreferences.getKeys();
-    final sessionKeys = allKeys.where(
-        (key) => key.startsWith("identity:") && key.endsWith(':authentication:session:details'));
+    final sessionKeys = allKeys.where((key) =>
+        key.startsWith("identity:") &&
+        key.endsWith(':authentication:session:details'));
 
     final List<IdentityEntity> identities = [];
     for (final key in sessionKeys) {

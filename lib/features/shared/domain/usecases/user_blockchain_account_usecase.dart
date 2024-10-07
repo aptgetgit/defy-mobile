@@ -1,6 +1,6 @@
 import 'package:defy/features/shared/data/models/user_blockchain_account/user_blockchain_account_remote_model.dart';
+import 'package:defy/features/shared/data/repositories/user_blockchain_account_repository_implementation.dart';
 import 'package:defy/features/shared/domain/entities/user_blockchain_account.dart';
-import 'package:defy/features/shared/domain/repositories/user_blockchain_account_repository.dart';
 
 class ListLocalUserBlockchainAccountsUseCase {
   final UserBlockchainAccountRepository _repository;

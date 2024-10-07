@@ -3,11 +3,10 @@ import 'package:defy/core/providers/object_box_database_provider.dart';
 import 'package:defy/features/shared/data/repositories/user_blockchain_account_repository_implementation.dart';
 import 'package:defy/features/shared/data/sources/local/user_blockchain_account_local_source.dart';
 import 'package:defy/features/shared/data/sources/remote/user_blockchain_account_remote_source.dart';
-import 'package:defy/features/shared/domain/repositories/user_blockchain_account_repository.dart';
 import 'package:defy/features/shared/domain/usecases/user_blockchain_account_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'generated/user_blockchain_account_provider.g.dart';
+part 'generated/user_blockchain_account_usecase_provider.g.dart';
 
 @riverpod
 UserBlockchainAccountRepository userBlockchainAccountRepository(
@@ -16,7 +15,7 @@ UserBlockchainAccountRepository userBlockchainAccountRepository(
   final objectBoxStore = ref.read(objectBoxDbServiceProvider);
   final localDataSource = UserBlockchainAccountLocalDataSource(objectBoxStore);
   final remoteDataSource = UserBlockchainAccountRemoteDataSource(baseDio);
-  return UserBlockchainAccountRepositoryImplementation(
+  return UserBlockchainAccountRepository(
       localDataSource, remoteDataSource);
 }
 

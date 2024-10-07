@@ -3,11 +3,10 @@ import 'package:defy/core/providers/secure_storage_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
 import 'package:defy/features/authentication/data/repositories/authentication_repository_implementation.dart';
 import 'package:defy/features/authentication/data/sources/remote/kratos_data_source.dart';
-import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
-import 'package:defy/features/authentication/domain/usecases/use_case.dart';
+import 'package:defy/features/authentication/domain/usecases/usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'generated/authentication_provider.g.dart';
+part 'generated/authentication_usecase_provider.g.dart';
 
 @riverpod
 AuthenticationRepository authenticationRepository(
@@ -17,7 +16,7 @@ AuthenticationRepository authenticationRepository(
   final oryKratosDataSource = KratosDataSourceImpl(oryKratosFrontendApi);
   final secureStorageService = ref.read(secureStorageServiceProvider);
   final sharedPreferencesService = ref.read(sharedPreferencesServiceProvider);
-  return AuthenticationRepositoryImpl(
+  return AuthenticationRepository(
     oryKratosDataSource,
     secureStorageService,
     sharedPreferencesService,
@@ -32,13 +31,15 @@ GetCurrentSessionUseCase getCurrentSessionUseCase(
 }
 
 @riverpod
-InitiateRegistrationUseCase initiateRegistrationUseCase(InitiateRegistrationUseCaseRef ref) {
+InitiateRegistrationUseCase initiateRegistrationUseCase(
+    InitiateRegistrationUseCaseRef ref) {
   final repository = ref.read(authenticationRepositoryProvider);
   return InitiateRegistrationUseCase(repository);
 }
 
 @riverpod
-CompleteRegistrationUseCase completeRegistrationUseCase(CompleteRegistrationUseCaseRef ref) {
+CompleteRegistrationUseCase completeRegistrationUseCase(
+    CompleteRegistrationUseCaseRef ref) {
   final repository = ref.read(authenticationRepositoryProvider);
   return CompleteRegistrationUseCase(repository);
 }

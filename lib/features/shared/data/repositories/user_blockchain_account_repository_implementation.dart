@@ -4,12 +4,12 @@ import 'package:defy/features/shared/data/sources/remote/user_blockchain_account
 import 'package:defy/features/shared/domain/entities/user_blockchain_account.dart';
 import 'package:defy/features/shared/domain/repositories/user_blockchain_account_repository.dart';
 
-class UserBlockchainAccountRepositoryImplementation
-    implements UserBlockchainAccountRepository {
+class UserBlockchainAccountRepository
+    implements IUserBlockchainAccountRepository {
   final UserBlockchainAccountLocalDataSource _localDataSource;
   final UserBlockchainAccountRemoteDataSource _remoteDataSource;
 
-  UserBlockchainAccountRepositoryImplementation(
+  UserBlockchainAccountRepository(
       this._localDataSource, this._remoteDataSource);
 
   @override

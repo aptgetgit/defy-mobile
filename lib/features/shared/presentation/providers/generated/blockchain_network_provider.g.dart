@@ -7,7 +7,7 @@ part of '../blockchain_network_provider.dart';
 // **************************************************************************
 
 String _$blockchainNetworkRepositoryHash() =>
-    r'eb8a1176c2a71679a456fb972e58ea4c44de3ea8';
+    r'20d063228381555a6c7dffdc5368ba7319971732';
 
 /// See also [blockchainNetworkRepository].
 @ProviderFor(blockchainNetworkRepository)

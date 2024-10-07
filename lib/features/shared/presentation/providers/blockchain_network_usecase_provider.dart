@@ -3,11 +3,10 @@ import 'package:defy/core/providers/object_box_database_provider.dart';
 import 'package:defy/features/shared/data/repositories/blockchain_network_repository_implementation.dart';
 import 'package:defy/features/shared/data/sources/local/blockchain_network_local_source.dart';
 import 'package:defy/features/shared/data/sources/remote/blockchain_network_remote_source.dart';
-import 'package:defy/features/shared/domain/repositories/blockchain_network_repository.dart';
 import 'package:defy/features/shared/domain/usecases/blockchain_network_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'generated/blockchain_network_provider.g.dart';
+part 'generated/blockchain_network_usecase_provider.g.dart';
 
 @riverpod
 BlockchainNetworkRepository blockchainNetworkRepository(
@@ -16,7 +15,7 @@ BlockchainNetworkRepository blockchainNetworkRepository(
   final objectBoxStore = ref.read(objectBoxDbServiceProvider);
   final localDataSource = BlockchainNetworkLocalDataSource(objectBoxStore);
   final remoteDataSource = BlockchainNetworkRemoteDataSource(baseDio);
-  return BlockchainNetworkRepositoryImplementation(
+  return BlockchainNetworkRepository(
       localDataSource, remoteDataSource);
 }
 

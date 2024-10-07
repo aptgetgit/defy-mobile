@@ -7,7 +7,7 @@ part of '../user_blockchain_account_group_assignment_provider.dart';
 // **************************************************************************
 
 String _$userBlockchainAccountGroupAssignmentRepositoryHash() =>
-    r'62c3e626e5cf9901903811c870fda0358a356c6e';
+    r'0ebe61fbf70394ef323a09f4ba6f20ed4e2611f9';
 
 /// See also [userBlockchainAccountGroupAssignmentRepository].
 @ProviderFor(userBlockchainAccountGroupAssignmentRepository)

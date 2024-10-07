@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:defy/features/authentication/presentation/providers/authentication_notifier.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';

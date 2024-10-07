@@ -4,12 +4,12 @@ import 'package:defy/features/shared/data/sources/remote/blockchain_network_remo
 import 'package:defy/features/shared/domain/entities/blockchain_network.dart';
 import 'package:defy/features/shared/domain/repositories/blockchain_network_repository.dart';
 
-class BlockchainNetworkRepositoryImplementation
-    implements BlockchainNetworkRepository {
+class BlockchainNetworkRepository
+    implements IBlockchainNetworkRepository {
   final BlockchainNetworkLocalDataSource _localDataSource;
   final BlockchainNetworkRemoteDataSource _remoteDataSource;
 
-  BlockchainNetworkRepositoryImplementation(
+  BlockchainNetworkRepository(
       this._localDataSource, this._remoteDataSource);
 
   // Local CRUD operations

@@ -1,6 +1,6 @@
 import 'package:defy/features/shared/data/models/user_blockchain_account_group/user_blockchain_account_group_remote_model.dart';
+import 'package:defy/features/shared/data/repositories/user_blockchain_account_group_repository_implementation.dart';
 import 'package:defy/features/shared/domain/entities/user_blockchain_account_group.dart';
-import 'package:defy/features/shared/domain/repositories/user_blockchain_account_group_repository.dart';
 
 class ListLocalUserBlockchainAccountGroupsUseCase {
   final UserBlockchainAccountGroupRepository _repository;

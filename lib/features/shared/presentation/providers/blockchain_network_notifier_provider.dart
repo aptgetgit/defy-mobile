@@ -1,6 +1,6 @@
+import 'package:defy/features/shared/data/repositories/blockchain_network_repository_implementation.dart';
 import 'package:defy/features/shared/domain/entities/blockchain_network.dart';
-import 'package:defy/features/shared/domain/repositories/blockchain_network_repository.dart';
-import 'package:defy/features/shared/presentation/providers/blockchain_network_provider.dart';
+import 'package:defy/features/shared/presentation/providers/blockchain_network_usecase_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

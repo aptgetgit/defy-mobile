@@ -1,7 +1,7 @@
 import 'package:defy/features/shared/domain/entities/user_blockchain_account_group_assignment.dart';
 import 'package:defy/features/shared/domain/entities/user_blockchain_account.dart';
 
-abstract class UserBlockchainAccountGroupAssignmentRepository {
+abstract class IUserBlockchainAccountGroupAssignmentRepository {
   // Local operations
   List<UserBlockchainAccountGroupAssignment>
       listLocalUserBlockchainAccountGroupAssignments();

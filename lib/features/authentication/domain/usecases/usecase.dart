@@ -1,3 +1,4 @@
+import 'package:defy/features/authentication/data/repositories/authentication_repository_implementation.dart';
 import 'package:defy/features/authentication/domain/entities/session_entity.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 

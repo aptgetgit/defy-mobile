@@ -1,6 +1,6 @@
 import 'package:defy/features/shared/domain/entities/blockchain_network.dart';
 
-abstract class BlockchainNetworkRepository {
+abstract class IBlockchainNetworkRepository {
   // Local operations
   List<BlockchainNetwork> listLocalBlockchainNetworks();
   BlockchainNetwork? getLocalBlockchainNetwork(String blockchainNetworkId);

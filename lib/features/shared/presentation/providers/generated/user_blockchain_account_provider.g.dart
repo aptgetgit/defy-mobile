@@ -7,7 +7,7 @@ part of '../user_blockchain_account_provider.dart';
 // **************************************************************************
 
 String _$userBlockchainAccountRepositoryHash() =>
-    r'c3a9578adfe85cb9f5cbfc38a913650ae70bafa6';
+    r'29eec0b18d5b7c738c3747804487a08d0599a1f0';
 
 /// See also [userBlockchainAccountRepository].
 @ProviderFor(userBlockchainAccountRepository)

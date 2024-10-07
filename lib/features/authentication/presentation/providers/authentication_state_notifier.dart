@@ -1,10 +1,10 @@
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_flow_manager.dart';
-import 'package:defy/features/authentication/presentation/providers/authentication_provider.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_usecase_provider.dart';
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'generated/authentication_notifier.g.dart';
+part 'generated/authentication_state_notifier.g.dart';
 
 @Riverpod(keepAlive: true)
 class AuthenticationNotifier extends _$AuthenticationNotifier {

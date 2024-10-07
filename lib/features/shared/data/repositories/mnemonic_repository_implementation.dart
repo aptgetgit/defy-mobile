@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:defy/core/providers/secure_storage_provider.dart';
 import 'package:defy/features/shared/domain/repositories/mnemonic_repository.dart';
-import 'package:wallet_core/wallet_core.dart';
+import 'package:bip39/bip39.dart' as bip39;
 
 class MnemonicRepository implements IMnemonicRepository {
   static String _prefix(String identityId) =>
@@ -18,29 +18,29 @@ class MnemonicRepository implements IMnemonicRepository {
 
   @override
   String generateMnemonic({int strength = 128}) {
-    return Mnemonic.generateMnemonic(strength: strength).trim();
+    return bip39.generateMnemonic(strength: strength).trim();
   }
 
   @override
-  bool validatePhrase(String phrase) {
-    return Mnemonic.validatePhrase(phrase.trim());
+  bool validateMnemonic(String mnemonic) {
+    return bip39.validateMnemonic(mnemonic.trim());
   }
 
   @override
-  Uint8List toSeed(String phrase, {String passphrase = ''}) {
-    return Mnemonic.toSeed(phrase.trim(), passphrase: passphrase);
+  Uint8List mnemonicToSeed(String mnemonic, {String passphrase = ''}) {
+    return bip39.mnemonicToSeed(mnemonic.trim(), passphrase: passphrase);
   }
 
   @override
-  String toSeedHex(String phrase, {String passphrase = ''}) {
-    return Mnemonic.toSeedHex(phrase.trim(), passphrase: passphrase);
+  String mnemonicToSeedHex(String mnemonic, {String passphrase = ''}) {
+    return bip39.mnemonicToSeedHex(mnemonic.trim(), passphrase: passphrase);
   }
 
   @override
-  Future<String> saveMnemonic(String identityId, String phrase) async {
-    final mnemonicHash = sha512.convert(utf8.encode(phrase.trim())).toString();
+  Future<String> saveMnemonic(String identityId, String mnemonic) async {
+    final mnemonicHash = sha512.convert(utf8.encode(mnemonic.trim())).toString();
     final mnemonicId = mnemonicKey(identityId, mnemonicHash);
-    await _secureStorageService.write(mnemonicId, phrase.trim());
+    await _secureStorageService.write(mnemonicId, mnemonic.trim());
     return mnemonicId;
   }
 

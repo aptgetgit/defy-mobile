@@ -18,7 +18,7 @@ class ValidateMnemonicUseCase {
   ValidateMnemonicUseCase(this._repository);
 
   bool call(String phrase) {
-    return _repository.validatePhrase(phrase);
+    return _repository.validateMnemonic(phrase);
   }
 }
 
@@ -28,7 +28,7 @@ class ToSeedUseCase {
   ToSeedUseCase(this._repository);
 
   Uint8List call(String phrase, {String passphrase = ''}) {
-    return _repository.toSeed(phrase, passphrase: passphrase);
+    return _repository.mnemonicToSeed(phrase, passphrase: passphrase);
   }
 }
 
@@ -38,7 +38,7 @@ class ToSeedHexUseCase {
   ToSeedHexUseCase(this._repository);
 
   String call(String phrase, {String passphrase = ''}) {
-    return _repository.toSeedHex(phrase, passphrase: passphrase);
+    return _repository.mnemonicToSeedHex(phrase, passphrase: passphrase);
   }
 }
 

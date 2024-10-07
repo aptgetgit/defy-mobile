@@ -6,7 +6,3 @@
 	path = packages/defy-graphql
 	url = git@github.com:avex-id/defy-graphql.git
 	branch = main
-[submodule "packages/wallet-core"]
-	path = packages/wallet-core
-	url = git@github.com:avex-id/wallet-core.git
-	branch = release/aptos

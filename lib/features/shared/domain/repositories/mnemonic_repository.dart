@@ -2,11 +2,11 @@ import 'dart:typed_data';
 
 abstract class IMnemonicRepository {
   String generateMnemonic({int strength = 128});
-  bool validatePhrase(String phrase);
-  Uint8List toSeed(String phrase, {String passphrase = ''});
-  String toSeedHex(String phrase, {String passphrase = ''});
+  bool validateMnemonic(String mnemonic);
+  Uint8List mnemonicToSeed(String mnemonic, {String passphrase = ''});
+  String mnemonicToSeedHex(String mnemonic, {String passphrase = ''});
 
-  Future<String> saveMnemonic(String identityId, String phrase);
+  Future<String> saveMnemonic(String identityId, String mnemonic);
   Future<String?> getMnemonic(String mnemonicId);
   Future<void> deleteMnemonic(String mnemonicId);
 }

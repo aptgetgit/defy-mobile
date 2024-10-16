@@ -20,7 +20,7 @@ final l10nProvider = AutoDisposeProvider<AppLocalizations>.internal(
 );
 
 typedef L10nRef = AutoDisposeProviderRef<AppLocalizations>;
-String _$localeNotifierHash() => r'01749cade07eab6f1f7ffa7b2201043d24a323c5';
+String _$localeNotifierHash() => r'1b9bffe8051c9c3518d4acc557289f8c8456eb84';
 
 /// See also [LocaleNotifier].
 @ProviderFor(LocaleNotifier)

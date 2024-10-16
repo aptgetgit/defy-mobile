@@ -1,0 +1,43 @@
+{
+    "@@locale": "ja",
+    "onboardingGetStartedButton": "始めましょう",
+    "@onboardingGetStartedButton": {
+      "description": "Label for the get started button on the final onboarding page"
+    },
+    "onboardingPage1Description": "すべての資産を管理し、\n1つのDappで異なるDappにアクセス",
+    "@onboardingPage1Description": {
+      "description": "Description for the first onboarding page"
+    },
+    "onboardingPage1Title": "統合Dapp ☝\uD83C\uDFFB",
+    "@onboardingPage1Title": {
+      "description": "Title for the first onboarding page"
+    },
+    "onboardingPage2Description": "友達をフォロー、トレードをコピー、\nオンチェーンプロフィールアバターで共同投資",
+    "@onboardingPage2Description": {
+      "description": "Description for the second onboarding page"
+    },
+    "onboardingPage2Title": "コミュニティ\uD83E\uDEC2",
+    "@onboardingPage2Title": {
+      "description": "Title for the second onboarding page"
+    },
+    "onboardingPage3Description": "すべての資産を管理し、\n1つのDappで異なるDappにアクセス",
+    "@onboardingPage3Description": {
+      "description": "Description for the third onboarding page"
+    },
+    "onboardingPage3Title": "セキュリティ\uD83D\uDD12",
+    "@onboardingPage3Title": {
+      "description": "Title for the third onboarding page"
+    },
+    "onboardingPage4Description": "友達をフォロー、トレードをコピー、\nオンチェーンプロフィールアバターで共同投資",
+    "@onboardingPage4Description": {
+      "description": "Description for the fourth onboarding page"
+    },
+    "onboardingPage4Title": "報酬 \uD83D\uDE09",
+    "@onboardingPage4Title": {
+      "description": "Title for the fourth onboarding page"
+    },
+    "onboardingSkipButton": "スキップ",
+    "@onboardingSkipButton": {
+      "description": "Label for the skip button on the onboarding screen"
+    }
+  }

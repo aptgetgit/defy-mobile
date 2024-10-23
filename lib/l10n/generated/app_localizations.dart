@@ -95,6 +95,42 @@ abstract class AppLocalizations {
     Locale('ja')
   ];
 
+  /// Name of Bitcoin cryptocurrency
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin'**
+  String get currencyBTC;
+
+  /// Name of Aptos cryptocurrency
+  ///
+  /// In en, this message translates to:
+  /// **'Aptos'**
+  String get currencyAPT;
+
+  /// Name of US Dollar currency
+  ///
+  /// In en, this message translates to:
+  /// **'United States Dollar'**
+  String get currencyUSD;
+
+  /// Name of Euro currency
+  ///
+  /// In en, this message translates to:
+  /// **'Euro'**
+  String get currencyEUR;
+
+  /// Name of Indian Rupee currency
+  ///
+  /// In en, this message translates to:
+  /// **'Indian Rupee'**
+  String get currencyINR;
+
+  /// Name of Japanese Yen currency
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese Yen'**
+  String get currencyJPY;
+
   /// Label for the get started button on the final onboarding page
   ///
   /// In en, this message translates to:

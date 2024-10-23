@@ -1,4 +1,8 @@
 import 'package:defy/core/providers/locale_provider.dart';
+import 'package:defy/core/providers/preferred_currency_provider.dart';
+import 'package:defy/core/constants/supported_currencies.dart';
+import 'package:defy/features/shared/presentation/providers/currency_conversion_provider.dart';
+import 'package:defy/features/shared/presentation/providers/currency_rate_notifier_provider.dart';
 import 'package:defy/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:defy/config/assets.gen.dart';
@@ -9,6 +13,7 @@ import 'package:defy/core/routes/router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -63,8 +68,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           child: Column(
             children: [
               _buildHeader(context, isDark, l10n),
-              // TODO: Remove this Temporary Locale Switcher
-              _buildTempLocaleSwitcher(),
+              // Temporary Switchers
+              Column(
+                children: [
+                  _buildTempLocaleSwitcher(),
+                  const Gap(8),
+                  _buildTempCurrencySwitcher(),
+                ],
+              ),
               Expanded(child: _buildPageView(l10n)),
               _buildFooter(context, height, isDark, l10n),
             ],
@@ -74,7 +85,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, bool isDark, AppLocalizations l10n) {
+  Widget _buildHeader(
+      BuildContext context, bool isDark, AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -96,7 +108,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  // TEMP: Method for the temporary locale switcher
   Widget _buildTempLocaleSwitcher() {
     final currentLocale = ref.watch(localeNotifierProvider);
     return Row(
@@ -116,6 +127,142 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ref.read(localeNotifierProvider.notifier).setLocale(newLocale);
             }
           },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTempCurrencySwitcher() {
+    final currentCurrency = ref.watch(preferredCurrencyNotifierProvider);
+    final currencyRatesAsync = ref.watch(currencyRateNotifierProvider);
+    final l10n = ref.watch(l10nProvider);
+
+    String getCurrencyName(String code) {
+      switch (code.toLowerCase()) {
+        case 'btc':
+          return l10n.currencyBTC;
+        case 'apt':
+          return l10n.currencyAPT;
+        case 'usd':
+          return l10n.currencyUSD;
+        case 'eur':
+          return l10n.currencyEUR;
+        case 'inr':
+          return l10n.currencyINR;
+        case 'jpy':
+          return l10n.currencyJPY;
+        default:
+          return code.toUpperCase();
+      }
+    }
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Temp Currency Switcher: '),
+            DropdownButton<String>(
+              value: currentCurrency.code,
+              items: SupportedCurrencies.all.map((currency) {
+                return DropdownMenuItem<String>(
+                  value: currency.code,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(currency.symbol),
+                      const SizedBox(width: 8),
+                      Text(currency.code.toUpperCase()),
+                      const SizedBox(width: 8),
+                      Text(
+                        '(${getCurrencyName(currency.code)})',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0XFF646D80),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+              onChanged: (String? newCurrencyCode) {
+                if (newCurrencyCode != null) {
+                  final newCurrency =
+                      SupportedCurrencies.fromCode(newCurrencyCode);
+                  if (newCurrency != null) {
+                    ref
+                        .read(preferredCurrencyNotifierProvider.notifier)
+                        .setCurrency(newCurrency);
+                  }
+                }
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        currencyRatesAsync.when(
+          data: (_) => Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEDF0F5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Format Examples:',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                // Using the new conversion provider
+                Text('Zero: ${NumberFormat.compactCurrency(
+                  locale: l10n.localeName,
+                  symbol: currentCurrency.symbol,
+                  decimalDigits: 2,
+                ).format(
+                  ref.watch(
+                    convertToPreferredCurrencyProvider(0.1, 'USD'),
+                  ),
+                )}'),
+                Text('Decimal: ${NumberFormat.compactCurrency(
+                  locale: l10n.localeName,
+                  symbol: currentCurrency.symbol,
+                  decimalDigits: 3,
+                ).format(
+                  ref.watch(
+                    convertToPreferredCurrencyProvider(100.5, 'USD'),
+                  ),
+                )}'),
+                Text('Whole: ${NumberFormat.compactCurrency(
+                  locale: l10n.localeName,
+                  symbol: currentCurrency.symbol,
+                  decimalDigits: 2,
+                ).format(
+                  ref.watch(
+                    convertToPreferredCurrencyProvider(1000000, 'USD'),
+                  ),
+                )}'),
+              ],
+            ),
+          ),
+          loading: () => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          error: (error, _) => Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEDF0F5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'Error loading rates: $error',
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
         ),
       ],
     );
@@ -161,7 +308,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  Widget _buildFooter(BuildContext context, double height, bool isDark, AppLocalizations l10n) {
+  Widget _buildFooter(
+      BuildContext context, double height, bool isDark, AppLocalizations l10n) {
     return Column(
       children: [
         Gap(height * 0.05),

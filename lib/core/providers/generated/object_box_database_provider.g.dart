@@ -7,7 +7,7 @@ part of '../object_box_database_provider.dart';
 // **************************************************************************
 
 String _$objectBoxDbInitializerHash() =>
-    r'6b8d24947e31852d6b77aeb5a7fff7f1dbee3448';
+    r'a32716ed240a8dc5589cb339296aebe5c08834b8';
 
 /// See also [objectBoxDbInitializer].
 @ProviderFor(objectBoxDbInitializer)

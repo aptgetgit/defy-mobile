@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:credential_manager/credential_manager.dart';
 import 'package:defy/app.dart';
 import 'package:defy/config/env.dart';
+import 'package:defy/config/network_connectivity_config.dart';
 import 'package:defy/config/objectbox/objectbox.g.dart';
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/logging/riverpod_observer.dart';
 import 'package:defy/core/providers/dio_provider.dart';
+import 'package:defy/core/providers/network_connectivity_provider.dart';
 import 'package:defy/core/providers/object_box_database_provider.dart';
 import 'package:defy/core/providers/ory_kratos_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
@@ -78,10 +80,17 @@ Future<void> main() async {
       );
     }
 
+    const networkConfig = NetworkConnectivityConfig(
+    checkUrls: ['https://1.1.1.1'],
+    timeout: Duration(seconds: 3),
+    lookupAddress: 'google.com'
+  );
+
     overrides.addAll([
       sharedPreferencesInitializerProvider.overrideWithValue(sharedPreferences),
       secureStorageInitializerProvider.overrideWithValue(secureStorage),
-      objectBoxDbInitializerProvider.overrideWithValue(store)
+      objectBoxDbInitializerProvider.overrideWithValue(store),
+      networkInitializerProvider.overrideWithValue(networkConfig),
     ]);
 
     final container = ProviderContainer(

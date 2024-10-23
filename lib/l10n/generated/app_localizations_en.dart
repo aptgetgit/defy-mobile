@@ -7,6 +7,24 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get currencyBTC => 'Bitcoin';
+
+  @override
+  String get currencyAPT => 'Aptos';
+
+  @override
+  String get currencyUSD => 'United States Dollar';
+
+  @override
+  String get currencyEUR => 'Euro';
+
+  @override
+  String get currencyINR => 'Indian Rupee';
+
+  @override
+  String get currencyJPY => 'Japanese Yen';
+
+  @override
   String get onboardingGetStartedButton => 'Let\'s get started';
 
   @override

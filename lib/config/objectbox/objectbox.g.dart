@@ -15,6 +15,7 @@ import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import '../../features/shared/data/models/blockchain_network/blockchain_network_local_model.dart';
+import '../../features/shared/data/models/currency_rate/currency_rate_local_model.dart';
 import '../../features/shared/data/models/user_blockchain_account/user_blockchain_account_local_model.dart';
 import '../../features/shared/data/models/user_blockchain_account_group/user_blockchain_account_group_local_model.dart';
 import '../../features/shared/data/models/user_blockchain_account_group_assignment/user_blockchain_account_group_assignment_local_model.dart';
@@ -167,6 +168,42 @@ final _entities = <obx_int.ModelEntity>[
             relationTarget: 'UserBlockchainAccountGroupAssignmentLocalModel')
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(5, 6710277839105327544),
+      name: 'CurrencyRateLocalModel',
+      lastPropertyId: const obx_int.IdUid(5, 8835589045051854719),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 3244975175968046810),
+            name: 'localId',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 6909994099731011805),
+            name: 'remoteId',
+            type: 9,
+            flags: 34848,
+            indexId: const obx_int.IdUid(12, 5807830780208675206)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 6335203309372508339),
+            name: 'code',
+            type: 9,
+            flags: 8,
+            indexId: const obx_int.IdUid(13, 2439398198781282479)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 2993903476795009535),
+            name: 'rate',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 8835589045051854719),
+            name: 'lastUpdate',
+            type: 10,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -205,8 +242,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(4, 3274070783752004820),
-      lastIndexId: const obx_int.IdUid(11, 321175863080590547),
+      lastEntityId: const obx_int.IdUid(5, 6710277839105327544),
+      lastIndexId: const obx_int.IdUid(13, 2439398198781282479),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -420,6 +457,47 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
           object.blockchainAccountGroupAssignment.attach(store);
           return object;
+        }),
+    CurrencyRateLocalModel: obx_int.EntityDefinition<CurrencyRateLocalModel>(
+        model: _entities[4],
+        toOneRelations: (CurrencyRateLocalModel object) => [],
+        toManyRelations: (CurrencyRateLocalModel object) => {},
+        getId: (CurrencyRateLocalModel object) => object.localId,
+        setId: (CurrencyRateLocalModel object, int id) {
+          object.localId = id;
+        },
+        objectToFB: (CurrencyRateLocalModel object, fb.Builder fbb) {
+          final remoteIdOffset = fbb.writeString(object.remoteId);
+          final codeOffset = fbb.writeString(object.code);
+          fbb.startTable(6);
+          fbb.addInt64(0, object.localId);
+          fbb.addOffset(1, remoteIdOffset);
+          fbb.addOffset(2, codeOffset);
+          fbb.addFloat64(3, object.rate);
+          fbb.addInt64(4, object.lastUpdate.millisecondsSinceEpoch);
+          fbb.finish(fbb.endTable());
+          return object.localId;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final remoteIdParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final codeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final rateParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final lastUpdateParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
+          final object = CurrencyRateLocalModel(
+              remoteId: remoteIdParam,
+              code: codeParam,
+              rate: rateParam,
+              lastUpdate: lastUpdateParam)
+            ..localId =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
         })
   };
 
@@ -529,4 +607,27 @@ class UserBlockchainAccountLocalModel_ {
           UserBlockchainAccountLocalModel,
           UserBlockchainAccountGroupAssignmentLocalModel>(
       _entities[3].properties[4]);
+}
+
+/// [CurrencyRateLocalModel] entity fields to define ObjectBox queries.
+class CurrencyRateLocalModel_ {
+  /// See [CurrencyRateLocalModel.localId].
+  static final localId = obx.QueryIntegerProperty<CurrencyRateLocalModel>(
+      _entities[4].properties[0]);
+
+  /// See [CurrencyRateLocalModel.remoteId].
+  static final remoteId = obx.QueryStringProperty<CurrencyRateLocalModel>(
+      _entities[4].properties[1]);
+
+  /// See [CurrencyRateLocalModel.code].
+  static final code = obx.QueryStringProperty<CurrencyRateLocalModel>(
+      _entities[4].properties[2]);
+
+  /// See [CurrencyRateLocalModel.rate].
+  static final rate = obx.QueryDoubleProperty<CurrencyRateLocalModel>(
+      _entities[4].properties[3]);
+
+  /// See [CurrencyRateLocalModel.lastUpdate].
+  static final lastUpdate =
+      obx.QueryDateProperty<CurrencyRateLocalModel>(_entities[4].properties[4]);
 }

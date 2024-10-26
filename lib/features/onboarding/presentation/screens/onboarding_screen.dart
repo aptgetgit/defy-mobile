@@ -116,7 +116,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       itemBuilder: (context, index) {
         final (title, description) = _content[index];
         return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
               title,

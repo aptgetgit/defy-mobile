@@ -1,4 +1,4 @@
-import 'package:defy/features/shared/data/models/tokens/user_wallet_token_remote_model.dart';
+import 'package:defy/features/shared/data/models/user_wallet_assets/user_wallet_token_remote_model.dart';
 import 'package:defy_graphql/aptos_graphql.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 

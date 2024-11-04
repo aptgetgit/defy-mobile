@@ -5,7 +5,7 @@ part 'generated/object_box_database_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Store objectBoxDbInitializer(ObjectBoxDbInitializerRef ref) {
-  throw UnimplementedError('Unimplemented isarDbInitializer');
+  throw UnimplementedError('Unimplemented objectBoxDbInitializer');
 }
 
 @Riverpod(keepAlive: true)

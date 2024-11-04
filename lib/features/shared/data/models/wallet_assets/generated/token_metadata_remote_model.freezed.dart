@@ -215,7 +215,7 @@ class __$$TokenMetaDataRemoteModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TokenMetaDataRemoteModelImpl implements _TokenMetaDataRemoteModel {
+class _$TokenMetaDataRemoteModelImpl extends _TokenMetaDataRemoteModel {
   _$TokenMetaDataRemoteModelImpl(
       {@JsonKey(name: 'coin_id') required this.coinId,
       @JsonKey(name: 'coin_name') required this.coinName,
@@ -223,7 +223,8 @@ class _$TokenMetaDataRemoteModelImpl implements _TokenMetaDataRemoteModel {
       @JsonKey(name: 'coin_defyapp_symbol') required this.coinDefyappSymbol,
       @JsonKey(name: 'coin_description') required this.coinDescription,
       @JsonKey(name: 'coin_logo_url') required this.coinLogoUrl,
-      @JsonKey(name: 'coin_metric') required this.coinMetric});
+      @JsonKey(name: 'coin_metric') required this.coinMetric})
+      : super._();
 
   factory _$TokenMetaDataRemoteModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$TokenMetaDataRemoteModelImplFromJson(json);
@@ -297,7 +298,7 @@ class _$TokenMetaDataRemoteModelImpl implements _TokenMetaDataRemoteModel {
   }
 }
 
-abstract class _TokenMetaDataRemoteModel implements TokenMetaDataRemoteModel {
+abstract class _TokenMetaDataRemoteModel extends TokenMetaDataRemoteModel {
   factory _TokenMetaDataRemoteModel(
       {@JsonKey(name: 'coin_id') required final String? coinId,
       @JsonKey(name: 'coin_name') required final String? coinName,
@@ -309,6 +310,7 @@ abstract class _TokenMetaDataRemoteModel implements TokenMetaDataRemoteModel {
       @JsonKey(name: 'coin_metric')
       required final TokenMetricModel?
           coinMetric}) = _$TokenMetaDataRemoteModelImpl;
+  _TokenMetaDataRemoteModel._() : super._();
 
   factory _TokenMetaDataRemoteModel.fromJson(Map<String, dynamic> json) =
       _$TokenMetaDataRemoteModelImpl.fromJson;
@@ -690,7 +692,7 @@ class __$$TokenMetricModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TokenMetricModelImpl implements _TokenMetricModel {
+class _$TokenMetricModelImpl extends _TokenMetricModel {
   _$TokenMetricModelImpl(
       {@JsonKey(name: 'price_change_1hr') required this.priceChange1hr,
       @JsonKey(name: 'price_change_24h') required this.priceChange24hr,
@@ -713,7 +715,8 @@ class _$TokenMetricModelImpl implements _TokenMetricModel {
       @JsonKey(name: 'fully_diluted_market_cap')
       required this.fullyDilutedMarketCap,
       @JsonKey(name: 'tvl') required this.tvl,
-      @JsonKey(name: 'circulating_supply') required this.circulatingSupply});
+      @JsonKey(name: 'circulating_supply') required this.circulatingSupply})
+      : super._();
 
   factory _$TokenMetricModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$TokenMetricModelImplFromJson(json);
@@ -869,7 +872,7 @@ class _$TokenMetricModelImpl implements _TokenMetricModel {
   }
 }
 
-abstract class _TokenMetricModel implements TokenMetricModel {
+abstract class _TokenMetricModel extends TokenMetricModel {
   factory _TokenMetricModel(
       {@JsonKey(name: 'price_change_1hr') required final double? priceChange1hr,
       @JsonKey(name: 'price_change_24h') required final double? priceChange24hr,
@@ -895,6 +898,7 @@ abstract class _TokenMetricModel implements TokenMetricModel {
       @JsonKey(name: 'tvl') required final num? tvl,
       @JsonKey(name: 'circulating_supply')
       required final num? circulatingSupply}) = _$TokenMetricModelImpl;
+  _TokenMetricModel._() : super._();
 
   factory _TokenMetricModel.fromJson(Map<String, dynamic> json) =
       _$TokenMetricModelImpl.fromJson;

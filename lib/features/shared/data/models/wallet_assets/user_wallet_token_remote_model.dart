@@ -6,6 +6,7 @@ part 'generated/user_wallet_token_remote_model.g.dart';
 
 @freezed
 class UserWalletTokenRemoteModel with _$UserWalletTokenRemoteModel {
+  const UserWalletTokenRemoteModel._();
   factory UserWalletTokenRemoteModel({
     @JsonKey(name: 'metadata') required MetaDataModel? metaData,
     @JsonKey(name: 'owner_address') required String? ownerAddress,
@@ -37,6 +38,7 @@ class UserWalletTokenRemoteModel with _$UserWalletTokenRemoteModel {
 
 @freezed
 class MetaDataModel with _$MetaDataModel {
+  const MetaDataModel._();
   factory MetaDataModel({
     @JsonKey(name: 'decimals') required int? decimals,
     @JsonKey(name: 'name') required String? name,

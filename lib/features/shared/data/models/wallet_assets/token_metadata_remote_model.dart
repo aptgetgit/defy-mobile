@@ -6,6 +6,7 @@ part 'generated/token_metadata_remote_model.g.dart';
 
 @freezed
 class TokenMetaDataRemoteModel with _$TokenMetaDataRemoteModel {
+  const TokenMetaDataRemoteModel._();
   factory TokenMetaDataRemoteModel({
     @JsonKey(name: 'coin_id') required String? coinId,
     @JsonKey(name: 'coin_name') required String? coinName,
@@ -43,6 +44,7 @@ class TokenMetaDataRemoteModel with _$TokenMetaDataRemoteModel {
 
 @freezed
 class TokenMetricModel with _$TokenMetricModel {
+  const TokenMetricModel._();
   factory TokenMetricModel({
     @JsonKey(name: 'price_change_1hr') required double? priceChange1hr,
     @JsonKey(name: 'price_change_24h') required double? priceChange24hr,

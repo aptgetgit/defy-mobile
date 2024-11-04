@@ -6,7 +6,7 @@ part of '../token_metadata_notifier_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tokenMetaDataHash() => r'e20bb83dcc4d42057feb5ffc73c362991dce1e39';
+String _$tokenMetaDataHash() => r'16062754017d6a58b63607c9f44feb226e8245fd';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,13 +30,11 @@ class _SystemHash {
 }
 
 abstract class _$TokenMetaData
-    extends BuildlessAutoDisposeAsyncNotifier<double?> {
-  late final String coinId;
-  late final double amount;
+    extends BuildlessAutoDisposeAsyncNotifier<TokenMetaDataEntity?> {
+  late final String? coinId;
 
-  FutureOr<double?> build(
-    String coinId,
-    double amount,
+  FutureOr<TokenMetaDataEntity?> build(
+    String? coinId,
   );
 }
 
@@ -45,18 +43,16 @@ abstract class _$TokenMetaData
 const tokenMetaDataProvider = TokenMetaDataFamily();
 
 /// See also [TokenMetaData].
-class TokenMetaDataFamily extends Family<AsyncValue<double?>> {
+class TokenMetaDataFamily extends Family<AsyncValue<TokenMetaDataEntity?>> {
   /// See also [TokenMetaData].
   const TokenMetaDataFamily();
 
   /// See also [TokenMetaData].
   TokenMetaDataProvider call(
-    String coinId,
-    double amount,
+    String? coinId,
   ) {
     return TokenMetaDataProvider(
       coinId,
-      amount,
     );
   }
 
@@ -66,7 +62,6 @@ class TokenMetaDataFamily extends Family<AsyncValue<double?>> {
   ) {
     return call(
       provider.coinId,
-      provider.amount,
     );
   }
 
@@ -86,16 +81,13 @@ class TokenMetaDataFamily extends Family<AsyncValue<double?>> {
 }
 
 /// See also [TokenMetaData].
-class TokenMetaDataProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<TokenMetaData, double?> {
+class TokenMetaDataProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    TokenMetaData, TokenMetaDataEntity?> {
   /// See also [TokenMetaData].
   TokenMetaDataProvider(
-    String coinId,
-    double amount,
+    String? coinId,
   ) : this._internal(
-          () => TokenMetaData()
-            ..coinId = coinId
-            ..amount = amount,
+          () => TokenMetaData()..coinId = coinId,
           from: tokenMetaDataProvider,
           name: r'tokenMetaDataProvider',
           debugGetCreateSourceHash:
@@ -106,7 +98,6 @@ class TokenMetaDataProvider
           allTransitiveDependencies:
               TokenMetaDataFamily._allTransitiveDependencies,
           coinId: coinId,
-          amount: amount,
         );
 
   TokenMetaDataProvider._internal(
@@ -117,19 +108,16 @@ class TokenMetaDataProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.coinId,
-    required this.amount,
   }) : super.internal();
 
-  final String coinId;
-  final double amount;
+  final String? coinId;
 
   @override
-  FutureOr<double?> runNotifierBuild(
+  FutureOr<TokenMetaDataEntity?> runNotifierBuild(
     covariant TokenMetaData notifier,
   ) {
     return notifier.build(
       coinId,
-      amount,
     );
   }
 
@@ -138,60 +126,50 @@ class TokenMetaDataProvider
     return ProviderOverride(
       origin: this,
       override: TokenMetaDataProvider._internal(
-        () => create()
-          ..coinId = coinId
-          ..amount = amount,
+        () => create()..coinId = coinId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         coinId: coinId,
-        amount: amount,
       ),
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<TokenMetaData, double?>
+  AutoDisposeAsyncNotifierProviderElement<TokenMetaData, TokenMetaDataEntity?>
       createElement() {
     return _TokenMetaDataProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TokenMetaDataProvider &&
-        other.coinId == coinId &&
-        other.amount == amount;
+    return other is TokenMetaDataProvider && other.coinId == coinId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, coinId.hashCode);
-    hash = _SystemHash.combine(hash, amount.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin TokenMetaDataRef on AutoDisposeAsyncNotifierProviderRef<double?> {
+mixin TokenMetaDataRef
+    on AutoDisposeAsyncNotifierProviderRef<TokenMetaDataEntity?> {
   /// The parameter `coinId` of this provider.
-  String get coinId;
-
-  /// The parameter `amount` of this provider.
-  double get amount;
+  String? get coinId;
 }
 
 class _TokenMetaDataProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<TokenMetaData, double?>
-    with TokenMetaDataRef {
+    extends AutoDisposeAsyncNotifierProviderElement<TokenMetaData,
+        TokenMetaDataEntity?> with TokenMetaDataRef {
   _TokenMetaDataProviderElement(super.provider);
 
   @override
-  String get coinId => (origin as TokenMetaDataProvider).coinId;
-  @override
-  double get amount => (origin as TokenMetaDataProvider).amount;
+  String? get coinId => (origin as TokenMetaDataProvider).coinId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

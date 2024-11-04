@@ -11,6 +11,8 @@ List<RouteBase> get $appRoutes => [
       $onboardingRoute,
       $authenticationRoute,
       $homeRoute,
+      $dashboardRoute,
+      $watchlistRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -103,11 +105,57 @@ extension $HomeRouteExtension on HomeRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $dashboardRoute => GoRouteData.$route(
+      path: '/dashboard',
+      factory: $DashboardRouteExtension._fromState,
+    );
+
+extension $DashboardRouteExtension on DashboardRoute {
+  static DashboardRoute _fromState(GoRouterState state) =>
+      const DashboardRoute();
+
+  String get location => GoRouteData.$location(
+        '/dashboard',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $watchlistRoute => GoRouteData.$route(
+      path: '/watchlist',
+      factory: $WatchlistRouteExtension._fromState,
+    );
+
+extension $WatchlistRouteExtension on WatchlistRoute {
+  static WatchlistRoute _fromState(GoRouterState state) =>
+      const WatchlistRoute();
+
+  String get location => GoRouteData.$location(
+        '/watchlist',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'dcdf5f80d87abac2f9a2bc42e84900c03b5384ac';
+String _$routerHash() => r'613b79d6c65496797ffac52f7337cb4b547fca6b';
 
 /// See also [router].
 @ProviderFor(router)

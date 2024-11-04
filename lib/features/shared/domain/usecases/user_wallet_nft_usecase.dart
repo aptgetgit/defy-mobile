@@ -6,7 +6,7 @@ class UserWalletNftUsecase {
   final UserWalletNFTRepository _repository;
   UserWalletNftUsecase(this._repository);
 
-  Future<List<UserWalletNFT>?> call(String ownerAddress) {
+  Future<List<List<UserWalletNFT>?>?> call(String ownerAddress) {
     return _repository.fetchUserWalletNFTs(ownerAddress);
   }
 }

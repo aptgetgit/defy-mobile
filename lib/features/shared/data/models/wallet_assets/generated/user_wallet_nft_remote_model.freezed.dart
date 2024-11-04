@@ -205,13 +205,14 @@ class __$$UserWalletNFTRemoteModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UserWalletNFTRemoteModelImpl implements _UserWalletNFTRemoteModel {
+class _$UserWalletNFTRemoteModelImpl extends _UserWalletNFTRemoteModel {
   _$UserWalletNFTRemoteModelImpl(
       {@JsonKey(name: 'nft_id') required this.nftId,
       @JsonKey(name: 'acquired_usd_price') required this.acquiredUsdPrice,
       @JsonKey(name: 'acquired_price') required this.acquiredPrice,
       @JsonKey(name: 'collection') required this.collection,
-      @JsonKey(name: 'nft') required this.nft});
+      @JsonKey(name: 'nft') required this.nft})
+      : super._();
 
   factory _$UserWalletNFTRemoteModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserWalletNFTRemoteModelImplFromJson(json);
@@ -274,7 +275,7 @@ class _$UserWalletNFTRemoteModelImpl implements _UserWalletNFTRemoteModel {
   }
 }
 
-abstract class _UserWalletNFTRemoteModel implements UserWalletNFTRemoteModel {
+abstract class _UserWalletNFTRemoteModel extends UserWalletNFTRemoteModel {
   factory _UserWalletNFTRemoteModel(
           {@JsonKey(name: 'nft_id') required final String? nftId,
           @JsonKey(name: 'acquired_usd_price')
@@ -284,6 +285,7 @@ abstract class _UserWalletNFTRemoteModel implements UserWalletNFTRemoteModel {
           required final NFTCollectionRemoteModel? collection,
           @JsonKey(name: 'nft') required final NFTRemoteModel? nft}) =
       _$UserWalletNFTRemoteModelImpl;
+  _UserWalletNFTRemoteModel._() : super._();
 
   factory _UserWalletNFTRemoteModel.fromJson(Map<String, dynamic> json) =
       _$UserWalletNFTRemoteModelImpl.fromJson;
@@ -466,13 +468,14 @@ class __$$NFTCollectionRemoteModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$NFTCollectionRemoteModelImpl implements _NFTCollectionRemoteModel {
+class _$NFTCollectionRemoteModelImpl extends _NFTCollectionRemoteModel {
   _$NFTCollectionRemoteModelImpl(
       {@JsonKey(name: 'cover_url') required this.coverUrl,
       @JsonKey(name: 'title') required this.title,
       @JsonKey(name: 'verified') required this.verified,
       @JsonKey(name: 'id') required this.id,
-      @JsonKey(name: 'floor') required this.floor});
+      @JsonKey(name: 'floor') required this.floor})
+      : super._();
 
   factory _$NFTCollectionRemoteModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$NFTCollectionRemoteModelImplFromJson(json);
@@ -534,7 +537,7 @@ class _$NFTCollectionRemoteModelImpl implements _NFTCollectionRemoteModel {
   }
 }
 
-abstract class _NFTCollectionRemoteModel implements NFTCollectionRemoteModel {
+abstract class _NFTCollectionRemoteModel extends NFTCollectionRemoteModel {
   factory _NFTCollectionRemoteModel(
           {@JsonKey(name: 'cover_url') required final String? coverUrl,
           @JsonKey(name: 'title') required final String? title,
@@ -542,6 +545,7 @@ abstract class _NFTCollectionRemoteModel implements NFTCollectionRemoteModel {
           @JsonKey(name: 'id') required final String? id,
           @JsonKey(name: 'floor') required final int? floor}) =
       _$NFTCollectionRemoteModelImpl;
+  _NFTCollectionRemoteModel._() : super._();
 
   factory _NFTCollectionRemoteModel.fromJson(Map<String, dynamic> json) =
       _$NFTCollectionRemoteModelImpl.fromJson;
@@ -789,7 +793,7 @@ class __$$NFTRemoteModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$NFTRemoteModelImpl implements _NFTRemoteModel {
+class _$NFTRemoteModelImpl extends _NFTRemoteModel {
   _$NFTRemoteModelImpl(
       {@JsonKey(name: 'name') required this.name,
       @JsonKey(name: 'owner') required this.owner,
@@ -802,7 +806,8 @@ class _$NFTRemoteModelImpl implements _NFTRemoteModel {
       @JsonKey(name: 'version') required this.version,
       @JsonKey(name: 'listings')
       required final List<NFTListingModel?>? listings})
-      : _listings = listings;
+      : _listings = listings,
+        super._();
 
   factory _$NFTRemoteModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$NFTRemoteModelImplFromJson(json);
@@ -902,7 +907,7 @@ class _$NFTRemoteModelImpl implements _NFTRemoteModel {
   }
 }
 
-abstract class _NFTRemoteModel implements NFTRemoteModel {
+abstract class _NFTRemoteModel extends NFTRemoteModel {
   factory _NFTRemoteModel(
       {@JsonKey(name: 'name') required final String? name,
       @JsonKey(name: 'owner') required final String? owner,
@@ -915,6 +920,7 @@ abstract class _NFTRemoteModel implements NFTRemoteModel {
       @JsonKey(name: 'version') required final int? version,
       @JsonKey(name: 'listings')
       required final List<NFTListingModel?>? listings}) = _$NFTRemoteModelImpl;
+  _NFTRemoteModel._() : super._();
 
   factory _NFTRemoteModel.fromJson(Map<String, dynamic> json) =
       _$NFTRemoteModelImpl.fromJson;
@@ -1065,10 +1071,11 @@ class __$$NFTListingModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$NFTListingModelImpl implements _NFTListingModel {
+class _$NFTListingModelImpl extends _NFTListingModel {
   _$NFTListingModelImpl(
       {@JsonKey(name: 'listed') required this.listed,
-      @JsonKey(name: 'price') required this.price});
+      @JsonKey(name: 'price') required this.price})
+      : super._();
 
   factory _$NFTListingModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$NFTListingModelImplFromJson(json);
@@ -1115,11 +1122,12 @@ class _$NFTListingModelImpl implements _NFTListingModel {
   }
 }
 
-abstract class _NFTListingModel implements NFTListingModel {
+abstract class _NFTListingModel extends NFTListingModel {
   factory _NFTListingModel(
           {@JsonKey(name: 'listed') required final bool? listed,
           @JsonKey(name: 'price') required final int? price}) =
       _$NFTListingModelImpl;
+  _NFTListingModel._() : super._();
 
   factory _NFTListingModel.fromJson(Map<String, dynamic> json) =
       _$NFTListingModelImpl.fromJson;

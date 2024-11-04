@@ -9,29 +9,41 @@ part 'generated/token_metadata_notifier_provider.g.dart';
 @riverpod
 class TokenMetaData extends _$TokenMetaData {
   @override
-  Future<double?> build(String coinId,double amount) async {
-    _periodicFetch();
-    return _fetchPrice(coinId,amount);
+  Future<TokenMetaDataEntity?> build(String? coinId) async {
+    _periodicFetch(coinId);
+    return _fetchData(coinId);
   }
 
-  Future<double?> _fetchPrice(String coinId,double amount) async {
+  Future<TokenMetaDataEntity?> _fetchData(String? coinId) async {
     final defyClient = ref.read(defyGraphQlClientProvider); 
+    if(coinId == null) return null;
     final coinMetaData = await ref.read(tokenMetaDataUseCaseProvider).call(defyClient, [coinId]);
-    final priceInUsd = _calculateAmountInUsd(amount,coinMetaData);
-    return priceInUsd;
+    if(coinMetaData == null || coinMetaData.isEmpty){
+      return null;
+    } else {
+      return coinMetaData[0];
+    }
   }
 
-  Future<void> _periodicFetch() async {
+  Future<void> _periodicFetch(String? coinId) async {
     ref.listen(tokenMetadataFetchtimerProvider, (_, __) {
-      _backgroundFetch();
+      _backgroundFetch(coinId);
     });
   }
 
-  Future<void> _backgroundFetch() async {
+  Future<void> _backgroundFetch(String? coinId) async {
     try {
-      final newPrice = await _fetchPrice(coinId,amount);
-      state = AsyncValue.data(newPrice);
+      final newData = await _fetchData(coinId);
+      if (!_areListsEqual(newData, state.value)) {
+        state = AsyncValue.data(newData);
+      }
     } catch (e) {}
+  }
+
+  bool _areListsEqual(
+      TokenMetaDataEntity? token1, TokenMetaDataEntity? token2) {
+    if (token1 == null || token2 == null) return token1 == token2;
+    return true;
   }
 
 double? _calculateAmountInUsd(

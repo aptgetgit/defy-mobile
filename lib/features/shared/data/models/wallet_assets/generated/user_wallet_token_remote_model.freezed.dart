@@ -188,13 +188,14 @@ class __$$UserWalletTokenRemoteModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UserWalletTokenRemoteModelImpl implements _UserWalletTokenRemoteModel {
+class _$UserWalletTokenRemoteModelImpl extends _UserWalletTokenRemoteModel {
   _$UserWalletTokenRemoteModelImpl(
       {@JsonKey(name: 'metadata') required this.metaData,
       @JsonKey(name: 'owner_address') required this.ownerAddress,
       @JsonKey(name: 'amount') required this.amount,
       @JsonKey(name: 'asset_type') required this.assetType,
-      @JsonKey(name: 'is_frozen') required this.isFrozen});
+      @JsonKey(name: 'is_frozen') required this.isFrozen})
+      : super._();
 
   factory _$UserWalletTokenRemoteModelImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -259,8 +260,7 @@ class _$UserWalletTokenRemoteModelImpl implements _UserWalletTokenRemoteModel {
   }
 }
 
-abstract class _UserWalletTokenRemoteModel
-    implements UserWalletTokenRemoteModel {
+abstract class _UserWalletTokenRemoteModel extends UserWalletTokenRemoteModel {
   factory _UserWalletTokenRemoteModel(
           {@JsonKey(name: 'metadata') required final MetaDataModel? metaData,
           @JsonKey(name: 'owner_address') required final String? ownerAddress,
@@ -268,6 +268,7 @@ abstract class _UserWalletTokenRemoteModel
           @JsonKey(name: 'asset_type') required final String? assetType,
           @JsonKey(name: 'is_frozen') required final bool? isFrozen}) =
       _$UserWalletTokenRemoteModelImpl;
+  _UserWalletTokenRemoteModel._() : super._();
 
   factory _UserWalletTokenRemoteModel.fromJson(Map<String, dynamic> json) =
       _$UserWalletTokenRemoteModelImpl.fromJson;
@@ -417,11 +418,12 @@ class __$$MetaDataModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$MetaDataModelImpl implements _MetaDataModel {
+class _$MetaDataModelImpl extends _MetaDataModel {
   _$MetaDataModelImpl(
       {@JsonKey(name: 'decimals') required this.decimals,
       @JsonKey(name: 'name') required this.name,
-      @JsonKey(name: 'symbol') required this.symbol});
+      @JsonKey(name: 'symbol') required this.symbol})
+      : super._();
 
   factory _$MetaDataModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MetaDataModelImplFromJson(json);
@@ -472,12 +474,13 @@ class _$MetaDataModelImpl implements _MetaDataModel {
   }
 }
 
-abstract class _MetaDataModel implements MetaDataModel {
+abstract class _MetaDataModel extends MetaDataModel {
   factory _MetaDataModel(
           {@JsonKey(name: 'decimals') required final int? decimals,
           @JsonKey(name: 'name') required final String? name,
           @JsonKey(name: 'symbol') required final String? symbol}) =
       _$MetaDataModelImpl;
+  _MetaDataModel._() : super._();
 
   factory _MetaDataModel.fromJson(Map<String, dynamic> json) =
       _$MetaDataModelImpl.fromJson;

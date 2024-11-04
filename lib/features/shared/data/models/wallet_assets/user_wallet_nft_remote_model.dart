@@ -6,6 +6,7 @@ part 'generated/user_wallet_nft_remote_model.g.dart';
 
 @freezed
 class UserWalletNFTRemoteModel with _$UserWalletNFTRemoteModel {
+  const UserWalletNFTRemoteModel._();
   factory UserWalletNFTRemoteModel({
     @JsonKey(name: 'nft_id') required String? nftId,
     @JsonKey(name: 'acquired_usd_price') required String? acquiredUsdPrice,
@@ -36,6 +37,7 @@ class UserWalletNFTRemoteModel with _$UserWalletNFTRemoteModel {
 
 @freezed
 class NFTCollectionRemoteModel with _$NFTCollectionRemoteModel {
+  const NFTCollectionRemoteModel._();
   factory NFTCollectionRemoteModel({
     @JsonKey(name: 'cover_url') required String? coverUrl,
     @JsonKey(name: 'title') required String? title,
@@ -66,6 +68,7 @@ class NFTCollectionRemoteModel with _$NFTCollectionRemoteModel {
 
 @freezed
 class NFTRemoteModel with _$NFTRemoteModel {
+  const NFTRemoteModel._();
   factory NFTRemoteModel({
     @JsonKey(name: 'name') required String? name,
     @JsonKey(name: 'owner') required String? owner,
@@ -114,6 +117,7 @@ class NFTRemoteModel with _$NFTRemoteModel {
 
 @freezed
 class NFTListingModel with _$NFTListingModel {
+  const NFTListingModel._();
   factory NFTListingModel({
     @JsonKey(name: 'listed') required bool? listed,
     @JsonKey(name: 'price') required int? price,

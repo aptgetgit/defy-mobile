@@ -155,7 +155,7 @@ extension $WatchlistRouteExtension on WatchlistRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'613b79d6c65496797ffac52f7337cb4b547fca6b';
+String _$routerHash() => r'81a583da257f433fdf7e9770a13ee50cc2d4b0cd';
 
 /// See also [router].
 @ProviderFor(router)

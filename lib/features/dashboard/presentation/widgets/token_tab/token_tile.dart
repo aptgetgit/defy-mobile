@@ -27,91 +27,110 @@ class _TokenTileState extends ConsumerState<TokenTile> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final width = context.screenWidth;
-    final selectTokens = ref.watch(tokenSelectionProvider);
-    final amount =
-        _calculateAmount(widget.token.amount, widget.token.metaData?.decimals);
-    return ListTileTheme(
-      contentPadding: EdgeInsets.zero,
-      dense: true,
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: GestureDetector(
-          onTap: () {},
-          child: ListTile(
-              leading: Consumer(builder: (ctx, ref, child) {
-                final tokenMetaData =
-                    ref.watch(tokenMetaDataProvider(widget.token.assetType));
-                return tokenMetaData.when(
-                  data: (data) {
-                    return _imageBuilderFromUrl(
-                        width * .08, width * .08, data?.coinLogoUrl);
-                  },
-                  error: (i, st) {
-                    return Icon(Icons.error);
-                  },
-                  loading: () {
-                    return const CircularProgressIndicator();
-                  },
-                );
-              }),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.token.metaData?.name ?? 'N/A',
+@override
+Widget build(BuildContext context) {
+  final width = context.screenWidth;
+  final selectTokens = ref.watch(tokenSelectionProvider);
+  final amount = _calculateAmount(widget.token.amount, widget.token.metaData?.decimals);
+
+  final tokenMetaData = ref.watch(tokenMetaDataProvider(widget.token.assetType));
+
+  return ListTileTheme(
+    contentPadding: EdgeInsets.zero,
+    dense: true,
+    child: Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: GestureDetector(
+        onTap: () {},
+        child: ListTile(
+          leading: tokenMetaData.when(
+            data: (data) {
+              return _imageBuilderFromUrl(
+                  width * .08, width * .08, data?.coinLogoUrl);
+            },
+            error: (i, st) {
+              return Icon(Icons.error);
+            },
+            loading: () {
+              return const CircularProgressIndicator();
+            },
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.token.metaData?.name ?? 'N/A',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+              tokenMetaData.when(
+                data: (data) {
+                  final tokenAmount = _calculateAmount(
+                      widget.token.amount, widget.token.metaData?.decimals);
+                  final priceInUsd = _calculateAmountInUsd(
+                      tokenAmount, data?.coinMetric?.priceUsd);
+                  return Text(
+                    "\$${priceInUsd?.toStringAsFixed(4) ?? 'N/A'}",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                  ),
-                  Consumer(builder: (ctx, ref, child) {
-                    final tokenMetaData = ref
-                        .watch(tokenMetaDataProvider(widget.token.assetType));
-                    return tokenMetaData.when(
-                      data: (data) {
-                        final tokenAmount = _calculateAmount(
-                            widget.token.amount,
-                            widget.token.metaData?.decimals);
-                        final priceInUsd = _calculateAmountInUsd(
-                            tokenAmount, data?.coinMetric?.priceUsd);
-                        return Text(
-                          "\$${priceInUsd?.toStringAsFixed(4) ?? 'N?A'}",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        );
-                      },
-                      error: (i, st) {
-                        return const Text('N/A');
-                      },
-                      loading: () {
-                        return const CircularProgressIndicator();
-                      },
-                    );
-                  }),
-                ],
+                  );
+                },
+                error: (i, st) {
+                  return const Text('N/A');
+                },
+                loading: () {
+                  return const CircularProgressIndicator();
+                },
               ),
-              subtitle: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${amount ?? '-'} ${widget.token.metaData!.symbol}",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    "-1.02%",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                  ),
-                ],
+            ],
+          ),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "${amount ?? '-'} ${widget.token.metaData!.symbol}",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               ),
-              trailing: selectTokens ? CurvedCheckbox(
-                        isChecked: isTokenSelected,
-                        isRound: true,
-                        onTap: selectToken,
-                      ) : null ,),
+              tokenMetaData.when(
+                data: (data) {
+                  // final changePercentage = data?.coinMetric?.priceChange24hr ?? 'N/A';
+                  final changePercentage = _buildChangePercentage(data?.coinMetric?.priceChange24hr);
+                  return Text(
+                    changePercentage,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  );
+                },
+                error: (i, st) {
+                  return const Text('-');
+                },
+                loading: () {
+                  return  const CircularProgressIndicator();
+                },
+              ),
+            ],
+          ),
+          trailing: selectTokens
+              ? CurvedCheckbox(
+                  isChecked: isTokenSelected,
+                  isRound: true,
+                  onTap: selectToken,
+                )
+              : null,
         ),
       ),
-    );
+    ),
+  );
+}
+
+String _buildChangePercentage(double? value) {
+
+  if(value == null) {
+    return 'N/A';
   }
+  if(value < 0) {
+    return "${value.toStringAsFixed(2)}%";
+  }
+  return "+${value.toStringAsFixed(2)}%";
+}
+
 
   Widget _imageBuilderFromUrl(double height, double width, String? url) {
     if (url == null) {

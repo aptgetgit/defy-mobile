@@ -25,10 +25,12 @@ class _WatchListScreenState extends State<WatchListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(onPressed: (){}, icon: Icon(PhosphorIconsBold.caretLeft,size: 26,)),
         title: Text('Watchlsit',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),),
         actions: [
           Icon(PhosphorIcons.star(),size: 26),
+          const SizedBox(width: 16,),
         ]
       ),
       body: SafeArea(
@@ -83,31 +85,34 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: TextField(
-        key: textFieldKey,
-        cursorColor: AppColors.greyLight,
-        style: TextStyle(fontSize: 16,
-        fontWeight: FontWeight.w500,),
-        decoration: InputDecoration(
-          filled: true,
-          isDense: true,
-          fillColor: AppColors.greyVeryLight,
-          hintText: title,
-          hintStyle:  TextStyle(fontSize: 16,
-        fontWeight: FontWeight.w500,),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent, width: 0.0),
-              borderRadius: BorderRadius.circular(8.0)),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent, width: 0.0),
-              borderRadius: BorderRadius.circular(8.0)),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent, width: 0.0),
-              borderRadius: BorderRadius.circular(8.0)),
-          prefixIcon: const Icon(
-            PhosphorIconsBold.magnifyingGlass,
-            size: 20,
-            color: AppColors.greyLight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: TextField(
+          key: textFieldKey,
+          cursorColor: AppColors.greyLight,
+          style: TextStyle(fontSize: 16,
+          fontWeight: FontWeight.w500,),
+          decoration: InputDecoration(
+            filled: true,
+            isDense: true,
+            fillColor: AppColors.greyVeryLight,
+            hintText: title,
+            hintStyle:  TextStyle(fontSize: 16,
+          fontWeight: FontWeight.w500,),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                borderRadius: BorderRadius.circular(8.0)),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                borderRadius: BorderRadius.circular(8.0)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                borderRadius: BorderRadius.circular(8.0)),
+            prefixIcon: const Icon(
+              PhosphorIconsBold.magnifyingGlass,
+              size: 20,
+              color: AppColors.greyLight,
+            ),
           ),
         ),
       ),

@@ -41,7 +41,7 @@ GoRouter router(RouterRef ref) {
   final authState = ref.watch(authenticationNotifierProvider);
   
   return GoRouter(
-    initialLocation: const WatchlistRoute().location,
+    initialLocation: const DashboardRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;

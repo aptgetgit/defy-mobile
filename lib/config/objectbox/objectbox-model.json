@@ -149,10 +149,48 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:6710277839105327544",
+      "lastPropertyId": "5:8835589045051854719",
+      "name": "CurrencyRateLocalModel",
+      "properties": [
+        {
+          "id": "1:3244975175968046810",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6909994099731011805",
+          "name": "remoteId",
+          "type": 9,
+          "flags": 34848,
+          "indexId": "12:5807830780208675206"
+        },
+        {
+          "id": "3:6335203309372508339",
+          "name": "code",
+          "type": 9,
+          "flags": 8,
+          "indexId": "13:2439398198781282479"
+        },
+        {
+          "id": "4:2993903476795009535",
+          "name": "rate",
+          "type": 8
+        },
+        {
+          "id": "5:8835589045051854719",
+          "name": "lastUpdate",
+          "type": 10
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:3274070783752004820",
-  "lastIndexId": "11:321175863080590547",
+  "lastEntityId": "5:6710277839105327544",
+  "lastIndexId": "13:2439398198781282479",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

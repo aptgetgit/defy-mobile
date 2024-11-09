@@ -1,40 +1,32 @@
+import 'package:defy/core/providers/locale_provider.dart';
+import 'package:defy/core/providers/preferred_currency_provider.dart';
+import 'package:defy/core/constants/supported_currencies.dart';
+import 'package:defy/features/shared/presentation/providers/currency_conversion_provider.dart';
+import 'package:defy/features/shared/presentation/providers/currency_rate_notifier_provider.dart';
+import 'package:defy/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/button_size_extension.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/core/routes/router.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class OnboardingScreen extends StatefulWidget {
+class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   static const _pageCount = 4;
   late final PageController _pageController;
   int _currentPage = 0;
-
-  final List<(String, String)> _content = const [
-    (
-      "Unified Dapp ☝🏻",
-      "Handle all assets, Access different\nDapps in one Dapp"
-    ),
-    (
-      "Community🫂",
-      "Follow Friends, Copy Trade, Coinvest\nwith onchain profile avatar"
-    ),
-    ("Security🔒", "Handle all assets, Access different\nDapps in one Dapp"),
-    (
-      "Rewards 😉",
-      "Follow Friends, Copy Trade, Coinvest\nwith onchain profile avatar"
-    ),
-  ];
 
   @override
   void initState() {
@@ -64,6 +56,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     final (width, height) = (context.screenWidth, context.screenHeight);
     final isDark = context.isDarkMode;
+    final l10n = ref.watch(l10nProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -74,9 +67,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           child: Column(
             children: [
-              _buildHeader(context, isDark),
-              Expanded(child: _buildPageView()),
-              _buildFooter(context, height, isDark),
+              _buildHeader(context, isDark, l10n),
+              // Temporary Switchers
+              Column(
+                children: [
+                  _buildTempLocaleSwitcher(),
+                  const Gap(8),
+                  _buildTempCurrencySwitcher(),
+                ],
+              ),
+              Expanded(child: _buildPageView(l10n)),
+              _buildFooter(context, height, isDark, l10n),
             ],
           ),
         ),
@@ -84,7 +85,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, bool isDark) {
+  Widget _buildHeader(
+      BuildContext context, bool isDark, AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -92,9 +94,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           onTap: () => _pageController.animateToPage(0,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut),
-          child: isDark
-              ? Assets.icons.appIcon.image(width: 50)
-              : Assets.icons.appIcon.image(width: 50),
+          child: Assets.icons.appIcon.image(width: 50),
         ),
         TextButton.icon(
           icon: const Icon(PhosphorIconsRegular.arrowCircleUpRight, size: 30),
@@ -102,19 +102,186 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               foregroundColor: isDark ? AppColors.white : AppColors.black,
               textStyle: context.titleLarge),
           onPressed: () => _skipOnboarding(context),
-          label: const Text('Skip'),
+          label: Text(l10n.onboardingSkipButton),
         ),
       ],
     );
   }
 
-  Widget _buildPageView() {
+  Widget _buildTempLocaleSwitcher() {
+    final currentLocale = ref.watch(localeNotifierProvider);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Temp Locale Switcher: '),
+        DropdownButton<Locale>(
+          value: currentLocale,
+          items: AppLocalizations.supportedLocales.map((Locale locale) {
+            return DropdownMenuItem<Locale>(
+              value: locale,
+              child: Text(locale.languageCode),
+            );
+          }).toList(),
+          onChanged: (Locale? newLocale) {
+            if (newLocale != null) {
+              ref.read(localeNotifierProvider.notifier).setLocale(newLocale);
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTempCurrencySwitcher() {
+    final currentCurrency = ref.watch(preferredCurrencyNotifierProvider);
+    final currencyRatesAsync = ref.watch(currencyRateNotifierProvider);
+    final l10n = ref.watch(l10nProvider);
+
+    String getCurrencyName(String code) {
+      switch (code.toLowerCase()) {
+        case 'btc':
+          return l10n.currencyBTC;
+        case 'apt':
+          return l10n.currencyAPT;
+        case 'usd':
+          return l10n.currencyUSD;
+        case 'eur':
+          return l10n.currencyEUR;
+        case 'inr':
+          return l10n.currencyINR;
+        case 'jpy':
+          return l10n.currencyJPY;
+        default:
+          return code.toUpperCase();
+      }
+    }
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Temp Currency Switcher: '),
+            DropdownButton<String>(
+              value: currentCurrency.code,
+              items: SupportedCurrencies.all.map((currency) {
+                return DropdownMenuItem<String>(
+                  value: currency.code,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(currency.symbol),
+                      const SizedBox(width: 8),
+                      Text(currency.code.toUpperCase()),
+                      const SizedBox(width: 8),
+                      Text(
+                        '(${getCurrencyName(currency.code)})',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0XFF646D80),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+              onChanged: (String? newCurrencyCode) {
+                if (newCurrencyCode != null) {
+                  final newCurrency =
+                      SupportedCurrencies.fromCode(newCurrencyCode);
+                  if (newCurrency != null) {
+                    ref
+                        .read(preferredCurrencyNotifierProvider.notifier)
+                        .setCurrency(newCurrency);
+                  }
+                }
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        currencyRatesAsync.when(
+          data: (_) => Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEDF0F5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Format Examples:',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                // Using the new conversion provider
+                Text('Zero: ${NumberFormat.compactCurrency(
+                  locale: l10n.localeName,
+                  symbol: currentCurrency.symbol,
+                  decimalDigits: 2,
+                ).format(
+                  ref.watch(
+                    convertToPreferredCurrencyProvider(0.1, 'USD'),
+                  ),
+                )}'),
+                Text('Decimal: ${NumberFormat.compactCurrency(
+                  locale: l10n.localeName,
+                  symbol: currentCurrency.symbol,
+                  decimalDigits: 3,
+                ).format(
+                  ref.watch(
+                    convertToPreferredCurrencyProvider(100.5, 'USD'),
+                  ),
+                )}'),
+                Text('Whole: ${NumberFormat.compactCurrency(
+                  locale: l10n.localeName,
+                  symbol: currentCurrency.symbol,
+                  decimalDigits: 2,
+                ).format(
+                  ref.watch(
+                    convertToPreferredCurrencyProvider(1000000, 'USD'),
+                  ),
+                )}'),
+              ],
+            ),
+          ),
+          loading: () => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          error: (error, _) => Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEDF0F5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'Error loading rates: $error',
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPageView(AppLocalizations l10n) {
+    final content = [
+      (l10n.onboardingPage1Title, l10n.onboardingPage1Description),
+      (l10n.onboardingPage2Title, l10n.onboardingPage2Description),
+      (l10n.onboardingPage3Title, l10n.onboardingPage3Description),
+      (l10n.onboardingPage4Title, l10n.onboardingPage4Description),
+    ];
+
     return PageView.builder(
       controller: _pageController,
       onPageChanged: _onPageChanged,
       itemCount: _pageCount,
       itemBuilder: (context, index) {
-        final (title, description) = _content[index];
+        final (title, description) = content[index];
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -141,14 +308,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildFooter(BuildContext context, double height, bool isDark) {
+  Widget _buildFooter(
+      BuildContext context, double height, bool isDark, AppLocalizations l10n) {
     return Column(
       children: [
         Gap(height * 0.05),
         if (_currentPage < _pageCount - 1)
           _buildPageIndicator(isDark)
         else
-          _buildGetStartedButton(context),
+          _buildGetStartedButton(context, l10n),
         const Gap(30),
       ],
     );
@@ -197,7 +365,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildGetStartedButton(BuildContext context) {
+  Widget _buildGetStartedButton(BuildContext context, AppLocalizations l10n) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -205,9 +373,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         style: ElevatedButton.styleFrom(
           minimumSize: Size.fromHeight(ButtonSize.large.height),
         ),
-        child: const Text(
-          'Let\'s get started',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        child: Text(
+          l10n.onboardingGetStartedButton,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
     ).animate().slideY(

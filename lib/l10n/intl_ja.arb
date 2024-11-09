@@ -1,0 +1,67 @@
+{
+  "@@locale": "ja",
+  "currencyBTC": "ビットコイン",
+  "@currencyBTC": {
+    "description": "Name of Bitcoin cryptocurrency"
+  },
+  "currencyAPT": "アプトス",
+  "@currencyAPT": {
+    "description": "Name of Aptos cryptocurrency"
+  },
+  "currencyUSD": "米ドル",
+  "@currencyUSD": {
+    "description": "Name of US Dollar currency"
+  },
+  "currencyEUR": "ユーロ",
+  "@currencyEUR": {
+    "description": "Name of Euro currency"
+  },
+  "currencyINR": "インドルピー",
+  "@currencyINR": {
+    "description": "Name of Indian Rupee currency"
+  },
+  "currencyJPY": "日本円",
+  "@currencyJPY": {
+    "description": "Name of Japanese Yen currency"
+  },
+  "onboardingGetStartedButton": "始めましょう",
+  "@onboardingGetStartedButton": {
+    "description": "Label for the get started button on the final onboarding page"
+  },
+  "onboardingPage1Description": "すべての資産を管理し、\n1つのDappで異なるDappにアクセス",
+  "@onboardingPage1Description": {
+    "description": "Description for the first onboarding page"
+  },
+  "onboardingPage1Title": "統合Dapp ☝🏻",
+  "@onboardingPage1Title": {
+    "description": "Title for the first onboarding page"
+  },
+  "onboardingPage2Description": "友達をフォロー、トレードをコピー、\nオンチェーンプロフィールアバターで共同投資",
+  "@onboardingPage2Description": {
+    "description": "Description for the second onboarding page"
+  },
+  "onboardingPage2Title": "コミュニティ🫂",
+  "@onboardingPage2Title": {
+    "description": "Title for the second onboarding page"
+  },
+  "onboardingPage3Description": "すべての資産を管理し、\n1つのDappで異なるDappにアクセス",
+  "@onboardingPage3Description": {
+    "description": "Description for the third onboarding page"
+  },
+  "onboardingPage3Title": "セキュリティ🔒",
+  "@onboardingPage3Title": {
+    "description": "Title for the third onboarding page"
+  },
+  "onboardingPage4Description": "友達をフォロー、トレードをコピー、\nオンチェーンプロフィールアバターで共同投資",
+  "@onboardingPage4Description": {
+    "description": "Description for the fourth onboarding page"
+  },
+  "onboardingPage4Title": "報酬 😉",
+  "@onboardingPage4Title": {
+    "description": "Title for the fourth onboarding page"
+  },
+  "onboardingSkipButton": "スキップ",
+  "@onboardingSkipButton": {
+    "description": "Label for the skip button on the onboarding screen"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "@@locale": "en",
+  "currencyBTC": "Bitcoin",
+  "@currencyBTC": {
+    "description": "Name of Bitcoin cryptocurrency"
+  },
+  "currencyAPT": "Aptos",
+  "@currencyAPT": {
+    "description": "Name of Aptos cryptocurrency"
+  },
+  "currencyUSD": "United States Dollar",
+  "@currencyUSD": {
+    "description": "Name of US Dollar currency"
+  },
+  "currencyEUR": "Euro",
+  "@currencyEUR": {
+    "description": "Name of Euro currency"
+  },
+  "currencyINR": "Indian Rupee",
+  "@currencyINR": {
+    "description": "Name of Indian Rupee currency"
+  },
+  "currencyJPY": "Japanese Yen",
+  "@currencyJPY": {
+    "description": "Name of Japanese Yen currency"
+  },
+  "onboardingGetStartedButton": "Let''s get started",
+  "@onboardingGetStartedButton": {
+    "description": "Label for the get started button on the final onboarding page"
+  },
+  "onboardingPage1Description": "Handle all assets, Access different\nDapps in one Dapp",
+  "@onboardingPage1Description": {
+    "description": "Description for the first onboarding page"
+  },
+  "onboardingPage1Title": "Unified Dapp ☝🏻",
+  "@onboardingPage1Title": {
+    "description": "Title for the first onboarding page"
+  },
+  "onboardingPage2Description": "Follow Friends, Copy Trade, Coinvest\nwith onchain profile avatar",
+  "@onboardingPage2Description": {
+    "description": "Description for the second onboarding page"
+  },
+  "onboardingPage2Title": "Community🫂",
+  "@onboardingPage2Title": {
+    "description": "Title for the second onboarding page"
+  },
+  "onboardingPage3Description": "Handle all assets, Access different\nDapps in one Dapp",
+  "@onboardingPage3Description": {
+    "description": "Description for the third onboarding page"
+  },
+  "onboardingPage3Title": "Security🔒",
+  "@onboardingPage3Title": {
+    "description": "Title for the third onboarding page"
+  },
+  "onboardingPage4Description": "Follow Friends, Copy Trade, Coinvest\nwith onchain profile avatar",
+  "@onboardingPage4Description": {
+    "description": "Description for the fourth onboarding page"
+  },
+  "onboardingPage4Title": "Rewards 😉",
+  "@onboardingPage4Title": {
+    "description": "Title for the fourth onboarding page"
+  },
+  "onboardingSkipButton": "Skip",
+  "@onboardingSkipButton": {
+    "description": "Label for the skip button on the onboarding screen"
+  }
+}

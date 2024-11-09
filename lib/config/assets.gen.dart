@@ -9,8 +9,21 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsAnimationsGen {
+  const $AssetsAnimationsGen();
+
+  /// File path: assets/animations/loading-indicator.json
+  String get loadingIndicator => 'assets/animations/loading-indicator.json';
+
+  /// List of all assets
+  List<String> get values => [loadingIndicator];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
+
+  /// File path: assets/icons/amnis.png
+  AssetGenImage get amnis => const AssetGenImage('assets/icons/amnis.png');
 
   /// File path: assets/icons/app-icon.png
   AssetGenImage get appIcon => const AssetGenImage('assets/icons/app-icon.png');
@@ -23,18 +36,74 @@ class $AssetsIconsGen {
   AssetGenImage get appLogoLight =>
       const AssetGenImage('assets/icons/app-logo-light.png');
 
+  /// File path: assets/icons/aptos-logo.png
+  AssetGenImage get aptosLogo =>
+      const AssetGenImage('assets/icons/aptos-logo.png');
+
+  /// File path: assets/icons/aries.png
+  AssetGenImage get aries => const AssetGenImage('assets/icons/aries.png');
+
+  /// File path: assets/icons/binance.png
+  AssetGenImage get binance => const AssetGenImage('assets/icons/binance.png');
+
+  /// File path: assets/icons/coinbase.png
+  AssetGenImage get coinbase =>
+      const AssetGenImage('assets/icons/coinbase.png');
+
   /// File path: assets/icons/google.png
   AssetGenImage get google => const AssetGenImage('assets/icons/google.png');
 
+  /// File path: assets/icons/gui-inu.png
+  AssetGenImage get guiInu => const AssetGenImage('assets/icons/gui-inu.png');
+
+  /// File path: assets/icons/kraken.png
+  AssetGenImage get kraken => const AssetGenImage('assets/icons/kraken.png');
+
+  /// File path: assets/icons/staking-default.png
+  AssetGenImage get stakingDefault =>
+      const AssetGenImage('assets/icons/staking-default.png');
+
+  /// File path: assets/icons/usdc.png
+  AssetGenImage get usdc => const AssetGenImage('assets/icons/usdc.png');
+
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [appIcon, appLogoDark, appLogoLight, google];
+  List<AssetGenImage> get values => [
+        amnis,
+        appIcon,
+        appLogoDark,
+        appLogoLight,
+        aptosLogo,
+        aries,
+        binance,
+        coinbase,
+        google,
+        guiInu,
+        kraken,
+        stakingDefault,
+        usdc
+      ];
+}
+
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/cosmos-bg.png
+  AssetGenImage get cosmosBg =>
+      const AssetGenImage('assets/images/cosmos-bg.png');
+
+  /// File path: assets/images/rocket.png
+  AssetGenImage get rocket => const AssetGenImage('assets/images/rocket.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [cosmosBg, rocket];
 }
 
 class Assets {
   Assets._();
 
+  static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 
 class AssetGenImage {

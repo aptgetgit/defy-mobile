@@ -202,5 +202,36 @@ final kratosDioServiceProvider = Provider<Dio>.internal(
 );
 
 typedef KratosDioServiceRef = ProviderRef<Dio>;
+String _$yieldAggregatorDioServiceHash() =>
+    r'fd961382a9d8b7302cd67d9b4d9ee4e8a70891ac';
+
+/// See also [yieldAggregatorDioService].
+@ProviderFor(yieldAggregatorDioService)
+final yieldAggregatorDioServiceProvider = Provider<Dio>.internal(
+  yieldAggregatorDioService,
+  name: r'yieldAggregatorDioServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$yieldAggregatorDioServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef YieldAggregatorDioServiceRef = ProviderRef<Dio>;
+String _$stakingDioServiceHash() => r'08eff29f0a5d525c85e737e4c5166323db89127b';
+
+/// See also [stakingDioService].
+@ProviderFor(stakingDioService)
+final stakingDioServiceProvider = Provider<Dio>.internal(
+  stakingDioService,
+  name: r'stakingDioServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$stakingDioServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef StakingDioServiceRef = ProviderRef<Dio>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

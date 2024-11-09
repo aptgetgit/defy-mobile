@@ -102,3 +102,18 @@ Dio kratosDioService(KratosDioServiceRef ref) {
   dio.interceptors.add(ref.watch(sessionTokenInterceptorProvider));
   return dio;
 }
+
+@Riverpod(keepAlive: true)
+Dio yieldAggregatorDioService(YieldAggregatorDioServiceRef ref) {
+  final dio = ref.watch(dioInitializerProvider(Env.yieldAggregatorBaseUrl));
+  dio.interceptors.add(ref.watch(sessionTokenInterceptorProvider));
+  return dio;
+}
+
+
+@Riverpod(keepAlive: true)
+Dio stakingDioService(StakingDioServiceRef ref) {
+  final dio = ref.watch(dioInitializerProvider(Env.stakingLendBorrowBaseUrl));
+  dio.interceptors.add(ref.watch(sessionTokenInterceptorProvider));
+  return dio;
+}

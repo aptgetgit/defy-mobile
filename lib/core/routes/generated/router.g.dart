@@ -11,6 +11,8 @@ List<RouteBase> get $appRoutes => [
       $onboardingRoute,
       $authenticationRoute,
       $homeRoute,
+      $testRoute,
+      $browserRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -103,11 +105,55 @@ extension $HomeRouteExtension on HomeRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $testRoute => GoRouteData.$route(
+      path: '/test',
+      factory: $TestRouteExtension._fromState,
+    );
+
+extension $TestRouteExtension on TestRoute {
+  static TestRoute _fromState(GoRouterState state) => const TestRoute();
+
+  String get location => GoRouteData.$location(
+        '/test',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $browserRoute => GoRouteData.$route(
+      path: '/browser',
+      factory: $BrowserRouteExtension._fromState,
+    );
+
+extension $BrowserRouteExtension on BrowserRoute {
+  static BrowserRoute _fromState(GoRouterState state) => const BrowserRoute();
+
+  String get location => GoRouteData.$location(
+        '/browser',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'dcdf5f80d87abac2f9a2bc42e84900c03b5384ac';
+String _$routerHash() => r'6a5806ccdba8ce2c0714b8d0f1a6fc897c811651';
 
 /// See also [router].
 @ProviderFor(router)

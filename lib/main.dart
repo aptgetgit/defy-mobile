@@ -13,12 +13,14 @@ import 'package:defy/core/providers/secure_storage_provider.dart';
 import 'package:defy/core/providers/credential_manager_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as fss;
 import 'package:path/path.dart';
+import 'dart:io' show Platform;
 
 Future<void> main() async {
   // Initialize the AppLogger
@@ -49,14 +51,14 @@ Future<void> main() async {
     final sharedPreferences = await SharedPreferences.getInstance();
 
     // Initialize FlutterSecureStorage
-    final secureStorage = FlutterSecureStorage(
-      aOptions: AndroidOptions(
+    final secureStorage = fss.FlutterSecureStorage(
+      aOptions: fss.AndroidOptions(
         encryptedSharedPreferences: true,
         preferencesKeyPrefix: 'id.avex.defy.securestorage',
         resetOnError: true,
       ),
-      iOptions: IOSOptions(
-        accessibility: KeychainAccessibility.first_unlock,
+      iOptions: fss.IOSOptions(
+        accessibility: fss.KeychainAccessibility.first_unlock,
         accountName: 'id.avex.defy.keychain',
         synchronizable: false,
       ),
@@ -77,6 +79,15 @@ Future<void> main() async {
         ),
       );
     }
+
+    if (!kIsWeb && Platform.isAndroid) {
+      await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    }
+
+    const networkConfig = NetworkConnectivityConfig(
+        checkUrls: ['https://1.1.1.1'],
+        timeout: Duration(seconds: 3),
+        lookupAddress: 'google.com');
 
     overrides.addAll([
       sharedPreferencesInitializerProvider.overrideWithValue(sharedPreferences),

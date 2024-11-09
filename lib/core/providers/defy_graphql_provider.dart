@@ -1,0 +1,22 @@
+import 'package:defy/config/env.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'generated/defy_graphql_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class DefyGraphQlClient extends _$DefyGraphQlClient {
+  @override
+  GraphQLClient build() {
+    return GraphQLClient(
+      link: HttpLink(Env.defyGraphQlEndpoint, defaultHeaders: {
+        'x-hasura-admin-secret': Env.defyAdminSecret,
+      }),
+      cache: GraphQLCache(store: InMemoryStore()),
+      defaultPolicies: DefaultPolicies(
+          query: Policies(
+              fetch: FetchPolicy.cacheAndNetwork,
+              cacheReread: CacheRereadPolicy.ignoreAll)),
+    );
+  }
+}

@@ -6,6 +6,8 @@ import 'package:defy/features/authentication/presentation/screens/authentication
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
 import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:defy/features/test/test_screen.dart';
+import 'package:defy/features/browser/presentation/browser_view.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +19,8 @@ part 'splash_route.dart';
 part 'onboarding_route.dart';
 part 'authentication_route.dart';
 part 'home_route.dart';
+part 'test_route.dart';
+part 'browser_route.dart';
 
 part 'generated/router.g.dart';
 part 'generated/router.freezed.dart';
@@ -35,13 +39,13 @@ class AppRoute with _$AppRoute {
 @Riverpod(keepAlive: true)
 GoRouter router(RouterRef ref) {
   final authState = ref.watch(authenticationNotifierProvider);
-  
+
   return GoRouter(
-    initialLocation: const SplashRoute().location,
+    initialLocation: const BrowserRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;
-      
+
       return authState.when(
         data: (authenticationState) {
           if (state.fullPath == const SplashRoute().location) {
@@ -86,7 +90,8 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 
   final Ref _ref;
-  late final ProviderSubscription<AsyncValue<AuthenticationState>> _subscription;
+  late final ProviderSubscription<AsyncValue<AuthenticationState>>
+      _subscription;
 
   @override
   void dispose() {

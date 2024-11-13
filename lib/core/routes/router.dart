@@ -7,6 +7,8 @@ import 'package:defy/features/dashboard/presentation/screens/dashboard_screen.da
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
 import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:defy/features/transaction/swap/presentation/screens/single_swap_screen.dart';
+import 'package:defy/features/transaction/swap/presentation/screens/tokens_screen.dart';
 import 'package:defy/features/watchlist/presentation/screens/watchlist.dart';
 
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ part 'authentication_route.dart';
 part 'home_route.dart';
 part 'dashboard_route.dart';
 part 'watchlist_route.dart';
+part 'swap_route.dart';
 
 part 'generated/router.g.dart';
 part 'generated/router.freezed.dart';
@@ -41,7 +44,7 @@ GoRouter router(RouterRef ref) {
   final authState = ref.watch(authenticationNotifierProvider);
   
   return GoRouter(
-    initialLocation: const DashboardRoute().location,
+    initialLocation: const SingleSwapScreenRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;

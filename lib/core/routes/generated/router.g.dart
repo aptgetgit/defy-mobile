@@ -13,6 +13,8 @@ List<RouteBase> get $appRoutes => [
       $homeRoute,
       $dashboardRoute,
       $watchlistRoute,
+      $singleSwapScreenRoute,
+      $swapTokensRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -151,11 +153,60 @@ extension $WatchlistRouteExtension on WatchlistRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $singleSwapScreenRoute => GoRouteData.$route(
+      path: '/swap',
+      factory: $SingleSwapScreenRouteExtension._fromState,
+    );
+
+extension $SingleSwapScreenRouteExtension on SingleSwapScreenRoute {
+  static SingleSwapScreenRoute _fromState(GoRouterState state) =>
+      const SingleSwapScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/swap',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $swapTokensRoute => GoRouteData.$route(
+      path: '/swap-tokens',
+      factory: $SwapTokensRouteExtension._fromState,
+    );
+
+extension $SwapTokensRouteExtension on SwapTokensRoute {
+  static SwapTokensRoute _fromState(GoRouterState state) => SwapTokensRoute(
+        $extra: state.extra as bool,
+      );
+
+  String get location => GoRouteData.$location(
+        '/swap-tokens',
+      );
+
+  void go(BuildContext context) => context.go(location, extra: $extra);
+
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: $extra);
+
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'81a583da257f433fdf7e9770a13ee50cc2d4b0cd';
+String _$routerHash() => r'38425ee7731785bdb555f671a6f0f3c854bc53e8';
 
 /// See also [router].
 @ProviderFor(router)

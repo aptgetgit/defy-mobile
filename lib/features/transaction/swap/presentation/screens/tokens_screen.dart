@@ -32,8 +32,7 @@ class _TokensScreenState extends ConsumerState<TokensScreen> {
   }
 
   void resetTokens() {
-    // ref.read(swapProvider.notifier).resetTokens(widget.isSwapFrom);
-    // Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SingleSwapScreen()));
+    ref.read(swapProvider.notifier).resetTokens(widget.isSwapFrom);
   }
 
   @override

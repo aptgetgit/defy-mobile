@@ -6,7 +6,7 @@ part of '../swap_tokens_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$swapFromHash() => r'd1e4a504d47a7bb1d51c3fe9e666ea9ad1bd733b';
+String _$swapFromHash() => r'c117346d67f4a68ac55801bd07c918810612d0c3';
 
 /// See also [SwapFrom].
 @ProviderFor(SwapFrom)
@@ -21,7 +21,7 @@ final swapFromProvider =
 );
 
 typedef _$SwapFrom = AsyncNotifier<List<SwapTokenEntity>>;
-String _$swapToHash() => r'34e657a1f33620a7bef7170811be0f684a99a9ed';
+String _$swapToHash() => r'24b567fcc05eadaded1e7322ac31d48ec3fe22c1';
 
 /// See also [SwapTo].
 @ProviderFor(SwapTo)
@@ -36,7 +36,7 @@ final swapToProvider =
 );
 
 typedef _$SwapTo = AsyncNotifier<List<SwapTokenEntity>>;
-String _$swapHash() => r'3cb1f9d72e7b2bd884b30d707c20f829178f6ba1';
+String _$swapHash() => r'0bb8f5997847b410413297b712c4532b4b17149b';
 
 /// See also [Swap].
 @ProviderFor(Swap)

@@ -50,10 +50,8 @@ class SwapFrom extends _$SwapFrom {
         []);
   }
 
-  void resetTokens() {
-    state = AsyncValue.data(state.value!
-        .map((token) => token.copyWith(isSelected: false))
-        .toList());
+  void resetTokens() async {
+    state = AsyncValue.data(await _init());
   }
 
   void swapTokens(List<SwapTokenEntity> toTokens) {
@@ -105,10 +103,8 @@ class SwapTo extends _$SwapTo {
         []);
   }
 
-  void resetTokens() {
-    state = AsyncValue.data(state.value!
-        .map((token) => token.copyWith(isSelected: false))
-        .toList());
+  void resetTokens() async {
+    state = AsyncValue.data(await _init());
   }
 
   void swapTokens(List<SwapTokenEntity> fromTokens) {
@@ -194,17 +190,13 @@ class Swap extends _$Swap {
     ));
   }
 
-  void resetTokens(bool isSwapFrom) {
+  void resetTokens(bool isSwapFrom) async {
     if (isSwapFrom) {
       ref.read(swapFromProvider.notifier).resetTokens();
-      state = AsyncValue.data(state.value!.copyWith(
-        fromTokens: [],
-      ));
+      state = AsyncValue.data(await _init());
     } else {
       ref.read(swapToProvider.notifier).resetTokens();
-      state = AsyncValue.data(state.value!.copyWith(
-        toTokens: [],
-      ));
+      state = AsyncValue.data(await _init());
     }
   }
 }

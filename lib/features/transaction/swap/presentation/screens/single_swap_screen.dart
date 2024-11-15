@@ -2,9 +2,9 @@
 
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
-import 'package:defy/core/routes/router.dart';
 import 'package:defy/features/transaction/swap/presentation/components/swap_route_tile.dart';
 import 'package:defy/features/transaction/swap/presentation/components/swap_tile.dart';
+import 'package:defy/features/transaction/swap/presentation/providers/swap_data_provider.dart';
 import 'package:defy/features/transaction/swap/presentation/providers/swap_tokens_provider.dart';
 import 'package:defy/features/transaction/swap/presentation/screens/tokens_screen.dart';
 import 'package:defy/features/transaction/swap/presentation/widgets/keyboard.dart';
@@ -128,9 +128,9 @@ class _SingleSwapScreenState extends ConsumerState<SingleSwapScreen>
                         visualDensity: VisualDensity(vertical: -4),
                       ),
                       onPressed: () {
-                        setState(() {
-                          isMarketSelected = !isMarketSelected;
-                        });
+                        // setState(() {
+                        //   isMarketSelected = !isMarketSelected;
+                        // });
                       },
                       child: Text(
                         'Market',
@@ -142,24 +142,25 @@ class _SingleSwapScreenState extends ConsumerState<SingleSwapScreen>
                                 : AppColors.greyLight),
                       ),
                     ),
-                    TextButton(
-                        style: const ButtonStyle(
-                          visualDensity: VisualDensity(vertical: -4),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            isMarketSelected = !isMarketSelected;
-                          });
-                        },
-                        child: Text(
-                          'Limit',
-                          style: TextStyle(
-                              fontSize: !isMarketSelected ? 17 : 16,
-                              fontWeight: FontWeight.w700,
-                              color: !isMarketSelected
-                                  ? AppColors.black
-                                  : AppColors.greyLight),
-                        )),
+                    // UI is ready , needs api which is not ready yet
+                    // TextButton(
+                    //     style: const ButtonStyle(
+                    //       visualDensity: VisualDensity(vertical: -4),
+                    //     ),
+                    //     onPressed: () {
+                    //       setState(() {
+                    //         isMarketSelected = !isMarketSelected;
+                    //       });
+                    //     },
+                    //     child: Text(
+                    //       'Limit',
+                    //       style: TextStyle(
+                    //           fontSize: !isMarketSelected ? 17 : 16,
+                    //           fontWeight: FontWeight.w700,
+                    //           color: !isMarketSelected
+                    //               ? AppColors.black
+                    //               : AppColors.greyLight),
+                    //     )),
                     const Spacer(),
                     Visibility(
                       visible: !isMarketSelected,
@@ -223,24 +224,16 @@ class _SingleSwapScreenState extends ConsumerState<SingleSwapScreen>
                         return GestureDetector(
                           onTap: () async {
                             ref.read(swapProvider.notifier).swapTokens();
-                            final fromTokensTest =
-                                await ref.read(swapFromProvider.future);
-                            final toTokensTest =
-                                await ref.read(swapToProvider.future);
-                            fromTokensTest.map(
-                                (token) => print("--fromToken: ${token.name} ${token.isSelected}")).toList();
-                            toTokensTest.map(
-                                (token) => print("--toToken: ${token.name} ${token.isSelected}")).toList();
                             _animate();
-                            setState(() {
-                              final temp_1 = swapfromTokenController.text;
-                              swapfromTokenController.text =
-                                  swapToTokenController.text;
-                              swapToTokenController.text = temp_1;
-                              final temp_2 = swapFromTokenInUSD;
-                              swapFromTokenInUSD = swapToTokenInUSD;
-                              swapToTokenInUSD = temp_2;
-                            });
+                            // setState(() {
+                            //   final temp_1 = swapfromTokenController.text;
+                            //   swapfromTokenController.text =
+                            //       swapToTokenController.text;
+                            //   swapToTokenController.text = temp_1;
+                            //   final temp_2 = swapFromTokenInUSD;
+                            //   swapFromTokenInUSD = swapToTokenInUSD;
+                            //   swapToTokenInUSD = temp_2;
+                            // });
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -373,6 +366,30 @@ class _SingleSwapScreenState extends ConsumerState<SingleSwapScreen>
                         ],
                       ),
                     ),
+                  ),
+                  Consumer(
+                    builder: (ctx, ref, child) {
+                      final String fromToken =
+                          "0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa::asset::USDC";
+                      final String toToken = "0x1::aptos_coin::AptosCoin";
+                      final int amount = 1000000;
+                      final swapData = ref.watch(swapDataProvider(
+                          fromToken: fromToken,
+                          toToken: toToken,
+                          amount: amount));
+                      return swapData.when(data: (data) {
+                        print(data?.data?.srcCoinType);
+                        print(data?.data?.srcAmount);
+                        print(data?.data?.dstCoinType);
+                        print(data?.data?.dstAmount);
+                        print(data?.data?.paths[0][0].source);
+                        return Text(data?.data?.dstAmount ?? 'null');
+                      }, error: (obj, st) {
+                        return Text('error');
+                      }, loading: () {
+                        return const CircularProgressIndicator();
+                      });
+                    },
                   ),
                   Visibility(
                     visible: isMarketSelected,

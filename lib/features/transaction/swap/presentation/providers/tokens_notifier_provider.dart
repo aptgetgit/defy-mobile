@@ -11,7 +11,8 @@ part 'generated/tokens_notifier_provider.g.dart';
 class Tokens extends _$Tokens {
   @override
   FutureOr<List<SwapTokenEntity>?> build() async {
-    return await _getSwapTokensList();
+    final tokens = await ref.watch(userWalletTokensProvider.future);
+    return await _getSwapTokensList(tokens);
   }
 
   //sTokens = tokens which the app supports currently to perform swap
@@ -22,15 +23,8 @@ class Tokens extends _$Tokens {
     return tokens;
   }
 
-  //the tokens from user wallet
-  Future<List<UserWalletToken>?> _getUserWalletTokens() async {
-    final tokens = await ref.watch(userWalletTokensProvider.future);
-    return tokens;
-  }
-
   //sorting the user tokens and sTokens to show user wallet tokens first followed by sTokens
-  Future<List<SwapTokenEntity>?> _getSwapTokensList() async {
-    final userWalletTokens = await _getUserWalletTokens();
+  Future<List<SwapTokenEntity>?> _getSwapTokensList(List<UserWalletToken>? userWalletTokens) async {
     final tokens = await _getTokens();
 
     if (tokens == null || tokens.isEmpty) {

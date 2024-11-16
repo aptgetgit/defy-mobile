@@ -23,7 +23,7 @@ final swapFromTokenTextConrollerProvider =
 );
 
 typedef _$SwapFromTokenTextConroller = AutoDisposeNotifier<double>;
-String _$swapToDataHash() => r'47b22d17096ca3a945a9fe240b64d60c3be7cdb6';
+String _$swapToDataHash() => r'db54ce75ec369a02a832a7cc664f80131658649d';
 
 /// See also [SwapToData].
 @ProviderFor(SwapToData)

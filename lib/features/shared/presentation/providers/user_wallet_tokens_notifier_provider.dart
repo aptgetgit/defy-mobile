@@ -30,9 +30,11 @@ class UserWalletTokens extends _$UserWalletTokens {
   }
 
   Future<void> _backgroundFetch() async {
+    print("-----------background call------------");
     try {
       final newData = await _fetchData();
       if (!_areListsEqual(newData, state.value)) {
+    print("-------------------------------NEW DATA-----------------------------");
         state = AsyncValue.data(newData);
       }
     } catch (e) {}

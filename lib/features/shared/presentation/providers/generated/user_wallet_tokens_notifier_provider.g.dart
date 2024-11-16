@@ -6,7 +6,7 @@ part of '../user_wallet_tokens_notifier_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userWalletTokensHash() => r'4e5ce4d82b4f92b082917b997b16c65beff32098';
+String _$userWalletTokensHash() => r'91da203d845a3c4924bcd1ba7a72019d23d6721d';
 
 /// See also [UserWalletTokens].
 @ProviderFor(UserWalletTokens)

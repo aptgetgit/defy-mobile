@@ -23,12 +23,46 @@ class $AssetsIconsGen {
   AssetGenImage get appLogoLight =>
       const AssetGenImage('assets/icons/app-logo-light.png');
 
+  /// File path: assets/icons/explore-nft-example.png
+  AssetGenImage get exploreNftExample =>
+      const AssetGenImage('assets/icons/explore-nft-example.png');
+
+  /// File path: assets/icons/explore-rankings-banner.png
+  AssetGenImage get exploreRankingsBanner =>
+      const AssetGenImage('assets/icons/explore-rankings-banner.png');
+
   /// File path: assets/icons/google.png
   AssetGenImage get google => const AssetGenImage('assets/icons/google.png');
 
+  /// File path: assets/icons/market-explore-logo.png
+  AssetGenImage get marketExploreLogo =>
+      const AssetGenImage('assets/icons/market-explore-logo.png');
+
+  /// File path: assets/icons/petra-wallet-logo.png
+  AssetGenImage get petraWalletLogo =>
+      const AssetGenImage('assets/icons/petra-wallet-logo.png');
+
+  /// File path: assets/icons/rainbow-wallet-logo.png
+  AssetGenImage get rainbowWalletLogo =>
+      const AssetGenImage('assets/icons/rainbow-wallet-logo.png');
+
+  /// File path: assets/icons/uniswap-dex-logo.png
+  AssetGenImage get uniswapDexLogo =>
+      const AssetGenImage('assets/icons/uniswap-dex-logo.png');
+
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [appIcon, appLogoDark, appLogoLight, google];
+  List<AssetGenImage> get values => [
+        appIcon,
+        appLogoDark,
+        appLogoLight,
+        exploreNftExample,
+        exploreRankingsBanner,
+        google,
+        marketExploreLogo,
+        petraWalletLogo,
+        rainbowWalletLogo,
+        uniswapDexLogo
+      ];
 }
 
 class Assets {

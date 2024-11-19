@@ -4,6 +4,9 @@ import 'package:defy/features/authentication/presentation/providers/authenticati
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
 import 'package:defy/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_market_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/search_screen.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
 import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -24,6 +27,7 @@ part 'home_route.dart';
 part 'dashboard_route.dart';
 part 'watchlist_route.dart';
 part 'swap_route.dart';
+part 'explore_route.dart';
 
 part 'generated/router.g.dart';
 part 'generated/router.freezed.dart';
@@ -44,7 +48,7 @@ GoRouter router(RouterRef ref) {
   final authState = ref.watch(authenticationNotifierProvider);
   
   return GoRouter(
-    initialLocation: const SingleSwapScreenRoute().location,
+    initialLocation: const ExploreScreenRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;

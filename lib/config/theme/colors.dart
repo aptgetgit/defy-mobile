@@ -12,6 +12,7 @@ class AppColors {
   static const Color greyMedium = Color(0xFFCFD2D8);
   static const Color greyDark = Color(0xFF646D80);
   static const Color greyVeryLight = Color(0xFFF5F5F6);
+  static const Color greyVeryLight2 = Color(0xFFF4F4F6);
   static const Color greyLightest = Color(0xFFEFEFF2);
   static final Color grey300 = Colors.grey.shade300;
 
@@ -25,8 +26,8 @@ class AppColors {
   static final Color blueLight = blue.withOpacity(0.2);
 
   // Green shades
-  static const Color green = Color(0xFFE9F3EC);
-  static const Color greenLight = Color(0xFF4EB13D);
+  static const Color green = Color(0xFF4EB13D);
+  static const Color greenLight = Color(0xFFE9F3EC);
   static const Color greenDark = Color(0xFF248444);
   static const Color greenPastel = Color(0xFF2A8189);
 

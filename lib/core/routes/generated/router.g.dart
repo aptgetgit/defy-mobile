@@ -15,6 +15,9 @@ List<RouteBase> get $appRoutes => [
       $watchlistRoute,
       $singleSwapScreenRoute,
       $swapTokensRoute,
+      $exploreScreenRoute,
+      $exploreSearchScreenRoute,
+      $exploreMarketScreenRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -202,11 +205,80 @@ extension $SwapTokensRouteExtension on SwapTokensRoute {
       context.replace(location, extra: $extra);
 }
 
+RouteBase get $exploreScreenRoute => GoRouteData.$route(
+      path: '/explore',
+      factory: $ExploreScreenRouteExtension._fromState,
+    );
+
+extension $ExploreScreenRouteExtension on ExploreScreenRoute {
+  static ExploreScreenRoute _fromState(GoRouterState state) =>
+      const ExploreScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreSearchScreenRoute => GoRouteData.$route(
+      path: '/explore-search',
+      factory: $ExploreSearchScreenRouteExtension._fromState,
+    );
+
+extension $ExploreSearchScreenRouteExtension on ExploreSearchScreenRoute {
+  static ExploreSearchScreenRoute _fromState(GoRouterState state) =>
+      const ExploreSearchScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-search',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreMarketScreenRoute => GoRouteData.$route(
+      path: '/explore-market',
+      factory: $ExploreMarketScreenRouteExtension._fromState,
+    );
+
+extension $ExploreMarketScreenRouteExtension on ExploreMarketScreenRoute {
+  static ExploreMarketScreenRoute _fromState(GoRouterState state) =>
+      const ExploreMarketScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-market',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'38425ee7731785bdb555f671a6f0f3c854bc53e8';
+String _$routerHash() => r'747008450ef2ca349e010a19cb921a9077aeac64';
 
 /// See also [router].
 @ProviderFor(router)

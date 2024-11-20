@@ -4,7 +4,6 @@ import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/features/explore/presentation/providers/explore_ui_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -21,7 +20,6 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
-    final width = context.screenWidth;
     final height = context.screenHeight;
     return Scaffold(
       backgroundColor: const Color(0xfff4f4f6),
@@ -137,41 +135,46 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget _buildDapps(BuildContext context) {
     final width = context.screenWidth;
     final height = context.screenHeight;
-    return Column(
-      children: [
-        SizedBox(
-          height: height / 4.5 * 0.63,
-          width: width * .4,
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Assets.icons.uniswapDexLogo.image(
-                width: width * .2,
-              ),
-              Positioned(
-                top: width * .065,
-                left: width * .4 * .15,
-                child: Assets.icons.rainbowWalletLogo.image(
-                  width: width * .1,
+    return GestureDetector(
+      onTap : () {
+        ExploreDappsScreenRoute().push(context);
+      },
+      child: Column(
+        children: [
+          SizedBox(
+            height: height / 4.5 * 0.63,
+            width: width * .4,
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Assets.icons.uniswapDexLogo.image(
+                  width: width * .2,
                 ),
-              ),
-              Positioned(
-                top: 1,
-                right: width * .4 * .22,
-                child: Assets.icons.petraWalletLogo.image(
-                  width: width * .14,
+                Positioned(
+                  top: width * .065,
+                  left: width * .4 * .15,
+                  child: Assets.icons.rainbowWalletLogo.image(
+                    width: width * .1,
+                  ),
                 ),
-              ),
-            ],
+                Positioned(
+                  top: 1,
+                  right: width * .4 * .22,
+                  child: Assets.icons.petraWalletLogo.image(
+                    width: width * .14,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Text('Dapps',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.greyLight,
-            )),
-      ],
+          Text('Dapps',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.greyLight,
+              )),
+        ],
+      ),
     );
   }
 
@@ -215,56 +218,61 @@ class _ExploreScreenState extends State<ExploreScreen> {
       "https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000",
       "https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000",
     ];
-    return Column(
-      children: [
-        Stack(alignment: Alignment.center, children: [
-          Transform.rotate(
-            angle: -math.pi / 14,
-            child: ClipRRect(
+    return GestureDetector(
+      onTap : () {
+        ExploreNFTScreenRoute().push(context);
+      },
+      child: Column(
+        children: [
+          Stack(alignment: Alignment.center, children: [
+            Transform.rotate(
+              angle: -math.pi / 14,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  width: width * .3,
+                  height: width * .45,
+                  imageUrl: nftImages[0],
+                  errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
+                  progressIndicatorBuilder: (ctx, str, download) =>
+                      const CircularProgressIndicator(),
+                ),
+              ),
+            ),
+            ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
                 width: width * .3,
                 height: width * .45,
-                imageUrl: nftImages[0],
+                imageUrl: nftImages[1],
                 errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
                 progressIndicatorBuilder: (ctx, str, download) =>
                     const CircularProgressIndicator(),
               ),
             ),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-              width: width * .3,
-              height: width * .45,
-              imageUrl: nftImages[1],
-              errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-              progressIndicatorBuilder: (ctx, str, download) =>
-                  const CircularProgressIndicator(),
-            ),
-          ),
-          Transform.rotate(
-            angle: math.pi / 14,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                width: width * .3,
-                height: width * .45,
-                imageUrl: nftImages[2],
-                errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-                progressIndicatorBuilder: (ctx, str, download) =>
-                    const CircularProgressIndicator(),
+            Transform.rotate(
+              angle: math.pi / 14,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  width: width * .3,
+                  height: width * .45,
+                  imageUrl: nftImages[2],
+                  errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
+                  progressIndicatorBuilder: (ctx, str, download) =>
+                      const CircularProgressIndicator(),
+                ),
               ),
             ),
-          ),
-        ]),
-        Text('NFTs',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.greyLight,
-            )),
-      ],
+          ]),
+          Text('NFTs',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.greyLight,
+              )),
+        ],
+      ),
     );
   }
 

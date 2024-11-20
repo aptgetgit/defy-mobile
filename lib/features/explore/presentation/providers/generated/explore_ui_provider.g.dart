@@ -7,7 +7,7 @@ part of '../explore_ui_provider.dart';
 // **************************************************************************
 
 String _$coinsAnimationIndexHash() =>
-    r'22211daaf54246ef94f361e8cba923d8a290bf49';
+    r'6686f7d75db62d54d986dfca4b00c2986a702c34';
 
 /// See also [CoinsAnimationIndex].
 @ProviderFor(CoinsAnimationIndex)

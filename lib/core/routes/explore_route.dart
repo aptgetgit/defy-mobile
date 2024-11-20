@@ -38,3 +38,29 @@ class ExploreMarketScreenRoute extends GoRouteData {
     builder: (context, state) => ExploreMarketScreen(),
   );
 }
+
+@TypedGoRoute<ExploreNFTScreenRoute>(path: '/explore-nft')
+class ExploreNFTScreenRoute extends GoRouteData {
+  const ExploreNFTScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => ExploreNFTScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => ExploreNFTScreen(),
+  );
+}
+
+@TypedGoRoute<ExploreDappsScreenRoute>(path: '/explore-dapps')
+class ExploreDappsScreenRoute extends GoRouteData {
+  const ExploreDappsScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => ExploreDappsScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => ExploreDappsScreen(),
+  );
+}

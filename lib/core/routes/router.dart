@@ -4,7 +4,9 @@ import 'package:defy/features/authentication/presentation/providers/authenticati
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
 import 'package:defy/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_dapps_screen.dart';
 import 'package:defy/features/explore/presentation/scrceens/explore_market_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_nft_screen.dart';
 import 'package:defy/features/explore/presentation/scrceens/explore_screen.dart';
 import 'package:defy/features/explore/presentation/scrceens/search_screen.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';

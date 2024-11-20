@@ -18,6 +18,8 @@ List<RouteBase> get $appRoutes => [
       $exploreScreenRoute,
       $exploreSearchScreenRoute,
       $exploreMarketScreenRoute,
+      $exploreNFTScreenRoute,
+      $exploreDappsScreenRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -262,6 +264,52 @@ extension $ExploreMarketScreenRouteExtension on ExploreMarketScreenRoute {
 
   String get location => GoRouteData.$location(
         '/explore-market',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreNFTScreenRoute => GoRouteData.$route(
+      path: '/explore-nft',
+      factory: $ExploreNFTScreenRouteExtension._fromState,
+    );
+
+extension $ExploreNFTScreenRouteExtension on ExploreNFTScreenRoute {
+  static ExploreNFTScreenRoute _fromState(GoRouterState state) =>
+      const ExploreNFTScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-nft',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreDappsScreenRoute => GoRouteData.$route(
+      path: '/explore-dapps',
+      factory: $ExploreDappsScreenRouteExtension._fromState,
+    );
+
+extension $ExploreDappsScreenRouteExtension on ExploreDappsScreenRoute {
+  static ExploreDappsScreenRoute _fromState(GoRouterState state) =>
+      const ExploreDappsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-dapps',
       );
 
   void go(BuildContext context) => context.go(location);

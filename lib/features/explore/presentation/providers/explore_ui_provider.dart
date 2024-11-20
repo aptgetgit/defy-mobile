@@ -19,9 +19,4 @@ class CoinsAnimationIndex extends _$CoinsAnimationIndex {
       state = (state + 1) % 4; 
     });
   }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-  }
 }

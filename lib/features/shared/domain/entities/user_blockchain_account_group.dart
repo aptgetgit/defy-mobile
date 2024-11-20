@@ -10,8 +10,8 @@ class UserBlockchainAccountGroup with _$UserBlockchainAccountGroup {
   const factory UserBlockchainAccountGroup(
       {required String id,
       required String name,
-      required String animatedIconUrl,
-      required String backgroundColor}) = _UserBlockchainAccountGroup;
+      required String icon,
+      required String color}) = _UserBlockchainAccountGroup;
 
   factory UserBlockchainAccountGroup.fromJson(Map<String, dynamic> json) =>
       _$UserBlockchainAccountGroupFromJson(json);

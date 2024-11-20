@@ -8,12 +8,12 @@ class InitiateRegistrationOptions with _$InitiateRegistrationOptions {
   const factory InitiateRegistrationOptions.withEmailCode({
     required String email,
     required String username,
-    required String name,
+    required String displayName,
   }) = InitiateRegistrationOptionsWithEmailCode;
 
   const factory InitiateRegistrationOptions.withOIDC({
     required String username,
-    required String name,
+    required String displayName,
   }) = InitiateRegistrationOptionsWithOIDC;
 }
 
@@ -22,7 +22,7 @@ class CompleteRegistrationOptions with _$CompleteRegistrationOptions {
   const factory CompleteRegistrationOptions.withEmailCode({
     required String flowId,
     required String username,
-    required String name,
+    required String displayName,
     required String email,
     required String code,
   }) = CompleteRegistrationOptionsWithEmailCode;
@@ -30,7 +30,7 @@ class CompleteRegistrationOptions with _$CompleteRegistrationOptions {
   const factory CompleteRegistrationOptions.withOIDC({
     required String flowId,
     required String username,
-    required String name,
+    required String displayName,
     required String provider,
     required String idToken,
   }) = CompleteRegistrationOptionsWithOIDC;

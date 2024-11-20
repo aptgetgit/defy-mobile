@@ -91,7 +91,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 1384478839714981719),
       name: 'UserBlockchainAccountGroupLocalModel',
-      lastPropertyId: const obx_int.IdUid(5, 2416477322595164425),
+      lastPropertyId: const obx_int.IdUid(7, 3591606802028917856),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -112,13 +112,13 @@ final _entities = <obx_int.ModelEntity>[
             flags: 2080,
             indexId: const obx_int.IdUid(7, 889576494494782903)),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 141499176132735524),
-            name: 'animatedIconUrl',
+            id: const obx_int.IdUid(6, 1242731091367397443),
+            name: 'icon',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 2416477322595164425),
-            name: 'backgroundColor',
+            id: const obx_int.IdUid(7, 3591606802028917856),
+            name: 'color',
             type: 9,
             flags: 0)
       ],
@@ -248,7 +248,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [141499176132735524, 2416477322595164425],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -370,14 +370,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
             (UserBlockchainAccountGroupLocalModel object, fb.Builder fbb) {
           final remoteIdOffset = fbb.writeString(object.remoteId);
           final nameOffset = fbb.writeString(object.name);
-          final animatedIconUrlOffset = fbb.writeString(object.animatedIconUrl);
-          final backgroundColorOffset = fbb.writeString(object.backgroundColor);
-          fbb.startTable(6);
+          final iconOffset = fbb.writeString(object.icon);
+          final colorOffset = fbb.writeString(object.color);
+          fbb.startTable(8);
           fbb.addInt64(0, object.localId);
           fbb.addOffset(1, remoteIdOffset);
           fbb.addOffset(2, nameOffset);
-          fbb.addOffset(3, animatedIconUrlOffset);
-          fbb.addOffset(4, backgroundColorOffset);
+          fbb.addOffset(5, iconOffset);
+          fbb.addOffset(6, colorOffset);
           fbb.finish(fbb.endTable());
           return object.localId;
         },
@@ -388,17 +388,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 6, '');
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 8, '');
-          final animatedIconUrlParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 10, '');
-          final backgroundColorParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 12, '');
+          final iconParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 14, '');
+          final colorParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 16, '');
           final object = UserBlockchainAccountGroupLocalModel(
               remoteId: remoteIdParam,
               name: nameParam,
-              animatedIconUrl: animatedIconUrlParam,
-              backgroundColor: backgroundColorParam)
+              icon: iconParam,
+              color: colorParam)
             ..localId =
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           obx_int.InternalToManyAccess.setRelInfo<
@@ -563,13 +561,13 @@ class UserBlockchainAccountGroupLocalModel_ {
       obx.QueryStringProperty<UserBlockchainAccountGroupLocalModel>(
           _entities[2].properties[2]);
 
-  /// See [UserBlockchainAccountGroupLocalModel.animatedIconUrl].
-  static final animatedIconUrl =
+  /// See [UserBlockchainAccountGroupLocalModel.icon].
+  static final icon =
       obx.QueryStringProperty<UserBlockchainAccountGroupLocalModel>(
           _entities[2].properties[3]);
 
-  /// See [UserBlockchainAccountGroupLocalModel.backgroundColor].
-  static final backgroundColor =
+  /// See [UserBlockchainAccountGroupLocalModel.color].
+  static final color =
       obx.QueryStringProperty<UserBlockchainAccountGroupLocalModel>(
           _entities[2].properties[4]);
 

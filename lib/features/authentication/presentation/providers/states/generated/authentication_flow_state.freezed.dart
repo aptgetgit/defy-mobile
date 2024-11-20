@@ -18,33 +18,33 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$RegistrationFlowData {
   String get flowId => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  String get displayName => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, String username, String name,
-            String email, String? code)
+    required TResult Function(String flowId, String username,
+            String displayName, String email, String? code)
         withCode,
-    required TResult Function(String flowId, String username, String name,
-            String? provider, String? idToken)
+    required TResult Function(String flowId, String username,
+            String displayName, String? provider, String? idToken)
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, String username, String name, String email,
-            String? code)?
+    TResult? Function(String flowId, String username, String displayName,
+            String email, String? code)?
         withCode,
-    TResult? Function(String flowId, String username, String name,
+    TResult? Function(String flowId, String username, String displayName,
             String? provider, String? idToken)?
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, String username, String name, String email,
-            String? code)?
+    TResult Function(String flowId, String username, String displayName,
+            String email, String? code)?
         withCode,
-    TResult Function(String flowId, String username, String name,
+    TResult Function(String flowId, String username, String displayName,
             String? provider, String? idToken)?
         withOIDC,
     required TResult orElse(),
@@ -83,7 +83,7 @@ abstract class $RegistrationFlowDataCopyWith<$Res> {
           $Res Function(RegistrationFlowData) then) =
       _$RegistrationFlowDataCopyWithImpl<$Res, RegistrationFlowData>;
   @useResult
-  $Res call({String flowId, String username, String name});
+  $Res call({String flowId, String username, String displayName});
 }
 
 /// @nodoc
@@ -104,7 +104,7 @@ class _$RegistrationFlowDataCopyWithImpl<$Res,
   $Res call({
     Object? flowId = null,
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
   }) {
     return _then(_value.copyWith(
       flowId: null == flowId
@@ -115,9 +115,9 @@ class _$RegistrationFlowDataCopyWithImpl<$Res,
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -135,7 +135,7 @@ abstract class _$$RegistrationFlowDataWithCodeImplCopyWith<$Res>
   $Res call(
       {String flowId,
       String username,
-      String name,
+      String displayName,
       String email,
       String? code});
 }
@@ -157,7 +157,7 @@ class __$$RegistrationFlowDataWithCodeImplCopyWithImpl<$Res>
   $Res call({
     Object? flowId = null,
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
     Object? email = null,
     Object? code = freezed,
   }) {
@@ -170,9 +170,9 @@ class __$$RegistrationFlowDataWithCodeImplCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       email: null == email
           ? _value.email
@@ -193,7 +193,7 @@ class _$RegistrationFlowDataWithCodeImpl
   const _$RegistrationFlowDataWithCodeImpl(
       {required this.flowId,
       required this.username,
-      required this.name,
+      required this.displayName,
       required this.email,
       this.code});
 
@@ -202,7 +202,7 @@ class _$RegistrationFlowDataWithCodeImpl
   @override
   final String username;
   @override
-  final String name;
+  final String displayName;
   @override
   final String email;
   @override
@@ -210,7 +210,7 @@ class _$RegistrationFlowDataWithCodeImpl
 
   @override
   String toString() {
-    return 'RegistrationFlowData.withCode(flowId: $flowId, username: $username, name: $name, email: $email, code: $code)';
+    return 'RegistrationFlowData.withCode(flowId: $flowId, username: $username, displayName: $displayName, email: $email, code: $code)';
   }
 
   @override
@@ -221,14 +221,15 @@ class _$RegistrationFlowDataWithCodeImpl
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.username, username) ||
                 other.username == username) &&
-            (identical(other.name, name) || other.name == name) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.code, code) || other.code == code));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, flowId, username, name, email, code);
+      Object.hash(runtimeType, flowId, username, displayName, email, code);
 
   /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
@@ -243,42 +244,42 @@ class _$RegistrationFlowDataWithCodeImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, String username, String name,
-            String email, String? code)
+    required TResult Function(String flowId, String username,
+            String displayName, String email, String? code)
         withCode,
-    required TResult Function(String flowId, String username, String name,
-            String? provider, String? idToken)
+    required TResult Function(String flowId, String username,
+            String displayName, String? provider, String? idToken)
         withOIDC,
   }) {
-    return withCode(flowId, username, name, email, code);
+    return withCode(flowId, username, displayName, email, code);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, String username, String name, String email,
-            String? code)?
+    TResult? Function(String flowId, String username, String displayName,
+            String email, String? code)?
         withCode,
-    TResult? Function(String flowId, String username, String name,
+    TResult? Function(String flowId, String username, String displayName,
             String? provider, String? idToken)?
         withOIDC,
   }) {
-    return withCode?.call(flowId, username, name, email, code);
+    return withCode?.call(flowId, username, displayName, email, code);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, String username, String name, String email,
-            String? code)?
+    TResult Function(String flowId, String username, String displayName,
+            String email, String? code)?
         withCode,
-    TResult Function(String flowId, String username, String name,
+    TResult Function(String flowId, String username, String displayName,
             String? provider, String? idToken)?
         withOIDC,
     required TResult orElse(),
   }) {
     if (withCode != null) {
-      return withCode(flowId, username, name, email, code);
+      return withCode(flowId, username, displayName, email, code);
     }
     return orElse();
   }
@@ -319,7 +320,7 @@ abstract class RegistrationFlowDataWithCode implements RegistrationFlowData {
   const factory RegistrationFlowDataWithCode(
       {required final String flowId,
       required final String username,
-      required final String name,
+      required final String displayName,
       required final String email,
       final String? code}) = _$RegistrationFlowDataWithCodeImpl;
 
@@ -328,7 +329,7 @@ abstract class RegistrationFlowDataWithCode implements RegistrationFlowData {
   @override
   String get username;
   @override
-  String get name;
+  String get displayName;
   String get email;
   String? get code;
 
@@ -353,7 +354,7 @@ abstract class _$$RegistrationFlowDataWithOIDCImplCopyWith<$Res>
   $Res call(
       {String flowId,
       String username,
-      String name,
+      String displayName,
       String? provider,
       String? idToken});
 }
@@ -375,7 +376,7 @@ class __$$RegistrationFlowDataWithOIDCImplCopyWithImpl<$Res>
   $Res call({
     Object? flowId = null,
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
     Object? provider = freezed,
     Object? idToken = freezed,
   }) {
@@ -388,9 +389,9 @@ class __$$RegistrationFlowDataWithOIDCImplCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       provider: freezed == provider
           ? _value.provider
@@ -411,7 +412,7 @@ class _$RegistrationFlowDataWithOIDCImpl
   const _$RegistrationFlowDataWithOIDCImpl(
       {required this.flowId,
       required this.username,
-      required this.name,
+      required this.displayName,
       this.provider,
       this.idToken});
 
@@ -420,7 +421,7 @@ class _$RegistrationFlowDataWithOIDCImpl
   @override
   final String username;
   @override
-  final String name;
+  final String displayName;
   @override
   final String? provider;
   @override
@@ -428,7 +429,7 @@ class _$RegistrationFlowDataWithOIDCImpl
 
   @override
   String toString() {
-    return 'RegistrationFlowData.withOIDC(flowId: $flowId, username: $username, name: $name, provider: $provider, idToken: $idToken)';
+    return 'RegistrationFlowData.withOIDC(flowId: $flowId, username: $username, displayName: $displayName, provider: $provider, idToken: $idToken)';
   }
 
   @override
@@ -439,15 +440,16 @@ class _$RegistrationFlowDataWithOIDCImpl
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.username, username) ||
                 other.username == username) &&
-            (identical(other.name, name) || other.name == name) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
             (identical(other.idToken, idToken) || other.idToken == idToken));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, flowId, username, name, provider, idToken);
+  int get hashCode => Object.hash(
+      runtimeType, flowId, username, displayName, provider, idToken);
 
   /// Create a copy of RegistrationFlowData
   /// with the given fields replaced by the non-null parameter values.
@@ -462,42 +464,42 @@ class _$RegistrationFlowDataWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, String username, String name,
-            String email, String? code)
+    required TResult Function(String flowId, String username,
+            String displayName, String email, String? code)
         withCode,
-    required TResult Function(String flowId, String username, String name,
-            String? provider, String? idToken)
+    required TResult Function(String flowId, String username,
+            String displayName, String? provider, String? idToken)
         withOIDC,
   }) {
-    return withOIDC(flowId, username, name, provider, idToken);
+    return withOIDC(flowId, username, displayName, provider, idToken);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, String username, String name, String email,
-            String? code)?
+    TResult? Function(String flowId, String username, String displayName,
+            String email, String? code)?
         withCode,
-    TResult? Function(String flowId, String username, String name,
+    TResult? Function(String flowId, String username, String displayName,
             String? provider, String? idToken)?
         withOIDC,
   }) {
-    return withOIDC?.call(flowId, username, name, provider, idToken);
+    return withOIDC?.call(flowId, username, displayName, provider, idToken);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, String username, String name, String email,
-            String? code)?
+    TResult Function(String flowId, String username, String displayName,
+            String email, String? code)?
         withCode,
-    TResult Function(String flowId, String username, String name,
+    TResult Function(String flowId, String username, String displayName,
             String? provider, String? idToken)?
         withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
-      return withOIDC(flowId, username, name, provider, idToken);
+      return withOIDC(flowId, username, displayName, provider, idToken);
     }
     return orElse();
   }
@@ -538,7 +540,7 @@ abstract class RegistrationFlowDataWithOIDC implements RegistrationFlowData {
   const factory RegistrationFlowDataWithOIDC(
       {required final String flowId,
       required final String username,
-      required final String name,
+      required final String displayName,
       final String? provider,
       final String? idToken}) = _$RegistrationFlowDataWithOIDCImpl;
 
@@ -547,7 +549,7 @@ abstract class RegistrationFlowDataWithOIDC implements RegistrationFlowData {
   @override
   String get username;
   @override
-  String get name;
+  String get displayName;
   String? get provider;
   String? get idToken;
 

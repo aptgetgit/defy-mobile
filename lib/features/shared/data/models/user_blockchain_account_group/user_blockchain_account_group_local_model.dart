@@ -13,8 +13,8 @@ class UserBlockchainAccountGroupLocalModel {
   @Unique(onConflict: ConflictStrategy.fail)
   String name;
 
-  String animatedIconUrl;
-  String backgroundColor;
+  String icon;
+  String color;
 
   @Backlink('blockchainAccountGroup')
   final blockchainAccountAssignments =
@@ -23,15 +23,15 @@ class UserBlockchainAccountGroupLocalModel {
   UserBlockchainAccountGroupLocalModel({
     required this.remoteId,
     required this.name,
-    required this.animatedIconUrl,
-    required this.backgroundColor,
+    required this.icon,
+    required this.color,
   });
 
   UserBlockchainAccountGroup toDomain() => UserBlockchainAccountGroup(
         id: remoteId,
         name: name,
-        animatedIconUrl: animatedIconUrl,
-        backgroundColor: backgroundColor,
+        icon: icon,
+        color: color,
       );
 
   static UserBlockchainAccountGroupLocalModel fromDomain(
@@ -39,7 +39,7 @@ class UserBlockchainAccountGroupLocalModel {
       UserBlockchainAccountGroupLocalModel(
         remoteId: group.id,
         name: group.name,
-        animatedIconUrl: group.animatedIconUrl,
-        backgroundColor: group.backgroundColor,
+        icon: group.icon,
+        color: group.color,
       );
 }

@@ -23,8 +23,8 @@ UserBlockchainAccountGroup _$UserBlockchainAccountGroupFromJson(
 mixin _$UserBlockchainAccountGroup {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get animatedIconUrl => throw _privateConstructorUsedError;
-  String get backgroundColor => throw _privateConstructorUsedError;
+  String get icon => throw _privateConstructorUsedError;
+  String get color => throw _privateConstructorUsedError;
 
   /// Serializes this UserBlockchainAccountGroup to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,8 +43,7 @@ abstract class $UserBlockchainAccountGroupCopyWith<$Res> {
       _$UserBlockchainAccountGroupCopyWithImpl<$Res,
           UserBlockchainAccountGroup>;
   @useResult
-  $Res call(
-      {String id, String name, String animatedIconUrl, String backgroundColor});
+  $Res call({String id, String name, String icon, String color});
 }
 
 /// @nodoc
@@ -65,8 +64,8 @@ class _$UserBlockchainAccountGroupCopyWithImpl<$Res,
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? animatedIconUrl = null,
-    Object? backgroundColor = null,
+    Object? icon = null,
+    Object? color = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -77,13 +76,13 @@ class _$UserBlockchainAccountGroupCopyWithImpl<$Res,
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      animatedIconUrl: null == animatedIconUrl
-          ? _value.animatedIconUrl
-          : animatedIconUrl // ignore: cast_nullable_to_non_nullable
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -98,8 +97,7 @@ abstract class _$$UserBlockchainAccountGroupImplCopyWith<$Res>
       __$$UserBlockchainAccountGroupImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id, String name, String animatedIconUrl, String backgroundColor});
+  $Res call({String id, String name, String icon, String color});
 }
 
 /// @nodoc
@@ -119,8 +117,8 @@ class __$$UserBlockchainAccountGroupImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? animatedIconUrl = null,
-    Object? backgroundColor = null,
+    Object? icon = null,
+    Object? color = null,
   }) {
     return _then(_$UserBlockchainAccountGroupImpl(
       id: null == id
@@ -131,13 +129,13 @@ class __$$UserBlockchainAccountGroupImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      animatedIconUrl: null == animatedIconUrl
-          ? _value.animatedIconUrl
-          : animatedIconUrl // ignore: cast_nullable_to_non_nullable
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -149,8 +147,8 @@ class _$UserBlockchainAccountGroupImpl extends _UserBlockchainAccountGroup {
   const _$UserBlockchainAccountGroupImpl(
       {required this.id,
       required this.name,
-      required this.animatedIconUrl,
-      required this.backgroundColor})
+      required this.icon,
+      required this.color})
       : super._();
 
   factory _$UserBlockchainAccountGroupImpl.fromJson(
@@ -162,13 +160,13 @@ class _$UserBlockchainAccountGroupImpl extends _UserBlockchainAccountGroup {
   @override
   final String name;
   @override
-  final String animatedIconUrl;
+  final String icon;
   @override
-  final String backgroundColor;
+  final String color;
 
   @override
   String toString() {
-    return 'UserBlockchainAccountGroup(id: $id, name: $name, animatedIconUrl: $animatedIconUrl, backgroundColor: $backgroundColor)';
+    return 'UserBlockchainAccountGroup(id: $id, name: $name, icon: $icon, color: $color)';
   }
 
   @override
@@ -178,16 +176,13 @@ class _$UserBlockchainAccountGroupImpl extends _UserBlockchainAccountGroup {
             other is _$UserBlockchainAccountGroupImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.animatedIconUrl, animatedIconUrl) ||
-                other.animatedIconUrl == animatedIconUrl) &&
-            (identical(other.backgroundColor, backgroundColor) ||
-                other.backgroundColor == backgroundColor));
+            (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.color, color) || other.color == color));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, animatedIconUrl, backgroundColor);
+  int get hashCode => Object.hash(runtimeType, id, name, icon, color);
 
   /// Create a copy of UserBlockchainAccountGroup
   /// with the given fields replaced by the non-null parameter values.
@@ -208,11 +203,10 @@ class _$UserBlockchainAccountGroupImpl extends _UserBlockchainAccountGroup {
 
 abstract class _UserBlockchainAccountGroup extends UserBlockchainAccountGroup {
   const factory _UserBlockchainAccountGroup(
-          {required final String id,
-          required final String name,
-          required final String animatedIconUrl,
-          required final String backgroundColor}) =
-      _$UserBlockchainAccountGroupImpl;
+      {required final String id,
+      required final String name,
+      required final String icon,
+      required final String color}) = _$UserBlockchainAccountGroupImpl;
   const _UserBlockchainAccountGroup._() : super._();
 
   factory _UserBlockchainAccountGroup.fromJson(Map<String, dynamic> json) =
@@ -223,9 +217,9 @@ abstract class _UserBlockchainAccountGroup extends UserBlockchainAccountGroup {
   @override
   String get name;
   @override
-  String get animatedIconUrl;
+  String get icon;
   @override
-  String get backgroundColor;
+  String get color;
 
   /// Create a copy of UserBlockchainAccountGroup
   /// with the given fields replaced by the non-null parameter values.

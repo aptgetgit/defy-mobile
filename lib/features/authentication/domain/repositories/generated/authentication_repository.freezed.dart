@@ -17,25 +17,26 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$InitiateRegistrationOptions {
   String get username => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  String get displayName => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String email, String username, String name)
+    required TResult Function(String email, String username, String displayName)
         withEmailCode,
-    required TResult Function(String username, String name) withOIDC,
+    required TResult Function(String username, String displayName) withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String username, String name)?
+    TResult? Function(String email, String username, String displayName)?
         withEmailCode,
-    TResult? Function(String username, String name)? withOIDC,
+    TResult? Function(String username, String displayName)? withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String username, String name)? withEmailCode,
-    TResult Function(String username, String name)? withOIDC,
+    TResult Function(String email, String username, String displayName)?
+        withEmailCode,
+    TResult Function(String username, String displayName)? withOIDC,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -78,7 +79,7 @@ abstract class $InitiateRegistrationOptionsCopyWith<$Res> {
       _$InitiateRegistrationOptionsCopyWithImpl<$Res,
           InitiateRegistrationOptions>;
   @useResult
-  $Res call({String username, String name});
+  $Res call({String username, String displayName});
 }
 
 /// @nodoc
@@ -98,16 +99,16 @@ class _$InitiateRegistrationOptionsCopyWithImpl<$Res,
   @override
   $Res call({
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
   }) {
     return _then(_value.copyWith(
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -122,7 +123,7 @@ abstract class _$$InitiateRegistrationOptionsWithEmailCodeImplCopyWith<$Res>
       __$$InitiateRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String username, String name});
+  $Res call({String email, String username, String displayName});
 }
 
 /// @nodoc
@@ -142,7 +143,7 @@ class __$$InitiateRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
   }) {
     return _then(_$InitiateRegistrationOptionsWithEmailCodeImpl(
       email: null == email
@@ -153,9 +154,9 @@ class __$$InitiateRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -166,18 +167,18 @@ class __$$InitiateRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>
 class _$InitiateRegistrationOptionsWithEmailCodeImpl
     implements InitiateRegistrationOptionsWithEmailCode {
   const _$InitiateRegistrationOptionsWithEmailCodeImpl(
-      {required this.email, required this.username, required this.name});
+      {required this.email, required this.username, required this.displayName});
 
   @override
   final String email;
   @override
   final String username;
   @override
-  final String name;
+  final String displayName;
 
   @override
   String toString() {
-    return 'InitiateRegistrationOptions.withEmailCode(email: $email, username: $username, name: $name)';
+    return 'InitiateRegistrationOptions.withEmailCode(email: $email, username: $username, displayName: $displayName)';
   }
 
   @override
@@ -188,11 +189,12 @@ class _$InitiateRegistrationOptionsWithEmailCodeImpl
             (identical(other.email, email) || other.email == email) &&
             (identical(other.username, username) ||
                 other.username == username) &&
-            (identical(other.name, name) || other.name == name));
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, email, username, name);
+  int get hashCode => Object.hash(runtimeType, email, username, displayName);
 
   /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -208,32 +210,33 @@ class _$InitiateRegistrationOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String email, String username, String name)
+    required TResult Function(String email, String username, String displayName)
         withEmailCode,
-    required TResult Function(String username, String name) withOIDC,
+    required TResult Function(String username, String displayName) withOIDC,
   }) {
-    return withEmailCode(email, username, name);
+    return withEmailCode(email, username, displayName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String username, String name)?
+    TResult? Function(String email, String username, String displayName)?
         withEmailCode,
-    TResult? Function(String username, String name)? withOIDC,
+    TResult? Function(String username, String displayName)? withOIDC,
   }) {
-    return withEmailCode?.call(email, username, name);
+    return withEmailCode?.call(email, username, displayName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String username, String name)? withEmailCode,
-    TResult Function(String username, String name)? withOIDC,
+    TResult Function(String email, String username, String displayName)?
+        withEmailCode,
+    TResult Function(String username, String displayName)? withOIDC,
     required TResult orElse(),
   }) {
     if (withEmailCode != null) {
-      return withEmailCode(email, username, name);
+      return withEmailCode(email, username, displayName);
     }
     return orElse();
   }
@@ -279,14 +282,14 @@ abstract class InitiateRegistrationOptionsWithEmailCode
   const factory InitiateRegistrationOptionsWithEmailCode(
           {required final String email,
           required final String username,
-          required final String name}) =
+          required final String displayName}) =
       _$InitiateRegistrationOptionsWithEmailCodeImpl;
 
   String get email;
   @override
   String get username;
   @override
-  String get name;
+  String get displayName;
 
   /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -306,7 +309,7 @@ abstract class _$$InitiateRegistrationOptionsWithOIDCImplCopyWith<$Res>
       __$$InitiateRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String username, String name});
+  $Res call({String username, String displayName});
 }
 
 /// @nodoc
@@ -325,16 +328,16 @@ class __$$InitiateRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
   }) {
     return _then(_$InitiateRegistrationOptionsWithOIDCImpl(
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -345,16 +348,16 @@ class __$$InitiateRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>
 class _$InitiateRegistrationOptionsWithOIDCImpl
     implements InitiateRegistrationOptionsWithOIDC {
   const _$InitiateRegistrationOptionsWithOIDCImpl(
-      {required this.username, required this.name});
+      {required this.username, required this.displayName});
 
   @override
   final String username;
   @override
-  final String name;
+  final String displayName;
 
   @override
   String toString() {
-    return 'InitiateRegistrationOptions.withOIDC(username: $username, name: $name)';
+    return 'InitiateRegistrationOptions.withOIDC(username: $username, displayName: $displayName)';
   }
 
   @override
@@ -364,11 +367,12 @@ class _$InitiateRegistrationOptionsWithOIDCImpl
             other is _$InitiateRegistrationOptionsWithOIDCImpl &&
             (identical(other.username, username) ||
                 other.username == username) &&
-            (identical(other.name, name) || other.name == name));
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, username, name);
+  int get hashCode => Object.hash(runtimeType, username, displayName);
 
   /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -383,32 +387,33 @@ class _$InitiateRegistrationOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String email, String username, String name)
+    required TResult Function(String email, String username, String displayName)
         withEmailCode,
-    required TResult Function(String username, String name) withOIDC,
+    required TResult Function(String username, String displayName) withOIDC,
   }) {
-    return withOIDC(username, name);
+    return withOIDC(username, displayName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String username, String name)?
+    TResult? Function(String email, String username, String displayName)?
         withEmailCode,
-    TResult? Function(String username, String name)? withOIDC,
+    TResult? Function(String username, String displayName)? withOIDC,
   }) {
-    return withOIDC?.call(username, name);
+    return withOIDC?.call(username, displayName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String username, String name)? withEmailCode,
-    TResult Function(String username, String name)? withOIDC,
+    TResult Function(String email, String username, String displayName)?
+        withEmailCode,
+    TResult Function(String username, String displayName)? withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
-      return withOIDC(username, name);
+      return withOIDC(username, displayName);
     }
     return orElse();
   }
@@ -452,13 +457,13 @@ class _$InitiateRegistrationOptionsWithOIDCImpl
 abstract class InitiateRegistrationOptionsWithOIDC
     implements InitiateRegistrationOptions {
   const factory InitiateRegistrationOptionsWithOIDC(
-      {required final String username,
-      required final String name}) = _$InitiateRegistrationOptionsWithOIDCImpl;
+          {required final String username, required final String displayName}) =
+      _$InitiateRegistrationOptionsWithOIDCImpl;
 
   @override
   String get username;
   @override
-  String get name;
+  String get displayName;
 
   /// Create a copy of InitiateRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -473,33 +478,33 @@ abstract class InitiateRegistrationOptionsWithOIDC
 mixin _$CompleteRegistrationOptions {
   String get flowId => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  String get displayName => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, String username, String name,
-            String email, String code)
+    required TResult Function(String flowId, String username,
+            String displayName, String email, String code)
         withEmailCode,
-    required TResult Function(String flowId, String username, String name,
-            String provider, String idToken)
+    required TResult Function(String flowId, String username,
+            String displayName, String provider, String idToken)
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, String username, String name, String email,
-            String code)?
+    TResult? Function(String flowId, String username, String displayName,
+            String email, String code)?
         withEmailCode,
-    TResult? Function(String flowId, String username, String name,
+    TResult? Function(String flowId, String username, String displayName,
             String provider, String idToken)?
         withOIDC,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, String username, String name, String email,
-            String code)?
+    TResult Function(String flowId, String username, String displayName,
+            String email, String code)?
         withEmailCode,
-    TResult Function(String flowId, String username, String name,
+    TResult Function(String flowId, String username, String displayName,
             String provider, String idToken)?
         withOIDC,
     required TResult orElse(),
@@ -544,7 +549,7 @@ abstract class $CompleteRegistrationOptionsCopyWith<$Res> {
       _$CompleteRegistrationOptionsCopyWithImpl<$Res,
           CompleteRegistrationOptions>;
   @useResult
-  $Res call({String flowId, String username, String name});
+  $Res call({String flowId, String username, String displayName});
 }
 
 /// @nodoc
@@ -565,7 +570,7 @@ class _$CompleteRegistrationOptionsCopyWithImpl<$Res,
   $Res call({
     Object? flowId = null,
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
   }) {
     return _then(_value.copyWith(
       flowId: null == flowId
@@ -576,9 +581,9 @@ class _$CompleteRegistrationOptionsCopyWithImpl<$Res,
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -594,7 +599,11 @@ abstract class _$$CompleteRegistrationOptionsWithEmailCodeImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String flowId, String username, String name, String email, String code});
+      {String flowId,
+      String username,
+      String displayName,
+      String email,
+      String code});
 }
 
 /// @nodoc
@@ -614,7 +623,7 @@ class __$$CompleteRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>
   $Res call({
     Object? flowId = null,
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
     Object? email = null,
     Object? code = null,
   }) {
@@ -627,9 +636,9 @@ class __$$CompleteRegistrationOptionsWithEmailCodeImplCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       email: null == email
           ? _value.email
@@ -650,7 +659,7 @@ class _$CompleteRegistrationOptionsWithEmailCodeImpl
   const _$CompleteRegistrationOptionsWithEmailCodeImpl(
       {required this.flowId,
       required this.username,
-      required this.name,
+      required this.displayName,
       required this.email,
       required this.code});
 
@@ -659,7 +668,7 @@ class _$CompleteRegistrationOptionsWithEmailCodeImpl
   @override
   final String username;
   @override
-  final String name;
+  final String displayName;
   @override
   final String email;
   @override
@@ -667,7 +676,7 @@ class _$CompleteRegistrationOptionsWithEmailCodeImpl
 
   @override
   String toString() {
-    return 'CompleteRegistrationOptions.withEmailCode(flowId: $flowId, username: $username, name: $name, email: $email, code: $code)';
+    return 'CompleteRegistrationOptions.withEmailCode(flowId: $flowId, username: $username, displayName: $displayName, email: $email, code: $code)';
   }
 
   @override
@@ -678,14 +687,15 @@ class _$CompleteRegistrationOptionsWithEmailCodeImpl
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.username, username) ||
                 other.username == username) &&
-            (identical(other.name, name) || other.name == name) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.code, code) || other.code == code));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, flowId, username, name, email, code);
+      Object.hash(runtimeType, flowId, username, displayName, email, code);
 
   /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -701,42 +711,42 @@ class _$CompleteRegistrationOptionsWithEmailCodeImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, String username, String name,
-            String email, String code)
+    required TResult Function(String flowId, String username,
+            String displayName, String email, String code)
         withEmailCode,
-    required TResult Function(String flowId, String username, String name,
-            String provider, String idToken)
+    required TResult Function(String flowId, String username,
+            String displayName, String provider, String idToken)
         withOIDC,
   }) {
-    return withEmailCode(flowId, username, name, email, code);
+    return withEmailCode(flowId, username, displayName, email, code);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, String username, String name, String email,
-            String code)?
+    TResult? Function(String flowId, String username, String displayName,
+            String email, String code)?
         withEmailCode,
-    TResult? Function(String flowId, String username, String name,
+    TResult? Function(String flowId, String username, String displayName,
             String provider, String idToken)?
         withOIDC,
   }) {
-    return withEmailCode?.call(flowId, username, name, email, code);
+    return withEmailCode?.call(flowId, username, displayName, email, code);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, String username, String name, String email,
-            String code)?
+    TResult Function(String flowId, String username, String displayName,
+            String email, String code)?
         withEmailCode,
-    TResult Function(String flowId, String username, String name,
+    TResult Function(String flowId, String username, String displayName,
             String provider, String idToken)?
         withOIDC,
     required TResult orElse(),
   }) {
     if (withEmailCode != null) {
-      return withEmailCode(flowId, username, name, email, code);
+      return withEmailCode(flowId, username, displayName, email, code);
     }
     return orElse();
   }
@@ -782,7 +792,7 @@ abstract class CompleteRegistrationOptionsWithEmailCode
   const factory CompleteRegistrationOptionsWithEmailCode(
           {required final String flowId,
           required final String username,
-          required final String name,
+          required final String displayName,
           required final String email,
           required final String code}) =
       _$CompleteRegistrationOptionsWithEmailCodeImpl;
@@ -792,7 +802,7 @@ abstract class CompleteRegistrationOptionsWithEmailCode
   @override
   String get username;
   @override
-  String get name;
+  String get displayName;
   String get email;
   String get code;
 
@@ -817,7 +827,7 @@ abstract class _$$CompleteRegistrationOptionsWithOIDCImplCopyWith<$Res>
   $Res call(
       {String flowId,
       String username,
-      String name,
+      String displayName,
       String provider,
       String idToken});
 }
@@ -839,7 +849,7 @@ class __$$CompleteRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>
   $Res call({
     Object? flowId = null,
     Object? username = null,
-    Object? name = null,
+    Object? displayName = null,
     Object? provider = null,
     Object? idToken = null,
   }) {
@@ -852,9 +862,9 @@ class __$$CompleteRegistrationOptionsWithOIDCImplCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       provider: null == provider
           ? _value.provider
@@ -875,7 +885,7 @@ class _$CompleteRegistrationOptionsWithOIDCImpl
   const _$CompleteRegistrationOptionsWithOIDCImpl(
       {required this.flowId,
       required this.username,
-      required this.name,
+      required this.displayName,
       required this.provider,
       required this.idToken});
 
@@ -884,7 +894,7 @@ class _$CompleteRegistrationOptionsWithOIDCImpl
   @override
   final String username;
   @override
-  final String name;
+  final String displayName;
   @override
   final String provider;
   @override
@@ -892,7 +902,7 @@ class _$CompleteRegistrationOptionsWithOIDCImpl
 
   @override
   String toString() {
-    return 'CompleteRegistrationOptions.withOIDC(flowId: $flowId, username: $username, name: $name, provider: $provider, idToken: $idToken)';
+    return 'CompleteRegistrationOptions.withOIDC(flowId: $flowId, username: $username, displayName: $displayName, provider: $provider, idToken: $idToken)';
   }
 
   @override
@@ -903,15 +913,16 @@ class _$CompleteRegistrationOptionsWithOIDCImpl
             (identical(other.flowId, flowId) || other.flowId == flowId) &&
             (identical(other.username, username) ||
                 other.username == username) &&
-            (identical(other.name, name) || other.name == name) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
             (identical(other.idToken, idToken) || other.idToken == idToken));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, flowId, username, name, provider, idToken);
+  int get hashCode => Object.hash(
+      runtimeType, flowId, username, displayName, provider, idToken);
 
   /// Create a copy of CompleteRegistrationOptions
   /// with the given fields replaced by the non-null parameter values.
@@ -926,42 +937,42 @@ class _$CompleteRegistrationOptionsWithOIDCImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String flowId, String username, String name,
-            String email, String code)
+    required TResult Function(String flowId, String username,
+            String displayName, String email, String code)
         withEmailCode,
-    required TResult Function(String flowId, String username, String name,
-            String provider, String idToken)
+    required TResult Function(String flowId, String username,
+            String displayName, String provider, String idToken)
         withOIDC,
   }) {
-    return withOIDC(flowId, username, name, provider, idToken);
+    return withOIDC(flowId, username, displayName, provider, idToken);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String flowId, String username, String name, String email,
-            String code)?
+    TResult? Function(String flowId, String username, String displayName,
+            String email, String code)?
         withEmailCode,
-    TResult? Function(String flowId, String username, String name,
+    TResult? Function(String flowId, String username, String displayName,
             String provider, String idToken)?
         withOIDC,
   }) {
-    return withOIDC?.call(flowId, username, name, provider, idToken);
+    return withOIDC?.call(flowId, username, displayName, provider, idToken);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String flowId, String username, String name, String email,
-            String code)?
+    TResult Function(String flowId, String username, String displayName,
+            String email, String code)?
         withEmailCode,
-    TResult Function(String flowId, String username, String name,
+    TResult Function(String flowId, String username, String displayName,
             String provider, String idToken)?
         withOIDC,
     required TResult orElse(),
   }) {
     if (withOIDC != null) {
-      return withOIDC(flowId, username, name, provider, idToken);
+      return withOIDC(flowId, username, displayName, provider, idToken);
     }
     return orElse();
   }
@@ -1007,7 +1018,7 @@ abstract class CompleteRegistrationOptionsWithOIDC
   const factory CompleteRegistrationOptionsWithOIDC(
           {required final String flowId,
           required final String username,
-          required final String name,
+          required final String displayName,
           required final String provider,
           required final String idToken}) =
       _$CompleteRegistrationOptionsWithOIDCImpl;
@@ -1017,7 +1028,7 @@ abstract class CompleteRegistrationOptionsWithOIDC
   @override
   String get username;
   @override
-  String get name;
+  String get displayName;
   String get provider;
   String get idToken;
 

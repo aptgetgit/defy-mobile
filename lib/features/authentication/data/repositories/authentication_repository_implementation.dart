@@ -42,9 +42,9 @@ class AuthenticationRepository implements IAuthenticationRepository {
   Future<String> initiateRegistration(
       InitiateRegistrationOptions options) async {
     return options.when(
-      withEmailCode: (email, username, name) =>
+      withEmailCode: (email, username, displayName) =>
           _initiateRegistrationWithEmail(),
-      withOIDC: (username, name) => _initiateRegistrationWithOIDC(),
+      withOIDC: (username, displayName) => _initiateRegistrationWithOIDC(),
     );
   }
 
@@ -64,11 +64,11 @@ class AuthenticationRepository implements IAuthenticationRepository {
   Future<SessionEntity> completeRegistration(
       CompleteRegistrationOptions options) async {
     return options.when(
-      withEmailCode: (flowId, username, name, email, code) =>
-          _completeRegistrationWithEmail(flowId, username, name, email, code),
-      withOIDC: (flowId, username, name, provider, idToken) =>
+      withEmailCode: (flowId, username, displayName, email, code) =>
+          _completeRegistrationWithEmail(flowId, username, displayName, email, code),
+      withOIDC: (flowId, username, displayName, provider, idToken) =>
           _completeRegistrationWithOIDC(
-              flowId, username, name, provider, idToken),
+              flowId, username, displayName, provider, idToken),
     );
   }
 
@@ -187,9 +187,9 @@ class AuthenticationRepository implements IAuthenticationRepository {
   }
 
   Future<SessionEntity> _completeRegistrationWithEmail(String flowId,
-      String username, String name, String email, String code) async {
+      String username, String displayName, String email, String code) async {
     final traits =
-        JsonObject({"email": email, "username": username, "name": name});
+        JsonObject({"email": email, "username": username, "displayName": displayName});
     final response = await _kratosClient.updateNativeRegistrationFlow(
       KratosUpdateNativeRegistrationFlowOptions.withCode(
           flowId: flowId, traits: traits, code: code),
@@ -206,12 +206,12 @@ class AuthenticationRepository implements IAuthenticationRepository {
   }
 
   Future<SessionEntity> _completeRegistrationWithOIDC(String flowId,
-      String username, String name, String provider, String idToken) async {
+      String username, String displayName, String provider, String idToken) async {
     final idTokenNonce = Jwt.parseJwt(idToken)['nonce'];
     if (idTokenNonce == null) {
       throw StateError('Invalid id token');
     }
-    final traits = JsonObject({"username": username, "name": name});
+    final traits = JsonObject({"username": username, "displayName": displayName});
     final response = await _kratosClient.updateNativeRegistrationFlow(
       KratosUpdateNativeRegistrationFlowOptions.withOIDC(
           flowId: flowId,

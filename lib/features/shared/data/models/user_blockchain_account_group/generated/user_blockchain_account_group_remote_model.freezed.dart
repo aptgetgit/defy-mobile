@@ -24,10 +24,10 @@ mixin _$UserBlockchainAccountGroupRemoteModel {
   String get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
-  @JsonKey(name: 'animatedIconUrl')
-  String get animatedIconUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'backgroundColor')
-  String get backgroundColor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon')
+  String get icon => throw _privateConstructorUsedError;
+  @JsonKey(name: 'color')
+  String get color => throw _privateConstructorUsedError;
 
   /// Serializes this UserBlockchainAccountGroupRemoteModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,8 +51,8 @@ abstract class $UserBlockchainAccountGroupRemoteModelCopyWith<$Res> {
   $Res call(
       {String id,
       @JsonKey(name: 'name') String name,
-      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') String backgroundColor});
+      @JsonKey(name: 'icon') String icon,
+      @JsonKey(name: 'color') String color});
 }
 
 /// @nodoc
@@ -73,8 +73,8 @@ class _$UserBlockchainAccountGroupRemoteModelCopyWithImpl<$Res,
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? animatedIconUrl = null,
-    Object? backgroundColor = null,
+    Object? icon = null,
+    Object? color = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -85,13 +85,13 @@ class _$UserBlockchainAccountGroupRemoteModelCopyWithImpl<$Res,
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      animatedIconUrl: null == animatedIconUrl
-          ? _value.animatedIconUrl
-          : animatedIconUrl // ignore: cast_nullable_to_non_nullable
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -109,8 +109,8 @@ abstract class _$$UserBlockchainAccountGroupRemoteModelImplCopyWith<$Res>
   $Res call(
       {String id,
       @JsonKey(name: 'name') String name,
-      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') String backgroundColor});
+      @JsonKey(name: 'icon') String icon,
+      @JsonKey(name: 'color') String color});
 }
 
 /// @nodoc
@@ -130,8 +130,8 @@ class __$$UserBlockchainAccountGroupRemoteModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? animatedIconUrl = null,
-    Object? backgroundColor = null,
+    Object? icon = null,
+    Object? color = null,
   }) {
     return _then(_$UserBlockchainAccountGroupRemoteModelImpl(
       id: null == id
@@ -142,13 +142,13 @@ class __$$UserBlockchainAccountGroupRemoteModelImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      animatedIconUrl: null == animatedIconUrl
-          ? _value.animatedIconUrl
-          : animatedIconUrl // ignore: cast_nullable_to_non_nullable
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -161,8 +161,8 @@ class _$UserBlockchainAccountGroupRemoteModelImpl
   const _$UserBlockchainAccountGroupRemoteModelImpl(
       {required this.id,
       @JsonKey(name: 'name') required this.name,
-      @JsonKey(name: 'animatedIconUrl') required this.animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') required this.backgroundColor})
+      @JsonKey(name: 'icon') required this.icon,
+      @JsonKey(name: 'color') required this.color})
       : super._();
 
   factory _$UserBlockchainAccountGroupRemoteModelImpl.fromJson(
@@ -175,15 +175,15 @@ class _$UserBlockchainAccountGroupRemoteModelImpl
   @JsonKey(name: 'name')
   final String name;
   @override
-  @JsonKey(name: 'animatedIconUrl')
-  final String animatedIconUrl;
+  @JsonKey(name: 'icon')
+  final String icon;
   @override
-  @JsonKey(name: 'backgroundColor')
-  final String backgroundColor;
+  @JsonKey(name: 'color')
+  final String color;
 
   @override
   String toString() {
-    return 'UserBlockchainAccountGroupRemoteModel(id: $id, name: $name, animatedIconUrl: $animatedIconUrl, backgroundColor: $backgroundColor)';
+    return 'UserBlockchainAccountGroupRemoteModel(id: $id, name: $name, icon: $icon, color: $color)';
   }
 
   @override
@@ -193,16 +193,13 @@ class _$UserBlockchainAccountGroupRemoteModelImpl
             other is _$UserBlockchainAccountGroupRemoteModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.animatedIconUrl, animatedIconUrl) ||
-                other.animatedIconUrl == animatedIconUrl) &&
-            (identical(other.backgroundColor, backgroundColor) ||
-                other.backgroundColor == backgroundColor));
+            (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.color, color) || other.color == color));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, animatedIconUrl, backgroundColor);
+  int get hashCode => Object.hash(runtimeType, id, name, icon, color);
 
   /// Create a copy of UserBlockchainAccountGroupRemoteModel
   /// with the given fields replaced by the non-null parameter values.
@@ -225,12 +222,11 @@ class _$UserBlockchainAccountGroupRemoteModelImpl
 abstract class _UserBlockchainAccountGroupRemoteModel
     extends UserBlockchainAccountGroupRemoteModel {
   const factory _UserBlockchainAccountGroupRemoteModel(
-      {required final String id,
-      @JsonKey(name: 'name') required final String name,
-      @JsonKey(name: 'animatedIconUrl') required final String animatedIconUrl,
-      @JsonKey(name: 'backgroundColor')
-      required final String
-          backgroundColor}) = _$UserBlockchainAccountGroupRemoteModelImpl;
+          {required final String id,
+          @JsonKey(name: 'name') required final String name,
+          @JsonKey(name: 'icon') required final String icon,
+          @JsonKey(name: 'color') required final String color}) =
+      _$UserBlockchainAccountGroupRemoteModelImpl;
   const _UserBlockchainAccountGroupRemoteModel._() : super._();
 
   factory _UserBlockchainAccountGroupRemoteModel.fromJson(
@@ -243,11 +239,11 @@ abstract class _UserBlockchainAccountGroupRemoteModel
   @JsonKey(name: 'name')
   String get name;
   @override
-  @JsonKey(name: 'animatedIconUrl')
-  String get animatedIconUrl;
+  @JsonKey(name: 'icon')
+  String get icon;
   @override
-  @JsonKey(name: 'backgroundColor')
-  String get backgroundColor;
+  @JsonKey(name: 'color')
+  String get color;
 
   /// Create a copy of UserBlockchainAccountGroupRemoteModel
   /// with the given fields replaced by the non-null parameter values.
@@ -268,10 +264,10 @@ CreateUserBlockchainAccountGroupRemoteRequest
 mixin _$CreateUserBlockchainAccountGroupRemoteRequest {
   @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
-  @JsonKey(name: 'animatedIconUrl')
-  String get animatedIconUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'backgroundColor')
-  String get backgroundColor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon')
+  String get icon => throw _privateConstructorUsedError;
+  @JsonKey(name: 'color')
+  String get color => throw _privateConstructorUsedError;
 
   /// Serializes this CreateUserBlockchainAccountGroupRemoteRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -294,8 +290,8 @@ abstract class $CreateUserBlockchainAccountGroupRemoteRequestCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'name') String name,
-      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') String backgroundColor});
+      @JsonKey(name: 'icon') String icon,
+      @JsonKey(name: 'color') String color});
 }
 
 /// @nodoc
@@ -316,21 +312,21 @@ class _$CreateUserBlockchainAccountGroupRemoteRequestCopyWithImpl<$Res,
   @override
   $Res call({
     Object? name = null,
-    Object? animatedIconUrl = null,
-    Object? backgroundColor = null,
+    Object? icon = null,
+    Object? color = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      animatedIconUrl: null == animatedIconUrl
-          ? _value.animatedIconUrl
-          : animatedIconUrl // ignore: cast_nullable_to_non_nullable
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -349,8 +345,8 @@ abstract class _$$CreateUserBlockchainAccountGroupRemoteRequestImplCopyWith<
   @useResult
   $Res call(
       {@JsonKey(name: 'name') String name,
-      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') String backgroundColor});
+      @JsonKey(name: 'icon') String icon,
+      @JsonKey(name: 'color') String color});
 }
 
 /// @nodoc
@@ -370,21 +366,21 @@ class __$$CreateUserBlockchainAccountGroupRemoteRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = null,
-    Object? animatedIconUrl = null,
-    Object? backgroundColor = null,
+    Object? icon = null,
+    Object? color = null,
   }) {
     return _then(_$CreateUserBlockchainAccountGroupRemoteRequestImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      animatedIconUrl: null == animatedIconUrl
-          ? _value.animatedIconUrl
-          : animatedIconUrl // ignore: cast_nullable_to_non_nullable
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -396,8 +392,8 @@ class _$CreateUserBlockchainAccountGroupRemoteRequestImpl
     implements _CreateUserBlockchainAccountGroupRemoteRequest {
   const _$CreateUserBlockchainAccountGroupRemoteRequestImpl(
       {@JsonKey(name: 'name') required this.name,
-      @JsonKey(name: 'animatedIconUrl') required this.animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') required this.backgroundColor});
+      @JsonKey(name: 'icon') required this.icon,
+      @JsonKey(name: 'color') required this.color});
 
   factory _$CreateUserBlockchainAccountGroupRemoteRequestImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -407,15 +403,15 @@ class _$CreateUserBlockchainAccountGroupRemoteRequestImpl
   @JsonKey(name: 'name')
   final String name;
   @override
-  @JsonKey(name: 'animatedIconUrl')
-  final String animatedIconUrl;
+  @JsonKey(name: 'icon')
+  final String icon;
   @override
-  @JsonKey(name: 'backgroundColor')
-  final String backgroundColor;
+  @JsonKey(name: 'color')
+  final String color;
 
   @override
   String toString() {
-    return 'CreateUserBlockchainAccountGroupRemoteRequest(name: $name, animatedIconUrl: $animatedIconUrl, backgroundColor: $backgroundColor)';
+    return 'CreateUserBlockchainAccountGroupRemoteRequest(name: $name, icon: $icon, color: $color)';
   }
 
   @override
@@ -424,16 +420,13 @@ class _$CreateUserBlockchainAccountGroupRemoteRequestImpl
         (other.runtimeType == runtimeType &&
             other is _$CreateUserBlockchainAccountGroupRemoteRequestImpl &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.animatedIconUrl, animatedIconUrl) ||
-                other.animatedIconUrl == animatedIconUrl) &&
-            (identical(other.backgroundColor, backgroundColor) ||
-                other.backgroundColor == backgroundColor));
+            (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.color, color) || other.color == color));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, animatedIconUrl, backgroundColor);
+  int get hashCode => Object.hash(runtimeType, name, icon, color);
 
   /// Create a copy of CreateUserBlockchainAccountGroupRemoteRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -459,9 +452,8 @@ abstract class _CreateUserBlockchainAccountGroupRemoteRequest
     implements CreateUserBlockchainAccountGroupRemoteRequest {
   const factory _CreateUserBlockchainAccountGroupRemoteRequest(
           {@JsonKey(name: 'name') required final String name,
-          @JsonKey(name: 'animatedIconUrl') required final String animatedIconUrl,
-          @JsonKey(name: 'backgroundColor')
-          required final String backgroundColor}) =
+          @JsonKey(name: 'icon') required final String icon,
+          @JsonKey(name: 'color') required final String color}) =
       _$CreateUserBlockchainAccountGroupRemoteRequestImpl;
 
   factory _CreateUserBlockchainAccountGroupRemoteRequest.fromJson(
@@ -472,11 +464,11 @@ abstract class _CreateUserBlockchainAccountGroupRemoteRequest
   @JsonKey(name: 'name')
   String get name;
   @override
-  @JsonKey(name: 'animatedIconUrl')
-  String get animatedIconUrl;
+  @JsonKey(name: 'icon')
+  String get icon;
   @override
-  @JsonKey(name: 'backgroundColor')
-  String get backgroundColor;
+  @JsonKey(name: 'color')
+  String get color;
 
   /// Create a copy of CreateUserBlockchainAccountGroupRemoteRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -497,10 +489,10 @@ UpdateUserBlockchainAccountGroupRemoteRequest
 mixin _$UpdateUserBlockchainAccountGroupRemoteRequest {
   @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
-  @JsonKey(name: 'animatedIconUrl')
-  String get animatedIconUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'backgroundColor')
-  String get backgroundColor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon')
+  String get icon => throw _privateConstructorUsedError;
+  @JsonKey(name: 'color')
+  String get color => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateUserBlockchainAccountGroupRemoteRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -523,8 +515,8 @@ abstract class $UpdateUserBlockchainAccountGroupRemoteRequestCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'name') String name,
-      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') String backgroundColor});
+      @JsonKey(name: 'icon') String icon,
+      @JsonKey(name: 'color') String color});
 }
 
 /// @nodoc
@@ -545,21 +537,21 @@ class _$UpdateUserBlockchainAccountGroupRemoteRequestCopyWithImpl<$Res,
   @override
   $Res call({
     Object? name = null,
-    Object? animatedIconUrl = null,
-    Object? backgroundColor = null,
+    Object? icon = null,
+    Object? color = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      animatedIconUrl: null == animatedIconUrl
-          ? _value.animatedIconUrl
-          : animatedIconUrl // ignore: cast_nullable_to_non_nullable
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -578,8 +570,8 @@ abstract class _$$UpdateUserBlockchainAccountGroupRemoteRequestImplCopyWith<
   @useResult
   $Res call(
       {@JsonKey(name: 'name') String name,
-      @JsonKey(name: 'animatedIconUrl') String animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') String backgroundColor});
+      @JsonKey(name: 'icon') String icon,
+      @JsonKey(name: 'color') String color});
 }
 
 /// @nodoc
@@ -599,21 +591,21 @@ class __$$UpdateUserBlockchainAccountGroupRemoteRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = null,
-    Object? animatedIconUrl = null,
-    Object? backgroundColor = null,
+    Object? icon = null,
+    Object? color = null,
   }) {
     return _then(_$UpdateUserBlockchainAccountGroupRemoteRequestImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      animatedIconUrl: null == animatedIconUrl
-          ? _value.animatedIconUrl
-          : animatedIconUrl // ignore: cast_nullable_to_non_nullable
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -625,8 +617,8 @@ class _$UpdateUserBlockchainAccountGroupRemoteRequestImpl
     implements _UpdateUserBlockchainAccountGroupRemoteRequest {
   const _$UpdateUserBlockchainAccountGroupRemoteRequestImpl(
       {@JsonKey(name: 'name') required this.name,
-      @JsonKey(name: 'animatedIconUrl') required this.animatedIconUrl,
-      @JsonKey(name: 'backgroundColor') required this.backgroundColor});
+      @JsonKey(name: 'icon') required this.icon,
+      @JsonKey(name: 'color') required this.color});
 
   factory _$UpdateUserBlockchainAccountGroupRemoteRequestImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -636,15 +628,15 @@ class _$UpdateUserBlockchainAccountGroupRemoteRequestImpl
   @JsonKey(name: 'name')
   final String name;
   @override
-  @JsonKey(name: 'animatedIconUrl')
-  final String animatedIconUrl;
+  @JsonKey(name: 'icon')
+  final String icon;
   @override
-  @JsonKey(name: 'backgroundColor')
-  final String backgroundColor;
+  @JsonKey(name: 'color')
+  final String color;
 
   @override
   String toString() {
-    return 'UpdateUserBlockchainAccountGroupRemoteRequest(name: $name, animatedIconUrl: $animatedIconUrl, backgroundColor: $backgroundColor)';
+    return 'UpdateUserBlockchainAccountGroupRemoteRequest(name: $name, icon: $icon, color: $color)';
   }
 
   @override
@@ -653,16 +645,13 @@ class _$UpdateUserBlockchainAccountGroupRemoteRequestImpl
         (other.runtimeType == runtimeType &&
             other is _$UpdateUserBlockchainAccountGroupRemoteRequestImpl &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.animatedIconUrl, animatedIconUrl) ||
-                other.animatedIconUrl == animatedIconUrl) &&
-            (identical(other.backgroundColor, backgroundColor) ||
-                other.backgroundColor == backgroundColor));
+            (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.color, color) || other.color == color));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, animatedIconUrl, backgroundColor);
+  int get hashCode => Object.hash(runtimeType, name, icon, color);
 
   /// Create a copy of UpdateUserBlockchainAccountGroupRemoteRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -688,9 +677,8 @@ abstract class _UpdateUserBlockchainAccountGroupRemoteRequest
     implements UpdateUserBlockchainAccountGroupRemoteRequest {
   const factory _UpdateUserBlockchainAccountGroupRemoteRequest(
           {@JsonKey(name: 'name') required final String name,
-          @JsonKey(name: 'animatedIconUrl') required final String animatedIconUrl,
-          @JsonKey(name: 'backgroundColor')
-          required final String backgroundColor}) =
+          @JsonKey(name: 'icon') required final String icon,
+          @JsonKey(name: 'color') required final String color}) =
       _$UpdateUserBlockchainAccountGroupRemoteRequestImpl;
 
   factory _UpdateUserBlockchainAccountGroupRemoteRequest.fromJson(
@@ -701,11 +689,11 @@ abstract class _UpdateUserBlockchainAccountGroupRemoteRequest
   @JsonKey(name: 'name')
   String get name;
   @override
-  @JsonKey(name: 'animatedIconUrl')
-  String get animatedIconUrl;
+  @JsonKey(name: 'icon')
+  String get icon;
   @override
-  @JsonKey(name: 'backgroundColor')
-  String get backgroundColor;
+  @JsonKey(name: 'color')
+  String get color;
 
   /// Create a copy of UpdateUserBlockchainAccountGroupRemoteRequest
   /// with the given fields replaced by the non-null parameter values.

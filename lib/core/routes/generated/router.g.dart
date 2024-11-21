@@ -20,6 +20,7 @@ List<RouteBase> get $appRoutes => [
       $exploreMarketScreenRoute,
       $exploreNFTScreenRoute,
       $exploreDappsScreenRoute,
+      $exploreCoinsScreenRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -310,6 +311,29 @@ extension $ExploreDappsScreenRouteExtension on ExploreDappsScreenRoute {
 
   String get location => GoRouteData.$location(
         '/explore-dapps',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreCoinsScreenRoute => GoRouteData.$route(
+      path: '/explore-coins',
+      factory: $ExploreCoinsScreenRouteExtension._fromState,
+    );
+
+extension $ExploreCoinsScreenRouteExtension on ExploreCoinsScreenRoute {
+  static ExploreCoinsScreenRoute _fromState(GoRouterState state) =>
+      const ExploreCoinsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-coins',
       );
 
   void go(BuildContext context) => context.go(location);

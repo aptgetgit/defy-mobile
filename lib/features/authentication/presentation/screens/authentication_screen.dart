@@ -1,3 +1,4 @@
+import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/providers/network_connectivity_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -10,6 +11,7 @@ import 'package:defy/features/authentication/domain/repositories/authentication_
 import 'package:defy/features/authentication/presentation/providers/authentication_flow_manager.dart';
 import 'package:defy/core/providers/credential_manager_provider.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key});
@@ -20,19 +22,30 @@ class AuthenticationScreen extends ConsumerStatefulWidget {
 
 class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
   Future<void> googleLogin() async {
+    print('--------sign in-------');
     final notifier = ref.read(authenticationNotifierProvider.notifier);
-    final credentialManager = ref.read(credentialManagerServiceProvider);
+    // final credentialManager = ref.read(credentialManagerServiceProvider);
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
-
+ 
     try {
-      final googleIdTokenCredential = await credentialManager.saveGoogleCredential();
+      // final googleIdTokenCredential = await credentialManager.saveGoogleCredential();
 
-      if (googleIdTokenCredential != null) {
+      final aCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+        ],
+        nonce : "wuhfbnrehuwe",
+      );
+      AppLogger.error(aCredential);
+      final idToken = aCredential.identityToken;
+      AppLogger.error(idToken);
+
+      if (aCredential != null) {
         await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
 
         flowManager.updateLoginFlowWithOIDC(
-          provider: 'google',
-          idToken: googleIdTokenCredential.idToken,
+          provider: 'apple',
+          idToken: idToken!,
         );
 
         await notifier.completeLogin();
@@ -41,6 +54,7 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
         _showErrorSnackBar('Google Sign-In failed');
       }
     } catch (e) {
+      print(e.toString());
       _showErrorSnackBar('Error during Google Sign-In: ${e.toString()}');
     }
   }

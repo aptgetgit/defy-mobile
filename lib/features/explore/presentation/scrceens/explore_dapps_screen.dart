@@ -1,6 +1,8 @@
 import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
+import 'package:defy/core/extensions/button_size_extension.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
+import 'package:defy/features/shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -115,6 +117,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
         return GestureDetector(
           onTap: () {
             showModalBottomSheet(
+              isScrollControlled: true,
                 context: context, builder: (ctx) => _buildDappModalSheet(ctx));
           },
           child: Container(
@@ -123,6 +126,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
               children: [
                 dapps[index].image(width: width * .16),
                 Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
@@ -202,9 +206,10 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
     final width = context.screenWidth;
     final height = context.screenHeight;
     return Container(
-        height: height * .5,
+       padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             //header
             Row(
@@ -213,6 +218,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
                 Assets.icons.uniswapDexLogo.image(width: width * .16),
                 const Gap(3),
                 Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -225,7 +231,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
                     Row(
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: 2),
+                          padding: EdgeInsets.symmetric(vertical: 2,horizontal: 8),
                           margin: EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
                             color: AppColors.greyVeryLight2,
@@ -261,7 +267,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: () => Navigator.of(context).pop,
+                  onPressed: () => Navigator.of(context).pop(),
                   icon: Icon(
                     PhosphorIconsBold.x,
                     size: 26,
@@ -283,6 +289,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
                 ),
               ),
             ),
+            const Gap(26),
 
             //network
             Row(
@@ -331,16 +338,18 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
               ],
             ),
 
+            const Gap(12),
+
             //socials
             Row(
               children: [
                 Icon(
-                  PhosphorIconsBold.shareNetwork,
+                  PhosphorIconsBold.cellSignalHigh,
                   color: AppColors.greyLight,
                 ),
                 const Gap(12),
                 Text(
-                  'Network',
+                  'Socials',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -351,17 +360,72 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 2),
-                      margin: EdgeInsets.symmetric(horizontal: 3),
+                      padding: EdgeInsets.all(6),
+                      margin: EdgeInsets.symmetric(horizontal: 4),
                       decoration: BoxDecoration(
                         color: AppColors.greyVeryLight2,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(PhosphorIconsBold.shareNetwork),
+                      child: Icon(PhosphorIconsBold.globe,size: 22,color: AppColors.greyLight,),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(6),
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.greyVeryLight2,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(PhosphorIconsBold.twitterLogo,size: 22,color: AppColors.greyLight,),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(6),
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.greyVeryLight2,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(PhosphorIconsBold.discordLogo,size: 22,color: AppColors.greyLight,),
                     ),
                   ],
                 ),
               ],
+            ),
+
+            const Gap(28),
+
+            //skip page descrition
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Transform.scale(
+                  scale: 1.2,
+                  child: Checkbox(
+                    value: false, 
+                    onChanged: (v){},
+            side: const BorderSide(
+              color: AppColors.greyMedium,
+              width: 2,
+            ),
+                    ),),
+                Flexible(
+                  child: Text(
+                    'Skip this page next time and go directly to Uniswap',
+                    style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.greyDark,
+                    ),
+                    ),
+                ),
+              ],
+            ),
+            const Gap(12),
+
+            //launch button
+            ActiveButton(
+              label: 'Launch App',
+              onTap: (){},
+              isDarkMode: false,
             ),
           ],
         ),

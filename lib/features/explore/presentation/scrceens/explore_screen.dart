@@ -188,25 +188,30 @@ class _ExploreScreenState extends State<ExploreScreen> {
     ];
     return Consumer(builder: (ctx, ref, child) {
       final index = ref.watch(coinsAnimationIndexProvider);
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            child: Image.network(
-              coinsLogos[index],
-              width: width * .15,
+      return GestureDetector(
+        onTap : () {
+          ExploreCoinsScreenRoute().push(context);
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              child: Image.network(
+                coinsLogos[index],
+                width: width * .15,
+              ),
             ),
-          ),
-          const Gap(6),
-          Text('Coins',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.greyLight,
-              )),
-        ],
+            const Gap(6),
+            Text('Coins',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.greyLight,
+                )),
+          ],
+        ),
       );
     });
   }

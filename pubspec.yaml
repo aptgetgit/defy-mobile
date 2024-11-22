@@ -75,6 +75,7 @@ dependencies:
   connectivity_plus: ^6.1.0
   http: ^1.2.2
   rxdart: ^0.28.0
+  google_sign_in_ios: ^5.7.8
 
 dev_dependencies:
   flutter_test:

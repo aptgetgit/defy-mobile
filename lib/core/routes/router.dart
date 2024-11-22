@@ -4,11 +4,16 @@ import 'package:defy/features/authentication/presentation/providers/authenticati
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
 import 'package:defy/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/create_token_screen.dart';
 import 'package:defy/features/explore/presentation/scrceens/explore_coins_screen.dart';
 import 'package:defy/features/explore/presentation/scrceens/explore_dapps_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_leaderboard.dart';
 import 'package:defy/features/explore/presentation/scrceens/explore_market_screen.dart';
 import 'package:defy/features/explore/presentation/scrceens/explore_nft_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_pump_fun_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_pump_fun_token_transactions_screen.dart';
 import 'package:defy/features/explore/presentation/scrceens/explore_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/pump_fun_token_preview_screen.dart';
 import 'package:defy/features/explore/presentation/scrceens/search_screen.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
 import 'package:defy/features/splash/presentation/screens/splash_screen.dart';

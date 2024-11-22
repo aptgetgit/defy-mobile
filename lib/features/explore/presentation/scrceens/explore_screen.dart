@@ -283,25 +283,28 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Widget _buildRankings(BuildContext context) {
     final width = context.screenWidth;
-    return Transform.rotate(
-      angle: math.pi / 22,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              Assets.icons.exploreRankingsBanner.image(
-                width: width * .78,
-              ),
-            ],
-          ),
-          Text('Rankings',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.greyLight,
-              )),
-        ],
+    return GestureDetector(
+      onTap : () => ExploreLeaderboardScreenRoute().push(context),
+      child: Transform.rotate(
+        angle: math.pi / 22,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              children: [
+                Assets.icons.exploreRankingsBanner.image(
+                  width: width * .78,
+                ),
+              ],
+            ),
+            Text('Rankings',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.greyLight,
+                )),
+          ],
+        ),
       ),
     );
   }

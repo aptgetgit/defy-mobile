@@ -145,7 +145,15 @@ flutter:
   fonts:
     - family: SFCompactRounded
       fonts:
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Black.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Bold.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Semibold.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Medium.otf
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Regular.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Light.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Thin.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Ultralight.otf
+
     - family: Nunito
       fonts:
         - asset: assets/fonts/nunito/Nunito-Regular.ttf

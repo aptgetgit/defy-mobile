@@ -77,3 +77,68 @@ class ExploreCoinsScreenRoute extends GoRouteData {
     builder: (context, state) => ExploreCoinsScreen(),
   );
 }
+
+@TypedGoRoute<ExplorePumpFunScreenRoute>(path: '/explore-pump-fun')
+class ExplorePumpFunScreenRoute extends GoRouteData {
+  const ExplorePumpFunScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => ExplorePumpFunScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => ExplorePumpFunScreen(),
+  );
+}
+
+@TypedGoRoute<ExplorePumpFunTokenTransactionsScreenRoute>(path: '/explore-pump-fun-transactions')
+class ExplorePumpFunTokenTransactionsScreenRoute extends GoRouteData {
+  const ExplorePumpFunTokenTransactionsScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => ExplorePumpFunTokenTransactionsScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => ExplorePumpFunTokenTransactionsScreen(),
+  );
+}
+
+@TypedGoRoute<CreateTokenScreenRoute>(path: '/explore-create-token')
+class CreateTokenScreenRoute extends GoRouteData {
+  const CreateTokenScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => CreateTokenScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => CreateTokenScreen(),
+  );
+}
+
+@TypedGoRoute<PumpFunTokenPreviewScreenRoute>(path: '/explore-pump-fun-token-preview')
+class PumpFunTokenPreviewScreenRoute extends GoRouteData {
+  const PumpFunTokenPreviewScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => PumpFunTokenPreviewScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => PumpFunTokenPreviewScreen(),
+  );
+}
+
+@TypedGoRoute<ExploreLeaderboardScreenRoute>(path: '/explore-leaderboard')
+class ExploreLeaderboardScreenRoute extends GoRouteData {
+  const ExploreLeaderboardScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => ExploreLeaderboardScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => ExploreLeaderboardScreen(),
+  );
+}

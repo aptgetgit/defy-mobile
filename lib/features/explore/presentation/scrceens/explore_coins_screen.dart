@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
+import 'package:defy/core/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -80,7 +81,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> {
               _buildTopBanner(context),
 
               //pump.uptos.fun
-              _buildCategoryHeader('pump.uptos.fun', () {}),
+              _buildCategoryHeader('pump.uptos.fun', () => ExplorePumpFunScreenRoute().push(context)),
               _buildPumpFunTile(context),
 
               //mcap coins

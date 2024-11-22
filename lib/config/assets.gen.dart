@@ -23,6 +23,10 @@ class $AssetsIconsGen {
   AssetGenImage get appLogoLight =>
       const AssetGenImage('assets/icons/app-logo-light.png');
 
+  /// File path: assets/icons/explore-leaderboard-podium.png
+  AssetGenImage get exploreLeaderboardPodium =>
+      const AssetGenImage('assets/icons/explore-leaderboard-podium.png');
+
   /// File path: assets/icons/explore-nft-example.png
   AssetGenImage get exploreNftExample =>
       const AssetGenImage('assets/icons/explore-nft-example.png');
@@ -55,6 +59,7 @@ class $AssetsIconsGen {
         appIcon,
         appLogoDark,
         appLogoLight,
+        exploreLeaderboardPodium,
         exploreNftExample,
         exploreRankingsBanner,
         google,
@@ -72,16 +77,9 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  });
+  const AssetGenImage(this._assetName);
 
   final String _assetName;
-
-  final Size? size;
-  final Set<String> flavors;
 
   Image image({
     Key? key,

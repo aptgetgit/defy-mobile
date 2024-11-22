@@ -21,6 +21,11 @@ List<RouteBase> get $appRoutes => [
       $exploreNFTScreenRoute,
       $exploreDappsScreenRoute,
       $exploreCoinsScreenRoute,
+      $explorePumpFunScreenRoute,
+      $explorePumpFunTokenTransactionsScreenRoute,
+      $createTokenScreenRoute,
+      $pumpFunTokenPreviewScreenRoute,
+      $exploreLeaderboardScreenRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -334,6 +339,125 @@ extension $ExploreCoinsScreenRouteExtension on ExploreCoinsScreenRoute {
 
   String get location => GoRouteData.$location(
         '/explore-coins',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $explorePumpFunScreenRoute => GoRouteData.$route(
+      path: '/explore-pump-fun',
+      factory: $ExplorePumpFunScreenRouteExtension._fromState,
+    );
+
+extension $ExplorePumpFunScreenRouteExtension on ExplorePumpFunScreenRoute {
+  static ExplorePumpFunScreenRoute _fromState(GoRouterState state) =>
+      const ExplorePumpFunScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-pump-fun',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $explorePumpFunTokenTransactionsScreenRoute => GoRouteData.$route(
+      path: '/explore-pump-fun-transactions',
+      factory: $ExplorePumpFunTokenTransactionsScreenRouteExtension._fromState,
+    );
+
+extension $ExplorePumpFunTokenTransactionsScreenRouteExtension
+    on ExplorePumpFunTokenTransactionsScreenRoute {
+  static ExplorePumpFunTokenTransactionsScreenRoute _fromState(
+          GoRouterState state) =>
+      const ExplorePumpFunTokenTransactionsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-pump-fun-transactions',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $createTokenScreenRoute => GoRouteData.$route(
+      path: '/explore-create-token',
+      factory: $CreateTokenScreenRouteExtension._fromState,
+    );
+
+extension $CreateTokenScreenRouteExtension on CreateTokenScreenRoute {
+  static CreateTokenScreenRoute _fromState(GoRouterState state) =>
+      const CreateTokenScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-create-token',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $pumpFunTokenPreviewScreenRoute => GoRouteData.$route(
+      path: '/explore-pump-fun-token-preview',
+      factory: $PumpFunTokenPreviewScreenRouteExtension._fromState,
+    );
+
+extension $PumpFunTokenPreviewScreenRouteExtension
+    on PumpFunTokenPreviewScreenRoute {
+  static PumpFunTokenPreviewScreenRoute _fromState(GoRouterState state) =>
+      const PumpFunTokenPreviewScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-pump-fun-token-preview',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreLeaderboardScreenRoute => GoRouteData.$route(
+      path: '/explore-leaderboard',
+      factory: $ExploreLeaderboardScreenRouteExtension._fromState,
+    );
+
+extension $ExploreLeaderboardScreenRouteExtension
+    on ExploreLeaderboardScreenRoute {
+  static ExploreLeaderboardScreenRoute _fromState(GoRouterState state) =>
+      const ExploreLeaderboardScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-leaderboard',
       );
 
   void go(BuildContext context) => context.go(location);

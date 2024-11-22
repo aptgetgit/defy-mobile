@@ -11,6 +11,7 @@ import 'package:defy/features/authentication/domain/repositories/authentication_
 import 'package:defy/features/authentication/presentation/providers/authentication_flow_manager.dart';
 import 'package:defy/core/providers/credential_manager_provider.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key});
@@ -38,7 +39,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
     final isOnline = ref.read(isOnlineProvider).valueOrNull ?? false;
 
-    // Don't attempt auto sign-in if offline
     if (!isOnline) return;
 
     setState(() => _isAutoSigningIn = true);
@@ -88,7 +88,36 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     }
   }
 
-   void _showErrorSnackBar(String message) {
+  Future<void> appleLogin() async {
+    final notifier = ref.read(authenticationNotifierProvider.notifier);
+    final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
+
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email
+        ],
+      );
+
+      if (credential.identityToken != null) {
+        await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
+
+        flowManager.updateLoginFlowWithOIDC(
+          provider: 'apple',
+          idToken: credential.identityToken!,
+        );
+
+        await notifier.completeLogin();
+        HomeRoute().replace(context);
+      } else {
+        _showErrorSnackBar('Apple Sign-In failed');
+      }
+    } catch (e) {
+      _showErrorSnackBar('Error during Apple Sign-In: ${e.toString()}');
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -98,14 +127,15 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     );
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     final (width, height) = (context.screenWidth, context.screenHeight);
     final isDark = context.isDarkMode;
     final authState = ref.watch(authenticationNotifierProvider);
     final isOnline = ref.watch(isOnlineProvider);
     final networkStatus = ref.watch(networkStatusProvider);
-      if (_isAutoSigningIn) {
+
+    if (_isAutoSigningIn) {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(
@@ -118,7 +148,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     return Scaffold(
       body: Column(
         children: [
-          // Network status banner
           networkStatus.when(
             data: (status) => status.when(
               online: () => const SizedBox.shrink(),
@@ -136,7 +165,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
             loading: () => const SizedBox.shrink(),
             error: (_, __) => const SizedBox.shrink(),
           ),
-          // Main content
           Expanded(
             child: Container(
               padding: EdgeInsets.only(
@@ -174,13 +202,40 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                     ),
                   ),
                   const Spacer(),
-                  _GoogleSignInButton(
+                  _SocialSignInButton(
                     onPressed: isOnline.whenOrNull(
                       data: (online) => online && !authState.isLoading 
                           ? googleLogin 
                           : null,
                     ),
                     isLoading: authState.isLoading,
+                    icon: Assets.icons.google.image(width: 32),
+                    label: 'Continue with Google',
+                  ),
+                  Gap(height * 0.02),
+                  FutureBuilder<bool>(
+                    future: SignInWithApple.isAvailable(),
+                    builder: (context, snapshot) {
+                      final isAppleSignInAvailable = snapshot.data ?? false;
+                      
+                      return isAppleSignInAvailable 
+                        ? _SocialSignInButton(
+                            onPressed: isOnline.whenOrNull(
+                              data: (online) => online && !authState.isLoading 
+                                  ? appleLogin 
+                                  : null,
+                            ),
+                            isLoading: authState.isLoading,
+                            icon: const Icon(
+                              Icons.apple,
+                              size: 32,
+                              color: Colors.white,
+                            ),
+                            label: 'Continue with Apple',
+                            isDark: true,
+                          )
+                        : const SizedBox.shrink();
+                    },
                   ),
                   Gap(height * 0.03),
                   const _TermsAndPrivacyText(),
@@ -193,6 +248,85 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     );
   }
 }
+
+class _SocialSignInButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final Widget icon;
+  final String label;
+  final bool isDark;
+
+  const _SocialSignInButton({
+    required this.onPressed,
+    required this.isLoading,
+    required this.icon,
+    required this.label,
+    this.isDark = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDisabled = onPressed == null;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: context.screenHeight * 0.065,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: isDisabled 
+              ? Colors.grey.shade100 
+              : isDark 
+                  ? Colors.black
+                  : Colors.white,
+          side: BorderSide(
+            color: isDisabled 
+                ? Colors.grey.shade300 
+                : isDark
+                    ? Colors.black
+                    : Colors.grey.shade400,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          elevation: 0,
+          shadowColor: Colors.transparent,
+        ),
+        child: isLoading
+            ? SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    isDark ? Colors.white : const Color(0XFF646D80),
+                  ),
+                ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  icon,
+                  const Gap(12),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      color: isDisabled
+                          ? const Color(0XFF646D80).withOpacity(0.5)
+                          : isDark
+                              ? Colors.white
+                              : const Color(0XFF646D80),
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+}
+
 
 class _NetworkStatusBanner extends StatelessWidget {
   final String message;
@@ -232,65 +366,6 @@ class _NetworkStatusBanner extends StatelessWidget {
   }
 }
 
-class _GoogleSignInButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final bool isLoading;
-
-  const _GoogleSignInButton({
-    required this.onPressed,
-    required this.isLoading,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final bool isDisabled = onPressed == null;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      height: context.screenHeight * 0.065,
-      child: OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          backgroundColor: isDisabled ? Colors.grey.shade100 : Colors.white,
-          side: BorderSide(
-            color: isDisabled ? Colors.grey.shade300 : Colors.grey.shade400,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          elevation: 0,
-          shadowColor: Colors.transparent,
-        ),
-        child: isLoading
-            ? const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF646D80)),
-                ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Assets.icons.google.image(width: 32),
-                  const Gap(12),
-                  Text(
-                    'Login with Google',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: isDisabled
-                          ? const Color(0XFF646D80).withOpacity(0.5)
-                          : const Color(0XFF646D80),
-                    ),
-                  ),
-                ],
-              ),
-      ),
-    );
-  }
-}
 
 class _TermsAndPrivacyText extends StatelessWidget {
   const _TermsAndPrivacyText();

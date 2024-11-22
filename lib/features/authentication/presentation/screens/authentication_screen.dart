@@ -1,3 +1,4 @@
+import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/providers/network_connectivity_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -15,10 +16,52 @@ class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key});
 
   @override
-  ConsumerState<AuthenticationScreen> createState() => _AuthenticationScreenState();
+  ConsumerState<AuthenticationScreen> createState() =>
+      _AuthenticationScreenState();
 }
 
 class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
+  bool _isAutoSigningIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final credentialManager = ref.read(credentialManagerServiceProvider);
+    if (credentialManager.isSupportedPlatform) {
+      tryAutoSignIn();
+    }
+  }
+
+  Future<void> tryAutoSignIn() async {
+    final notifier = ref.read(authenticationNotifierProvider.notifier);
+    final credentialManager = ref.read(credentialManagerServiceProvider);
+    final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
+    final isOnline = ref.read(isOnlineProvider).valueOrNull ?? false;
+
+    // Don't attempt auto sign-in if offline
+    if (!isOnline) return;
+
+    setState(() => _isAutoSigningIn = true);
+
+    try {
+      final credentials = await credentialManager.getCredentials();
+      if (credentials.googleIdTokenCredential != null) {
+        await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
+        flowManager.updateLoginFlowWithOIDC(
+            provider: 'google',
+            idToken: credentials.googleIdTokenCredential!.idToken);
+        await notifier.completeLogin();
+        HomeRoute().replace(context);
+      } else {
+        AppLogger.info("Auto Sign In failed");
+      }
+    } catch (e) {
+      print('Auto sign-in failed: ${e.toString()}');
+    } finally {
+      setState(() => _isAutoSigningIn = false);
+    }
+  }
+
   Future<void> googleLogin() async {
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     final credentialManager = ref.read(credentialManagerServiceProvider);
@@ -45,7 +88,7 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     }
   }
 
-  void _showErrorSnackBar(String message) {
+   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -55,13 +98,22 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     );
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     final (width, height) = (context.screenWidth, context.screenHeight);
     final isDark = context.isDarkMode;
     final authState = ref.watch(authenticationNotifierProvider);
     final isOnline = ref.watch(isOnlineProvider);
     final networkStatus = ref.watch(networkStatusProvider);
+      if (_isAutoSigningIn) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF646D80)),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       body: Column(

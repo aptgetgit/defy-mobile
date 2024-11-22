@@ -21,6 +21,12 @@ class CredentialManagerService {
 
   CredentialManagerService(this._credentialManager);
 
+  Future<Credentials> getCredentials() {
+    return _credentialManager.getCredentials(
+        fetchOptions: FetchOptionsAndroid(
+            googleCredential: true, passKey: false, passwordCredential: false));
+  }
+
   /// Saves Google credential
   Future<GoogleIdTokenCredential?> saveGoogleCredential(
       {bool useButtonFlow = false}) {

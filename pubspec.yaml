@@ -52,14 +52,14 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.19.0
-  envied: ^0.5.4+1
+  envied: ^1.0.0
   flutter_animate: ^4.5.0
   phosphor_flutter: ^2.1.0
   gap: ^3.0.1
   flutter_secure_storage: ^9.2.2
   crypto: ^3.0.5
   freezed_annotation: ^2.4.4
-  credential_manager: ^1.0.4+1
+  credential_manager: ^2.0.2
   json_annotation: ^4.9.0
   built_value: ^8.9.2
   one_of: ^1.5.0
@@ -89,11 +89,11 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.0
   riverpod_generator: ^2.4.3
   build_runner: ^2.4.13
-  custom_lint: ^0.6.7
+  custom_lint: ^0.7.0
   riverpod_lint: ^2.3.13
   go_router_builder: ^2.7.1
   flutter_gen_runner: ^5.7.0
-  envied_generator: ^0.5.4+1
+  envied_generator: ^1.0.0
   freezed: ^2.5.7
   json_serializable: ^6.8.0
   objectbox_generator: ^4.0.2

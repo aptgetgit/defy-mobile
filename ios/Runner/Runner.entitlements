@@ -11,5 +11,9 @@
 		<string>webcredentials:avex.id</string>
 		<string>applinks:avex.id</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)id.avex.defy</string>
+	</array>
 </dict>
 </plist>

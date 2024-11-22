@@ -45,5 +45,20 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>GIDClientID</key>
+	<string>618034957136-s94lbfhbbhd376113sbtvce8rgvu2a1f.apps.googleusercontent.com</string>
+	<key>GIDServerClientID</key>
+	<string>618034957136-s9noka3grjt2mhtgrlhhqfjl9lftj1fg.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.618034957136-s94lbfhbbhd376113sbtvce8rgvu2a1f</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

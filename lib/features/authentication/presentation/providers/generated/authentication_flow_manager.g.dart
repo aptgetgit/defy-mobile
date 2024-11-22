@@ -7,7 +7,7 @@ part of '../authentication_flow_manager.dart';
 // **************************************************************************
 
 String _$authenticationFlowManagerHash() =>
-    r'1c47daefc40710ef714eac0ea218a614dfb6f027';
+    r'eca277c641fa9185808f928e0a15f5a359899f2e';
 
 /// See also [AuthenticationFlowManager].
 @ProviderFor(AuthenticationFlowManager)
@@ -24,4 +24,4 @@ final authenticationFlowManagerProvider = NotifierProvider<
 
 typedef _$AuthenticationFlowManager = Notifier<AuthenticationFlowState>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

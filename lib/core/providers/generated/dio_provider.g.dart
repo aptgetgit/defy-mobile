@@ -142,6 +142,8 @@ class DioInitializerProvider extends Provider<Dio> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DioInitializerRef on ProviderRef<Dio> {
   /// The parameter `baseUrl` of this provider.
   String get baseUrl;
@@ -171,6 +173,8 @@ final sessionTokenInterceptorProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SessionTokenInterceptorRef = ProviderRef<SessionTokenInterceptor>;
 String _$baseDioServiceHash() => r'919ace0a7339d40152e8b0d33f78420453c458d3';
 
@@ -186,6 +190,8 @@ final baseDioServiceProvider = Provider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef BaseDioServiceRef = ProviderRef<Dio>;
 String _$kratosDioServiceHash() => r'567f1d16e62e65f557deb85cfbd608be706eb1c6';
 
@@ -201,6 +207,8 @@ final kratosDioServiceProvider = Provider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef KratosDioServiceRef = ProviderRef<Dio>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

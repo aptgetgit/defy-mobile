@@ -7,7 +7,7 @@ part of '../currency_conversion_provider.dart';
 // **************************************************************************
 
 String _$convertToPreferredCurrencyHash() =>
-    r'61a9e80a8da36dd228c6a71b96cc21d235852108';
+    r'5ef0616868adb17a9e6d450475ff12da26d7c7b6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -155,6 +155,8 @@ class ConvertToPreferredCurrencyProvider extends AutoDisposeProvider<double> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin ConvertToPreferredCurrencyRef on AutoDisposeProviderRef<double> {
   /// The parameter `amount` of this provider.
   double get amount;
@@ -175,4 +177,4 @@ class _ConvertToPreferredCurrencyProviderElement
       (origin as ConvertToPreferredCurrencyProvider).fromCurrency;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

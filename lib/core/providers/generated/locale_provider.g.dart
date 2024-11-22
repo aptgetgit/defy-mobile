@@ -19,6 +19,8 @@ final l10nProvider = AutoDisposeProvider<AppLocalizations>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef L10nRef = AutoDisposeProviderRef<AppLocalizations>;
 String _$localeNotifierHash() => r'1b9bffe8051c9c3518d4acc557289f8c8456eb84';
 
@@ -37,4 +39,4 @@ final localeNotifierProvider =
 
 typedef _$LocaleNotifier = AutoDisposeNotifier<Locale>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

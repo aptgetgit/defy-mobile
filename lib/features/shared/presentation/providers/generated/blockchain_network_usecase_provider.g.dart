@@ -22,6 +22,8 @@ final blockchainNetworkRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef BlockchainNetworkRepositoryRef
     = AutoDisposeProviderRef<BlockchainNetworkRepository>;
 String _$listLocalBlockchainNetworksUseCaseHash() =>
@@ -40,6 +42,8 @@ final listLocalBlockchainNetworksUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ListLocalBlockchainNetworksUseCaseRef
     = AutoDisposeProviderRef<ListLocalBlockchainNetworksUseCase>;
 String _$getLocalBlockchainNetworkUseCaseHash() =>
@@ -58,6 +62,8 @@ final getLocalBlockchainNetworkUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetLocalBlockchainNetworkUseCaseRef
     = AutoDisposeProviderRef<GetLocalBlockchainNetworkUseCase>;
 String _$saveLocalBlockchainNetworkUseCaseHash() =>
@@ -76,6 +82,8 @@ final saveLocalBlockchainNetworkUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveLocalBlockchainNetworkUseCaseRef
     = AutoDisposeProviderRef<SaveLocalBlockchainNetworkUseCase>;
 String _$deleteLocalBlockchainNetworkUseCaseHash() =>
@@ -94,6 +102,8 @@ final deleteLocalBlockchainNetworkUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteLocalBlockchainNetworkUseCaseRef
     = AutoDisposeProviderRef<DeleteLocalBlockchainNetworkUseCase>;
 String _$listRemoteBlockchainNetworksUseCaseHash() =>
@@ -112,6 +122,8 @@ final listRemoteBlockchainNetworksUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ListRemoteBlockchainNetworksUseCaseRef
     = AutoDisposeProviderRef<ListRemoteBlockchainNetworksUseCase>;
 String _$getRemoteBlockchainNetworkUseCaseHash() =>
@@ -130,6 +142,8 @@ final getRemoteBlockchainNetworkUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetRemoteBlockchainNetworkUseCaseRef
     = AutoDisposeProviderRef<GetRemoteBlockchainNetworkUseCase>;
 String _$syncBlockchainNetworksUseCaseHash() =>
@@ -148,7 +162,9 @@ final syncBlockchainNetworksUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SyncBlockchainNetworksUseCaseRef
     = AutoDisposeProviderRef<SyncBlockchainNetworksUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

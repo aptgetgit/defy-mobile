@@ -23,6 +23,8 @@ final userBlockchainAccountGroupAssignmentRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef UserBlockchainAccountGroupAssignmentRepositoryRef
     = AutoDisposeProviderRef<UserBlockchainAccountGroupAssignmentRepository>;
 String _$listLocalUserBlockchainAccountGroupAssignmentUseCaseHash() =>
@@ -42,6 +44,8 @@ final listLocalUserBlockchainAccountGroupAssignmentUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ListLocalUserBlockchainAccountGroupAssignmentUseCaseRef
     = AutoDisposeProviderRef<
         ListLocalUserBlockchainAccountGroupAssignmentUseCase>;
@@ -62,6 +66,8 @@ final getLocalUserBlockchainAccountGroupAssignmentUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetLocalUserBlockchainAccountGroupAssignmentUseCaseRef
     = AutoDisposeProviderRef<
         GetLocalUserBlockchainAccountGroupAssignmentUseCase>;
@@ -82,6 +88,8 @@ final getLocalUserBlockchainAccountGroupAssignmentByAccountUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetLocalUserBlockchainAccountGroupAssignmentByAccountUseCaseRef
     = AutoDisposeProviderRef<
         GetLocalUserBlockchainAccountGroupAssignmentByAccountUseCase>;
@@ -102,6 +110,8 @@ final getLocalUserBlockchainAccountGroupAssignmentsByGroupUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetLocalUserBlockchainAccountGroupAssignmentsByGroupUseCaseRef
     = AutoDisposeProviderRef<
         GetLocalUserBlockchainAccountGroupAssignmentsByGroupUseCase>;
@@ -122,6 +132,8 @@ final saveLocalUserBlockchainAccountGroupAssignmentUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveLocalUserBlockchainAccountGroupAssignmentUseCaseRef
     = AutoDisposeProviderRef<
         SaveLocalUserBlockchainAccountGroupAssignmentUseCase>;
@@ -142,6 +154,8 @@ final deleteLocalUserBlockchainAccountGroupAssignmentUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteLocalUserBlockchainAccountGroupAssignmentUseCaseRef
     = AutoDisposeProviderRef<
         DeleteLocalUserBlockchainAccountGroupAssignmentUseCase>;
@@ -162,6 +176,8 @@ final listRemoteUserBlockchainAccountGroupAssignmentsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ListRemoteUserBlockchainAccountGroupAssignmentsUseCaseRef
     = AutoDisposeProviderRef<
         ListRemoteUserBlockchainAccountGroupAssignmentsUseCase>;
@@ -182,6 +198,8 @@ final getRemoteUserBlockchainAccountGroupAssignmentUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetRemoteUserBlockchainAccountGroupAssignmentUseCaseRef
     = AutoDisposeProviderRef<
         GetRemoteUserBlockchainAccountGroupAssignmentUseCase>;
@@ -202,6 +220,8 @@ final updateRemoteUserBlockchainAccountGroupAssignmentUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef UpdateRemoteUserBlockchainAccountGroupAssignmentUseCaseRef
     = AutoDisposeProviderRef<
         UpdateRemoteUserBlockchainAccountGroupAssignmentUseCase>;
@@ -222,6 +242,8 @@ final deleteRemoteUserBlockchainAccountGroupAssignmentUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteRemoteUserBlockchainAccountGroupAssignmentUseCaseRef
     = AutoDisposeProviderRef<
         DeleteRemoteUserBlockchainAccountGroupAssignmentUseCase>;
@@ -242,7 +264,9 @@ final syncUserBlockchainAccountGroupAssignmentsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SyncUserBlockchainAccountGroupAssignmentsUseCaseRef
     = AutoDisposeProviderRef<SyncUserBlockchainAccountGroupAssignmentsUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -27,14 +27,14 @@ class AuthenticationFlowManager extends _$AuthenticationFlowManager {
           flowId: flowId,
           email: emailOptions.email,
           username: emailOptions.username,
-          name: emailOptions.name,
+          displayName: emailOptions.displayName,
         ),
       ),
       withOIDC: (oidcOptions) => AuthenticationFlowState.registrationInProgress(
         RegistrationFlowData.withOIDC(
           flowId: flowId,
           username: oidcOptions.username,
-          name: oidcOptions.name,
+          displayName: oidcOptions.displayName,
         ),
       ),
     );
@@ -133,7 +133,7 @@ class AuthenticationFlowManager extends _$AuthenticationFlowManager {
               return CompleteRegistrationOptions.withEmailCode(
                 flowId: codeData.flowId,
                 username: codeData.username,
-                name: codeData.name,
+                displayName: codeData.displayName,
                 email: codeData.email,
                 code: codeData.code!,
               );
@@ -145,7 +145,7 @@ class AuthenticationFlowManager extends _$AuthenticationFlowManager {
               return CompleteRegistrationOptions.withOIDC(
                 flowId: oidcData.flowId,
                 username: oidcData.username,
-                name: oidcData.name,
+                displayName: oidcData.displayName,
                 provider: oidcData.provider!,
                 idToken: oidcData.idToken!,
               );

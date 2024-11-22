@@ -22,6 +22,8 @@ final authenticationRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AuthenticationRepositoryRef
     = AutoDisposeProviderRef<AuthenticationRepository>;
 String _$getCurrentSessionUseCaseHash() =>
@@ -40,6 +42,8 @@ final getCurrentSessionUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetCurrentSessionUseCaseRef
     = AutoDisposeProviderRef<GetCurrentSessionUseCase>;
 String _$initiateRegistrationUseCaseHash() =>
@@ -58,6 +62,8 @@ final initiateRegistrationUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef InitiateRegistrationUseCaseRef
     = AutoDisposeProviderRef<InitiateRegistrationUseCase>;
 String _$completeRegistrationUseCaseHash() =>
@@ -76,6 +82,8 @@ final completeRegistrationUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CompleteRegistrationUseCaseRef
     = AutoDisposeProviderRef<CompleteRegistrationUseCase>;
 String _$initiateLoginUseCaseHash() =>
@@ -94,6 +102,8 @@ final initiateLoginUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef InitiateLoginUseCaseRef = AutoDisposeProviderRef<InitiateLoginUseCase>;
 String _$completeLoginUseCaseHash() =>
     r'2b72c2342945afaf143c5cae40b617395a6c7f43';
@@ -111,6 +121,8 @@ final completeLoginUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CompleteLoginUseCaseRef = AutoDisposeProviderRef<CompleteLoginUseCase>;
 String _$logoutUseCaseHash() => r'4ade2e5c46b6f878d3a801c17bcbc100dc256c80';
 
@@ -126,6 +138,8 @@ final logoutUseCaseProvider = AutoDisposeProvider<LogoutUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef LogoutUseCaseRef = AutoDisposeProviderRef<LogoutUseCase>;
 String _$getLoggedInIdentitiesUseCaseHash() =>
     r'82e7966d6b48909060eb3a9cd589996c78f02c8f';
@@ -143,6 +157,8 @@ final getLoggedInIdentitiesUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetLoggedInIdentitiesUseCaseRef
     = AutoDisposeProviderRef<GetLoggedInIdentitiesUseCase>;
 String _$getSessionTokenUseCaseHash() =>
@@ -161,6 +177,8 @@ final getSessionTokenUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetSessionTokenUseCaseRef
     = AutoDisposeProviderRef<GetSessionTokenUseCase>;
 String _$saveSessionTokenUseCaseHash() =>
@@ -179,6 +197,8 @@ final saveSessionTokenUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveSessionTokenUseCaseRef
     = AutoDisposeProviderRef<SaveSessionTokenUseCase>;
 String _$deleteSessionTokenUseCaseHash() =>
@@ -197,6 +217,8 @@ final deleteSessionTokenUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteSessionTokenUseCaseRef
     = AutoDisposeProviderRef<DeleteSessionTokenUseCase>;
 String _$setActiveIdentityUseCaseHash() =>
@@ -215,6 +237,8 @@ final setActiveIdentityUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SetActiveIdentityUseCaseRef
     = AutoDisposeProviderRef<SetActiveIdentityUseCase>;
 String _$getActiveIdentityUseCaseHash() =>
@@ -233,6 +257,8 @@ final getActiveIdentityUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetActiveIdentityUseCaseRef
     = AutoDisposeProviderRef<GetActiveIdentityUseCase>;
 String _$getSessionDetailsUseCaseHash() =>
@@ -251,6 +277,8 @@ final getSessionDetailsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetSessionDetailsUseCaseRef
     = AutoDisposeProviderRef<GetSessionDetailsUseCase>;
 String _$saveSessionDetailsUseCaseHash() =>
@@ -269,6 +297,8 @@ final saveSessionDetailsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveSessionDetailsUseCaseRef
     = AutoDisposeProviderRef<SaveSessionDetailsUseCase>;
 String _$deleteSessionDetailsUseCaseHash() =>
@@ -287,7 +317,9 @@ final deleteSessionDetailsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteSessionDetailsUseCaseRef
     = AutoDisposeProviderRef<DeleteSessionDetailsUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

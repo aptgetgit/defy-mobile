@@ -22,6 +22,8 @@ final mnemonicRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef MnemonicRepositoryRef = AutoDisposeProviderRef<MnemonicRepository>;
 String _$generateMnemonicUseCaseHash() =>
     r'c9752b4ac714b57ba1ff2f293ec8de9dfe3d9d02';
@@ -39,6 +41,8 @@ final generateMnemonicUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GenerateMnemonicUseCaseRef
     = AutoDisposeProviderRef<GenerateMnemonicUseCase>;
 String _$validateMnemonicUseCaseHash() =>
@@ -57,6 +61,8 @@ final validateMnemonicUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ValidateMnemonicUseCaseRef
     = AutoDisposeProviderRef<ValidateMnemonicUseCase>;
 String _$toSeedUseCaseHash() => r'6bcf800cf74e125610a60a5de95adda4d1f41c25';
@@ -73,6 +79,8 @@ final toSeedUseCaseProvider = AutoDisposeProvider<ToSeedUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ToSeedUseCaseRef = AutoDisposeProviderRef<ToSeedUseCase>;
 String _$toSeedHexUseCaseHash() => r'66c24bc17170dc9f95f15bc485e540c31f690391';
 
@@ -88,6 +96,8 @@ final toSeedHexUseCaseProvider = AutoDisposeProvider<ToSeedHexUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ToSeedHexUseCaseRef = AutoDisposeProviderRef<ToSeedHexUseCase>;
 String _$saveMnemonicUseCaseHash() =>
     r'3907c1fc007363c9538006b190dfa7019c0ab5ac';
@@ -105,6 +115,8 @@ final saveMnemonicUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveMnemonicUseCaseRef = AutoDisposeProviderRef<SaveMnemonicUseCase>;
 String _$getMnemonicUseCaseHash() =>
     r'dbe22738e4f3c12e2f8c01f3786cf73d084065e2';
@@ -122,6 +134,8 @@ final getMnemonicUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetMnemonicUseCaseRef = AutoDisposeProviderRef<GetMnemonicUseCase>;
 String _$deleteMnemonicUseCaseHash() =>
     r'9848a59341ee03547c39a95ea444e30cf34b599f';
@@ -139,7 +153,9 @@ final deleteMnemonicUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteMnemonicUseCaseRef
     = AutoDisposeProviderRef<DeleteMnemonicUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

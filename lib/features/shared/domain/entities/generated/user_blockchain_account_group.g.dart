@@ -11,8 +11,8 @@ _$UserBlockchainAccountGroupImpl _$$UserBlockchainAccountGroupImplFromJson(
     _$UserBlockchainAccountGroupImpl(
       id: json['id'] as String,
       name: json['name'] as String,
-      animatedIconUrl: json['animated_icon_url'] as String,
-      backgroundColor: json['background_color'] as String,
+      icon: json['icon'] as String,
+      color: json['color'] as String,
     );
 
 Map<String, dynamic> _$$UserBlockchainAccountGroupImplToJson(
@@ -20,6 +20,6 @@ Map<String, dynamic> _$$UserBlockchainAccountGroupImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'animated_icon_url': instance.animatedIconUrl,
-      'background_color': instance.backgroundColor,
+      'icon': instance.icon,
+      'color': instance.color,
     };

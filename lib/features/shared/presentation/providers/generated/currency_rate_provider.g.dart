@@ -22,6 +22,8 @@ final currencyRateRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CurrencyRateRepositoryRef
     = AutoDisposeProviderRef<CurrencyRateRepository>;
 String _$listLocalCurrencyRatesUseCaseHash() =>
@@ -40,6 +42,8 @@ final listLocalCurrencyRatesUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ListLocalCurrencyRatesUseCaseRef
     = AutoDisposeProviderRef<ListLocalCurrencyRatesUseCase>;
 String _$getLocalCurrencyRateUseCaseHash() =>
@@ -58,6 +62,8 @@ final getLocalCurrencyRateUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetLocalCurrencyRateUseCaseRef
     = AutoDisposeProviderRef<GetLocalCurrencyRateUseCase>;
 String _$saveLocalCurrencyRateUseCaseHash() =>
@@ -76,6 +82,8 @@ final saveLocalCurrencyRateUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveLocalCurrencyRateUseCaseRef
     = AutoDisposeProviderRef<SaveLocalCurrencyRateUseCase>;
 String _$deleteLocalCurrencyRateUseCaseHash() =>
@@ -94,6 +102,8 @@ final deleteLocalCurrencyRateUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteLocalCurrencyRateUseCaseRef
     = AutoDisposeProviderRef<DeleteLocalCurrencyRateUseCase>;
 String _$listRemoteCurrencyRatesUseCaseHash() =>
@@ -112,6 +122,8 @@ final listRemoteCurrencyRatesUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ListRemoteCurrencyRatesUseCaseRef
     = AutoDisposeProviderRef<ListRemoteCurrencyRatesUseCase>;
 String _$syncCurrencyRatesUseCaseHash() =>
@@ -130,7 +142,9 @@ final syncCurrencyRatesUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SyncCurrencyRatesUseCaseRef
     = AutoDisposeProviderRef<SyncCurrencyRatesUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

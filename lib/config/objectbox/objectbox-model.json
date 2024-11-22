@@ -70,7 +70,7 @@
     },
     {
       "id": "3:1384478839714981719",
-      "lastPropertyId": "5:2416477322595164425",
+      "lastPropertyId": "7:3591606802028917856",
       "name": "UserBlockchainAccountGroupLocalModel",
       "properties": [
         {
@@ -94,13 +94,13 @@
           "indexId": "7:889576494494782903"
         },
         {
-          "id": "4:141499176132735524",
-          "name": "animatedIconUrl",
+          "id": "6:1242731091367397443",
+          "name": "icon",
           "type": 9
         },
         {
-          "id": "5:2416477322595164425",
-          "name": "backgroundColor",
+          "id": "7:3591606802028917856",
+          "name": "color",
           "type": 9
         }
       ],
@@ -197,7 +197,10 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    141499176132735524,
+    2416477322595164425
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

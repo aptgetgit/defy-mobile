@@ -67,9 +67,9 @@ Future<void> main() async {
     final applicationDirectory = await getApplicationDocumentsDirectory();
     final store =
         await openStore(directory: join(applicationDirectory.path, "obx-defy"));
-
-    if (Platform.isAndroid) {
-      final credentialManager = CredentialManager();
+    final credentialManager = CredentialManager();
+    if (credentialManager.isSupportedPlatform) {
+      
       await credentialManager.init(
           preferImmediatelyAvailableCredentials: true,
           googleClientId: Env.googleWebApplicationClientId);

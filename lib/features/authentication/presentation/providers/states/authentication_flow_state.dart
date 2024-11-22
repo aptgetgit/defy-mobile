@@ -7,7 +7,7 @@ class RegistrationFlowData with _$RegistrationFlowData {
   const factory RegistrationFlowData.withCode({
     required String flowId,
     required String username,
-    required String name,
+    required String displayName,
     required String email,
     String? code,
   }) = RegistrationFlowDataWithCode;
@@ -15,7 +15,7 @@ class RegistrationFlowData with _$RegistrationFlowData {
   const factory RegistrationFlowData.withOIDC({
     required String flowId,
     required String username,
-    required String name,
+    required String displayName,
     String? provider,
     String? idToken,
   }) = RegistrationFlowDataWithOIDC;

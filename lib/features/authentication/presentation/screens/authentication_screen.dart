@@ -97,6 +97,7 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
         scopes: [
           AppleIDAuthorizationScopes.email
         ],
+        nonce: "testertagger"
       );
 
       if (credential.identityToken != null) {

@@ -6,3 +6,7 @@
 	path = packages/defy-graphql
 	url = git@github.com:avex-id/defy-graphql.git
 	branch = main
+[submodule "packages/aptos-dart"]
+	path = packages/aptos-dart
+	url = git@github.com:avex-id/aptos-dart.git
+	branch = main

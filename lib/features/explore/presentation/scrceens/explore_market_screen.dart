@@ -1,3 +1,4 @@
+import 'package:defy/config/fonts.gen.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';

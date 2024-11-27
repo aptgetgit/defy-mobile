@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
+import 'package:defy/config/theme/font.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/features/explore/presentation/providers/explore_ui_provider.dart';
 import 'package:flutter/material.dart';
@@ -54,10 +55,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         child: TextField(
                           enabled: false,
                           textAlign: TextAlign.start,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "Search or paste URL",
                             hintStyle: TextStyle(
+                              fontWeight: AppFont.medium,
                               color: AppColors.greyMedium,
                               fontSize: 14,
                             ),

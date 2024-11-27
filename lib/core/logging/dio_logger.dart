@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
 class DioLogger extends Interceptor {
-
   DioLogger({
     required this.logger,
     this.request = true,
@@ -188,8 +187,8 @@ class DioLogger extends Interceptor {
   void _addBlockToBuffer(StringBuffer buffer, String msg) {
     final lines = (msg.length / maxWidth).ceil();
     for (var i = 0; i < lines; ++i) {
-      buffer.writeln('║ ${msg.substring(i * maxWidth,
-              math.min<int>(i * maxWidth + maxWidth, msg.length))}');
+      buffer.writeln(
+          '║ ${msg.substring(i * maxWidth, math.min<int>(i * maxWidth + maxWidth, msg.length))}');
     }
   }
 

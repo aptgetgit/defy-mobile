@@ -4,28 +4,26 @@ import 'package:defy/features/authentication/presentation/providers/authenticati
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
-import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
-
+import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'splash_route.dart';
-part 'onboarding_route.dart';
 part 'authentication_route.dart';
-part 'home_route.dart';
-
-part 'generated/router.g.dart';
 part 'generated/router.freezed.dart';
+part 'generated/router.g.dart';
+part 'home_route.dart';
+part 'onboarding_route.dart';
+part 'splash_route.dart';
 
 @freezed
 class AppRoute with _$AppRoute {
   const factory AppRoute.public({
-    String? redirectIfAuthenticated,
     required Widget Function(BuildContext, GoRouterState) builder,
+    String? redirectIfAuthenticated,
   }) = PublicRoute;
   const factory AppRoute.protected({
     required Widget Function(BuildContext, GoRouterState) builder,
@@ -33,7 +31,7 @@ class AppRoute with _$AppRoute {
 }
 
 @Riverpod(keepAlive: true)
-GoRouter router(RouterRef ref) {
+GoRouter router(Ref ref) {
   final authState = ref.watch(authenticationNotifierProvider);
 
   return GoRouter(

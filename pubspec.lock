@@ -14,14 +14,6 @@ packages:
     description: dart
     source: sdk
     version: "0.3.2"
-  adaptive_number:
-    dependency: transitive
-    description:
-      name: adaptive_number
-      sha256: "3a567544e9b5c9c803006f51140ad544aedc79604fd4f3f2c1380003f97c1d77"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   analyzer:
     dependency: transitive
     description:
@@ -38,13 +30,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.3"
-  aptos_dart:
-    dependency: "direct main"
-    description:
-      path: "packages/aptos-dart"
-      relative: true
-    source: path
-    version: "0.0.1"
   archive:
     dependency: transitive
     description:
@@ -253,14 +238,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.6"
-  cryptography:
-    dependency: transitive
-    description:
-      name: cryptography
-      sha256: d146b76d33d94548cf035233fbc2f4338c1242fa119013bead807d033fc4ae05
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.7.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -348,14 +325,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  ed25519_edwards:
-    dependency: transitive
-    description:
-      name: ed25519_edwards
-      sha256: "6ce0112d131327ec6d42beede1e5dfd526069b18ad45dcf654f15074ad9276cd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.1"
   envied:
     dependency: "direct main"
     description:
@@ -624,70 +593,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.5"
-  gql:
-    dependency: transitive
-    description:
-      name: gql
-      sha256: "650e79ed60c21579ca3bd17ebae8a8c8d22cde267b03a19bf3b35996baaa843a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1-alpha+1730759315362"
-  gql_dedupe_link:
-    dependency: transitive
-    description:
-      name: gql_dedupe_link
-      sha256: "10bee0564d67c24e0c8bd08bd56e0682b64a135e58afabbeed30d85d5e9fea96"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.4-alpha+1715521079596"
-  gql_error_link:
-    dependency: transitive
-    description:
-      name: gql_error_link
-      sha256: "93901458f3c050e33386dedb0ca7173e08cebd7078e4e0deca4bf23ab7a71f63"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0+1"
-  gql_exec:
-    dependency: transitive
-    description:
-      name: gql_exec
-      sha256: "394944626fae900f1d34343ecf2d62e44eb984826189c8979d305f0ae5846e38"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1-alpha+1699813812660"
-  gql_http_link:
-    dependency: transitive
-    description:
-      name: gql_http_link
-      sha256: ef6ad24d31beb5a30113e9b919eec20876903cc4b0ee0d31550047aaaba7d5dd
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
-  gql_link:
-    dependency: transitive
-    description:
-      name: gql_link
-      sha256: c2b0adb2f6a60c2599b9128fb095316db5feb99ce444c86fb141a6964acedfa4
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1-alpha+1730759315378"
-  gql_transform_link:
-    dependency: transitive
-    description:
-      name: gql_transform_link
-      sha256: "0645fdd874ca1be695fd327271fdfb24c0cd6fa40774a64b946062f321a59709"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  graphql:
-    dependency: transitive
-    description:
-      name: graphql
-      sha256: b90f3faa525fed0d8b57f528af913cf1363e1d77f287004d3a15ce699fa866ee
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.2.0-beta.9"
   graphs:
     dependency: transitive
     description:
@@ -712,14 +617,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
-  hive:
-    dependency: transitive
-    description:
-      name: hive
-      sha256: "8dcf6db979d7933da8217edcec84e9df1bdb4e4edc7fc77dbd5aa74356d6d941"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.3"
   hooks_riverpod:
     dependency: "direct main"
     description:
@@ -816,14 +713,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.9.0"
-  jwk:
-    dependency: transitive
-    description:
-      name: jwk
-      sha256: "29579ae13c7b4b029e57bcc45514ef5a34768fae0d5e7863b4f03443454283e2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.3"
   jwt_decode:
     dependency: "direct main"
     description:
@@ -928,14 +817,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
-  normalize:
-    dependency: transitive
-    description:
-      name: normalize
-      sha256: "8a60e37de5b608eeaf9b839273370c71ebba445e9f73b08eee7725e0d92dbc43"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.2+1"
   objectbox:
     dependency: "direct main"
     description:
@@ -991,6 +872,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  package_info_plus:
+    dependency: transitive
+    description:
+      name: package_info_plus
+      sha256: da8d9ac8c4b1df253d1a328b7bf01ae77ef132833479ab40763334db13b91cce
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.1.1"
+  package_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: package_info_plus_platform_interface
+      sha256: ac1f4a4847f1ade8e6a87d1f39f5d7c67490738642e2542f559ec38c37489a66
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   path:
     dependency: "direct main"
     description:
@@ -1207,6 +1104,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  sentry:
+    dependency: transitive
+    description:
+      name: sentry
+      sha256: "2440763ae96fa8fd1bcdfc224f5232e1b7a09af76a72f4e626ee313a261faf6f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.10.1"
+  sentry_flutter:
+    dependency: "direct main"
+    description:
+      name: sentry_flutter
+      sha256: "3b30038b3b9303540a8b2c8b1c8f0bb93a207f8e4b25691c59d969ddeb4734fd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.10.1"
   shared_preferences:
     dependency: "direct main"
     description:

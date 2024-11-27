@@ -1,15 +1,17 @@
+import 'package:defy/core/di/providers/network/network_connectivity_provider.dart';
+import 'package:defy/core/di/providers/services/credential_manager_service_provider.dart';
 import 'package:defy/core/logging/app_logger.dart';
-import 'package:defy/core/providers/network_connectivity_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
-import 'package:defy/core/routes/router.dart';
+import 'package:defy/app/routes/router.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_flow_manager.dart';
-import 'package:defy/core/providers/credential_manager_provider.dart';
+
 import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -68,7 +70,8 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
 
     try {
-      final googleIdTokenCredential = await credentialManager.saveGoogleCredential();
+      final googleIdTokenCredential =
+          await credentialManager.saveGoogleCredential();
 
       if (googleIdTokenCredential != null) {
         await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
@@ -94,11 +97,7 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
 
     try {
       final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email
-        ],
-        nonce: "testertagger"
-      );
+          scopes: [AppleIDAuthorizationScopes.email], nonce: "testertagger");
 
       if (credential.identityToken != null) {
         await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
@@ -205,9 +204,8 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                   const Spacer(),
                   _SocialSignInButton(
                     onPressed: isOnline.whenOrNull(
-                      data: (online) => online && !authState.isLoading 
-                          ? googleLogin 
-                          : null,
+                      data: (online) =>
+                          online && !authState.isLoading ? googleLogin : null,
                     ),
                     isLoading: authState.isLoading,
                     icon: Assets.icons.google.image(width: 32),
@@ -218,24 +216,24 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                     future: SignInWithApple.isAvailable(),
                     builder: (context, snapshot) {
                       final isAppleSignInAvailable = snapshot.data ?? false;
-                      
-                      return isAppleSignInAvailable 
-                        ? _SocialSignInButton(
-                            onPressed: isOnline.whenOrNull(
-                              data: (online) => online && !authState.isLoading 
-                                  ? appleLogin 
-                                  : null,
-                            ),
-                            isLoading: authState.isLoading,
-                            icon: const Icon(
-                              Icons.apple,
-                              size: 32,
-                              color: Colors.white,
-                            ),
-                            label: 'Continue with Apple',
-                            isDark: true,
-                          )
-                        : const SizedBox.shrink();
+
+                      return isAppleSignInAvailable
+                          ? _SocialSignInButton(
+                              onPressed: isOnline.whenOrNull(
+                                data: (online) => online && !authState.isLoading
+                                    ? appleLogin
+                                    : null,
+                              ),
+                              isLoading: authState.isLoading,
+                              icon: const Icon(
+                                Icons.apple,
+                                size: 32,
+                                color: Colors.white,
+                              ),
+                              label: 'Continue with Apple',
+                              isDark: true,
+                            )
+                          : const SizedBox.shrink();
                     },
                   ),
                   Gap(height * 0.03),
@@ -275,14 +273,14 @@ class _SocialSignInButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          backgroundColor: isDisabled 
-              ? Colors.grey.shade100 
-              : isDark 
+          backgroundColor: isDisabled
+              ? Colors.grey.shade100
+              : isDark
                   ? Colors.black
                   : Colors.white,
           side: BorderSide(
-            color: isDisabled 
-                ? Colors.grey.shade300 
+            color: isDisabled
+                ? Colors.grey.shade300
                 : isDark
                     ? Colors.black
                     : Colors.grey.shade400,
@@ -328,7 +326,6 @@ class _SocialSignInButton extends StatelessWidget {
   }
 }
 
-
 class _NetworkStatusBanner extends StatelessWidget {
   final String message;
   final Color color;
@@ -366,7 +363,6 @@ class _NetworkStatusBanner extends StatelessWidget {
     );
   }
 }
-
 
 class _TermsAndPrivacyText extends StatelessWidget {
   const _TermsAndPrivacyText();

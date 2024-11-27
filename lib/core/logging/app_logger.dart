@@ -4,25 +4,24 @@ class AppLogger {
   static late Logger _logger;
   static bool _initialized = false;
 
-  static void init({
-    Level logLevel = Level.debug,
-    bool useColors = true,
-    bool printEmojis = true,
-    DateTimeFormatter dateTimeFormatter = DateTimeFormat.onlyTimeAndSinceStart
-  }) {
+  static void init(
+      {Level logLevel = Level.debug,
+      bool useColors = true,
+      bool printEmojis = true,
+      DateTimeFormatter dateTimeFormatter =
+          DateTimeFormat.onlyTimeAndSinceStart}) {
     if (_initialized) return;
 
     _logger = Logger(
       level: logLevel,
       printer: PrettyPrinter(
-        methodCount: 0,
-        errorMethodCount: 8,
-        lineLength: 120,
-        colors: useColors,
-        printEmojis: printEmojis,
-        noBoxingByDefault: false,
-        dateTimeFormat: dateTimeFormatter
-      ),
+          methodCount: 0,
+          errorMethodCount: 8,
+          lineLength: 120,
+          colors: useColors,
+          printEmojis: printEmojis,
+          noBoxingByDefault: false,
+          dateTimeFormat: dateTimeFormatter),
       output: ConsoleOutput(),
     );
 
@@ -46,7 +45,8 @@ class AppLogger {
       if (stackTrace != null) {
         fullMessage += '\nStack trace:\n${_formatStackTrace(stackTrace)}';
       }
-    } else if (stackTrace != null && (level == Level.error || level == Level.fatal)) {
+    } else if (stackTrace != null &&
+        (level == Level.error || level == Level.fatal)) {
       fullMessage += '\nStack trace:\n${_formatStackTrace(stackTrace)}';
     }
 
@@ -58,20 +58,21 @@ class AppLogger {
   }
 
   static void trace(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-    log(Level.trace, message, error: error, stackTrace: stackTrace);
+      log(Level.trace, message, error: error, stackTrace: stackTrace);
 
   static void debug(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-    log(Level.debug, message, error: error, stackTrace: stackTrace);
+      log(Level.debug, message, error: error, stackTrace: stackTrace);
 
   static void info(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-    log(Level.info, message, error: error, stackTrace: stackTrace);
+      log(Level.info, message, error: error, stackTrace: stackTrace);
 
-  static void warning(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-    log(Level.warning, message, error: error, stackTrace: stackTrace);
+  static void warning(dynamic message,
+          {dynamic error, StackTrace? stackTrace}) =>
+      log(Level.warning, message, error: error, stackTrace: stackTrace);
 
   static void error(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-    log(Level.error, message, error: error, stackTrace: stackTrace);
+      log(Level.error, message, error: error, stackTrace: stackTrace);
 
   static void fatal(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
-    log(Level.fatal, message, error: error, stackTrace: stackTrace);
+      log(Level.fatal, message, error: error, stackTrace: stackTrace);
 }

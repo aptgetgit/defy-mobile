@@ -34,7 +34,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingPage1Title => '統合Dapp ☝🏻';
 
   @override
-  String get onboardingPage2Description => '友達をフォロー、トレードをコピー、\nオンチェーンプロフィールアバターで共同投資';
+  String get onboardingPage2Description =>
+      '友達をフォロー、トレードをコピー、\nオンチェーンプロフィールアバターで共同投資';
 
   @override
   String get onboardingPage2Title => 'コミュニティ🫂';
@@ -46,7 +47,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingPage3Title => 'セキュリティ🔒';
 
   @override
-  String get onboardingPage4Description => '友達をフォロー、トレードをコピー、\nオンチェーンプロフィールアバターで共同投資';
+  String get onboardingPage4Description =>
+      '友達をフォロー、トレードをコピー、\nオンチェーンプロフィールアバターで共同投資';
 
   @override
   String get onboardingPage4Title => '報酬 😉';

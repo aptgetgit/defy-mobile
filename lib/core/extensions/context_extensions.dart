@@ -34,7 +34,8 @@ extension ResponsiveExtensions on BuildContext {
   bool get isPhone => mediaQuery.size.width < 600;
 
   // Tablet screen check (600dp <= width < 900dp)
-  bool get isTablet => mediaQuery.size.width >= 600 && mediaQuery.size.width < 900;
+  bool get isTablet =>
+      mediaQuery.size.width >= 600 && mediaQuery.size.width < 900;
 
   // Desktop screen check (width >= 900dp)
   bool get isDesktop => mediaQuery.size.width >= 900;

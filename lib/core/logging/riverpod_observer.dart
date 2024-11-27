@@ -24,7 +24,8 @@ class ProviderLogger extends ProviderObserver {
     this.maxCollectionLogLength = 5,
   });
 
-  void _logBlock(String title, List<String> lines, {Level level = Level.debug}) {
+  void _logBlock(String title, List<String> lines,
+      {Level level = Level.debug}) {
     final buffer = StringBuffer();
     buffer.writeln('🔍 $title');
     buffer.writeln('╔${'═' * 78}');
@@ -32,43 +33,57 @@ class ProviderLogger extends ProviderObserver {
       buffer.writeln('║ $line');
     }
     buffer.writeln('╚${'═' * 78}');
-    
+
     logger.log(level, buffer.toString());
   }
 
   @override
-  void didAddProvider(ProviderBase<Object?> provider, Object? value, ProviderContainer container) {
+  void didAddProvider(ProviderBase<Object?> provider, Object? value,
+      ProviderContainer container) {
     if (logAdditions) {
-      _logBlock('Provider Added: ${_getProviderName(provider)}', [
-        'Initial Value: ${_formatValue(value)}',
-      ], level: Level.info);
+      _logBlock(
+          'Provider Added: ${_getProviderName(provider)}',
+          [
+            'Initial Value: ${_formatValue(value)}',
+          ],
+          level: Level.info);
     }
   }
 
   @override
-  void didDisposeProvider(ProviderBase<Object?> provider, ProviderContainer container) {
+  void didDisposeProvider(
+      ProviderBase<Object?> provider, ProviderContainer container) {
     if (logDisposals) {
-      _logBlock('Provider Disposed', [
-        _getProviderName(provider),
-      ], level: Level.info);
+      _logBlock(
+          'Provider Disposed',
+          [
+            _getProviderName(provider),
+          ],
+          level: Level.info);
     }
     _lastUpdateTimes.remove(_getProviderName(provider));
   }
 
   @override
-  void didUpdateProvider(ProviderBase<Object?> provider, Object? previousValue, Object? newValue, ProviderContainer container) {
+  void didUpdateProvider(ProviderBase<Object?> provider, Object? previousValue,
+      Object? newValue, ProviderContainer container) {
     if (logUpdates) {
       final providerName = _getProviderName(provider);
       final now = DateTime.now();
       final lastUpdate = _lastUpdateTimes[providerName];
 
-      if (lastUpdate == null || now.difference(lastUpdate) > updateFrequencyThreshold) {
-        if (!logOnlySignificantUpdates || _isSignificantChange(previousValue, newValue)) {
-          _logBlock('Provider Updated: $providerName', [
-            'Previous: ${_formatValue(previousValue)}',
-            'New: ${_formatValue(newValue)}',
-            'Changed: ${_describeChange(previousValue, newValue)}',
-          ], level: Level.debug);
+      if (lastUpdate == null ||
+          now.difference(lastUpdate) > updateFrequencyThreshold) {
+        if (!logOnlySignificantUpdates ||
+            _isSignificantChange(previousValue, newValue)) {
+          _logBlock(
+              'Provider Updated: $providerName',
+              [
+                'Previous: ${_formatValue(previousValue)}',
+                'New: ${_formatValue(newValue)}',
+                'Changed: ${_describeChange(previousValue, newValue)}',
+              ],
+              level: Level.debug);
         }
         _lastUpdateTimes[providerName] = now;
       }
@@ -76,14 +91,18 @@ class ProviderLogger extends ProviderObserver {
   }
 
   @override
-  void providerDidFail(ProviderBase<Object?> provider, Object error, StackTrace stackTrace, ProviderContainer container) {
+  void providerDidFail(ProviderBase<Object?> provider, Object error,
+      StackTrace stackTrace, ProviderContainer container) {
     if (logErrors) {
-      _logBlock('Provider Error: ${_getProviderName(provider)}', [
-        'Error: $error',
-        'Stack Trace:',
-        ...stackTrace.toString().split('\n').take(10),
-        if (stackTrace.toString().split('\n').length > 10) '...',
-      ], level: Level.error);
+      _logBlock(
+          'Provider Error: ${_getProviderName(provider)}',
+          [
+            'Error: $error',
+            'Stack Trace:',
+            ...stackTrace.toString().split('\n').take(10),
+            if (stackTrace.toString().split('\n').length > 10) '...',
+          ],
+          level: Level.error);
     }
   }
 
@@ -98,7 +117,8 @@ class ProviderLogger extends ProviderObserver {
       return '[${value.take(maxCollectionLogLength).map(_formatValue).join(', ')}${value.length > maxCollectionLogLength ? ', ...' : ''}]';
     }
     if (value is Map) {
-      final entries = value.entries.take(maxCollectionLogLength)
+      final entries = value.entries
+          .take(maxCollectionLogLength)
           .map((e) => '${_formatValue(e.key)}: ${_formatValue(e.value)}')
           .join(', ');
       return '{$entries${value.length > maxCollectionLogLength ? ', ...' : ''}}';
@@ -109,12 +129,15 @@ class ProviderLogger extends ProviderObserver {
   bool _isSignificantChange(Object? previous, Object? current) {
     if (identical(previous, current)) return false;
     if (previous is List && current is List) {
-      return previous.length != current.length || 
-             !previous.asMap().entries.every((entry) => entry.value == current[entry.key]);
+      return previous.length != current.length ||
+          !previous
+              .asMap()
+              .entries
+              .every((entry) => entry.value == current[entry.key]);
     }
     if (previous is Map && current is Map) {
-      return previous.length != current.length || 
-             previous.entries.any((e) => current[e.key] != e.value);
+      return previous.length != current.length ||
+          previous.entries.any((e) => current[e.key] != e.value);
     }
     return previous != current;
   }
@@ -123,16 +146,21 @@ class ProviderLogger extends ProviderObserver {
     if (identical(previous, current)) return 'No change (identical objects)';
     if (previous == null || current == null) return 'Nullability changed';
     if (previous is List && current is List) {
-      if (previous.length != current.length) return 'List length changed from ${previous.length} to ${current.length}';
-      final changedIndices = previous.asMap().entries
+      if (previous.length != current.length)
+        return 'List length changed from ${previous.length} to ${current.length}';
+      final changedIndices = previous
+          .asMap()
+          .entries
           .where((entry) => entry.value != current[entry.key])
           .map((e) => e.key)
           .toList();
       return 'List elements changed at indices: $changedIndices';
     }
     if (previous is Map && current is Map) {
-      if (previous.length != current.length) return 'Map size changed from ${previous.length} to ${current.length}';
-      final changedKeys = previous.keys.where((key) => previous[key] != current[key]).toList();
+      if (previous.length != current.length)
+        return 'Map size changed from ${previous.length} to ${current.length}';
+      final changedKeys =
+          previous.keys.where((key) => previous[key] != current[key]).toList();
       return 'Map values changed for keys: $changedKeys';
     }
     return 'Value changed';

@@ -36,7 +36,8 @@ class SessionEntity with _$SessionEntity {
 
   SessionEntity._();
 
-  factory SessionEntity.fromJson(Map<String, dynamic> json) => _$SessionEntityFromJson(json);
+  factory SessionEntity.fromJson(Map<String, dynamic> json) =>
+      _$SessionEntityFromJson(json);
   bool get isActive => active;
   bool get isExpired => DateTime.now().isAfter(expiresAt);
 }
@@ -51,5 +52,6 @@ class IdentityEntity with _$IdentityEntity {
 
   IdentityEntity._();
 
-  factory IdentityEntity.fromJson(Map<String, dynamic> json) => _$IdentityEntityFromJson(json);
+  factory IdentityEntity.fromJson(Map<String, dynamic> json) =>
+      _$IdentityEntityFromJson(json);
 }

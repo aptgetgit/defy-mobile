@@ -1,9 +1,23 @@
-import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
+
 class DioLogger extends Interceptor {
+
+  DioLogger({
+    required this.logger,
+    this.request = true,
+    this.requestHeader = false,
+    this.requestBody = false,
+    this.responseHeader = false,
+    this.responseBody = true,
+    this.error = true,
+    this.maxWidth = 90,
+    this.compact = true,
+    this.logTime = true,
+  });
   final Logger logger;
   final bool request;
   final bool requestHeader;
@@ -19,19 +33,6 @@ class DioLogger extends Interceptor {
   static const String _tabStep = '    ';
   static const int _chunkSize = 20;
 
-  DioLogger({
-    required this.logger,
-    this.request = true,
-    this.requestHeader = false,
-    this.requestBody = false,
-    this.responseHeader = false,
-    this.responseBody = true,
-    this.error = true,
-    this.maxWidth = 90,
-    this.compact = true,
-    this.logTime = true,
-  });
-
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final StringBuffer logBuffer = StringBuffer();
@@ -42,7 +43,8 @@ class DioLogger extends Interceptor {
       _addRequestHeaderToBuffer(logBuffer, options);
     }
     if (requestHeader) {
-      _addMapAsTableToBuffer(logBuffer, options.queryParameters, header: 'Query Parameters');
+      _addMapAsTableToBuffer(logBuffer, options.queryParameters,
+          header: 'Query Parameters');
       final requestHeaders = <String, dynamic>{
         ...options.headers,
         'contentType': options.contentType?.toString(),
@@ -68,7 +70,8 @@ class DioLogger extends Interceptor {
     _addResponseHeaderToBuffer(logBuffer, response);
     if (responseHeader) {
       final responseHeaders = <String, String>{};
-      response.headers.forEach((k, list) => responseHeaders[k] = list.toString());
+      response.headers
+          .forEach((k, list) => responseHeaders[k] = list.toString());
       _addMapAsTableToBuffer(logBuffer, responseHeaders, header: 'Headers');
     }
 
@@ -91,8 +94,10 @@ class DioLogger extends Interceptor {
       if (err.type == DioExceptionType.badResponse) {
         final uri = err.response?.requestOptions.uri;
         final method = err.response?.requestOptions.method;
-        _addBoxedToBuffer(logBuffer,
-          header: 'DioError ║ $method ║ Status: ${err.response?.statusCode} ${err.response?.statusMessage}',
+        _addBoxedToBuffer(
+          logBuffer,
+          header:
+              'DioError ║ $method ║ Status: ${err.response?.statusCode} ${err.response?.statusMessage}',
           text: uri.toString(),
         );
         if (err.response != null && err.response?.data != null) {
@@ -102,7 +107,8 @@ class DioLogger extends Interceptor {
         logBuffer.writeln('╚');
         logBuffer.writeln('');
       } else {
-        _addBoxedToBuffer(logBuffer,
+        _addBoxedToBuffer(
+          logBuffer,
           header: 'DioError ║ ${err.type}',
           text: err.message ?? 'No error message',
         );
@@ -121,12 +127,14 @@ class DioLogger extends Interceptor {
 
   void _addRequestBodyToBuffer(StringBuffer buffer, dynamic data) {
     if (data != null) {
-      if (data is Map) _addMapAsTableToBuffer(buffer, data, header: 'Body');
-      else if (data is FormData) {
+      if (data is Map) {
+        _addMapAsTableToBuffer(buffer, data, header: 'Body');
+      } else if (data is FormData) {
         final formDataMap = <String, dynamic>{}
           ..addEntries(data.fields)
           ..addEntries(data.files);
-        _addMapAsTableToBuffer(buffer, formDataMap, header: 'Form data | ${data.boundary}');
+        _addMapAsTableToBuffer(buffer, formDataMap,
+            header: 'Form data | ${data.boundary}');
       } else {
         _addBlockToBuffer(buffer, data.toString());
       }
@@ -136,14 +144,14 @@ class DioLogger extends Interceptor {
   void _addResponseToBuffer(StringBuffer buffer, Response response) {
     if (response.data != null) {
       if (response.data is Map) {
-        _addPrettyMapToBuffer(buffer, response.data);
+        _addPrettyMapToBuffer(buffer, response.data as Map);
       } else if (response.data is Uint8List) {
         buffer.writeln('║${_indent()}[');
-        _addUint8ListToBuffer(buffer, response.data);
+        _addUint8ListToBuffer(buffer, response.data as Uint8List);
         buffer.writeln('║${_indent()}]');
       } else if (response.data is List) {
         buffer.writeln('║${_indent()}[');
-        _addListToBuffer(buffer, response.data);
+        _addListToBuffer(buffer, response.data as List);
         buffer.writeln('║${_indent()}]');
       } else {
         _addBlockToBuffer(buffer, response.data.toString());
@@ -156,12 +164,16 @@ class DioLogger extends Interceptor {
     final method = response.requestOptions.method;
     final requestTime = response.requestOptions.extra['startTime'] as DateTime?;
     final responseTime = DateTime.now();
-    final duration = requestTime != null ? responseTime.difference(requestTime) : null;
-    
-    final durationString = logTime && duration != null ? ' (${duration.inMilliseconds}ms)' : '';
-    
-    _addBoxedToBuffer(buffer,
-      header: 'Response ║ $method ║ Status: ${response.statusCode} ${response.statusMessage}$durationString',
+    final duration =
+        requestTime != null ? responseTime.difference(requestTime) : null;
+
+    final durationString =
+        logTime && duration != null ? ' (${duration.inMilliseconds}ms)' : '';
+
+    _addBoxedToBuffer(
+      buffer,
+      header:
+          'Response ║ $method ║ Status: ${response.statusCode} ${response.statusMessage}$durationString',
       text: uri.toString(),
     );
   }
@@ -169,15 +181,15 @@ class DioLogger extends Interceptor {
   void _addRequestHeaderToBuffer(StringBuffer buffer, RequestOptions options) {
     final uri = options.uri;
     final method = options.method;
-    _addBoxedToBuffer(buffer, header: 'Request ║ $method ', text: uri.toString());
+    _addBoxedToBuffer(buffer,
+        header: 'Request ║ $method ', text: uri.toString());
   }
 
   void _addBlockToBuffer(StringBuffer buffer, String msg) {
     final lines = (msg.length / maxWidth).ceil();
     for (var i = 0; i < lines; ++i) {
-      buffer.writeln('║ ' +
-          msg.substring(i * maxWidth,
-              math.min<int>(i * maxWidth + maxWidth, msg.length)));
+      buffer.writeln('║ ${msg.substring(i * maxWidth,
+              math.min<int>(i * maxWidth + maxWidth, msg.length))}');
     }
   }
 
@@ -237,7 +249,8 @@ class DioLogger extends Interceptor {
     buffer.writeln('║$initialIndent}${isListItem && !isLast ? ',' : ''}');
   }
 
-  void _addListToBuffer(StringBuffer buffer, List list, {int tabs = _kInitialTab}) {
+  void _addListToBuffer(StringBuffer buffer, List list,
+      {int tabs = _kInitialTab}) {
     list.asMap().forEach((i, dynamic e) {
       final isLast = i == list.length - 1;
       if (e is Map) {
@@ -253,7 +266,8 @@ class DioLogger extends Interceptor {
     });
   }
 
-  void _addUint8ListToBuffer(StringBuffer buffer, Uint8List list, {int tabs = _kInitialTab}) {
+  void _addUint8ListToBuffer(StringBuffer buffer, Uint8List list,
+      {int tabs = _kInitialTab}) {
     var chunks = [];
     for (var i = 0; i < list.length; i += _chunkSize) {
       chunks.add(

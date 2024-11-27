@@ -1,0 +1,226 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "2:8999351120648255067",
+      "lastPropertyId": "5:6812148657660653429",
+      "name": "CurrencyRateLocalModel",
+      "properties": [
+        {
+          "id": "1:1647680699466616656",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5673537534224521354",
+          "name": "remoteId",
+          "type": 9,
+          "flags": 34848,
+          "indexId": "4:3820722826859288876"
+        },
+        {
+          "id": "3:6771679292486506684",
+          "name": "code",
+          "type": 9,
+          "flags": 8,
+          "indexId": "5:8520118993034251577"
+        },
+        {
+          "id": "4:6835892024418026478",
+          "name": "rate",
+          "type": 8
+        },
+        {
+          "id": "5:6812148657660653429",
+          "name": "lastUpdate",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:7580159180986214273",
+      "lastPropertyId": "3:8104779439154075389",
+      "name": "BlockchainAccountGroupAssignmentLocalModel",
+      "properties": [
+        {
+          "id": "1:5524555087355608250",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5536946164202206976",
+          "name": "blockchainAccountGroupId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "14:5762383511262111404",
+          "relationTarget": "BlockchainAccountGroupLocalModel"
+        },
+        {
+          "id": "3:8104779439154075389",
+          "name": "blockchainAccountId",
+          "type": 11,
+          "flags": 552,
+          "indexId": "15:1055111400833116874",
+          "relationTarget": "BlockchainAccountLocalModel"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:4605152139467121300",
+      "lastPropertyId": "5:6155217685869614482",
+      "name": "BlockchainAccountGroupLocalModel",
+      "properties": [
+        {
+          "id": "1:1307726207620521771",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1735019480120130320",
+          "name": "remoteId",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "16:2565893151743183890"
+        },
+        {
+          "id": "3:8219578951145615581",
+          "name": "name",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "17:254948723536923438"
+        },
+        {
+          "id": "4:5991694022263677267",
+          "name": "icon",
+          "type": 9
+        },
+        {
+          "id": "5:6155217685869614482",
+          "name": "color",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:502902524867826623",
+      "lastPropertyId": "5:2464529971166543754",
+      "name": "BlockchainAccountLocalModel",
+      "properties": [
+        {
+          "id": "1:6660921246919330876",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3085241131903905970",
+          "name": "remoteId",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "18:6972350616615566948"
+        },
+        {
+          "id": "3:4110624731944071324",
+          "name": "accountAddress",
+          "type": 9,
+          "flags": 8,
+          "indexId": "19:5868985037379253837"
+        },
+        {
+          "id": "4:2675118784343108857",
+          "name": "blockchainNetworkId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "20:5739885686780681104",
+          "relationTarget": "BlockchainNetworkLocalModel"
+        },
+        {
+          "id": "5:2464529971166543754",
+          "name": "blockchainAccountGroupAssignmentId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "21:2535417019912587225",
+          "relationTarget": "BlockchainAccountGroupAssignmentLocalModel"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:2290705785346227065",
+      "lastPropertyId": "4:7499148646682078062",
+      "name": "BlockchainNetworkLocalModel",
+      "properties": [
+        {
+          "id": "1:5014450640790671959",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8650984160985605232",
+          "name": "remoteId",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "22:8965600045967308726"
+        },
+        {
+          "id": "3:3528599621411434518",
+          "name": "namespace",
+          "type": 9,
+          "flags": 8,
+          "indexId": "23:811657003628450368"
+        },
+        {
+          "id": "4:7499148646682078062",
+          "name": "reference",
+          "type": 9,
+          "flags": 8,
+          "indexId": "24:3308001866504069131"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "9:2290705785346227065",
+  "lastIndexId": "24:3308001866504069131",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    4886912923951459638,
+    1531017610702850679,
+    474530165184316971,
+    130694872617235992
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    5353295131111717108,
+    4997761393755021674,
+    6347185288661682636,
+    4564539678320231206,
+    1004368761100747343,
+    7060714545118563358,
+    2005263841048580839,
+    1744339467443575364,
+    4728874209823034665,
+    5966819426818324952,
+    6076604867309271638,
+    4384455810133218123,
+    3630957709110080684,
+    7766436735782084218,
+    8182077461687973176,
+    7161831806794570356,
+    7394826762002850582
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

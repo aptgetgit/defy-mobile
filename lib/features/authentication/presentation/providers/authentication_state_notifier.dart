@@ -15,12 +15,18 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
 
   Future<AuthenticationState> _initialize() async {
     try {
-      final activeIdentityId = ref.read(getActiveIdentityUseCaseProvider).call();
+      final activeIdentityId =
+          ref.read(getActiveIdentityUseCaseProvider).call();
       if (activeIdentityId != null) {
-        final token = await ref.read(getSessionTokenUseCaseProvider).call(activeIdentityId);
-        final sessionDetails = await ref.read(getSessionDetailsUseCaseProvider).call(activeIdentityId);
+        final token = await ref
+            .read(getSessionTokenUseCaseProvider)
+            .call(activeIdentityId);
+        final sessionDetails = await ref
+            .read(getSessionDetailsUseCaseProvider)
+            .call(activeIdentityId);
         if (sessionDetails.isActive && !sessionDetails.isExpired) {
-          final currentSession = await ref.read(getCurrentSessionUseCaseProvider).call(token);
+          final currentSession =
+              await ref.read(getCurrentSessionUseCaseProvider).call(token);
           if (currentSession.isActive && !currentSession.isExpired) {
             return AuthenticationState.authenticated(currentSession);
           }
@@ -36,7 +42,9 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
     state = const AsyncValue.loading();
     try {
       final flowId = await ref.read(initiateLoginUseCaseProvider).call(options);
-      ref.read(authenticationFlowManagerProvider.notifier).initializeLoginFlow(flowId, options);
+      ref
+          .read(authenticationFlowManagerProvider.notifier)
+          .initializeLoginFlow(flowId, options);
       state = const AsyncValue.data(AuthenticationState.authenticating());
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
@@ -52,8 +60,11 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
         throw Exception("Login flow not properly initiated or missing data");
       }
 
-      final session = await ref.read(completeLoginUseCaseProvider).call(completeOptions);
-      await ref.read(setActiveIdentityUseCaseProvider).call(session.identity.id);
+      final session =
+          await ref.read(completeLoginUseCaseProvider).call(completeOptions);
+      await ref
+          .read(setActiveIdentityUseCaseProvider)
+          .call(session.identity.id);
       flowManager.resetFlow();
       state = AsyncValue.data(AuthenticationState.authenticated(session));
     } catch (e) {
@@ -64,8 +75,11 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
   Future<void> initiateRegistration(InitiateRegistrationOptions options) async {
     state = const AsyncValue.loading();
     try {
-      final flowId = await ref.read(initiateRegistrationUseCaseProvider).call(options);
-      ref.read(authenticationFlowManagerProvider.notifier).initializeRegistrationFlow(flowId, options);
+      final flowId =
+          await ref.read(initiateRegistrationUseCaseProvider).call(options);
+      ref
+          .read(authenticationFlowManagerProvider.notifier)
+          .initializeRegistrationFlow(flowId, options);
       state = const AsyncValue.data(AuthenticationState.authenticating());
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
@@ -78,11 +92,16 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
       final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
       final completeOptions = flowManager.getCompleteRegistrationOptions();
       if (completeOptions == null) {
-        throw Exception("Registration flow not properly initiated or missing data");
+        throw Exception(
+            "Registration flow not properly initiated or missing data");
       }
 
-      final session = await ref.read(completeRegistrationUseCaseProvider).call(completeOptions);
-      await ref.read(setActiveIdentityUseCaseProvider).call(session.identity.id);
+      final session = await ref
+          .read(completeRegistrationUseCaseProvider)
+          .call(completeOptions);
+      await ref
+          .read(setActiveIdentityUseCaseProvider)
+          .call(session.identity.id);
       flowManager.resetFlow();
       state = AsyncValue.data(AuthenticationState.authenticated(session));
     } catch (e) {
@@ -93,7 +112,8 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
   Future<void> logout() async {
     state = const AsyncValue.loading();
     try {
-      final activeIdentityId = ref.read(getActiveIdentityUseCaseProvider).call();
+      final activeIdentityId =
+          ref.read(getActiveIdentityUseCaseProvider).call();
       if (activeIdentityId != null) {
         await ref.read(logoutUseCaseProvider).call(activeIdentityId);
       }

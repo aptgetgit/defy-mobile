@@ -5,7 +5,7 @@ targets:
       envied_generator|envied:
         enabled: true
         generate_for:
-          - lib/**.dart
+          - lib/config/environment/env.dart
 
       # Flutter Gen Builder configuration
       flutter_gen_runner:

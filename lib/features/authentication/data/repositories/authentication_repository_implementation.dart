@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:built_value/json_object.dart';
-import 'package:defy/core/providers/secure_storage_provider.dart';
-import 'package:defy/core/providers/shared_preferences_provider.dart';
+import 'package:defy/core/services/secure_storage_service.dart';
+import 'package:defy/core/services/shared_preference_service.dart';
 import 'package:defy/features/authentication/data/sources/remote/kratos_data_source.dart';
 import 'package:defy/features/authentication/domain/entities/session_entity.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
@@ -65,7 +65,8 @@ class AuthenticationRepository implements IAuthenticationRepository {
       CompleteRegistrationOptions options) async {
     return options.when(
       withEmailCode: (flowId, username, displayName, email, code) =>
-          _completeRegistrationWithEmail(flowId, username, displayName, email, code),
+          _completeRegistrationWithEmail(
+              flowId, username, displayName, email, code),
       withOIDC: (flowId, username, displayName, provider, idToken) =>
           _completeRegistrationWithOIDC(
               flowId, username, displayName, provider, idToken),
@@ -188,8 +189,8 @@ class AuthenticationRepository implements IAuthenticationRepository {
 
   Future<SessionEntity> _completeRegistrationWithEmail(String flowId,
       String username, String displayName, String email, String code) async {
-    final traits =
-        JsonObject({"email": email, "username": username, "displayName": displayName});
+    final traits = JsonObject(
+        {"email": email, "username": username, "displayName": displayName});
     final response = await _kratosClient.updateNativeRegistrationFlow(
       KratosUpdateNativeRegistrationFlowOptions.withCode(
           flowId: flowId, traits: traits, code: code),
@@ -205,13 +206,18 @@ class AuthenticationRepository implements IAuthenticationRepository {
     return sessionEntity;
   }
 
-  Future<SessionEntity> _completeRegistrationWithOIDC(String flowId,
-      String username, String displayName, String provider, String idToken) async {
-    final idTokenNonce = Jwt.parseJwt(idToken)['nonce'];
+  Future<SessionEntity> _completeRegistrationWithOIDC(
+      String flowId,
+      String username,
+      String displayName,
+      String provider,
+      String idToken) async {
+    final String? idTokenNonce = Jwt.parseJwt(idToken)['nonce']?.toString();
     if (idTokenNonce == null) {
       throw StateError('Invalid id token');
     }
-    final traits = JsonObject({"username": username, "displayName": displayName});
+    final traits =
+        JsonObject({'username': username, 'displayName': displayName});
     final response = await _kratosClient.updateNativeRegistrationFlow(
       KratosUpdateNativeRegistrationFlowOptions.withOIDC(
           flowId: flowId,
@@ -248,7 +254,7 @@ class AuthenticationRepository implements IAuthenticationRepository {
 
   Future<SessionEntity> _completeLoginWithOIDC(
       String flowId, String provider, String idToken) async {
-    final idTokenNonce = Jwt.parseJwt(idToken)['nonce'];
+    final String? idTokenNonce = Jwt.parseJwt(idToken)['nonce']?.toString();
     if (idTokenNonce == null) {
       throw StateError('Invalid id token');
     }
@@ -331,7 +337,8 @@ class AuthenticationRepository implements IAuthenticationRepository {
     final sessionDetails =
         _sharedPreferences.get<String>(sessionDetailsKey(identityId));
     if (sessionDetails != null) {
-      Map<String, dynamic> sessionMap = jsonDecode(sessionDetails);
+      final Map<String, dynamic> sessionMap =
+          jsonDecode(sessionDetails) as Map<String, dynamic>;
       return SessionEntity.fromJson(sessionMap);
     }
     return null;

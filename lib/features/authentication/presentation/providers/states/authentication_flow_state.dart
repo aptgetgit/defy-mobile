@@ -39,6 +39,8 @@ class LoginFlowData with _$LoginFlowData {
 @freezed
 class AuthenticationFlowState with _$AuthenticationFlowState {
   const factory AuthenticationFlowState.idle() = _Idle;
-  const factory AuthenticationFlowState.registrationInProgress(RegistrationFlowData data) = _RegistrationInProgress;
-  const factory AuthenticationFlowState.loginInProgress(LoginFlowData data) = _LoginInProgress;
+  const factory AuthenticationFlowState.registrationInProgress(
+      RegistrationFlowData data) = _RegistrationInProgress;
+  const factory AuthenticationFlowState.loginInProgress(LoginFlowData data) =
+      _LoginInProgress;
 }

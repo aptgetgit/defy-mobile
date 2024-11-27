@@ -7,7 +7,7 @@ part of '../authentication_usecase_provider.dart';
 // **************************************************************************
 
 String _$authenticationRepositoryHash() =>
-    r'26233db126069e8f02c79891fa39e02a2fd920a4';
+    r'17ba4ce9e7bef5c95cc493aa12842c10eb20577e';
 
 /// See also [authenticationRepository].
 @ProviderFor(authenticationRepository)
@@ -27,7 +27,7 @@ final authenticationRepositoryProvider =
 typedef AuthenticationRepositoryRef
     = AutoDisposeProviderRef<AuthenticationRepository>;
 String _$getCurrentSessionUseCaseHash() =>
-    r'e353de3e28a3c8c5463de50f80bc8282890f2b28';
+    r'cb203d74b2dff309cac274759b8b06086aa1fead';
 
 /// See also [getCurrentSessionUseCase].
 @ProviderFor(getCurrentSessionUseCase)
@@ -47,7 +47,7 @@ final getCurrentSessionUseCaseProvider =
 typedef GetCurrentSessionUseCaseRef
     = AutoDisposeProviderRef<GetCurrentSessionUseCase>;
 String _$initiateRegistrationUseCaseHash() =>
-    r'918b07adcf750fffbfbf6ac5a0de8bf24fb7b801';
+    r'd34bbd086574f0b075a505cdee6935d739b456ce';
 
 /// See also [initiateRegistrationUseCase].
 @ProviderFor(initiateRegistrationUseCase)
@@ -67,7 +67,7 @@ final initiateRegistrationUseCaseProvider =
 typedef InitiateRegistrationUseCaseRef
     = AutoDisposeProviderRef<InitiateRegistrationUseCase>;
 String _$completeRegistrationUseCaseHash() =>
-    r'07579d0382dc93707cab3ac9650e5696a4a0b6c8';
+    r'eaa722389b5e29a7c1d36089e788de412ede1ece';
 
 /// See also [completeRegistrationUseCase].
 @ProviderFor(completeRegistrationUseCase)
@@ -87,7 +87,7 @@ final completeRegistrationUseCaseProvider =
 typedef CompleteRegistrationUseCaseRef
     = AutoDisposeProviderRef<CompleteRegistrationUseCase>;
 String _$initiateLoginUseCaseHash() =>
-    r'31da8f878f779fdf0d87381cbac7488aca987752';
+    r'10eef1325e98241cd66fdad0ec654b8127f8d20c';
 
 /// See also [initiateLoginUseCase].
 @ProviderFor(initiateLoginUseCase)
@@ -106,7 +106,7 @@ final initiateLoginUseCaseProvider =
 // ignore: unused_element
 typedef InitiateLoginUseCaseRef = AutoDisposeProviderRef<InitiateLoginUseCase>;
 String _$completeLoginUseCaseHash() =>
-    r'2b72c2342945afaf143c5cae40b617395a6c7f43';
+    r'aed5542a4db26c136f2c62b5d97b9c34652c414b';
 
 /// See also [completeLoginUseCase].
 @ProviderFor(completeLoginUseCase)
@@ -124,7 +124,7 @@ final completeLoginUseCaseProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CompleteLoginUseCaseRef = AutoDisposeProviderRef<CompleteLoginUseCase>;
-String _$logoutUseCaseHash() => r'4ade2e5c46b6f878d3a801c17bcbc100dc256c80';
+String _$logoutUseCaseHash() => r'19c968247f3c931afb4a10624a733ebdc825c04a';
 
 /// See also [logoutUseCase].
 @ProviderFor(logoutUseCase)
@@ -142,7 +142,7 @@ final logoutUseCaseProvider = AutoDisposeProvider<LogoutUseCase>.internal(
 // ignore: unused_element
 typedef LogoutUseCaseRef = AutoDisposeProviderRef<LogoutUseCase>;
 String _$getLoggedInIdentitiesUseCaseHash() =>
-    r'82e7966d6b48909060eb3a9cd589996c78f02c8f';
+    r'6e257ee30b9bf8b12391b11f85195060546aa299';
 
 /// See also [getLoggedInIdentitiesUseCase].
 @ProviderFor(getLoggedInIdentitiesUseCase)
@@ -162,7 +162,7 @@ final getLoggedInIdentitiesUseCaseProvider =
 typedef GetLoggedInIdentitiesUseCaseRef
     = AutoDisposeProviderRef<GetLoggedInIdentitiesUseCase>;
 String _$getSessionTokenUseCaseHash() =>
-    r'38e7e9ff98d1df8561b5b1b139e7f6188b90653a';
+    r'cda3cb0f07c4cd0ca4bf7ad2bfe91ddd1162f5c5';
 
 /// See also [getSessionTokenUseCase].
 @ProviderFor(getSessionTokenUseCase)
@@ -182,7 +182,7 @@ final getSessionTokenUseCaseProvider =
 typedef GetSessionTokenUseCaseRef
     = AutoDisposeProviderRef<GetSessionTokenUseCase>;
 String _$saveSessionTokenUseCaseHash() =>
-    r'88c1987b8459829d92e18ed9b3e8990838a019a0';
+    r'd07bb3bdbcf349fe528f930b3dca71ed36bcaf78';
 
 /// See also [saveSessionTokenUseCase].
 @ProviderFor(saveSessionTokenUseCase)
@@ -202,7 +202,7 @@ final saveSessionTokenUseCaseProvider =
 typedef SaveSessionTokenUseCaseRef
     = AutoDisposeProviderRef<SaveSessionTokenUseCase>;
 String _$deleteSessionTokenUseCaseHash() =>
-    r'2f0274727bea9b42b9023c653940227b2db9917d';
+    r'f7345b51433a7bec5855cc0cc23044cfc73e9f56';
 
 /// See also [deleteSessionTokenUseCase].
 @ProviderFor(deleteSessionTokenUseCase)
@@ -222,7 +222,7 @@ final deleteSessionTokenUseCaseProvider =
 typedef DeleteSessionTokenUseCaseRef
     = AutoDisposeProviderRef<DeleteSessionTokenUseCase>;
 String _$setActiveIdentityUseCaseHash() =>
-    r'88a04190894872b8307882eb7e96e9b78c49f0c8';
+    r'3db7101a0c724afd4adbb6fcc554bd8b99a6899b';
 
 /// See also [setActiveIdentityUseCase].
 @ProviderFor(setActiveIdentityUseCase)
@@ -242,7 +242,7 @@ final setActiveIdentityUseCaseProvider =
 typedef SetActiveIdentityUseCaseRef
     = AutoDisposeProviderRef<SetActiveIdentityUseCase>;
 String _$getActiveIdentityUseCaseHash() =>
-    r'c59394fae82c400a1d2d84ce3d4981b35bdecaa2';
+    r'49d532e142af484d9ba66a5b65e9f813fd7c3b3f';
 
 /// See also [getActiveIdentityUseCase].
 @ProviderFor(getActiveIdentityUseCase)
@@ -262,7 +262,7 @@ final getActiveIdentityUseCaseProvider =
 typedef GetActiveIdentityUseCaseRef
     = AutoDisposeProviderRef<GetActiveIdentityUseCase>;
 String _$getSessionDetailsUseCaseHash() =>
-    r'380e954150c7ad20cff1d4c8adccf0088f2a4477';
+    r'dc3dd758ecf1fa54bb73db5db4c43c16a72a72b7';
 
 /// See also [getSessionDetailsUseCase].
 @ProviderFor(getSessionDetailsUseCase)
@@ -282,7 +282,7 @@ final getSessionDetailsUseCaseProvider =
 typedef GetSessionDetailsUseCaseRef
     = AutoDisposeProviderRef<GetSessionDetailsUseCase>;
 String _$saveSessionDetailsUseCaseHash() =>
-    r'64838de01c296de90ce04e65cf47df96b3068d04';
+    r'58b2fd78d12b62bd01444af2fa1223582702c41e';
 
 /// See also [saveSessionDetailsUseCase].
 @ProviderFor(saveSessionDetailsUseCase)
@@ -302,7 +302,7 @@ final saveSessionDetailsUseCaseProvider =
 typedef SaveSessionDetailsUseCaseRef
     = AutoDisposeProviderRef<SaveSessionDetailsUseCase>;
 String _$deleteSessionDetailsUseCaseHash() =>
-    r'6de74ef6900629eb94e99bd8cf198d014d918958';
+    r'8d120a0715c76d69ed1730289b61af6816576ed6';
 
 /// See also [deleteSessionDetailsUseCase].
 @ProviderFor(deleteSessionDetailsUseCase)

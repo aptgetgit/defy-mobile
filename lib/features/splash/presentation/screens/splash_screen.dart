@@ -1,6 +1,6 @@
 import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
-import 'package:defy/core/routes/router.dart';
+import 'package:defy/app/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -52,7 +52,7 @@ class SplashScreen extends HookConsumerWidget {
     try {
       await Future.delayed(const Duration(seconds: 2));
       if (!context.mounted) return;
-      
+
       OnboardingRoute().go(context);
     } catch (e) {
       if (context.mounted) {

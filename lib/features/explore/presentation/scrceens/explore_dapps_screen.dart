@@ -135,7 +135,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
                           dappNames[index],
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         const Gap(12),
@@ -179,7 +179,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> {
                         'Uniswap allows direct crypto swapping without middlemen,using, automated...',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                           color: AppColors.greyLight,
                         ),
                         maxLines: 2,

@@ -22,7 +22,7 @@ class AppColors {
 
   // Blue shades
   static const Color blue = Color(0xFF2071EE);
-  static final Color blueLight = blue.withOpacity(0.2);
+  static final Color blueLight = Color(0xff3282ff);
 
   // Green shades
   static const Color green = Color(0xFFE9F3EC);

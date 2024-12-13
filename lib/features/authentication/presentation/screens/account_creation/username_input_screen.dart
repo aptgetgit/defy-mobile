@@ -1,12 +1,21 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:defy/config/theme/colors.dart';
+import 'package:defy/core/extensions/button_size_extension.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
+import 'package:defy/core/logging/app_logger.dart';
+import 'package:defy/core/providers/credential_manager_provider.dart';
+import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:defy/features/authentication/presentation/helpers/token_expiry_helper.dart';
 import 'package:defy/features/authentication/presentation/providers/account_data_state_provider.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_flow_manager.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
 import 'package:defy/features/authentication/presentation/widgets/fading_text.dart';
+import 'package:defy/features/shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class UserNameInputScreen extends ConsumerStatefulWidget {
   const UserNameInputScreen({super.key, required this.nextPage});
@@ -27,12 +36,65 @@ class _UserNameInputScreenState extends ConsumerState<UserNameInputScreen> {
 
   void confirm() {
     ref.read(accountDataStateProvider.notifier).setUsername(controller.text);
-    signupUser();
-    widget.nextPage(1);
+    register();
   }
 
-  void signupUser() async {
-    // final accountData = ref.read(accountDataStateProvider);
+  Future<void> register() async {
+    final accountDataState = ref.read(accountDataStateProvider);
+    final notifier = ref.read(authenticationNotifierProvider.notifier);
+    final credentialManager = ref.read(credentialManagerServiceProvider);
+    final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
+
+    //get the idToken
+    try {
+      String? idToken;
+      String? provider;
+      final loginOption = flowManager.getCompleteLoginOptions();
+
+      //oidc
+      if (loginOption is CompleteLoginOptionsWithOIDC) {
+        final oidcOption = loginOption;
+        idToken = oidcOption.idToken;
+        provider = oidcOption.provider;
+
+        //check if idToken is valid
+        final isExpired = isTokenExpired(idToken);
+
+        if (isExpired) {
+          //asking for auth again
+          if (provider == 'google') {
+            final googleIdTokenCredential =
+                await credentialManager.saveGoogleCredential();
+            if (googleIdTokenCredential != null) {
+              idToken = googleIdTokenCredential.idToken;
+            } else {
+              _showErrorSnackBar('Google Sign-Up failed');
+            }
+          } else if (provider == 'apple') {
+            final credential = await SignInWithApple.getAppleIDCredential(
+                scopes: [AppleIDAuthorizationScopes.email],
+                nonce: "testertagger");
+            if (credential.identityToken != null) {
+              idToken = credential.identityToken!;
+            } else {
+              _showErrorSnackBar('Apple Sign-Up failed');
+            }
+          }
+        } else {
+          //continuing with login idToken
+          await notifier
+              .initiateRegistration(InitiateRegistrationOptions.withOIDC(
+            username: accountDataState.username,
+            displayName: accountDataState.firstName,
+          ));
+          flowManager.updateRegistrationFlowWithOIDC(
+              provider: provider, idToken: idToken);
+          await notifier.completeRegistration();
+        }
+      }
+    } on Exception catch (e) {
+      AppLogger.debug(e.toString());
+    }
   }
 
   @override
@@ -174,14 +236,24 @@ class _UserNameInputScreenState extends ConsumerState<UserNameInputScreen> {
               ),
             ),
             const Spacer(),
-            // ActiveButton(
-            //   label: 'Confirm',
-            //   onTap: confirm,
-            //   size: ButtonSize.large,
-            //   active: activeButton,
-            // )
+            ActiveButton(
+              label: 'Confirm',
+              onTap: confirm,
+              size: ButtonSize.large,
+              active: activeButton,
+            )
           ],
         ),
+      ),
+    );
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red.shade700,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

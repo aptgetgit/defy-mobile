@@ -1,5 +1,6 @@
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/providers/network_connectivity_provider.dart';
+import 'package:defy/features/authentication/presentation/providers/account_data_state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -29,7 +30,7 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     super.initState();
     final credentialManager = ref.read(credentialManagerServiceProvider);
     if (credentialManager.isSupportedPlatform) {
-      tryAutoSignIn();
+      // tryAutoSignIn();
     }
   }
 
@@ -63,6 +64,7 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
   }
 
   Future<void> googleLogin() async {
+    ref.read(accountDataStateProvider.notifier).setProvider('google');
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     final credentialManager = ref.read(credentialManagerServiceProvider);
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
@@ -79,16 +81,18 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
         );
 
         await notifier.completeLogin();
-        HomeRoute().replace(context);
+        // HomeRoute().replace(context);
       } else {
         _showErrorSnackBar('Google Sign-In failed');
       }
-    } catch (e) {
+    } on Exception catch (e) {
+      AppLogger.debug("error in google Login");
       _showErrorSnackBar('Error during Google Sign-In: ${e.toString()}');
     }
   }
 
   Future<void> appleLogin() async {
+    ref.read(accountDataStateProvider.notifier).setProvider('apple');
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
 

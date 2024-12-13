@@ -155,7 +155,7 @@ extension $HomeRouteExtension on HomeRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'a35eee1d801a1b7c32efa75dda11a52a502fa53a';
+String _$routerHash() => r'6d63be945051a4b815297a307236e58280ad55e7';
 
 /// See also [router].
 @ProviderFor(router)

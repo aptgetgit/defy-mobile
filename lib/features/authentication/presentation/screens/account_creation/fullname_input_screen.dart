@@ -1,8 +1,10 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:defy/config/theme/colors.dart';
+import 'package:defy/core/extensions/button_size_extension.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/features/authentication/presentation/providers/account_data_state_provider.dart';
 import 'package:defy/features/authentication/presentation/widgets/fading_text.dart';
+import 'package:defy/features/shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -115,12 +117,12 @@ class _FullNameInputScreenState extends ConsumerState<FullNameInputScreen> {
               ),
             ),
             const Spacer(),
-            // ActiveButton(
-            //   label: 'Confirm',
-            //   onTap: confimr,
-            //   size: ButtonSize.large,
-            //   active: activeButton,
-            // )
+            ActiveButton(
+              label: 'Confirm',
+              onTap: confirm,
+              size: ButtonSize.large,
+              active: activeButton,
+            )
           ],
         ),
       ),

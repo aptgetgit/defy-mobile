@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:async';
 
+import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
+import 'package:defy/features/authentication/presentation/helpers/error.dart';
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:defy/features/authentication/presentation/screens/account_creation/account_creation_screen.dart';
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
@@ -8,6 +11,7 @@ import 'package:defy/features/authentication/presentation/screens/welcome_back_s
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
 import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -49,25 +53,50 @@ GoRouter router(RouterRef ref) {
           if (state.fullPath == const SplashRoute().location) {
             return authenticationState.map(
               authenticated: (_) => const HomeRoute().location,
-              unauthenticated: (_) => const OnboardingRoute().location,
+              unauthenticated: (_) => const AuthenticationRoute().location,
               authenticating: (_) => null,
             );
           }
 
-          return authenticationState.map(
-            authenticated: (_) => routeData?.map(
-              public: (route) => route.redirectIfAuthenticated,
-              protected: (_) => null,
-            ),
-            unauthenticated: (_) => routeData?.map(
-              public: (_) => null,
-              protected: (_) => const AuthenticationRoute().location,
-            ),
+          if(state.fullPath == const AccountCreationRoute().location){
+            AppLogger.debug("routeData- ${state.fullPath}");
+            return authenticationState.map(
+              authenticated: (_) => const HomeRoute().location,
+              unauthenticated: (_) => const AuthenticationRoute().location,
+              authenticating: (_) => null,
+            );
+          }
+
+          if(state.fullPath == const AuthenticationRoute().location){
+            AppLogger.debug("routeDataAuth- ${state.fullPath}");
+            return authenticationState.map(
+            authenticated: (_) => const HomeRoute().location,
+            unauthenticated: (_) => const AuthenticationRoute().location,
             authenticating: (_) => null, // Don't redirect while authenticating
           );
+          }
+
         },
         loading: () => null, // Stay on current route while loading
-        error: (_, __) => const AuthenticationRoute().location,
+        error: (e, st) {
+          AppLogger.debug("routeErr- ${state.fullPath}");
+          DioException? err;
+          if(e is DioException) {
+            err = e;
+          }
+          final authErrorType = AuthErrorHandler.parseAuthError(err?.response);
+          switch(authErrorType) {
+            case AuthErrorType.missingUsername:
+              AppLogger.debug(authErrorType.toString());
+              return const AccountCreationRoute().location;
+            case AuthErrorType.missingDisplayName:
+              AppLogger.debug(authErrorType.toString());
+              return const AccountCreationRoute().location;
+            case AuthErrorType.generalAuthError:
+              AppLogger.debug(authErrorType.toString());
+              return const AuthenticationRoute().location;
+          }
+          },
       );
     },
     refreshListenable: GoRouterRefreshStream(ref),

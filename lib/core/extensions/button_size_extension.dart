@@ -9,9 +9,9 @@ enum ButtonSize {
 
 extension ButtonSizeExtension on ButtonSize {
   double get height => switch (this) {
-    ButtonSize.small => 32,
-    ButtonSize.medium => 40,
-    ButtonSize.large => 48,
+    ButtonSize.small => 40,
+    ButtonSize.medium => 48,
+    ButtonSize.large => 56,
   };
 
   double get textSize => switch (this) {

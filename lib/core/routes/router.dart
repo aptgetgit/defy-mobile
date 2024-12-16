@@ -4,11 +4,15 @@ import 'dart:async';
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
 import 'package:defy/features/authentication/presentation/helpers/error.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_usecase_provider.dart';
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
 import 'package:defy/features/authentication/presentation/screens/account_creation/account_creation_screen.dart';
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
+import 'package:defy/features/authentication/presentation/screens/create_import_wallet_screen.dart';
 import 'package:defy/features/authentication/presentation/screens/welcome_back_screen.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
+import 'package:defy/features/shared/presentation/providers/user_blockchain_account_group_notifier_provider.dart';
+import 'package:defy/features/shared/presentation/providers/user_blockchain_account_notifier_provider.dart';
 import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:dio/dio.dart';
@@ -40,63 +44,87 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(RouterRef ref) {
-  final authState = ref.watch(authenticationNotifierProvider);
-  
+
   return GoRouter(
-    initialLocation: const AuthenticationRoute().location,
+    initialLocation: CreateImportWalletScreenRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;
-      
+      final authState = ref.watch(authenticationNotifierProvider);
+      AppLogger.debug(state.fullPath);
+
       return authState.when(
-        data: (authenticationState) {
-          if (state.fullPath == const SplashRoute().location) {
-            return authenticationState.map(
-              authenticated: (_) => const HomeRoute().location,
-              unauthenticated: (_) => const AuthenticationRoute().location,
-              authenticating: (_) => null,
-            );
-          }
-
-          if(state.fullPath == const AccountCreationRoute().location){
-            AppLogger.debug("routeData- ${state.fullPath}");
-            return authenticationState.map(
-              authenticated: (_) => const HomeRoute().location,
-              unauthenticated: (_) => const AuthenticationRoute().location,
-              authenticating: (_) => null,
-            );
-          }
-
-          if(state.fullPath == const AuthenticationRoute().location){
-            AppLogger.debug("routeDataAuth- ${state.fullPath}");
-            return authenticationState.map(
-            authenticated: (_) => const HomeRoute().location,
-            unauthenticated: (_) => const AuthenticationRoute().location,
-            authenticating: (_) => null, // Don't redirect while authenticating
-          );
-          }
-
-        },
-        loading: () => null, // Stay on current route while loading
+        loading: () {
+          AppLogger.debug("loading");
+          return null;
+        }, // Stay on current route while loading
         error: (e, st) {
-          AppLogger.debug("routeErr- ${state.fullPath}");
+           AppLogger.debug("error");
           DioException? err;
-          if(e is DioException) {
+          if (e is DioException) {
             err = e;
           }
           final authErrorType = AuthErrorHandler.parseAuthError(err?.response);
-          switch(authErrorType) {
+          switch (authErrorType) {
             case AuthErrorType.missingUsername:
-              AppLogger.debug(authErrorType.toString());
-              return const AccountCreationRoute().location;
             case AuthErrorType.missingDisplayName:
-              AppLogger.debug(authErrorType.toString());
               return const AccountCreationRoute().location;
             case AuthErrorType.generalAuthError:
-              AppLogger.debug(authErrorType.toString());
               return const AuthenticationRoute().location;
+            default:
+              const AuthenticationRoute().location;
           }
-          },
+        return const AuthenticationRoute().location;
+        },
+        data: (authenticationState) {
+
+          if (state.fullPath == const AccountCreationRoute().location) {
+            return authenticationState.map(
+              authenticated: (_) =>
+                  const CreateImportWalletScreenRoute().location,
+              unauthenticated: (_) => const AuthenticationRoute().location,
+              authenticating: (_) => null,
+            );
+          }
+
+          if (state.fullPath == const AuthenticationRoute().location) {
+            return authenticationState.map(
+              authenticated: (_) => WelcomeBackScreenRoute().location,
+              unauthenticated: (_) => const AuthenticationRoute().location,
+              authenticating: (_) =>
+                  null, // Don't redirect while authenticating
+            );
+          }
+
+          if (state.fullPath == SplashRoute().location) {
+            return authenticationState.map(
+              authenticated: (_) {
+                AppLogger.debug("splash screen - home route");
+                //if active group then return to homescreen //todo
+                // final accountsState =
+                //     ref.read(userBlockchainAccountGroupNotifierProvider);
+                // return accountsState.when(
+                //   data: (accounts) {
+                //     if (accounts.isEmpty) {
+                //       return const CreateImportWalletScreenRoute().location;
+                //     } else {
+                //       return WelcomeBackScreenRoute().location;
+                //     }
+                //   },
+                //   error: (e, st) {
+                //     AppLogger.debug("error getting accounts so routing to authentication");
+                //     return const AuthenticationRoute().location;
+                //   },
+                //   loading: () => null,
+                // );
+                return const HomeRoute().location;
+              },
+              unauthenticated: (_) => const AuthenticationRoute().location,
+              authenticating: (_) => null,
+            );
+          }
+        return null;
+        },
       );
     },
     refreshListenable: GoRouterRefreshStream(ref),
@@ -117,7 +145,8 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 
   final Ref _ref;
-  late final ProviderSubscription<AsyncValue<AuthenticationState>> _subscription;
+  late final ProviderSubscription<AsyncValue<AuthenticationState>>
+      _subscription;
 
   @override
   void dispose() {

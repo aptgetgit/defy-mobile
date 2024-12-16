@@ -16,6 +16,7 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
   }
 
   Future<AuthenticationState> _initialize() async {
+    await Future.delayed(const Duration(seconds: 6));
     try {
       final activeIdentityId = ref.read(getActiveIdentityUseCaseProvider).call();
       if (activeIdentityId != null) {

@@ -32,6 +32,10 @@ class $AssetsGifsGen {
   AssetGenImage get smilingFaceWithHalo =>
       const AssetGenImage('assets/gifs/smiling-face-with-halo.gif');
 
+  /// File path: assets/gifs/smiling-face-with-hearts.gif
+  AssetGenImage get smilingFaceWithHearts =>
+      const AssetGenImage('assets/gifs/smiling-face-with-hearts.gif');
+
   /// File path: assets/gifs/star-struck.gif
   AssetGenImage get starStruck =>
       const AssetGenImage('assets/gifs/star-struck.gif');
@@ -43,6 +47,7 @@ class $AssetsGifsGen {
         kissingFace,
         slightlySmilingFace,
         smilingFaceWithHalo,
+        smilingFaceWithHearts,
         starStruck
       ];
 }
@@ -65,12 +70,27 @@ class $AssetsIconsGen {
   AssetGenImage get coinLogo =>
       const AssetGenImage('assets/icons/coin-logo.png');
 
+  /// File path: assets/icons/female-emoji.png
+  AssetGenImage get femaleEmoji =>
+      const AssetGenImage('assets/icons/female-emoji.png');
+
   /// File path: assets/icons/google.png
   AssetGenImage get google => const AssetGenImage('assets/icons/google.png');
 
+  /// File path: assets/icons/male-emoji.png
+  AssetGenImage get maleEmoji =>
+      const AssetGenImage('assets/icons/male-emoji.png');
+
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [appIcon, appLogoDark, appLogoLight, coinLogo, google];
+  List<AssetGenImage> get values => [
+        appIcon,
+        appLogoDark,
+        appLogoLight,
+        coinLogo,
+        femaleEmoji,
+        google,
+        maleEmoji
+      ];
 }
 
 class $AssetsImagesGen {
@@ -79,6 +99,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/aptos-logo.png
   AssetGenImage get aptosLogo =>
       const AssetGenImage('assets/images/aptos-logo.png');
+
+  /// File path: assets/images/mobile-frame-notch.png
+  AssetGenImage get mobileFrameNotch =>
+      const AssetGenImage('assets/images/mobile-frame-notch.png');
+
+  /// File path: assets/images/mobile-frame.png
+  AssetGenImage get mobileFrame =>
+      const AssetGenImage('assets/images/mobile-frame.png');
 
   /// File path: assets/images/onboarding-nft-1.png
   AssetGenImage get onboardingNft1 =>
@@ -107,6 +135,8 @@ class $AssetsImagesGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         aptosLogo,
+        mobileFrameNotch,
+        mobileFrame,
         onboardingNft1,
         onboardingNft2,
         onboardingNft3,
@@ -125,16 +155,9 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  });
+  const AssetGenImage(this._assetName);
 
   final String _assetName;
-
-  final Size? size;
-  final Set<String> flavors;
 
   Image image({
     Key? key,
@@ -154,7 +177,7 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = true,
+    bool gaplessPlayback = false,
     bool isAntiAlias = false,
     String? package,
     FilterQuality filterQuality = FilterQuality.low,

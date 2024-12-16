@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/providers/network_connectivity_provider.dart';
 import 'package:defy/features/authentication/presentation/providers/account_data_state_provider.dart';
+import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:defy/config/assets.gen.dart';
@@ -70,7 +74,8 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
 
     try {
-      final googleIdTokenCredential = await credentialManager.saveGoogleCredential();
+      final googleIdTokenCredential =
+          await credentialManager.saveGoogleCredential();
 
       if (googleIdTokenCredential != null) {
         await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
@@ -81,7 +86,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
         );
 
         await notifier.completeLogin();
-        // HomeRoute().replace(context);
       } else {
         _showErrorSnackBar('Google Sign-In failed');
       }
@@ -132,7 +136,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
   Widget build(BuildContext context) {
     final (width, height) = (context.screenWidth, context.screenHeight);
     final isDark = context.isDarkMode;
-    final authState = ref.watch(authenticationNotifierProvider);
     final isOnline = ref.watch(isOnlineProvider);
     final networkStatus = ref.watch(networkStatusProvider);
 
@@ -151,8 +154,8 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
         child: Stack(
           children: [
             Positioned(
-              left: width * .0867,
-              top: height * .0802,
+              left: width * .0943,
+              top: height * .1238,
               child: Container(
                 height: height * .0481,
                 width: width * .1046,
@@ -165,15 +168,74 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                   width: width * .0608,
                 ),
               ),
-            ),
+            ).animate().scaleXY(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
             Positioned(
-              left: (width - (width * .1862)) / 2,
-              top: height * .0901,
+              left: width * .4886,
+              top: height * .0560,
               child: Assets.images.onboardingNft1.image(
-                width: width * .1862,
-                height: height * .0849,
+                width: width * .1148,
+                height: height * .0531,
+              ),
+            ).animate().scale(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: width * .3214,
+              top: height * .3670,
+              child: Assets.images.onboardingNft6.image(
+                width: width * .1148,
+                height: height * .0531,
+              ),
+            ).animate().scale(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: width * .5785,
+              top: height * .4230,
+              child: Container(
+                height: height * .0543,
+                width: width * .1173,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.blueLight,
+                ),
+                child: Assets.gifs.grinningFaceWithSmilingEyes.image(
+                  width: width * .0683,
+                ),
+              ),
+            ).animate().scale(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              right: 12,
+              top: height * .2526,
+              child: Assets.images.onboardingNft3.image(
+                width: width * .1377,
+                height: height * .0637,
+              ),
+            ).animate().scale(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 3.0,
+                  sigmaY: 3.0,
+                ),
+                child: Container(
+                  color: Colors.transparent,
+                ),
               ),
             ),
+            //------------//
             Positioned(
               right: 5,
               top: height * .0898,
@@ -181,63 +243,56 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                 width: width * .1654,
                 height: height * .0765,
               ),
-            ),
-            Positioned(
-              left: width * .0229,
-              top: height * .1874,
-              child: Container(
-                height: height * .0651,
-                width: width * .1407,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.blueLight,
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: 1.5,
+                  end: 0,
+                  curve: Curves.easeOut,
                 ),
-                child: Assets.gifs.grinningFaceWithSmilingEyes.image(
-                  width: width * .0819,
-                ),
-              ),
-            ),
             Positioned(
-              left: width * .8496,
-              top: height * .2526,
-              child: Transform.rotate(
-                angle: 0,
-                child: Assets.images.onboardingNft3.image(
-                  width: width * .1939,
-                  height: height * .0895,
-                ),
-              ),
-            ),
-            Positioned(
-              left: width * .0808,
-              top: height * .3327,
+              right: 4,
+              top: height * .4174,
               child: Assets.icons.coinLogo.image(
-                width: width * .1302,
-                height: height * .0541,
+                width: width * .16,
+                height: height * .0739,
               ),
-            ),
-            Positioned(
-              left: width * .8980,
-              top: height * .3961,
-              child: Transform.rotate(
-                angle: 0,
-                child: Assets.images.aptosLogo.image(
-                  width: width * .1587,
-                  height: height * .0732,
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: 1.5,
+                  end: 0,
+                  curve: Curves.easeOut,
                 ),
+            Positioned(
+              left: -(width * .0561),
+              top: height * .2594,
+              child: Assets.images.aptosLogo.image(
+                width: width * .1587,
+                height: height * .0732,
               ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: -1,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: width * .25,
+              top: height * .5430,
+              child: Assets.images.onboardingNft4
+                  .image(
+                    width: width * .2580,
+                    height: height * .1192,
+                  )
+                  .animate()
+                  .slideY(
+                    duration: Duration(milliseconds: 550),
+                    begin: 1,
+                    end: 0,
+                    curve: Curves.easeOut,
+                  ),
             ),
             Positioned(
-              left: -width * .1077,
-              top: height * .5758,
-              child: Assets.images.onboardingNft4.image(
-                width: width * .2580,
-                height: height * .1192,
-              ),
-            ),
-            Positioned(
-              left: width * .8530,
+              right: width * .05,
               top: height * .6011,
               child: Container(
                 height: height * .0820,
@@ -251,25 +306,48 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                   width: width * .1031,
                 ),
               ),
-            ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: 1.5,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
             Positioned(
-              left: -width * .08,
-              top: height * .8738,
+              left: width * .0408,
+              top: height * .5801,
+              child: Container(
+                height: height * .0513,
+                width: width * .1111,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFFA7AA2),
+                ),
+                child: Assets.gifs.smilingFaceWithHearts.image(
+                  width: width * .0646,
+                ),
+              ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: -1,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: -(width * .0454),
+              top: height * .4078,
               child: Assets.images.onboardingNft5.image(
-                width: width * .2403,
-                height: height * .1113,
+                width: width * .1940,
+                height: height * .0812,
               ),
-            ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: -1,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
             Positioned(
-              left: width * .8798,
-              top: height * .8165,
-              child: Assets.images.onboardingNft6.image(
-                width: width * .2374,
-                height: height * .1098,
-              ),
-            ),
-            Positioned(
-              top: height * .3104,
+              top: height * .1474,
               left: 0,
               right: 0,
               child: SizedBox(
@@ -281,22 +359,32 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                     Assets.icons.appLogoDark
                         .image(width: width * .1589, height: height * .0872),
                     const Gap(4),
-                    const Text(
-                      'Let\'s get started',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 24,
-                      ),
-                    ),
-                    const Gap(4),
-                    const Text(
-                      'Sign up or recover your account.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: Color(0XFF979DAA),
-                      ),
-                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'Let\'s get started',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 24,
+                          ),
+                        ),
+                        const Gap(4),
+                        const Text(
+                          'Sign up or recover your account.',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Color(0XFF979DAA),
+                          ),
+                        ),
+                      ],
+                    ).animate().slideY(
+                          duration: Duration(milliseconds: 500),
+                          begin: 3,
+                          end: 0,
+                          curve: Curves.easeOut,
+                        ),
                   ],
                 ),
               ),
@@ -305,18 +393,23 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  _SocialSignInButton(
-                    onPressed: isOnline.whenOrNull(
-                      data: (online) =>
-                          online && !authState.isLoading ? googleLogin : null,
-                    ),
-                    isLoading: authState.isLoading,
-                    icon: Assets.icons.google.image(width: 32),
-                    label: 'Continue with Google',
+                  Consumer(
+                    builder:(ctx,ref,child){
+                      final authState = ref.watch(authenticationNotifierProvider);
+                      return _SocialSignInButton(
+                      onPressed: isOnline.whenOrNull(
+                        data: (online) =>
+                            online && !authState.isLoading ? googleLogin : null,
+                      ),
+                      isLoading: authState.isLoading,
+                      icon: Assets.icons.google.image(width: 32),
+                      label: 'Continue with Google',
+                    );
+                    }
                   ),
                   Gap(height * 0.03),
                   const _TermsAndPrivacyText(),
-                  Gap(height * .0844),
+                  Gap(height * .0644),
                 ],
               ),
             ),

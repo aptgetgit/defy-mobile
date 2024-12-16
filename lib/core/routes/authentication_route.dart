@@ -30,9 +30,21 @@ class WelcomeBackScreenRoute extends GoRouteData {
   const WelcomeBackScreenRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const WelcomeBackScreen();
+  Widget build(BuildContext context, GoRouterState state) => WelcomeBackScreen();
+
+  // static final AppRoute route = AppRoute.protected(
+  //   builder: (context, state) => WelcomeBackScreen(displayName: $extra,),
+  // );
+}
+
+@TypedGoRoute<CreateImportWalletScreenRoute>(path: '/create-import')
+class CreateImportWalletScreenRoute extends GoRouteData {
+  const CreateImportWalletScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const CreateImportWalletScreen();
 
   static final AppRoute route = AppRoute.protected(
-    builder: (context, state) => const WelcomeBackScreen(),
+    builder: (context, state) => const CreateImportWalletScreen(),
   );
 }

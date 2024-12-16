@@ -12,6 +12,7 @@ List<RouteBase> get $appRoutes => [
       $authenticationRoute,
       $accountCreationRoute,
       $welcomeBackScreenRoute,
+      $createImportWalletScreenRoute,
       $homeRoute,
     ];
 
@@ -129,6 +130,30 @@ extension $WelcomeBackScreenRouteExtension on WelcomeBackScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $createImportWalletScreenRoute => GoRouteData.$route(
+      path: '/create-import',
+      factory: $CreateImportWalletScreenRouteExtension._fromState,
+    );
+
+extension $CreateImportWalletScreenRouteExtension
+    on CreateImportWalletScreenRoute {
+  static CreateImportWalletScreenRoute _fromState(GoRouterState state) =>
+      const CreateImportWalletScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/create-import',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $homeRoute => GoRouteData.$route(
       path: '/home',
       factory: $HomeRouteExtension._fromState,
@@ -155,7 +180,7 @@ extension $HomeRouteExtension on HomeRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'6d63be945051a4b815297a307236e58280ad55e7';
+String _$routerHash() => r'6c407f8a7f4601a8253c13ecd3d53f9ddc1e54a9';
 
 /// See also [router].
 @ProviderFor(router)

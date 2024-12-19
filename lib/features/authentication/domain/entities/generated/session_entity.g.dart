@@ -40,6 +40,7 @@ const _$AssuranceLevelEnumMap = {
 _$IdentityEntityImpl _$$IdentityEntityImplFromJson(Map<String, dynamic> json) =>
     _$IdentityEntityImpl(
       id: json['id'] as String,
+      traits: TraitsEntity.fromJson(json['traits'] as Map<String, dynamic>),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
@@ -48,6 +49,21 @@ Map<String, dynamic> _$$IdentityEntityImplToJson(
         _$IdentityEntityImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'traits': instance.traits,
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
+    };
+
+_$TraitsEntityImpl _$$TraitsEntityImplFromJson(Map<String, dynamic> json) =>
+    _$TraitsEntityImpl(
+      email: json['email'] as String,
+      username: json['username'] as String,
+      displayName: json['display_name'] as String,
+    );
+
+Map<String, dynamic> _$$TraitsEntityImplToJson(_$TraitsEntityImpl instance) =>
+    <String, dynamic>{
+      'email': instance.email,
+      'username': instance.username,
+      'display_name': instance.displayName,
     };

@@ -1,9 +1,11 @@
 import 'package:defy/config/assets.gen.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_usecase_provider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'dart:math' as math;
 
@@ -34,12 +36,58 @@ class WelcomeBackScreen extends StatelessWidget {
   Widget _buildHeaderText(BuildContext context) {
     return Column(
       children: [
-        Text(
-          'Hello again, Allan',
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.w700,
-          ),
+        Consumer(
+          builder: (ctx, ref, child) {
+            final activeIdentityUseCase =
+                ref.read(getActiveIdentityUseCaseProvider);
+            final activeSessionUseCase =
+                ref.read(getSessionDetailsUseCaseProvider);
+
+            final activeIdentity = activeIdentityUseCase.call();
+            if (activeIdentity == null) {
+              return Text(
+                'Hello again',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
+                ),
+              );
+            }
+
+            return FutureBuilder(
+              future: activeSessionUseCase.call(activeIdentity),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text(
+                    'Hello again',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                } else if (!snapshot.hasData) {
+                  return Text(
+                    'Hello again',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                }
+
+                final identity = snapshot.data!.identity.traits;
+                return Text(
+                  'Hello again, ${identity.displayName}',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                  ),
+                );
+              },
+            );
+          },
         ),
         const Gap(16),
         Align(
@@ -273,19 +321,25 @@ class WelcomeBackScreen extends StatelessWidget {
 
   Widget _buildButton() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Ready to choose your wallets?',style: TextStyle(
-            color: AppColors.greyLight,
-            fontSize: 16,
-          ),),
+          Text(
+            'Ready to choose your wallets?',
+            style: TextStyle(
+              color: AppColors.greyLight,
+              fontSize: 16,
+            ),
+          ),
           const Gap(16),
           SizedBox(
-            height: 56,
-            child: ElevatedButton(onPressed: (){}, child: Text('Choose Wallet'),)),
+              height: 56,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text('Choose Wallet'),
+              )),
         ],
       ),
     );

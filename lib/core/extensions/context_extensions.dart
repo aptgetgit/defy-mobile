@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+extension BuildContextExtension on BuildContext {
+  void unfocus() => FocusScope.of(this).unfocus();
+}
+
 extension MediaQueryExtensions on BuildContext {
   // Access to MediaQueryData
   MediaQueryData get mediaQuery => MediaQuery.of(this);

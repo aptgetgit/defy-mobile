@@ -321,6 +321,7 @@ IdentityEntity _$IdentityEntityFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$IdentityEntity {
   String get id => throw _privateConstructorUsedError;
+  TraitsEntity get traits => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -340,7 +341,10 @@ abstract class $IdentityEntityCopyWith<$Res> {
           IdentityEntity value, $Res Function(IdentityEntity) then) =
       _$IdentityEntityCopyWithImpl<$Res, IdentityEntity>;
   @useResult
-  $Res call({String id, DateTime createdAt, DateTime updatedAt});
+  $Res call(
+      {String id, TraitsEntity traits, DateTime createdAt, DateTime updatedAt});
+
+  $TraitsEntityCopyWith<$Res> get traits;
 }
 
 /// @nodoc
@@ -359,6 +363,7 @@ class _$IdentityEntityCopyWithImpl<$Res, $Val extends IdentityEntity>
   @override
   $Res call({
     Object? id = null,
+    Object? traits = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -367,6 +372,10 @@ class _$IdentityEntityCopyWithImpl<$Res, $Val extends IdentityEntity>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      traits: null == traits
+          ? _value.traits
+          : traits // ignore: cast_nullable_to_non_nullable
+              as TraitsEntity,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -376,6 +385,16 @@ class _$IdentityEntityCopyWithImpl<$Res, $Val extends IdentityEntity>
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ) as $Val);
+  }
+
+  /// Create a copy of IdentityEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TraitsEntityCopyWith<$Res> get traits {
+    return $TraitsEntityCopyWith<$Res>(_value.traits, (value) {
+      return _then(_value.copyWith(traits: value) as $Val);
+    });
   }
 }
 
@@ -387,7 +406,11 @@ abstract class _$$IdentityEntityImplCopyWith<$Res>
       __$$IdentityEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, DateTime createdAt, DateTime updatedAt});
+  $Res call(
+      {String id, TraitsEntity traits, DateTime createdAt, DateTime updatedAt});
+
+  @override
+  $TraitsEntityCopyWith<$Res> get traits;
 }
 
 /// @nodoc
@@ -404,6 +427,7 @@ class __$$IdentityEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? traits = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -412,6 +436,10 @@ class __$$IdentityEntityImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      traits: null == traits
+          ? _value.traits
+          : traits // ignore: cast_nullable_to_non_nullable
+              as TraitsEntity,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -428,7 +456,10 @@ class __$$IdentityEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$IdentityEntityImpl extends _IdentityEntity {
   _$IdentityEntityImpl(
-      {required this.id, required this.createdAt, required this.updatedAt})
+      {required this.id,
+      required this.traits,
+      required this.createdAt,
+      required this.updatedAt})
       : super._();
 
   factory _$IdentityEntityImpl.fromJson(Map<String, dynamic> json) =>
@@ -437,13 +468,15 @@ class _$IdentityEntityImpl extends _IdentityEntity {
   @override
   final String id;
   @override
+  final TraitsEntity traits;
+  @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'IdentityEntity(id: $id, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'IdentityEntity(id: $id, traits: $traits, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -452,6 +485,7 @@ class _$IdentityEntityImpl extends _IdentityEntity {
         (other.runtimeType == runtimeType &&
             other is _$IdentityEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.traits, traits) || other.traits == traits) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -460,7 +494,8 @@ class _$IdentityEntityImpl extends _IdentityEntity {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, createdAt, updatedAt);
+  int get hashCode =>
+      Object.hash(runtimeType, id, traits, createdAt, updatedAt);
 
   /// Create a copy of IdentityEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -482,6 +517,7 @@ class _$IdentityEntityImpl extends _IdentityEntity {
 abstract class _IdentityEntity extends IdentityEntity {
   factory _IdentityEntity(
       {required final String id,
+      required final TraitsEntity traits,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$IdentityEntityImpl;
   _IdentityEntity._() : super._();
@@ -492,6 +528,8 @@ abstract class _IdentityEntity extends IdentityEntity {
   @override
   String get id;
   @override
+  TraitsEntity get traits;
+  @override
   DateTime get createdAt;
   @override
   DateTime get updatedAt;
@@ -501,5 +539,194 @@ abstract class _IdentityEntity extends IdentityEntity {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$IdentityEntityImplCopyWith<_$IdentityEntityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+TraitsEntity _$TraitsEntityFromJson(Map<String, dynamic> json) {
+  return _TraitsEntity.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TraitsEntity {
+  String get email => throw _privateConstructorUsedError;
+  String get username => throw _privateConstructorUsedError;
+  String get displayName => throw _privateConstructorUsedError;
+
+  /// Serializes this TraitsEntity to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TraitsEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TraitsEntityCopyWith<TraitsEntity> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TraitsEntityCopyWith<$Res> {
+  factory $TraitsEntityCopyWith(
+          TraitsEntity value, $Res Function(TraitsEntity) then) =
+      _$TraitsEntityCopyWithImpl<$Res, TraitsEntity>;
+  @useResult
+  $Res call({String email, String username, String displayName});
+}
+
+/// @nodoc
+class _$TraitsEntityCopyWithImpl<$Res, $Val extends TraitsEntity>
+    implements $TraitsEntityCopyWith<$Res> {
+  _$TraitsEntityCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TraitsEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? email = null,
+    Object? username = null,
+    Object? displayName = null,
+  }) {
+    return _then(_value.copyWith(
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TraitsEntityImplCopyWith<$Res>
+    implements $TraitsEntityCopyWith<$Res> {
+  factory _$$TraitsEntityImplCopyWith(
+          _$TraitsEntityImpl value, $Res Function(_$TraitsEntityImpl) then) =
+      __$$TraitsEntityImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String email, String username, String displayName});
+}
+
+/// @nodoc
+class __$$TraitsEntityImplCopyWithImpl<$Res>
+    extends _$TraitsEntityCopyWithImpl<$Res, _$TraitsEntityImpl>
+    implements _$$TraitsEntityImplCopyWith<$Res> {
+  __$$TraitsEntityImplCopyWithImpl(
+      _$TraitsEntityImpl _value, $Res Function(_$TraitsEntityImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TraitsEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? email = null,
+    Object? username = null,
+    Object? displayName = null,
+  }) {
+    return _then(_$TraitsEntityImpl(
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TraitsEntityImpl extends _TraitsEntity {
+  _$TraitsEntityImpl(
+      {required this.email, required this.username, required this.displayName})
+      : super._();
+
+  factory _$TraitsEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TraitsEntityImplFromJson(json);
+
+  @override
+  final String email;
+  @override
+  final String username;
+  @override
+  final String displayName;
+
+  @override
+  String toString() {
+    return 'TraitsEntity(email: $email, username: $username, displayName: $displayName)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TraitsEntityImpl &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, email, username, displayName);
+
+  /// Create a copy of TraitsEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TraitsEntityImplCopyWith<_$TraitsEntityImpl> get copyWith =>
+      __$$TraitsEntityImplCopyWithImpl<_$TraitsEntityImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TraitsEntityImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TraitsEntity extends TraitsEntity {
+  factory _TraitsEntity(
+      {required final String email,
+      required final String username,
+      required final String displayName}) = _$TraitsEntityImpl;
+  _TraitsEntity._() : super._();
+
+  factory _TraitsEntity.fromJson(Map<String, dynamic> json) =
+      _$TraitsEntityImpl.fromJson;
+
+  @override
+  String get email;
+  @override
+  String get username;
+  @override
+  String get displayName;
+
+  /// Create a copy of TraitsEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TraitsEntityImplCopyWith<_$TraitsEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

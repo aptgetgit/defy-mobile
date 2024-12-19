@@ -14,6 +14,16 @@ List<RouteBase> get $appRoutes => [
       $welcomeBackScreenRoute,
       $createImportWalletScreenRoute,
       $homeRoute,
+      $accountDashboardScreenRoute,
+      $walletCreationScreenRoute,
+      $seedSelectionScreenRoute,
+      $importPrivateKeyScreenRoute,
+      $importSeedKeyScreenRoute,
+      $walletUiScreenRoute,
+      $securityScreenRoute,
+      $manageWalletScreenRoute,
+      $rotateKeyScreenRoute,
+      $connectionScreenRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -176,11 +186,241 @@ extension $HomeRouteExtension on HomeRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $accountDashboardScreenRoute => GoRouteData.$route(
+      path: '/account',
+      factory: $AccountDashboardScreenRouteExtension._fromState,
+    );
+
+extension $AccountDashboardScreenRouteExtension on AccountDashboardScreenRoute {
+  static AccountDashboardScreenRoute _fromState(GoRouterState state) =>
+      const AccountDashboardScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/account',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletCreationScreenRoute => GoRouteData.$route(
+      path: '/wallet-creation',
+      factory: $WalletCreationScreenRouteExtension._fromState,
+    );
+
+extension $WalletCreationScreenRouteExtension on WalletCreationScreenRoute {
+  static WalletCreationScreenRoute _fromState(GoRouterState state) =>
+      const WalletCreationScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-creation',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $seedSelectionScreenRoute => GoRouteData.$route(
+      path: '/seed-selection',
+      factory: $SeedSelectionScreenRouteExtension._fromState,
+    );
+
+extension $SeedSelectionScreenRouteExtension on SeedSelectionScreenRoute {
+  static SeedSelectionScreenRoute _fromState(GoRouterState state) =>
+      const SeedSelectionScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/seed-selection',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $importPrivateKeyScreenRoute => GoRouteData.$route(
+      path: '/import-private-key',
+      factory: $ImportPrivateKeyScreenRouteExtension._fromState,
+    );
+
+extension $ImportPrivateKeyScreenRouteExtension on ImportPrivateKeyScreenRoute {
+  static ImportPrivateKeyScreenRoute _fromState(GoRouterState state) =>
+      const ImportPrivateKeyScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/import-private-key',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $importSeedKeyScreenRoute => GoRouteData.$route(
+      path: '/import-seed-key',
+      factory: $ImportSeedKeyScreenRouteExtension._fromState,
+    );
+
+extension $ImportSeedKeyScreenRouteExtension on ImportSeedKeyScreenRoute {
+  static ImportSeedKeyScreenRoute _fromState(GoRouterState state) =>
+      const ImportSeedKeyScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/import-seed-key',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletUiScreenRoute => GoRouteData.$route(
+      path: '/wallet',
+      factory: $WalletUiScreenRouteExtension._fromState,
+    );
+
+extension $WalletUiScreenRouteExtension on WalletUiScreenRoute {
+  static WalletUiScreenRoute _fromState(GoRouterState state) =>
+      WalletUiScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $securityScreenRoute => GoRouteData.$route(
+      path: '/security',
+      factory: $SecurityScreenRouteExtension._fromState,
+    );
+
+extension $SecurityScreenRouteExtension on SecurityScreenRoute {
+  static SecurityScreenRoute _fromState(GoRouterState state) =>
+      SecurityScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/security',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $manageWalletScreenRoute => GoRouteData.$route(
+      path: '/manage',
+      factory: $ManageWalletScreenRouteExtension._fromState,
+    );
+
+extension $ManageWalletScreenRouteExtension on ManageWalletScreenRoute {
+  static ManageWalletScreenRoute _fromState(GoRouterState state) =>
+      ManageWalletScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/manage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $rotateKeyScreenRoute => GoRouteData.$route(
+      path: '/rotate-key',
+      factory: $RotateKeyScreenRouteExtension._fromState,
+    );
+
+extension $RotateKeyScreenRouteExtension on RotateKeyScreenRoute {
+  static RotateKeyScreenRoute _fromState(GoRouterState state) =>
+      RotateKeyScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/rotate-key',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $connectionScreenRoute => GoRouteData.$route(
+      path: '/connections',
+      factory: $ConnectionScreenRouteExtension._fromState,
+    );
+
+extension $ConnectionScreenRouteExtension on ConnectionScreenRoute {
+  static ConnectionScreenRoute _fromState(GoRouterState state) =>
+      ConnectionScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/connections',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'6c407f8a7f4601a8253c13ecd3d53f9ddc1e54a9';
+String _$routerHash() => r'3379e1611b5b5139ba890bd7cbff6a5a4680bb89';
 
 /// See also [router].
 @ProviderFor(router)

@@ -10,6 +10,16 @@ import 'package:defy/features/authentication/presentation/screens/account_creati
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
 import 'package:defy/features/authentication/presentation/screens/create_import_wallet_screen.dart';
 import 'package:defy/features/authentication/presentation/screens/welcome_back_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/account_dashboard/screens/account_dashboard.dart';
+import 'package:defy/features/blockchain/presentation/screens/import_wallet/screens/import_private_key_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/import_wallet/screens/import_seed_key_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_creation/screens/seed_selection_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_creation/screens/wallet_creation_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/connection_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/manage_wallet_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/rotate_key_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/security_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/wallet_ui_screen.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
 import 'package:defy/features/shared/presentation/providers/user_blockchain_account_group_notifier_provider.dart';
 import 'package:defy/features/shared/presentation/providers/user_blockchain_account_notifier_provider.dart';
@@ -27,6 +37,7 @@ part 'splash_route.dart';
 part 'onboarding_route.dart';
 part 'authentication_route.dart';
 part 'home_route.dart';
+part 'blockchain_route.dart';
 
 part 'generated/router.g.dart';
 part 'generated/router.freezed.dart';
@@ -46,7 +57,7 @@ class AppRoute with _$AppRoute {
 GoRouter router(RouterRef ref) {
 
   return GoRouter(
-    initialLocation: CreateImportWalletScreenRoute().location,
+    initialLocation: ManageWalletScreenRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;

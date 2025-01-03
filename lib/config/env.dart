@@ -21,6 +21,9 @@ abstract class Env {
   @EnviedField(varName: 'STAKING_LEND-BORROW_BASE_URL')
   static const String stakingLendBorrowBaseUrl = _Env.stakingLendBorrowBaseUrl;
 
-  @EnviedField(varName: 'YIELD_AGGREDATOR_BASE_URL')
+  @EnviedField(varName: 'YIELD_AGGREGATOR_BASE_URL')
   static const String yieldAggregatorBaseUrl = _Env.yieldAggregatorBaseUrl;
+
+  @EnviedField(varName : 'TRADE_PORT_API_KEY')
+  static const String tradePortApiKey = _Env.tradePortApiKey;
 }

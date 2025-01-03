@@ -10,8 +10,7 @@ class TabBarWidget extends ConsumerWidget {
     final controller = ref.read(tokensControllerProvider.notifier);
 
     return Material(
-      elevation: 100,
-      color: Colors.transparent,
+      color: Colors.white,
       child: Container(
         color: Colors.white,
         child: Row(
@@ -68,8 +67,8 @@ class TabButton extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            fontSize: 18,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             color: isSelected ? Colors.black : Colors.grey,
           ),
         ),

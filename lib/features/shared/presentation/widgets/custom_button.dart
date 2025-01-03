@@ -1,10 +1,8 @@
+import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/button_size_extension.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-const Color whiteColor = Colors.white;
-const Color blackColor = Colors.black;
 
 class ActiveButton extends StatelessWidget {
   const ActiveButton({
@@ -35,7 +33,8 @@ class ActiveButton extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             minimumSize: Size.fromHeight(size!.height),
-            // backgroundColor: !active ? const Color(0xffcfd2d8) : whiteColor,
+            backgroundColor:
+                !active ? const Color(0xffcfd2d8) : AppColors.white,
           ),
           onPressed: active ? onTap : null,
           child: Row(
@@ -48,7 +47,7 @@ class ActiveButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: size!.textSize,
                   fontWeight: FontWeight.w500,
-                  // color: !active ? whiteColor : blackColor,
+                  color: !active ? AppColors.white : AppColors.black,
                 ),
               ),
             ],
@@ -60,7 +59,7 @@ class ActiveButton extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             minimumSize: Size.fromHeight(size!.height),
-            // backgroundColor: !active ? const Color(0xff252525) : blueColor,
+            backgroundColor: !active ? const Color(0xff252525) : AppColors.blue,
           ),
           onPressed: active ? onTap : null,
           child: Row(
@@ -73,7 +72,7 @@ class ActiveButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: size!.textSize,
                   fontWeight: FontWeight.w500,
-                  // color: whiteColor,
+                  color: AppColors.white,
                 ),
               ),
             ],
@@ -109,7 +108,7 @@ class OutlineButton extends ConsumerWidget {
           minimumSize: Size.fromHeight(size.height),
           side: BorderSide(
             width: 1,
-            color: darkMode ? whiteColor : blackColor,
+            color: darkMode ? AppColors.white : AppColors.black,
           ),
         ),
         onPressed: onTap,
@@ -118,7 +117,7 @@ class OutlineButton extends ConsumerWidget {
           style: TextStyle(
             fontSize: size.textSize,
             fontWeight: FontWeight.w500,
-            color: darkMode ? whiteColor : blackColor,
+            color: darkMode ? AppColors.white : AppColors.black,
           ),
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/core/logging/app_logger.dart';
+import 'package:defy/features/yield/domain/entities/pool_data_entity.dart';
 import 'package:defy/features/yield/presentation/components/yield_chart.dart';
 import 'package:defy/features/yield/presentation/provider/yield_pool_provider.dart';
 import 'package:defy/features/yield/presentation/screens/yield_lending_transaction_view.dart';
@@ -33,7 +34,7 @@ class YieldMultiplyView extends ConsumerWidget {
     return poolEither.when(
       data: (either) => either.fold(
         (error) => const Center(child: Text('Error')),
-        (pool) => Scaffold(
+        (PoolDataEntity pool) => Scaffold(
           backgroundColor: AppColors.white,
           appBar: _buildAppBar(context, pool),
           body: Stack(
@@ -70,7 +71,7 @@ class YieldMultiplyView extends ConsumerWidget {
         ),
       ),
       loading: () => Center(
-        child: LottieBuilder.asset('assets/lotties/loading-indicator.json'),
+        child: LottieBuilder.asset('assets/animations/loading-indicator.json'),
       ),
       error: (error, stackTrace) => const Center(child: Text('Error')),
     );
@@ -220,9 +221,12 @@ class YieldMultiplyView extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildPlatformItem(context, 'Aries', 'assets/images/platform-aries.png'),
-            _buildPlatformItem(context, 'Amnis', 'assets/images/platform-amnis.png'),
-            _buildPlatformItem(context, 'Aries', 'assets/images/platform-aries.png'),
+            _buildPlatformItem(
+                context, 'Aries', 'assets/images/platform-aries.png'),
+            _buildPlatformItem(
+                context, 'Amnis', 'assets/images/platform-amnis.png'),
+            _buildPlatformItem(
+                context, 'Aries', 'assets/images/platform-aries.png'),
             Container(),
             Container(),
           ],
@@ -231,7 +235,8 @@ class YieldMultiplyView extends ConsumerWidget {
     );
   }
 
-  Widget _buildPlatformItem(BuildContext context, String name, String imagePath) {
+  Widget _buildPlatformItem(
+      BuildContext context, String name, String imagePath) {
     return Container(
       height: context.screenHeight * 0.04,
       width: context.screenWidth * 0.2,
@@ -278,30 +283,44 @@ class YieldMultiplyView extends ConsumerWidget {
           ),
         ),
         const Gap(30),
-        _buildPositionRow(context, pool, '0', 'My Position', '0', 'My Supply', '0', 'Total'),
+        _buildPositionRow(
+            context, pool, '0', 'My Position', '0', 'My Supply', '0', 'Total'),
         const Gap(30),
-        _buildPositionRow(context, pool, '1.5x', 'My Multiply', '+12.63%', 'Net APY', '14.65%', 'Lend APY'),
+        _buildPositionRow(context, pool, '1.5x', 'My Multiply', '+12.63%',
+            'Net APY', '14.65%', 'Lend APY'),
         const Gap(30),
         _buildPositionRow(context, pool, '2.01%', 'Borrow APY', '', '', '', ''),
       ],
     );
   }
 
-  Widget _buildPositionRow(BuildContext context, dynamic pool, String value1, String label1, String value2, String label2, String value3, String label3) {
+  Widget _buildPositionRow(
+      BuildContext context,
+      dynamic pool,
+      String value1,
+      String label1,
+      String value2,
+      String label2,
+      String value3,
+      String label3) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildPositionItem(context, '$value1 ${pool.name.split(' ')[0]}', label1, CrossAxisAlignment.start),
-          _buildPositionItem(context, '$value2 ${pool.name.split(' ')[0]}', label2, CrossAxisAlignment.center),
-          _buildPositionItem(context, '$value3 ${pool.name.split(' ')[0]}', label3, CrossAxisAlignment.end),
+          _buildPositionItem(context, '$value1 ${pool.name.split(' ')[0]}',
+              label1, CrossAxisAlignment.start),
+          _buildPositionItem(context, '$value2 ${pool.name.split(' ')[0]}',
+              label2, CrossAxisAlignment.center),
+          _buildPositionItem(context, '$value3 ${pool.name.split(' ')[0]}',
+              label3, CrossAxisAlignment.end),
         ],
       ),
     );
   }
 
-  Widget _buildPositionItem(BuildContext context, String value, String label, CrossAxisAlignment alignment) {
+  Widget _buildPositionItem(BuildContext context, String value, String label,
+      CrossAxisAlignment alignment) {
     return Expanded(
       child: Column(
         crossAxisAlignment: alignment,
@@ -336,16 +355,19 @@ class YieldMultiplyView extends ConsumerWidget {
           ),
         ),
         const Gap(30),
-        _buildVaultStatRow(context, 'Total ${pool.name.split(' ')[0]} Supplied', '56.3M', '\$50.09M'),
+        _buildVaultStatRow(context, 'Total ${pool.name.split(' ')[0]} Supplied',
+            '56.3M', '\$50.09M'),
         const Gap(30),
-        _buildVaultStatRow(context, 'Total ${pool.name.split(' ')[0]} Borrowed', '2.91M', '\$26.85M'),
+        _buildVaultStatRow(context, 'Total ${pool.name.split(' ')[0]} Borrowed',
+            '2.91M', '\$26.85M'),
         const Gap(30),
         _buildVaultStatRow(context, 'AVG Multiplier', '1.54x', ''),
       ],
     );
   }
 
-  Widget _buildVaultStatRow(BuildContext context, String label, String value1, String value2) {
+  Widget _buildVaultStatRow(
+      BuildContext context, String label, String value1, String value2) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -422,4 +444,3 @@ class YieldMultiplyView extends ConsumerWidget {
     );
   }
 }
-

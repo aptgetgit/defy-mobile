@@ -6,97 +6,118 @@ part of '../pool_data_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PoolDataResponseImpl _$$PoolDataResponseImplFromJson(
-        Map<String, dynamic> json) =>
-    _$PoolDataResponseImpl(
-      id: json['id'] as String,
-      isEnabled: json['is_enabled'] as bool,
-      poolProtocols: parseProtocols(json['pool_protocols']),
-      apr: json['apr'] as String,
-      nameId: json['name_id'] as String,
-      description: json['description'] as String,
-      pid: json['pid'] as String,
-      poolType: json['pool_type'] as String,
-      stakeToken: parseStakeToken(json['stake_token']),
-      totalValueLocked: json['total_value_locked'] as String,
-      tvlToken: json['tvl_token'] as String,
-      withdrawalSlippage: json['withdrawal_slippage'] as String,
-      name: json['name'] as String,
-      displayName: json['display_name'] as String,
-      strategyType: json['strategy_type'] as String,
-      rewardToken: parseRewardToken(json['reward_token']),
-      positionToken: json['position_token'] as String,
-      feeToken: parseFeeToken(json['fee_token']),
-      depositFee: json['deposit_fee'] as String,
-      risk: json['risk'] as String,
-      withdrawalFee: json['withdrawal_fee'] as String,
-      depositSwapFee: json['deposit_swap_fee'] as String,
-      withdrawalSwapFee: json['withdrawal_swap_fee'] as String,
-      stakers: json['stakers'] as String,
-      liquidityType: json['liquidity_type'] as String,
-      weight: parseWeight(json['weight']),
-      aprAvg: json['apr_avg'] as String,
-      vibrantFee: json['vibrant_fee'] as String,
-      volume24h: json['volume24h'] as String,
-      fee24h: json['fee24h'] as String,
-      inflow24h: json['inflow24h'] as String,
-      minApr: json['min_apr'] as String,
-      maxApr: json['max_apr'] as String,
-      maxLeverage: json['max_leverage'] as String,
-      borrowApr: json['borrow_apr'] as String,
-      airdropPoint: json['airdrop_point'] as String,
-      inflowChartData: parsePoolInflowChartData(json['inflow_chart_data']),
-      tvlAprChartData: parseTvlAprChartData(json['tvl_apr_chart_data']),
-      ariesDetail: json['aries_detail'] as String?,
-      echelonDetail: json['echelon_detail'] as String?,
-      leverageResponseDto: json['leverage_response_dto'] as String?,
-      payload:
-          PoolPayloadData.fromJson(json['payload'] as Map<String, dynamic>),
+PoolDataModel _$PoolDataModelFromJson(Map<String, dynamic> json) =>
+    PoolDataModel(
+      id: json['id'] as String? ?? '',
+      isEnabled: json['isEnabled'] as bool?,
+      poolProtocols: (json['protocols'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      apr: json['apr'] as String? ?? '',
+      nameId: json['nameId'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      pid: json['pid'] as String? ?? '',
+      poolType: json['poolType'] as String? ?? '',
+      stakeToken: (json['stakeToken'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      totalValueLocked: json['totalValueLocked'] as String? ?? '',
+      tvlToken: json['tvlToken'] as String? ?? '',
+      withdrawalSlippage: json['withdrawalSlippage'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      displayName: json['displayName'] as String? ?? '',
+      strategyType: json['strategyType'] as String? ?? '',
+      rewardToken: (json['rewardToken'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      positionToken: json['positionToken'] as String? ?? '',
+      feeToken: (json['feeToken'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      depositFee: json['depositFee'] as String? ?? '',
+      risk: json['risk'] as String? ?? '',
+      withdrawalFee: json['withdrawalFee'] as String? ?? '',
+      depositSwapFee: json['depositSwapFee'] as String? ?? '',
+      withdrawalSwapFee: json['withdrawalSwapFee'] as String? ?? '',
+      stakers: json['stakers'] as String? ?? '',
+      liquidityType: json['liquidityType'] as String? ?? '',
+      weight: (json['weight'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      aprAvg: json['aprAvg'] as String? ?? '',
+      vibrantFee: json['vibrantFee'] as String? ?? '',
+      volume24h: json['volume24h'] as String? ?? '',
+      fee24h: json['fee24h'] as String? ?? '',
+      inflow24h: json['inflow24h'] as String? ?? '',
+      minApr: json['minApr'] as String? ?? '',
+      maxApr: json['maxApr'] as String? ?? '',
+      maxLeverage: json['maxLeverage'] as String? ?? '',
+      borrowApr: json['borrowApr'] as String? ?? '',
+      airdropPoint: json['airdropPoint'] as String? ?? '',
+      inflowChartData: (json['inflowChartData'] as List<dynamic>?)
+              ?.map((e) =>
+                  PoolInflowChartDataModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      tvlAprChartData: (json['tvlAprChartData'] as List<dynamic>?)
+              ?.map((e) =>
+                  PoolTvlAprChartDataModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      ariesDetail: json['ariesDetail'] as String?,
+      echelonDetail: json['echelonDetail'] as String?,
+      leverageResponseDto: json['leverageResponseDto'] as String?,
+      payload: PoolPayloadDataModel.fromJson(
+          json['payload'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$PoolDataResponseImplToJson(
-        _$PoolDataResponseImpl instance) =>
+Map<String, dynamic> _$PoolDataModelToJson(PoolDataModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'is_enabled': instance.isEnabled,
-      'pool_protocols': instance.poolProtocols,
+      'isEnabled': instance.isEnabled,
+      'protocols': instance.poolProtocols,
       'apr': instance.apr,
-      'name_id': instance.nameId,
+      'nameId': instance.nameId,
       'description': instance.description,
       'pid': instance.pid,
-      'pool_type': instance.poolType,
-      'stake_token': instance.stakeToken,
-      'total_value_locked': instance.totalValueLocked,
-      'tvl_token': instance.tvlToken,
-      'withdrawal_slippage': instance.withdrawalSlippage,
+      'poolType': instance.poolType,
+      'stakeToken': instance.stakeToken,
+      'totalValueLocked': instance.totalValueLocked,
+      'tvlToken': instance.tvlToken,
+      'withdrawalSlippage': instance.withdrawalSlippage,
       'name': instance.name,
-      'display_name': instance.displayName,
-      'strategy_type': instance.strategyType,
-      'reward_token': instance.rewardToken,
-      'position_token': instance.positionToken,
-      'fee_token': instance.feeToken,
-      'deposit_fee': instance.depositFee,
+      'displayName': instance.displayName,
+      'strategyType': instance.strategyType,
+      'rewardToken': instance.rewardToken,
+      'positionToken': instance.positionToken,
+      'feeToken': instance.feeToken,
+      'depositFee': instance.depositFee,
       'risk': instance.risk,
-      'withdrawal_fee': instance.withdrawalFee,
-      'deposit_swap_fee': instance.depositSwapFee,
-      'withdrawal_swap_fee': instance.withdrawalSwapFee,
+      'withdrawalFee': instance.withdrawalFee,
+      'depositSwapFee': instance.depositSwapFee,
+      'withdrawalSwapFee': instance.withdrawalSwapFee,
       'stakers': instance.stakers,
-      'liquidity_type': instance.liquidityType,
+      'liquidityType': instance.liquidityType,
       'weight': instance.weight,
-      'apr_avg': instance.aprAvg,
-      'vibrant_fee': instance.vibrantFee,
+      'aprAvg': instance.aprAvg,
+      'vibrantFee': instance.vibrantFee,
       'volume24h': instance.volume24h,
       'fee24h': instance.fee24h,
       'inflow24h': instance.inflow24h,
-      'min_apr': instance.minApr,
-      'max_apr': instance.maxApr,
-      'max_leverage': instance.maxLeverage,
-      'borrow_apr': instance.borrowApr,
-      'airdrop_point': instance.airdropPoint,
-      'inflow_chart_data': instance.inflowChartData,
-      'tvl_apr_chart_data': instance.tvlAprChartData,
-      'aries_detail': instance.ariesDetail,
-      'echelon_detail': instance.echelonDetail,
-      'leverage_response_dto': instance.leverageResponseDto,
+      'minApr': instance.minApr,
+      'maxApr': instance.maxApr,
+      'maxLeverage': instance.maxLeverage,
+      'borrowApr': instance.borrowApr,
+      'airdropPoint': instance.airdropPoint,
+      'inflowChartData': instance.inflowChartData,
+      'tvlAprChartData': instance.tvlAprChartData,
+      'ariesDetail': instance.ariesDetail,
+      'echelonDetail': instance.echelonDetail,
+      'leverageResponseDto': instance.leverageResponseDto,
       'payload': instance.payload,
     };

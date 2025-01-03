@@ -1,10 +1,11 @@
 
 import 'package:defy/core/api/base_api_repository.dart';
-import 'package:defy/features/yield/data/models/pool_data_response.dart';
-import 'package:defy/features/yield/data/models/pool_response.dart';
+import 'package:defy/features/yield/domain/entities/pool_data_entity.dart';
+import 'package:defy/features/yield/domain/entities/pool_response_entity.dart';
+
 
 abstract class PoolRepository {
-  Future<ApiRes<List<PoolResponse>>> getAllPools();
+  Future<ApiRes<List<PoolResponseEntity>>> getAllPools();
 
-  Future<ApiRes<PoolDataResponse>> getPool(String poolId, String poolName);
+  Future<ApiRes<PoolDataEntity>> getPool(String poolId, String poolName);
 }

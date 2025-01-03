@@ -1,6 +1,7 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
+import 'package:defy/features/yield/domain/entities/pool_data_entity.dart';
 import 'package:defy/features/yield/presentation/components/yield_chart.dart';
 import 'package:defy/features/yield/presentation/provider/yield_pool_provider.dart';
 import 'package:defy/features/yield/presentation/screens/yield_lending_transaction_view.dart';
@@ -30,7 +31,7 @@ class YieldStakingView extends ConsumerWidget {
     return poolEither.when(
       data: (either) => either.fold(
         (error) => const Center(child: Text('Error')),
-        (pool) => Scaffold(
+        (PoolDataEntity pool) => Scaffold(
           backgroundColor: AppColors.white,
           appBar: _buildAppBar(context, pool),
           body: Stack(
@@ -57,7 +58,7 @@ class YieldStakingView extends ConsumerWidget {
       ),
       loading: () => Scaffold(
         body: Center(
-          child: LottieBuilder.asset('assets/lotties/loading-indicator.json'),
+          child: LottieBuilder.asset('assets/animations/loading-indicator.json'),
         ),
       ),
       error: (error, stackTrace) => Center(child: Text('Error: $error')),

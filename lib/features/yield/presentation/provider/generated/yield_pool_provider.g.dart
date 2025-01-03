@@ -6,7 +6,7 @@ part of '../yield_pool_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$poolRepositoryHash() => r'f094b719074d5e18eb4339c846d15b36695a93ae';
+String _$poolRepositoryHash() => r'b02f1d87a84f76a472e459a994a35fdd0b0ec28b';
 
 /// See also [poolRepository].
 @ProviderFor(poolRepository)
@@ -53,7 +53,7 @@ final getPoolUseCaseProvider = AutoDisposeProvider<GetPoolUseCase>.internal(
 );
 
 typedef GetPoolUseCaseRef = AutoDisposeProviderRef<GetPoolUseCase>;
-String _$getPoolHash() => r'44b57f9ada8ead5dd1e11170447fd201e01e9028';
+String _$getPoolHash() => r'5199928a9737a95a6921edb0bdc7db1e9be9bd91';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -82,7 +82,7 @@ const getPoolProvider = GetPoolFamily();
 
 /// See also [getPool].
 class GetPoolFamily
-    extends Family<AsyncValue<Either<DioException, PoolDataResponse>>> {
+    extends Family<AsyncValue<Either<DioException, PoolDataEntity>>> {
   /// See also [getPool].
   const GetPoolFamily();
 
@@ -124,7 +124,7 @@ class GetPoolFamily
 
 /// See also [getPool].
 class GetPoolProvider
-    extends AutoDisposeFutureProvider<Either<DioException, PoolDataResponse>> {
+    extends AutoDisposeFutureProvider<Either<DioException, PoolDataEntity>> {
   /// See also [getPool].
   GetPoolProvider(
     String poolId,
@@ -163,8 +163,7 @@ class GetPoolProvider
 
   @override
   Override overrideWith(
-    FutureOr<Either<DioException, PoolDataResponse>> Function(
-            GetPoolRef provider)
+    FutureOr<Either<DioException, PoolDataEntity>> Function(GetPoolRef provider)
         create,
   ) {
     return ProviderOverride(
@@ -183,7 +182,7 @@ class GetPoolProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<Either<DioException, PoolDataResponse>>
+  AutoDisposeFutureProviderElement<Either<DioException, PoolDataEntity>>
       createElement() {
     return _GetPoolProviderElement(this);
   }
@@ -206,7 +205,7 @@ class GetPoolProvider
 }
 
 mixin GetPoolRef
-    on AutoDisposeFutureProviderRef<Either<DioException, PoolDataResponse>> {
+    on AutoDisposeFutureProviderRef<Either<DioException, PoolDataEntity>> {
   /// The parameter `poolId` of this provider.
   String get poolId;
 
@@ -215,7 +214,7 @@ mixin GetPoolRef
 }
 
 class _GetPoolProviderElement extends AutoDisposeFutureProviderElement<
-    Either<DioException, PoolDataResponse>> with GetPoolRef {
+    Either<DioException, PoolDataEntity>> with GetPoolRef {
   _GetPoolProviderElement(super.provider);
 
   @override
@@ -224,12 +223,12 @@ class _GetPoolProviderElement extends AutoDisposeFutureProviderElement<
   String get poolName => (origin as GetPoolProvider).poolName;
 }
 
-String _$getAllPoolsHash() => r'ceaa7fb21772e784e1695c6d5ba70c4675e2931d';
+String _$getAllPoolsHash() => r'860dbf04d4055ab959b35f3b5ecd50362d46aa00';
 
 /// See also [getAllPools].
 @ProviderFor(getAllPools)
 final getAllPoolsProvider = AutoDisposeFutureProvider<
-    Either<DioException, List<PoolResponse>>>.internal(
+    Either<DioException, List<PoolResponseEntity>>>.internal(
   getAllPools,
   name: r'getAllPoolsProvider',
   debugGetCreateSourceHash:
@@ -238,7 +237,7 @@ final getAllPoolsProvider = AutoDisposeFutureProvider<
   allTransitiveDependencies: null,
 );
 
-typedef GetAllPoolsRef
-    = AutoDisposeFutureProviderRef<Either<DioException, List<PoolResponse>>>;
+typedef GetAllPoolsRef = AutoDisposeFutureProviderRef<
+    Either<DioException, List<PoolResponseEntity>>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

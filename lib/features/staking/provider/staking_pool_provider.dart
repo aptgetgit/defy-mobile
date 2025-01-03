@@ -14,7 +14,7 @@ part 'generated/staking_pool_provider.g.dart';
 @riverpod
 StakingPoolRepository stakingPoolRepository(StakingPoolRepositoryRef ref) {
   final dio = ref.read(stakingDioServiceProvider);
-  final stakingPoolClient = StakingPoolClient(dio);
+  final stakingPoolClient = StakingPoolClient(dio: dio);
   return StakingPoolRepositoryImpl(stakingPoolClient);
 }
 

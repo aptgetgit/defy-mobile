@@ -127,7 +127,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           height: context.screenWidth * 0.35,
                           decoration: BoxDecoration(
                             image: const DecorationImage(
-                              image: AssetImage('assets/images/cosmos-cg.png'),
+                              image: AssetImage('assets/images/cosmos-bg.png'),
                               fit: BoxFit.fill,
                             ),
                             color: const Color(0xffF4F4F6),
@@ -148,11 +148,13 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                               const Spacer(),
                               Text(
                                 "Cosmos",
-                                style: context.titleLarge?.copyWith(color: Colors.white),
+                                style: context.titleLarge
+                                    ?.copyWith(color: Colors.white),
                               ),
                               Text(
                                 "Free Entry for Virtual Cosmic \nEvent",
-                                style: context.bodySmall?.copyWith(color: Colors.white),
+                                style: context.bodySmall
+                                    ?.copyWith(color: Colors.white),
                               ),
                             ],
                           ),
@@ -284,10 +286,12 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           children: [
                             Row(
                               children: [
-                                Image.asset('assets/icons/aptos-logo.png', height: 40),
+                                Image.asset('assets/icons/aptos-logo.png',
+                                    height: 40),
                                 const SizedBox(width: 10),
                                 Text(
-                                  coin['coin_defyapp_symbol']?.toUpperCase() ?? '',
+                                  coin['coin_defyapp_symbol']?.toUpperCase() ??
+                                      '',
                                   style: context.headlineSmall,
                                 ),
                               ],
@@ -322,7 +326,8 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           children: [
                             Row(
                               children: [
-                                Image.asset('assets/icons/usdc.png', height: 40),
+                                Image.asset('assets/icons/usdc.png',
+                                    height: 40),
                                 const SizedBox(width: 10),
                                 Text('USDC', style: context.headlineSmall),
                               ],
@@ -434,7 +439,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                             Text(
                               "ERC-721",
                               overflow: TextOverflow.ellipsis,
-                                                            style: context.titleMedium?.copyWith(
+                              style: context.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
                             )

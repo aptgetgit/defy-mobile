@@ -15,19 +15,20 @@ class StakingPoolRepositoryImpl extends StakingPoolRepository
   @override
   Future<Either<DioException, List<StakingPoolEntity>>>
       getStakingPools() async {
-    final response = await getApiResponse<List<dynamic>>(
-      request: () => client.getStakingPools(),
-    );
-
-    return response.map((list) => list.map((item) {
-          if (item is Map<String, dynamic>) {
-            return StakingPoolModel.fromJson(item).toEntity();
-          } else if (item is StakingPoolModel) {
-            return item.toEntity();
-          } else {
-            throw Exception(
-                'Unexpected item type in response: ${item.runtimeType}');
-          }
-        }).toList());
+    try {
+      final List<StakingPoolModel> models = await client.getStakingPools();
+      final List<StakingPoolEntity> entities =
+          models.map((model) => model.toEntity()).toList();
+      return Right(entities);
+    } on DioException catch (e) {
+      print('Dio error in repository: ${e.message}');
+      return Left(e);
+    } catch (e) {
+      print('Unexpected error in repository: $e');
+      return Left(DioException(
+        requestOptions: RequestOptions(path: ''),
+        error: 'An unexpected error occurred: $e',
+      ));
+    }
   }
 }

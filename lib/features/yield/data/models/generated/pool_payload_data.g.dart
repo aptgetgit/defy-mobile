@@ -6,18 +6,19 @@ part of '../pool_payload_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PoolPayloadDataImpl _$$PoolPayloadDataImplFromJson(
+PoolPayloadDataModel _$PoolPayloadDataModelFromJson(
         Map<String, dynamic> json) =>
-    _$PoolPayloadDataImpl(
-      function_id: json['function_id'] as String,
-      type_arguments: parseTypeArguments(json['type_arguments']),
-      arguments: parseArguments(json['arguments']),
+    PoolPayloadDataModel(
+      functionId: json['function_id'] as String? ?? '',
+      typeArguments: PoolPayloadDataModel._parseList(json['type_arguments']),
+      arguments: PoolPayloadDataModel._parseList(json['arguments']),
     );
 
-Map<String, dynamic> _$$PoolPayloadDataImplToJson(
-        _$PoolPayloadDataImpl instance) =>
+Map<String, dynamic> _$PoolPayloadDataModelToJson(
+        PoolPayloadDataModel instance) =>
     <String, dynamic>{
-      'function_id': instance.function_id,
-      'type_arguments': instance.type_arguments,
-      'arguments': instance.arguments,
+      'function_id': instance.functionId,
+      'type_arguments':
+          PoolPayloadDataModel._listToJson(instance.typeArguments),
+      'arguments': PoolPayloadDataModel._listToJson(instance.arguments),
     };

@@ -2,6 +2,7 @@ import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/features/shared/presentation/widgets/custom_swipe_button.dart';
+import 'package:defy/features/yield/domain/entities/pool_data_entity.dart';
 import 'package:defy/features/yield/domain/yield_lending_transaction_state.dart';
 import 'package:defy_graphql/defy_graphql.dart';
 import 'package:defy/features/yield/data/models/pool_data_response.dart';
@@ -14,7 +15,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class YieldLendingTransactionView extends ConsumerWidget {
-  final PoolDataResponse selectedTile;
+  final PoolDataEntity selectedTile;
   final dynamic metadata;
 
   const YieldLendingTransactionView({

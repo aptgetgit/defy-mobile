@@ -4,6 +4,7 @@ import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:defy/features/shared/data/sources/remote/coin_metadata_service.dart';
 import 'package:defy/features/shared/presentation/providers/coin_metadata_provider.dart';
 import 'package:defy/features/yield/data/models/pool_response.dart';
+import 'package:defy/features/yield/domain/entities/pool_response_entity.dart';
 import 'package:defy/features/yield/domain/yield_state_model.dart';
 import 'package:defy/features/yield/presentation/components/yield_chart.dart';
 import 'package:defy/features/yield/presentation/provider/yield_pool_provider.dart';
@@ -34,7 +35,8 @@ class YieldView extends ConsumerWidget {
       body: allPoolEither.when(
         data: (either) => either.fold(
           (error) => Center(child: Text('Error: $error')),
-          (pools) => _buildBody(context, state, controller, pools, coinMetadataService),
+          (pools) => _buildBody(
+              context, state, controller, pools, coinMetadataService),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),
@@ -79,7 +81,12 @@ class YieldView extends ConsumerWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, YieldStateModel state, YieldViewProvider controller, List<PoolResponse> pools, CoinMetadataService coinMetadataService) {
+  Widget _buildBody(
+      BuildContext context,
+      YieldStateModel state,
+      YieldViewProvider controller,
+      List<PoolResponseEntity> pools,
+      CoinMetadataService coinMetadataService) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: SafeArea(
@@ -94,7 +101,8 @@ class YieldView extends ConsumerWidget {
     );
   }
 
-  Widget _buildToggleButtons(BuildContext context, YieldStateModel state, YieldViewProvider controller) {
+  Widget _buildToggleButtons(BuildContext context, YieldStateModel state,
+      YieldViewProvider controller) {
     return Row(
       children: [
         _buildToggleButton(
@@ -158,7 +166,8 @@ class YieldView extends ConsumerWidget {
     );
   }
 
-  Widget _buildIconButton({required IconData icon, required VoidCallback onTap}) {
+  Widget _buildIconButton(
+      {required IconData icon, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -176,19 +185,25 @@ class YieldView extends ConsumerWidget {
     );
   }
 
-  Widget _buildPoolList(BuildContext context, YieldStateModel state, List<PoolResponse> pools, CoinMetadataService coinMetadataService) {
-    final filteredPools = pools.where((pool) =>
-        state.toggleSingleMulti ? pool.stakeToken.length > 1 : pool.stakeToken.length == 1
-    ).toList();
+  Widget _buildPoolList(BuildContext context, YieldStateModel state,
+      List<PoolResponseEntity> pools, CoinMetadataService coinMetadataService) {
+    final filteredPools = pools
+        .where((pool) => state.toggleSingleMulti
+            ? pool.stakeToken!.length > 1
+            : pool.stakeToken!.length == 1)
+        .toList();
 
     return Column(
-      children: filteredPools.map((pool) => _buildPoolItem(context, pool, coinMetadataService)).toList(),
+      children: filteredPools
+          .map((pool) => _buildPoolItem(context, pool, coinMetadataService))
+          .toList(),
     );
   }
 
-  Widget _buildPoolItem(BuildContext context, PoolResponse pool, CoinMetadataService coinMetadataService) {
+  Widget _buildPoolItem(BuildContext context, PoolResponseEntity pool,
+      CoinMetadataService coinMetadataService) {
     return FutureBuilder<Map<String, dynamic>?>(
-      future: coinMetadataService.getCoinsMetaData(pool.stakeToken),
+      future: coinMetadataService.getCoinsMetaData(pool.stakeToken ?? []),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -205,7 +220,7 @@ class YieldView extends ConsumerWidget {
 
         return GestureDetector(
           onTap: () => _navigateToPoolDetails(context, pool, metadata),
-          child: pool.stakeToken.length > 1
+          child: pool.stakeToken!.length > 1
               ? _buildMultiToken(context, pool, metadata)
               : _buildSingleToken(context, pool, metadata.first),
         );
@@ -213,51 +228,56 @@ class YieldView extends ConsumerWidget {
     );
   }
 
-  void _navigateToPoolDetails(BuildContext context, PoolResponse pool, dynamic metadata) {
+  void _navigateToPoolDetails(
+      BuildContext context, PoolResponseEntity pool, dynamic metadata) {
     Widget destination;
     switch (pool.strategyType) {
       case 'Lending':
         destination = YieldLendingView(
           metadata: metadata,
-          poolId: pool.id,
-          poolName: pool.nameId,
+          poolId: pool.id!,
+          poolName: pool.nameId!,
         );
         break;
       case 'Staking':
         destination = YieldStakingView(
-          poolId: pool.id,
-          poolName: pool.nameId,
+          poolId: pool.id!,
+          poolName: pool.nameId!,
           metadata: metadata,
         );
         break;
       case 'Liquidity':
         destination = YieldAddLiquidityView(
-          poolId: pool.id,
-          poolName: pool.nameId,
+          poolId: pool.id!,
+          poolName: pool.nameId!,
           metadata: metadata,
         );
         break;
       case 'Leverage':
         destination = YieldMultiplyView(
           metadata: metadata,
-          poolId: pool.id,
-          poolName: pool.nameId,
+          poolId: pool.id!,
+          poolName: pool.nameId!,
         );
         break;
       default:
         return;
     }
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => destination));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => destination));
   }
 
-  Widget _buildMultiToken(BuildContext context, PoolResponse pool, List<dynamic> metadata) {
+  Widget _buildMultiToken(
+      BuildContext context, PoolResponseEntity pool, List<dynamic> metadata) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           RowSuper(
             innerDistance: -20,
-            children: metadata.map((token) => _buildTokenLogo(token['coin_logo_url'])).toList(),
+            children: metadata
+                .map((token) => _buildTokenLogo(token['coin_logo_url']))
+                .toList(),
           ),
           const Gap(10),
           _buildPoolInfo(context, pool),
@@ -268,7 +288,8 @@ class YieldView extends ConsumerWidget {
     );
   }
 
-  Widget _buildSingleToken(BuildContext context, PoolResponse pool, dynamic metadata) {
+  Widget _buildSingleToken(
+      BuildContext context, PoolResponseEntity pool, dynamic metadata) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -289,12 +310,12 @@ class YieldView extends ConsumerWidget {
         : Image.network(url, height: 35);
   }
 
-  Widget _buildPoolInfo(BuildContext context, PoolResponse pool) {
+  Widget _buildPoolInfo(BuildContext context, PoolResponseEntity pool) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          pool.name,
+          pool.name!,
           style: context.titleMedium.copyWith(fontWeight: FontWeight.w600),
         ),
         const Gap(5),
@@ -306,20 +327,20 @@ class YieldView extends ConsumerWidget {
     );
   }
 
-  Widget _buildPoolStats(BuildContext context, PoolResponse pool) {
+  Widget _buildPoolStats(BuildContext context, PoolResponseEntity pool) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Container(
           padding: const EdgeInsets.all(4),
           child: Text(
-            "${pool.apr.substring(0, 4)}% APR",
+            "${pool.apr!.substring(0, 4)}% APR",
             style: context.bodyMedium.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
         const Gap(5),
         Text(
-          pool.strategyType,
+          pool.strategyType!,
           style: context.bodyMedium.copyWith(color: AppColors.greyDark),
         ),
       ],

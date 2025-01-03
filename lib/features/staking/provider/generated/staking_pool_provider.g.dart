@@ -7,7 +7,7 @@ part of '../staking_pool_provider.dart';
 // **************************************************************************
 
 String _$stakingPoolRepositoryHash() =>
-    r'771b17defe72519485b544e426809e62d0132aa5';
+    r'2403e3541119638bee5a67506e9f2446b9e96855';
 
 /// See also [stakingPoolRepository].
 @ProviderFor(stakingPoolRepository)

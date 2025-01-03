@@ -1,6 +1,7 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/features/yield/data/models/pool_data_response.dart';
+import 'package:defy/features/yield/domain/entities/pool_data_entity.dart';
 import 'package:defy/features/yield/presentation/components/yield_chart.dart';
 import 'package:defy/features/yield/presentation/provider/yield_pool_provider.dart';
 import 'package:defy/features/yield/presentation/screens/yield_lending_transaction_view.dart';
@@ -31,10 +32,10 @@ class YieldAddLiquidityView extends ConsumerWidget {
     return poolEither.when(
       data: (either) => either.fold(
         (error) => const Center(child: CircularProgressIndicator()),
-        (pool) => _buildScaffold(context, pool),
+        (pool) => _buildScaffold(context, pool as PoolDataEntity),
       ),
       loading: () => Center(
-        child: LottieBuilder.asset('assets/lotties/loading-indicator.json'),
+        child: LottieBuilder.asset('assets/animations/loading-indicator.json'),
       ),
       error: (error, stackTrace) => Scaffold(
         body: Center(child: Text('Error: $error')),
@@ -42,7 +43,7 @@ class YieldAddLiquidityView extends ConsumerWidget {
     );
   }
 
-  Widget _buildScaffold(BuildContext context, PoolDataResponse pool) {
+  Widget _buildScaffold(BuildContext context, PoolDataEntity pool) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(context, pool),
@@ -55,7 +56,7 @@ class YieldAddLiquidityView extends ConsumerWidget {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context, PoolDataResponse pool) {
+  AppBar _buildAppBar(BuildContext context, PoolDataEntity pool) {
     return AppBar(
       leading: GestureDetector(
         onTap: () => context.pop(),
@@ -118,7 +119,7 @@ class YieldAddLiquidityView extends ConsumerWidget {
     );
   }
 
-  Widget _buildScrollableContent(BuildContext context, PoolDataResponse pool) {
+  Widget _buildScrollableContent(BuildContext context, PoolDataEntity pool) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: SafeArea(
@@ -141,7 +142,7 @@ class YieldAddLiquidityView extends ConsumerWidget {
     );
   }
 
-  Widget _buildPoolStats(PoolDataResponse pool) {
+  Widget _buildPoolStats(PoolDataEntity pool) {
     return Padding(
       padding: const EdgeInsets.only(left: 50.0),
       child: Row(
@@ -263,7 +264,7 @@ class YieldAddLiquidityView extends ConsumerWidget {
     );
   }
 
-  Widget _buildPoolRatioSection(PoolDataResponse pool) {
+  Widget _buildPoolRatioSection(PoolDataEntity pool) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -326,7 +327,7 @@ class YieldAddLiquidityView extends ConsumerWidget {
     );
   }
 
-  Widget _buildPoolRatioForeground(PoolDataResponse pool) {
+  Widget _buildPoolRatioForeground(PoolDataEntity pool) {
     return Positioned(
       top: 0,
       left: 0,
@@ -374,7 +375,7 @@ class YieldAddLiquidityView extends ConsumerWidget {
     );
   }
 
-  Widget _buildSupplyButton(BuildContext context, PoolDataResponse pool) {
+  Widget _buildSupplyButton(BuildContext context, PoolDataEntity pool) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: GestureDetector(

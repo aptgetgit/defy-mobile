@@ -1,36 +1,56 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:defy/features/yield/domain/entities/pool_payload_data_entity.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'generated/pool_payload_data.freezed.dart';
 part 'generated/pool_payload_data.g.dart';
 
-@freezed
-class PoolPayloadData with _$PoolPayloadData {
-  const factory PoolPayloadData({
-    required String function_id,
-    @JsonKey(fromJson: parseTypeArguments) required List<String> type_arguments,
-    @JsonKey(fromJson: parseArguments) required List<String> arguments,
-  }) = _PoolPayloadData;
+@JsonSerializable()
+class PoolPayloadDataModel {
+  @JsonKey(name: 'function_id', defaultValue: '')
+  final String functionId;
 
-  factory PoolPayloadData.fromJson(Map<String, dynamic> json) =>
-      _$PoolPayloadDataFromJson(json);
-}
+  @JsonKey(name: 'type_arguments', fromJson: _parseList, toJson: _listToJson)
+  final List<String> typeArguments;
 
-List<String> parseTypeArguments(dynamic value) {
-  if (value is String) {
-    return value.isEmpty ? [] : [value];
-  } else if (value is List) {
-    return List<String>.from(value);
-  } else {
-    return [];
+  @JsonKey(name: 'arguments', fromJson: _parseList, toJson: _listToJson)
+  final List<String> arguments;
+
+  const PoolPayloadDataModel({
+    required this.functionId,
+    required this.typeArguments,
+    required this.arguments,
+  });
+
+  factory PoolPayloadDataModel.fromJson(Map<String, dynamic> json) => 
+      _$PoolPayloadDataModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PoolPayloadDataModelToJson(this);
+
+  static List<String> _parseList(dynamic value) {
+    if (value == null) return [];
+    if (value is String) {
+      return value.isEmpty ? [] : [value];
+    } else if (value is List) {
+      return List<String>.from(value.map((e) => e.toString()));
+    } else {
+      return [];
+    }
   }
-}
 
-List<String> parseArguments(dynamic value) {
-  if (value is String) {
-    return value.isEmpty ? [] : [value];
-  } else if (value is List) {
-    return List<String>.from(value);
-  } else {
-    return [];
+  static List<String> _listToJson(List<String> list) => list;
+
+  PoolPayloadDataEntity toEntity() {
+    return PoolPayloadDataEntity(
+      functionId: functionId,
+      typeArguments: typeArguments,
+      arguments: arguments,
+    );
+  }
+
+  factory PoolPayloadDataModel.fromEntity(PoolPayloadDataEntity entity) {
+    return PoolPayloadDataModel(
+      functionId: entity.functionId,
+      typeArguments: entity.typeArguments,
+      arguments: entity.arguments,
+    );
   }
 }

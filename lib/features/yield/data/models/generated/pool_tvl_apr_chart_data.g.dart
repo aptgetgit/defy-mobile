@@ -6,22 +6,22 @@ part of '../pool_tvl_apr_chart_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PoolTvlAprChartDataImpl _$$PoolTvlAprChartDataImplFromJson(
+PoolTvlAprChartDataModel _$PoolTvlAprChartDataModelFromJson(
         Map<String, dynamic> json) =>
-    _$PoolTvlAprChartDataImpl(
-      apr: json['apr'] as String,
-      strategyId: json['strategy_id'] as String,
-      totalValueLocked: json['total_value_locked'] as String,
-      createdAt: json['created_at'] as String,
-      timestamp: json['timestamp'] as String,
+    PoolTvlAprChartDataModel(
+      apr: json['apr'] as String? ?? '',
+      strategyId: json['strategyId'] as String? ?? '',
+      totalValueLocked: json['totalValueLocked'] as String? ?? '',
+      createdAt: json['createdAt'] as String? ?? '',
+      timestamp: json['timestamp'] as String? ?? '',
     );
 
-Map<String, dynamic> _$$PoolTvlAprChartDataImplToJson(
-        _$PoolTvlAprChartDataImpl instance) =>
+Map<String, dynamic> _$PoolTvlAprChartDataModelToJson(
+        PoolTvlAprChartDataModel instance) =>
     <String, dynamic>{
       'apr': instance.apr,
-      'strategy_id': instance.strategyId,
-      'total_value_locked': instance.totalValueLocked,
-      'created_at': instance.createdAt,
+      'strategyId': instance.strategyId,
+      'totalValueLocked': instance.totalValueLocked,
+      'createdAt': instance.createdAt,
       'timestamp': instance.timestamp,
     };

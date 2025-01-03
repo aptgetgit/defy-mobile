@@ -1,6 +1,7 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:defy/config/theme/colors.dart';
 import 'package:defy/core/extensions/context_extensions.dart';
+import 'package:defy/features/yield/domain/entities/pool_data_entity.dart';
 import 'package:defy/features/yield/presentation/components/yield_chart.dart';
 import 'package:defy/features/yield/presentation/provider/yield_pool_provider.dart';
 import 'package:defy/features/yield/presentation/screens/yield_lending_transaction_view.dart';
@@ -30,7 +31,7 @@ class YieldLendingView extends ConsumerWidget {
     return poolEither.when(
       data: (either) => either.fold(
         (error) => const Center(child: Text('Error')),
-        (pool) => Scaffold(
+        (PoolDataEntity pool) => Scaffold(
           appBar: _buildAppBar(context, pool),
           body: Stack(
             children: [
@@ -42,7 +43,7 @@ class YieldLendingView extends ConsumerWidget {
                     children: [
                       _buildHeader(context, pool),
                       const Gap(100),
-                      YieldChart(data: pool.tvlAprChartData),
+                      YieldChart(data: pool.tvlAprChartData ?? []),
                       const Gap(40),
                       _buildSupplyInfo(context, pool),
                       const Gap(30),

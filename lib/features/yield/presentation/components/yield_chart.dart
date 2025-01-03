@@ -1,11 +1,12 @@
 import 'dart:math';
 import 'package:defy/features/yield/data/models/pool_tvl_apr_chart_data.dart';
+import 'package:defy/features/yield/domain/entities/pool_tvl_apr_chart_data_entity.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class YieldChart extends StatefulWidget {
-  final List<PoolTvlAprChartData> data;
+  final List<PoolTvlAprChartDataEntity> data;
 
   const YieldChart({Key? key, required this.data}) : super(key: key);
 
@@ -48,7 +49,7 @@ class _YieldChartState extends State<YieldChart> {
     tvlSpots = _processData(filteredData, (entry) => entry.totalValueLocked);
   }
 
-  List<FlSpot> _processData(List<PoolTvlAprChartData> data, String Function(PoolTvlAprChartData) getValue) {
+  List<FlSpot> _processData(List<PoolTvlAprChartDataEntity> data, String Function(PoolTvlAprChartDataEntity) getValue) {
     return _reduceData(
       data.map((entry) => FlSpot(
         double.tryParse(entry.timestamp) ?? 0,
@@ -66,7 +67,7 @@ class _YieldChartState extends State<YieldChart> {
     return _smoothSpots(reducedSpots);
   }
 
-  int _binarySearch(List<PoolTvlAprChartData> data, DateTime targetTime, {bool isStart = true}) {
+  int _binarySearch(List<PoolTvlAprChartDataEntity> data, DateTime targetTime, {bool isStart = true}) {
     int low = 0;
     int high = data.length - 1;
 

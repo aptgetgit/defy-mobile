@@ -6,20 +6,20 @@ part of '../pool_inflow_chart_data_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PoolInflowChartDataResponseImpl _$$PoolInflowChartDataResponseImplFromJson(
+PoolInflowChartDataModel _$PoolInflowChartDataModelFromJson(
         Map<String, dynamic> json) =>
-    _$PoolInflowChartDataResponseImpl(
-      strategyId: json['strategy_id'] as String,
-      inflow24h: json['inflow24h'] as String,
-      createdAt: json['created_at'] as String,
-      timestamp: json['timestamp'] as String,
+    PoolInflowChartDataModel(
+      strategyId: json['strategyId'] as String? ?? '',
+      inflow24h: json['inflow24h'] as String? ?? '',
+      createdAt: json['createdAt'] as String? ?? '',
+      timestamp: json['timestamp'] as String? ?? '',
     );
 
-Map<String, dynamic> _$$PoolInflowChartDataResponseImplToJson(
-        _$PoolInflowChartDataResponseImpl instance) =>
+Map<String, dynamic> _$PoolInflowChartDataModelToJson(
+        PoolInflowChartDataModel instance) =>
     <String, dynamic>{
-      'strategy_id': instance.strategyId,
+      'strategyId': instance.strategyId,
       'inflow24h': instance.inflow24h,
-      'created_at': instance.createdAt,
+      'createdAt': instance.createdAt,
       'timestamp': instance.timestamp,
     };

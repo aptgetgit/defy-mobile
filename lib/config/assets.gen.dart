@@ -123,6 +123,18 @@ class $AssetsIconsGen {
   AssetGenImage get ethereum =>
       const AssetGenImage('assets/icons/ethereum.png');
 
+  /// File path: assets/icons/explore-leaderboard-podium.png
+  AssetGenImage get exploreLeaderboardPodium =>
+      const AssetGenImage('assets/icons/explore-leaderboard-podium.png');
+
+  /// File path: assets/icons/explore-nft-example.png
+  AssetGenImage get exploreNftExample =>
+      const AssetGenImage('assets/icons/explore-nft-example.png');
+
+  /// File path: assets/icons/explore-rankings-banner.png
+  AssetGenImage get exploreRankingsBanner =>
+      const AssetGenImage('assets/icons/explore-rankings-banner.png');
+
   /// File path: assets/icons/female-emoji.png
   AssetGenImage get femaleEmoji =>
       const AssetGenImage('assets/icons/female-emoji.png');
@@ -140,12 +152,28 @@ class $AssetsIconsGen {
   AssetGenImage get maleEmoji =>
       const AssetGenImage('assets/icons/male-emoji.png');
 
+  /// File path: assets/icons/market-explore-logo.png
+  AssetGenImage get marketExploreLogo =>
+      const AssetGenImage('assets/icons/market-explore-logo.png');
+
+  /// File path: assets/icons/petra-wallet-logo.png
+  AssetGenImage get petraWalletLogo =>
+      const AssetGenImage('assets/icons/petra-wallet-logo.png');
+
   /// File path: assets/icons/polygon.png
   AssetGenImage get polygon => const AssetGenImage('assets/icons/polygon.png');
+
+  /// File path: assets/icons/rainbow-wallet-logo.png
+  AssetGenImage get rainbowWalletLogo =>
+      const AssetGenImage('assets/icons/rainbow-wallet-logo.png');
 
   /// File path: assets/icons/staking-default.png
   AssetGenImage get stakingDefault =>
       const AssetGenImage('assets/icons/staking-default.png');
+
+  /// File path: assets/icons/uniswap-dex-logo.png
+  AssetGenImage get uniswapDexLogo =>
+      const AssetGenImage('assets/icons/uniswap-dex-logo.png');
 
   /// File path: assets/icons/usdc.png
   AssetGenImage get usdc => const AssetGenImage('assets/icons/usdc.png');
@@ -170,13 +198,20 @@ class $AssetsIconsGen {
         dai,
         ethereumCircular,
         ethereum,
+        exploreLeaderboardPodium,
+        exploreNftExample,
+        exploreRankingsBanner,
         femaleEmoji,
         google,
         guiInu,
         kraken,
         maleEmoji,
+        marketExploreLogo,
+        petraWalletLogo,
         polygon,
+        rainbowWalletLogo,
         stakingDefault,
+        uniswapDexLogo,
         usdc,
         warning
       ];

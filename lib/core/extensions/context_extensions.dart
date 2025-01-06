@@ -23,6 +23,9 @@ extension ThemeModeExtensions on BuildContext {
 
   // Dark mode check
   bool get isDarkMode => brightness == Brightness.dark;
+
+  //theme data
+  ThemeData get themeData => Theme.of(this);
 }
 
 extension OrientationExtensions on BuildContext {

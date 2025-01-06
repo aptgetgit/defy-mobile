@@ -20,6 +20,18 @@ import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/scr
 import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/security_screen.dart';
 import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/wallet_ui_screen.dart';
 import 'package:defy/features/browser/presentation/browser_view.dart';
+import 'package:defy/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/create_token_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_coins_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_dapps_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_leaderboard.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_market_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_nft_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_pump_fun_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_pump_fun_token_transactions_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/pump_fun_token_preview_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/search_screen.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
 import 'package:defy/features/lend-borrow/presentation/lending_view.dart';
 import 'package:defy/features/leverage_trading/presentation/screens/leverage_trading_pair_view.dart';
@@ -32,7 +44,10 @@ import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:defy/features/staking/presentation/screens/staking_pool_view.dart';
 import 'package:defy/features/test/test_screen.dart';
 import 'package:defy/features/token_info/presentation/tokens_info_screen.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';import 'package:defy/features/transaction/swap/presentation/screens/single_swap_screen.dart';
+import 'package:defy/features/transaction/swap/presentation/screens/tokens_screen.dart';
+import 'package:defy/features/watchlist/presentation/screens/watchlist.dart';
+
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
@@ -41,6 +56,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'authentication_route.dart';
 part 'browser_route.dart';
+part 'dashboard_route.dart';
+part 'watchlist_route.dart';
+part 'swap_route.dart';
+part 'explore_route.dart';
 part 'blockchain_route.dart';
 part 'generated/router.freezed.dart';
 part 'generated/router.g.dart';
@@ -71,7 +90,7 @@ GoRouter router(RouterRef ref) {
   final authState = ref.watch(authenticationNotifierProvider);
 
   return GoRouter(
-    initialLocation: const SplashRoute().location,
+    initialLocation: const ExploreScreenRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;

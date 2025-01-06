@@ -90,12 +90,13 @@ dependencies:
   animated_text_kit: ^4.2.2
   expandable: ^5.0.1
   syncfusion_flutter_charts: ^28.1.35
-
   dotted_border: ^2.1.0
   flutter_card_swiper: ^7.0.2
   flutter_colorpicker: ^1.1.0
   confetti: ^0.8.0
   el_tooltip: ^2.2.1
+  equatable: ^2.0.5
+  fluttertoast: ^8.2.8
 
 dev_dependencies:
   flutter_test:
@@ -164,15 +165,25 @@ flutter:
     - family: SFCompactRounded
       fonts:
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Black.otf
-        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Bold.otf
+          weight: 900
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Heavy.otf
+          weight: 800
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Bold.otf
+          weight: 700
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Semibold.otf
+          weight: 600
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Medium.otf
+          weight: 500
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Regular.otf
+          weight: 400
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Light.otf
+          weight: 300
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Thin.otf
+          weight: 200
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Ultralight.otf
-    - family: Nunito 
+          weight: 100
+
+    - family: Nunito
       fonts:
         - asset: assets/fonts/nunito/Nunito-Regular.ttf
   #

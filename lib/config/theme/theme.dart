@@ -5,7 +5,7 @@ import 'colors.dart';
 
 class AppTheme {
   static String get _primaryFont => FontFamily.sFCompactRounded;
-  // Platform.isIOS ? FontFamily.sFCompactRounded : FontFamily.nunito;
+      // Platform.isIOS ? FontFamily.sFCompactRounded : FontFamily.nunito;
   static ThemeData get lightTheme => _buildTheme(isDark: false);
   static ThemeData get darkTheme => _buildTheme(isDark: true);
 
@@ -75,6 +75,8 @@ class AppTheme {
       textTheme: _buildTextTheme(isDark: isDark),
     );
   }
+
+
 
   static TextTheme _buildTextTheme({required bool isDark}) {
     return TextTheme(

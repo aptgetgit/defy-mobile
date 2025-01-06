@@ -16,33 +16,33 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AppRoute {
-  InvalidType Function(InvalidType, GoRouterState) get builder =>
+  Widget Function(BuildContext, GoRouterState) get builder =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)
+            Widget Function(BuildContext, GoRouterState) builder)
         public,
     required TResult Function(
-            InvalidType Function(InvalidType, GoRouterState) builder)
+            Widget Function(BuildContext, GoRouterState) builder)
         protected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)?
+            Widget Function(BuildContext, GoRouterState) builder)?
         public,
-    TResult? Function(InvalidType Function(InvalidType, GoRouterState) builder)?
+    TResult? Function(Widget Function(BuildContext, GoRouterState) builder)?
         protected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)?
+            Widget Function(BuildContext, GoRouterState) builder)?
         public,
-    TResult Function(InvalidType Function(InvalidType, GoRouterState) builder)?
+    TResult Function(Widget Function(BuildContext, GoRouterState) builder)?
         protected,
     required TResult orElse(),
   }) =>
@@ -79,7 +79,7 @@ abstract class $AppRouteCopyWith<$Res> {
   factory $AppRouteCopyWith(AppRoute value, $Res Function(AppRoute) then) =
       _$AppRouteCopyWithImpl<$Res, AppRoute>;
   @useResult
-  $Res call({InvalidType Function(InvalidType, GoRouterState) builder});
+  $Res call({Widget Function(BuildContext, GoRouterState) builder});
 }
 
 /// @nodoc
@@ -103,7 +103,7 @@ class _$AppRouteCopyWithImpl<$Res, $Val extends AppRoute>
       builder: null == builder
           ? _value.builder
           : builder // ignore: cast_nullable_to_non_nullable
-              as InvalidType Function(InvalidType, GoRouterState),
+              as Widget Function(BuildContext, GoRouterState),
     ) as $Val);
   }
 }
@@ -118,7 +118,7 @@ abstract class _$$PublicRouteImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? redirectIfAuthenticated,
-      InvalidType Function(InvalidType, GoRouterState) builder});
+      Widget Function(BuildContext, GoRouterState) builder});
 }
 
 /// @nodoc
@@ -145,7 +145,7 @@ class __$$PublicRouteImplCopyWithImpl<$Res>
       builder: null == builder
           ? _value.builder
           : builder // ignore: cast_nullable_to_non_nullable
-              as InvalidType Function(InvalidType, GoRouterState),
+              as Widget Function(BuildContext, GoRouterState),
     ));
   }
 }
@@ -159,7 +159,7 @@ class _$PublicRouteImpl implements PublicRoute {
   @override
   final String? redirectIfAuthenticated;
   @override
-  final InvalidType Function(InvalidType, GoRouterState) builder;
+  final Widget Function(BuildContext, GoRouterState) builder;
 
   @override
   String toString() {
@@ -193,10 +193,10 @@ class _$PublicRouteImpl implements PublicRoute {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)
+            Widget Function(BuildContext, GoRouterState) builder)
         public,
     required TResult Function(
-            InvalidType Function(InvalidType, GoRouterState) builder)
+            Widget Function(BuildContext, GoRouterState) builder)
         protected,
   }) {
     return public(redirectIfAuthenticated, builder);
@@ -206,9 +206,9 @@ class _$PublicRouteImpl implements PublicRoute {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)?
+            Widget Function(BuildContext, GoRouterState) builder)?
         public,
-    TResult? Function(InvalidType Function(InvalidType, GoRouterState) builder)?
+    TResult? Function(Widget Function(BuildContext, GoRouterState) builder)?
         protected,
   }) {
     return public?.call(redirectIfAuthenticated, builder);
@@ -218,9 +218,9 @@ class _$PublicRouteImpl implements PublicRoute {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)?
+            Widget Function(BuildContext, GoRouterState) builder)?
         public,
-    TResult Function(InvalidType Function(InvalidType, GoRouterState) builder)?
+    TResult Function(Widget Function(BuildContext, GoRouterState) builder)?
         protected,
     required TResult orElse(),
   }) {
@@ -265,12 +265,12 @@ class _$PublicRouteImpl implements PublicRoute {
 abstract class PublicRoute implements AppRoute {
   const factory PublicRoute(
       {final String? redirectIfAuthenticated,
-      required final InvalidType Function(InvalidType, GoRouterState)
+      required final Widget Function(BuildContext, GoRouterState)
           builder}) = _$PublicRouteImpl;
 
   String? get redirectIfAuthenticated;
   @override
-  InvalidType Function(InvalidType, GoRouterState) get builder;
+  Widget Function(BuildContext, GoRouterState) get builder;
 
   /// Create a copy of AppRoute
   /// with the given fields replaced by the non-null parameter values.
@@ -288,7 +288,7 @@ abstract class _$$ProtectedRouteImplCopyWith<$Res>
       __$$ProtectedRouteImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({InvalidType Function(InvalidType, GoRouterState) builder});
+  $Res call({Widget Function(BuildContext, GoRouterState) builder});
 }
 
 /// @nodoc
@@ -310,7 +310,7 @@ class __$$ProtectedRouteImplCopyWithImpl<$Res>
       builder: null == builder
           ? _value.builder
           : builder // ignore: cast_nullable_to_non_nullable
-              as InvalidType Function(InvalidType, GoRouterState),
+              as Widget Function(BuildContext, GoRouterState),
     ));
   }
 }
@@ -321,7 +321,7 @@ class _$ProtectedRouteImpl implements ProtectedRoute {
   const _$ProtectedRouteImpl({required this.builder});
 
   @override
-  final InvalidType Function(InvalidType, GoRouterState) builder;
+  final Widget Function(BuildContext, GoRouterState) builder;
 
   @override
   String toString() {
@@ -352,10 +352,10 @@ class _$ProtectedRouteImpl implements ProtectedRoute {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)
+            Widget Function(BuildContext, GoRouterState) builder)
         public,
     required TResult Function(
-            InvalidType Function(InvalidType, GoRouterState) builder)
+            Widget Function(BuildContext, GoRouterState) builder)
         protected,
   }) {
     return protected(builder);
@@ -365,9 +365,9 @@ class _$ProtectedRouteImpl implements ProtectedRoute {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)?
+            Widget Function(BuildContext, GoRouterState) builder)?
         public,
-    TResult? Function(InvalidType Function(InvalidType, GoRouterState) builder)?
+    TResult? Function(Widget Function(BuildContext, GoRouterState) builder)?
         protected,
   }) {
     return protected?.call(builder);
@@ -377,9 +377,9 @@ class _$ProtectedRouteImpl implements ProtectedRoute {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? redirectIfAuthenticated,
-            InvalidType Function(InvalidType, GoRouterState) builder)?
+            Widget Function(BuildContext, GoRouterState) builder)?
         public,
-    TResult Function(InvalidType Function(InvalidType, GoRouterState) builder)?
+    TResult Function(Widget Function(BuildContext, GoRouterState) builder)?
         protected,
     required TResult orElse(),
   }) {
@@ -423,11 +423,11 @@ class _$ProtectedRouteImpl implements ProtectedRoute {
 
 abstract class ProtectedRoute implements AppRoute {
   const factory ProtectedRoute(
-      {required final InvalidType Function(InvalidType, GoRouterState)
+      {required final Widget Function(BuildContext, GoRouterState)
           builder}) = _$ProtectedRouteImpl;
 
   @override
-  InvalidType Function(InvalidType, GoRouterState) get builder;
+  Widget Function(BuildContext, GoRouterState) get builder;
 
   /// Create a copy of AppRoute
   /// with the given fields replaced by the non-null parameter values.

@@ -23,10 +23,10 @@ class NFTMarketplaceSellScreen extends ConsumerStatefulWidget {
   final bool fromCollectionPage;
   final String? collectionName;
   const NFTMarketplaceSellScreen({
-    Key? key,
+    super.key,
     this.fromCollectionPage = false,
     this.collectionName,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<NFTMarketplaceSellScreen> createState() =>

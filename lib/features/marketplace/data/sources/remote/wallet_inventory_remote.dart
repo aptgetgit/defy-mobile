@@ -1,5 +1,6 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:defy/core/logging/app_logger.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:defy/features/marketplace/data/models/wallet_inventory_model.dart';
 
 abstract class WalletInventoryRemote {
@@ -7,18 +8,21 @@ abstract class WalletInventoryRemote {
 }
 
 class WalletInventoryRemoteImpl implements WalletInventoryRemote {
-  final GraphQLClient _client;
-
-  WalletInventoryRemoteImpl(this._client);
-
   @override
   Future<WalletInventoryModel?> getWalletInventory(
       {required String owner}) async {
+    const url = 'https://api.indexer.xyz/graphql';
+    final req = http.Request("POST", Uri.parse(url));
+    final headers = {
+      'content-type': 'application/json',
+      'x-api-user': "Defy",
+      'x-api-key': "s3Z2Xw1.17c86d6a8315fc025e4a475ffd4c6608",
+    };
     const String query = r'''
     query fetchWalletInventoryWithListings($owner: String!) {
       aptos {
         collections(
-          where: {nfts: {owner: {_eq: $owner}}, floor: {}, volume: {}}
+          where: {nfts: {owner: {_eq: $owner}}}
           order_by: {usd_volume: desc_nulls_last, volume: desc_nulls_last}
         ) {
           title
@@ -40,39 +44,65 @@ class WalletInventoryRemoteImpl implements WalletInventoryRemote {
     }
     ''';
 
+    req.body = jsonEncode({
+      'query': query,
+      'variables': {'owner': owner}
+    });
+    req.headers.addAll(headers);
+
     try {
-      final QueryOptions options = QueryOptions(
-        document: gql(query),
-        variables: {'owner': owner},
-      );
-
       AppLogger.debug(
-          'WalletInventoryRemoteImpl: Executing query with variables: ${options.variables}');
+          'WalletInventoryRemoteImpl: Executing request for owner: $owner');
 
-      final QueryResult result = await _client.query(options);
+      final response = await http.Client().send(req);
+      AppLogger.debug(
+          'WalletInventoryRemoteImpl: Response status: ${response.statusCode}');
 
-      AppLogger.debug('WalletInventoryRemoteImpl: Response status: ${result.source}');
+      if (response.statusCode == 200) {
+        final jsonString = await response.stream.transform(utf8.decoder).join();
+        final data = jsonDecode(jsonString) as Map<String, dynamic>;
+        AppLogger.debug('WalletInventoryRemoteImpl: Raw response: $data');
 
-      if (result.hasException) {
-        AppLogger.debug(
-            'WalletInventoryRemoteImpl: GraphQL Errors: ${result.exception.toString()}');
-        if (result.exception?.graphqlErrors.isNotEmpty ?? false) {
-          for (var error in result.exception!.graphqlErrors) {
-            AppLogger.debug('GraphQL Error: ${error.message}');
-            AppLogger.debug('Error Location: ${error.locations}');
-            AppLogger.debug('Error Path: ${error.path}');
-            AppLogger.debug('Error Extensions: ${error.extensions}');
+        if (data['data'] != null && data['data']['aptos'] != null) {
+          final aptosData = data['data']['aptos'] as Map<String, dynamic>;
+          final collectionsData = aptosData['collections'] as List<dynamic>?;
+
+          if (collectionsData != null) {
+            final collections = collectionsData.map((collectionJson) {
+              return CollectionModel(
+                title: collectionJson['title'] as String? ?? '',
+                description: collectionJson['description'] as String?,
+                floor: (collectionJson['floor'] as num?)?.toDouble(),
+                usdVolume: (collectionJson['usd_volume'] as num?)?.toDouble(),
+                verified: collectionJson['verified'] as bool? ?? false,
+                coverUrl: collectionJson['cover_url'] as String?,
+                nfts: (collectionJson['nfts'] as List<dynamic>?)
+                        ?.map((nftJson) {
+                      return NFTModel(
+                        mediaUrl: nftJson['media_url'] as String? ?? '',
+                        name: nftJson['name'] as String? ?? '',
+                        owner: nftJson['owner'] as String? ?? '',
+                        collection: CollectionTitleModel(
+                          title:
+                              nftJson['collection']['title'] as String? ?? '',
+                        ),
+                      );
+                    }).toList() ??
+                    [],
+              );
+            }).toList();
+
+            return WalletInventoryModel(
+              aptos: AptosModel(collections: collections),
+            );
           }
         }
+        AppLogger.debug(
+            "WalletInventoryRemoteImpl: No valid data in the response");
         return null;
-      }
-
-      if (result.data != null && result.data!['aptos'] != null) {
-        AppLogger.debug('WalletInventoryRemoteImpl: Raw response: ${result.data}');
-        return WalletInventoryModel.fromJson(result.data!);
       } else {
-        AppLogger
-            .debug("WalletInventoryRemoteImpl: No data available in the response");
+        AppLogger.debug(
+            'WalletInventoryRemoteImpl: HTTP Error: ${response.statusCode}');
         return null;
       }
     } catch (e) {

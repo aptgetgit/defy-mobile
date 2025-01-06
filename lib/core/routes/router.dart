@@ -54,7 +54,7 @@ GoRouter router(RouterRef ref) {
   final authState = ref.watch(authenticationNotifierProvider);
 
   return GoRouter(
-    initialLocation: LendBorrowViewRoute().location,
+    initialLocation: NFTMarketplaceScreenRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;

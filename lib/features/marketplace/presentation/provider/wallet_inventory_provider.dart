@@ -1,4 +1,3 @@
-
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/features/marketplace/data/repository/wallet_inventory_repository_impl.dart';
 import 'package:defy/features/marketplace/data/sources/remote/wallet_inventory_remote.dart';
@@ -14,7 +13,7 @@ part 'generated/wallet_inventory_provider.g.dart';
 @riverpod
 WalletInventoryRemote walletInventoryRemote(WalletInventoryRemoteRef ref) {
   final client = ref.watch(tradeportGraphQLClientProvider);
-  return WalletInventoryRemoteImpl(client);
+  return WalletInventoryRemoteImpl();
 }
 
 @riverpod
@@ -41,13 +40,15 @@ class WalletInventory extends _$WalletInventory {
     required String owner,
   }) async {
     try {
-      AppLogger.debug('WalletInventory: Fetching wallet inventory for owner: $owner');
+      AppLogger.debug(
+          'WalletInventory: Fetching wallet inventory for owner: $owner');
       final walletInventory =
           await ref.read(walletInventoryUseCaseProvider).call(
                 owner: owner,
               );
       if (walletInventory != null) {
-        AppLogger.debug('WalletInventory: Wallet inventory fetched successfully');
+        AppLogger.debug(
+            'WalletInventory: Wallet inventory fetched successfully');
         AppLogger.debug(
             'WalletInventory: Number of collections: ${walletInventory.aptos.collections.length}');
       } else {

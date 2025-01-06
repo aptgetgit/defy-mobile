@@ -6,7 +6,7 @@ part of '../dio_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioInitializerHash() => r'77a3581f6fda0c2321b2fc3fa308cb6bea61d33f';
+String _$dioInitializerHash() => r'd5fef7e73fb89119b61097e6de73f7aa406add2d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -210,5 +210,52 @@ final kratosDioServiceProvider = Provider<Dio>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef KratosDioServiceRef = ProviderRef<Dio>;
+String _$yieldAggregatorDioServiceHash() =>
+    r'fd961382a9d8b7302cd67d9b4d9ee4e8a70891ac';
+
+/// See also [yieldAggregatorDioService].
+@ProviderFor(yieldAggregatorDioService)
+final yieldAggregatorDioServiceProvider = Provider<Dio>.internal(
+  yieldAggregatorDioService,
+  name: r'yieldAggregatorDioServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$yieldAggregatorDioServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef YieldAggregatorDioServiceRef = ProviderRef<Dio>;
+String _$stakingDioServiceHash() => r'08eff29f0a5d525c85e737e4c5166323db89127b';
+
+/// See also [stakingDioService].
+@ProviderFor(stakingDioService)
+final stakingDioServiceProvider = Provider<Dio>.internal(
+  stakingDioService,
+  name: r'stakingDioServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$stakingDioServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef StakingDioServiceRef = ProviderRef<Dio>;
+String _$lendBorrowDioServiceHash() =>
+    r'66e80181fbf5a9b718a13bfffa1180362817a0d5';
+
+/// See also [lendBorrowDioService].
+@ProviderFor(lendBorrowDioService)
+final lendBorrowDioServiceProvider = Provider<Dio>.internal(
+  lendBorrowDioService,
+  name: r'lendBorrowDioServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$lendBorrowDioServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef LendBorrowDioServiceRef = ProviderRef<Dio>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

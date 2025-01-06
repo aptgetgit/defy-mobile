@@ -76,6 +76,20 @@ dependencies:
   http: ^1.2.2
   rxdart: ^0.28.0
   google_sign_in_ios: ^5.7.8
+  flutter_inappwebview: ^6.1.5
+  graphql_flutter: ^5.2.0-beta.7
+  lottie: ^3.1.3
+  flutter_svg: ^2.0.14
+  fpdart: ^1.1.1
+  fl_chart: ^0.69.0
+  cached_network_image: ^3.4.1
+  assorted_layout_widgets: ^10.0.4
+  flutter_screenutil: ^5.9.3
+  carousel_slider: ^5.0.0
+  smooth_page_indicator: ^1.2.0+3
+  animated_text_kit: ^4.2.2
+  expandable: ^5.0.1
+  syncfusion_flutter_charts: ^28.1.35
 
 dev_dependencies:
   flutter_test:
@@ -140,8 +154,16 @@ flutter:
   fonts:
     - family: SFCompactRounded
       fonts:
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Black.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Bold.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Heavy.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Semibold.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Medium.otf
         - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Regular.otf
-    - family: Nunito
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Light.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Thin.otf
+        - asset: assets/fonts/sf_compact_rounded/SF-Compact-Rounded-Ultralight.otf
+    - family: Nunito 
       fonts:
         - asset: assets/fonts/nunito/Nunito-Regular.ttf
   #

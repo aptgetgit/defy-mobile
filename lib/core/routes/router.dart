@@ -1,25 +1,42 @@
 import 'dart:async';
 
-import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
-import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
-import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
-import 'package:defy/features/home/presentation/screens/home_screen.dart';
-import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
-import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
-
+import 'package:defy/features/marketplace/presentation/screens/nft_marketplace_screen.dart';
+import 'package:defy/features/token_info/presentation/tokens_info_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'splash_route.dart';
-part 'onboarding_route.dart';
+import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
+import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
+import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
+import 'package:defy/features/browser/presentation/browser_view.dart';
+import 'package:defy/features/home/presentation/screens/home_screen.dart';
+import 'package:defy/features/lend-borrow/presentation/lending_view.dart';
+import 'package:defy/features/leverage_trading/presentation/screens/leverage_trading_pair_view.dart';
+import 'package:defy/features/leverage_trading/presentation/screens/leverage_trading_view.dart';
+import 'package:defy/features/mint/presentation/nft_mint_details_view.dart';
+import 'package:defy/features/mint/presentation/nft_mint_view.dart';
+import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
+import 'package:defy/features/staking/presentation/screens/staking_pool_view.dart';
+import 'package:defy/features/test/test_screen.dart';
+
 part 'authentication_route.dart';
-part 'home_route.dart';
-
-part 'generated/router.g.dart';
+part 'browser_route.dart';
 part 'generated/router.freezed.dart';
+part 'generated/router.g.dart';
+part 'home_route.dart';
+part 'lend_borrow_route.dart';
+part 'leverage_trading_route.dart';
+part 'nft_marketplace_route.dart';
+part 'nft_mint_route.dart';
+part 'onboarding_route.dart';
+part 'splash_route.dart';
+part 'staking_route.dart';
+part 'test_route.dart';
+part 'tokens_info_route.dart';
 
 @freezed
 class AppRoute with _$AppRoute {
@@ -35,13 +52,13 @@ class AppRoute with _$AppRoute {
 @Riverpod(keepAlive: true)
 GoRouter router(RouterRef ref) {
   final authState = ref.watch(authenticationNotifierProvider);
-  
+
   return GoRouter(
-    initialLocation: const SplashRoute().location,
+    initialLocation: NFTMarketplaceScreenRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;
-      
+
       return authState.when(
         data: (authenticationState) {
           if (state.fullPath == const SplashRoute().location) {
@@ -61,10 +78,10 @@ GoRouter router(RouterRef ref) {
               public: (_) => null,
               protected: (_) => const AuthenticationRoute().location,
             ),
-            authenticating: (_) => null, // Don't redirect while authenticating
+            authenticating: (_) => null,
           );
         },
-        loading: () => null, // Stay on current route while loading
+        loading: () => null,
         error: (_, __) => const AuthenticationRoute().location,
       );
     },
@@ -86,7 +103,8 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 
   final Ref _ref;
-  late final ProviderSubscription<AsyncValue<AuthenticationState>> _subscription;
+  late final ProviderSubscription<AsyncValue<AuthenticationState>>
+      _subscription;
 
   @override
   void dispose() {

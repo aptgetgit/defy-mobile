@@ -14,8 +14,9 @@ part 'generated/dio_provider.g.dart';
 Dio dioInitializer(DioInitializerRef ref, String baseUrl) {
   final dio = Dio(BaseOptions(
     baseUrl: baseUrl,
-    connectTimeout: Duration(seconds: 10),
-    receiveTimeout: Duration(seconds: 10),
+    connectTimeout: Duration(seconds: 30),
+    receiveTimeout: Duration(seconds: 30),
+    sendTimeout: Duration(seconds: 30),
   ))
     ..interceptors.addAll([
       if (kDebugMode)
@@ -47,10 +48,10 @@ Dio dioInitializer(DioInitializerRef ref, String baseUrl) {
 }
 
 @Riverpod(keepAlive: true)
-SessionTokenInterceptor sessionTokenInterceptor(SessionTokenInterceptorRef ref) {
+SessionTokenInterceptor sessionTokenInterceptor(
+    SessionTokenInterceptorRef ref) {
   return SessionTokenInterceptor(ref);
 }
-
 
 class SessionTokenInterceptor extends Interceptor {
   final Ref ref;
@@ -58,14 +59,16 @@ class SessionTokenInterceptor extends Interceptor {
   SessionTokenInterceptor(this.ref);
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     final authState = ref.read(authenticationNotifierProvider);
-    
+
     if (authState case AsyncData(value: _)) {
       final activeIdentityId = ref.read(getActiveIdentityUseCaseProvider)();
       if (activeIdentityId != null) {
         try {
-          final sessionToken = await ref.read(getSessionTokenUseCaseProvider)(activeIdentityId);
+          final sessionToken =
+              await ref.read(getSessionTokenUseCaseProvider)(activeIdentityId);
           options.headers['Authorization'] = 'Bearer $sessionToken';
         } catch (e) {
           AppLogger.error('Failed to get session token: $e');
@@ -83,11 +86,10 @@ class SessionTokenInterceptor extends Interceptor {
       final authNotifier = ref.read(authenticationNotifierProvider.notifier);
       await authNotifier.logout();
     }
-    
+
     handler.next(err);
   }
 }
-
 
 @Riverpod(keepAlive: true)
 Dio baseDioService(BaseDioServiceRef ref) {
@@ -99,6 +101,27 @@ Dio baseDioService(BaseDioServiceRef ref) {
 @Riverpod(keepAlive: true)
 Dio kratosDioService(KratosDioServiceRef ref) {
   final dio = ref.watch(dioInitializerProvider(Env.oryKratosEndpoint));
+  dio.interceptors.add(ref.watch(sessionTokenInterceptorProvider));
+  return dio;
+}
+
+@Riverpod(keepAlive: true)
+Dio yieldAggregatorDioService(YieldAggregatorDioServiceRef ref) {
+  final dio = ref.watch(dioInitializerProvider(Env.yieldAggregatorBaseUrl));
+  dio.interceptors.add(ref.watch(sessionTokenInterceptorProvider));
+  return dio;
+}
+
+@Riverpod(keepAlive: true)
+Dio stakingDioService(StakingDioServiceRef ref) {
+  final dio = ref.watch(dioInitializerProvider(Env.stakingLendBorrowBaseUrl));
+  dio.interceptors.add(ref.watch(sessionTokenInterceptorProvider));
+  return dio;
+}
+
+@Riverpod(keepAlive: true)
+Dio lendBorrowDioService(LendBorrowDioServiceRef ref) {
+  final dio = ref.watch(dioInitializerProvider(Env.stakingLendBorrowBaseUrl));
   dio.interceptors.add(ref.watch(sessionTokenInterceptorProvider));
   return dio;
 }

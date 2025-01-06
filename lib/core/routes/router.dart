@@ -1,30 +1,47 @@
+// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:async';
 
-import 'package:defy/features/marketplace/presentation/screens/nft_marketplace_screen.dart';
-import 'package:defy/features/token_info/presentation/tokens_info_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
+import 'package:defy/features/authentication/presentation/helpers/error.dart';
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
+import 'package:defy/features/authentication/presentation/screens/account_creation/account_creation_screen.dart';
 import 'package:defy/features/authentication/presentation/screens/authentication_screen.dart';
+import 'package:defy/features/authentication/presentation/screens/create_import_wallet_screen.dart';
+import 'package:defy/features/authentication/presentation/screens/welcome_back_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/account_dashboard/screens/account_dashboard.dart';
+import 'package:defy/features/blockchain/presentation/screens/import_wallet/screens/import_private_key_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/import_wallet/screens/import_seed_key_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_creation/screens/seed_selection_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_creation/screens/wallet_creation_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/connection_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/manage_wallet_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/rotate_key_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/security_screen.dart';
+import 'package:defy/features/blockchain/presentation/screens/wallet_ui_edit/screens/wallet_ui_screen.dart';
 import 'package:defy/features/browser/presentation/browser_view.dart';
 import 'package:defy/features/home/presentation/screens/home_screen.dart';
 import 'package:defy/features/lend-borrow/presentation/lending_view.dart';
 import 'package:defy/features/leverage_trading/presentation/screens/leverage_trading_pair_view.dart';
 import 'package:defy/features/leverage_trading/presentation/screens/leverage_trading_view.dart';
+import 'package:defy/features/marketplace/presentation/screens/nft_marketplace_screen.dart';
 import 'package:defy/features/mint/presentation/nft_mint_details_view.dart';
 import 'package:defy/features/mint/presentation/nft_mint_view.dart';
 import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:defy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:defy/features/staking/presentation/screens/staking_pool_view.dart';
 import 'package:defy/features/test/test_screen.dart';
+import 'package:defy/features/token_info/presentation/tokens_info_screen.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'authentication_route.dart';
 part 'browser_route.dart';
+part 'blockchain_route.dart';
 part 'generated/router.freezed.dart';
 part 'generated/router.g.dart';
 part 'home_route.dart';
@@ -54,12 +71,33 @@ GoRouter router(RouterRef ref) {
   final authState = ref.watch(authenticationNotifierProvider);
 
   return GoRouter(
-    initialLocation: NFTMarketplaceScreenRoute().location,
+    initialLocation: const SplashRoute().location,
     routes: $appRoutes,
     redirect: (BuildContext context, GoRouterState state) {
       final routeData = state.extra as AppRoute?;
-
+      
       return authState.when(
+        loading: () {
+          AppLogger.debug("loading");
+          return null;
+        }, // Stay on current route while loading
+        error: (e, st) {
+          AppLogger.debug("error");
+          DioException? err;
+          if (e is DioException) {
+            err = e;
+          }
+          final authErrorType = AuthErrorHandler.parseAuthError(err?.response);
+          switch (authErrorType) {
+            case AuthErrorType.missingUsername:
+            case AuthErrorType.missingDisplayName:
+              return const AccountCreationRoute().location;
+            case AuthErrorType.generalAuthError:
+              return const AuthenticationRoute().location;
+            default:
+              return const AuthenticationRoute().location;
+          }
+        },
         data: (authenticationState) {
           if (state.fullPath == const SplashRoute().location) {
             return authenticationState.map(
@@ -81,8 +119,6 @@ GoRouter router(RouterRef ref) {
             authenticating: (_) => null,
           );
         },
-        loading: () => null,
-        error: (_, __) => const AuthenticationRoute().location,
       );
     },
     refreshListenable: GoRouterRefreshStream(ref),

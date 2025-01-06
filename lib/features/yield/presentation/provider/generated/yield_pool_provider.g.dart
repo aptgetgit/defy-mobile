@@ -20,6 +20,8 @@ final poolRepositoryProvider = AutoDisposeProvider<PoolRepository>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef PoolRepositoryRef = AutoDisposeProviderRef<PoolRepository>;
 String _$getAllPoolsUseCaseHash() =>
     r'21fd2ef60f9a0e0a0bc3dde3c6bacc72de07ac3c';
@@ -37,6 +39,8 @@ final getAllPoolsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetAllPoolsUseCaseRef = AutoDisposeProviderRef<GetAllPoolsUseCase>;
 String _$getPoolUseCaseHash() => r'bdfa9fe21f0644b130b1061b0fa8f592bbbdf8a9';
 
@@ -52,6 +56,8 @@ final getPoolUseCaseProvider = AutoDisposeProvider<GetPoolUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetPoolUseCaseRef = AutoDisposeProviderRef<GetPoolUseCase>;
 String _$getPoolHash() => r'5199928a9737a95a6921edb0bdc7db1e9be9bd91';
 
@@ -204,6 +210,8 @@ class GetPoolProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GetPoolRef
     on AutoDisposeFutureProviderRef<Either<DioException, PoolDataEntity>> {
   /// The parameter `poolId` of this provider.
@@ -237,7 +245,9 @@ final getAllPoolsProvider = AutoDisposeFutureProvider<
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetAllPoolsRef = AutoDisposeFutureProviderRef<
     Either<DioException, List<PoolResponseEntity>>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

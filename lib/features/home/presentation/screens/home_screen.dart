@@ -1,3 +1,4 @@
+import 'package:defy/features/authentication/presentation/providers/authentication_usecase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_state_notifier.dart';
@@ -21,18 +22,73 @@ class HomeScreen extends HookConsumerWidget {
     final networksState = ref.watch(blockchainNetworkNotifierProvider);
     final accountsState = ref.watch(userBlockchainAccountNotifierProvider);
     final groupsState = ref.watch(userBlockchainAccountGroupNotifierProvider);
-    final assignmentsState = ref.watch(userBlockchainAccountGroupAssignmentNotifierProvider);
+    final assignmentsState =
+        ref.watch(userBlockchainAccountGroupAssignmentNotifierProvider);
 
     Future<void> syncAllData() async {
       ref.read(blockchainNetworkNotifierProvider.notifier).refresh();
       ref.read(userBlockchainAccountNotifierProvider.notifier).refresh();
       ref.read(userBlockchainAccountGroupNotifierProvider.notifier).refresh();
-      ref.read(userBlockchainAccountGroupAssignmentNotifierProvider.notifier).refresh();
+      ref
+          .read(userBlockchainAccountGroupAssignmentNotifierProvider.notifier)
+          .refresh();
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Blockchain Dashboard'),
+        title: Consumer(
+          builder: (ctx, ref, child) {
+            final activeIdentityUseCase =
+                ref.read(getActiveIdentityUseCaseProvider);
+            final activeSessionUseCase =
+                ref.read(getSessionDetailsUseCaseProvider);
+
+            final activeIdentity = activeIdentityUseCase.call();
+            if (activeIdentity == null) {
+              return Text(
+                'Hello again',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
+                ),
+              );
+            }
+
+            return FutureBuilder(
+              future: activeSessionUseCase.call(activeIdentity),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text(
+                    'Hello again',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                } else if (!snapshot.hasData) {
+                  return Text(
+                    'Hello again',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                }
+
+                final identity = snapshot.data!.identity.traits;
+                return Text(
+                  'Hello again, ${identity.username}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                );
+              },
+            );
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.sync),
@@ -51,7 +107,8 @@ class HomeScreen extends HookConsumerWidget {
       ),
       body: authState.when(
         data: (state) => state.maybeWhen(
-          authenticated: (session) => _buildAuthenticatedView(context, session, networksState, accountsState, groupsState, assignmentsState),
+          authenticated: (session) => _buildAuthenticatedView(context, session,
+              networksState, accountsState, groupsState, assignmentsState),
           orElse: () => const Center(child: Text('Not authenticated')),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -61,13 +118,12 @@ class HomeScreen extends HookConsumerWidget {
   }
 
   Widget _buildAuthenticatedView(
-    BuildContext context,
-    SessionEntity session,
-    AsyncValue<List<BlockchainNetwork>> networksState,
-    AsyncValue<List<UserBlockchainAccount>> accountsState,
-    AsyncValue<List<UserBlockchainAccountGroup>> groupsState,
-    AsyncValue<List<UserBlockchainAccountGroupAssignment>> assignmentsState
-  ) {
+      BuildContext context,
+      SessionEntity session,
+      AsyncValue<List<BlockchainNetwork>> networksState,
+      AsyncValue<List<UserBlockchainAccount>> accountsState,
+      AsyncValue<List<UserBlockchainAccountGroup>> groupsState,
+      AsyncValue<List<UserBlockchainAccountGroupAssignment>> assignmentsState) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -75,11 +131,13 @@ class HomeScreen extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Welcome, ${session.identity.id}!',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             Text('Session ID: ${session.id}'),
             Text('Expires at: ${session.expiresAt}'),
-            Text('Authentication Level: ${session.authenticatorAssuranceLevel}'),
+            Text(
+                'Authentication Level: ${session.authenticatorAssuranceLevel}'),
             const SizedBox(height: 20),
             _buildDataSection('Blockchain Networks', networksState),
             _buildDataSection('Blockchain Accounts', accountsState),
@@ -94,7 +152,8 @@ class HomeScreen extends HookConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
         state.when(
           data: (data) => ListView.builder(
@@ -117,21 +176,22 @@ class HomeScreen extends HookConsumerWidget {
   }
 
   Widget _buildGroupsSection(
-    AsyncValue<List<UserBlockchainAccountGroup>> groupsState,
-    AsyncValue<List<UserBlockchainAccount>> accountsState,
-    AsyncValue<List<UserBlockchainAccountGroupAssignment>> assignmentsState
-  ) {
+      AsyncValue<List<UserBlockchainAccountGroup>> groupsState,
+      AsyncValue<List<UserBlockchainAccount>> accountsState,
+      AsyncValue<List<UserBlockchainAccountGroupAssignment>> assignmentsState) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Blockchain Account Groups', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        const Text('Blockchain Account Groups',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
         groupsState.when(
           data: (groups) => ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: groups.length,
-            itemBuilder: (context, index) => _buildGroupTile(groups[index], accountsState, assignmentsState),
+            itemBuilder: (context, index) =>
+                _buildGroupTile(groups[index], accountsState, assignmentsState),
           ),
           loading: () => const CircularProgressIndicator(),
           error: (error, stack) => Text('Error: $error'),
@@ -141,26 +201,32 @@ class HomeScreen extends HookConsumerWidget {
   }
 
   Widget _buildGroupTile(
-    UserBlockchainAccountGroup group,
-    AsyncValue<List<UserBlockchainAccount>> accountsState,
-    AsyncValue<List<UserBlockchainAccountGroupAssignment>> assignmentsState
-  ) {
+      UserBlockchainAccountGroup group,
+      AsyncValue<List<UserBlockchainAccount>> accountsState,
+      AsyncValue<List<UserBlockchainAccountGroupAssignment>> assignmentsState) {
     return ExpansionTile(
       title: Text(group.name),
       children: [
         accountsState.when(
           data: (accounts) => assignmentsState.when(
             data: (assignments) {
-              final groupAssignments = assignments.where((assignment) => assignment.blockchainAccountGroupId == group.id).toList();
-              final groupAccounts = accounts.where((account) => 
-                groupAssignments.any((assignment) => assignment.blockchainAccountId == account.id)
-              ).toList();
-              
+              final groupAssignments = assignments
+                  .where((assignment) =>
+                      assignment.blockchainAccountGroupId == group.id)
+                  .toList();
+              final groupAccounts = accounts
+                  .where((account) => groupAssignments.any((assignment) =>
+                      assignment.blockchainAccountId == account.id))
+                  .toList();
+
               return Column(
-                children: groupAccounts.map((account) => ListTile(
-                  title: Text(account.accountAddress),
-                  subtitle: Text('Network ID: ${account.blockchainNetworkId}'),
-                )).toList(),
+                children: groupAccounts
+                    .map((account) => ListTile(
+                          title: Text(account.accountAddress),
+                          subtitle: Text(
+                              'Network ID: ${account.blockchainNetworkId}'),
+                        ))
+                    .toList(),
               );
             },
             loading: () => const CircularProgressIndicator(),

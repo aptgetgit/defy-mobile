@@ -1,7 +1,9 @@
+import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_flow_manager.dart';
 import 'package:defy/features/authentication/presentation/providers/authentication_usecase_provider.dart';
 import 'package:defy/features/authentication/presentation/providers/states/authentication_state.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/authentication_state_notifier.g.dart';
@@ -14,6 +16,7 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
   }
 
   Future<AuthenticationState> _initialize() async {
+    await Future.delayed(const Duration(seconds: 6));
     try {
       final activeIdentityId = ref.read(getActiveIdentityUseCaseProvider).call();
       if (activeIdentityId != null) {
@@ -56,7 +59,7 @@ class AuthenticationNotifier extends _$AuthenticationNotifier {
       await ref.read(setActiveIdentityUseCaseProvider).call(session.identity.id);
       flowManager.resetFlow();
       state = AsyncValue.data(AuthenticationState.authenticated(session));
-    } catch (e) {
+    } on DioException catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
   }

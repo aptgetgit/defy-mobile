@@ -52,8 +52,6 @@ class SplashScreen extends HookConsumerWidget {
     try {
       await Future.delayed(const Duration(seconds: 2));
       if (!context.mounted) return;
-      
-      OnboardingRoute().go(context);
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

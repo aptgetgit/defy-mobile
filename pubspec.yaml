@@ -91,6 +91,12 @@ dependencies:
   expandable: ^5.0.1
   syncfusion_flutter_charts: ^28.1.35
 
+  dotted_border: ^2.1.0
+  flutter_card_swiper: ^7.0.2
+  flutter_colorpicker: ^1.1.0
+  confetti: ^0.8.0
+  el_tooltip: ^2.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -120,6 +126,8 @@ dev_dependencies:
 # Flutter Gen Config
 flutter_gen:
   output: lib/config
+  integrations:
+    flutter_svg: true
 
 # Object Box Config
 objectbox:
@@ -139,6 +147,7 @@ flutter:
     - assets/videos/
     - assets/animations/
     - assets/icons/
+    - assets/gifs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

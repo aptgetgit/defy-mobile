@@ -7,7 +7,7 @@ part of '../wallet_inventory_provider.dart';
 // **************************************************************************
 
 String _$walletInventoryRemoteHash() =>
-    r'6111884463a911817fe5c5545c1a505ab78136f9';
+    r'e59d3757ecf172f0aeacbabb0773caa1c5279777';
 
 /// See also [walletInventoryRemote].
 @ProviderFor(walletInventoryRemote)
@@ -22,6 +22,8 @@ final walletInventoryRemoteProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef WalletInventoryRemoteRef
     = AutoDisposeProviderRef<WalletInventoryRemote>;
 String _$walletInventoryRepositoryHash() =>
@@ -40,6 +42,8 @@ final walletInventoryRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef WalletInventoryRepositoryRef
     = AutoDisposeProviderRef<WalletInventoryRepository>;
 String _$walletInventoryUseCaseHash() =>
@@ -58,6 +62,8 @@ final walletInventoryUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef WalletInventoryUseCaseRef
     = AutoDisposeProviderRef<WalletInventoryUseCase>;
 String _$walletInventoryDataHash() =>
@@ -200,6 +206,8 @@ class WalletInventoryDataProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin WalletInventoryDataRef
     on AutoDisposeFutureProviderRef<WalletInventoryEntity?> {
   /// The parameter `owner` of this provider.
@@ -232,4 +240,4 @@ final walletInventoryProvider =
 
 typedef _$WalletInventory = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

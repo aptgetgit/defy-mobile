@@ -22,6 +22,8 @@ final stakingPoolRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef StakingPoolRepositoryRef
     = AutoDisposeProviderRef<StakingPoolRepository>;
 String _$stakingPoolsUseCaseHash() =>
@@ -40,6 +42,8 @@ final stakingPoolsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef StakingPoolsUseCaseRef = AutoDisposeProviderRef<StakingPoolsUseCase>;
 String _$getStakingPoolsHash() => r'dec86fd7d8426a40105ced87d957ea2c35e4f32d';
 
@@ -56,7 +60,9 @@ final getStakingPoolsProvider = AutoDisposeFutureProvider<
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetStakingPoolsRef = AutoDisposeFutureProviderRef<
     Either<DioException, List<StakingPoolEntity>>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

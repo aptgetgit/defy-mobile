@@ -1,6 +1,12 @@
+import 'dart:core';
+import 'dart:ui';
+
 import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/providers/network_connectivity_provider.dart';
+import 'package:defy/features/authentication/presentation/providers/account_data_state_provider.dart';
+import 'package:defy/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:defy/config/assets.gen.dart';
@@ -29,7 +35,7 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     super.initState();
     final credentialManager = ref.read(credentialManagerServiceProvider);
     if (credentialManager.isSupportedPlatform) {
-      tryAutoSignIn();
+      // tryAutoSignIn();
     }
   }
 
@@ -63,12 +69,14 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
   }
 
   Future<void> googleLogin() async {
+    ref.read(accountDataStateProvider.notifier).setProvider('google');
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     final credentialManager = ref.read(credentialManagerServiceProvider);
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
 
     try {
-      final googleIdTokenCredential = await credentialManager.saveGoogleCredential();
+      final googleIdTokenCredential =
+          await credentialManager.saveGoogleCredential();
 
       if (googleIdTokenCredential != null) {
         await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
@@ -79,26 +87,23 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
         );
 
         await notifier.completeLogin();
-        HomeRoute().replace(context);
       } else {
         _showErrorSnackBar('Google Sign-In failed');
       }
-    } catch (e) {
+    } on Exception catch (e) {
+      AppLogger.debug("error in google Login");
       _showErrorSnackBar('Error during Google Sign-In: ${e.toString()}');
     }
   }
 
   Future<void> appleLogin() async {
+    ref.read(accountDataStateProvider.notifier).setProvider('apple');
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     final flowManager = ref.read(authenticationFlowManagerProvider.notifier);
 
     try {
       final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email
-        ],
-        nonce: "testertagger"
-      );
+          scopes: [AppleIDAuthorizationScopes.email], nonce: "testertagger");
 
       if (credential.identityToken != null) {
         await notifier.initiateLogin(const InitiateLoginOptions.withOIDC());
@@ -132,7 +137,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
   Widget build(BuildContext context) {
     final (width, height) = (context.screenWidth, context.screenHeight);
     final isDark = context.isDarkMode;
-    final authState = ref.watch(authenticationNotifierProvider);
     final isOnline = ref.watch(isOnlineProvider);
     final networkStatus = ref.watch(networkStatusProvider);
 
@@ -147,104 +151,271 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     }
 
     return Scaffold(
-      body: Column(
-        children: [
-          networkStatus.when(
-            data: (status) => status.when(
-              online: () => const SizedBox.shrink(),
-              limited: () => _NetworkStatusBanner(
-                message: 'Limited Connection',
-                color: Colors.orange,
-                icon: Icons.wifi_off,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned(
+              left: width * .0943,
+              top: height * .1238,
+              child: Container(
+                height: height * .0481,
+                width: width * .1046,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.yellow,
+                ),
+                child: Assets.gifs.slightlySmilingFace.image(
+                  width: width * .0608,
+                ),
               ),
-              offline: () => _NetworkStatusBanner(
-                message: 'No Internet Connection',
-                color: Colors.red,
-                icon: Icons.signal_wifi_off,
+            ).animate().scaleXY(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: width * .4886,
+              top: height * .0560,
+              child: Assets.images.onboardingNft1.image(
+                width: width * .1148,
+                height: height * .0531,
+              ),
+            ).animate().scale(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: width * .3214,
+              top: height * .3670,
+              child: Assets.images.onboardingNft6.image(
+                width: width * .1148,
+                height: height * .0531,
+              ),
+            ).animate().scale(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: width * .5785,
+              top: height * .4230,
+              child: Container(
+                height: height * .0543,
+                width: width * .1173,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.blueLight,
+                ),
+                child: Assets.gifs.grinningFaceWithSmilingEyes.image(
+                  width: width * .0683,
+                ),
+              ),
+            ).animate().scale(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              right: 12,
+              top: height * .2526,
+              child: Assets.images.onboardingNft3.image(
+                width: width * .1377,
+                height: height * .0637,
+              ),
+            ).animate().scale(
+                  duration: Duration(milliseconds: 550),
+                  curve: Curves.easeOut,
+                ),
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 3.0,
+                  sigmaY: 3.0,
+                ),
+                child: Container(
+                  color: Colors.transparent,
+                ),
               ),
             ),
-            loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(
-                left: width * 0.05,
-                right: width * 0.05,
-                top: height * 0.08,
-                bottom: height * 0.03,
+            //------------//
+            Positioned(
+              right: 5,
+              top: height * .0898,
+              child: Assets.images.onboardingNft2.image(
+                width: width * .1654,
+                height: height * .0765,
               ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: 1.5,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              right: 4,
+              top: height * .4174,
+              child: Assets.icons.coinLogo.image(
+                width: width * .16,
+                height: height * .0739,
+              ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: 1.5,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: -(width * .0561),
+              top: height * .2594,
+              child: Assets.images.aptosLogo.image(
+                width: width * .1587,
+                height: height * .0732,
+              ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: -1,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: width * .25,
+              top: height * .5430,
+              child: Assets.images.onboardingNft4
+                  .image(
+                    width: width * .2580,
+                    height: height * .1192,
+                  )
+                  .animate()
+                  .slideY(
+                    duration: Duration(milliseconds: 550),
+                    begin: 1,
+                    end: 0,
+                    curve: Curves.easeOut,
+                  ),
+            ),
+            Positioned(
+              right: width * .05,
+              top: height * .6011,
+              child: Container(
+                height: height * .0820,
+                width: width * .1770,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF8b5dff),
+                ),
+                child: Assets.gifs.starStruck.image(
+                  width: width * .1031,
+                ),
+              ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: 1.5,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: width * .0408,
+              top: height * .5801,
+              child: Container(
+                height: height * .0513,
+                width: width * .1111,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFFA7AA2),
+                ),
+                child: Assets.gifs.smilingFaceWithHearts.image(
+                  width: width * .0646,
+                ),
+              ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: -1,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              left: -(width * .0454),
+              top: height * .4078,
+              child: Assets.images.onboardingNft5.image(
+                width: width * .1940,
+                height: height * .0812,
+              ),
+            ).animate().slideX(
+                  duration: Duration(milliseconds: 550),
+                  begin: -1,
+                  end: 0,
+                  curve: Curves.easeOut,
+                ),
+            Positioned(
+              top: height * .1474,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                height: height * .1722,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Assets.icons.appLogoDark
+                        .image(width: width * .1589, height: height * .0872),
+                    const Gap(4),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'Let\'s get started',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 24,
+                          ),
+                        ),
+                        const Gap(4),
+                        const Text(
+                          'Sign up or recover your account.',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Color(0XFF979DAA),
+                          ),
+                        ),
+                      ],
+                    ).animate().slideY(
+                          duration: Duration(milliseconds: 500),
+                          begin: 3,
+                          end: 0,
+                          curve: Curves.easeOut,
+                        ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned.fill(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      isDark
-                          ? Assets.icons.appLogoLight.image(width: 50)
-                          : Assets.icons.appLogoDark.image(width: 50),
-                    ],
-                  ),
-                  Gap(height * 0.04),
-                  const Text(
-                    'Let\'s get started',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                  Gap(height * 0.008),
-                  const Text(
-                    'Sign up or recover your wallet by entering your\nemail below',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: Color(0XFF979DAA),
-                    ),
-                  ),
-                  const Spacer(),
-                  _SocialSignInButton(
-                    onPressed: isOnline.whenOrNull(
-                      data: (online) => online && !authState.isLoading 
-                          ? googleLogin 
-                          : null,
-                    ),
-                    isLoading: authState.isLoading,
-                    icon: Assets.icons.google.image(width: 32),
-                    label: 'Continue with Google',
-                  ),
-                  Gap(height * 0.02),
-                  FutureBuilder<bool>(
-                    future: SignInWithApple.isAvailable(),
-                    builder: (context, snapshot) {
-                      final isAppleSignInAvailable = snapshot.data ?? false;
-                      
-                      return isAppleSignInAvailable 
-                        ? _SocialSignInButton(
-                            onPressed: isOnline.whenOrNull(
-                              data: (online) => online && !authState.isLoading 
-                                  ? appleLogin 
-                                  : null,
-                            ),
-                            isLoading: authState.isLoading,
-                            icon: const Icon(
-                              Icons.apple,
-                              size: 32,
-                              color: Colors.white,
-                            ),
-                            label: 'Continue with Apple',
-                            isDark: true,
-                          )
-                        : const SizedBox.shrink();
-                    },
+                  Consumer(
+                    builder:(ctx,ref,child){
+                      final authState = ref.watch(authenticationNotifierProvider);
+                      return _SocialSignInButton(
+                      onPressed: isOnline.whenOrNull(
+                        data: (online) =>
+                            online && !authState.isLoading ? googleLogin : null,
+                      ),
+                      isLoading: authState.isLoading,
+                      icon: Assets.icons.google.image(width: 32),
+                      label: 'Continue with Google',
+                    );
+                    }
                   ),
                   Gap(height * 0.03),
                   const _TermsAndPrivacyText(),
+                  Gap(height * .0644),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -268,27 +439,27 @@ class _SocialSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDisabled = onPressed == null;
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      height: context.screenHeight * 0.065,
+      height: context.screenHeight * 0.0649,
+      width: context.screenWidth * .6986,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          backgroundColor: isDisabled 
-              ? Colors.grey.shade100 
-              : isDark 
+          backgroundColor: isDisabled
+              ? Colors.grey.shade100
+              : isDark
                   ? Colors.black
                   : Colors.white,
           side: BorderSide(
-            color: isDisabled 
-                ? Colors.grey.shade300 
+            color: isDisabled
+                ? Colors.grey.shade300
                 : isDark
                     ? Colors.black
                     : Colors.grey.shade400,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(30),
           ),
           elevation: 0,
           shadowColor: Colors.transparent,
@@ -328,7 +499,6 @@ class _SocialSignInButton extends StatelessWidget {
   }
 }
 
-
 class _NetworkStatusBanner extends StatelessWidget {
   final String message;
   final Color color;
@@ -366,7 +536,6 @@ class _NetworkStatusBanner extends StatelessWidget {
     );
   }
 }
-
 
 class _TermsAndPrivacyText extends StatelessWidget {
   const _TermsAndPrivacyText();

@@ -6,7 +6,7 @@ part of '../leverage_trading_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$leverageTradingHash() => r'2bdbc31496a381a73ca5b8979293362fd006737a';
+String _$leverageTradingHash() => r'302543a63744518b3ff25ca0280de9b89c429c7c';
 
 /// See also [LeverageTrading].
 @ProviderFor(LeverageTrading)
@@ -23,4 +23,4 @@ final leverageTradingProvider =
 
 typedef _$LeverageTrading = Notifier<LeverageTradingViewState>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

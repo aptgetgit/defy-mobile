@@ -12,3 +12,39 @@ class AuthenticationRoute extends GoRouteData {
     builder: (context, state) => const AuthenticationScreen(),
   );
 }
+
+@TypedGoRoute<AccountCreationRoute>(path: '/account-creation')
+class AccountCreationRoute extends GoRouteData {
+  const AccountCreationRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const AccountCreationScreen();
+
+  static final AppRoute route = AppRoute.protected(
+    builder: (context, state) => const AccountCreationScreen(),
+  );
+}
+
+@TypedGoRoute<WelcomeBackScreenRoute>(path: '/welcome-back')
+class WelcomeBackScreenRoute extends GoRouteData {
+  const WelcomeBackScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => WelcomeBackScreen();
+
+  // static final AppRoute route = AppRoute.protected(
+  //   builder: (context, state) => WelcomeBackScreen(displayName: $extra,),
+  // );
+}
+
+@TypedGoRoute<CreateImportWalletScreenRoute>(path: '/create-import')
+class CreateImportWalletScreenRoute extends GoRouteData {
+  const CreateImportWalletScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const CreateImportWalletScreen();
+
+  static final AppRoute route = AppRoute.protected(
+    builder: (context, state) => const CreateImportWalletScreen(),
+  );
+}

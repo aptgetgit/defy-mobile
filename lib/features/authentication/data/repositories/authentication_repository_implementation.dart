@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:built_value/json_object.dart';
+import 'package:defy/core/logging/app_logger.dart';
 import 'package:defy/core/providers/secure_storage_provider.dart';
 import 'package:defy/core/providers/shared_preferences_provider.dart';
 import 'package:defy/features/authentication/data/sources/remote/kratos_data_source.dart';
@@ -312,7 +313,9 @@ class AuthenticationRepository implements IAuthenticationRepository {
           identities.add(IdentityEntity(
               id: sessionDetailsJson.identity.id,
               createdAt: sessionDetailsJson.identity.createdAt,
-              updatedAt: sessionDetailsJson.identity.updatedAt));
+              updatedAt: sessionDetailsJson.identity.updatedAt,
+              traits: sessionDetailsJson.identity.traits,
+              ));
         } else {
           await _deleteSessionDetails(identityId);
           await _deleteSessionToken(identityId);
@@ -363,6 +366,22 @@ class AuthenticationRepository implements IAuthenticationRepository {
       id: identity.id,
       createdAt: identity.createdAt ?? DateTime.now(),
       updatedAt: identity.updatedAt ?? DateTime.now(),
+      traits: _mapToTraitsEntity(identity)
     );
   }
+
+TraitsEntity _mapToTraitsEntity(Identity identity) {
+  if (identity.traits is JsonObject && identity.traits != null) {
+    final jsond = Map<String, dynamic>.from(identity.traits!.asMap);
+
+    final email = jsond['email'] as String? ?? '';
+    final username = jsond['username'] as String? ?? '';
+    final displayName = jsond['displayName'] as String? ?? '';
+
+    AppLogger.debug(username);
+
+    return TraitsEntity(email: email, username: username, displayName: displayName);
+  }
+  throw Exception("Invalid traits data type. Expected Map<String, dynamic>.");
+}
 }

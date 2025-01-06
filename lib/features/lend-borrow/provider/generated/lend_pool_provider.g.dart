@@ -22,6 +22,8 @@ final lendPoolRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef LendPoolRepositoryRef = AutoDisposeProviderRef<LendPoolRepository>;
 String _$getLendPoolsUseCaseHash() =>
     r'e641764ae68d64f641f5526601d8e83ffdc3543d';
@@ -39,6 +41,8 @@ final getLendPoolsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetLendPoolsUseCaseRef = AutoDisposeProviderRef<GetLendPoolsUseCase>;
 String _$getLendPoolsHash() => r'd2c847df6d86b42933fd2f10e23eba7cf483e3d6';
 
@@ -54,7 +58,9 @@ final getLendPoolsProvider = AutoDisposeFutureProvider<
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetLendPoolsRef = AutoDisposeFutureProviderRef<
     Either<DioException, Map<String, LendPoolEntity>>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

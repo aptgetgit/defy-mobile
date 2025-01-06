@@ -225,6 +225,8 @@ final yieldAggregatorDioServiceProvider = Provider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef YieldAggregatorDioServiceRef = ProviderRef<Dio>;
 String _$stakingDioServiceHash() => r'08eff29f0a5d525c85e737e4c5166323db89127b';
 
@@ -240,6 +242,8 @@ final stakingDioServiceProvider = Provider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef StakingDioServiceRef = ProviderRef<Dio>;
 String _$lendBorrowDioServiceHash() =>
     r'66e80181fbf5a9b718a13bfffa1180362817a0d5';
@@ -256,6 +260,8 @@ final lendBorrowDioServiceProvider = Provider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef LendBorrowDioServiceRef = ProviderRef<Dio>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

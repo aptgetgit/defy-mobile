@@ -45,6 +45,7 @@ class SessionEntity with _$SessionEntity {
 class IdentityEntity with _$IdentityEntity {
   factory IdentityEntity({
     required String id,
+    required TraitsEntity traits,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _IdentityEntity;
@@ -52,4 +53,17 @@ class IdentityEntity with _$IdentityEntity {
   IdentityEntity._();
 
   factory IdentityEntity.fromJson(Map<String, dynamic> json) => _$IdentityEntityFromJson(json);
+}
+
+@freezed
+class TraitsEntity with _$TraitsEntity {
+  factory TraitsEntity({
+    required String email,
+    required String username,
+    required String displayName,
+  }) = _TraitsEntity;
+
+  TraitsEntity._();
+
+  factory TraitsEntity.fromJson(Map<String, dynamic> json) => _$TraitsEntityFromJson(json);
 }

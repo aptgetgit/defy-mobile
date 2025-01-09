@@ -71,8 +71,15 @@ class $AssetsGifsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/Buy-logo.png
+  AssetGenImage get buyLogo => const AssetGenImage('assets/icons/Buy-logo.png');
+
   /// File path: assets/icons/Frame.svg
   SvgGenImage get frame => const SvgGenImage('assets/icons/Frame.svg');
+
+  /// File path: assets/icons/addtoken-logo.png
+  AssetGenImage get addtokenLogo =>
+      const AssetGenImage('assets/icons/addtoken-logo.png');
 
   /// File path: assets/icons/amnis.png
   AssetGenImage get amnis => const AssetGenImage('assets/icons/amnis.png');
@@ -145,8 +152,16 @@ class $AssetsIconsGen {
   /// File path: assets/icons/gui-inu.png
   AssetGenImage get guiInu => const AssetGenImage('assets/icons/gui-inu.png');
 
+  /// File path: assets/icons/invitefriend-logo.png
+  AssetGenImage get invitefriendLogo =>
+      const AssetGenImage('assets/icons/invitefriend-logo.png');
+
   /// File path: assets/icons/kraken.png
   AssetGenImage get kraken => const AssetGenImage('assets/icons/kraken.png');
+
+  /// File path: assets/icons/ledborrow-logo.png
+  AssetGenImage get ledborrowLogo =>
+      const AssetGenImage('assets/icons/ledborrow-logo.png');
 
   /// File path: assets/icons/male-emoji.png
   AssetGenImage get maleEmoji =>
@@ -155,6 +170,22 @@ class $AssetsIconsGen {
   /// File path: assets/icons/market-explore-logo.png
   AssetGenImage get marketExploreLogo =>
       const AssetGenImage('assets/icons/market-explore-logo.png');
+
+  /// File path: assets/icons/mints-logo.png
+  AssetGenImage get mintsLogo =>
+      const AssetGenImage('assets/icons/mints-logo.png');
+
+  /// File path: assets/icons/more-logo.png
+  AssetGenImage get moreLogo =>
+      const AssetGenImage('assets/icons/more-logo.png');
+
+  /// File path: assets/icons/offramp-logo.png
+  AssetGenImage get offrampLogo =>
+      const AssetGenImage('assets/icons/offramp-logo.png');
+
+  /// File path: assets/icons/onramp-logo.png
+  AssetGenImage get onrampLogo =>
+      const AssetGenImage('assets/icons/onramp-logo.png');
 
   /// File path: assets/icons/petra-wallet-logo.png
   AssetGenImage get petraWalletLogo =>
@@ -167,9 +198,25 @@ class $AssetsIconsGen {
   AssetGenImage get rainbowWalletLogo =>
       const AssetGenImage('assets/icons/rainbow-wallet-logo.png');
 
+  /// File path: assets/icons/receive-logo.png
+  AssetGenImage get receiveLogo =>
+      const AssetGenImage('assets/icons/receive-logo.png');
+
+  /// File path: assets/icons/send-logo.png
+  AssetGenImage get sendLogo =>
+      const AssetGenImage('assets/icons/send-logo.png');
+
   /// File path: assets/icons/staking-default.png
   AssetGenImage get stakingDefault =>
       const AssetGenImage('assets/icons/staking-default.png');
+
+  /// File path: assets/icons/support-logo.png
+  AssetGenImage get supportLogo =>
+      const AssetGenImage('assets/icons/support-logo.png');
+
+  /// File path: assets/icons/swap-logo.png
+  AssetGenImage get swapLogo =>
+      const AssetGenImage('assets/icons/swap-logo.png');
 
   /// File path: assets/icons/uniswap-dex-logo.png
   AssetGenImage get uniswapDexLogo =>
@@ -181,9 +228,15 @@ class $AssetsIconsGen {
   /// File path: assets/icons/warning.png
   AssetGenImage get warning => const AssetGenImage('assets/icons/warning.png');
 
+  /// File path: assets/icons/watchlist-logo.png
+  AssetGenImage get watchlistLogo =>
+      const AssetGenImage('assets/icons/watchlist-logo.png');
+
   /// List of all assets
   List<dynamic> get values => [
+        buyLogo,
         frame,
+        addtokenLogo,
         amnis,
         appIcon,
         appLogoDark,
@@ -204,16 +257,27 @@ class $AssetsIconsGen {
         femaleEmoji,
         google,
         guiInu,
+        invitefriendLogo,
         kraken,
+        ledborrowLogo,
         maleEmoji,
         marketExploreLogo,
+        mintsLogo,
+        moreLogo,
+        offrampLogo,
+        onrampLogo,
         petraWalletLogo,
         polygon,
         rainbowWalletLogo,
+        receiveLogo,
+        sendLogo,
         stakingDefault,
+        supportLogo,
+        swapLogo,
         uniswapDexLogo,
         usdc,
-        warning
+        warning,
+        watchlistLogo
       ];
 }
 
@@ -239,6 +303,22 @@ class $AssetsImagesGen {
   /// File path: assets/images/Fantasy-Ruins.png
   AssetGenImage get fantasyRuins =>
       const AssetGenImage('assets/images/Fantasy-Ruins.png');
+
+  /// File path: assets/images/Mask group (1).png
+  AssetGenImage get maskGroup1 =>
+      const AssetGenImage('assets/images/Mask group (1).png');
+
+  /// File path: assets/images/Mask group (2).png
+  AssetGenImage get maskGroup2 =>
+      const AssetGenImage('assets/images/Mask group (2).png');
+
+  /// File path: assets/images/Mask group (3).png
+  AssetGenImage get maskGroup3 =>
+      const AssetGenImage('assets/images/Mask group (3).png');
+
+  /// File path: assets/images/Mask group.png
+  AssetGenImage get maskGroup =>
+      const AssetGenImage('assets/images/Mask group.png');
 
   /// File path: assets/images/NFT-Content-Section-Header.png
   AssetGenImage get nFTContentSectionHeader =>
@@ -282,6 +362,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/avatar-5.png
   AssetGenImage get avatar5 =>
       const AssetGenImage('assets/images/avatar-5.png');
+
+  /// File path: assets/images/avatar.png
+  AssetGenImage get avatar => const AssetGenImage('assets/images/avatar.png');
 
   /// File path: assets/images/cosmos-bg.png
   AssetGenImage get cosmosBg =>
@@ -350,6 +433,10 @@ class $AssetsImagesGen {
         doodleLeft,
         doodleRight,
         fantasyRuins,
+        maskGroup1,
+        maskGroup2,
+        maskGroup3,
+        maskGroup,
         nFTContentSectionHeader,
         nftPlaceholder,
         spiderman,
@@ -361,6 +448,7 @@ class $AssetsImagesGen {
         avatar3,
         avatar4,
         avatar5,
+        avatar,
         cosmosBg,
         cyborg,
         mint,

@@ -1,8 +1,23 @@
-import 'package:defy/shared/currency/domain/entities/currency_rate.dart';
 import 'package:objectbox/objectbox.dart';
+
+import '../../../domain/entities/currency_rate.dart';
 
 @Entity()
 class CurrencyRateLocalModel {
+  CurrencyRateLocalModel({
+    required this.remoteId,
+    required this.code,
+    required this.rate,
+    required this.lastUpdate,
+  });
+
+  factory CurrencyRateLocalModel.fromDomain(CurrencyRate rate) =>
+      CurrencyRateLocalModel(
+        remoteId: rate.id,
+        code: rate.code,
+        rate: rate.rate,
+        lastUpdate: rate.lastUpdate,
+      );
   @Id()
   int localId = 0;
 
@@ -17,25 +32,10 @@ class CurrencyRateLocalModel {
   @Property(type: PropertyType.date)
   DateTime lastUpdate;
 
-  CurrencyRateLocalModel({
-    required this.remoteId,
-    required this.code,
-    required this.rate,
-    required this.lastUpdate,
-  });
-
   CurrencyRate toDomain() => CurrencyRate(
         id: remoteId,
         code: code,
         rate: rate,
         lastUpdate: lastUpdate,
-      );
-
-  static CurrencyRateLocalModel fromDomain(CurrencyRate rate) =>
-      CurrencyRateLocalModel(
-        remoteId: rate.id,
-        code: rate.code,
-        rate: rate.rate,
-        lastUpdate: rate.lastUpdate,
       );
 }

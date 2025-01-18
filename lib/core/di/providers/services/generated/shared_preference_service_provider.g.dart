@@ -26,7 +26,7 @@ final sharedPreferencesInitializerProvider =
 // ignore: unused_element
 typedef SharedPreferencesInitializerRef = ProviderRef<SharedPreferences>;
 String _$sharedPreferencesServiceHash() =>
-    r'80678046ddb40ea1cd6d9df3d6c02bdffa6d5a4b';
+    r'2133748e2a93d7fb742c48336cfb2fd18aea691e';
 
 /// See also [sharedPreferencesService].
 @ProviderFor(sharedPreferencesService)

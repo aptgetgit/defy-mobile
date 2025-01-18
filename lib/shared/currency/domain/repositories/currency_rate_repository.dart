@@ -1,4 +1,4 @@
-import 'package:defy/shared/currency/domain/entities/currency_rate.dart';
+import '../entities/currency_rate.dart';
 
 abstract class ICurrencyRateRepository {
   // Local operations

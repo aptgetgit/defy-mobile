@@ -6,7 +6,7 @@ part of '../locale_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$l10nHash() => r'178f78df9a65127794d87731c1b61450c8b5d43d';
+String _$l10nHash() => r'acf5de48e42c61c9af1ea35c00c9a1f5538e2e01';
 
 /// See also [l10n].
 @ProviderFor(l10n)
@@ -22,7 +22,7 @@ final l10nProvider = AutoDisposeProvider<AppLocalizations>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef L10nRef = AutoDisposeProviderRef<AppLocalizations>;
-String _$localeNotifierHash() => r'1b9bffe8051c9c3518d4acc557289f8c8456eb84';
+String _$localeNotifierHash() => r'ff680ca77df0d7889b165046c61c700f1cd8d5d7';
 
 /// See also [LocaleNotifier].
 @ProviderFor(LocaleNotifier)

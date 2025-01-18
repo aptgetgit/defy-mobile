@@ -1,7 +1,8 @@
-import 'package:defy/core/services/shared_preference_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../services/shared_preference_service.dart';
 
 part 'generated/shared_preference_service_provider.g.dart';
 
@@ -12,6 +13,7 @@ SharedPreferences sharedPreferencesInitializer(Ref ref) {
 
 @Riverpod(keepAlive: true)
 SharedPreferencesService sharedPreferencesService(Ref ref) {
-  final sharedPreferences = ref.watch(sharedPreferencesInitializerProvider);
+  final SharedPreferences sharedPreferences =
+      ref.watch(sharedPreferencesInitializerProvider);
   return SharedPreferencesService(sharedPreferences);
 }

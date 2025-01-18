@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  const AppColors._();
+
   // Base colors
   static const Color white = Colors.white;
   static const Color black = Colors.black;
@@ -22,7 +24,7 @@ class AppColors {
 
   // Blue shades
   static const Color blue = Color(0xFF2071EE);
-  static final Color blueLight = blue.withOpacity(0.2);
+  static final Color blueLight = blue.withAlpha((0.2 * 255).round());
 
   // Green shades
   static const Color green = Color(0xFFE9F3EC);

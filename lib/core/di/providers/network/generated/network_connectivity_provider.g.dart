@@ -24,7 +24,7 @@ final networkInitializerProvider = Provider<NetworkConnectivityConfig>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef NetworkInitializerRef = ProviderRef<NetworkConnectivityConfig>;
-String _$networkStatusHash() => r'95e92382b8fbca5da0a680cfc5c66ab25f8887a4';
+String _$networkStatusHash() => r'b3f69ef893a44bf5415bc67d0ff27a092d2bef04';
 
 /// See also [networkStatus].
 @ProviderFor(networkStatus)
@@ -41,7 +41,7 @@ final networkStatusProvider = StreamProvider<NetworkStatus>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef NetworkStatusRef = StreamProviderRef<NetworkStatus>;
-String _$isOnlineHash() => r'40979e9968b3391949dc4b6e7ac2c30ca816cc4b';
+String _$isOnlineHash() => r'0a8a028dca9ed74e457cd457924442af422a8be4';
 
 /// See also [isOnline].
 @ProviderFor(isOnline)

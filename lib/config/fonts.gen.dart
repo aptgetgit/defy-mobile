@@ -10,9 +10,6 @@
 class FontFamily {
   FontFamily._();
 
-  /// Font family: Nunito
-  static const String nunito = 'Nunito';
-
   /// Font family: SFCompactRounded
   static const String sFCompactRounded = 'SFCompactRounded';
 }

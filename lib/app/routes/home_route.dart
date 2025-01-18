@@ -8,6 +8,6 @@ class HomeRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
 
   static final AppRoute route = AppRoute.protected(
-    builder: (context, state) => const HomeScreen(),
+    builder: (BuildContext context, GoRouterState state) => const HomeScreen(),
   );
 }

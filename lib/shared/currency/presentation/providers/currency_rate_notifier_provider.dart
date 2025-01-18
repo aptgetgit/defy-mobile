@@ -1,8 +1,9 @@
-import 'package:defy/shared/currency/data/repositories/currency_rate_repository_implementation.dart';
-import 'package:defy/shared/currency/presentation/providers/currency_rate_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../data/repositories/currency_rate_repository_implementation.dart';
 import '../../domain/entities/currency_rate.dart';
+import 'currency_rate_provider.dart';
 
 part 'generated/currency_rate_notifier_provider.g.dart';
 
@@ -19,31 +20,32 @@ class CurrencyRateNotifier extends _$CurrencyRateNotifier {
   Future<List<CurrencyRate>> _fetchRates() async {
     // Get local data first
     List<CurrencyRate> localData = _repository.listLocalCurrencyRates();
-    state = AsyncData(localData);
+    state = AsyncData<List<CurrencyRate>>(localData);
 
     try {
       // Sync with remote data
       await _repository.syncCurrencyRates();
 
       // Get updated local data
-      List<CurrencyRate> updatedData = _repository.listLocalCurrencyRates();
+      final List<CurrencyRate> updatedData =
+          _repository.listLocalCurrencyRates();
 
       // Update state only if data has changed
       if (!listEquals(localData, updatedData)) {
-        state = AsyncData(updatedData);
+        state = AsyncData<List<CurrencyRate>>(updatedData);
         localData = updatedData;
       }
-    } catch (e, stack) {
+    } on Exception catch (e, stack) {
       // Keep showing local data but indicate error state
-      state = AsyncError(e, stack);
+      state = AsyncError<List<CurrencyRate>>(e, stack);
     }
 
     return localData;
   }
 
   Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = AsyncData(await _fetchRates());
+    state = const AsyncLoading<List<CurrencyRate>>();
+    state = AsyncData<List<CurrencyRate>>(await _fetchRates());
   }
 
   // Additional utility methods
@@ -53,21 +55,23 @@ class CurrencyRateNotifier extends _$CurrencyRateNotifier {
     required String from,
     required String to,
   }) {
-    final rates = state.valueOrNull ?? [];
-    if (rates.isEmpty) return amount;
+    final List<CurrencyRate> rates = state.valueOrNull ?? <CurrencyRate>[];
+    if (rates.isEmpty) {
+      return amount;
+    }
 
-    final fromRate = rates.firstWhere(
-      (rate) => rate.code.toLowerCase() == from.toLowerCase(),
+    final CurrencyRate fromRate = rates.firstWhere(
+      (CurrencyRate rate) => rate.code.toLowerCase() == from.toLowerCase(),
       orElse: () => CurrencyRate(
         id: 'usd',
         code: 'USD',
-        rate: 1.0,
+        rate: 1,
         lastUpdate: DateTime.now(),
       ),
     );
 
-    final toRate = rates.firstWhere(
-      (rate) => rate.code.toLowerCase() == to.toLowerCase(),
+    final CurrencyRate toRate = rates.firstWhere(
+      (CurrencyRate rate) => rate.code.toLowerCase() == to.toLowerCase(),
       orElse: () => fromRate,
     );
 
@@ -76,14 +80,17 @@ class CurrencyRateNotifier extends _$CurrencyRateNotifier {
 
   // Get a specific currency rate
   CurrencyRate? getRateForCurrency(String currencyCode) {
-    final rates = state.valueOrNull;
-    if (rates == null) return null;
+    final List<CurrencyRate>? rates = state.valueOrNull;
+    if (rates == null) {
+      return null;
+    }
 
     try {
       return rates.firstWhere(
-        (rate) => rate.code.toLowerCase() == currencyCode.toLowerCase(),
+        (CurrencyRate rate) =>
+            rate.code.toLowerCase() == currencyCode.toLowerCase(),
       );
-    } catch (_) {
+    } on Exception catch (_) {
       return null;
     }
   }

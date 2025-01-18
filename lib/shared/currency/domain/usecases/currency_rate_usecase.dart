@@ -1,54 +1,42 @@
-import 'package:defy/shared/currency/data/repositories/currency_rate_repository_implementation.dart';
-import 'package:defy/shared/currency/domain/entities/currency_rate.dart';
+import '../../data/repositories/currency_rate_repository_implementation.dart';
+import '../entities/currency_rate.dart';
 
 class ListLocalCurrencyRatesUseCase {
+  ListLocalCurrencyRatesUseCase(this._repository);
   final CurrencyRateRepository _repository;
 
-  ListLocalCurrencyRatesUseCase(this._repository);
-
-  List<CurrencyRate> call() {
-    return _repository.listLocalCurrencyRates();
-  }
+  List<CurrencyRate> call() => _repository.listLocalCurrencyRates();
 }
 
 class GetLocalCurrencyRateUseCase {
+  GetLocalCurrencyRateUseCase(this._repository);
   final CurrencyRateRepository _repository;
 
-  GetLocalCurrencyRateUseCase(this._repository);
-
-  CurrencyRate? call(String currencyCode) {
-    return _repository.getLocalCurrencyRate(currencyCode);
-  }
+  CurrencyRate? call(String currencyCode) =>
+      _repository.getLocalCurrencyRate(currencyCode);
 }
 
 class SaveLocalCurrencyRateUseCase {
+  SaveLocalCurrencyRateUseCase(this._repository);
   final CurrencyRateRepository _repository;
 
-  SaveLocalCurrencyRateUseCase(this._repository);
-
-  void call(CurrencyRate currencyRate) {
-    return _repository.saveLocalCurrencyRate(currencyRate);
-  }
+  void call(CurrencyRate currencyRate) =>
+      _repository.saveLocalCurrencyRate(currencyRate);
 }
 
 class DeleteLocalCurrencyRateUseCase {
+  DeleteLocalCurrencyRateUseCase(this._repository);
   final CurrencyRateRepository _repository;
 
-  DeleteLocalCurrencyRateUseCase(this._repository);
-
-  void call(String currencyCode) {
-    return _repository.deleteLocalCurrencyRate(currencyCode);
-  }
+  void call(String currencyCode) =>
+      _repository.deleteLocalCurrencyRate(currencyCode);
 }
 
 class ListRemoteCurrencyRatesUseCase {
+  ListRemoteCurrencyRatesUseCase(this._repository);
   final CurrencyRateRepository _repository;
 
-  ListRemoteCurrencyRatesUseCase(this._repository);
-
-  Future<List<CurrencyRate>> call() {
-    return _repository.listRemoteCurrencyRates();
-  }
+  Future<List<CurrencyRate>> call() => _repository.listRemoteCurrencyRates();
 }
 
 // class GetRemoteCurrencyRateUseCase {
@@ -62,11 +50,8 @@ class ListRemoteCurrencyRatesUseCase {
 // }
 
 class SyncCurrencyRatesUseCase {
+  SyncCurrencyRatesUseCase(this._repository);
   final CurrencyRateRepository _repository;
 
-  SyncCurrencyRatesUseCase(this._repository);
-
-  Future<void> call() {
-    return _repository.syncCurrencyRates();
-  }
+  Future<void> call() => _repository.syncCurrencyRates();
 }

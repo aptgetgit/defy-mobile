@@ -18,54 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AppRoute {
   Widget Function(BuildContext, GoRouterState) get builder =>
       throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)
-        public,
-    required TResult Function(
-            Widget Function(BuildContext, GoRouterState) builder)
-        protected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)?
-        public,
-    TResult? Function(Widget Function(BuildContext, GoRouterState) builder)?
-        protected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)?
-        public,
-    TResult Function(Widget Function(BuildContext, GoRouterState) builder)?
-        protected,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(PublicRoute value) public,
-    required TResult Function(ProtectedRoute value) protected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PublicRoute value)? public,
-    TResult? Function(ProtectedRoute value)? protected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(PublicRoute value)? public,
-    TResult Function(ProtectedRoute value)? protected,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
 
   /// Create a copy of AppRoute
   /// with the given fields replaced by the non-null parameter values.
@@ -117,8 +69,8 @@ abstract class _$$PublicRouteImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? redirectIfAuthenticated,
-      Widget Function(BuildContext, GoRouterState) builder});
+      {Widget Function(BuildContext, GoRouterState) builder,
+      String? redirectIfAuthenticated});
 }
 
 /// @nodoc
@@ -134,18 +86,18 @@ class __$$PublicRouteImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? redirectIfAuthenticated = freezed,
     Object? builder = null,
+    Object? redirectIfAuthenticated = freezed,
   }) {
     return _then(_$PublicRouteImpl(
-      redirectIfAuthenticated: freezed == redirectIfAuthenticated
-          ? _value.redirectIfAuthenticated
-          : redirectIfAuthenticated // ignore: cast_nullable_to_non_nullable
-              as String?,
       builder: null == builder
           ? _value.builder
           : builder // ignore: cast_nullable_to_non_nullable
               as Widget Function(BuildContext, GoRouterState),
+      redirectIfAuthenticated: freezed == redirectIfAuthenticated
+          ? _value.redirectIfAuthenticated
+          : redirectIfAuthenticated // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -154,16 +106,16 @@ class __$$PublicRouteImplCopyWithImpl<$Res>
 
 class _$PublicRouteImpl implements PublicRoute {
   const _$PublicRouteImpl(
-      {this.redirectIfAuthenticated, required this.builder});
+      {required this.builder, this.redirectIfAuthenticated});
 
   @override
-  final String? redirectIfAuthenticated;
-  @override
   final Widget Function(BuildContext, GoRouterState) builder;
+  @override
+  final String? redirectIfAuthenticated;
 
   @override
   String toString() {
-    return 'AppRoute.public(redirectIfAuthenticated: $redirectIfAuthenticated, builder: $builder)';
+    return 'AppRoute.public(builder: $builder, redirectIfAuthenticated: $redirectIfAuthenticated)';
   }
 
   @override
@@ -171,15 +123,15 @@ class _$PublicRouteImpl implements PublicRoute {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PublicRouteImpl &&
+            (identical(other.builder, builder) || other.builder == builder) &&
             (identical(
                     other.redirectIfAuthenticated, redirectIfAuthenticated) ||
-                other.redirectIfAuthenticated == redirectIfAuthenticated) &&
-            (identical(other.builder, builder) || other.builder == builder));
+                other.redirectIfAuthenticated == redirectIfAuthenticated));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, redirectIfAuthenticated, builder);
+      Object.hash(runtimeType, builder, redirectIfAuthenticated);
 
   /// Create a copy of AppRoute
   /// with the given fields replaced by the non-null parameter values.
@@ -188,89 +140,16 @@ class _$PublicRouteImpl implements PublicRoute {
   @pragma('vm:prefer-inline')
   _$$PublicRouteImplCopyWith<_$PublicRouteImpl> get copyWith =>
       __$$PublicRouteImplCopyWithImpl<_$PublicRouteImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)
-        public,
-    required TResult Function(
-            Widget Function(BuildContext, GoRouterState) builder)
-        protected,
-  }) {
-    return public(redirectIfAuthenticated, builder);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)?
-        public,
-    TResult? Function(Widget Function(BuildContext, GoRouterState) builder)?
-        protected,
-  }) {
-    return public?.call(redirectIfAuthenticated, builder);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)?
-        public,
-    TResult Function(Widget Function(BuildContext, GoRouterState) builder)?
-        protected,
-    required TResult orElse(),
-  }) {
-    if (public != null) {
-      return public(redirectIfAuthenticated, builder);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(PublicRoute value) public,
-    required TResult Function(ProtectedRoute value) protected,
-  }) {
-    return public(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PublicRoute value)? public,
-    TResult? Function(ProtectedRoute value)? protected,
-  }) {
-    return public?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(PublicRoute value)? public,
-    TResult Function(ProtectedRoute value)? protected,
-    required TResult orElse(),
-  }) {
-    if (public != null) {
-      return public(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class PublicRoute implements AppRoute {
   const factory PublicRoute(
-      {final String? redirectIfAuthenticated,
-      required final Widget Function(BuildContext, GoRouterState)
-          builder}) = _$PublicRouteImpl;
+      {required final Widget Function(BuildContext, GoRouterState) builder,
+      final String? redirectIfAuthenticated}) = _$PublicRouteImpl;
 
-  String? get redirectIfAuthenticated;
   @override
   Widget Function(BuildContext, GoRouterState) get builder;
+  String? get redirectIfAuthenticated;
 
   /// Create a copy of AppRoute
   /// with the given fields replaced by the non-null parameter values.
@@ -347,78 +226,6 @@ class _$ProtectedRouteImpl implements ProtectedRoute {
   _$$ProtectedRouteImplCopyWith<_$ProtectedRouteImpl> get copyWith =>
       __$$ProtectedRouteImplCopyWithImpl<_$ProtectedRouteImpl>(
           this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)
-        public,
-    required TResult Function(
-            Widget Function(BuildContext, GoRouterState) builder)
-        protected,
-  }) {
-    return protected(builder);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)?
-        public,
-    TResult? Function(Widget Function(BuildContext, GoRouterState) builder)?
-        protected,
-  }) {
-    return protected?.call(builder);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? redirectIfAuthenticated,
-            Widget Function(BuildContext, GoRouterState) builder)?
-        public,
-    TResult Function(Widget Function(BuildContext, GoRouterState) builder)?
-        protected,
-    required TResult orElse(),
-  }) {
-    if (protected != null) {
-      return protected(builder);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(PublicRoute value) public,
-    required TResult Function(ProtectedRoute value) protected,
-  }) {
-    return protected(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PublicRoute value)? public,
-    TResult? Function(ProtectedRoute value)? protected,
-  }) {
-    return protected?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(PublicRoute value)? public,
-    TResult Function(ProtectedRoute value)? protected,
-    required TResult orElse(),
-  }) {
-    if (protected != null) {
-      return protected(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class ProtectedRoute implements AppRoute {

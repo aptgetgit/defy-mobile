@@ -35,16 +35,19 @@ class DioLogger extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final StringBuffer logBuffer = StringBuffer();
-    final startTime = DateTime.now();
+    final DateTime startTime = DateTime.now();
     options.extra['startTime'] = startTime;
 
     if (request) {
       _addRequestHeaderToBuffer(logBuffer, options);
     }
     if (requestHeader) {
-      _addMapAsTableToBuffer(logBuffer, options.queryParameters,
-          header: 'Query Parameters');
-      final requestHeaders = <String, dynamic>{
+      _addMapAsTableToBuffer(
+        logBuffer,
+        options.queryParameters,
+        header: 'Query Parameters',
+      );
+      final Map<String, dynamic> requestHeaders = <String, dynamic>{
         ...options.headers,
         'contentType': options.contentType?.toString(),
         'responseType': options.responseType.toString(),
@@ -59,30 +62,36 @@ class DioLogger extends Interceptor {
       _addRequestBodyToBuffer(logBuffer, options.data);
     }
 
-    logger.d('🌐 Dio Request:\n${logBuffer.toString()}');
+    logger.d('🌐 Dio Request:\n$logBuffer');
     super.onRequest(options, handler);
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     final StringBuffer logBuffer = StringBuffer();
     _addResponseHeaderToBuffer(logBuffer, response);
     if (responseHeader) {
-      final responseHeaders = <String, String>{};
-      response.headers
-          .forEach((k, list) => responseHeaders[k] = list.toString());
+      final Map<String, String> responseHeaders = <String, String>{};
+      response.headers.forEach(
+        (String k, List<String> list) => responseHeaders[k] = list.toString(),
+      );
       _addMapAsTableToBuffer(logBuffer, responseHeaders, header: 'Headers');
     }
 
     if (responseBody) {
-      logBuffer.writeln('╔ Body');
-      logBuffer.writeln('║');
+      logBuffer
+        ..writeln('╔ Body')
+        ..writeln('║');
       _addResponseToBuffer(logBuffer, response);
-      logBuffer.writeln('║');
-      logBuffer.writeln('╚');
+      logBuffer
+        ..writeln('║')
+        ..writeln('╚');
     }
 
-    logger.d('🌐 Dio Response:\n${logBuffer.toString()}');
+    logger.d('🌐 Dio Response:\n$logBuffer');
     super.onResponse(response, handler);
   }
 
@@ -91,8 +100,8 @@ class DioLogger extends Interceptor {
     if (error) {
       final StringBuffer logBuffer = StringBuffer();
       if (err.type == DioExceptionType.badResponse) {
-        final uri = err.response?.requestOptions.uri;
-        final method = err.response?.requestOptions.method;
+        final Uri? uri = err.response?.requestOptions.uri;
+        final String? method = err.response?.requestOptions.method;
         _addBoxedToBuffer(
           logBuffer,
           header:
@@ -100,11 +109,12 @@ class DioLogger extends Interceptor {
           text: uri.toString(),
         );
         if (err.response != null && err.response?.data != null) {
-          logBuffer.writeln('╔ ${err.type.toString()}');
+          logBuffer.writeln('╔ ${err.type}');
           _addResponseToBuffer(logBuffer, err.response!);
         }
-        logBuffer.writeln('╚');
-        logBuffer.writeln('');
+        logBuffer
+          ..writeln('╚')
+          ..writeln();
       } else {
         _addBoxedToBuffer(
           logBuffer,
@@ -112,16 +122,17 @@ class DioLogger extends Interceptor {
           text: err.message ?? 'No error message',
         );
       }
-      logger.e('🌐 Dio Error:\n${logBuffer.toString()}');
+      logger.e('🌐 Dio Error:\n$logBuffer');
     }
     super.onError(err, handler);
   }
 
   void _addBoxedToBuffer(StringBuffer buffer, {String? header, String? text}) {
-    buffer.writeln('');
-    buffer.writeln('╔╣ $header');
-    buffer.writeln('║  $text');
-    buffer.writeln('╚${'═' * maxWidth}');
+    buffer
+      ..writeln()
+      ..writeln('╔╣ $header')
+      ..writeln('║  $text')
+      ..writeln('╚${'═' * maxWidth}');
   }
 
   void _addRequestBodyToBuffer(StringBuffer buffer, dynamic data) {
@@ -129,28 +140,31 @@ class DioLogger extends Interceptor {
       if (data is Map) {
         _addMapAsTableToBuffer(buffer, data, header: 'Body');
       } else if (data is FormData) {
-        final formDataMap = <String, dynamic>{}
+        final Map<String, dynamic> formDataMap = <String, dynamic>{}
           ..addEntries(data.fields)
           ..addEntries(data.files);
-        _addMapAsTableToBuffer(buffer, formDataMap,
-            header: 'Form data | ${data.boundary}');
+        _addMapAsTableToBuffer(
+          buffer,
+          formDataMap,
+          header: 'Form data | ${data.boundary}',
+        );
       } else {
         _addBlockToBuffer(buffer, data.toString());
       }
     }
   }
 
-  void _addResponseToBuffer(StringBuffer buffer, Response response) {
+  void _addResponseToBuffer(StringBuffer buffer, Response<dynamic> response) {
     if (response.data != null) {
       if (response.data is Map) {
-        _addPrettyMapToBuffer(buffer, response.data as Map);
+        _addPrettyMapToBuffer(buffer, response.data as Map<dynamic, dynamic>);
       } else if (response.data is Uint8List) {
         buffer.writeln('║${_indent()}[');
         _addUint8ListToBuffer(buffer, response.data as Uint8List);
         buffer.writeln('║${_indent()}]');
       } else if (response.data is List) {
         buffer.writeln('║${_indent()}[');
-        _addListToBuffer(buffer, response.data as List);
+        _addListToBuffer(buffer, response.data as List<dynamic>);
         buffer.writeln('║${_indent()}]');
       } else {
         _addBlockToBuffer(buffer, response.data.toString());
@@ -158,15 +172,19 @@ class DioLogger extends Interceptor {
     }
   }
 
-  void _addResponseHeaderToBuffer(StringBuffer buffer, Response response) {
-    final uri = response.requestOptions.uri;
-    final method = response.requestOptions.method;
-    final requestTime = response.requestOptions.extra['startTime'] as DateTime?;
-    final responseTime = DateTime.now();
-    final duration =
+  void _addResponseHeaderToBuffer(
+    StringBuffer buffer,
+    Response<dynamic> response,
+  ) {
+    final Uri uri = response.requestOptions.uri;
+    final String method = response.requestOptions.method;
+    final DateTime? requestTime =
+        response.requestOptions.extra['startTime'] as DateTime?;
+    final DateTime responseTime = DateTime.now();
+    final Duration? duration =
         requestTime != null ? responseTime.difference(requestTime) : null;
 
-    final durationString =
+    final String durationString =
         logTime && duration != null ? ' (${duration.inMilliseconds}ms)' : '';
 
     _addBoxedToBuffer(
@@ -178,17 +196,21 @@ class DioLogger extends Interceptor {
   }
 
   void _addRequestHeaderToBuffer(StringBuffer buffer, RequestOptions options) {
-    final uri = options.uri;
-    final method = options.method;
-    _addBoxedToBuffer(buffer,
-        header: 'Request ║ $method ', text: uri.toString());
+    final Uri uri = options.uri;
+    final String method = options.method;
+    _addBoxedToBuffer(
+      buffer,
+      header: 'Request ║ $method ',
+      text: uri.toString(),
+    );
   }
 
   void _addBlockToBuffer(StringBuffer buffer, String msg) {
-    final lines = (msg.length / maxWidth).ceil();
-    for (var i = 0; i < lines; ++i) {
+    final int lines = (msg.length / maxWidth).ceil();
+    for (int i = 0; i < lines; ++i) {
       buffer.writeln(
-          '║ ${msg.substring(i * maxWidth, math.min<int>(i * maxWidth + maxWidth, msg.length))}');
+        '║ ${msg.substring(i * maxWidth, math.min<int>(i * maxWidth + maxWidth, msg.length))}',
+      );
     }
   }
 
@@ -196,23 +218,25 @@ class DioLogger extends Interceptor {
 
   void _addPrettyMapToBuffer(
     StringBuffer buffer,
-    Map data, {
+    Map<dynamic, dynamic> data, {
     int initialTab = _kInitialTab,
     bool isListItem = false,
     bool isLast = false,
   }) {
-    var tabs = initialTab;
-    final isRoot = tabs == _kInitialTab;
-    final initialIndent = _indent(tabs);
+    int tabs = initialTab;
+    final bool isRoot = tabs == _kInitialTab;
+    final String initialIndent = _indent(tabs);
     tabs++;
 
-    if (isRoot || isListItem) buffer.writeln('║$initialIndent{');
+    if (isRoot || isListItem) {
+      buffer.writeln('║$initialIndent{');
+    }
 
-    data.keys.toList().asMap().forEach((index, dynamic key) {
-      final isLast = index == data.length - 1;
+    data.keys.toList().asMap().forEach((int index, dynamic key) {
+      final bool isLast = index == data.length - 1;
       dynamic value = data[key];
       if (value is String) {
-        value = '"${value.toString().replaceAll(RegExp(r'([\r\n])+'), " ")}"';
+        value = '"${value.replaceAll(RegExp(r'([\r\n])+'), " ")}"';
       }
       if (value is Map) {
         if (compact && _canFlattenMap(value)) {
@@ -223,21 +247,22 @@ class DioLogger extends Interceptor {
         }
       } else if (value is List) {
         if (compact && _canFlattenList(value)) {
-          buffer.writeln('║${_indent(tabs)} $key: ${value.toString()}');
+          buffer.writeln('║${_indent(tabs)} $key: $value');
         } else {
           buffer.writeln('║${_indent(tabs)} $key: [');
           _addListToBuffer(buffer, value, tabs: tabs);
           buffer.writeln('║${_indent(tabs)} ]${isLast ? '' : ','}');
         }
       } else {
-        final msg = value.toString().replaceAll('\n', '');
-        final indent = _indent(tabs);
-        final linWidth = maxWidth - indent.length;
+        final String msg = value.toString().replaceAll('\n', '');
+        final String indent = _indent(tabs);
+        final int linWidth = maxWidth - indent.length;
         if (msg.length + indent.length > linWidth) {
-          final lines = (msg.length / linWidth).ceil();
-          for (var i = 0; i < lines; ++i) {
+          final int lines = (msg.length / linWidth).ceil();
+          for (int i = 0; i < lines; ++i) {
             buffer.writeln(
-                '║${_indent(tabs)} ${msg.substring(i * linWidth, math.min<int>(i * linWidth + linWidth, msg.length))}');
+              '║${_indent(tabs)} ${msg.substring(i * linWidth, math.min<int>(i * linWidth + linWidth, msg.length))}',
+            );
           }
         } else {
           buffer.writeln('║${_indent(tabs)} $key: $msg${!isLast ? ',' : ''}');
@@ -248,16 +273,24 @@ class DioLogger extends Interceptor {
     buffer.writeln('║$initialIndent}${isListItem && !isLast ? ',' : ''}');
   }
 
-  void _addListToBuffer(StringBuffer buffer, List list,
-      {int tabs = _kInitialTab}) {
-    list.asMap().forEach((i, dynamic e) {
-      final isLast = i == list.length - 1;
+  void _addListToBuffer(
+    StringBuffer buffer,
+    List<dynamic> list, {
+    int tabs = _kInitialTab,
+  }) {
+    list.asMap().forEach((int i, dynamic e) {
+      final bool isLast = i == list.length - 1;
       if (e is Map) {
         if (compact && _canFlattenMap(e)) {
           buffer.writeln('║${_indent(tabs)}  $e${!isLast ? ',' : ''}');
         } else {
-          _addPrettyMapToBuffer(buffer, e,
-              initialTab: tabs + 1, isListItem: true, isLast: isLast);
+          _addPrettyMapToBuffer(
+            buffer,
+            e,
+            initialTab: tabs + 1,
+            isListItem: true,
+            isLast: isLast,
+          );
         }
       } else {
         buffer.writeln('║${_indent(tabs + 2)} $e${isLast ? '' : ','}');
@@ -265,37 +298,44 @@ class DioLogger extends Interceptor {
     });
   }
 
-  void _addUint8ListToBuffer(StringBuffer buffer, Uint8List list,
-      {int tabs = _kInitialTab}) {
-    var chunks = [];
-    for (var i = 0; i < list.length; i += _chunkSize) {
+  void _addUint8ListToBuffer(
+    StringBuffer buffer,
+    Uint8List list, {
+    int tabs = _kInitialTab,
+  }) {
+    final List<Uint8List> chunks = <Uint8List>[];
+    for (int i = 0; i < list.length; i += _chunkSize) {
       chunks.add(
         list.sublist(
-            i, i + _chunkSize > list.length ? list.length : i + _chunkSize),
+          i,
+          i + _chunkSize > list.length ? list.length : i + _chunkSize,
+        ),
       );
     }
-    for (var element in chunks) {
+    for (final Uint8List element in chunks) {
       buffer.writeln('║${_indent(tabs)} ${element.join(", ")}');
     }
   }
 
-  bool _canFlattenMap(Map map) {
-    return map.values
-            .where((dynamic val) => val is Map || val is List)
-            .isEmpty &&
-        map.toString().length < maxWidth;
-  }
+  bool _canFlattenMap(Map<dynamic, dynamic> map) =>
+      map.values.where((dynamic val) => val is Map || val is List).isEmpty &&
+      map.toString().length < maxWidth;
 
-  bool _canFlattenList(List list) {
-    return list.length < 10 && list.toString().length < maxWidth;
-  }
+  bool _canFlattenList(List<dynamic> list) =>
+      list.length < 10 && list.toString().length < maxWidth;
 
-  void _addMapAsTableToBuffer(StringBuffer buffer, Map? map, {String? header}) {
-    if (map == null || map.isEmpty) return;
+  void _addMapAsTableToBuffer(
+    StringBuffer buffer,
+    Map<dynamic, dynamic>? map, {
+    String? header,
+  }) {
+    if (map == null || map.isEmpty) {
+      return;
+    }
     buffer.writeln('╔ $header ');
     map.forEach((dynamic key, dynamic value) {
-      final pre = '╟ $key: ';
-      final msg = value.toString();
+      final String pre = '╟ $key: ';
+      final String msg = value.toString();
 
       if (pre.length + msg.length > maxWidth) {
         buffer.writeln(pre);

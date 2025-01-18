@@ -26,7 +26,7 @@ final secureStorageInitializerProvider =
 // ignore: unused_element
 typedef SecureStorageInitializerRef = ProviderRef<FlutterSecureStorage>;
 String _$secureStorageServiceHash() =>
-    r'de00d2a41a0fb9c672f8710ba88d3a9e28236316';
+    r'c25889428a28d62370448d3e2ebb5c6a557c4974';
 
 /// See also [secureStorageService].
 @ProviderFor(secureStorageService)

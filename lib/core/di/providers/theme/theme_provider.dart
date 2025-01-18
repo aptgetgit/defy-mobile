@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../services/shared_preference_service.dart';
 import '../services/shared_preference_service_provider.dart';
 
 part 'generated/theme_provider.g.dart';
 
 @riverpod
 class ThemeNotifier extends _$ThemeNotifier {
-  static const _themeKey = 'app:setting:theme';
+  static const String _themeKey = 'app:setting:theme';
 
   @override
   ThemeMode build() {
-    final sharedPreferences = ref.watch(sharedPreferencesServiceProvider);
-    final savedTheme = sharedPreferences.getString(_themeKey);
+    final SharedPreferencesService sharedPreferences =
+        ref.watch(sharedPreferencesServiceProvider);
+    final String? savedTheme = sharedPreferences.getString(_themeKey);
     return _getThemeModeFromString(savedTheme);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
-    final sharedPreferences = ref.read(sharedPreferencesServiceProvider);
+    final SharedPreferencesService sharedPreferences =
+        ref.read(sharedPreferencesServiceProvider);
     await sharedPreferences.set<String>(_themeKey, mode.toString());
     state = mode;
   }

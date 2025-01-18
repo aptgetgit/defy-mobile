@@ -3,12 +3,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'generated/api_response.freezed.dart';
 part 'generated/api_response.g.dart';
 
-@Freezed(genericArgumentFactories: true)
+@Freezed(genericArgumentFactories: true, toJson: true, fromJson: true)
 class ApiResponse<T> with _$ApiResponse<T> {
   const factory ApiResponse({
     T? data,
     ErrorResponse? error,
-  }) = _ApiResponse;
+  }) = _ApiResponse<T>;
 
   factory ApiResponse.fromJson(
     Map<String, dynamic> json,
@@ -17,7 +17,7 @@ class ApiResponse<T> with _$ApiResponse<T> {
       _$ApiResponseFromJson(json, fromJsonT);
 }
 
-@freezed
+@Freezed(toJson: true, fromJson: true)
 class ErrorResponse with _$ErrorResponse {
   const factory ErrorResponse({
     required int code,

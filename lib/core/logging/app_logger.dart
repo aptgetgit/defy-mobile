@@ -4,24 +4,24 @@ class AppLogger {
   static late Logger _logger;
   static bool _initialized = false;
 
-  static void init(
-      {Level logLevel = Level.debug,
-      bool useColors = true,
-      bool printEmojis = true,
-      DateTimeFormatter dateTimeFormatter =
-          DateTimeFormat.onlyTimeAndSinceStart}) {
-    if (_initialized) return;
+  static void init({
+    Level logLevel = Level.debug,
+    bool useColors = true,
+    bool printEmojis = true,
+    DateTimeFormatter dateTimeFormatter = DateTimeFormat.onlyTimeAndSinceStart,
+  }) {
+    if (_initialized) {
+      return;
+    }
 
     _logger = Logger(
       level: logLevel,
       printer: PrettyPrinter(
-          methodCount: 0,
-          errorMethodCount: 8,
-          lineLength: 120,
-          colors: useColors,
-          printEmojis: printEmojis,
-          noBoxingByDefault: false,
-          dateTimeFormat: dateTimeFormatter),
+        methodCount: 0,
+        colors: useColors,
+        printEmojis: printEmojis,
+        dateTimeFormat: dateTimeFormatter,
+      ),
       output: ConsoleOutput(),
     );
 
@@ -36,7 +36,9 @@ class AppLogger {
     dynamic error,
     StackTrace? stackTrace,
   }) {
-    if (!_initialized) init();
+    if (!_initialized) {
+      init();
+    }
 
     String fullMessage = message.toString();
 
@@ -53,9 +55,8 @@ class AppLogger {
     _logger.log(level, fullMessage);
   }
 
-  static String _formatStackTrace(StackTrace stackTrace) {
-    return stackTrace.toString().split('\n').take(8).join('\n');
-  }
+  static String _formatStackTrace(StackTrace stackTrace) =>
+      stackTrace.toString().split('\n').take(8).join('\n');
 
   static void trace(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
       log(Level.trace, message, error: error, stackTrace: stackTrace);
@@ -66,8 +67,11 @@ class AppLogger {
   static void info(dynamic message, {dynamic error, StackTrace? stackTrace}) =>
       log(Level.info, message, error: error, stackTrace: stackTrace);
 
-  static void warning(dynamic message,
-          {dynamic error, StackTrace? stackTrace}) =>
+  static void warning(
+    dynamic message, {
+    dynamic error,
+    StackTrace? stackTrace,
+  }) =>
       log(Level.warning, message, error: error, stackTrace: stackTrace);
 
   static void error(dynamic message, {dynamic error, StackTrace? stackTrace}) =>

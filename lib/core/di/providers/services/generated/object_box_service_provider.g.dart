@@ -25,7 +25,7 @@ final objectBoxDbInitializerProvider = Provider<Store>.internal(
 // ignore: unused_element
 typedef ObjectBoxDbInitializerRef = ProviderRef<Store>;
 String _$objectBoxDbServiceHash() =>
-    r'bfdc42c0fde605208ad6003418bc6e8f2c8a91c5';
+    r'b8fbac6431f5113fe27d2ae377b72ed5adff9ce0';
 
 /// See also [objectBoxDbService].
 @ProviderFor(objectBoxDbService)

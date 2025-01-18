@@ -10,6 +10,7 @@ class SplashRoute extends GoRouteData {
 
   static final AppRoute route = AppRoute.public(
     redirectIfAuthenticated: const HomeRoute().location,
-    builder: (context, state) => const SplashScreen(),
+    builder: (BuildContext context, GoRouterState state) =>
+        const SplashScreen(),
   );
 }

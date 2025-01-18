@@ -1,30 +1,27 @@
 import 'dart:async';
-import 'package:defy/core/di/dependency_injector.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:defy/core/logging/app_logger.dart';
-import 'package:logger/logger.dart';
+
+import '../core/di/dependency_injector.dart';
+import '../core/logging/app_logger.dart';
 
 Future<void> bootstrap({
   required Widget Function(ProviderContainer container) builder,
 }) async {
-  AppLogger.init(
-    logLevel: Level.debug,
-    useColors: true,
-    printEmojis: true,
-    dateTimeFormatter: DateTimeFormat.onlyTimeAndSinceStart,
-  );
+  AppLogger.init();
 
   return runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     _setupErrorHandling();
 
-    final container = await DependencyInjector.initializeApp();
+    final ProviderContainer container = await initializeApp();
 
+    // ignore: missing_provider_scope
     runApp(builder(container));
-  }, (error, stackTrace) {
+  }, (Object error, StackTrace stackTrace) {
     AppLogger.fatal(
       'Uncaught asynchronous error',
       error: error,
@@ -42,7 +39,7 @@ void _setupErrorHandling() {
     );
   };
 
-  PlatformDispatcher.instance.onError = (error, stack) {
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
     AppLogger.error('Platform error', error: error, stackTrace: stack);
     return true;
   };

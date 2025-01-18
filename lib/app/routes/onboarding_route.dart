@@ -10,6 +10,7 @@ class OnboardingRoute extends GoRouteData {
 
   static final AppRoute route = AppRoute.public(
     redirectIfAuthenticated: const HomeRoute().location,
-    builder: (context, state) => const OnboardingScreen(),
+    builder: (BuildContext context, GoRouterState state) =>
+        const OnboardingScreen(),
   );
 }

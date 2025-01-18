@@ -7,13 +7,45 @@ part of '../currency_rate_remote_model.dart';
 // **************************************************************************
 
 _$CurrencyRateRemoteModelImpl _$$CurrencyRateRemoteModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$CurrencyRateRemoteModelImpl(
-      date: json['date'] as String,
-      rates: (json['usd'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry(k, (e as num).toDouble()),
-      ),
+        Map json) =>
+    $checkedCreate(
+      r'_$CurrencyRateRemoteModelImpl',
+      json,
+      ($checkedConvert) {
+        $checkKeys(
+          json,
+          allowedKeys: const ['date', 'usd'],
+        );
+        final val = _$CurrencyRateRemoteModelImpl(
+          date: $checkedConvert('date', (v) => v as String),
+          rates: $checkedConvert(
+              'usd',
+              (v) => (v as Map).map(
+                    (k, e) => MapEntry(k as String, (e as num).toDouble()),
+                  )),
+        );
+        return val;
+      },
+      fieldKeyMap: const {'rates': 'usd'},
     );
+
+const _$$CurrencyRateRemoteModelImplFieldMap = <String, String>{
+  'date': 'date',
+  'rates': 'usd',
+};
+
+abstract final class _$$CurrencyRateRemoteModelImplJsonKeys {
+  static const String date = 'date';
+  static const String rates = 'usd';
+}
+
+// ignore: unused_element
+abstract class _$$CurrencyRateRemoteModelImplPerFieldToJson {
+  // ignore: unused_element
+  static Object? date(String instance) => instance;
+  // ignore: unused_element
+  static Object? rates(Map<String, double> instance) => instance;
+}
 
 Map<String, dynamic> _$$CurrencyRateRemoteModelImplToJson(
         _$CurrencyRateRemoteModelImpl instance) =>

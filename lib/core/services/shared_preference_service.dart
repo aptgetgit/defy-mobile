@@ -1,9 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {
-  final SharedPreferences _sharedPreferences;
-
   SharedPreferencesService(this._sharedPreferences);
+  final SharedPreferences _sharedPreferences;
 
   T? get<T>(String key) => _sharedPreferences.get(key) as T?;
 
@@ -19,7 +18,7 @@ class SharedPreferencesService {
     } else if (value is List<String>) {
       return _sharedPreferences.setStringList(key, value);
     } else {
-      throw ArgumentError('Unsupported type: ${T.toString()}');
+      throw ArgumentError('Unsupported type: $T');
     }
   }
 

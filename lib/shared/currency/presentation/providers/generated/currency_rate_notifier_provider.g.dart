@@ -7,7 +7,7 @@ part of '../currency_rate_notifier_provider.dart';
 // **************************************************************************
 
 String _$currencyRateNotifierHash() =>
-    r'6d4e6c5b0efd6b2603417289ce8b1157397c5933';
+    r'4111459cb9bed79bda295b067357b02629ac9d35';
 
 /// See also [CurrencyRateNotifier].
 @ProviderFor(CurrencyRateNotifier)

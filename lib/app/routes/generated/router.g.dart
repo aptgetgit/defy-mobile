@@ -7,22 +7,21 @@ part of '../router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $splashRoute,
-      $onboardingRoute,
-      $authenticationRoute,
       $homeRoute,
+      $onboardingRoute,
+      $splashRoute,
     ];
 
-RouteBase get $splashRoute => GoRouteData.$route(
-      path: '/splash',
-      factory: $SplashRouteExtension._fromState,
+RouteBase get $homeRoute => GoRouteData.$route(
+      path: '/home',
+      factory: $HomeRouteExtension._fromState,
     );
 
-extension $SplashRouteExtension on SplashRoute {
-  static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
+extension $HomeRouteExtension on HomeRoute {
+  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
 
   String get location => GoRouteData.$location(
-        '/splash',
+        '/home',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -58,39 +57,16 @@ extension $OnboardingRouteExtension on OnboardingRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $authenticationRoute => GoRouteData.$route(
-      path: '/auth',
-      factory: $AuthenticationRouteExtension._fromState,
+RouteBase get $splashRoute => GoRouteData.$route(
+      path: '/splash',
+      factory: $SplashRouteExtension._fromState,
     );
 
-extension $AuthenticationRouteExtension on AuthenticationRoute {
-  static AuthenticationRoute _fromState(GoRouterState state) =>
-      const AuthenticationRoute();
+extension $SplashRouteExtension on SplashRoute {
+  static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
 
   String get location => GoRouteData.$location(
-        '/auth',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/home',
-      factory: $HomeRouteExtension._fromState,
-    );
-
-extension $HomeRouteExtension on HomeRoute {
-  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
-
-  String get location => GoRouteData.$location(
-        '/home',
+        '/splash',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -107,7 +83,7 @@ extension $HomeRouteExtension on HomeRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'dcdf5f80d87abac2f9a2bc42e84900c03b5384ac';
+String _$routerHash() => r'5d1c5f20c8d2c83569d438dfa5a67bcaf352af79';
 
 /// See also [router].
 @ProviderFor(router)

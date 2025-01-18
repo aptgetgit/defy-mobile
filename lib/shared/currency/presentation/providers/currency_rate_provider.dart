@@ -1,61 +1,73 @@
-import 'package:defy/core/di/providers/services/object_box_service_provider.dart';
-import 'package:defy/shared/currency/data/repositories/currency_rate_repository_implementation.dart';
-import 'package:defy/shared/currency/data/sources/local/currency_rate_local_source.dart';
-import 'package:defy/shared/currency/data/sources/remote/currency_rate_remote_source.dart';
-import 'package:defy/shared/currency/domain/usecases/currency_rate_usecase.dart';
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:objectbox/src/native/store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../../core/di/providers/services/object_box_service_provider.dart';
+import '../../data/repositories/currency_rate_repository_implementation.dart';
+import '../../data/sources/local/currency_rate_local_source.dart';
+import '../../data/sources/remote/currency_rate_remote_source.dart';
+import '../../domain/usecases/currency_rate_usecase.dart';
 
 part 'generated/currency_rate_provider.g.dart';
 
 @riverpod
 CurrencyRateRepository currencyRateRepository(Ref ref) {
-  final dio = Dio(BaseOptions(
-    baseUrl: 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    // You can adjust these timeouts as needed
-    connectTimeout: const Duration(seconds: 5),
-    receiveTimeout: const Duration(seconds: 3),
-  ));
-  final objectBoxStore = ref.read(objectBoxDbServiceProvider);
+  final Dio dio = Dio(
+    BaseOptions(
+      baseUrl:
+          'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1',
+      headers: <String, String>{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      // You can adjust these timeouts as needed
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 3),
+    ),
+  );
+  final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
 
-  final localDataSource = CurrencyRateLocalDataSource(objectBoxStore);
-  final remoteDataSource = CurrencyRateRemoteDataSource(dio);
+  final CurrencyRateLocalDataSource localDataSource =
+      CurrencyRateLocalDataSource(objectBoxStore);
+  final CurrencyRateRemoteDataSource remoteDataSource =
+      CurrencyRateRemoteDataSource(dio);
 
   return CurrencyRateRepository(localDataSource, remoteDataSource);
 }
 
 @riverpod
 ListLocalCurrencyRatesUseCase listLocalCurrencyRatesUseCase(Ref ref) {
-  final repository = ref.read(currencyRateRepositoryProvider);
+  final CurrencyRateRepository repository =
+      ref.read(currencyRateRepositoryProvider);
   return ListLocalCurrencyRatesUseCase(repository);
 }
 
 @riverpod
 GetLocalCurrencyRateUseCase getLocalCurrencyRateUseCase(Ref ref) {
-  final repository = ref.read(currencyRateRepositoryProvider);
+  final CurrencyRateRepository repository =
+      ref.read(currencyRateRepositoryProvider);
   return GetLocalCurrencyRateUseCase(repository);
 }
 
 @riverpod
 SaveLocalCurrencyRateUseCase saveLocalCurrencyRateUseCase(Ref ref) {
-  final repository = ref.read(currencyRateRepositoryProvider);
+  final CurrencyRateRepository repository =
+      ref.read(currencyRateRepositoryProvider);
   return SaveLocalCurrencyRateUseCase(repository);
 }
 
 @riverpod
 DeleteLocalCurrencyRateUseCase deleteLocalCurrencyRateUseCase(Ref ref) {
-  final repository = ref.read(currencyRateRepositoryProvider);
+  final CurrencyRateRepository repository =
+      ref.read(currencyRateRepositoryProvider);
   return DeleteLocalCurrencyRateUseCase(repository);
 }
 
 @riverpod
 ListRemoteCurrencyRatesUseCase listRemoteCurrencyRatesUseCase(Ref ref) {
-  final repository = ref.read(currencyRateRepositoryProvider);
+  final CurrencyRateRepository repository =
+      ref.read(currencyRateRepositoryProvider);
   return ListRemoteCurrencyRatesUseCase(repository);
 }
 
@@ -69,7 +81,8 @@ ListRemoteCurrencyRatesUseCase listRemoteCurrencyRatesUseCase(Ref ref) {
 
 @riverpod
 SyncCurrencyRatesUseCase syncCurrencyRatesUseCase(Ref ref) {
-  final repository = ref.read(currencyRateRepositoryProvider);
+  final CurrencyRateRepository repository =
+      ref.read(currencyRateRepositoryProvider);
   return SyncCurrencyRatesUseCase(repository);
 }
 

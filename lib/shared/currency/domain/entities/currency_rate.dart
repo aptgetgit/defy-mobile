@@ -3,16 +3,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'generated/currency_rate.freezed.dart';
 part 'generated/currency_rate.g.dart';
 
-@freezed
+@Freezed(toJson: true, fromJson: true)
 class CurrencyRate with _$CurrencyRate {
-  const CurrencyRate._();
-
   const factory CurrencyRate({
     required String id,
     required String code,
     required double rate,
     required DateTime lastUpdate,
   }) = _CurrencyRate;
+  const CurrencyRate._();
 
   factory CurrencyRate.fromJson(Map<String, dynamic> json) =>
       _$CurrencyRateFromJson(json);

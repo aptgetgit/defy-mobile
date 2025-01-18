@@ -1,60 +1,79 @@
 import 'package:flutter/material.dart';
 
+/// Extensions for media query related properties
 extension MediaQueryExtensions on BuildContext {
-  // Access to MediaQueryData
+  /// Direct access to MediaQueryData
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 
-  // Screen dimensions
-  double get screenHeight => mediaQuery.size.height;
-  double get screenWidth => mediaQuery.size.width;
+  /// Screen dimensions
+  Size get screenSize => mediaQuery.size;
+  double get screenHeight => screenSize.height;
+  double get screenWidth => screenSize.width;
 
-  // Device padding
+  /// Safe area paddings
   EdgeInsets get padding => mediaQuery.padding;
   EdgeInsets get viewInsets => mediaQuery.viewInsets;
-}
+  double get bottomInset => viewInsets.bottom;
 
-extension ThemeModeExtensions on BuildContext {
-  // Theme brightness
-  Brightness get brightness => Theme.of(this).brightness;
-
-  // Dark mode check
-  bool get isDarkMode => brightness == Brightness.dark;
-}
-
-extension OrientationExtensions on BuildContext {
-  // Landscape mode check
+  /// Screen orientation
   bool get isLandscape => mediaQuery.orientation == Orientation.landscape;
-
-  // Portrait mode check
   bool get isPortrait => mediaQuery.orientation == Orientation.portrait;
 }
 
-extension ResponsiveExtensions on BuildContext {
-  // Phone screen check (width < 600dp)
-  bool get isPhone => mediaQuery.size.width < 600;
+/// Extensions for theme related properties
+extension ThemeExtensions on BuildContext {
+  /// Theme access
+  ThemeData get theme => Theme.of(this);
 
-  // Tablet screen check (600dp <= width < 900dp)
-  bool get isTablet =>
-      mediaQuery.size.width >= 600 && mediaQuery.size.width < 900;
+  /// Brightness
+  Brightness get brightness => theme.brightness;
+  bool get isDarkMode => brightness == Brightness.dark;
 
-  // Desktop screen check (width >= 900dp)
-  bool get isDesktop => mediaQuery.size.width >= 900;
+  /// Color scheme
+  ColorScheme get colorScheme => theme.colorScheme;
 }
 
+/// Extensions for responsive breakpoints
+extension ResponsiveExtensions on BuildContext {
+  /// Breakpoint values
+  static const double _kPhoneBreakpoint = 600;
+  static const double _kTabletBreakpoint = 900;
+
+  /// Device type checks
+  bool get isPhone => screenWidth < _kPhoneBreakpoint;
+  bool get isTablet =>
+      screenWidth >= _kPhoneBreakpoint && screenWidth < _kTabletBreakpoint;
+  bool get isDesktop => screenWidth >= _kTabletBreakpoint;
+}
+
+/// Extensions for text styles
 extension TextStyleExtensions on BuildContext {
-  TextStyle get displayLarge => Theme.of(this).textTheme.displayLarge!;
-  TextStyle get displayMedium => Theme.of(this).textTheme.displayMedium!;
-  TextStyle get displaySmall => Theme.of(this).textTheme.displaySmall!;
-  TextStyle get headlineLarge => Theme.of(this).textTheme.headlineLarge!;
-  TextStyle get headlineMedium => Theme.of(this).textTheme.headlineMedium!;
-  TextStyle get headlineSmall => Theme.of(this).textTheme.headlineSmall!;
-  TextStyle get titleLarge => Theme.of(this).textTheme.titleLarge!;
-  TextStyle get titleMedium => Theme.of(this).textTheme.titleMedium!;
-  TextStyle get titleSmall => Theme.of(this).textTheme.titleSmall!;
-  TextStyle get bodyLarge => Theme.of(this).textTheme.bodyLarge!;
-  TextStyle get bodyMedium => Theme.of(this).textTheme.bodyMedium!;
-  TextStyle get bodySmall => Theme.of(this).textTheme.bodySmall!;
-  TextStyle get labelLarge => Theme.of(this).textTheme.labelLarge!;
-  TextStyle get labelMedium => Theme.of(this).textTheme.labelMedium!;
-  TextStyle get labelSmall => Theme.of(this).textTheme.labelSmall!;
+  // TODO: Does nullable affects any thing ?
+  /// Access to text theme
+  TextTheme get textTheme => theme.textTheme;
+
+  /// Display styles
+  TextStyle? get displayLarge => textTheme.displayLarge;
+  TextStyle? get displayMedium => textTheme.displayMedium;
+  TextStyle? get displaySmall => textTheme.displaySmall;
+
+  /// Headline styles
+  TextStyle? get headlineLarge => textTheme.headlineLarge;
+  TextStyle? get headlineMedium => textTheme.headlineMedium;
+  TextStyle? get headlineSmall => textTheme.headlineSmall;
+
+  /// Title styles
+  TextStyle? get titleLarge => textTheme.titleLarge;
+  TextStyle? get titleMedium => textTheme.titleMedium;
+  TextStyle? get titleSmall => textTheme.titleSmall;
+
+  /// Body styles
+  TextStyle? get bodyLarge => textTheme.bodyLarge;
+  TextStyle? get bodyMedium => textTheme.bodyMedium;
+  TextStyle? get bodySmall => textTheme.bodySmall;
+
+  /// Label styles
+  TextStyle? get labelLarge => textTheme.labelLarge;
+  TextStyle? get labelMedium => textTheme.labelMedium;
+  TextStyle? get labelSmall => textTheme.labelSmall;
 }

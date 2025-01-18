@@ -7,7 +7,7 @@ part of '../currency_rate_provider.dart';
 // **************************************************************************
 
 String _$currencyRateRepositoryHash() =>
-    r'1ce97bab70106167fc704b48dc982e2d94c5374e';
+    r'a4326a2bd23a5e0c9c86cb521dfe1b5a46e27478';
 
 /// See also [currencyRateRepository].
 @ProviderFor(currencyRateRepository)
@@ -27,7 +27,7 @@ final currencyRateRepositoryProvider =
 typedef CurrencyRateRepositoryRef
     = AutoDisposeProviderRef<CurrencyRateRepository>;
 String _$listLocalCurrencyRatesUseCaseHash() =>
-    r'241e96b3106909966b4fc70acadebeaa96036527';
+    r'3330bfbdd4fb9489203c73704a05f8b6185e2889';
 
 /// See also [listLocalCurrencyRatesUseCase].
 @ProviderFor(listLocalCurrencyRatesUseCase)
@@ -47,7 +47,7 @@ final listLocalCurrencyRatesUseCaseProvider =
 typedef ListLocalCurrencyRatesUseCaseRef
     = AutoDisposeProviderRef<ListLocalCurrencyRatesUseCase>;
 String _$getLocalCurrencyRateUseCaseHash() =>
-    r'a1d4287c2c7d5847db9ac89f76ca96dbd7e703cc';
+    r'bfcf37f79c56d39feade05b2df634ceca5e1333f';
 
 /// See also [getLocalCurrencyRateUseCase].
 @ProviderFor(getLocalCurrencyRateUseCase)
@@ -67,7 +67,7 @@ final getLocalCurrencyRateUseCaseProvider =
 typedef GetLocalCurrencyRateUseCaseRef
     = AutoDisposeProviderRef<GetLocalCurrencyRateUseCase>;
 String _$saveLocalCurrencyRateUseCaseHash() =>
-    r'e8f66fc90bdd3474921f045fc514c450df549e93';
+    r'92a6dc27ab720ffa0ae9b4dff6d69cc710f12676';
 
 /// See also [saveLocalCurrencyRateUseCase].
 @ProviderFor(saveLocalCurrencyRateUseCase)
@@ -87,7 +87,7 @@ final saveLocalCurrencyRateUseCaseProvider =
 typedef SaveLocalCurrencyRateUseCaseRef
     = AutoDisposeProviderRef<SaveLocalCurrencyRateUseCase>;
 String _$deleteLocalCurrencyRateUseCaseHash() =>
-    r'f1e38885f5e75e3df85a3fac497f533a9a11db1e';
+    r'7dcef66969aaeab9948d8f5996eb9f8b3e3bdb98';
 
 /// See also [deleteLocalCurrencyRateUseCase].
 @ProviderFor(deleteLocalCurrencyRateUseCase)
@@ -107,7 +107,7 @@ final deleteLocalCurrencyRateUseCaseProvider =
 typedef DeleteLocalCurrencyRateUseCaseRef
     = AutoDisposeProviderRef<DeleteLocalCurrencyRateUseCase>;
 String _$listRemoteCurrencyRatesUseCaseHash() =>
-    r'8bfaf5948780ff73561102e86cd43b8de695cb95';
+    r'729fc52ed665c67d22b6db431b79da5d310a5cdb';
 
 /// See also [listRemoteCurrencyRatesUseCase].
 @ProviderFor(listRemoteCurrencyRatesUseCase)
@@ -127,7 +127,7 @@ final listRemoteCurrencyRatesUseCaseProvider =
 typedef ListRemoteCurrencyRatesUseCaseRef
     = AutoDisposeProviderRef<ListRemoteCurrencyRatesUseCase>;
 String _$syncCurrencyRatesUseCaseHash() =>
-    r'1183bb8aa1ffdf23c7101549718b839ac68e6eae';
+    r'7a6693e77965b1cf81ffaccb465af1945479a67c';
 
 /// See also [syncCurrencyRatesUseCase].
 @ProviderFor(syncCurrencyRatesUseCase)

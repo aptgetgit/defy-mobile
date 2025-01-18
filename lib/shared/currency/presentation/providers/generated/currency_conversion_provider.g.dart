@@ -7,7 +7,7 @@ part of '../currency_conversion_provider.dart';
 // **************************************************************************
 
 String _$convertToPreferredCurrencyHash() =>
-    r'fda6a0ccd12c49f8a653305481e4223cda25e226';
+    r'6ea087288f0ce6eea88829bdf7b515f7b950b308';
 
 /// Copied from Dart SDK
 class _SystemHash {

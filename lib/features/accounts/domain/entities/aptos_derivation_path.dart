@@ -1,76 +1,7 @@
 import 'dart:typed_data';
 
-/// Handles BIP32/44 derivation paths for Aptos in binary format
-/// Format: m/44'/637'/account'/0'/0'
 class AptosDerivationPath {
-  const AptosDerivationPath._();
-
-  static const int _hardenedBit = 0x80000000;
-  static const int _bytesPerLevel = 4;
-  static const int _totalLevels = 5;
-  static const int _totalBytes = _bytesPerLevel * _totalLevels;
-
-  static const int _purpose = 44;
-  static const int _coinType = 637;
-  static const int _defaultChange = 0;
-  static const int _defaultAddress = 0;
-
-  static bool isValid(Uint8List path) {
-    if (path.length != _totalBytes) {
-      return false;
-    }
-
-    final List<int> levels = _getLevels(path);
-
-    if (levels.any((int level) => !_isHardened(level))) {
-      return false;
-    }
-
-    return _getUnhardened(levels[0]) == _purpose &&
-        _getUnhardened(levels[1]) == _coinType &&
-        _getUnhardened(levels[3]) == _defaultChange &&
-        _getUnhardened(levels[4]) == _defaultAddress;
-  }
-
-  /// Creates a binary derivation path for given account index
-  static Uint8List encode(int accountIndex) {
-    if (accountIndex < 0) {
-      throw ArgumentError('Account index must be non-negative');
-    }
-
-    final Uint8List buffer = Uint8List(_totalBytes);
-    ByteData.view(buffer.buffer)
-      ..setUint32(0, _purpose | _hardenedBit, Endian.little) // 44'
-      ..setUint32(4, _coinType | _hardenedBit, Endian.little) // 637'
-      ..setUint32(8, accountIndex | _hardenedBit, Endian.little) // account'
-      ..setUint32(12, _defaultChange | _hardenedBit, Endian.little) // 0'
-      ..setUint32(16, _defaultAddress | _hardenedBit, Endian.little); // 0'
-
-    return buffer;
-  }
-
-  /// Gets the account index from a binary path
-  static int getAccountIndex(Uint8List path) {
-    if (!isValid(path)) {
-      throw ArgumentError('Invalid Aptos derivation path');
-    }
-
-    final ByteData byteData = ByteData.view(path.buffer);
-    return byteData.getUint32(8, Endian.little) & ~_hardenedBit;
-  }
-
-  /// Formats binary path to readable format (m/44'/637'/x'/0'/0')
-  static String formatPath(Uint8List path) {
-    if (!isValid(path)) {
-      throw ArgumentError('Invalid Aptos derivation path');
-    }
-
-    final Iterable<int> levels = _getLevels(path).map(_getUnhardened);
-    return "m/${levels.map((int l) => "$l'").join('/')}";
-  }
-
-  /// Decodes readable format to binary path
-  static Uint8List parsePath(String formattedPath) {
+  factory AptosDerivationPath.parse(String formattedPath) {
     final List<String> parts = formattedPath.substring(2).split('/');
 
     if (parts.length != _totalLevels) {
@@ -91,10 +22,75 @@ class AptosDerivationPath {
       throw ArgumentError('Invalid Aptos path format');
     }
 
-    return encode(levels[2]);
+    return AptosDerivationPath.fromAccountIndex(levels[2]);
   }
 
-  // Private helper methods
+  factory AptosDerivationPath.fromAccountIndex(int accountIndex) {
+    if (accountIndex < 0) {
+      throw ArgumentError('Account index must be non-negative');
+    }
+
+    final Uint8List buffer = Uint8List(_totalBytes);
+    ByteData.view(buffer.buffer)
+      ..setUint32(0, _purpose | _hardenedBit, Endian.little)
+      ..setUint32(4, _coinType | _hardenedBit, Endian.little)
+      ..setUint32(8, accountIndex | _hardenedBit, Endian.little)
+      ..setUint32(12, _defaultChange | _hardenedBit, Endian.little)
+      ..setUint32(16, _defaultAddress | _hardenedBit, Endian.little);
+
+    return AptosDerivationPath._(buffer);
+  }
+
+  factory AptosDerivationPath.fromBytes(Uint8List path) {
+    if (!_isValid(path)) {
+      throw ArgumentError('Invalid Aptos derivation path');
+    }
+    return AptosDerivationPath._(path);
+  }
+  AptosDerivationPath._(this._path);
+
+  static const int _hardenedBit = 0x80000000;
+  static const int _bytesPerLevel = 4;
+  static const int _totalLevels = 5;
+  static const int _totalBytes = _bytesPerLevel * _totalLevels;
+
+  static const int _purpose = 44;
+  static const int _coinType = 637;
+  static const int _defaultChange = 0;
+  static const int _defaultAddress = 0;
+
+  final Uint8List _path;
+
+  int get accountIndex {
+    final ByteData byteData = ByteData.view(_path.buffer);
+    return byteData.getUint32(8, Endian.little) & ~_hardenedBit;
+  }
+
+  Uint8List toBytes() => _path;
+
+  @override
+  String toString() {
+    final Iterable<int> levels = _getLevels(_path).map(_getUnhardened);
+    return "m/${levels.map((int l) => "$l'").join('/')}";
+  }
+
+  static bool _isValid(Uint8List path) {
+    if (path.length != _totalBytes) {
+      return false;
+    }
+
+    final List<int> levels = _getLevels(path);
+
+    if (levels.any((int level) => !_isHardened(level))) {
+      return false;
+    }
+
+    return _getUnhardened(levels[0]) == _purpose &&
+        _getUnhardened(levels[1]) == _coinType &&
+        _getUnhardened(levels[3]) == _defaultChange &&
+        _getUnhardened(levels[4]) == _defaultAddress;
+  }
+
   static List<int> _getLevels(Uint8List path) {
     final List<int> levels = <int>[];
     final ByteData byteData = ByteData.view(path.buffer);

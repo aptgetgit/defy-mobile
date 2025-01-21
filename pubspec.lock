@@ -793,7 +793,7 @@ packages:
     source: hosted
     version: "6.9.0"
   jwk:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: jwk
       sha256: "29579ae13c7b4b029e57bcc45514ef5a34768fae0d5e7863b4f03443454283e2"
@@ -1041,7 +1041,7 @@ packages:
     source: hosted
     version: "2.1.8"
   pointycastle:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pointycastle
       sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"

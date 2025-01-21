@@ -23,12 +23,8 @@ class $AssetsIconsGen {
   AssetGenImage get appLogoLight =>
       const AssetGenImage('assets/icons/app-logo-light.png');
 
-  /// File path: assets/icons/google.png
-  AssetGenImage get google => const AssetGenImage('assets/icons/google.png');
-
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [appIcon, appLogoDark, appLogoLight, google];
+  List<AssetGenImage> get values => [appIcon, appLogoDark, appLogoLight];
 }
 
 class Assets {

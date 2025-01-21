@@ -1,142 +1,281 @@
 import 'dart:typed_data';
+
+import 'package:objectbox/objectbox.dart';
+
+import '../../domain/entities/account_address.dart';
+import '../../domain/entities/aptos_account.dart';
+import '../../domain/entities/authentication_key.dart';
+import '../../domain/entities/authentication_key_scheme.dart';
+import '../../domain/entities/json_web_key.dart';
 import '../../domain/repositories/aptos_account_repository.dart';
 import '../models/local/aptos_account_local_model.dart';
-import '../models/local/auth_scheme_config_local_model.dart';
-import '../models/local/public_key_local_model.dart';
+import '../models/local/auth_key_config_local_model.dart';
+import '../models/local/jwk_local_model.dart';
 import '../sources/local/aptos_account_local_data_source.dart';
+import '../sources/local/auth_key_config_local_data_source.dart';
 import '../sources/local/public_key_local_data_source.dart';
 
 class AptosAccountRepository implements IAptosAccountRepository {
-  AptosAccountRepository(this._localDataSource, this._publicKeyDataSource);
-  final AptosAccountLocalDataSource _localDataSource;
-  final PublicKeyLocalDataSource _publicKeyDataSource;
+  AptosAccountRepository(this._store)
+      : _accountLocalDataSource =
+            AptosAccountLocalDataSource(_store.box<AptosAccountLocalModel>()),
+        _jwkLocalDataSource = JwkLocalDataSource(_store.box<JwkLocalModel>()),
+        _ed25519AuthKeyConfigDataSource = Ed25519AuthKeyConfigLocalDataSource(
+          _store.box<Ed25519AuthKeyConfigLocalModel>(),
+        );
 
-//  // Helper methods
-//  Uint8List _addressToBytes(String address) = HexString(address).toUint8Array();
-//  String _bytesToAddress(Uint8List bytes) = HexString.fromUint8Array(bytes).toString();
+  final Store _store;
+  final AptosAccountLocalDataSource _accountLocalDataSource;
+  final JwkLocalDataSource _jwkLocalDataSource;
+  final Ed25519AuthKeyConfigLocalDataSource _ed25519AuthKeyConfigDataSource;
 
   @override
-  int storeAccountWithAuthConfig({
-    required Uint8List accountAddress,
-    required Uint8List authenticationKey,
-    required Uint8List kId,
-  }) {
-    final PublicKeyLocalModel? publicKey =
-        _publicKeyDataSource.findPublicKeyByKId(kId);
-    if (publicKey == null) {
-      throw StateError('Public key not found for kId');
-    }
+  int storeAccountWithAuthenticatorConfig({
+    required AccountAddress accountAddress,
+    required AuthenticationKey authenticationKey,
+    required AuthenticatorConfig authenticatorConfig,
+  }) =>
+      _store.runInTransaction(TxMode.write, () {
+        if (_accountLocalDataSource.findAccountByAccountAddress(
+                accountAddress: accountAddress.toBytes()) !=
+            null) {
+          throw StateError('Account with this address already exists');
+        }
+        _validateAndStoreAuthenticatorConfig(
+          authenticationKey: authenticationKey,
+          authenticatorConfig: authenticatorConfig,
+        );
 
-    return _localDataSource.storeAccountWithAuthSchemeConfig(
-      StoreAptosAccountParams.withEd25519Config(
-        accountAddress: accountAddress,
-        authenticationKey: authenticationKey,
-        publicKeyId: publicKey.localId,
-      ),
+        return _accountLocalDataSource.putAccount(
+          accountAddress: accountAddress.toBytes(),
+          authenticationKey: authenticationKey.toBytes(),
+          authenticationKeyScheme: authenticationKey.scheme.toByte(),
+        );
+      });
+
+  void _validateAndStoreAuthenticatorConfig({
+    required AuthenticationKey authenticationKey,
+    required AuthenticatorConfig authenticatorConfig,
+  }) {
+    switch (authenticatorConfig) {
+      case Ed25519AuthenticatorConfig(:final Jwk jwk):
+        _validateAndStoreEd25519Config(
+          authenticationKey: authenticationKey,
+          jwk: jwk,
+        );
+    }
+  }
+
+  void _validateAndStoreEd25519Config({
+    required AuthenticationKey authenticationKey,
+    required Jwk jwk,
+  }) {
+    final JwkLocalModel? publicKey =
+        _jwkLocalDataSource.findPublicKeyByKeyId(keyId: jwk.keyId);
+    if (publicKey == null) {
+      throw StateError('Required public key not found for keyId: ${jwk.keyId}');
+    }
+    final Ed25519AuthKeyConfigLocalModel? existingConfig =
+        _ed25519AuthKeyConfigDataSource
+            .findEd25519AuthKeyConfigByAuthenticationKey(
+      authenticationKey: authenticationKey.toBytes(),
+    );
+
+    if (existingConfig != null) {
+      if (existingConfig.jwkKeyId != jwk.keyId) {
+        throw StateError(
+          'Authentication key conflict: existing config uses different JWK',
+        );
+      }
+      return;
+    }
+    _ed25519AuthKeyConfigDataSource.putEd25519AuthKeyConfig(
+      authenticationKey: authenticationKey.toBytes(),
+      jwkKeyId: jwk.keyId,
     );
   }
 
   @override
-  AptosAccountLocalModel? findAccountByAddress(Uint8List address) {
-    try {
-      return _localDataSource.findAccountByAddress(address);
-    } catch (e) {
-      throw StateError('Failed to find account: $e');
+  void deleteAccountByAddress({
+    required AccountAddress accountAddress,
+  }) =>
+      _store.runInTransaction(TxMode.write, () {
+        final AptosAccount? account =
+            findAccountByAddress(accountAddress: accountAddress);
+        if (account == null) {
+          return;
+        }
+
+        _accountLocalDataSource.removeAccountByAddress(
+          accountAddress: accountAddress.toBytes(),
+        );
+
+        final AuthenticationKey authKey = account.authenticationKey;
+        final List<AptosAccountLocalModel> remainingAccounts =
+            _accountLocalDataSource.findAccountsByAuthenticationKey(
+          authenticationKey: authKey.toBytes(),
+        );
+
+        if (remainingAccounts.isEmpty) {
+          _ed25519AuthKeyConfigDataSource
+              .removeEd25519AuthKeyConfigByAuthenticationKey(
+            authenticationKey: authKey.toBytes(),
+          );
+        }
+      });
+
+  @override
+  List<AptosAccount> findAccountsByJwkKeyId({
+    required Uint8List jwkKeyId,
+  }) {
+    final Ed25519AuthKeyConfigLocalModel? config =
+        _ed25519AuthKeyConfigDataSource.findEd25519AuthKeyConfigByJwkKeyId(
+      jwkKeyId: jwkKeyId,
+    );
+    if (config == null) {
+      return <AptosAccount>[];
     }
+
+    return _accountLocalDataSource
+        .findAccountsByAuthenticationKey(
+          authenticationKey: config.authenticationKey,
+        )
+        .map((AptosAccountLocalModel model) => model.toDomain())
+        .toList();
   }
 
   @override
-  Ed25519AuthSchemeConfigLocalModel? findAuthConfigByAccountId(
-    int accountId,
-  ) {
-    try {
-      return _localDataSource.findAuthConfigByAccountId(accountId);
-    } catch (e) {
-      throw StateError('Failed to find auth config: $e');
-    }
+  List<AptosAccount> findAccountsByAuthKey({
+    required AuthenticationKey authenticationKey,
+  }) =>
+      _accountLocalDataSource
+          .findAccountsByAuthenticationKey(
+            authenticationKey: authenticationKey.toBytes(),
+          )
+          .map((AptosAccountLocalModel model) => model.toDomain())
+          .toList();
+
+  @override
+  List<AptosAccount> findAccountsByAuthKeyScheme({
+    required AuthenticationKeyScheme authenticationKeyScheme,
+  }) =>
+      _accountLocalDataSource
+          .findAccountsByAuthenticationKeyScheme(
+            authenticationKeyScheme: authenticationKeyScheme.toByte(),
+          )
+          .map((AptosAccountLocalModel model) => model.toDomain())
+          .toList();
+
+  @override
+  void updateAuthKey({
+    required AccountAddress accountAddress,
+    required AuthenticationKey newAuthKey,
+  }) =>
+      _store.runInTransaction(TxMode.write, () {
+        final AptosAccount? account =
+            findAccountByAddress(accountAddress: accountAddress);
+        if (account == null) {
+          throw StateError('Account not found');
+        }
+
+        final AuthenticationKey oldAuthKey = account.authenticationKey;
+        final List<AptosAccountLocalModel> otherAccountsWithOldKey =
+            _accountLocalDataSource
+                .findAccountsByAuthenticationKey(
+                  authenticationKey: oldAuthKey.toBytes(),
+                )
+                .where(
+                  (AptosAccountLocalModel a) =>
+                      a.accountAddress != accountAddress.toBytes(),
+                )
+                .toList();
+
+        if (otherAccountsWithOldKey.isEmpty) {
+          _ed25519AuthKeyConfigDataSource
+              .removeEd25519AuthKeyConfigByAuthenticationKey(
+            authenticationKey: oldAuthKey.toBytes(),
+          );
+        }
+
+        _accountLocalDataSource.putAccount(
+          accountAddress: accountAddress.toBytes(),
+          authenticationKey: newAuthKey.toBytes(),
+          authenticationKeyScheme: newAuthKey.scheme.toByte(),
+        );
+      });
+
+  @override
+  bool hasAccountWithAddress({
+    required AccountAddress accountAddress,
+  }) =>
+      _accountLocalDataSource.findAccountByAccountAddress(
+        accountAddress: accountAddress.toBytes(),
+      ) !=
+      null;
+
+  @override
+  AptosAccount? findAccountByAddress({
+    required AccountAddress accountAddress,
+  }) {
+    final AptosAccountLocalModel? account =
+        _accountLocalDataSource.findAccountByAccountAddress(
+      accountAddress: accountAddress.toBytes(),
+    );
+    return account?.toDomain();
   }
 
   @override
-  List<Ed25519AuthSchemeConfigLocalModel> findAuthConfigsByPublicKeyId(
-    int publicKeyId,
-  ) {
-    try {
-      return _localDataSource.findAuthConfigsByPublicKeyId(publicKeyId);
-    } catch (e) {
-      throw StateError('Failed to find auth configs: $e');
+  AuthenticatorConfig? findAuthConfigByAuthenticationKey({
+    required AuthenticationKey authenticationKey,
+  }) {
+    final Ed25519AuthKeyConfigLocalModel? config =
+        _ed25519AuthKeyConfigDataSource
+            .findEd25519AuthKeyConfigByAuthenticationKey(
+      authenticationKey: authenticationKey.toBytes(),
+    );
+    if (config == null) {
+      return null;
     }
+
+    final JwkLocalModel? jwk = _jwkLocalDataSource.findPublicKeyByKeyId(
+      keyId: config.jwkKeyId,
+    );
+    if (jwk == null) {
+      return null;
+    }
+
+    return AuthenticatorConfig.ed25519(jwk: jwk.toDomain());
   }
 
   @override
-  List<AptosAccountLocalModel> findAccountsByKId(Uint8List kId) {
-    try {
-      final PublicKeyLocalModel? publicKey =
-          _publicKeyDataSource.findPublicKeyByKId(kId);
-      if (publicKey == null) {
-        return <AptosAccountLocalModel>[];
-      }
-      return _localDataSource.findAccountsByPublicKeyId(publicKey.localId);
-    } catch (e) {
-      throw StateError('Failed to find accounts by kId: $e');
+  List<AuthenticatorConfig> findAuthConfigsByJwkKeyId({
+    required Uint8List jwkKeyId,
+  }) {
+    final Ed25519AuthKeyConfigLocalModel? configs =
+        _ed25519AuthKeyConfigDataSource.findEd25519AuthKeyConfigByJwkKeyId(
+      jwkKeyId: jwkKeyId,
+    );
+    if (configs == null) {
+      return <AuthenticatorConfig>[];
     }
+
+    final JwkLocalModel? jwk =
+        _jwkLocalDataSource.findPublicKeyByKeyId(keyId: jwkKeyId);
+    if (jwk == null) {
+      return <AuthenticatorConfig>[];
+    }
+
+    return <AuthenticatorConfig>[
+      AuthenticatorConfig.ed25519(jwk: jwk.toDomain()),
+    ];
   }
 
   @override
-  List<AptosAccountLocalModel> findAccountsByAuthKey(
-    Uint8List authenticationKey,
-  ) {
-    try {
-      return _localDataSource.findAccountsByAuthKey(authenticationKey);
-    } catch (e) {
-      throw StateError('Failed to find accounts by auth key: $e');
-    }
-  }
+  List<AptosAccount> getAllAccounts() => _accountLocalDataSource
+      .getAllAccounts()
+      .map((AptosAccountLocalModel model) => model.toDomain())
+      .toList();
 
   @override
-  bool hasAccountWithAddress(Uint8List address) {
-    try {
-      return _localDataSource.hasAccountWithAddress(address);
-    } on Exception catch (_) {
-      return false;
-    }
-  }
-
-  @override
-  List<AptosAccountLocalModel> getAllAccounts() {
-    try {
-      return _localDataSource.getAllAccounts();
-    } catch (e) {
-      throw StateError('Failed to get all accounts: $e');
-    }
-  }
-
-  @override
-  int getAccountCount() {
-    try {
-      return _localDataSource.getAccountCount();
-    } catch (e) {
-      throw StateError('Failed to get account count: $e');
-    }
-  }
-
-  // @override
-  // void updateAuthenticationKey({
-  //   required Uint8List address,
-  //   required Uint8List newAuthKey,
-  // }) {
-  //   try {
-  //     _localDataSource.updateAuthenticationKey(address, newAuthKey);
-  //   } catch (e) {
-  //     throw StateError('Failed to update authentication key: $e');
-  //   }
-  // }
-
-  @override
-  void deleteAccountByAddress(Uint8List address) {
-    try {
-      _localDataSource.deleteAccountByAddress(address);
-    } catch (e) {
-      throw StateError('Failed to delete account: $e');
-    }
-  }
+  int getAccountCount() => _accountLocalDataSource.countAccounts();
 }

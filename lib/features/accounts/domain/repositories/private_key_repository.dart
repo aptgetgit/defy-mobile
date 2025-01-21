@@ -1,21 +1,17 @@
 import 'dart:typed_data';
 
-import 'package:jwk/jwk.dart';
+import '../entities/json_web_key.dart';
 
 abstract class IPrivateKeyRepository {
-  Future<Uint8List> storePrivateKey(Uint8List privateKey);
+  Future<Uint8List> storePrivateKey({required Jwk jwk});
 
-  Future<Uint8List?> getPrivateKey(Uint8List jwkThumbprint);
+  Future<Uint8List?> getPrivateKey({required Uint8List jwkKeyId});
 
-  Future<bool> hasPrivateKey(Uint8List jwkThumbprint);
+  Future<bool> hasPrivateKey({required Uint8List jwkKeyId});
 
-  Future<bool> deletePrivateKey(Uint8List jwkThumbprint);
+  Future<bool> deletePrivateKey({required Uint8List jwkKeyId});
 
   Future<int> getTotalKeys();
 
   Future<List<Uint8List>> listThumbprints();
-
-  Jwk createJwk(Uint8List privateKey);
-
-  Uint8List computeThumbprint(Jwk jwk);
 }

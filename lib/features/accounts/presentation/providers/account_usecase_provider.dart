@@ -10,8 +10,6 @@ import '../../data/repositories/aptos_account_repository_implementation.dart';
 import '../../data/repositories/entropy_repository_implementation.dart';
 import '../../data/repositories/private_key_repository_implementation.dart';
 import '../../data/repositories/public_key_repository_implementation.dart';
-import '../../data/sources/local/aptos_account_local_data_source.dart';
-import '../../data/sources/local/public_key_local_data_source.dart';
 import '../../domain/usecases/aptos_account_usecase.dart';
 import '../../domain/usecases/mnemonic_usecase.dart';
 import '../../domain/usecases/private_key_usecase.dart';
@@ -33,21 +31,15 @@ PrivateKeyRepository privateKeyRepository(Ref ref) {
 }
 
 @riverpod
-PublicKeyRepository publicKeyRepository(Ref ref) {
+JwkRepository jwkRepository(Ref ref) {
   final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
-  final PublicKeyLocalDataSource localDataSource =
-      PublicKeyLocalDataSource(objectBoxStore);
-  return PublicKeyRepository(localDataSource);
+  return JwkRepository(objectBoxStore);
 }
 
 @riverpod
 AptosAccountRepository aptosAccountRepository(Ref ref) {
   final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
-  final AptosAccountLocalDataSource localDataSource =
-      AptosAccountLocalDataSource(objectBoxStore);
-  final PublicKeyLocalDataSource publicKeyDataSource =
-      PublicKeyLocalDataSource(objectBoxStore);
-  return AptosAccountRepository(localDataSource, publicKeyDataSource);
+  return AptosAccountRepository(objectBoxStore);
 }
 
 @riverpod
@@ -62,11 +54,11 @@ ImportMnemonicUseCase importMnemonicUseCase(Ref ref) {
   return ImportMnemonicUseCase(repository);
 }
 
-// @riverpod
-// RemoveMnemonicUseCase removeMnemonicUseCase(Ref ref) {
-//   final EntropyRepository repository = ref.read(entropyRepositoryProvider);
-//   return RemoveMnemonicUseCase(repository);
-// }
+// // @riverpod
+// // RemoveMnemonicUseCase removeMnemonicUseCase(Ref ref) {
+// //   final EntropyRepository repository = ref.read(entropyRepositoryProvider);
+// //   return RemoveMnemonicUseCase(repository);
+// // }
 
 @riverpod
 ReadMnemonicUseCase readMnemonicUseCase(Ref ref) {
@@ -74,24 +66,23 @@ ReadMnemonicUseCase readMnemonicUseCase(Ref ref) {
   return ReadMnemonicUseCase(repository);
 }
 
-// Private Key UseCase Providers
+// // Private Key UseCase Providers
 @riverpod
 ImportPrivateKeyUseCase importPrivateKeyUseCase(Ref ref) {
   final PrivateKeyRepository privateKeyRepo =
       ref.read(privateKeyRepositoryProvider);
-  final PublicKeyRepository publicKeyRepo =
-      ref.read(publicKeyRepositoryProvider);
-  return ImportPrivateKeyUseCase(privateKeyRepo, publicKeyRepo);
+  final JwkRepository jwkRepo = ref.read(jwkRepositoryProvider);
+  return ImportPrivateKeyUseCase(privateKeyRepo, jwkRepo);
 }
 
-// @riverpod
-// RemovePrivateKeyUseCase removePrivateKeyUseCase(Ref ref) {
-//   final PrivateKeyRepository privateKeyRepo =
-//       ref.read(privateKeyRepositoryProvider);
-//   final PublicKeyRepository publicKeyRepo =
-//       ref.read(publicKeyRepositoryProvider);
-//   return RemovePrivateKeyUseCase(privateKeyRepo, publicKeyRepo);
-// }
+// // @riverpod
+// // RemovePrivateKeyUseCase removePrivateKeyUseCase(Ref ref) {
+// //   final PrivateKeyRepository privateKeyRepo =
+// //       ref.read(privateKeyRepositoryProvider);
+// //   final PublicKeyRepository publicKeyRepo =
+// //       ref.read(publicKeyRepositoryProvider);
+// //   return RemovePrivateKeyUseCase(privateKeyRepo, publicKeyRepo);
+// // }
 
 @riverpod
 ReadPrivateKeyUseCase readPrivateKeyUseCase(Ref ref) {
@@ -103,18 +94,14 @@ ReadPrivateKeyUseCase readPrivateKeyUseCase(Ref ref) {
 @riverpod
 GeneratePrivateKeyUseCase generatePrivateKeyUseCase(Ref ref) {
   final EntropyRepository entropyRepo = ref.read(entropyRepositoryProvider);
-  final PrivateKeyRepository privateKeyRepo =
-      ref.read(privateKeyRepositoryProvider);
-  final PublicKeyRepository publicKeyRepo =
-      ref.read(publicKeyRepositoryProvider);
+  final JwkRepository jwkRepo = ref.read(jwkRepositoryProvider);
   return GeneratePrivateKeyUseCase(
     entropyRepo,
-    privateKeyRepo,
-    publicKeyRepo,
+    jwkRepo,
   );
 }
 
-// Aptos Account UseCase Providers
+// // Aptos Account UseCase Providers
 @riverpod
 CreateAptosAccountUseCase createAptosAccountUseCase(Ref ref) {
   final AptosAccountRepository repository =
@@ -122,12 +109,12 @@ CreateAptosAccountUseCase createAptosAccountUseCase(Ref ref) {
   return CreateAptosAccountUseCase(repository);
 }
 
-// @riverpod
-// DeleteAptosAccountUseCase deleteAptosAccountUseCase(Ref ref) {
-//   final AptosAccountRepository repository =
-//       ref.read(aptosAccountRepositoryProvider);
-//   return DeleteAptosAccountUseCase(repository);
-// }
+// // @riverpod
+// // DeleteAptosAccountUseCase deleteAptosAccountUseCase(Ref ref) {
+// //   final AptosAccountRepository repository =
+// //       ref.read(aptosAccountRepositoryProvider);
+// //   return DeleteAptosAccountUseCase(repository);
+// // }
 
 @riverpod
 GetAptosAccountUseCase getAptosAccountUseCase(Ref ref) {

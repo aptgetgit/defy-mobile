@@ -17,7 +17,6 @@ class EntropyRepository implements IEntropyRepository {
 
   final SecureStorageService _secureStorage;
 
-  // Helper methods
   String _prefix(Uint8List entropyHash) =>
       '$_entropyPrefix${_entropyToHex(entropyHash)}';
 
@@ -28,20 +27,20 @@ class EntropyRepository implements IEntropyRepository {
       HexString(hexString).toUint8Array();
 
   @override
-  bool isValidEntropyLength(Uint8List entropy) =>
+  bool isValidEntropyLength({required Uint8List entropy}) =>
       _validEntropyLengths.contains(entropy.length);
 
   @override
-  Uint8List computeEntropyHash(Uint8List entropy) =>
+  Uint8List computeEntropyHash({required Uint8List entropy}) =>
       Uint8List.fromList(crypto.sha256.convert(entropy).bytes);
 
   @override
-  Future<Uint8List> storeEntropy(Uint8List entropy) async {
-    if (!isValidEntropyLength(entropy)) {
+  Future<Uint8List> storeEntropy({required Uint8List entropy}) async {
+    if (!isValidEntropyLength(entropy: entropy)) {
       throw const FormatException('Invalid entropy length');
     }
 
-    final Uint8List entropyHash = computeEntropyHash(entropy);
+    final Uint8List entropyHash = computeEntropyHash(entropy: entropy);
     final String key = _prefix(entropyHash);
 
     try {
@@ -53,7 +52,7 @@ class EntropyRepository implements IEntropyRepository {
   }
 
   @override
-  Future<Uint8List?> getEntropy(Uint8List entropyHash) async {
+  Future<Uint8List?> getEntropy({required Uint8List entropyHash}) async {
     try {
       final String? encodedEntropy =
           await _secureStorage.read(_prefix(entropyHash));
@@ -64,7 +63,7 @@ class EntropyRepository implements IEntropyRepository {
   }
 
   @override
-  Future<bool> hasEntropy(Uint8List entropyHash) async {
+  Future<bool> hasEntropy({required Uint8List entropyHash}) async {
     try {
       return await _secureStorage.containsKey(_prefix(entropyHash));
     } on PlatformException {
@@ -73,7 +72,7 @@ class EntropyRepository implements IEntropyRepository {
   }
 
   @override
-  Future<bool> deleteEntropy(Uint8List entropyHash) async {
+  Future<bool> deleteEntropy({required Uint8List entropyHash}) async {
     try {
       await _secureStorage.delete(_prefix(entropyHash));
       return true;

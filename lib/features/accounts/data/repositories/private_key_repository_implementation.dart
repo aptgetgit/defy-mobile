@@ -2,64 +2,51 @@ import 'dart:convert';
 
 import 'package:aptos_dart/hex_string.dart';
 import 'package:flutter/services.dart';
-import 'package:jwk/jwk.dart';
 
 import '../../../../core/services/secure_storage_service.dart';
+import '../../domain/entities/json_web_key.dart';
 import '../../domain/repositories/private_key_repository.dart';
-import '../models/local/public_key_local_model.dart';
 
 class PrivateKeyRepository implements IPrivateKeyRepository {
   PrivateKeyRepository(this._secureStorage);
 
   static const String _keyPrefix = 'private:';
-  static const int _privateKeyLength = 32;
-  static const String _jwkKty = 'OKP';
-  static const String _jwkCurve = 'Ed25519';
-
   final SecureStorageService _secureStorage;
 
   String _prefix(Uint8List thumbprint) =>
       '$_keyPrefix${HexString.fromUint8Array(thumbprint).noPrefix()}';
 
   @override
-  Jwk createJwk(Uint8List privateKey) {
-    if (privateKey.length != 64) {
-      throw const FormatException('Private key must be 64 bytes');
+  Future<Uint8List> storePrivateKey({required Jwk jwk}) async {
+    final Uint8List? d = switch (jwk) {
+      Ed25519Jwk(:final Uint8List d?) => d,
+      Secp256k1Jwk(:final Uint8List d?) => d,
+      Secp256r1Jwk(:final Uint8List d?) => d,
+      _ => null,
+    };
+
+    if (d == null) {
+      throw StateError(
+        'Cannot store public key as private key: missing private component "d"',
+      );
     }
 
-    return Jwk(
-      kty: _jwkKty,
-      crv: _jwkCurve,
-      d: privateKey.sublist(0, _privateKeyLength),
-      x: privateKey.sublist(_privateKeyLength, privateKey.length),
-    );
-  }
-
-  @override
-  Uint8List computeThumbprint(Jwk jwk) => jwk.generateThumbprint();
-
-  @override
-  Future<Uint8List> storePrivateKey(Uint8List privateKey) async {
     try {
-      final Jwk jwk = createJwk(privateKey);
-      final Uint8List thumbprint = jwk.generateThumbprint();
-      final String key = _prefix(thumbprint);
-
+      final String key = _prefix(jwk.keyId);
       await _secureStorage.write(
         key,
         json.encode(jwk.toJson()),
       );
-
-      return thumbprint;
+      return jwk.keyId;
     } on PlatformException catch (e) {
       throw StateError('Failed to store private key: ${e.message}');
     }
   }
 
   @override
-  Future<Uint8List?> getPrivateKey(Uint8List jwkThumbprint) async {
+  Future<Uint8List?> getPrivateKey({required Uint8List jwkKeyId}) async {
     try {
-      final String? jwkJson = await _secureStorage.read(_prefix(jwkThumbprint));
+      final String? jwkJson = await _secureStorage.read(_prefix(jwkKeyId));
       if (jwkJson == null) {
         return null;
       }
@@ -68,11 +55,19 @@ class PrivateKeyRepository implements IPrivateKeyRepository {
           json.decode(jwkJson) as Map<String, dynamic>;
       final Jwk jwk = Jwk.fromJson(jsonMap);
 
-      final List<int>? d = jwk.d;
-      final List<int>? x = jwk.x;
-      if (d == null || x == null) {
-        throw StateError('Invalid JWK: missing d or x values');
-      }
+      final (Uint8List d, Uint8List x) = switch (jwk) {
+        Ed25519Jwk(:final Uint8List? d, :final Uint8List x) when d != null => (
+            d,
+            x
+          ),
+        Secp256k1Jwk(:final Uint8List? d, :final Uint8List x) when d != null =>
+          (d, x),
+        Secp256r1Jwk(:final Uint8List? d, :final Uint8List x) when d != null =>
+          (d, x),
+        _ => throw StateError(
+            'Retrieved JWK is not a private key: missing private component "d"',
+          ),
+      };
 
       return Uint8List.fromList(<int>[...d, ...x]);
     } on PlatformException catch (e) {
@@ -81,18 +76,33 @@ class PrivateKeyRepository implements IPrivateKeyRepository {
   }
 
   @override
-  Future<bool> hasPrivateKey(Uint8List jwkThumbprint) async {
+  Future<bool> hasPrivateKey({required Uint8List jwkKeyId}) async {
     try {
-      return await _secureStorage.containsKey(_prefix(jwkThumbprint));
+      final String? jwkJson = await _secureStorage.read(_prefix(jwkKeyId));
+      if (jwkJson == null) {
+        return false;
+      }
+
+      final Map<String, dynamic> jsonMap =
+          json.decode(jwkJson) as Map<String, dynamic>;
+      final Jwk jwk = Jwk.fromJson(jsonMap);
+
+      final bool hasPrivateComponent = switch (jwk) {
+        Ed25519Jwk(d: final Uint8List? d) => d != null,
+        Secp256k1Jwk(d: final Uint8List? d) => d != null,
+        Secp256r1Jwk(d: final Uint8List? d) => d != null,
+      };
+
+      return hasPrivateComponent;
     } on PlatformException {
       return false;
     }
   }
 
   @override
-  Future<bool> deletePrivateKey(Uint8List jwkThumbprint) async {
+  Future<bool> deletePrivateKey({required Uint8List jwkKeyId}) async {
     try {
-      await _secureStorage.delete(_prefix(jwkThumbprint));
+      await _secureStorage.delete(_prefix(jwkKeyId));
       return true;
     } on PlatformException {
       return false;

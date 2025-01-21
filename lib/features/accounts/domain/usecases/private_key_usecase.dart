@@ -1,82 +1,80 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:aptos_dart/aptos.dart' as aptos;
 import 'package:aptos_dart/hex_string.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:ed25519_edwards/ed25519_edwards.dart' as ed25519;
-import 'package:jwk/jwk.dart';
 
 import '../../data/repositories/entropy_repository_implementation.dart';
 import '../../data/repositories/private_key_repository_implementation.dart';
 import '../../data/repositories/public_key_repository_implementation.dart';
-import '../../data/sources/local/public_key_local_data_source.dart';
 import '../entities/aptos_derivation_path.dart';
+import '../entities/json_web_key.dart';
+import '../repositories/jwk_repository.dart';
 
 class ImportPrivateKeyUseCase {
   ImportPrivateKeyUseCase(
     this._privateKeyRepository,
-    this._publicKeyRepository,
+    this.jwkRepository,
   );
 
   final PrivateKeyRepository _privateKeyRepository;
-  final PublicKeyRepository _publicKeyRepository;
+  final JwkRepository jwkRepository;
 
   Future<Uint8List> call(Uint8List privateKeyBytes) async {
     final ed25519.PrivateKey privateKey =
         ed25519.newKeyFromSeed(privateKeyBytes);
-    final Jwk jwk = _privateKeyRepository.createJwk(privateKeyBytes);
-    final Uint8List thumbprint = _privateKeyRepository.computeThumbprint(jwk);
-
-    if (await _privateKeyRepository.hasPrivateKey(thumbprint)) {
+    final Jwk jwk = Jwk.fromEd25519PrivateKey(
+      privateKeyBytes: Uint8List.fromList(privateKey.bytes.sublist(0, 32)),
+    );
+    final Uint8List jwkKeyId = jwk.keyId;
+    if (await _privateKeyRepository.hasPrivateKey(jwkKeyId: jwkKeyId)) {
       throw StateError('Private Key already imported');
     }
 
     try {
-      await _privateKeyRepository.storePrivateKey(
-        Uint8List.fromList(privateKey.bytes),
+      await _privateKeyRepository.storePrivateKey(jwk: jwk);
+
+      jwkRepository.storeJwkWithKeySourceConfig(
+        jwk: jwk,
+        config: KeySourceConfig.fromSigningKey(jwkThumbprint: jwkKeyId),
       );
 
-      _publicKeyRepository.storePublicKeyWithRelation(
-        StorePublicKeyParams.fromPrivateKey(
-          publicKey: jwk,
-          jwkThumbprint: thumbprint,
-        ),
-      );
-
-      return thumbprint;
+      return jwkKeyId;
     } catch (e) {
-      await _privateKeyRepository.deletePrivateKey(thumbprint);
+      await _privateKeyRepository.deletePrivateKey(jwkKeyId: jwkKeyId);
       throw StateError('Failed to import key pair: $e');
     }
   }
 }
 
-// class RemovePrivateKeyUseCase {
-//   RemovePrivateKeyUseCase(
-//     this._privateKeyRepository,
-//     this._publicKeyRepository,
-//   );
+// // class RemovePrivateKeyUseCase {
+// //   RemovePrivateKeyUseCase(
+// //     this._privateKeyRepository,
+// //     this.jwkRepository,
+// //   );
 
-//   final PrivateKeyRepository _privateKeyRepository;
-//   final PublicKeyRepository _publicKeyRepository;
+// //   final PrivateKeyRepository _privateKeyRepository;
+// //   final JwkRepository jwkRepository;
 
-//   Future<void> call({required Uint8List thumbprint}) async {
-//     if (!await _privateKeyRepository.hasPrivateKey(thumbprint)) {
-//       throw StateError('Private key not found');
-//     }
+// //   Future<void> call({required Uint8List thumbprint}) async {
+// //     if (!await _privateKeyRepository.hasPrivateKey(thumbprint)) {
+// //       throw StateError('Private key not found');
+// //     }
 
-//     await _privateKeyRepository.deletePrivateKey(thumbprint);
-//     _publicKeyRepository.deletePublicKeyByKId(thumbprint);
-//   }
-// }
+// //     await _privateKeyRepository.deletePrivateKey(thumbprint);
+// //     jwkRepository.deletePublicKeyByKId(thumbprint);
+// //   }
+// // }
 
 class ReadPrivateKeyUseCase {
   ReadPrivateKeyUseCase(this._repository);
   final PrivateKeyRepository _repository;
 
-  Future<String> call({required Uint8List thumbprint}) async {
+  Future<String> call({required Uint8List jwkKeyId}) async {
     final Uint8List? privateKeyBytes =
-        await _repository.getPrivateKey(thumbprint);
+        await _repository.getPrivateKey(jwkKeyId: jwkKeyId);
     if (privateKeyBytes == null) {
       throw StateError('Private key not found');
     }
@@ -87,59 +85,62 @@ class ReadPrivateKeyUseCase {
 class GeneratePrivateKeyUseCase {
   GeneratePrivateKeyUseCase(
     this._entropyRepository,
-    this._privateKeyRepository,
-    this._publicKeyRepository,
+    this._jwkRepository,
   );
 
   final EntropyRepository _entropyRepository;
-  final PrivateKeyRepository _privateKeyRepository;
-  final PublicKeyRepository _publicKeyRepository;
+  final JwkRepository _jwkRepository;
 
   Future<Uint8List> call({
     required Uint8List entropyHash,
     int? accountIndex,
   }) async {
-    final Uint8List? entropy = await _entropyRepository.getEntropy(entropyHash);
+    final Uint8List? entropy =
+        await _entropyRepository.getEntropy(entropyHash: entropyHash);
     if (entropy == null) {
-      throw StateError('Entropy not found');
+      throw StateError('Mnemonic not found');
     }
 
     try {
-      if (accountIndex != null) {
-        if (accountIndex < 0) {
-          throw ArgumentError('Account index must be non-negative');
-        }
+      final List<HdKeySourceConfig> existingHDKeySource = _jwkRepository
+          .findHDKeySourceConfigsByEntropyHash(entropyHash: entropyHash);
 
-        final List<int> existingIndexes =
-            _publicKeyRepository.findAccountIndexesByEntropyHash(entropyHash);
-        if (existingIndexes.contains(accountIndex)) {
-          throw StateError(
-            'Private key already exists for account index: $accountIndex',
-          );
-        }
-      } else {
-        accountIndex = _publicKeyRepository.getNextAvailableIndex(entropyHash);
+      final Iterable<int> existingIndexes = existingHDKeySource
+          .map((HdKeySourceConfig e) => e.derivationPath.accountIndex);
+
+      final int resolvedAccountIndex =
+          accountIndex ?? _getNextAccountIndex(existingIndexes);
+
+      if (resolvedAccountIndex < 0) {
+        throw ArgumentError('Account index must be non-negative');
       }
 
-      final Uint8List derivationPath = AptosDerivationPath.encode(accountIndex);
-      final Uint8List privateKeyBytes =
-          _derivePrivateKey(entropy, derivationPath);
-      final ed25519.PrivateKey privateKey =
-          ed25519.newKeyFromSeed(privateKeyBytes);
-      final Jwk jwk = _privateKeyRepository.createJwk(
-        Uint8List.fromList(privateKey.bytes),
-      );
-      final Uint8List thumbprint = _privateKeyRepository.computeThumbprint(jwk);
+      if (existingIndexes.contains(resolvedAccountIndex)) {
+        throw StateError(
+          'Private key already exists for account index: $resolvedAccountIndex',
+        );
+      }
 
-      _publicKeyRepository.storePublicKeyWithRelation(
-        StorePublicKeyParams.fromHDKey(
-          publicKey: jwk,
+      final AptosDerivationPath derivationPath =
+          AptosDerivationPath.fromAccountIndex(resolvedAccountIndex);
+
+      final Uint8List privateKeyBytes =
+          _derivePrivateKey(entropy, derivationPath.toBytes());
+
+      final Jwk jwk =
+          Jwk.fromEd25519PrivateKey(privateKeyBytes: privateKeyBytes);
+
+      final Uint8List jwkKeyId = jwk.keyId;
+
+      _jwkRepository.storeJwkWithKeySourceConfig(
+        jwk: jwk,
+        config: KeySourceConfig.fromHdKey(
           entropyHash: entropyHash,
           derivationPath: derivationPath,
         ),
       );
 
-      return thumbprint;
+      return jwkKeyId;
     } catch (e) {
       if (e is StateError) {
         rethrow;
@@ -156,7 +157,7 @@ class GeneratePrivateKeyUseCase {
 
       final String seed = bip39.mnemonicToSeedHex(mnemonic);
       final aptos.Keys keys = aptos.derivePath(
-        AptosDerivationPath.formatPath(derivationPath),
+        AptosDerivationPath.fromBytes(derivationPath).toString(),
         seed,
       );
 
@@ -172,5 +173,12 @@ class GeneratePrivateKeyUseCase {
     } catch (e) {
       throw StateError('Key derivation failed: $e');
     }
+  }
+
+  int _getNextAccountIndex(Iterable<int> existingIndexes) {
+    if (existingIndexes.isEmpty) {
+      return 0;
+    }
+    return existingIndexes.reduce(max) + 1;
   }
 }

@@ -43,27 +43,25 @@ final privateKeyRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef PrivateKeyRepositoryRef = AutoDisposeProviderRef<PrivateKeyRepository>;
-String _$publicKeyRepositoryHash() =>
-    r'2a8d0c899ac0a665a13744e217c46f6e69b55709';
+String _$jwkRepositoryHash() => r'c68ad363a7000187443728db556a78a9da97630c';
 
-/// See also [publicKeyRepository].
-@ProviderFor(publicKeyRepository)
-final publicKeyRepositoryProvider =
-    AutoDisposeProvider<PublicKeyRepository>.internal(
-  publicKeyRepository,
-  name: r'publicKeyRepositoryProvider',
+/// See also [jwkRepository].
+@ProviderFor(jwkRepository)
+final jwkRepositoryProvider = AutoDisposeProvider<JwkRepository>.internal(
+  jwkRepository,
+  name: r'jwkRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$publicKeyRepositoryHash,
+      : _$jwkRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef PublicKeyRepositoryRef = AutoDisposeProviderRef<PublicKeyRepository>;
+typedef JwkRepositoryRef = AutoDisposeProviderRef<JwkRepository>;
 String _$aptosAccountRepositoryHash() =>
-    r'da30681add300d9e0fd8266a30dcee9c5836da56';
+    r'0f2f7f2788dfb41490e92ad9c24e556c25da249a';
 
 /// See also [aptosAccountRepository].
 @ProviderFor(aptosAccountRepository)
@@ -142,7 +140,7 @@ final readMnemonicUseCaseProvider =
 // ignore: unused_element
 typedef ReadMnemonicUseCaseRef = AutoDisposeProviderRef<ReadMnemonicUseCase>;
 String _$importPrivateKeyUseCaseHash() =>
-    r'9a3587516654cfb7316fa8d125a9a0497a082664';
+    r'c5bc39272e7addb793182eeaf1e801ad92ed1792';
 
 /// See also [importPrivateKeyUseCase].
 @ProviderFor(importPrivateKeyUseCase)
@@ -182,7 +180,7 @@ final readPrivateKeyUseCaseProvider =
 typedef ReadPrivateKeyUseCaseRef
     = AutoDisposeProviderRef<ReadPrivateKeyUseCase>;
 String _$generatePrivateKeyUseCaseHash() =>
-    r'25b3322dd2a0876e7c91f98eaafa9309f5820e50';
+    r'35f760e37d212b848ee9441e1111293afb36c9db';
 
 /// See also [generatePrivateKeyUseCase].
 @ProviderFor(generatePrivateKeyUseCase)

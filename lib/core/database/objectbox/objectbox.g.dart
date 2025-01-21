@@ -14,11 +14,11 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import '../../../features/accounts/data/models/local/aptos_account_local_model.dart';
-import '../../../features/accounts/data/models/local/auth_key_config_local_model.dart';
-import '../../../features/accounts/data/models/local/hd_key_local_model.dart';
-import '../../../features/accounts/data/models/local/jwk_local_model.dart';
-import '../../../features/accounts/data/models/local/signing_key_local_model.dart';
+import '../../../features/wallet/data/models/local/aptos_account_local_model.dart';
+import '../../../features/wallet/data/models/local/auth_key_config_local_model.dart';
+import '../../../features/wallet/data/models/local/hd_key_local_model.dart';
+import '../../../features/wallet/data/models/local/jwk_local_model.dart';
+import '../../../features/wallet/data/models/local/signing_key_local_model.dart';
 import '../../../shared/currency/data/models/local/currency_rate_local_model.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file

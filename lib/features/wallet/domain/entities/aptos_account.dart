@@ -25,15 +25,6 @@ class AptosAccount with _$AptosAccount {
         authenticationKey: authenticationKey,
       );
 
-  factory AptosAccount.fromAuthenticationKeyWithAddress({
-    required AuthenticationKey authenticationKey,
-    required AccountAddress accountAddress,
-  }) =>
-      AptosAccount(
-        accountAddress: accountAddress,
-        authenticationKey: authenticationKey,
-      );
-
   AuthenticationKeyScheme get authenticationKeyScheme =>
       authenticationKey.scheme;
 

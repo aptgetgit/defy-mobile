@@ -1,7 +1,6 @@
 import '../../data/repositories/aptos_account_repository_implementation.dart';
 import '../entities/account_address.dart';
 import '../entities/aptos_account.dart';
-import '../entities/authentication_key.dart';
 import '../repositories/aptos_account_repository.dart';
 
 class CreateAptosAccountUseCase {
@@ -9,19 +8,13 @@ class CreateAptosAccountUseCase {
 
   final AptosAccountRepository _repository;
 
-  Future<int> call({
-    required AccountAddress accountAddress,
-    required AuthenticationKey authenticationKey,
+  Future<AptosAccount> call({
     required AuthenticatorConfig authenticatorConfig,
+    AccountAddress? accountAddress,
   }) async {
     try {
-      if (_repository.hasAccountWithAddress(accountAddress: accountAddress)) {
-        throw StateError('Account already exists for this address');
-      }
-
       return _repository.storeAccountWithAuthenticatorConfig(
         accountAddress: accountAddress,
-        authenticationKey: authenticationKey,
         authenticatorConfig: authenticatorConfig,
       );
     } catch (e) {

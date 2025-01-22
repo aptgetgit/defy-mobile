@@ -197,7 +197,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       Column(
         children: <Widget>[
           Gap(height * 0.05),
-          // AnimatedSwitcher for smooth transitions between indicator and button
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: _currentPage < _pageCount - 1

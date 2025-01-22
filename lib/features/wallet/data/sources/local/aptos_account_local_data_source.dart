@@ -7,7 +7,7 @@ class AptosAccountLocalDataSource {
   AptosAccountLocalDataSource(this._box);
   final Box<AptosAccountLocalModel> _box;
 
-  int putAccount({
+  AptosAccountLocalModel putAccount({
     required Uint8List accountAddress,
     required Uint8List authenticationKey,
     required int authenticationKeyScheme,
@@ -17,7 +17,8 @@ class AptosAccountLocalDataSource {
       authenticationKey: authenticationKey,
       authenticationKeyScheme: authenticationKeyScheme,
     );
-    return _box.put(account);
+    _box.put(account);
+    return account;
   }
 
   AptosAccountLocalModel? findAccountByAccountAddress({

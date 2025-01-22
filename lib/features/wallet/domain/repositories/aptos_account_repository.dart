@@ -15,13 +15,21 @@ sealed class AuthenticatorConfig with _$AuthenticatorConfig {
   const factory AuthenticatorConfig.ed25519({
     required Jwk jwk,
   }) = Ed25519AuthenticatorConfig;
+
+  const AuthenticatorConfig._();
+
+  AuthenticationKey toAuthenticationKey() => switch (this) {
+        Ed25519AuthenticatorConfig(:final Jwk jwk) =>
+          AuthenticationKey.ed25519SchemeFromPublicKey(
+            publicKeyBytes: jwk.x,
+          ),
+      };
 }
 
 abstract class IAptosAccountRepository {
-  int storeAccountWithAuthenticatorConfig({
-    required AccountAddress accountAddress,
-    required AuthenticationKey authenticationKey,
+  AptosAccount storeAccountWithAuthenticatorConfig({
     required AuthenticatorConfig authenticatorConfig,
+    AccountAddress? accountAddress,
   });
 
   void deleteAccountByAddress({

@@ -25,7 +25,7 @@ class JwkRepository implements IJwkRepository {
   final HDKeyLocalDataSource _hdKeyLocalDataSource;
   final SigningKeyLocalDataSource _signingKeyLocalDataSource;
   @override
-  int storeJwkWithKeySourceConfig({
+  Jwk storeJwkWithKeySourceConfig({
     required Jwk jwk,
     required KeySourceConfig config,
   }) =>
@@ -68,7 +68,7 @@ class JwkRepository implements IJwkRepository {
             );
         }
 
-        return _jwkLocalDataSource.putJwk(jwk);
+        return _jwkLocalDataSource.putJwk(jwk).toDomain();
       });
 
   @override

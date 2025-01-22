@@ -20,7 +20,7 @@ sealed class KeySourceConfig with _$KeySourceConfig {
 }
 
 abstract class IJwkRepository {
-  int storeJwkWithKeySourceConfig({
+  Jwk storeJwkWithKeySourceConfig({
     required Jwk jwk,
     required KeySourceConfig config,
   });

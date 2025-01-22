@@ -44,7 +44,7 @@ class PrivateKeyRepository implements IPrivateKeyRepository {
   }
 
   @override
-  Future<Uint8List?> getPrivateKey({required Uint8List jwkKeyId}) async {
+  Future<Jwk?> getPrivateKey({required Uint8List jwkKeyId}) async {
     try {
       final String? jwkJson = await _secureStorage.read(_prefix(jwkKeyId));
       if (jwkJson == null) {
@@ -69,7 +69,7 @@ class PrivateKeyRepository implements IPrivateKeyRepository {
           ),
       };
 
-      return Uint8List.fromList(<int>[...d, ...x]);
+      return jwk;
     } on PlatformException catch (e) {
       throw StateError('Failed to retrieve private key: ${e.message}');
     }

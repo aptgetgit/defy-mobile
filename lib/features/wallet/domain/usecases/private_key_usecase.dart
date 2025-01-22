@@ -49,36 +49,16 @@ class ImportPrivateKeyUseCase {
   }
 }
 
-// // class RemovePrivateKeyUseCase {
-// //   RemovePrivateKeyUseCase(
-// //     this._privateKeyRepository,
-// //     this.jwkRepository,
-// //   );
-
-// //   final PrivateKeyRepository _privateKeyRepository;
-// //   final JwkRepository jwkRepository;
-
-// //   Future<void> call({required Uint8List thumbprint}) async {
-// //     if (!await _privateKeyRepository.hasPrivateKey(thumbprint)) {
-// //       throw StateError('Private key not found');
-// //     }
-
-// //     await _privateKeyRepository.deletePrivateKey(thumbprint);
-// //     jwkRepository.deletePublicKeyByKId(thumbprint);
-// //   }
-// // }
-
 class ReadPrivateKeyUseCase {
   ReadPrivateKeyUseCase(this._repository);
   final PrivateKeyRepository _repository;
 
-  Future<String> call({required Uint8List jwkKeyId}) async {
-    final Uint8List? privateKeyBytes =
-        await _repository.getPrivateKey(jwkKeyId: jwkKeyId);
-    if (privateKeyBytes == null) {
+  Future<Jwk> call({required Uint8List jwkKeyId}) async {
+    final Jwk? jwk = await _repository.getPrivateKey(jwkKeyId: jwkKeyId);
+    if (jwk == null) {
       throw StateError('Private key not found');
     }
-    return HexString.fromUint8Array(privateKeyBytes.sublist(0, 32)).toString();
+    return jwk;
   }
 }
 

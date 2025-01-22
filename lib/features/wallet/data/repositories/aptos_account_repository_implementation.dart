@@ -30,27 +30,32 @@ class AptosAccountRepository implements IAptosAccountRepository {
   final Ed25519AuthKeyConfigLocalDataSource _ed25519AuthKeyConfigDataSource;
 
   @override
-  int storeAccountWithAuthenticatorConfig({
-    required AccountAddress accountAddress,
-    required AuthenticationKey authenticationKey,
+  AptosAccount storeAccountWithAuthenticatorConfig({
     required AuthenticatorConfig authenticatorConfig,
+    AccountAddress? accountAddress,
   }) =>
       _store.runInTransaction(TxMode.write, () {
+        final AuthenticationKey computedAuthKey =
+            authenticatorConfig.toAuthenticationKey();
+
+        final AccountAddress computedAccountAddress =
+            accountAddress ?? AccountAddress(bytes: computedAuthKey.toBytes());
         if (_accountLocalDataSource.findAccountByAccountAddress(
-                accountAddress: accountAddress.toBytes()) !=
+              accountAddress: computedAccountAddress.toBytes(),
+            ) !=
             null) {
           throw StateError('Account with this address already exists');
         }
         _validateAndStoreAuthenticatorConfig(
-          authenticationKey: authenticationKey,
+          authenticationKey: computedAuthKey,
           authenticatorConfig: authenticatorConfig,
         );
 
         return _accountLocalDataSource.putAccount(
-          accountAddress: accountAddress.toBytes(),
-          authenticationKey: authenticationKey.toBytes(),
-          authenticationKeyScheme: authenticationKey.scheme.toByte(),
-        );
+          accountAddress: computedAccountAddress.toBytes(),
+          authenticationKey: computedAuthKey.toBytes(),
+          authenticationKeyScheme: computedAuthKey.scheme.toByte(),
+        ).toDomain();
       });
 
   void _validateAndStoreAuthenticatorConfig({

@@ -3,65 +3,57 @@ import 'dart:typed_data';
 import '../../../../../core/database/objectbox/objectbox.g.dart';
 import '../../models/local/signing_key_local_model.dart';
 
-class SigningKeyLocalDataSource {
-  SigningKeyLocalDataSource(this._box);
+class SigningKeyDataSource {
+  SigningKeyDataSource({required Box<SigningKeyLocalModel> box}) : _box = box;
   final Box<SigningKeyLocalModel> _box;
 
-  int putSigningKey({
-    required Uint8List jwkKeyId,
+  int store({
+    required Uint8List keyId,
     required Uint8List jwkThumbprint,
   }) {
-    final SigningKeyLocalModel key = SigningKeyLocalModel(
-      jwkKeyId: jwkKeyId,
+    if (getByKeyId(keyId: keyId) != null) {
+      throw StateError('Key ID already exists');
+    }
+    if (getByThumbprint(jwkThumbprint: jwkThumbprint) != null) {
+      throw StateError('Thumbprint already exists');
+    }
+
+    final SigningKeyLocalModel model = SigningKeyLocalModel(
+      jwkKeyId: keyId,
       jwkThumbprint: jwkThumbprint,
     );
-    return _box.put(key);
+    return _box.put(model);
   }
 
-  SigningKeyLocalModel? findKeyById(int localId) => _box.get(localId);
+  SigningKeyLocalModel? get(int localId) => _box.get(localId);
 
-  SigningKeyLocalModel? findKeyByJwkKeyId({
-    required Uint8List jwkKeyId,
-  }) =>
-      _box
-          .query(SigningKeyLocalModel_.jwkKeyId.equals(jwkKeyId))
-          .build()
-          .findFirst();
+  SigningKeyLocalModel? getByKeyId({required Uint8List keyId}) => _box
+      .query(SigningKeyLocalModel_.jwkKeyId.equals(keyId))
+      .build()
+      .findFirst();
 
-  SigningKeyLocalModel? findKeyByJwkThumbprint({
-    required Uint8List jwkThumbprint,
-  }) =>
+  SigningKeyLocalModel? getByThumbprint({required Uint8List jwkThumbprint}) =>
       _box
           .query(SigningKeyLocalModel_.jwkThumbprint.equals(jwkThumbprint))
           .build()
           .findFirst();
 
-  List<SigningKeyLocalModel> getAllKeys() => _box.getAll();
+  List<SigningKeyLocalModel> getAll() => _box.getAll();
 
-  bool removeKey(int localId) => _box.remove(localId);
+  bool delete(int localId) => _box.remove(localId);
 
-  bool removeKeyByJwkKeyId({
-    required Uint8List jwkKeyId,
-  }) {
-    final SigningKeyLocalModel? key = findKeyByJwkKeyId(jwkKeyId: jwkKeyId);
-    if (key == null) {
-      return false;
-    }
-    return removeKey(key.localId);
+  bool deleteByKeyId({required Uint8List keyId}) {
+    final SigningKeyLocalModel? key = getByKeyId(keyId: keyId);
+    return key != null && delete(key.localId);
   }
 
-  bool removeKeyByJwkThumbprint({
-    required Uint8List jwkThumbprint,
-  }) {
+  bool deleteByThumbprint({required Uint8List jwkThumbprint}) {
     final SigningKeyLocalModel? key =
-        findKeyByJwkThumbprint(jwkThumbprint: jwkThumbprint);
-    if (key == null) {
-      return false;
-    }
-    return removeKey(key.localId);
+        getByThumbprint(jwkThumbprint: jwkThumbprint);
+    return key != null && delete(key.localId);
   }
 
-  int removeAllKeys() => _box.removeAll();
+  int clear() => _box.removeAll();
 
-  int countKeys() => _box.count();
+  int count() => _box.count();
 }

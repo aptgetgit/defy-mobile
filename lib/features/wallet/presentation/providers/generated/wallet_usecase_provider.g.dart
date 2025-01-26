@@ -6,7 +6,7 @@ part of '../wallet_usecase_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$entropyRepositoryHash() => r'fedaa8fb2c25d4a4c8034f9d45d22f76bd7b077b';
+String _$entropyRepositoryHash() => r'415542628ee2ce22bb9d56f8dcda2abaccb7686e';
 
 /// See also [entropyRepository].
 @ProviderFor(entropyRepository)
@@ -24,26 +24,26 @@ final entropyRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef EntropyRepositoryRef = AutoDisposeProviderRef<EntropyRepository>;
-String _$privateKeyRepositoryHash() =>
-    r'f741c02d71175440c9b8c0d6f82573b5e3941c5c';
+String _$privateJwkRepositoryHash() =>
+    r'ba28a71e0dfd097b49878b39732e77d1b6675c58';
 
-/// See also [privateKeyRepository].
-@ProviderFor(privateKeyRepository)
-final privateKeyRepositoryProvider =
-    AutoDisposeProvider<PrivateKeyRepository>.internal(
-  privateKeyRepository,
-  name: r'privateKeyRepositoryProvider',
+/// See also [privateJwkRepository].
+@ProviderFor(privateJwkRepository)
+final privateJwkRepositoryProvider =
+    AutoDisposeProvider<PrivateJwkRepository>.internal(
+  privateJwkRepository,
+  name: r'privateJwkRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$privateKeyRepositoryHash,
+      : _$privateJwkRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef PrivateKeyRepositoryRef = AutoDisposeProviderRef<PrivateKeyRepository>;
-String _$jwkRepositoryHash() => r'c68ad363a7000187443728db556a78a9da97630c';
+typedef PrivateJwkRepositoryRef = AutoDisposeProviderRef<PrivateJwkRepository>;
+String _$jwkRepositoryHash() => r'7eaabdc6cd3eac7aa23da5f491bf288f088b296f';
 
 /// See also [jwkRepository].
 @ProviderFor(jwkRepository)
@@ -61,7 +61,7 @@ final jwkRepositoryProvider = AutoDisposeProvider<JwkRepository>.internal(
 // ignore: unused_element
 typedef JwkRepositoryRef = AutoDisposeProviderRef<JwkRepository>;
 String _$aptosAccountRepositoryHash() =>
-    r'0f2f7f2788dfb41490e92ad9c24e556c25da249a';
+    r'57c41e9152f7d723e9ac3f498215167856e662d6';
 
 /// See also [aptosAccountRepository].
 @ProviderFor(aptosAccountRepository)
@@ -81,7 +81,7 @@ final aptosAccountRepositoryProvider =
 typedef AptosAccountRepositoryRef
     = AutoDisposeProviderRef<AptosAccountRepository>;
 String _$generateMnemonicUseCaseHash() =>
-    r'a423a72d9eac74f943af27cea1ee77a537cc3be2';
+    r'f6cdc71b835a2f00813b3b6d92364fddad4f5161';
 
 /// See also [generateMnemonicUseCase].
 @ProviderFor(generateMnemonicUseCase)
@@ -101,7 +101,7 @@ final generateMnemonicUseCaseProvider =
 typedef GenerateMnemonicUseCaseRef
     = AutoDisposeProviderRef<GenerateMnemonicUseCase>;
 String _$importMnemonicUseCaseHash() =>
-    r'5401cbecce8340466ee8fa79a8cbdef826b81662';
+    r'02e64f94ac9abc3e5707d2d697eee0737310367c';
 
 /// See also [importMnemonicUseCase].
 @ProviderFor(importMnemonicUseCase)
@@ -121,7 +121,7 @@ final importMnemonicUseCaseProvider =
 typedef ImportMnemonicUseCaseRef
     = AutoDisposeProviderRef<ImportMnemonicUseCase>;
 String _$readMnemonicUseCaseHash() =>
-    r'0aed8eb284fac4145af27f876ceecb1bc2c89b53';
+    r'38baf1e6b0a76a34d4ba8d68701b95f6a08b6c8c';
 
 /// See also [readMnemonicUseCase].
 @ProviderFor(readMnemonicUseCase)
@@ -139,8 +139,28 @@ final readMnemonicUseCaseProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ReadMnemonicUseCaseRef = AutoDisposeProviderRef<ReadMnemonicUseCase>;
+String _$getMnemonicAccountsUseCaseHash() =>
+    r'e96a1d69ec5b7905b4d56f5c2015c41453ab3194';
+
+/// See also [getMnemonicAccountsUseCase].
+@ProviderFor(getMnemonicAccountsUseCase)
+final getMnemonicAccountsUseCaseProvider =
+    AutoDisposeProvider<GetMnemonicAccountsUseCase>.internal(
+  getMnemonicAccountsUseCase,
+  name: r'getMnemonicAccountsUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getMnemonicAccountsUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetMnemonicAccountsUseCaseRef
+    = AutoDisposeProviderRef<GetMnemonicAccountsUseCase>;
 String _$importPrivateKeyUseCaseHash() =>
-    r'c5bc39272e7addb793182eeaf1e801ad92ed1792';
+    r'a2e8a72b5f87883e3024f610674b681af779910e';
 
 /// See also [importPrivateKeyUseCase].
 @ProviderFor(importPrivateKeyUseCase)
@@ -160,7 +180,7 @@ final importPrivateKeyUseCaseProvider =
 typedef ImportPrivateKeyUseCaseRef
     = AutoDisposeProviderRef<ImportPrivateKeyUseCase>;
 String _$readPrivateKeyUseCaseHash() =>
-    r'efb5f6273b64ad469fa719df5e1181fddba2c046';
+    r'574890bcb68ca1b177e10761ac1491a9007adaa1';
 
 /// See also [readPrivateKeyUseCase].
 @ProviderFor(readPrivateKeyUseCase)
@@ -180,7 +200,7 @@ final readPrivateKeyUseCaseProvider =
 typedef ReadPrivateKeyUseCaseRef
     = AutoDisposeProviderRef<ReadPrivateKeyUseCase>;
 String _$generatePrivateKeyUseCaseHash() =>
-    r'35f760e37d212b848ee9441e1111293afb36c9db';
+    r'e441e0fece8f84384378a05358434bd3c261cb0c';
 
 /// See also [generatePrivateKeyUseCase].
 @ProviderFor(generatePrivateKeyUseCase)
@@ -200,7 +220,7 @@ final generatePrivateKeyUseCaseProvider =
 typedef GeneratePrivateKeyUseCaseRef
     = AutoDisposeProviderRef<GeneratePrivateKeyUseCase>;
 String _$createAptosAccountUseCaseHash() =>
-    r'490226179c1afd22c6a7fa192c8b1687026d4642';
+    r'08270c569ba6a2740478625a93ad93bd5d13654b';
 
 /// See also [createAptosAccountUseCase].
 @ProviderFor(createAptosAccountUseCase)
@@ -219,8 +239,28 @@ final createAptosAccountUseCaseProvider =
 // ignore: unused_element
 typedef CreateAptosAccountUseCaseRef
     = AutoDisposeProviderRef<CreateAptosAccountUseCase>;
+String _$deleteAptosAccountUseCaseHash() =>
+    r'13a8d4a2b3f85ad03c03bdf79bd7b818d9b6d4f2';
+
+/// See also [deleteAptosAccountUseCase].
+@ProviderFor(deleteAptosAccountUseCase)
+final deleteAptosAccountUseCaseProvider =
+    AutoDisposeProvider<DeleteAptosAccountUseCase>.internal(
+  deleteAptosAccountUseCase,
+  name: r'deleteAptosAccountUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteAptosAccountUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DeleteAptosAccountUseCaseRef
+    = AutoDisposeProviderRef<DeleteAptosAccountUseCase>;
 String _$getAptosAccountUseCaseHash() =>
-    r'b350ba0d19388f6fde6b86f251a26e7783e1e0ea';
+    r'a0a2f214e8bb35e9d0dee69f873f3c5c8afae0bb';
 
 /// See also [getAptosAccountUseCase].
 @ProviderFor(getAptosAccountUseCase)
@@ -240,7 +280,7 @@ final getAptosAccountUseCaseProvider =
 typedef GetAptosAccountUseCaseRef
     = AutoDisposeProviderRef<GetAptosAccountUseCase>;
 String _$listAptosAccountsUseCaseHash() =>
-    r'0e54ff8998713154d3c163b212e31b14b13100a9';
+    r'459c4dbacf9f4b5ca55a3ce27e43efd8a119196c';
 
 /// See also [listAptosAccountsUseCase].
 @ProviderFor(listAptosAccountsUseCase)
@@ -259,5 +299,85 @@ final listAptosAccountsUseCaseProvider =
 // ignore: unused_element
 typedef ListAptosAccountsUseCaseRef
     = AutoDisposeProviderRef<ListAptosAccountsUseCase>;
+String _$revealAccountPublicKeyUseCaseHash() =>
+    r'ba98fa503291a3bd8ecc4d7c7e7224517bfa92fd';
+
+/// See also [revealAccountPublicKeyUseCase].
+@ProviderFor(revealAccountPublicKeyUseCase)
+final revealAccountPublicKeyUseCaseProvider =
+    AutoDisposeProvider<RevealAccountPublicKeyUseCase>.internal(
+  revealAccountPublicKeyUseCase,
+  name: r'revealAccountPublicKeyUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$revealAccountPublicKeyUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef RevealAccountPublicKeyUseCaseRef
+    = AutoDisposeProviderRef<RevealAccountPublicKeyUseCase>;
+String _$revealAccountPrivateKeyUseCaseHash() =>
+    r'0ebb0ac1975f10bb4fe98a965c6f1c65167a9f0b';
+
+/// See also [revealAccountPrivateKeyUseCase].
+@ProviderFor(revealAccountPrivateKeyUseCase)
+final revealAccountPrivateKeyUseCaseProvider =
+    AutoDisposeProvider<RevealAccountPrivateKeyUseCase>.internal(
+  revealAccountPrivateKeyUseCase,
+  name: r'revealAccountPrivateKeyUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$revealAccountPrivateKeyUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef RevealAccountPrivateKeyUseCaseRef
+    = AutoDisposeProviderRef<RevealAccountPrivateKeyUseCase>;
+String _$revealAccountMnemonicUseCaseHash() =>
+    r'9e174baf8e02f00765d20aa34ef3dd33f68ae165';
+
+/// See also [revealAccountMnemonicUseCase].
+@ProviderFor(revealAccountMnemonicUseCase)
+final revealAccountMnemonicUseCaseProvider =
+    AutoDisposeProvider<RevealAccountMnemonicUseCase>.internal(
+  revealAccountMnemonicUseCase,
+  name: r'revealAccountMnemonicUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$revealAccountMnemonicUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef RevealAccountMnemonicUseCaseRef
+    = AutoDisposeProviderRef<RevealAccountMnemonicUseCase>;
+String _$canRevealMnemonicUseCaseHash() =>
+    r'c317cd3c49108a6783e8f6fff0a36faeab55758b';
+
+/// See also [canRevealMnemonicUseCase].
+@ProviderFor(canRevealMnemonicUseCase)
+final canRevealMnemonicUseCaseProvider =
+    AutoDisposeProvider<CanRevealMnemonicUseCase>.internal(
+  canRevealMnemonicUseCase,
+  name: r'canRevealMnemonicUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$canRevealMnemonicUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef CanRevealMnemonicUseCaseRef
+    = AutoDisposeProviderRef<CanRevealMnemonicUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

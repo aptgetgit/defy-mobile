@@ -1,19 +1,19 @@
 import 'dart:typed_data';
 
 abstract class IEntropyRepository {
-  Future<Uint8List> storeEntropy({required Uint8List entropy});
+  Future<Uint8List> store({required Uint8List entropy});
 
-  Future<Uint8List?> getEntropy({required Uint8List entropyHash});
+  Future<Uint8List?> get({required Uint8List hash});
 
-  Future<bool> hasEntropy({required Uint8List entropyHash});
+  Future<List<Uint8List>> getAllHashes();
 
-  Future<bool> deleteEntropy({required Uint8List entropyHash});
+  Future<int> count();
 
-  Uint8List computeEntropyHash({required Uint8List entropy});
+  Future<bool> has({required Uint8List hash});
 
-  Future<List<Uint8List>> listEntropyHashes();
+  Future<void> delete({required Uint8List hash});
+  
+  Future<void> deleteMany(List<Uint8List> hashes);
 
-  Future<int> getTotalEntropies();
-
-  bool isValidEntropyLength({required Uint8List entropy});
+  Future<void> clear();
 }

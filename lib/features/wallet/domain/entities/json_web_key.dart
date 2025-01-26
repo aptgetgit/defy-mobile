@@ -50,20 +50,20 @@ enum JwkCurve {
 @freezed
 sealed class Jwk with _$Jwk {
   const factory Jwk.ed25519({
-    @JsonKey(name: 'x') @Base64UrlConverter() required Uint8List x,
-    @JsonKey(name: 'd') @Base64UrlConverter() Uint8List? d,
+    @JsonKey(name: 'x') required Uint8List x,
+    @JsonKey(name: 'd') Uint8List? d,
   }) = Ed25519Jwk;
 
   const factory Jwk.secp256k1({
-    @JsonKey(name: 'x') @Base64UrlConverter() required Uint8List x,
-    @JsonKey(name: 'y') @Base64UrlConverter() required Uint8List y,
-    @JsonKey(name: 'd') @Base64UrlConverter() Uint8List? d,
+    @JsonKey(name: 'x') required Uint8List x,
+    @JsonKey(name: 'y') required Uint8List y,
+    @JsonKey(name: 'd') Uint8List? d,
   }) = Secp256k1Jwk;
 
   const factory Jwk.secp256r1({
-    @JsonKey(name: 'x') @Base64UrlConverter() required Uint8List x,
-    @JsonKey(name: 'y') @Base64UrlConverter() required Uint8List y,
-    @JsonKey(name: 'd') @Base64UrlConverter() Uint8List? d,
+    @JsonKey(name: 'x') required Uint8List x,
+    @JsonKey(name: 'y') required Uint8List y,
+    @JsonKey(name: 'd') Uint8List? d,
   }) = Secp256r1Jwk;
 
   const Jwk._();

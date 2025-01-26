@@ -3,35 +3,38 @@ import 'dart:typed_data';
 import '../../../../../core/database/objectbox/objectbox.g.dart';
 import '../../models/local/aptos_account_local_model.dart';
 
-class AptosAccountLocalDataSource {
-  AptosAccountLocalDataSource(this._box);
+class AptosAccountDataSource {
+  AptosAccountDataSource({required Box<AptosAccountLocalModel> box})
+      : _box = box;
   final Box<AptosAccountLocalModel> _box;
 
-  AptosAccountLocalModel putAccount({
+  AptosAccountLocalModel store({
     required Uint8List accountAddress,
     required Uint8List authenticationKey,
     required int authenticationKeyScheme,
   }) {
-    final AptosAccountLocalModel account = AptosAccountLocalModel(
+    if (getByAddress(accountAddress: accountAddress) != null) {
+      throw StateError('Account address already exists');
+    }
+
+    final AptosAccountLocalModel model = AptosAccountLocalModel(
       accountAddress: accountAddress,
       authenticationKey: authenticationKey,
       authenticationKeyScheme: authenticationKeyScheme,
     );
-    _box.put(account);
-    return account;
+    _box.put(model);
+    return model;
   }
 
-  AptosAccountLocalModel? findAccountByAccountAddress({
-    required Uint8List accountAddress,
-  }) =>
+  AptosAccountLocalModel? getByAddress({required Uint8List accountAddress}) =>
       _box
           .query(AptosAccountLocalModel_.accountAddress.equals(accountAddress))
           .build()
           .findFirst();
 
-  AptosAccountLocalModel? findAccountById(int localId) => _box.get(localId);
+  AptosAccountLocalModel? get(int localId) => _box.get(localId);
 
-  List<AptosAccountLocalModel> findAccountsByAuthenticationKey({
+  List<AptosAccountLocalModel> getByAuthKey({
     required Uint8List authenticationKey,
   }) =>
       _box
@@ -41,7 +44,7 @@ class AptosAccountLocalDataSource {
           .build()
           .find();
 
-  List<AptosAccountLocalModel> findAccountsByAuthenticationKeyScheme({
+  List<AptosAccountLocalModel> getByScheme({
     required int authenticationKeyScheme,
   }) =>
       _box
@@ -52,56 +55,43 @@ class AptosAccountLocalDataSource {
           .build()
           .find();
 
-  List<AptosAccountLocalModel> getAllAccounts() => _box.getAll();
+  List<AptosAccountLocalModel> getAll() => _box.getAll();
 
-  bool removeAccount(int localId) => _box.remove(localId);
+  bool delete(int localId) => _box.remove(localId);
 
-  int removeAccounts(List<int> localIds) => _box.removeMany(localIds);
+  int deleteMany(List<int> localIds) => _box.removeMany(localIds);
 
-  bool removeAccountByAddress({
-    required Uint8List accountAddress,
-  }) {
+  bool deleteByAddress({required Uint8List accountAddress}) {
     final AptosAccountLocalModel? account =
-        findAccountByAccountAddress(accountAddress: accountAddress);
-    if (account == null) {
-      return false;
-    }
-    return removeAccount(account.localId);
+        getByAddress(accountAddress: accountAddress);
+    return account != null && delete(account.localId);
   }
 
-  bool removeAccountByAuthenticationKey({
-    required Uint8List authenticationKey,
-  }) {
+  bool deleteByAuthKey({required Uint8List authenticationKey}) {
     final List<AptosAccountLocalModel> accounts =
-        findAccountsByAuthenticationKey(
-      authenticationKey: authenticationKey,
-    );
-    if (accounts.isEmpty) {
-      return false;
-    }
-    return removeAccounts(
-          accounts.map((AptosAccountLocalModel acc) => acc.localId).toList(),
-        ) >
-        0;
+        getByAuthKey(authenticationKey: authenticationKey);
+    return accounts.isNotEmpty &&
+        deleteMany(
+              accounts
+                  .map((AptosAccountLocalModel acc) => acc.localId)
+                  .toList(),
+            ) >
+            0;
   }
 
-  bool removeAccountsByAuthenticationKeyScheme({
-    required int authenticationKeyScheme,
-  }) {
+  bool deleteByScheme({required int authenticationKeyScheme}) {
     final List<AptosAccountLocalModel> accounts =
-        findAccountsByAuthenticationKeyScheme(
-      authenticationKeyScheme: authenticationKeyScheme,
-    );
-    if (accounts.isEmpty) {
-      return false;
-    }
-    return removeAccounts(
-          accounts.map((AptosAccountLocalModel acc) => acc.localId).toList(),
-        ) >
-        0;
+        getByScheme(authenticationKeyScheme: authenticationKeyScheme);
+    return accounts.isNotEmpty &&
+        deleteMany(
+              accounts
+                  .map((AptosAccountLocalModel acc) => acc.localId)
+                  .toList(),
+            ) >
+            0;
   }
 
-  int removeAllAccounts() => _box.removeAll();
+  int clear() => _box.removeAll();
 
-  int countAccounts() => _box.count();
+  int count() => _box.count();
 }

@@ -3,26 +3,34 @@ import 'dart:typed_data';
 import '../../../../../core/database/objectbox/objectbox.g.dart';
 import '../../models/local/auth_key_config_local_model.dart';
 
-class Ed25519AuthKeyConfigLocalDataSource {
-  Ed25519AuthKeyConfigLocalDataSource(this._box);
+class Ed25519AuthKeyConfigDataSource {
+  Ed25519AuthKeyConfigDataSource(
+      {required Box<Ed25519AuthKeyConfigLocalModel> box})
+      : _box = box;
   final Box<Ed25519AuthKeyConfigLocalModel> _box;
 
-  int putEd25519AuthKeyConfig({
+  int store({
     required Uint8List authenticationKey,
-    required Uint8List jwkKeyId,
+    required Uint8List keyId,
   }) {
-    final Ed25519AuthKeyConfigLocalModel config =
-        Ed25519AuthKeyConfigLocalModel(
+    if (getByAuthKey(authenticationKey: authenticationKey) != null) {
+      throw StateError('Authentication key already exists');
+    }
+
+    if (getByKeyId(keyId: keyId) != null) {
+      throw StateError('JWK Key ID already exists');
+    }
+
+    final Ed25519AuthKeyConfigLocalModel model = Ed25519AuthKeyConfigLocalModel(
       authenticationKey: authenticationKey,
-      jwkKeyId: jwkKeyId,
+      jwkKeyId: keyId,
     );
-    return _box.put(config);
+    return _box.put(model);
   }
 
-  Ed25519AuthKeyConfigLocalModel? findEd25519AuthKeyConfigById(int localId) =>
-      _box.get(localId);
+  Ed25519AuthKeyConfigLocalModel? get(int localId) => _box.get(localId);
 
-  Ed25519AuthKeyConfigLocalModel? findEd25519AuthKeyConfigByAuthenticationKey({
+  Ed25519AuthKeyConfigLocalModel? getByAuthKey({
     required Uint8List authenticationKey,
   }) =>
       _box
@@ -33,49 +41,34 @@ class Ed25519AuthKeyConfigLocalDataSource {
           .build()
           .findFirst();
 
-  Ed25519AuthKeyConfigLocalModel? findEd25519AuthKeyConfigByJwkKeyId({
-    required Uint8List jwkKeyId,
+  Ed25519AuthKeyConfigLocalModel? getByKeyId({
+    required Uint8List keyId,
   }) =>
       _box
           .query(
-            Ed25519AuthKeyConfigLocalModel_.jwkKeyId.equals(jwkKeyId),
+            Ed25519AuthKeyConfigLocalModel_.jwkKeyId.equals(keyId),
           )
           .build()
           .findFirst();
 
-  List<Ed25519AuthKeyConfigLocalModel> getAllEd25519AuthKeyConfigs() =>
-      _box.getAll();
+  List<Ed25519AuthKeyConfigLocalModel> getAll() => _box.getAll();
 
-  bool removeEd25519AuthKeyConfig(int localId) => _box.remove(localId);
+  bool delete(int localId) => _box.remove(localId);
 
-  int removeEd25519AuthKeyConfigs(List<int> localIds) =>
-      _box.removeMany(localIds);
+  int deleteMany(List<int> localIds) => _box.removeMany(localIds);
 
-  bool removeEd25519AuthKeyConfigByAuthenticationKey({
-    required Uint8List authenticationKey,
-  }) {
+  bool deleteByAuthKey({required Uint8List authenticationKey}) {
     final Ed25519AuthKeyConfigLocalModel? config =
-        findEd25519AuthKeyConfigByAuthenticationKey(
-      authenticationKey: authenticationKey,
-    );
-    if (config == null) {
-      return false;
-    }
-    return removeEd25519AuthKeyConfig(config.localId);
+        getByAuthKey(authenticationKey: authenticationKey);
+    return config != null && delete(config.localId);
   }
 
-  bool removeEd25519AuthKeyConfigByJwkKeyId({
-    required Uint8List jwkKeyId,
-  }) {
-    final Ed25519AuthKeyConfigLocalModel? config =
-        findEd25519AuthKeyConfigByJwkKeyId(jwkKeyId: jwkKeyId);
-    if (config == null) {
-      return false;
-    }
-    return removeEd25519AuthKeyConfig(config.localId);
+  bool deleteByKeyId({required Uint8List keyId}) {
+    final Ed25519AuthKeyConfigLocalModel? config = getByKeyId(keyId: keyId);
+    return config != null && delete(config.localId);
   }
 
-  int removeAllEd25519AuthKeyConfigs() => _box.removeAll();
+  int clear() => _box.removeAll();
 
-  int countEd25519AuthKeyConfigs() => _box.count();
+  int count() => _box.count();
 }

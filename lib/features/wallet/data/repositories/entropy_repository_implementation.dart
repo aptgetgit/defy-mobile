@@ -1,109 +1,83 @@
-import 'package:aptos_dart/hex_string.dart';
-import 'package:crypto/crypto.dart' as crypto;
-import 'package:flutter/services.dart';
+import 'dart:typed_data';
 
-import '../../../../core/services/secure_storage_service.dart';
+import '../../../../core/database/objectbox/objectbox.g.dart';
+import '../../../../shared/utils/crypto_utils.dart';
 import '../../domain/repositories/entropy_repository.dart';
+import '../sources/local/entropy_local_data_source.dart';
+import '../sources/local/hd_key_local_data_source.dart';
 
 class EntropyRepository implements IEntropyRepository {
-  EntropyRepository(this._secureStorage);
+  EntropyRepository({
+    required Store store,
+    required EntropyDataSource entropyDataSource,
+    required HDKeyDataSource hdKeyDataSource,
+  })  : _store = store,
+        _entropyDataSource = entropyDataSource,
+        _hdKeyDataSource = hdKeyDataSource;
 
-  static const String _entropyPrefix = 'entropy:';
-  static const int _prefixLength = 8;
+  static final Uint8List _validLengths =
+      Uint8List.fromList(<int>[16, 20, 24, 28, 32]);
 
-  static final Uint8List _validEntropyLengths = Uint8List.fromList(
-    const <int>[16, 20, 24, 28, 32],
-  );
+  final Store _store;
+  final EntropyDataSource _entropyDataSource;
+  final HDKeyDataSource _hdKeyDataSource;
 
-  final SecureStorageService _secureStorage;
-
-  String _prefix(Uint8List entropyHash) =>
-      '$_entropyPrefix${_entropyToHex(entropyHash)}';
-
-  String _entropyToHex(Uint8List entropy) =>
-      HexString.fromUint8Array(entropy).noPrefix();
-
-  Uint8List _hexToEntropy(String hexString) =>
-      HexString(hexString).toUint8Array();
+  bool _isValidLength(Uint8List entropy) =>
+      _validLengths.contains(entropy.length);
 
   @override
-  bool isValidEntropyLength({required Uint8List entropy}) =>
-      _validEntropyLengths.contains(entropy.length);
-
-  @override
-  Uint8List computeEntropyHash({required Uint8List entropy}) =>
-      Uint8List.fromList(crypto.sha256.convert(entropy).bytes);
-
-  @override
-  Future<Uint8List> storeEntropy({required Uint8List entropy}) async {
-    if (!isValidEntropyLength(entropy: entropy)) {
+  Future<Uint8List> store({required Uint8List entropy}) async {
+    if (!_isValidLength(entropy)) {
       throw const FormatException('Invalid entropy length');
     }
 
-    final Uint8List entropyHash = computeEntropyHash(entropy: entropy);
-    final String key = _prefix(entropyHash);
-
-    try {
-      await _secureStorage.write(key, _entropyToHex(entropy));
-      return entropyHash;
-    } on PlatformException catch (e) {
-      throw StateError('Failed to store entropy: ${e.message}');
-    }
+    final Uint8List hash = computeSha256Hash(entropy);
+    await _entropyDataSource.store(hash: hash, entropy: entropy);
+    return hash;
   }
 
   @override
-  Future<Uint8List?> getEntropy({required Uint8List entropyHash}) async {
-    try {
-      final String? encodedEntropy =
-          await _secureStorage.read(_prefix(entropyHash));
-      return encodedEntropy != null ? _hexToEntropy(encodedEntropy) : null;
-    } on PlatformException catch (e) {
-      throw StateError('Failed to retrieve entropy: ${e.message}');
-    }
-  }
+  Future<Uint8List?> get({required Uint8List hash}) =>
+      _entropyDataSource.get(hash: hash);
 
   @override
-  Future<bool> hasEntropy({required Uint8List entropyHash}) async {
-    try {
-      return await _secureStorage.containsKey(_prefix(entropyHash));
-    } on PlatformException {
-      return false;
-    }
-  }
+  Future<bool> has({required Uint8List hash}) =>
+      _entropyDataSource.has(hash: hash);
 
   @override
-  Future<bool> deleteEntropy({required Uint8List entropyHash}) async {
-    try {
-      await _secureStorage.delete(_prefix(entropyHash));
-      return true;
-    } on PlatformException {
-      return false;
-    }
-  }
+  Future<void> delete({required Uint8List hash}) =>
+      _store.runInTransaction(TxMode.read, () async {
+        if (_hdKeyDataSource.getByEntropy(entropyHash: hash).isNotEmpty) {
+          throw StateError('Cannot delete: entropy is used in HD derivation');
+        }
+        await _entropyDataSource.delete(hash: hash);
+      });
 
   @override
-  Future<int> getTotalEntropies() async {
-    try {
-      final Map<String, String> allKeys = await _secureStorage.readAll();
-      return allKeys.keys
-          .where((String key) => key.startsWith(_entropyPrefix))
-          .length;
-    } on PlatformException catch (e) {
-      throw StateError('Failed to count entropies: ${e.message}');
-    }
-  }
+  Future<void> deleteMany(List<Uint8List> hashes) =>
+      _store.runInTransaction(TxMode.read, () async {
+        for (final Uint8List hash in hashes) {
+          if (_hdKeyDataSource.getByEntropy(entropyHash: hash).isNotEmpty) {
+            throw StateError('Cannot delete: entropy is used in HD derivation');
+          }
+        }
+        await _entropyDataSource.deleteMany(hashes);
+      });
 
   @override
-  Future<List<Uint8List>> listEntropyHashes() async {
-    try {
-      final Map<String, String> allKeys = await _secureStorage.readAll();
-      return allKeys.keys
-          .where((String key) => key.startsWith(_entropyPrefix))
-          .map((String key) => key.substring(_prefixLength))
-          .map(_hexToEntropy)
-          .toList();
-    } on PlatformException catch (e) {
-      throw StateError('Failed to list entropy hashes: ${e.message}');
-    }
-  }
+  Future<int> count() => _entropyDataSource.count();
+
+  @override
+  Future<List<Uint8List>> getAllHashes() => _entropyDataSource.getAllHashes();
+
+  @override
+  Future<void> clear() => _store.runInTransaction(TxMode.read, () async {
+        final List<Uint8List> hashes = await getAllHashes();
+        for (final Uint8List hash in hashes) {
+          if (_hdKeyDataSource.getByEntropy(entropyHash: hash).isNotEmpty) {
+            throw StateError('Cannot clear: entropy is used in HD derivation');
+          }
+        }
+        await _entropyDataSource.clear();
+      });
 }

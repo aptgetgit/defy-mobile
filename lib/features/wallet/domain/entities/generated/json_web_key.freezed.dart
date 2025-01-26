@@ -17,10 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$Jwk {
   @JsonKey(name: 'x')
-  @Base64UrlConverter()
   Uint8List get x => throw _privateConstructorUsedError;
   @JsonKey(name: 'd')
-  @Base64UrlConverter()
   Uint8List? get d => throw _privateConstructorUsedError;
 
   /// Create a copy of Jwk
@@ -35,8 +33,7 @@ abstract class $JwkCopyWith<$Res> {
       _$JwkCopyWithImpl<$Res, Jwk>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'x') @Base64UrlConverter() Uint8List x,
-      @JsonKey(name: 'd') @Base64UrlConverter() Uint8List? d});
+      {@JsonKey(name: 'x') Uint8List x, @JsonKey(name: 'd') Uint8List? d});
 }
 
 /// @nodoc
@@ -77,8 +74,7 @@ abstract class _$$Ed25519JwkImplCopyWith<$Res> implements $JwkCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'x') @Base64UrlConverter() Uint8List x,
-      @JsonKey(name: 'd') @Base64UrlConverter() Uint8List? d});
+      {@JsonKey(name: 'x') Uint8List x, @JsonKey(name: 'd') Uint8List? d});
 }
 
 /// @nodoc
@@ -114,17 +110,14 @@ class __$$Ed25519JwkImplCopyWithImpl<$Res>
 
 class _$Ed25519JwkImpl extends Ed25519Jwk {
   const _$Ed25519JwkImpl(
-      {@JsonKey(name: 'x') @Base64UrlConverter() required this.x,
-      @JsonKey(name: 'd') @Base64UrlConverter() this.d})
+      {@JsonKey(name: 'x') required this.x, @JsonKey(name: 'd') this.d})
       : super._();
 
   @override
   @JsonKey(name: 'x')
-  @Base64UrlConverter()
   final Uint8List x;
   @override
   @JsonKey(name: 'd')
-  @Base64UrlConverter()
   final Uint8List? d;
 
   @override
@@ -158,18 +151,15 @@ class _$Ed25519JwkImpl extends Ed25519Jwk {
 
 abstract class Ed25519Jwk extends Jwk {
   const factory Ed25519Jwk(
-          {@JsonKey(name: 'x') @Base64UrlConverter() required final Uint8List x,
-          @JsonKey(name: 'd') @Base64UrlConverter() final Uint8List? d}) =
-      _$Ed25519JwkImpl;
+      {@JsonKey(name: 'x') required final Uint8List x,
+      @JsonKey(name: 'd') final Uint8List? d}) = _$Ed25519JwkImpl;
   const Ed25519Jwk._() : super._();
 
   @override
   @JsonKey(name: 'x')
-  @Base64UrlConverter()
   Uint8List get x;
   @override
   @JsonKey(name: 'd')
-  @Base64UrlConverter()
   Uint8List? get d;
 
   /// Create a copy of Jwk
@@ -188,9 +178,9 @@ abstract class _$$Secp256k1JwkImplCopyWith<$Res> implements $JwkCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'x') @Base64UrlConverter() Uint8List x,
-      @JsonKey(name: 'y') @Base64UrlConverter() Uint8List y,
-      @JsonKey(name: 'd') @Base64UrlConverter() Uint8List? d});
+      {@JsonKey(name: 'x') Uint8List x,
+      @JsonKey(name: 'y') Uint8List y,
+      @JsonKey(name: 'd') Uint8List? d});
 }
 
 /// @nodoc
@@ -231,22 +221,19 @@ class __$$Secp256k1JwkImplCopyWithImpl<$Res>
 
 class _$Secp256k1JwkImpl extends Secp256k1Jwk {
   const _$Secp256k1JwkImpl(
-      {@JsonKey(name: 'x') @Base64UrlConverter() required this.x,
-      @JsonKey(name: 'y') @Base64UrlConverter() required this.y,
-      @JsonKey(name: 'd') @Base64UrlConverter() this.d})
+      {@JsonKey(name: 'x') required this.x,
+      @JsonKey(name: 'y') required this.y,
+      @JsonKey(name: 'd') this.d})
       : super._();
 
   @override
   @JsonKey(name: 'x')
-  @Base64UrlConverter()
   final Uint8List x;
   @override
   @JsonKey(name: 'y')
-  @Base64UrlConverter()
   final Uint8List y;
   @override
   @JsonKey(name: 'd')
-  @Base64UrlConverter()
   final Uint8List? d;
 
   @override
@@ -282,22 +269,18 @@ class _$Secp256k1JwkImpl extends Secp256k1Jwk {
 
 abstract class Secp256k1Jwk extends Jwk {
   const factory Secp256k1Jwk(
-          {@JsonKey(name: 'x') @Base64UrlConverter() required final Uint8List x,
-          @JsonKey(name: 'y') @Base64UrlConverter() required final Uint8List y,
-          @JsonKey(name: 'd') @Base64UrlConverter() final Uint8List? d}) =
-      _$Secp256k1JwkImpl;
+      {@JsonKey(name: 'x') required final Uint8List x,
+      @JsonKey(name: 'y') required final Uint8List y,
+      @JsonKey(name: 'd') final Uint8List? d}) = _$Secp256k1JwkImpl;
   const Secp256k1Jwk._() : super._();
 
   @override
   @JsonKey(name: 'x')
-  @Base64UrlConverter()
   Uint8List get x;
   @JsonKey(name: 'y')
-  @Base64UrlConverter()
   Uint8List get y;
   @override
   @JsonKey(name: 'd')
-  @Base64UrlConverter()
   Uint8List? get d;
 
   /// Create a copy of Jwk
@@ -316,9 +299,9 @@ abstract class _$$Secp256r1JwkImplCopyWith<$Res> implements $JwkCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'x') @Base64UrlConverter() Uint8List x,
-      @JsonKey(name: 'y') @Base64UrlConverter() Uint8List y,
-      @JsonKey(name: 'd') @Base64UrlConverter() Uint8List? d});
+      {@JsonKey(name: 'x') Uint8List x,
+      @JsonKey(name: 'y') Uint8List y,
+      @JsonKey(name: 'd') Uint8List? d});
 }
 
 /// @nodoc
@@ -359,22 +342,19 @@ class __$$Secp256r1JwkImplCopyWithImpl<$Res>
 
 class _$Secp256r1JwkImpl extends Secp256r1Jwk {
   const _$Secp256r1JwkImpl(
-      {@JsonKey(name: 'x') @Base64UrlConverter() required this.x,
-      @JsonKey(name: 'y') @Base64UrlConverter() required this.y,
-      @JsonKey(name: 'd') @Base64UrlConverter() this.d})
+      {@JsonKey(name: 'x') required this.x,
+      @JsonKey(name: 'y') required this.y,
+      @JsonKey(name: 'd') this.d})
       : super._();
 
   @override
   @JsonKey(name: 'x')
-  @Base64UrlConverter()
   final Uint8List x;
   @override
   @JsonKey(name: 'y')
-  @Base64UrlConverter()
   final Uint8List y;
   @override
   @JsonKey(name: 'd')
-  @Base64UrlConverter()
   final Uint8List? d;
 
   @override
@@ -410,22 +390,18 @@ class _$Secp256r1JwkImpl extends Secp256r1Jwk {
 
 abstract class Secp256r1Jwk extends Jwk {
   const factory Secp256r1Jwk(
-          {@JsonKey(name: 'x') @Base64UrlConverter() required final Uint8List x,
-          @JsonKey(name: 'y') @Base64UrlConverter() required final Uint8List y,
-          @JsonKey(name: 'd') @Base64UrlConverter() final Uint8List? d}) =
-      _$Secp256r1JwkImpl;
+      {@JsonKey(name: 'x') required final Uint8List x,
+      @JsonKey(name: 'y') required final Uint8List y,
+      @JsonKey(name: 'd') final Uint8List? d}) = _$Secp256r1JwkImpl;
   const Secp256r1Jwk._() : super._();
 
   @override
   @JsonKey(name: 'x')
-  @Base64UrlConverter()
   Uint8List get x;
   @JsonKey(name: 'y')
-  @Base64UrlConverter()
   Uint8List get y;
   @override
   @JsonKey(name: 'd')
-  @Base64UrlConverter()
   Uint8List? get d;
 
   /// Create a copy of Jwk

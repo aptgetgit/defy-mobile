@@ -10,277 +10,244 @@ import '../../domain/entities/json_web_key.dart';
 import '../../domain/repositories/aptos_account_repository.dart';
 import '../models/local/aptos_account_local_model.dart';
 import '../models/local/auth_key_config_local_model.dart';
-import '../models/local/jwk_local_model.dart';
 import '../sources/local/aptos_account_local_data_source.dart';
 import '../sources/local/auth_key_config_local_data_source.dart';
-import '../sources/local/public_key_local_data_source.dart';
+import '../sources/local/jwk_local_data_source.dart';
 
 class AptosAccountRepository implements IAptosAccountRepository {
-  AptosAccountRepository(this._store)
-      : _accountLocalDataSource =
-            AptosAccountLocalDataSource(_store.box<AptosAccountLocalModel>()),
-        _jwkLocalDataSource = JwkLocalDataSource(_store.box<JwkLocalModel>()),
-        _ed25519AuthKeyConfigDataSource = Ed25519AuthKeyConfigLocalDataSource(
-          _store.box<Ed25519AuthKeyConfigLocalModel>(),
-        );
+  AptosAccountRepository({
+    required Store store,
+    required AptosAccountDataSource accountDataSource,
+    required JwkDataSource jwkDataSource,
+    required Ed25519AuthKeyConfigDataSource ed25519ConfigDataSource,
+  })  : _store = store,
+        _accountDataSource = accountDataSource,
+        _jwkDataSource = jwkDataSource,
+        _ed25519ConfigDataSource = ed25519ConfigDataSource;
 
   final Store _store;
-  final AptosAccountLocalDataSource _accountLocalDataSource;
-  final JwkLocalDataSource _jwkLocalDataSource;
-  final Ed25519AuthKeyConfigLocalDataSource _ed25519AuthKeyConfigDataSource;
+  final JwkDataSource _jwkDataSource;
+  final AptosAccountDataSource _accountDataSource;
+  final Ed25519AuthKeyConfigDataSource _ed25519ConfigDataSource;
 
   @override
-  AptosAccount storeAccountWithAuthenticatorConfig({
-    required AuthenticatorConfig authenticatorConfig,
+  AptosAccount createAccount({
+    required AuthenticatorConfig config,
     AccountAddress? accountAddress,
   }) =>
       _store.runInTransaction(TxMode.write, () {
-        final AuthenticationKey computedAuthKey =
-            authenticatorConfig.toAuthenticationKey();
-
-        final AccountAddress computedAccountAddress =
-            accountAddress ?? AccountAddress(bytes: computedAuthKey.toBytes());
-        if (_accountLocalDataSource.findAccountByAccountAddress(
-              accountAddress: computedAccountAddress.toBytes(),
-            ) !=
-            null) {
-          throw StateError('Account with this address already exists');
-        }
-        _validateAndStoreAuthenticatorConfig(
-          authenticationKey: computedAuthKey,
-          authenticatorConfig: authenticatorConfig,
-        );
-
-        return _accountLocalDataSource.putAccount(
-          accountAddress: computedAccountAddress.toBytes(),
-          authenticationKey: computedAuthKey.toBytes(),
-          authenticationKeyScheme: computedAuthKey.scheme.toByte(),
-        ).toDomain();
+        final AuthenticationKey authKey = _storeAuthConfig(config: config);
+        return _accountDataSource
+            .store(
+              accountAddress: accountAddress?.toBytes() ??
+                  AccountAddress.fromAuthenticationKey(
+                    authenticationKey: authKey,
+                  ).toBytes(),
+              authenticationKey: authKey.toBytes(),
+              authenticationKeyScheme: authKey.scheme.toByte(),
+            )
+            .toDomain();
       });
 
-  void _validateAndStoreAuthenticatorConfig({
-    required AuthenticationKey authenticationKey,
-    required AuthenticatorConfig authenticatorConfig,
-  }) {
-    switch (authenticatorConfig) {
-      case Ed25519AuthenticatorConfig(:final Jwk jwk):
-        _validateAndStoreEd25519Config(
-          authenticationKey: authenticationKey,
-          jwk: jwk,
-        );
-    }
-  }
+  AuthenticationKey _storeAuthConfig({required AuthenticatorConfig config}) {
+    switch (config) {
+      case Ed25519AuthenticatorConfig(:final Uint8List keyId):
+        final Jwk? jwk = _jwkDataSource.getByKeyId(keyId: keyId)?.toDomain();
+        if (jwk == null) {
+          throw StateError('JWK not found');
+        }
 
-  void _validateAndStoreEd25519Config({
-    required AuthenticationKey authenticationKey,
-    required Jwk jwk,
-  }) {
-    final JwkLocalModel? publicKey =
-        _jwkLocalDataSource.findPublicKeyByKeyId(keyId: jwk.keyId);
-    if (publicKey == null) {
-      throw StateError('Required public key not found for keyId: ${jwk.keyId}');
-    }
-    final Ed25519AuthKeyConfigLocalModel? existingConfig =
-        _ed25519AuthKeyConfigDataSource
-            .findEd25519AuthKeyConfigByAuthenticationKey(
-      authenticationKey: authenticationKey.toBytes(),
-    );
-
-    if (existingConfig != null) {
-      if (existingConfig.jwkKeyId != jwk.keyId) {
-        throw StateError(
-          'Authentication key conflict: existing config uses different JWK',
+        final AuthenticationKey authKey =
+            AuthenticationKey.ed25519SchemeFromPublicKey(
+          publicKeyBytes: jwk.x,
         );
-      }
-      return;
+
+        _ed25519ConfigDataSource.store(
+          authenticationKey: authKey.toBytes(),
+          keyId: keyId,
+        );
+
+        return authKey;
     }
-    _ed25519AuthKeyConfigDataSource.putEd25519AuthKeyConfig(
-      authenticationKey: authenticationKey.toBytes(),
-      jwkKeyId: jwk.keyId,
-    );
   }
 
   @override
-  void deleteAccountByAddress({
-    required AccountAddress accountAddress,
-  }) =>
+  void deleteByAddress({required AccountAddress accountAddress}) =>
       _store.runInTransaction(TxMode.write, () {
         final AptosAccount? account =
-            findAccountByAddress(accountAddress: accountAddress);
+            getByAddress(accountAddress: accountAddress);
         if (account == null) {
           return;
         }
 
-        _accountLocalDataSource.removeAccountByAddress(
+        _accountDataSource.deleteByAddress(
           accountAddress: accountAddress.toBytes(),
         );
 
-        final AuthenticationKey authKey = account.authenticationKey;
         final List<AptosAccountLocalModel> remainingAccounts =
-            _accountLocalDataSource.findAccountsByAuthenticationKey(
-          authenticationKey: authKey.toBytes(),
+            _accountDataSource.getByAuthKey(
+          authenticationKey: account.authenticationKey.toBytes(),
         );
 
         if (remainingAccounts.isEmpty) {
-          _ed25519AuthKeyConfigDataSource
-              .removeEd25519AuthKeyConfigByAuthenticationKey(
-            authenticationKey: authKey.toBytes(),
+          final Ed25519AuthKeyConfigLocalModel? authConfig =
+              _ed25519ConfigDataSource.getByAuthKey(
+            authenticationKey: account.authenticationKey.toBytes(),
           );
+          if (authConfig != null) {
+            _ed25519ConfigDataSource.deleteByAuthKey(
+              authenticationKey: account.authenticationKey.toBytes(),
+            );
+            if (_ed25519ConfigDataSource.getByKeyId(
+                  keyId: authConfig.jwkKeyId,
+                ) ==
+                null) {
+              _jwkDataSource.deleteByKeyId(keyId: authConfig.jwkKeyId);
+            }
+          }
         }
       });
 
   @override
-  List<AptosAccount> findAccountsByJwkKeyId({
-    required Uint8List jwkKeyId,
-  }) {
-    final Ed25519AuthKeyConfigLocalModel? config =
-        _ed25519AuthKeyConfigDataSource.findEd25519AuthKeyConfigByJwkKeyId(
-      jwkKeyId: jwkKeyId,
-    );
-    if (config == null) {
-      return <AptosAccount>[];
+  void deleteMany(List<AccountAddress> accountAddress) {
+    for (final AccountAddress address in accountAddress) {
+      deleteByAddress(accountAddress: address);
     }
-
-    return _accountLocalDataSource
-        .findAccountsByAuthenticationKey(
-          authenticationKey: config.authenticationKey,
-        )
-        .map((AptosAccountLocalModel model) => model.toDomain())
-        .toList();
   }
 
   @override
-  List<AptosAccount> findAccountsByAuthKey({
-    required AuthenticationKey authenticationKey,
-  }) =>
-      _accountLocalDataSource
-          .findAccountsByAuthenticationKey(
-            authenticationKey: authenticationKey.toBytes(),
-          )
-          .map((AptosAccountLocalModel model) => model.toDomain())
-          .toList();
-
-  @override
-  List<AptosAccount> findAccountsByAuthKeyScheme({
-    required AuthenticationKeyScheme authenticationKeyScheme,
-  }) =>
-      _accountLocalDataSource
-          .findAccountsByAuthenticationKeyScheme(
-            authenticationKeyScheme: authenticationKeyScheme.toByte(),
-          )
-          .map((AptosAccountLocalModel model) => model.toDomain())
-          .toList();
-
-  @override
-  void updateAuthKey({
-    required AccountAddress accountAddress,
-    required AuthenticationKey newAuthKey,
-  }) =>
-      _store.runInTransaction(TxMode.write, () {
-        final AptosAccount? account =
-            findAccountByAddress(accountAddress: accountAddress);
-        if (account == null) {
-          throw StateError('Account not found');
+  void clear() => _store.runInTransaction(TxMode.write, () {
+        _accountDataSource.clear();
+        final List<Ed25519AuthKeyConfigLocalModel> authConfigs =
+            _ed25519ConfigDataSource.getAll();
+        for (final Ed25519AuthKeyConfigLocalModel config in authConfigs) {
+          if (_accountDataSource
+              .getByAuthKey(authenticationKey: config.authenticationKey)
+              .isNotEmpty) {
+            throw StateError(
+              'Cannot clear: auth configs are in use by accounts',
+            );
+          }
         }
+        _ed25519ConfigDataSource.clear();
+        final Set<Uint8List> usedJwkIds = authConfigs
+            .map((Ed25519AuthKeyConfigLocalModel config) => config.jwkKeyId)
+            .toSet();
 
-        final AuthenticationKey oldAuthKey = account.authenticationKey;
-        final List<AptosAccountLocalModel> otherAccountsWithOldKey =
-            _accountLocalDataSource
-                .findAccountsByAuthenticationKey(
-                  authenticationKey: oldAuthKey.toBytes(),
-                )
-                .where(
-                  (AptosAccountLocalModel a) =>
-                      a.accountAddress != accountAddress.toBytes(),
-                )
-                .toList();
-
-        if (otherAccountsWithOldKey.isEmpty) {
-          _ed25519AuthKeyConfigDataSource
-              .removeEd25519AuthKeyConfigByAuthenticationKey(
-            authenticationKey: oldAuthKey.toBytes(),
-          );
+        for (final Uint8List jwkId in usedJwkIds) {
+          if (_ed25519ConfigDataSource.getByKeyId(keyId: jwkId) == null) {
+            _jwkDataSource.deleteByKeyId(keyId: jwkId);
+          }
         }
-
-        _accountLocalDataSource.putAccount(
-          accountAddress: accountAddress.toBytes(),
-          authenticationKey: newAuthKey.toBytes(),
-          authenticationKeyScheme: newAuthKey.scheme.toByte(),
-        );
       });
 
   @override
-  bool hasAccountWithAddress({
-    required AccountAddress accountAddress,
+  AptosAccount? getByAddress({required AccountAddress accountAddress}) =>
+      _accountDataSource
+          .getByAddress(accountAddress: accountAddress.toBytes())
+          ?.toDomain();
+
+  @override
+  List<AptosAccount> getByAuthKey({required AuthenticationKey authKey}) =>
+      _accountDataSource
+          .getByAuthKey(authenticationKey: authKey.toBytes())
+          .map((AptosAccountLocalModel model) => model.toDomain())
+          .toList();
+
+  @override
+  List<AptosAccount> getByAuthScheme({
+    required AuthenticationKeyScheme scheme,
   }) =>
-      _accountLocalDataSource.findAccountByAccountAddress(
+      _accountDataSource
+          .getByScheme(authenticationKeyScheme: scheme.toByte())
+          .map((AptosAccountLocalModel model) => model.toDomain())
+          .toList();
+
+  @override
+  List<AptosAccount> getAll() => _accountDataSource
+      .getAll()
+      .map((AptosAccountLocalModel model) => model.toDomain())
+      .toList();
+
+  @override
+  int count() => _accountDataSource.count();
+
+  @override
+  bool hasAddress({required AccountAddress accountAddress}) =>
+      _accountDataSource.getByAddress(
         accountAddress: accountAddress.toBytes(),
       ) !=
       null;
 
   @override
-  AptosAccount? findAccountByAddress({
-    required AccountAddress accountAddress,
+  AuthenticatorConfig? getAuthConfigByAuthKey({
+    required AuthenticationKey authKey,
   }) {
-    final AptosAccountLocalModel? account =
-        _accountLocalDataSource.findAccountByAccountAddress(
-      accountAddress: accountAddress.toBytes(),
-    );
-    return account?.toDomain();
-  }
-
-  @override
-  AuthenticatorConfig? findAuthConfigByAuthenticationKey({
-    required AuthenticationKey authenticationKey,
-  }) {
-    final Ed25519AuthKeyConfigLocalModel? config =
-        _ed25519AuthKeyConfigDataSource
-            .findEd25519AuthKeyConfigByAuthenticationKey(
-      authenticationKey: authenticationKey.toBytes(),
-    );
+    final Ed25519AuthKeyConfigLocalModel? config = _ed25519ConfigDataSource
+        .getByAuthKey(authenticationKey: authKey.toBytes());
     if (config == null) {
       return null;
     }
 
-    final JwkLocalModel? jwk = _jwkLocalDataSource.findPublicKeyByKeyId(
-      keyId: config.jwkKeyId,
-    );
-    if (jwk == null) {
+    // final JwkLocalModel? jwk =
+    //     _jwkDataSource.getByKeyId(keyId: config.jwkKeyId);
+    // if (jwk == null) {
+    //   return null;
+    // }
+
+    return AuthenticatorConfig.ed25519(keyId: config.jwkKeyId);
+  }
+
+  @override
+  AuthenticatorConfig? getEd25519AuthConfigsByJwkKeyId({
+    required Uint8List keyId,
+  }) {
+    final Ed25519AuthKeyConfigLocalModel? config =
+        _ed25519ConfigDataSource.getByKeyId(keyId: keyId);
+    if (config == null) {
       return null;
     }
 
-    return AuthenticatorConfig.ed25519(jwk: jwk.toDomain());
+    // final JwkLocalModel? jwk = _jwkDataSource.getByKeyId(keyId: keyId);
+    // if (jwk == null) {
+    //   return <AuthenticatorConfig>[];
+    // }
+
+    return AuthenticatorConfig.ed25519(keyId: config.jwkKeyId);
   }
 
-  @override
-  List<AuthenticatorConfig> findAuthConfigsByJwkKeyId({
-    required Uint8List jwkKeyId,
-  }) {
-    final Ed25519AuthKeyConfigLocalModel? configs =
-        _ed25519AuthKeyConfigDataSource.findEd25519AuthKeyConfigByJwkKeyId(
-      jwkKeyId: jwkKeyId,
-    );
-    if (configs == null) {
-      return <AuthenticatorConfig>[];
-    }
+  // @override
+  // void updateAuthKey({
+  //   required AccountAddress accountAddress,
+  //   required AuthenticationKey newAuthKey,
+  // }) =>
+  //     _store.runInTransaction(TxMode.write, () {
+  //       final AptosAccount? account =
+  //           getByAddress(accountAddress: accountAddress);
+  //       if (account == null) {
+  //         throw StateError('Account not found');
+  //       }
 
-    final JwkLocalModel? jwk =
-        _jwkLocalDataSource.findPublicKeyByKeyId(keyId: jwkKeyId);
-    if (jwk == null) {
-      return <AuthenticatorConfig>[];
-    }
+  //       final AuthenticationKey oldAuthKey = account.authenticationKey;
+  //       final List<AptosAccountLocalModel> otherAccountsWithOldKey =
+  //           _accountDataSource
+  //               .getByAuthKey(authenticationKey: oldAuthKey.toBytes())
+  //               .where(
+  //                 (AptosAccountLocalModel a) =>
+  //                     a.accountAddress != accountAddress.toBytes(),
+  //               )
+  //               .toList();
 
-    return <AuthenticatorConfig>[
-      AuthenticatorConfig.ed25519(jwk: jwk.toDomain()),
-    ];
-  }
+  //       if (otherAccountsWithOldKey.isEmpty) {
+  //         _ed25519ConfigDataSource.deleteByAuthKey(
+  //           authenticationKey: oldAuthKey.toBytes(),
+  //         );
+  //       }
 
-  @override
-  List<AptosAccount> getAllAccounts() => _accountLocalDataSource
-      .getAllAccounts()
-      .map((AptosAccountLocalModel model) => model.toDomain())
-      .toList();
-
-  @override
-  int getAccountCount() => _accountLocalDataSource.countAccounts();
+  //       _accountDataSource.store(
+  //         accountAddress: accountAddress.toBytes(),
+  //         authenticationKey: newAuthKey.toBytes(),
+  //         authenticationKeyScheme: newAuthKey.scheme.toByte(),
+  //       );
+  //     });
 }

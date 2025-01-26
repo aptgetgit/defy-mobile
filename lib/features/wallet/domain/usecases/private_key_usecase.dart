@@ -2,59 +2,59 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:aptos_dart/aptos.dart' as aptos;
-import 'package:aptos_dart/hex_string.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:ed25519_edwards/ed25519_edwards.dart' as ed25519;
 
+import '../../../../shared/utils/hex_utils.dart';
 import '../../data/repositories/entropy_repository_implementation.dart';
-import '../../data/repositories/private_key_repository_implementation.dart';
-import '../../data/repositories/public_key_repository_implementation.dart';
+import '../../data/repositories/jwk_repository_implementation.dart';
+import '../../data/repositories/private_jwk_repository_implementation.dart';
 import '../entities/aptos_derivation_path.dart';
 import '../entities/json_web_key.dart';
 import '../repositories/jwk_repository.dart';
 
 class ImportPrivateKeyUseCase {
-  ImportPrivateKeyUseCase(
-    this._privateKeyRepository,
-    this.jwkRepository,
-  );
+  ImportPrivateKeyUseCase({
+    required PrivateJwkRepository privateJwkRepository,
+    required JwkRepository jwkRepository,
+  })  : _privateJwkRepository = privateJwkRepository,
+        _jwkRepository = jwkRepository;
 
-  final PrivateKeyRepository _privateKeyRepository;
-  final JwkRepository jwkRepository;
+  final PrivateJwkRepository _privateJwkRepository;
+  final JwkRepository _jwkRepository;
 
   Future<Uint8List> call(Uint8List privateKeyBytes) async {
     final ed25519.PrivateKey privateKey =
         ed25519.newKeyFromSeed(privateKeyBytes);
+
     final Jwk jwk = Jwk.fromEd25519PrivateKey(
       privateKeyBytes: Uint8List.fromList(privateKey.bytes.sublist(0, 32)),
     );
+
     final Uint8List jwkKeyId = jwk.keyId;
-    if (await _privateKeyRepository.hasPrivateKey(jwkKeyId: jwkKeyId)) {
-      throw StateError('Private Key already imported');
-    }
-
     try {
-      await _privateKeyRepository.storePrivateKey(jwk: jwk);
+      await _privateJwkRepository.store(jwk: jwk);
 
-      jwkRepository.storeJwkWithKeySourceConfig(
+      await _jwkRepository.store(
         jwk: jwk,
         config: KeySourceConfig.fromSigningKey(jwkThumbprint: jwkKeyId),
       );
 
       return jwkKeyId;
     } catch (e) {
-      await _privateKeyRepository.deletePrivateKey(jwkKeyId: jwkKeyId);
+      await _privateJwkRepository.delete(keyId: jwkKeyId);
       throw StateError('Failed to import key pair: $e');
     }
   }
 }
 
 class ReadPrivateKeyUseCase {
-  ReadPrivateKeyUseCase(this._repository);
-  final PrivateKeyRepository _repository;
+  ReadPrivateKeyUseCase({required PrivateJwkRepository repository})
+      : _repository = repository;
+  final PrivateJwkRepository _repository;
 
-  Future<Jwk> call({required Uint8List jwkKeyId}) async {
-    final Jwk? jwk = await _repository.getPrivateKey(jwkKeyId: jwkKeyId);
+  Future<Jwk> call({required Uint8List keyId}) async {
+    final Jwk? jwk = await _repository.get(keyId: keyId);
     if (jwk == null) {
       throw StateError('Private key not found');
     }
@@ -63,10 +63,11 @@ class ReadPrivateKeyUseCase {
 }
 
 class GeneratePrivateKeyUseCase {
-  GeneratePrivateKeyUseCase(
-    this._entropyRepository,
-    this._jwkRepository,
-  );
+  GeneratePrivateKeyUseCase({
+    required EntropyRepository entropyRepository,
+    required JwkRepository jwkRepository,
+  })  : _entropyRepository = entropyRepository,
+        _jwkRepository = jwkRepository;
 
   final EntropyRepository _entropyRepository;
   final JwkRepository _jwkRepository;
@@ -75,18 +76,22 @@ class GeneratePrivateKeyUseCase {
     required Uint8List entropyHash,
     int? accountIndex,
   }) async {
-    final Uint8List? entropy =
-        await _entropyRepository.getEntropy(entropyHash: entropyHash);
+    final Uint8List? entropy = await _entropyRepository.get(hash: entropyHash);
     if (entropy == null) {
       throw StateError('Mnemonic not found');
     }
 
     try {
-      final List<HdKeySourceConfig> existingHDKeySource = _jwkRepository
-          .findHDKeySourceConfigsByEntropyHash(entropyHash: entropyHash);
+      final List<HDKeySourceConfig> existingHDKeySource = _jwkRepository
+          .getAllHDKeySourceConfigs()
+          .map(((Uint8List, HDKeySourceConfig) data) => data.$2)
+          .toList();
 
       final Iterable<int> existingIndexes = existingHDKeySource
-          .map((HdKeySourceConfig e) => e.derivationPath.accountIndex);
+          .where(
+            (HDKeySourceConfig config) => config.entropyHash == entropyHash,
+          )
+          .map((HDKeySourceConfig e) => e.derivationPath.accountIndex);
 
       final int resolvedAccountIndex =
           accountIndex ?? _getNextAccountIndex(existingIndexes);
@@ -110,17 +115,17 @@ class GeneratePrivateKeyUseCase {
       final Jwk jwk =
           Jwk.fromEd25519PrivateKey(privateKeyBytes: privateKeyBytes);
 
-      final Uint8List jwkKeyId = jwk.keyId;
+      final Uint8List keyId = jwk.keyId;
 
-      _jwkRepository.storeJwkWithKeySourceConfig(
+      await _jwkRepository.store(
         jwk: jwk,
-        config: KeySourceConfig.fromHdKey(
+        config: KeySourceConfig.fromHDKey(
           entropyHash: entropyHash,
           derivationPath: derivationPath,
         ),
       );
 
-      return jwkKeyId;
+      return keyId;
     } catch (e) {
       if (e is StateError) {
         rethrow;
@@ -132,7 +137,7 @@ class GeneratePrivateKeyUseCase {
   Uint8List _derivePrivateKey(Uint8List entropy, Uint8List derivationPath) {
     try {
       final String mnemonic = bip39.entropyToMnemonic(
-        HexString.fromUint8Array(entropy).noPrefix(),
+        bytesToHex(entropy),
       );
 
       final String seed = bip39.mnemonicToSeedHex(mnemonic);

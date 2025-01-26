@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/entities/aptos_account.dart';
-import '../../domain/entities/json_web_key.dart';
 import '../../domain/repositories/aptos_account_repository.dart';
 import '../states/account_generation_flow_state.dart';
 import 'wallet_usecase_provider.dart';
@@ -39,19 +38,19 @@ class AccountGenerationFlowManager extends _$AccountGenerationFlowManager {
     Uint8List entropyHash,
     int? accountIndex,
   ) async {
-    final Uint8List jwkKeyId = await ref
+    final Uint8List keyId = await ref
         .read(generatePrivateKeyUseCaseProvider)
         .call(entropyHash: entropyHash, accountIndex: accountIndex);
-    return _generateFromPrivateKey(jwkKeyId);
+    return _generateFromPrivateKey(keyId);
   }
 
   Future<AptosAccount> _generateFromPrivateKey(Uint8List jwkThumbprint) async {
-    final Jwk jwk = await ref
-        .read(readPrivateKeyUseCaseProvider)
-        .call(jwkKeyId: jwkThumbprint);
-    final AptosAccount account = await ref
-        .read(createAptosAccountUseCaseProvider)
-        .call(authenticatorConfig: AuthenticatorConfig.ed25519(jwk: jwk));
+    final AptosAccount account =
+        await ref.read(createAptosAccountUseCaseProvider).call(
+              authenticatorConfig: AuthenticatorConfig.ed25519(
+                keyId: jwkThumbprint,
+              ),
+            );
     return account;
   }
 

@@ -39,20 +39,20 @@ class _$KeySourceConfigCopyWithImpl<$Res, $Val extends KeySourceConfig>
 }
 
 /// @nodoc
-abstract class _$$HdKeySourceConfigImplCopyWith<$Res> {
-  factory _$$HdKeySourceConfigImplCopyWith(_$HdKeySourceConfigImpl value,
-          $Res Function(_$HdKeySourceConfigImpl) then) =
-      __$$HdKeySourceConfigImplCopyWithImpl<$Res>;
+abstract class _$$HDKeySourceConfigImplCopyWith<$Res> {
+  factory _$$HDKeySourceConfigImplCopyWith(_$HDKeySourceConfigImpl value,
+          $Res Function(_$HDKeySourceConfigImpl) then) =
+      __$$HDKeySourceConfigImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Uint8List entropyHash, AptosDerivationPath derivationPath});
 }
 
 /// @nodoc
-class __$$HdKeySourceConfigImplCopyWithImpl<$Res>
-    extends _$KeySourceConfigCopyWithImpl<$Res, _$HdKeySourceConfigImpl>
-    implements _$$HdKeySourceConfigImplCopyWith<$Res> {
-  __$$HdKeySourceConfigImplCopyWithImpl(_$HdKeySourceConfigImpl _value,
-      $Res Function(_$HdKeySourceConfigImpl) _then)
+class __$$HDKeySourceConfigImplCopyWithImpl<$Res>
+    extends _$KeySourceConfigCopyWithImpl<$Res, _$HDKeySourceConfigImpl>
+    implements _$$HDKeySourceConfigImplCopyWith<$Res> {
+  __$$HDKeySourceConfigImplCopyWithImpl(_$HDKeySourceConfigImpl _value,
+      $Res Function(_$HDKeySourceConfigImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of KeySourceConfig
@@ -63,7 +63,7 @@ class __$$HdKeySourceConfigImplCopyWithImpl<$Res>
     Object? entropyHash = null,
     Object? derivationPath = null,
   }) {
-    return _then(_$HdKeySourceConfigImpl(
+    return _then(_$HDKeySourceConfigImpl(
       entropyHash: null == entropyHash
           ? _value.entropyHash
           : entropyHash // ignore: cast_nullable_to_non_nullable
@@ -78,8 +78,8 @@ class __$$HdKeySourceConfigImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$HdKeySourceConfigImpl implements HdKeySourceConfig {
-  const _$HdKeySourceConfigImpl(
+class _$HDKeySourceConfigImpl implements HDKeySourceConfig {
+  const _$HDKeySourceConfigImpl(
       {required this.entropyHash, required this.derivationPath});
 
   @override
@@ -89,14 +89,14 @@ class _$HdKeySourceConfigImpl implements HdKeySourceConfig {
 
   @override
   String toString() {
-    return 'KeySourceConfig.fromHdKey(entropyHash: $entropyHash, derivationPath: $derivationPath)';
+    return 'KeySourceConfig.fromHDKey(entropyHash: $entropyHash, derivationPath: $derivationPath)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$HdKeySourceConfigImpl &&
+            other is _$HDKeySourceConfigImpl &&
             const DeepCollectionEquality()
                 .equals(other.entropyHash, entropyHash) &&
             (identical(other.derivationPath, derivationPath) ||
@@ -112,16 +112,16 @@ class _$HdKeySourceConfigImpl implements HdKeySourceConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$HdKeySourceConfigImplCopyWith<_$HdKeySourceConfigImpl> get copyWith =>
-      __$$HdKeySourceConfigImplCopyWithImpl<_$HdKeySourceConfigImpl>(
+  _$$HDKeySourceConfigImplCopyWith<_$HDKeySourceConfigImpl> get copyWith =>
+      __$$HDKeySourceConfigImplCopyWithImpl<_$HDKeySourceConfigImpl>(
           this, _$identity);
 }
 
-abstract class HdKeySourceConfig implements KeySourceConfig {
-  const factory HdKeySourceConfig(
+abstract class HDKeySourceConfig implements KeySourceConfig {
+  const factory HDKeySourceConfig(
           {required final Uint8List entropyHash,
           required final AptosDerivationPath derivationPath}) =
-      _$HdKeySourceConfigImpl;
+      _$HDKeySourceConfigImpl;
 
   Uint8List get entropyHash;
   AptosDerivationPath get derivationPath;
@@ -129,7 +129,7 @@ abstract class HdKeySourceConfig implements KeySourceConfig {
   /// Create a copy of KeySourceConfig
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$HdKeySourceConfigImplCopyWith<_$HdKeySourceConfigImpl> get copyWith =>
+  _$$HDKeySourceConfigImplCopyWith<_$HDKeySourceConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

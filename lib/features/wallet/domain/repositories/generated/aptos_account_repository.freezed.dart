@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AuthenticatorConfig {
-  Jwk get jwk => throw _privateConstructorUsedError;
+  Uint8List get keyId => throw _privateConstructorUsedError;
 
   /// Create a copy of AuthenticatorConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -31,9 +31,7 @@ abstract class $AuthenticatorConfigCopyWith<$Res> {
           AuthenticatorConfig value, $Res Function(AuthenticatorConfig) then) =
       _$AuthenticatorConfigCopyWithImpl<$Res, AuthenticatorConfig>;
   @useResult
-  $Res call({Jwk jwk});
-
-  $JwkCopyWith<$Res> get jwk;
+  $Res call({Uint8List keyId});
 }
 
 /// @nodoc
@@ -51,24 +49,14 @@ class _$AuthenticatorConfigCopyWithImpl<$Res, $Val extends AuthenticatorConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? jwk = null,
+    Object? keyId = null,
   }) {
     return _then(_value.copyWith(
-      jwk: null == jwk
-          ? _value.jwk
-          : jwk // ignore: cast_nullable_to_non_nullable
-              as Jwk,
+      keyId: null == keyId
+          ? _value.keyId
+          : keyId // ignore: cast_nullable_to_non_nullable
+              as Uint8List,
     ) as $Val);
-  }
-
-  /// Create a copy of AuthenticatorConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $JwkCopyWith<$Res> get jwk {
-    return $JwkCopyWith<$Res>(_value.jwk, (value) {
-      return _then(_value.copyWith(jwk: value) as $Val);
-    });
   }
 }
 
@@ -81,10 +69,7 @@ abstract class _$$Ed25519AuthenticatorConfigImplCopyWith<$Res>
       __$$Ed25519AuthenticatorConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Jwk jwk});
-
-  @override
-  $JwkCopyWith<$Res> get jwk;
+  $Res call({Uint8List keyId});
 }
 
 /// @nodoc
@@ -102,28 +87,28 @@ class __$$Ed25519AuthenticatorConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? jwk = null,
+    Object? keyId = null,
   }) {
     return _then(_$Ed25519AuthenticatorConfigImpl(
-      jwk: null == jwk
-          ? _value.jwk
-          : jwk // ignore: cast_nullable_to_non_nullable
-              as Jwk,
+      keyId: null == keyId
+          ? _value.keyId
+          : keyId // ignore: cast_nullable_to_non_nullable
+              as Uint8List,
     ));
   }
 }
 
 /// @nodoc
 
-class _$Ed25519AuthenticatorConfigImpl extends Ed25519AuthenticatorConfig {
-  const _$Ed25519AuthenticatorConfigImpl({required this.jwk}) : super._();
+class _$Ed25519AuthenticatorConfigImpl implements Ed25519AuthenticatorConfig {
+  const _$Ed25519AuthenticatorConfigImpl({required this.keyId});
 
   @override
-  final Jwk jwk;
+  final Uint8List keyId;
 
   @override
   String toString() {
-    return 'AuthenticatorConfig.ed25519(jwk: $jwk)';
+    return 'AuthenticatorConfig.ed25519(keyId: $keyId)';
   }
 
   @override
@@ -131,11 +116,12 @@ class _$Ed25519AuthenticatorConfigImpl extends Ed25519AuthenticatorConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Ed25519AuthenticatorConfigImpl &&
-            (identical(other.jwk, jwk) || other.jwk == jwk));
+            const DeepCollectionEquality().equals(other.keyId, keyId));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, jwk);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(keyId));
 
   /// Create a copy of AuthenticatorConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -147,13 +133,12 @@ class _$Ed25519AuthenticatorConfigImpl extends Ed25519AuthenticatorConfig {
           _$Ed25519AuthenticatorConfigImpl>(this, _$identity);
 }
 
-abstract class Ed25519AuthenticatorConfig extends AuthenticatorConfig {
-  const factory Ed25519AuthenticatorConfig({required final Jwk jwk}) =
+abstract class Ed25519AuthenticatorConfig implements AuthenticatorConfig {
+  const factory Ed25519AuthenticatorConfig({required final Uint8List keyId}) =
       _$Ed25519AuthenticatorConfigImpl;
-  const Ed25519AuthenticatorConfig._() : super._();
 
   @override
-  Jwk get jwk;
+  Uint8List get keyId;
 
   /// Create a copy of AuthenticatorConfig
   /// with the given fields replaced by the non-null parameter values.

@@ -9,10 +9,10 @@ part 'generated/jwk_repository.freezed.dart';
 
 @freezed
 sealed class KeySourceConfig with _$KeySourceConfig {
-  const factory KeySourceConfig.fromHdKey({
+  const factory KeySourceConfig.fromHDKey({
     required Uint8List entropyHash,
     required AptosDerivationPath derivationPath,
-  }) = HdKeySourceConfig;
+  }) = HDKeySourceConfig;
 
   const factory KeySourceConfig.fromSigningKey({
     required Uint8List jwkThumbprint,
@@ -20,38 +20,34 @@ sealed class KeySourceConfig with _$KeySourceConfig {
 }
 
 abstract class IJwkRepository {
-  Jwk storeJwkWithKeySourceConfig({
+  Future<Jwk> store({
     required Jwk jwk,
     required KeySourceConfig config,
   });
 
-  Jwk? findJwkByKeyId({required Uint8List jwkKeyId});
+  Jwk? get({required Uint8List keyId});
 
-  bool hasJwkWithKeyId({required Uint8List jwkKeyId});
+  List<Jwk> getAll();
 
-  HdKeySourceConfig? findHDKeySourceConfigByJwKeyId({
-    required Uint8List jwkKeyId,
+  int count();
+
+  bool has({required Uint8List keyId});
+
+  HDKeySourceConfig? getHDKeySourceConfig({
+    required Uint8List keyId,
   });
 
-  SigningKeySourceConfig? findSigningKeySourceConfigByJwKeyId({
-    required Uint8List jwkKeyId,
+  SigningKeySourceConfig? getSigningKeySourceConfig({
+    required Uint8List keyId,
   });
 
-  List<HdKeySourceConfig> findHDKeySourceConfigsByEntropyHash({
-    required Uint8List entropyHash,
-  });
+  void delete({required Uint8List keyId});
 
-  List<Jwk> findJwksByEntropyHash({
-    required Uint8List entropyHash,
-  });
+  void deleteMany(List<Uint8List> keyIds);
 
-  void deleteJwkByKeyId({required Uint8List jwkKeyId});
+  void clear();
 
-  int getJwkCount();
+  List<(Uint8List, HDKeySourceConfig)> getAllHDKeySourceConfigs();
 
-  List<Jwk> getAllJwks();
-
-  List<HdKeySourceConfig> getAllHDKeySourceConfigs();
-
-  List<SigningKeySourceConfig> getAllSigningKeySourceConfigs();
+  List<(Uint8List, SigningKeySourceConfig)> getAllSigningKeySourceConfigs();
 }

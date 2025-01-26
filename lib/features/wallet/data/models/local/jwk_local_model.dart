@@ -28,14 +28,12 @@ class JwkLocalModel {
       );
 
   Jwk toDomain() {
-    // If y is null, it's Ed25519
     if (y == null) {
       return Jwk.ed25519(
         x: x,
       );
     }
 
-    // Otherwise check curve for secp256k1 vs secp256r1
     return switch (curve) {
       'secp256k1' => Jwk.secp256k1(
           x: x,

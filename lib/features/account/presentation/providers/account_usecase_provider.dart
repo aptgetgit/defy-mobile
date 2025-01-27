@@ -20,7 +20,7 @@ import '../../domain/usecases/aptos_account_usecase.dart';
 import '../../domain/usecases/mnemonic_usecase.dart';
 import '../../domain/usecases/private_key_usecase.dart';
 
-part 'generated/wallet_usecase_provider.g.dart';
+part 'generated/account_usecase_provider.g.dart';
 
 @riverpod
 EntropyRepository entropyRepository(Ref ref) {

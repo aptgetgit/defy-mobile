@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/entities/aptos_account.dart';
 import '../../domain/repositories/aptos_account_repository.dart';
 import '../states/account_generation_flow_state.dart';
-import 'wallet_usecase_provider.dart';
+import 'account_usecase_provider.dart';
 
 part 'generated/account_generation_flow_manager.g.dart';
 

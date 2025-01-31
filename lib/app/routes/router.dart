@@ -1,5 +1,21 @@
 import 'dart:async';
 
+import 'package:defy/features/explore/presentation/scrceens/create_token_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_coins_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_dapps_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_leaderboard.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_market_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_nft_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_pump_fun_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_pump_fun_token_transactions_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/explore_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/pump_fun_token_preview_screen.dart';
+import 'package:defy/features/explore/presentation/scrceens/search_screen.dart';
+import 'package:defy/features/receive/screens/receive_screen.dart';
+import 'package:defy/features/receive/screens/receive_select_screen.dart';
+import 'package:defy/features/receive/screens/receive_amount_screen.dart';
+import 'package:defy/features/receive/screens/receive_share_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +31,8 @@ part 'generated/router.g.dart';
 part 'home_route.dart';
 part 'onboarding_route.dart';
 part 'splash_route.dart';
+part 'explore_route.dart';
+part 'receive_route.dart';
 
 @freezed
 class AppRoute with _$AppRoute {
@@ -29,7 +47,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const SplashRoute().location,
+      initialLocation: const ReceiveScreenRoute().location,
       routes: $appRoutes,
       errorBuilder: (BuildContext context, GoRouterState state) =>
           const Scaffold(

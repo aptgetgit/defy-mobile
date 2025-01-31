@@ -94,6 +94,7 @@ class AppTheme {
 
   static TextStyle _baseTextStyle(
     bool isDark,
+    
     double fontSize,
     FontWeight fontWeight,
   ) =>

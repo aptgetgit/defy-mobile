@@ -10,6 +10,22 @@ List<RouteBase> get $appRoutes => [
       $homeRoute,
       $onboardingRoute,
       $splashRoute,
+      $exploreScreenRoute,
+      $exploreSearchScreenRoute,
+      $exploreMarketScreenRoute,
+      $exploreNFTScreenRoute,
+      $exploreDappsScreenRoute,
+      $exploreCoinsScreenRoute,
+      $explorePumpFunScreenRoute,
+      $explorePumpFunTokenTransactionsScreenRoute,
+      $createTokenScreenRoute,
+      $pumpFunTokenPreviewScreenRoute,
+      $exploreLeaderboardScreenRoute,
+      $receiveScreenRoute,
+      $receiveSelectScreenRoute,
+      $receiveAmountScreenRoute,
+      $receiveShareScreenRoute,
+      $receiveMethodScreenRoute,
     ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -79,11 +95,383 @@ extension $SplashRouteExtension on SplashRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $exploreScreenRoute => GoRouteData.$route(
+      path: '/explore',
+      factory: $ExploreScreenRouteExtension._fromState,
+    );
+
+extension $ExploreScreenRouteExtension on ExploreScreenRoute {
+  static ExploreScreenRoute _fromState(GoRouterState state) =>
+      const ExploreScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreSearchScreenRoute => GoRouteData.$route(
+      path: '/explore-search',
+      factory: $ExploreSearchScreenRouteExtension._fromState,
+    );
+
+extension $ExploreSearchScreenRouteExtension on ExploreSearchScreenRoute {
+  static ExploreSearchScreenRoute _fromState(GoRouterState state) =>
+      const ExploreSearchScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-search',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreMarketScreenRoute => GoRouteData.$route(
+      path: '/explore-market',
+      factory: $ExploreMarketScreenRouteExtension._fromState,
+    );
+
+extension $ExploreMarketScreenRouteExtension on ExploreMarketScreenRoute {
+  static ExploreMarketScreenRoute _fromState(GoRouterState state) =>
+      const ExploreMarketScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-market',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreNFTScreenRoute => GoRouteData.$route(
+      path: '/explore-nft',
+      factory: $ExploreNFTScreenRouteExtension._fromState,
+    );
+
+extension $ExploreNFTScreenRouteExtension on ExploreNFTScreenRoute {
+  static ExploreNFTScreenRoute _fromState(GoRouterState state) =>
+      const ExploreNFTScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-nft',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreDappsScreenRoute => GoRouteData.$route(
+      path: '/explore-dapps',
+      factory: $ExploreDappsScreenRouteExtension._fromState,
+    );
+
+extension $ExploreDappsScreenRouteExtension on ExploreDappsScreenRoute {
+  static ExploreDappsScreenRoute _fromState(GoRouterState state) =>
+      const ExploreDappsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-dapps',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreCoinsScreenRoute => GoRouteData.$route(
+      path: '/explore-coins',
+      factory: $ExploreCoinsScreenRouteExtension._fromState,
+    );
+
+extension $ExploreCoinsScreenRouteExtension on ExploreCoinsScreenRoute {
+  static ExploreCoinsScreenRoute _fromState(GoRouterState state) =>
+      const ExploreCoinsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-coins',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $explorePumpFunScreenRoute => GoRouteData.$route(
+      path: '/explore-pump-fun',
+      factory: $ExplorePumpFunScreenRouteExtension._fromState,
+    );
+
+extension $ExplorePumpFunScreenRouteExtension on ExplorePumpFunScreenRoute {
+  static ExplorePumpFunScreenRoute _fromState(GoRouterState state) =>
+      const ExplorePumpFunScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-pump-fun',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $explorePumpFunTokenTransactionsScreenRoute => GoRouteData.$route(
+      path: '/explore-pump-fun-transactions',
+      factory: $ExplorePumpFunTokenTransactionsScreenRouteExtension._fromState,
+    );
+
+extension $ExplorePumpFunTokenTransactionsScreenRouteExtension
+    on ExplorePumpFunTokenTransactionsScreenRoute {
+  static ExplorePumpFunTokenTransactionsScreenRoute _fromState(
+          GoRouterState state) =>
+      const ExplorePumpFunTokenTransactionsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-pump-fun-transactions',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $createTokenScreenRoute => GoRouteData.$route(
+      path: '/explore-create-token',
+      factory: $CreateTokenScreenRouteExtension._fromState,
+    );
+
+extension $CreateTokenScreenRouteExtension on CreateTokenScreenRoute {
+  static CreateTokenScreenRoute _fromState(GoRouterState state) =>
+      const CreateTokenScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-create-token',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $pumpFunTokenPreviewScreenRoute => GoRouteData.$route(
+      path: '/explore-pump-fun-token-preview',
+      factory: $PumpFunTokenPreviewScreenRouteExtension._fromState,
+    );
+
+extension $PumpFunTokenPreviewScreenRouteExtension
+    on PumpFunTokenPreviewScreenRoute {
+  static PumpFunTokenPreviewScreenRoute _fromState(GoRouterState state) =>
+      const PumpFunTokenPreviewScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-pump-fun-token-preview',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreLeaderboardScreenRoute => GoRouteData.$route(
+      path: '/explore-leaderboard',
+      factory: $ExploreLeaderboardScreenRouteExtension._fromState,
+    );
+
+extension $ExploreLeaderboardScreenRouteExtension
+    on ExploreLeaderboardScreenRoute {
+  static ExploreLeaderboardScreenRoute _fromState(GoRouterState state) =>
+      const ExploreLeaderboardScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-leaderboard',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $receiveScreenRoute => GoRouteData.$route(
+      path: '/receive',
+      factory: $ReceiveScreenRouteExtension._fromState,
+    );
+
+extension $ReceiveScreenRouteExtension on ReceiveScreenRoute {
+  static ReceiveScreenRoute _fromState(GoRouterState state) =>
+      const ReceiveScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/receive',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $receiveSelectScreenRoute => GoRouteData.$route(
+      path: '/receive-select',
+      factory: $ReceiveSelectScreenRouteExtension._fromState,
+    );
+
+extension $ReceiveSelectScreenRouteExtension on ReceiveSelectScreenRoute {
+  static ReceiveSelectScreenRoute _fromState(GoRouterState state) =>
+      const ReceiveSelectScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/receive-select',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $receiveAmountScreenRoute => GoRouteData.$route(
+      path: '/receive-amount',
+      factory: $ReceiveAmountScreenRouteExtension._fromState,
+    );
+
+extension $ReceiveAmountScreenRouteExtension on ReceiveAmountScreenRoute {
+  static ReceiveAmountScreenRoute _fromState(GoRouterState state) =>
+      const ReceiveAmountScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/receive-amount',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $receiveShareScreenRoute => GoRouteData.$route(
+      path: '/receive-share',
+      factory: $ReceiveShareScreenRouteExtension._fromState,
+    );
+
+extension $ReceiveShareScreenRouteExtension on ReceiveShareScreenRoute {
+  static ReceiveShareScreenRoute _fromState(GoRouterState state) =>
+      const ReceiveShareScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/receive-share',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $receiveMethodScreenRoute => GoRouteData.$route(
+      path: '/receive-method',
+      factory: $ReceiveMethodScreenRouteExtension._fromState,
+    );
+
+extension $ReceiveMethodScreenRouteExtension on ReceiveMethodScreenRoute {
+  static ReceiveMethodScreenRoute _fromState(GoRouterState state) =>
+      const ReceiveMethodScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/receive-method',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'5d1c5f20c8d2c83569d438dfa5a67bcaf352af79';
+String _$routerHash() => r'3d06c19edab6a4e6660f76f0475dbd7d200ee189';
 
 /// See also [router].
 @ProviderFor(router)

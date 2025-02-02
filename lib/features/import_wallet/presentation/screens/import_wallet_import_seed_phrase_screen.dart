@@ -47,8 +47,8 @@ class _ImportWalletImportSeedPhraseScreenState
   }
 
   void _importMnemonic() {
-  final String mnemonic = _words.join(' ');
-  ref.read(accountGenerationFlowManagerProvider.notifier).importMnemonic(mnemonic);
+  // final String mnemonic = _words.join(' ');
+  // ref.read(accountGenerationFlowManagerProvider.notifier).importMnemonic(mnemonic);
 }
 
 

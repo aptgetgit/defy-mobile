@@ -62,11 +62,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   void _skipOnboarding(BuildContext context) {
-    const HomeRoute().pushReplacement(context);
+    const LoginPageRoute().pushReplacement(context);
   }
 
   void _finishOnboarding(BuildContext context) {
-    const HomeRoute().pushReplacement(context);
+    const LoginPageRoute().pushReplacement(context);
   }
 
   @override
@@ -164,6 +164,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              const Spacer(),
+              Image.asset(
+                getImagePath(index),
+                width: index == 1
+                    ? context.screenWidth * 0.8
+                    : context.screenWidth * 0.9,
+                height: index == 1
+                    ? context.screenHeight * 0.3
+                    : context.screenHeight * 0.4,
+              ),
+              const Spacer(),
               Text(
                 title,
                 style: const TextStyle(
@@ -257,6 +268,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               duration: const Duration(milliseconds: 280),
             ),
       );
+
+  String getImagePath(int index) {
+    if (index == 0) {
+      return Assets.images.onboarding1.path;
+    } else if (index == 1) {
+      return Assets.images.onboarding2.path;
+    } else if (index == 2) {
+      return Assets.images.onboarding3.path;
+    } else {
+      return Assets.images.onboarding4.path;
+    }
+  }
 }
 
 class _PageDot extends StatelessWidget {

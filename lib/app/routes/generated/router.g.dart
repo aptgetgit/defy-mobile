@@ -9,7 +9,15 @@ part of '../router.dart';
 List<RouteBase> get $appRoutes => [
       $homeRoute,
       $onboardingRoute,
+      $loginPageRoute,
+      $accountSetUpFullNameScreenRoute,
+      $accountSetUpUsernameScreenRoute,
       $splashRoute,
+      $waitlistScreenRoute,
+      $walletCreationScreenRoute,
+      $walletCreationWalletNameScreenRoute,
+      $walletCreationWalletBackgroundScreenRoute,
+      $importWalletScreenRoute,
     ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -57,6 +65,77 @@ extension $OnboardingRouteExtension on OnboardingRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $loginPageRoute => GoRouteData.$route(
+      path: '/login',
+      factory: $LoginPageRouteExtension._fromState,
+    );
+
+extension $LoginPageRouteExtension on LoginPageRoute {
+  static LoginPageRoute _fromState(GoRouterState state) =>
+      const LoginPageRoute();
+
+  String get location => GoRouteData.$location(
+        '/login',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $accountSetUpFullNameScreenRoute => GoRouteData.$route(
+      path: '/account-set-up-full-name',
+      factory: $AccountSetUpFullNameScreenRouteExtension._fromState,
+    );
+
+extension $AccountSetUpFullNameScreenRouteExtension
+    on AccountSetUpFullNameScreenRoute {
+  static AccountSetUpFullNameScreenRoute _fromState(GoRouterState state) =>
+      const AccountSetUpFullNameScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/account-set-up-full-name',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $accountSetUpUsernameScreenRoute => GoRouteData.$route(
+      path: '/account-set-up-username',
+      factory: $AccountSetUpUsernameScreenRouteExtension._fromState,
+    );
+
+extension $AccountSetUpUsernameScreenRouteExtension
+    on AccountSetUpUsernameScreenRoute {
+  static AccountSetUpUsernameScreenRoute _fromState(GoRouterState state) =>
+      const AccountSetUpUsernameScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/account-set-up-username',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $splashRoute => GoRouteData.$route(
       path: '/splash',
       factory: $SplashRouteExtension._fromState,
@@ -79,11 +158,129 @@ extension $SplashRouteExtension on SplashRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $waitlistScreenRoute => GoRouteData.$route(
+      path: '/waitlist',
+      factory: $WaitlistScreenRouteExtension._fromState,
+    );
+
+extension $WaitlistScreenRouteExtension on WaitlistScreenRoute {
+  static WaitlistScreenRoute _fromState(GoRouterState state) =>
+      const WaitlistScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/waitlist',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletCreationScreenRoute => GoRouteData.$route(
+      path: '/wallet-creation',
+      factory: $WalletCreationScreenRouteExtension._fromState,
+    );
+
+extension $WalletCreationScreenRouteExtension on WalletCreationScreenRoute {
+  static WalletCreationScreenRoute _fromState(GoRouterState state) =>
+      const WalletCreationScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-creation',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletCreationWalletNameScreenRoute => GoRouteData.$route(
+      path: '/wallet-creation/wallet-name',
+      factory: $WalletCreationWalletNameScreenRouteExtension._fromState,
+    );
+
+extension $WalletCreationWalletNameScreenRouteExtension
+    on WalletCreationWalletNameScreenRoute {
+  static WalletCreationWalletNameScreenRoute _fromState(GoRouterState state) =>
+      const WalletCreationWalletNameScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-creation/wallet-name',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletCreationWalletBackgroundScreenRoute => GoRouteData.$route(
+      path: '/wallet-creation/wallet-background',
+      factory: $WalletCreationWalletBackgroundScreenRouteExtension._fromState,
+    );
+
+extension $WalletCreationWalletBackgroundScreenRouteExtension
+    on WalletCreationWalletBackgroundScreenRoute {
+  static WalletCreationWalletBackgroundScreenRoute _fromState(
+          GoRouterState state) =>
+      const WalletCreationWalletBackgroundScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-creation/wallet-background',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $importWalletScreenRoute => GoRouteData.$route(
+      path: '/wallet-creation/import-wallet',
+      factory: $ImportWalletScreenRouteExtension._fromState,
+    );
+
+extension $ImportWalletScreenRouteExtension on ImportWalletScreenRoute {
+  static ImportWalletScreenRoute _fromState(GoRouterState state) =>
+      const ImportWalletScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-creation/import-wallet',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'5d1c5f20c8d2c83569d438dfa5a67bcaf352af79';
+String _$routerHash() => r'dcb0553649d6d72575e52e3fed44b3d8400440e3';
 
 /// See also [router].
 @ProviderFor(router)

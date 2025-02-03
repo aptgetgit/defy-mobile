@@ -15,14 +15,11 @@ sealed class AuthenticatorConfig with _$AuthenticatorConfig {
     required Uint8List keyId,
   }) = Ed25519AuthenticatorConfig;
 
-  // const AuthenticatorConfig._();
+  const AuthenticatorConfig._();
 
-  // AuthenticationKey toAuthenticationKey() => switch (this) {
-  //       Ed25519AuthenticatorConfig(:final Jwk jwk) =>
-  //         AuthenticationKey.ed25519SchemeFromPublicKey(
-  //           publicKeyBytes: jwk.x,
-  //         ),
-  //     };
+  AuthenticationKeyScheme get scheme => switch (this) {
+        Ed25519AuthenticatorConfig() => AuthenticationKeyScheme.ed25519,
+      };
 }
 
 abstract class IAptosAccountRepository {

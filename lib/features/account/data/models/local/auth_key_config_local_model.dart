@@ -2,15 +2,17 @@ import 'dart:typed_data';
 
 import 'package:objectbox/objectbox.dart';
 
+import '../../../../../shared/utils/crypto_utils.dart';
+
 @Entity()
 class Ed25519AuthKeyConfigLocalModel {
   Ed25519AuthKeyConfigLocalModel({
     required this.authenticationKey,
     required this.jwkKeyId,
-  });
+  }) : localId = bytes32ToInt(authenticationKey);
 
-  @Id(assignable: false)
-  int localId = 0;
+  @Id(assignable: true)
+  int localId;
 
   @Property(type: PropertyType.byte, signed: false)
   final int authenticationKeyScheme = 0x00;

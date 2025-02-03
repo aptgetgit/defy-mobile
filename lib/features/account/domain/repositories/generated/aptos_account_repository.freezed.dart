@@ -100,8 +100,8 @@ class __$$Ed25519AuthenticatorConfigImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Ed25519AuthenticatorConfigImpl implements Ed25519AuthenticatorConfig {
-  const _$Ed25519AuthenticatorConfigImpl({required this.keyId});
+class _$Ed25519AuthenticatorConfigImpl extends Ed25519AuthenticatorConfig {
+  const _$Ed25519AuthenticatorConfigImpl({required this.keyId}) : super._();
 
   @override
   final Uint8List keyId;
@@ -133,9 +133,10 @@ class _$Ed25519AuthenticatorConfigImpl implements Ed25519AuthenticatorConfig {
           _$Ed25519AuthenticatorConfigImpl>(this, _$identity);
 }
 
-abstract class Ed25519AuthenticatorConfig implements AuthenticatorConfig {
+abstract class Ed25519AuthenticatorConfig extends AuthenticatorConfig {
   const factory Ed25519AuthenticatorConfig({required final Uint8List keyId}) =
       _$Ed25519AuthenticatorConfigImpl;
+  const Ed25519AuthenticatorConfig._() : super._();
 
   @override
   Uint8List get keyId;

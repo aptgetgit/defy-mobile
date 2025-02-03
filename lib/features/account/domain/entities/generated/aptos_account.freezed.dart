@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AptosAccount {
   AccountAddress get accountAddress => throw _privateConstructorUsedError;
   AuthenticationKey get authenticationKey => throw _privateConstructorUsedError;
+  AuthenticationKeyScheme get authenticationKeyScheme =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of AptosAccount
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +35,9 @@ abstract class $AptosAccountCopyWith<$Res> {
       _$AptosAccountCopyWithImpl<$Res, AptosAccount>;
   @useResult
   $Res call(
-      {AccountAddress accountAddress, AuthenticationKey authenticationKey});
+      {AccountAddress accountAddress,
+      AuthenticationKey authenticationKey,
+      AuthenticationKeyScheme authenticationKeyScheme});
 
   $AccountAddressCopyWith<$Res> get accountAddress;
   $AuthenticationKeyCopyWith<$Res> get authenticationKey;
@@ -56,6 +60,7 @@ class _$AptosAccountCopyWithImpl<$Res, $Val extends AptosAccount>
   $Res call({
     Object? accountAddress = null,
     Object? authenticationKey = null,
+    Object? authenticationKeyScheme = null,
   }) {
     return _then(_value.copyWith(
       accountAddress: null == accountAddress
@@ -66,6 +71,10 @@ class _$AptosAccountCopyWithImpl<$Res, $Val extends AptosAccount>
           ? _value.authenticationKey
           : authenticationKey // ignore: cast_nullable_to_non_nullable
               as AuthenticationKey,
+      authenticationKeyScheme: null == authenticationKeyScheme
+          ? _value.authenticationKeyScheme
+          : authenticationKeyScheme // ignore: cast_nullable_to_non_nullable
+              as AuthenticationKeyScheme,
     ) as $Val);
   }
 
@@ -99,7 +108,9 @@ abstract class _$$AptosAccountImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {AccountAddress accountAddress, AuthenticationKey authenticationKey});
+      {AccountAddress accountAddress,
+      AuthenticationKey authenticationKey,
+      AuthenticationKeyScheme authenticationKeyScheme});
 
   @override
   $AccountAddressCopyWith<$Res> get accountAddress;
@@ -122,6 +133,7 @@ class __$$AptosAccountImplCopyWithImpl<$Res>
   $Res call({
     Object? accountAddress = null,
     Object? authenticationKey = null,
+    Object? authenticationKeyScheme = null,
   }) {
     return _then(_$AptosAccountImpl(
       accountAddress: null == accountAddress
@@ -132,6 +144,10 @@ class __$$AptosAccountImplCopyWithImpl<$Res>
           ? _value.authenticationKey
           : authenticationKey // ignore: cast_nullable_to_non_nullable
               as AuthenticationKey,
+      authenticationKeyScheme: null == authenticationKeyScheme
+          ? _value.authenticationKeyScheme
+          : authenticationKeyScheme // ignore: cast_nullable_to_non_nullable
+              as AuthenticationKeyScheme,
     ));
   }
 }
@@ -140,13 +156,17 @@ class __$$AptosAccountImplCopyWithImpl<$Res>
 
 class _$AptosAccountImpl extends _AptosAccount {
   const _$AptosAccountImpl(
-      {required this.accountAddress, required this.authenticationKey})
+      {required this.accountAddress,
+      required this.authenticationKey,
+      required this.authenticationKeyScheme})
       : super._();
 
   @override
   final AccountAddress accountAddress;
   @override
   final AuthenticationKey authenticationKey;
+  @override
+  final AuthenticationKeyScheme authenticationKeyScheme;
 
   @override
   bool operator ==(Object other) {
@@ -156,12 +176,15 @@ class _$AptosAccountImpl extends _AptosAccount {
             (identical(other.accountAddress, accountAddress) ||
                 other.accountAddress == accountAddress) &&
             (identical(other.authenticationKey, authenticationKey) ||
-                other.authenticationKey == authenticationKey));
+                other.authenticationKey == authenticationKey) &&
+            (identical(
+                    other.authenticationKeyScheme, authenticationKeyScheme) ||
+                other.authenticationKeyScheme == authenticationKeyScheme));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, accountAddress, authenticationKey);
+  int get hashCode => Object.hash(
+      runtimeType, accountAddress, authenticationKey, authenticationKeyScheme);
 
   /// Create a copy of AptosAccount
   /// with the given fields replaced by the non-null parameter values.
@@ -174,14 +197,18 @@ class _$AptosAccountImpl extends _AptosAccount {
 
 abstract class _AptosAccount extends AptosAccount {
   const factory _AptosAccount(
-      {required final AccountAddress accountAddress,
-      required final AuthenticationKey authenticationKey}) = _$AptosAccountImpl;
+          {required final AccountAddress accountAddress,
+          required final AuthenticationKey authenticationKey,
+          required final AuthenticationKeyScheme authenticationKeyScheme}) =
+      _$AptosAccountImpl;
   const _AptosAccount._() : super._();
 
   @override
   AccountAddress get accountAddress;
   @override
   AuthenticationKey get authenticationKey;
+  @override
+  AuthenticationKeyScheme get authenticationKeyScheme;
 
   /// Create a copy of AptosAccount
   /// with the given fields replaced by the non-null parameter values.

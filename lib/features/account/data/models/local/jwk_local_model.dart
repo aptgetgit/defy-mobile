@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:objectbox/objectbox.dart';
 
+import '../../../../../shared/utils/crypto_utils.dart';
 import '../../../domain/entities/json_web_key.dart';
 
 @Entity()
@@ -12,7 +13,7 @@ class JwkLocalModel {
     required this.curve,
     required this.x,
     this.y,
-  });
+  }) : localId = bytes32ToInt(keyId);
 
   factory JwkLocalModel.fromDomain(Jwk jwk) => JwkLocalModel(
         keyId: jwk.keyId,
@@ -47,8 +48,8 @@ class JwkLocalModel {
     };
   }
 
-  @Id(assignable: false)
-  int localId = 0;
+  @Id(assignable: true)
+  int localId;
 
   @Property(type: PropertyType.byteVector, signed: false)
   final Uint8List keyId;

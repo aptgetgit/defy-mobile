@@ -37,6 +37,8 @@ class AptosAccountRepository implements IAptosAccountRepository {
   }) =>
       _store.runInTransaction(TxMode.write, () {
         final AuthenticationKey authKey = _storeAuthConfig(config: config);
+        final AuthenticationKeyScheme scheme = config.scheme;
+
         return _accountDataSource
             .store(
               accountAddress: accountAddress?.toBytes() ??
@@ -44,7 +46,7 @@ class AptosAccountRepository implements IAptosAccountRepository {
                     authenticationKey: authKey,
                   ).toBytes(),
               authenticationKey: authKey.toBytes(),
-              authenticationKeyScheme: authKey.scheme.toByte(),
+              authenticationKeyScheme: scheme.toByte(),
             )
             .toDomain();
       });

@@ -6,10 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../features/browser/presentation/screens/browser_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 
+part 'browser_route.dart';
 part 'generated/router.freezed.dart';
 part 'generated/router.g.dart';
 part 'home_route.dart';
@@ -29,7 +31,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const SplashRoute().location,
+      initialLocation: const BrowserRoute().location,
       routes: $appRoutes,
       errorBuilder: (BuildContext context, GoRouterState state) =>
           const Scaffold(

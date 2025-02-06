@@ -27,10 +27,21 @@ class $AssetsIconsGen {
   List<AssetGenImage> get values => [appIcon, appLogoDark, appLogoLight];
 }
 
+class $AssetsScriptsGen {
+  const $AssetsScriptsGen();
+
+  /// File path: assets/scripts/wallet.js
+  String get wallet => 'assets/scripts/wallet.js';
+
+  /// List of all assets
+  List<String> get values => [wallet];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsScriptsGen scripts = $AssetsScriptsGen();
 }
 
 class AssetGenImage {

@@ -46,18 +46,18 @@ class PrivateJwkRepository implements IPrivateJwkRepository {
 
   @override
   Future<void> delete({required Uint8List keyId}) =>
-      _store.runInTransaction(TxMode.read, () async {
+      _store.runInTransaction(TxMode.read, () {
         if (_signingKeyDataSource.getByKeyId(keyId: keyId) != null) {
           throw StateError(
             'Cannot delete: key is used in signing configuration',
           );
         }
-        await _privateJwkDataSource.delete(keyId: keyId);
+        return _privateJwkDataSource.delete(keyId: keyId);
       });
 
   @override
   Future<void> deleteMany(List<Uint8List> keyIds) =>
-      _store.runInTransaction(TxMode.read, () async {
+      _store.runInTransaction(TxMode.read, () {
         for (final Uint8List keyId in keyIds) {
           if (_signingKeyDataSource.getByKeyId(keyId: keyId) != null) {
             throw StateError(
@@ -65,7 +65,7 @@ class PrivateJwkRepository implements IPrivateJwkRepository {
             );
           }
         }
-        await _privateJwkDataSource.deleteMany(keyIds);
+        return _privateJwkDataSource.deleteMany(keyIds);
       });
 
   @override
@@ -76,15 +76,14 @@ class PrivateJwkRepository implements IPrivateJwkRepository {
       _privateJwkDataSource.getAllKeyIds();
 
   @override
-  Future<void> clear() => _store.runInTransaction(TxMode.read, () async {
-        final List<Uint8List> keyIds = await getAllKeyIds();
-        for (final Uint8List keyId in keyIds) {
-          if (_signingKeyDataSource.getByKeyId(keyId: keyId) != null) {
-            throw StateError(
-              'Cannot clear: keys used in signing configuration',
-            );
-          }
-        }
-        await _privateJwkDataSource.clear();
-      });
+  Future<void> clear() async {
+    final List<Uint8List> keyIds = await getAllKeyIds();
+
+    for (final Uint8List keyId in keyIds) {
+      if (_signingKeyDataSource.getByKeyId(keyId: keyId) != null) {
+        throw StateError('Cannot clear: keys used in signing configuration');
+      }
+    }
+    return _store.runInTransaction(TxMode.read, _privateJwkDataSource.clear);
+  }
 }

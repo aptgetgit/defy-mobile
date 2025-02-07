@@ -45,23 +45,25 @@ class EntropyRepository implements IEntropyRepository {
       _entropyDataSource.has(hash: hash);
 
   @override
-  Future<void> delete({required Uint8List hash}) =>
-      _store.runInTransaction(TxMode.read, () async {
-        if (_hdKeyDataSource.getByEntropy(entropyHash: hash).isNotEmpty) {
-          throw StateError('Cannot delete: entropy is used in HD derivation');
-        }
-        await _entropyDataSource.delete(hash: hash);
-      });
+  Future<void> delete({required Uint8List hash}) async {
+    if (_hdKeyDataSource.getByEntropy(entropyHash: hash).isNotEmpty) {
+      throw StateError('Cannot delete: entropy is used in HD derivation');
+    }
+
+    return _store.runInTransaction(TxMode.read, () {
+      _entropyDataSource.delete(hash: hash);
+    });
+  }
 
   @override
   Future<void> deleteMany(List<Uint8List> hashes) =>
-      _store.runInTransaction(TxMode.read, () async {
+      _store.runInTransaction(TxMode.read, () {
         for (final Uint8List hash in hashes) {
           if (_hdKeyDataSource.getByEntropy(entropyHash: hash).isNotEmpty) {
             throw StateError('Cannot delete: entropy is used in HD derivation');
           }
         }
-        await _entropyDataSource.deleteMany(hashes);
+        return _entropyDataSource.deleteMany(hashes);
       });
 
   @override
@@ -71,13 +73,15 @@ class EntropyRepository implements IEntropyRepository {
   Future<List<Uint8List>> getAllHashes() => _entropyDataSource.getAllHashes();
 
   @override
-  Future<void> clear() => _store.runInTransaction(TxMode.read, () async {
-        final List<Uint8List> hashes = await getAllHashes();
-        for (final Uint8List hash in hashes) {
-          if (_hdKeyDataSource.getByEntropy(entropyHash: hash).isNotEmpty) {
-            throw StateError('Cannot clear: entropy is used in HD derivation');
-          }
-        }
-        await _entropyDataSource.clear();
-      });
+  Future<void> clear() async {
+    final List<Uint8List> hashes = await getAllHashes();
+
+    for (final Uint8List hash in hashes) {
+      if (_hdKeyDataSource.getByEntropy(entropyHash: hash).isNotEmpty) {
+        throw StateError('Cannot clear: entropy is used in HD derivation');
+      }
+    }
+    
+    return _store.runInTransaction(TxMode.read, _entropyDataSource.clear);
+  }
 }

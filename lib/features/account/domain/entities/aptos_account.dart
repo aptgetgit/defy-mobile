@@ -11,22 +11,22 @@ class AptosAccount with _$AptosAccount {
   const factory AptosAccount({
     required AccountAddress accountAddress,
     required AuthenticationKey authenticationKey,
+    required AuthenticationKeyScheme authenticationKeyScheme,
   }) = _AptosAccount;
 
   const AptosAccount._();
 
   factory AptosAccount.fromAuthenticationKey({
     required AuthenticationKey authenticationKey,
+    required AuthenticationKeyScheme authenticationKeyScheme,
   }) =>
       AptosAccount(
         accountAddress: AccountAddress.fromAuthenticationKey(
           authenticationKey: authenticationKey,
         ),
         authenticationKey: authenticationKey,
+        authenticationKeyScheme: authenticationKeyScheme,
       );
-
-  AuthenticationKeyScheme get authenticationKeyScheme =>
-      authenticationKey.scheme;
 
   String toHex() => accountAddress.toHex();
 

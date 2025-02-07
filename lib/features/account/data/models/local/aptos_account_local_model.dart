@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:objectbox/objectbox.dart';
 
+import '../../../../../shared/utils/crypto_utils.dart';
 import '../../../domain/entities/account_address.dart';
 import '../../../domain/entities/aptos_account.dart';
 import '../../../domain/entities/authentication_key.dart';
@@ -13,7 +14,7 @@ class AptosAccountLocalModel {
     required this.accountAddress,
     required this.authenticationKey,
     required this.authenticationKeyScheme,
-  });
+  }) : localId = bytes32ToInt(accountAddress);
 
   factory AptosAccountLocalModel.fromDomain(AptosAccount account) =>
       AptosAccountLocalModel(
@@ -22,8 +23,8 @@ class AptosAccountLocalModel {
         authenticationKeyScheme: account.authenticationKeyScheme.toByte(),
       );
 
-  @Id(assignable: false)
-  int localId = 0;
+  @Id(assignable: true)
+  int localId;
 
   @Property(type: PropertyType.byteVector, signed: false)
   final Uint8List accountAddress;
@@ -39,7 +40,9 @@ class AptosAccountLocalModel {
         authenticationKey: switch (
             AuthenticationKeyScheme.fromByte(authenticationKeyScheme)) {
           AuthenticationKeyScheme.ed25519 =>
-            AuthenticationKey.ed25519(bytes: authenticationKey),
+            AuthenticationKey(bytes: authenticationKey),
         },
+        authenticationKeyScheme:
+            AuthenticationKeyScheme.fromByte(authenticationKeyScheme),
       );
 }

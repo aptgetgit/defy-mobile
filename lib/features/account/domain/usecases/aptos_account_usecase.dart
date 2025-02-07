@@ -57,7 +57,7 @@ class GetAptosAccountUseCase {
 
   final AptosAccountRepository _repository;
 
-  Future<AptosAccount?> call(AccountAddress accountAddress) async {
+  Future<AptosAccount?> call({required AccountAddress accountAddress}) async {
     try {
       final AptosAccount? account =
           _repository.getByAddress(accountAddress: accountAddress);

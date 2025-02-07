@@ -61,25 +61,22 @@ class _$AuthenticationKeyCopyWithImpl<$Res, $Val extends AuthenticationKey>
 }
 
 /// @nodoc
-abstract class _$$Ed25519AuthenticationKeyImplCopyWith<$Res>
+abstract class _$$AuthenticationKeyImplCopyWith<$Res>
     implements $AuthenticationKeyCopyWith<$Res> {
-  factory _$$Ed25519AuthenticationKeyImplCopyWith(
-          _$Ed25519AuthenticationKeyImpl value,
-          $Res Function(_$Ed25519AuthenticationKeyImpl) then) =
-      __$$Ed25519AuthenticationKeyImplCopyWithImpl<$Res>;
+  factory _$$AuthenticationKeyImplCopyWith(_$AuthenticationKeyImpl value,
+          $Res Function(_$AuthenticationKeyImpl) then) =
+      __$$AuthenticationKeyImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Uint8List bytes});
 }
 
 /// @nodoc
-class __$$Ed25519AuthenticationKeyImplCopyWithImpl<$Res>
-    extends _$AuthenticationKeyCopyWithImpl<$Res,
-        _$Ed25519AuthenticationKeyImpl>
-    implements _$$Ed25519AuthenticationKeyImplCopyWith<$Res> {
-  __$$Ed25519AuthenticationKeyImplCopyWithImpl(
-      _$Ed25519AuthenticationKeyImpl _value,
-      $Res Function(_$Ed25519AuthenticationKeyImpl) _then)
+class __$$AuthenticationKeyImplCopyWithImpl<$Res>
+    extends _$AuthenticationKeyCopyWithImpl<$Res, _$AuthenticationKeyImpl>
+    implements _$$AuthenticationKeyImplCopyWith<$Res> {
+  __$$AuthenticationKeyImplCopyWithImpl(_$AuthenticationKeyImpl _value,
+      $Res Function(_$AuthenticationKeyImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of AuthenticationKey
@@ -89,7 +86,7 @@ class __$$Ed25519AuthenticationKeyImplCopyWithImpl<$Res>
   $Res call({
     Object? bytes = null,
   }) {
-    return _then(_$Ed25519AuthenticationKeyImpl(
+    return _then(_$AuthenticationKeyImpl(
       bytes: null == bytes
           ? _value.bytes
           : bytes // ignore: cast_nullable_to_non_nullable
@@ -100,9 +97,8 @@ class __$$Ed25519AuthenticationKeyImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-@internal
-class _$Ed25519AuthenticationKeyImpl extends Ed25519AuthenticationKey {
-  const _$Ed25519AuthenticationKeyImpl({required this.bytes}) : super._();
+class _$AuthenticationKeyImpl extends _AuthenticationKey {
+  const _$AuthenticationKeyImpl({required this.bytes}) : super._();
 
   @override
   final Uint8List bytes;
@@ -111,7 +107,7 @@ class _$Ed25519AuthenticationKeyImpl extends Ed25519AuthenticationKey {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Ed25519AuthenticationKeyImpl &&
+            other is _$AuthenticationKeyImpl &&
             const DeepCollectionEquality().equals(other.bytes, bytes));
   }
 
@@ -124,15 +120,15 @@ class _$Ed25519AuthenticationKeyImpl extends Ed25519AuthenticationKey {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$Ed25519AuthenticationKeyImplCopyWith<_$Ed25519AuthenticationKeyImpl>
-      get copyWith => __$$Ed25519AuthenticationKeyImplCopyWithImpl<
-          _$Ed25519AuthenticationKeyImpl>(this, _$identity);
+  _$$AuthenticationKeyImplCopyWith<_$AuthenticationKeyImpl> get copyWith =>
+      __$$AuthenticationKeyImplCopyWithImpl<_$AuthenticationKeyImpl>(
+          this, _$identity);
 }
 
-abstract class Ed25519AuthenticationKey extends AuthenticationKey {
-  const factory Ed25519AuthenticationKey({required final Uint8List bytes}) =
-      _$Ed25519AuthenticationKeyImpl;
-  const Ed25519AuthenticationKey._() : super._();
+abstract class _AuthenticationKey extends AuthenticationKey {
+  const factory _AuthenticationKey({required final Uint8List bytes}) =
+      _$AuthenticationKeyImpl;
+  const _AuthenticationKey._() : super._();
 
   @override
   Uint8List get bytes;
@@ -141,6 +137,6 @@ abstract class Ed25519AuthenticationKey extends AuthenticationKey {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$Ed25519AuthenticationKeyImplCopyWith<_$Ed25519AuthenticationKeyImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$AuthenticationKeyImplCopyWith<_$AuthenticationKeyImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

@@ -6,9 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../features/authentication/presentation/screens/account_set_up_Full_name_screen.dart';
+import '../../features/authentication/presentation/screens/account_set_up_full_name_screen.dart';
 import '../../features/authentication/presentation/screens/account_set_up_username_screen.dart';
 import '../../features/authentication/presentation/screens/login_page.dart';
+import '../../features/browser/presentation/screens/browser_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/import_wallet/presentation/screens/import_wallet_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -18,6 +19,7 @@ import '../../features/wallet-creation/presentation/screens/wallet_creation_scre
 import '../../features/wallet-creation/presentation/screens/wallet_creation_wallet_background_screen.dart';
 import '../../features/wallet-creation/presentation/screens/wallet_creation_wallet_name_screen.dart';
 
+part 'browser_route.dart';
 part 'generated/router.freezed.dart';
 part 'generated/router.g.dart';
 part 'home_route.dart';

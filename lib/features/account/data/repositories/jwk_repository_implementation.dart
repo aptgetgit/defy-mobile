@@ -41,100 +41,125 @@ class JwkRepository implements IJwkRepository {
   final PrivateJwkDataSource _privateJwkDataSource;
 
   @override
-  Future<Jwk> store({required Jwk jwk, required KeySourceConfig config}) =>
-      _store.runInTransaction(TxMode.write, () async {
-        switch (config) {
-          case HDKeySourceConfig(
-              :final Uint8List entropyHash,
-              :final AptosDerivationPath derivationPath
-            ):
-            if (!await _entropyDataSource.has(hash: entropyHash)) {
-              throw StateError('Cannot store: entropy not found');
-            }
-
-            _hdKeyDataSource.store(
-              keyId: jwk.keyId,
-              entropyHash: entropyHash,
-              derivationPath: derivationPath.toBytes(),
-            );
-
-          case SigningKeySourceConfig(:final Uint8List jwkThumbprint):
-            if (!await _privateJwkDataSource.has(keyId: jwk.keyId)) {
-              throw StateError('Cannot store: private key not found');
-            }
-            _signingKeyDataSource.store(
-              keyId: jwk.keyId,
-              jwkThumbprint: jwkThumbprint,
-            );
+  Future<Jwk> store({required Jwk jwk, required KeySourceConfig config}) async {
+    switch (config) {
+      case HDKeySourceConfig(
+          :final Uint8List entropyHash,
+        ):
+        if (!await _entropyDataSource.has(hash: entropyHash)) {
+          throw StateError('Cannot store: entropy not found');
         }
 
-        return _jwkDataSource.store(jwk).toDomain();
-      });
+      case SigningKeySourceConfig():
+        if (!await _privateJwkDataSource.has(keyId: jwk.keyId)) {
+          throw StateError('Cannot store: private key not found');
+        }
+    }
+
+    return _store.runInTransaction(TxMode.write, () {
+      switch (config) {
+        case HDKeySourceConfig(
+            :final Uint8List entropyHash,
+            :final AptosDerivationPath derivationPath
+          ):
+          _hdKeyDataSource.store(
+            keyId: jwk.keyId,
+            entropyHash: entropyHash,
+            derivationPath: derivationPath.toBytes(),
+          );
+
+        case SigningKeySourceConfig(:final Uint8List jwkThumbprint):
+          _signingKeyDataSource.store(
+            keyId: jwk.keyId,
+            jwkThumbprint: jwkThumbprint,
+          );
+      }
+
+      return _jwkDataSource.store(jwk).toDomain();
+    });
+  }
 
   @override
-  void delete({required Uint8List keyId}) =>
-      _store.runInTransaction(TxMode.write, () async {
-        if (_ed25519AuthKeyConfigDataSource.getByKeyId(keyId: keyId) != null) {
-          throw StateError('Cannot delete: JWK is used in auth configuration');
-        }
-        final HDKeyLocalModel? hdConfig =
-            _hdKeyDataSource.getByKeyId(keyId: keyId);
-        final SigningKeyLocalModel? signingConfig =
-            _signingKeyDataSource.getByKeyId(keyId: keyId);
+  Future<void> delete({required Uint8List keyId}) async {
+    if (_ed25519AuthKeyConfigDataSource.getByKeyId(keyId: keyId) != null) {
+      throw StateError('Cannot delete: JWK is used in auth configuration');
+    }
 
-        _jwkDataSource.deleteByKeyId(keyId: keyId);
-        _hdKeyDataSource.deleteByKeyId(keyId: keyId);
-        _signingKeyDataSource.deleteByKeyId(keyId: keyId);
+    final HDKeyLocalModel? hdConfig = _hdKeyDataSource.getByKeyId(keyId: keyId);
+    final SigningKeyLocalModel? signingConfig =
+        _signingKeyDataSource.getByKeyId(keyId: keyId);
 
-        if (hdConfig != null) {
-          if (_hdKeyDataSource
+    bool shouldDeleteEntropy = false;
+    bool shouldDeletePrivateJwk = false;
+
+    if (hdConfig != null) {
+      shouldDeleteEntropy = _hdKeyDataSource
               .getByEntropy(entropyHash: hdConfig.entropyHash)
-              .isEmpty) {
-            await _entropyDataSource.delete(hash: hdConfig.entropyHash);
-          }
-        }
+              .length <=
+          1;
+    }
 
-        if (signingConfig != null) {
-          if (_signingKeyDataSource.getByKeyId(keyId: keyId) == null) {
-            await _privateJwkDataSource.delete(keyId: keyId);
-          }
-        }
-      });
+    if (signingConfig != null) {
+      shouldDeletePrivateJwk =
+          _signingKeyDataSource.getByKeyId(keyId: keyId) != null;
+    }
+
+    return _store.runInTransaction(TxMode.write, () {
+      _jwkDataSource.deleteByKeyId(keyId: keyId);
+      _hdKeyDataSource.deleteByKeyId(keyId: keyId);
+      _signingKeyDataSource.deleteByKeyId(keyId: keyId);
+
+      if (shouldDeleteEntropy && hdConfig != null) {
+        _entropyDataSource.delete(hash: hdConfig.entropyHash);
+      }
+
+      if (shouldDeletePrivateJwk) {
+        _privateJwkDataSource.delete(keyId: keyId);
+      }
+    });
+  }
 
   @override
-  void deleteMany(List<Uint8List> keyIds) {
+  Future<void> deleteMany(List<Uint8List> keyIds) async {
     for (final Uint8List keyId in keyIds) {
-      delete(keyId: keyId);
+      await delete(keyId: keyId);
     }
   }
 
   @override
-  void clear() => _store.runInTransaction(TxMode.write, () async {
-        final List<JwkLocalModel> jwks = _jwkDataSource.getAll();
-        for (final JwkLocalModel jwk in jwks) {
-          if (_ed25519AuthKeyConfigDataSource.getByKeyId(keyId: jwk.keyId) !=
-              null) {
-            throw StateError(
-              'Cannot clear: some JWKs are used in auth configuration',
-            );
-          }
-        }
-        final List<HDKeyLocalModel> hdConfigs = _hdKeyDataSource.getAll();
-        final List<SigningKeyLocalModel> signingConfigs =
-            _signingKeyDataSource.getAll();
+  Future<void> clear() async {
+    // First get all data and perform checks
+    final List<JwkLocalModel> jwks = _jwkDataSource.getAll();
 
-        _jwkDataSource.clear();
-        _hdKeyDataSource.clear();
-        _signingKeyDataSource.clear();
+    // Check for auth configuration usage
+    for (final JwkLocalModel jwk in jwks) {
+      if (_ed25519AuthKeyConfigDataSource.getByKeyId(keyId: jwk.keyId) !=
+          null) {
+        throw StateError(
+          'Cannot clear: some JWKs are used in auth configuration',
+        );
+      }
+    }
 
-        for (final HDKeyLocalModel config in hdConfigs) {
-          await _entropyDataSource.delete(hash: config.entropyHash);
-        }
+    final List<HDKeyLocalModel> hdConfigs = _hdKeyDataSource.getAll();
+    final List<SigningKeyLocalModel> signingConfigs =
+        _signingKeyDataSource.getAll();
 
-        for (final SigningKeyLocalModel config in signingConfigs) {
-          await _privateJwkDataSource.delete(keyId: config.jwkKeyId);
-        }
-      });
+    _store.runInTransaction(TxMode.write, () {
+      _jwkDataSource.clear();
+      _hdKeyDataSource.clear();
+      _signingKeyDataSource.clear();
+    });
+
+    // Perform cleanup operations after transaction
+    for (final HDKeyLocalModel config in hdConfigs) {
+      await _entropyDataSource.delete(hash: config.entropyHash);
+    }
+
+    for (final SigningKeyLocalModel config in signingConfigs) {
+      await _privateJwkDataSource.delete(keyId: config.jwkKeyId);
+    }
+  }
 
   @override
   Jwk? get({required Uint8List keyId}) =>

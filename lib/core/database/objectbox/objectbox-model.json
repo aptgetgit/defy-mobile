@@ -4,30 +4,70 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:2909051709120546600",
-      "lastPropertyId": "4:5726717755770933592",
-      "name": "AptosAccountLocalModel",
+      "id": "1:4182314550174392550",
+      "lastPropertyId": "5:6253582848712013208",
+      "name": "AccountDataLocalModel",
       "properties": [
         {
-          "id": "1:1373863606202848039",
+          "id": "1:7007133562409375229",
           "name": "localId",
           "type": 6,
-          "flags": 1
+          "flags": 129
         },
         {
-          "id": "2:1353877823097889783",
+          "id": "2:5198184016149516220",
           "name": "accountAddress",
           "type": 23,
           "flags": 8192
         },
         {
-          "id": "3:7605264632340743478",
+          "id": "3:8126593131848050637",
           "name": "authenticationKey",
           "type": 23,
           "flags": 8192
         },
         {
-          "id": "4:5726717755770933592",
+          "id": "4:5907020577426658851",
+          "name": "sequenceNumber",
+          "type": 9,
+          "flags": 2048,
+          "indexId": "1:2272878117692943110"
+        },
+        {
+          "id": "5:6253582848712013208",
+          "name": "lastUpdated",
+          "type": 10,
+          "flags": 8,
+          "indexId": "2:3582915394289616771"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1316363701706477493",
+      "lastPropertyId": "4:6181605997917094092",
+      "name": "AptosAccountLocalModel",
+      "properties": [
+        {
+          "id": "1:7651002381355097857",
+          "name": "localId",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:408088151449726791",
+          "name": "accountAddress",
+          "type": 23,
+          "flags": 8192
+        },
+        {
+          "id": "3:8653674514881419267",
+          "name": "authenticationKey",
+          "type": 23,
+          "flags": 8192
+        },
+        {
+          "id": "4:6181605997917094092",
           "name": "authenticationKeyScheme",
           "type": 2,
           "flags": 8192
@@ -36,37 +76,37 @@
       "relations": []
     },
     {
-      "id": "2:8777296894330968837",
-      "lastPropertyId": "5:2815338160461428524",
+      "id": "3:2753354279680204207",
+      "lastPropertyId": "5:6677456662683431534",
       "name": "CurrencyRateLocalModel",
       "properties": [
         {
-          "id": "1:1291903399818412611",
+          "id": "1:2339192103837400134",
           "name": "localId",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:705841299122847605",
+          "id": "2:3808795257804271454",
           "name": "remoteId",
           "type": 9,
           "flags": 34848,
-          "indexId": "1:7189955600722002279"
+          "indexId": "3:1150527915858006640"
         },
         {
-          "id": "3:2622902649881730644",
+          "id": "3:4400638669175668493",
           "name": "code",
           "type": 9,
           "flags": 8,
-          "indexId": "2:990417945290668497"
+          "indexId": "4:5937483962678904033"
         },
         {
-          "id": "4:1833952893682634992",
+          "id": "4:9168524603120483698",
           "name": "rate",
           "type": 8
         },
         {
-          "id": "5:2815338160461428524",
+          "id": "5:6677456662683431534",
           "name": "lastUpdate",
           "type": 10
         }
@@ -74,24 +114,24 @@
       "relations": []
     },
     {
-      "id": "3:3059927752517601321",
-      "lastPropertyId": "3:5039888005590595692",
+      "id": "4:8567161995492284245",
+      "lastPropertyId": "3:706152330900802484",
       "name": "Ed25519AuthKeyConfigLocalModel",
       "properties": [
         {
-          "id": "1:8563454044389820419",
+          "id": "1:2931337087954638005",
           "name": "localId",
           "type": 6,
-          "flags": 1
+          "flags": 129
         },
         {
-          "id": "2:6231022793882167767",
+          "id": "2:8872773204590830452",
           "name": "authenticationKey",
           "type": 23,
           "flags": 8192
         },
         {
-          "id": "3:5039888005590595692",
+          "id": "3:706152330900802484",
           "name": "jwkKeyId",
           "type": 23,
           "flags": 8192
@@ -100,30 +140,30 @@
       "relations": []
     },
     {
-      "id": "4:1370581994157340670",
-      "lastPropertyId": "4:7853541918638698973",
+      "id": "5:608468296644925480",
+      "lastPropertyId": "4:795916402875532669",
       "name": "HDKeyLocalModel",
       "properties": [
         {
-          "id": "1:5438497026814197879",
+          "id": "1:3487329536360871779",
           "name": "localId",
           "type": 6,
-          "flags": 1
+          "flags": 129
         },
         {
-          "id": "2:8468203169448060490",
+          "id": "2:961145833408348736",
           "name": "jwkKeyId",
           "type": 23,
           "flags": 8192
         },
         {
-          "id": "3:6262111914126604287",
+          "id": "3:5465110506903346475",
           "name": "derivationPath",
           "type": 23,
           "flags": 8192
         },
         {
-          "id": "4:7853541918638698973",
+          "id": "4:795916402875532669",
           "name": "entropyHash",
           "type": 23,
           "flags": 8192
@@ -132,40 +172,40 @@
       "relations": []
     },
     {
-      "id": "5:5928249470824879723",
-      "lastPropertyId": "6:4509470520992335588",
+      "id": "6:6207240703508457827",
+      "lastPropertyId": "6:3768514250617993459",
       "name": "JwkLocalModel",
       "properties": [
         {
-          "id": "1:9177513397812729546",
+          "id": "1:4711909463350265978",
           "name": "localId",
           "type": 6,
-          "flags": 1
+          "flags": 129
         },
         {
-          "id": "2:8059061427466946994",
+          "id": "2:2211248956674004257",
           "name": "keyId",
           "type": 23,
           "flags": 8192
         },
         {
-          "id": "3:16947549777523319",
+          "id": "3:2036413853019964547",
           "name": "keyType",
           "type": 9
         },
         {
-          "id": "4:8121486278617511226",
+          "id": "4:148160874341995540",
           "name": "curve",
           "type": 9
         },
         {
-          "id": "5:7793387342126382432",
+          "id": "5:3869134254421369057",
           "name": "x",
           "type": 23,
           "flags": 8192
         },
         {
-          "id": "6:4509470520992335588",
+          "id": "6:3768514250617993459",
           "name": "y",
           "type": 23,
           "flags": 8192
@@ -174,24 +214,24 @@
       "relations": []
     },
     {
-      "id": "6:2694572063000851198",
-      "lastPropertyId": "3:8668381737134277169",
+      "id": "7:321863732965903275",
+      "lastPropertyId": "3:1459281033024763775",
       "name": "SigningKeyLocalModel",
       "properties": [
         {
-          "id": "1:5782315816968071152",
+          "id": "1:7147687165577257780",
           "name": "localId",
           "type": 6,
-          "flags": 1
+          "flags": 129
         },
         {
-          "id": "2:4228705866385916400",
+          "id": "2:2370762186480854559",
           "name": "jwkKeyId",
           "type": 23,
           "flags": 8192
         },
         {
-          "id": "3:8668381737134277169",
+          "id": "3:1459281033024763775",
           "name": "jwkThumbprint",
           "type": 23,
           "flags": 8192
@@ -200,8 +240,8 @@
       "relations": []
     }
   ],
-  "lastEntityId": "6:2694572063000851198",
-  "lastIndexId": "2:990417945290668497",
+  "lastEntityId": "7:321863732965903275",
+  "lastIndexId": "4:5937483962678904033",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

@@ -143,22 +143,22 @@ GeneratePrivateKeyUseCase generatePrivateKeyUseCase(Ref ref) =>
 @riverpod
 CreateAptosAccountUseCase createAptosAccountUseCase(Ref ref) =>
     CreateAptosAccountUseCase(
-        repository: ref.read(aptosAccountRepositoryProvider));
+        repository: ref.read(aptosAccountRepositoryProvider),);
 
 @riverpod
 DeleteAptosAccountUseCase deleteAptosAccountUseCase(Ref ref) =>
     DeleteAptosAccountUseCase(
-        repository: ref.read(aptosAccountRepositoryProvider));
+        repository: ref.read(aptosAccountRepositoryProvider),);
 
 @riverpod
 GetAptosAccountUseCase getAptosAccountUseCase(Ref ref) =>
     GetAptosAccountUseCase(
-        repository: ref.read(aptosAccountRepositoryProvider));
+        repository: ref.read(aptosAccountRepositoryProvider),);
 
 @riverpod
 ListAptosAccountsUseCase listAptosAccountsUseCase(Ref ref) =>
     ListAptosAccountsUseCase(
-        repository: ref.read(aptosAccountRepositoryProvider));
+        repository: ref.read(aptosAccountRepositoryProvider),);
 
 @riverpod
 RevealAccountPublicKeyUseCase revealAccountPublicKeyUseCase(Ref ref) =>

@@ -7,6 +7,7 @@ part of '../router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
+      $browserRoute,
       $homeRoute,
       $onboardingRoute,
       $loginPageRoute,
@@ -19,6 +20,28 @@ List<RouteBase> get $appRoutes => [
       $walletCreationWalletBackgroundScreenRoute,
       $importWalletScreenRoute,
     ];
+
+RouteBase get $browserRoute => GoRouteData.$route(
+      path: '/browser',
+      factory: $BrowserRouteExtension._fromState,
+    );
+
+extension $BrowserRouteExtension on BrowserRoute {
+  static BrowserRoute _fromState(GoRouterState state) => const BrowserRoute();
+
+  String get location => GoRouteData.$location(
+        '/browser',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 RouteBase get $homeRoute => GoRouteData.$route(
       path: '/home',

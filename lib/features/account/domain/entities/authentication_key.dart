@@ -9,10 +9,9 @@ part 'generated/authentication_key.freezed.dart';
 
 @freezed
 sealed class AuthenticationKey with _$AuthenticationKey {
-  @internal
-  const factory AuthenticationKey.ed25519({
+  const factory AuthenticationKey({
     required Uint8List bytes,
-  }) = Ed25519AuthenticationKey;
+  }) = _AuthenticationKey;
 
   const AuthenticationKey._();
 
@@ -28,12 +27,12 @@ sealed class AuthenticationKey with _$AuthenticationKey {
     final pc.SHA3Digest sha3Hash = pc.SHA3Digest(256);
     final Uint8List hashedBytes = sha3Hash.process(bytes);
 
-    return AuthenticationKey.ed25519(bytes: hashedBytes);
+    return AuthenticationKey(bytes: hashedBytes);
   }
 
-  AuthenticationKeyScheme get scheme => switch (this) {
-        Ed25519AuthenticationKey() => AuthenticationKeyScheme.ed25519,
-      };
+  // AuthenticationKeyScheme get scheme => switch (this) {
+  //       Ed25519AuthenticationKey() => AuthenticationKeyScheme.ed25519,
+  //     };
 
   String toHex() => HexString.fromUint8Array(bytes).toString();
 

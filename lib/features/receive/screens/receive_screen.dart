@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../app/routes/router.dart';
+import 'dart:ui'; 
 
 class ReceiveScreen extends StatelessWidget {
   const ReceiveScreen({super.key});
@@ -140,76 +141,84 @@ class ReceiveScreen extends StatelessWidget {
     );
 
   void _showWalletBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Material(
-                elevation: 8,
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Title
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Choose wallet',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent, // Set background color transparent
+    builder: (BuildContext context) => Stack(
+      children: [
+        // Apply blur effect to the background
+        Positioned.fill(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Apply blur effect
+            child: Container(
+              color: Colors.black.withOpacity(0.5), // Optional: darken the background a bit
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Material(
+              elevation: 8,
+              borderRadius: BorderRadius.circular(28), // Increase radius to 28
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Choose wallet',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            PhosphorIconsBold.x,
+                            size: 24,
+                            color: AppColors.greyLight,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(
-                              PhosphorIconsBold.x,
-                              size: 24,
-                              color: AppColors.greyLight,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Gap(12),
+                        ),
+                      ],
+                    ),
+                    const Gap(12),
 
-                      // Wallet Options
-                      _buildWalletOption(
-                        imagePath: 'assets/icons/star-struck.png',
-                        title: 'Business',
-                        balance: '\$324.00',
-                        isDefault: true,
-                      ),
-                      _buildWalletOption(
-                        imagePath: 'assets/icons/face-blowing-kiss.png',
-                        title: 'Savings',
-                        balance: '\$60.20',
-                      ),
-                      _buildWalletOption(
-                        imagePath: 'assets/icons/star-struck.png',
-                        title: 'Business',
-                        balance: '\$324.00',
-                      ),
-                    ],
-                  ),
+                    // Wallet Options
+                    _buildWalletOption(
+                      imagePath: 'assets/icons/star-struck.png',
+                      title: 'Business',
+                      balance: '\$324.00',
+                      isDefault: true,
+                    ),
+                    _buildWalletOption(
+                      imagePath: 'assets/icons/face-blowing-kiss.png',
+                      title: 'Savings',
+                      balance: '\$60.20',
+                    ),
+                    _buildWalletOption(
+                      imagePath: 'assets/icons/star-struck.png',
+                      title: 'Business',
+                      balance: '\$324.00',
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
-
+      ],
+    ),
+  );
+}
   // Helper function to build wallet option
   Widget _buildWalletOption({
     required String imagePath,

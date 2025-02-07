@@ -7,9 +7,6 @@ part of '../router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $homeRoute,
-      $onboardingRoute,
-      $splashRoute,
       $exploreScreenRoute,
       $exploreSearchScreenRoute,
       $exploreMarketScreenRoute,
@@ -21,79 +18,19 @@ List<RouteBase> get $appRoutes => [
       $createTokenScreenRoute,
       $pumpFunTokenPreviewScreenRoute,
       $exploreLeaderboardScreenRoute,
+      $homeRoute,
+      $onboardingRoute,
       $receiveScreenRoute,
       $receiveSelectScreenRoute,
       $receiveAmountScreenRoute,
       $receiveShareScreenRoute,
       $receiveMethodScreenRoute,
+      $splashRoute,
+      $walletScreenRoute,
+      $walletMoreScreenRoute,
+      $walletSearchScreenRoute,
+      $walletWatchListScreenRoute,
     ];
-
-RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/home',
-      factory: $HomeRouteExtension._fromState,
-    );
-
-extension $HomeRouteExtension on HomeRoute {
-  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
-
-  String get location => GoRouteData.$location(
-        '/home',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $onboardingRoute => GoRouteData.$route(
-      path: '/onboarding',
-      factory: $OnboardingRouteExtension._fromState,
-    );
-
-extension $OnboardingRouteExtension on OnboardingRoute {
-  static OnboardingRoute _fromState(GoRouterState state) =>
-      const OnboardingRoute();
-
-  String get location => GoRouteData.$location(
-        '/onboarding',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $splashRoute => GoRouteData.$route(
-      path: '/splash',
-      factory: $SplashRouteExtension._fromState,
-    );
-
-extension $SplashRouteExtension on SplashRoute {
-  static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
-
-  String get location => GoRouteData.$location(
-        '/splash',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
 
 RouteBase get $exploreScreenRoute => GoRouteData.$route(
       path: '/explore',
@@ -352,6 +289,51 @@ extension $ExploreLeaderboardScreenRouteExtension
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $homeRoute => GoRouteData.$route(
+      path: '/home',
+      factory: $HomeRouteExtension._fromState,
+    );
+
+extension $HomeRouteExtension on HomeRoute {
+  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
+
+  String get location => GoRouteData.$location(
+        '/home',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $onboardingRoute => GoRouteData.$route(
+      path: '/onboarding',
+      factory: $OnboardingRouteExtension._fromState,
+    );
+
+extension $OnboardingRouteExtension on OnboardingRoute {
+  static OnboardingRoute _fromState(GoRouterState state) =>
+      const OnboardingRoute();
+
+  String get location => GoRouteData.$location(
+        '/onboarding',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $receiveScreenRoute => GoRouteData.$route(
       path: '/receive',
       factory: $ReceiveScreenRouteExtension._fromState,
@@ -467,11 +449,125 @@ extension $ReceiveMethodScreenRouteExtension on ReceiveMethodScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $splashRoute => GoRouteData.$route(
+      path: '/splash',
+      factory: $SplashRouteExtension._fromState,
+    );
+
+extension $SplashRouteExtension on SplashRoute {
+  static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
+
+  String get location => GoRouteData.$location(
+        '/splash',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletScreenRoute => GoRouteData.$route(
+      path: '/wallet',
+      factory: $WalletScreenRouteExtension._fromState,
+    );
+
+extension $WalletScreenRouteExtension on WalletScreenRoute {
+  static WalletScreenRoute _fromState(GoRouterState state) =>
+      const WalletScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletMoreScreenRoute => GoRouteData.$route(
+      path: '/wallet-more',
+      factory: $WalletMoreScreenRouteExtension._fromState,
+    );
+
+extension $WalletMoreScreenRouteExtension on WalletMoreScreenRoute {
+  static WalletMoreScreenRoute _fromState(GoRouterState state) =>
+      const WalletMoreScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-more',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletSearchScreenRoute => GoRouteData.$route(
+      path: '/wallet-search',
+      factory: $WalletSearchScreenRouteExtension._fromState,
+    );
+
+extension $WalletSearchScreenRouteExtension on WalletSearchScreenRoute {
+  static WalletSearchScreenRoute _fromState(GoRouterState state) =>
+      const WalletSearchScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-search',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $walletWatchListScreenRoute => GoRouteData.$route(
+      path: '/wallet-watchlist',
+      factory: $WalletWatchListScreenRouteExtension._fromState,
+    );
+
+extension $WalletWatchListScreenRouteExtension on WalletWatchListScreenRoute {
+  static WalletWatchListScreenRoute _fromState(GoRouterState state) =>
+      const WalletWatchListScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-watchlist',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'3d06c19edab6a4e6660f76f0475dbd7d200ee189';
+String _$routerHash() => r'90bfb70b632ecf65ea2219744dad31624394b1cd';
 
 /// See also [router].
 @ProviderFor(router)

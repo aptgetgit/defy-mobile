@@ -1,38 +1,43 @@
 import 'dart:async';
 
-import 'package:defy/features/explore/presentation/scrceens/create_token_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/explore_coins_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/explore_dapps_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/explore_leaderboard.dart';
-import 'package:defy/features/explore/presentation/scrceens/explore_market_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/explore_nft_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/explore_pump_fun_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/explore_pump_fun_token_transactions_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/explore_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/pump_fun_token_preview_screen.dart';
-import 'package:defy/features/explore/presentation/scrceens/search_screen.dart';
-import 'package:defy/features/receive/screens/receive_screen.dart';
-import 'package:defy/features/receive/screens/receive_select_screen.dart';
-import 'package:defy/features/receive/screens/receive_amount_screen.dart';
-import 'package:defy/features/receive/screens/receive_share_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../features/explore/presentation/scrceens/create_token_screen.dart';
+import '../../features/explore/presentation/scrceens/explore_coins_screen.dart';
+import '../../features/explore/presentation/scrceens/explore_dapps_screen.dart';
+import '../../features/explore/presentation/scrceens/explore_leaderboard.dart';
+import '../../features/explore/presentation/scrceens/explore_market_screen.dart';
+import '../../features/explore/presentation/scrceens/explore_nft_screen.dart';
+import '../../features/explore/presentation/scrceens/explore_pump_fun_screen.dart';
+import '../../features/explore/presentation/scrceens/explore_pump_fun_token_transactions_screen.dart';
+import '../../features/explore/presentation/scrceens/explore_screen.dart';
+import '../../features/explore/presentation/scrceens/pump_fun_token_preview_screen.dart';
+import '../../features/explore/presentation/scrceens/search_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/receive/screens/receive_amount_screen.dart';
+import '../../features/receive/screens/receive_screen.dart';
+import '../../features/receive/screens/receive_select_screen.dart';
+import '../../features/receive/screens/receive_share_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/wallet/presentation/wallet_more_screen.dart';
+import '../../features/wallet/presentation/wallet_screen.dart';
+import '../../features/wallet/presentation/wallet_search.dart';
 
+import '../../features/watchlist/presentation/watch_list_screen.dart';
+
+part 'explore_route.dart';
 part 'generated/router.freezed.dart';
 part 'generated/router.g.dart';
 part 'home_route.dart';
 part 'onboarding_route.dart';
-part 'splash_route.dart';
-part 'explore_route.dart';
 part 'receive_route.dart';
+part 'splash_route.dart';
+part 'wallet_route.dart';
 
 @freezed
 class AppRoute with _$AppRoute {
@@ -47,7 +52,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const ReceiveScreenRoute().location,
+      initialLocation: const WalletScreenRoute().location,
       routes: $appRoutes,
       errorBuilder: (BuildContext context, GoRouterState state) =>
           const Scaffold(

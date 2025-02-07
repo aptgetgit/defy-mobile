@@ -379,9 +379,16 @@ class $AssetsImagesGen {
   /// File path: assets/images/emo.png
   AssetGenImage get emo => const AssetGenImage('assets/images/emo.png');
 
+  /// File path: assets/images/invest.png
+  AssetGenImage get invest => const AssetGenImage('assets/images/invest.png');
+
   /// File path: assets/images/market-phone.png
   AssetGenImage get marketPhone =>
       const AssetGenImage('assets/images/market-phone.png');
+
+  /// File path: assets/images/marketplace.png
+  AssetGenImage get marketplace =>
+      const AssetGenImage('assets/images/marketplace.png');
 
   /// File path: assets/images/mint.png
   AssetGenImage get mint => const AssetGenImage('assets/images/mint.png');
@@ -446,6 +453,29 @@ class $AssetsImagesGen {
   AssetGenImage get shareQr =>
       const AssetGenImage('assets/images/share-qr.png');
 
+  /// File path: assets/images/trading.png
+  AssetGenImage get trading => const AssetGenImage('assets/images/trading.png');
+
+  /// File path: assets/images/watchlist1.png
+  AssetGenImage get watchlist1 =>
+      const AssetGenImage('assets/images/watchlist1.png');
+
+  /// File path: assets/images/watchlist2.png
+  AssetGenImage get watchlist2 =>
+      const AssetGenImage('assets/images/watchlist2.png');
+
+  /// File path: assets/images/watchlist3.png
+  AssetGenImage get watchlist3 =>
+      const AssetGenImage('assets/images/watchlist3.png');
+
+  /// File path: assets/images/watchlist4.png
+  AssetGenImage get watchlist4 =>
+      const AssetGenImage('assets/images/watchlist4.png');
+
+  /// File path: assets/images/watchlist5.png
+  AssetGenImage get watchlist5 =>
+      const AssetGenImage('assets/images/watchlist5.png');
+
   /// List of all assets
   List<dynamic> get values => [
         blueCheck,
@@ -474,7 +504,9 @@ class $AssetsImagesGen {
         cosmosBg,
         cyborg,
         emo,
+        invest,
         marketPhone,
+        marketplace,
         mint,
         mintHeader,
         mintWidget,
@@ -491,7 +523,13 @@ class $AssetsImagesGen {
         qr2,
         rocket,
         seed,
-        shareQr
+        shareQr,
+        trading,
+        watchlist1,
+        watchlist2,
+        watchlist3,
+        watchlist4,
+        watchlist5
       ];
 }
 

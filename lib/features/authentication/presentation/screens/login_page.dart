@@ -37,58 +37,82 @@ class LoginPageState extends ConsumerState<LoginPage> {
                       right: 160,
                       width: 72,
                       height: 72,
-                    ).animate().slideY(duration: 300.ms, begin: -1),
+                    ).animate().slideY(
+                        duration: 600.ms,
+                        begin: -1,
+                        curve: Curves.easeOutBack),
                     _buildAnimatedImage(
                       asset: 'assets/images/login-2.png',
-                      top: 100,
-                      right: -10,
+                      top: 80,
+                      right: -4,
                       width: 64,
                       height: 64,
-                    ).animate().slideX(duration: 300.ms, begin: 1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: 1,
+                        curve: Curves.easeOutBack),
                     _buildAnimatedImage(
                       asset: 'assets/images/login-3.png',
-                      top: 240,
+                      top: 220,
                       right: -10,
                       width: 76,
                       height: 76,
-                    ).animate().slideX(duration: 300.ms, begin: 1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: 1,
+                        curve: Curves.easeOutBack),
                     _buildAnimatedImage(
                       asset: 'assets/images/login-4.png',
-                      bottom: 340,
+                      bottom: 400,
                       right: 0,
                       width: 62,
                       height: 62,
-                    ).animate().slideX(duration: 300.ms, begin: 1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: 1,
+                        curve: Curves.easeOutBack),
                     _buildAnimatedImage(
                       asset: 'assets/images/login-5.png',
                       bottom: 40,
                       right: -24,
                       width: 92,
                       height: 92,
-                    ).animate().slideX(duration: 300.ms, begin: 1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: 1,
+                        curve: Curves.easeOutBack),
                     _buildAnimatedImage(
                       asset: 'assets/images/login-6.png',
                       bottom: 0,
                       left: -10,
                       width: 94,
                       height: 94,
-                    ).animate().slideX(duration: 300.ms, begin: -1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: -1,
+                        curve: Curves.easeOutBack),
                     _buildAnimatedImage(
                       asset: 'assets/images/login-7.png',
                       bottom: 260,
                       left: -24,
                       width: 102,
                       height: 102,
-                    ).animate().slideX(duration: 300.ms, begin: -1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: -1,
+                        curve: Curves.easeOutBack),
                     _buildAnimatedImage(
                       asset: 'assets/images/login-8.png',
-                      top: 320,
+                      top: 300,
                       left: 0,
                       width: 80,
                       height: 80,
-                    ).animate().slideX(duration: 300.ms, begin: -1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: -1,
+                        curve: Curves.easeOutBack),
                     Positioned(
-                      bottom: 220,
+                      bottom: 260,
                       right: -20,
                       child: Container(
                         padding: const EdgeInsets.all(12),
@@ -103,9 +127,12 @@ class LoginPageState extends ConsumerState<LoginPage> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                    ).animate().slideX(duration: 300.ms, begin: 1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: 1,
+                        curve: Curves.easeOutBack),
                     Positioned(
-                      top: 180,
+                      top: 160,
                       left: 10,
                       child: Container(
                         padding: const EdgeInsets.all(12),
@@ -115,46 +142,61 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         ),
                         child: Image.asset(
                           'assets/images/grinning-face-with-smiling-eyes.gif',
-                          width: 40,
-                          height: 40,
+                          width: 36,
+                          height: 36,
                           fit: BoxFit.contain,
                         ),
                       ),
-                    ).animate().slideX(duration: 300.ms, begin: -1),
+                    ).animate().slideX(
+                        duration: 600.ms,
+                        begin: -1,
+                        curve: Curves.easeOutBack),
                     Positioned(
-                      top: 80,
-                      left: 20,
+                      top: 60,
+                      left: 40,
                       child: Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           color: const Color(0xffF0B90B),
                           borderRadius: BorderRadius.circular(40),
                         ),
                         child: Image.asset(
                           'assets/images/slightly-smiling-face.gif',
-                          width: 36,
-                          height: 36,
+                          width: 28,
+                          height: 28,
                           fit: BoxFit.contain,
                         ),
                       ),
-                    ).animate().slideX(duration: 300.ms, begin: -1),
+                    ).animate().slideX(
+                          duration: 600.ms,
+                          begin: -1,
+                          curve: Curves.easeOutBack,
+                        ),
                     Column(
                       children: <Widget>[
-                        const SizedBox(height: 200),
+                        const SizedBox(height: 240),
                         Center(
                           child: Image.asset(
                             'assets/icons/app-logo-dark.png',
-                            width: 100,
-                            height: 100,
-                          ).animate().slideY(duration: 300.ms, begin: 1),
+                            width: 68,
+                            height: 68,
+                          ).animate().slideY(
+                                duration: 600.ms,
+                                begin: 1,
+                                curve: Curves.easeOutBack,
+                              ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 16),
                         const Text(
                           "Let's get started",
                           style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.w600),
-                        ).animate().slideY(duration: 300.ms, begin: 1),
-                        const SizedBox(height: 12),
+                              fontSize: 24, fontWeight: FontWeight.w600,),
+                        ).animate().slideY(
+                              duration: 600.ms,
+                              begin: 1,
+                              curve: Curves.easeOutBack,
+                            ),
+                        const SizedBox(height: 6),
                         const Text(
                           'Sign up or recover your account.',
                           style: TextStyle(
@@ -162,7 +204,11 @@ class LoginPageState extends ConsumerState<LoginPage> {
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
-                        ).animate().slideY(duration: 300.ms, begin: 1),
+                        ).animate().slideY(
+                              duration: 600.ms,
+                              begin: 1,
+                              curve: Curves.easeOutBack,
+                            ),
                         const SizedBox(height: 200),
                         GestureDetector(
                           onTap: () => const WaitlistScreenRoute().go(context),
@@ -180,9 +226,14 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         const Text(
                           'By continuing, you agree to our User \nAgreement and Privacy Policy ',
                           style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.greyLight),
                           textAlign: TextAlign.center,
-                        ).animate().fade(duration: 300.ms, delay: 300.ms),
+                        ).animate().fade(
+                            duration: 300.ms,
+                            delay: 300.ms,
+                            curve: Curves.easeInOut),
                       ],
                     ),
                   ],
@@ -219,7 +270,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
           borderRadius: BorderRadius.circular(40),
           border: Border.all(color: AppColors.greyMedium),
         ),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

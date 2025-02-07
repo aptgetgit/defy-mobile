@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -55,7 +57,7 @@ class _AccountSetUpFullNameScreenState
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               const Text(
                 "Let's setup your account",
                 style: TextStyle(
@@ -67,7 +69,7 @@ class _AccountSetUpFullNameScreenState
                 height: 12,
               ),
               const Row(
-                children: [
+                children: <Widget>[
                   Icon(
                     PhosphorIconsBold.identificationCard,
                   ),
@@ -80,7 +82,7 @@ class _AccountSetUpFullNameScreenState
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(
@@ -118,13 +120,13 @@ class _AccountSetUpFullNameScreenState
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.greyLight),
+                      color: AppColors.greyLight,),
                 ),
               ),
               const Spacer(),
               GestureDetector(
                 onTap: () =>
-                    const AccountSetUpUsernameScreenRoute().push(context),
+                    unawaited(const AccountSetUpUsernameScreenRoute().push(context)),
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColors.black,
@@ -138,7 +140,7 @@ class _AccountSetUpFullNameScreenState
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.white),
+                          color: AppColors.white,),
                     ),
                   ),
                 ),

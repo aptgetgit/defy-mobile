@@ -31,12 +31,38 @@ class $AssetsIconsGen {
   AssetGenImage get appleLogo =>
       const AssetGenImage('assets/icons/apple-logo.png');
 
+  /// File path: assets/icons/aptos.png
+  AssetGenImage get aptos => const AssetGenImage('assets/icons/aptos.png');
+
+  /// File path: assets/icons/binance.png
+  AssetGenImage get binance => const AssetGenImage('assets/icons/binance.png');
+
+  /// File path: assets/icons/btc.png
+  AssetGenImage get btc => const AssetGenImage('assets/icons/btc.png');
+
   /// File path: assets/icons/coins.png
   AssetGenImage get coins => const AssetGenImage('assets/icons/coins.png');
+
+  /// File path: assets/icons/dai.png
+  AssetGenImage get dai => const AssetGenImage('assets/icons/dai.png');
+
+  /// File path: assets/icons/ethereum-circular.png
+  AssetGenImage get ethereumCircular =>
+      const AssetGenImage('assets/icons/ethereum-circular.png');
+
+  /// File path: assets/icons/ethereum.png
+  AssetGenImage get ethereum =>
+      const AssetGenImage('assets/icons/ethereum.png');
 
   /// File path: assets/icons/google-logo.png
   AssetGenImage get googleLogo =>
       const AssetGenImage('assets/icons/google-logo.png');
+
+  /// File path: assets/icons/polygon.png
+  AssetGenImage get polygon => const AssetGenImage('assets/icons/polygon.png');
+
+  /// File path: assets/icons/usdc.png
+  AssetGenImage get usdc => const AssetGenImage('assets/icons/usdc.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
@@ -45,13 +71,49 @@ class $AssetsIconsGen {
         appLogoDark,
         appLogoLight,
         appleLogo,
+        aptos,
+        binance,
+        btc,
         coins,
-        googleLogo
+        dai,
+        ethereumCircular,
+        ethereum,
+        googleLogo,
+        polygon,
+        usdc
       ];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/avatar-1.png
+  AssetGenImage get avatar1 =>
+      const AssetGenImage('assets/images/avatar-1.png');
+
+  /// File path: assets/images/avatar-2.png
+  AssetGenImage get avatar2 =>
+      const AssetGenImage('assets/images/avatar-2.png');
+
+  /// File path: assets/images/avatar-3.png
+  AssetGenImage get avatar3 =>
+      const AssetGenImage('assets/images/avatar-3.png');
+
+  /// File path: assets/images/avatar-4.png
+  AssetGenImage get avatar4 =>
+      const AssetGenImage('assets/images/avatar-4.png');
+
+  /// File path: assets/images/avatar-5.png
+  AssetGenImage get avatar5 =>
+      const AssetGenImage('assets/images/avatar-5.png');
+
+  /// File path: assets/images/avatar-6.png
+  AssetGenImage get avatar6 =>
+      const AssetGenImage('assets/images/avatar-6.png');
+
+  /// File path: assets/images/avatar-7.png
+  AssetGenImage get avatar7 =>
+      const AssetGenImage('assets/images/avatar-7.png');
 
   /// File path: assets/images/face-with-tears-of-joy.gif
   AssetGenImage get faceWithTearsOfJoy =>
@@ -88,6 +150,21 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/login-8.png
   AssetGenImage get login8 => const AssetGenImage('assets/images/login-8.png');
+
+  /// File path: assets/images/nft-1.png
+  AssetGenImage get nft1 => const AssetGenImage('assets/images/nft-1.png');
+
+  /// File path: assets/images/nft-2.png
+  AssetGenImage get nft2 => const AssetGenImage('assets/images/nft-2.png');
+
+  /// File path: assets/images/nft-3.png
+  AssetGenImage get nft3 => const AssetGenImage('assets/images/nft-3.png');
+
+  /// File path: assets/images/nft-4.png
+  AssetGenImage get nft4 => const AssetGenImage('assets/images/nft-4.png');
+
+  /// File path: assets/images/nft-5.png
+  AssetGenImage get nft5 => const AssetGenImage('assets/images/nft-5.png');
 
   /// File path: assets/images/onboarding-1.gif
   AssetGenImage get onboarding1 =>
@@ -143,6 +220,13 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        avatar1,
+        avatar2,
+        avatar3,
+        avatar4,
+        avatar5,
+        avatar6,
+        avatar7,
         faceWithTearsOfJoy,
         grinningFaceWithSmilingEyes,
         kissingFace,
@@ -154,6 +238,11 @@ class $AssetsImagesGen {
         login6,
         login7,
         login8,
+        nft1,
+        nft2,
+        nft3,
+        nft4,
+        nft5,
         onboarding1,
         onboarding2,
         onboarding3,

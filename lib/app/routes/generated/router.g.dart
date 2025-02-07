@@ -13,6 +13,10 @@ List<RouteBase> get $appRoutes => [
       $loginPageRoute,
       $accountSetUpFullNameScreenRoute,
       $accountSetUpUsernameScreenRoute,
+      $sendScreenRoute,
+      $sendToSelfScreenRoute,
+      $sendToContactsScreenRoute,
+      $sendToFriendsScreenRoute,
       $splashRoute,
       $waitlistScreenRoute,
       $walletCreationScreenRoute,
@@ -147,6 +151,98 @@ extension $AccountSetUpUsernameScreenRouteExtension
 
   String get location => GoRouteData.$location(
         '/account-set-up-username',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sendScreenRoute => GoRouteData.$route(
+      path: '/send',
+      factory: $SendScreenRouteExtension._fromState,
+    );
+
+extension $SendScreenRouteExtension on SendScreenRoute {
+  static SendScreenRoute _fromState(GoRouterState state) =>
+      const SendScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/send',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sendToSelfScreenRoute => GoRouteData.$route(
+      path: '/send/send-to-self',
+      factory: $SendToSelfScreenRouteExtension._fromState,
+    );
+
+extension $SendToSelfScreenRouteExtension on SendToSelfScreenRoute {
+  static SendToSelfScreenRoute _fromState(GoRouterState state) =>
+      const SendToSelfScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/send/send-to-self',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sendToContactsScreenRoute => GoRouteData.$route(
+      path: '/send/send-to-contacts',
+      factory: $SendToContactsScreenRouteExtension._fromState,
+    );
+
+extension $SendToContactsScreenRouteExtension on SendToContactsScreenRoute {
+  static SendToContactsScreenRoute _fromState(GoRouterState state) =>
+      const SendToContactsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/send/send-to-contacts',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sendToFriendsScreenRoute => GoRouteData.$route(
+      path: '/send/send-to-friends',
+      factory: $SendToFriendsScreenRouteExtension._fromState,
+    );
+
+extension $SendToFriendsScreenRouteExtension on SendToFriendsScreenRoute {
+  static SendToFriendsScreenRoute _fromState(GoRouterState state) =>
+      const SendToFriendsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/send/send-to-friends',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -303,7 +399,7 @@ extension $ImportWalletScreenRouteExtension on ImportWalletScreenRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'dcb0553649d6d72575e52e3fed44b3d8400440e3';
+String _$routerHash() => r'd32b4645cc9face3189ef9483abc209a92c13192';
 
 /// See also [router].
 @ProviderFor(router)

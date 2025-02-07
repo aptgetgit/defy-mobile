@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/bip39_wordlist.dart';
+import '../../../account/presentation/providers/account_generation_flow_manager.dart';
 
 class ImportWalletImportSeedPhraseScreen extends ConsumerStatefulWidget {
   const ImportWalletImportSeedPhraseScreen({super.key});
@@ -46,11 +47,13 @@ class _ImportWalletImportSeedPhraseScreenState
     }
   }
 
-  void _importMnemonic() {
-  // final String mnemonic = _words.join(' ');
-  // ref.read(accountGenerationFlowManagerProvider.notifier).importMnemonic(mnemonic);
-}
+  void _importMnemonic() async {
+    final String mnemonic = _words.join(' ');
 
+    await ref
+        .watch(accountGenerationFlowManagerProvider.notifier)
+        .importMnemonic(mnemonic);
+  }
 
   void _addWord(String word) {
     word = word.trim().toLowerCase();
@@ -92,7 +95,7 @@ class _ImportWalletImportSeedPhraseScreenState
 
   @override
   Widget build(BuildContext context) {
-    final double baseHeight = _words.isEmpty ? 100 : 20;
+    final double baseHeight = _words.isEmpty ? 100 : 60;
     final double dynamicHeight = baseHeight + (_words.length / 3).ceil() * 40;
 
     return Padding(
@@ -104,7 +107,7 @@ class _ImportWalletImportSeedPhraseScreenState
             'Import Seed Phrase 🤫',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           const Text(
             'Enter your 12 or 24-word seed phrase.',
             style: TextStyle(
@@ -116,7 +119,8 @@ class _ImportWalletImportSeedPhraseScreenState
           const SizedBox(height: 20),
           Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 343, minWidth: 343),
+              constraints: const BoxConstraints(
+                  maxWidth: double.infinity, minWidth: double.infinity),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 height: dynamicHeight,
@@ -139,26 +143,25 @@ class _ImportWalletImportSeedPhraseScreenState
           ),
           const Spacer(),
           GestureDetector(
-  onTap: _words.isNotEmpty ? _importMnemonic : _pasteFromClipboard,
-  child: Container(
-    width: double.infinity,
-    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-    decoration: BoxDecoration(
-      color: AppColors.black,
-      borderRadius: BorderRadius.circular(40),
-    ),
-    child: Text(
-      _words.isEmpty ? 'Paste from clipboard' : 'Continue',
-      style: const TextStyle(
-        color: AppColors.white,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-      ),
-      textAlign: TextAlign.center,
-    ),
-  ).animate().scale(),
-),
-
+            onTap: _words.isNotEmpty ? _importMnemonic : _pasteFromClipboard,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              decoration: BoxDecoration(
+                color: AppColors.black,
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: Text(
+                _words.isEmpty ? 'Paste from clipboard' : 'Continue',
+                style: const TextStyle(
+                  color: AppColors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ).animate().scale(),
+          ),
         ],
       ),
     );

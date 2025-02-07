@@ -94,16 +94,16 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                       bottom: 20,
                       child: Column(
                         children: <Widget>[
-                          Text(
-                            'Defy',
+                          const Text(
+                            'Welcome',
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 28,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
                           ),
-                          Text(
-                            'Beta program',
+                          const Text(
+                            'on your first Defy journey',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -115,6 +115,8 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                     ),
                   ],
                 ),
+                AnimatedContainer(
+                    duration: const Duration(milliseconds: 300), height: 20),
                 AnimatedBuilder(
                   animation: _animation,
                   builder: (BuildContext context, Widget? child) =>
@@ -129,26 +131,10 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                 ),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: _isTextFieldFocused ? 0 : 220,
-                ),
-                const Text(
-                  'Welcome',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-                const Text(
-                  'on your first Defy journey',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.greyLight,
-                  ),
+                  height: _isTextFieldFocused ? 0 : 200,
                 ),
                 AnimatedContainer(
-                  height: _isTextFieldFocused ? 20 : 40,
+                  height: _isTextFieldFocused ? 60 : 40,
                   duration: const Duration(milliseconds: 300),
                 ),
                 Container(
@@ -174,14 +160,14 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                     ),
                   ),
                 ),
-                if (_isTextFieldFocused) const SizedBox(height: 10),
+                if (_isTextFieldFocused) const SizedBox(height: 24),
                 if (_isTextFieldFocused)
                   GestureDetector(
                     onTap: () => AccountSetUpFullNameScreenRoute().go(context),
                     child: Container(
                       width: double.infinity,
-                      margin: const EdgeInsets.symmetric(horizontal: 24),
-                      padding: const EdgeInsets.all(14),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: AppColors.black,
                         borderRadius: BorderRadius.circular(40),

@@ -143,22 +143,26 @@ GeneratePrivateKeyUseCase generatePrivateKeyUseCase(Ref ref) =>
 @riverpod
 CreateAptosAccountUseCase createAptosAccountUseCase(Ref ref) =>
     CreateAptosAccountUseCase(
-        repository: ref.read(aptosAccountRepositoryProvider),);
+      repository: ref.read(aptosAccountRepositoryProvider),
+    );
 
 @riverpod
 DeleteAptosAccountUseCase deleteAptosAccountUseCase(Ref ref) =>
     DeleteAptosAccountUseCase(
-        repository: ref.read(aptosAccountRepositoryProvider),);
+      repository: ref.read(aptosAccountRepositoryProvider),
+    );
 
 @riverpod
 GetAptosAccountUseCase getAptosAccountUseCase(Ref ref) =>
     GetAptosAccountUseCase(
-        repository: ref.read(aptosAccountRepositoryProvider),);
+      repository: ref.read(aptosAccountRepositoryProvider),
+    );
 
 @riverpod
 ListAptosAccountsUseCase listAptosAccountsUseCase(Ref ref) =>
     ListAptosAccountsUseCase(
-        repository: ref.read(aptosAccountRepositoryProvider),);
+      repository: ref.read(aptosAccountRepositoryProvider),
+    );
 
 @riverpod
 RevealAccountPublicKeyUseCase revealAccountPublicKeyUseCase(Ref ref) =>
@@ -189,4 +193,12 @@ CanRevealMnemonicUseCase canRevealMnemonicUseCase(Ref ref) =>
     CanRevealMnemonicUseCase(
       accountRepository: ref.read(aptosAccountRepositoryProvider),
       jwkRepository: ref.read(jwkRepositoryProvider),
+    );
+
+@riverpod
+SignMessageUseCase signMessageUseCase(Ref ref) => SignMessageUseCase(
+      accountRepository: ref.read(aptosAccountRepositoryProvider),
+      jwkRepository: ref.read(jwkRepositoryProvider),
+      entropyRepository: ref.read(entropyRepositoryProvider),
+      privateJwkRepository: ref.read(privateJwkRepositoryProvider),
     );

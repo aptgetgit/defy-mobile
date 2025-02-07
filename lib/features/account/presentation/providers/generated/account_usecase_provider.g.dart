@@ -379,5 +379,24 @@ final canRevealMnemonicUseCaseProvider =
 // ignore: unused_element
 typedef CanRevealMnemonicUseCaseRef
     = AutoDisposeProviderRef<CanRevealMnemonicUseCase>;
+String _$signMessageUseCaseHash() =>
+    r'3bb678e34cdc7ca460b4c1f4c895c91b11c89e45';
+
+/// See also [signMessageUseCase].
+@ProviderFor(signMessageUseCase)
+final signMessageUseCaseProvider =
+    AutoDisposeProvider<SignMessageUseCase>.internal(
+  signMessageUseCase,
+  name: r'signMessageUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$signMessageUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SignMessageUseCaseRef = AutoDisposeProviderRef<SignMessageUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -7,7 +7,7 @@ part of '../message_signing_flow_manager.dart';
 // **************************************************************************
 
 String _$messageSigningFlowManagerHash() =>
-    r'd347809dca9651c47382299200e57cd1af545bd0';
+    r'0c66bfe16365c0490fe66759dc5ec509b8cc283b';
 
 /// See also [MessageSigningFlowManager].
 @ProviderFor(MessageSigningFlowManager)

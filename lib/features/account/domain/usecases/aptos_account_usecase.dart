@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:aptos_dart/aptos.dart' as aptos;
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:ed25519_edwards/ed25519_edwards.dart' as ed25519;
 
 import '../../../../shared/utils/hex_utils.dart';
 import '../../data/repositories/aptos_account_repository_implementation.dart';
@@ -285,5 +286,98 @@ class CanRevealMnemonicUseCase {
     final HDKeySourceConfig? hdConfig =
         _jwkRepository.getHDKeySourceConfig(keyId: authConfig.keyId);
     return hdConfig != null;
+  }
+}
+
+class SignMessageUseCase {
+  SignMessageUseCase({
+    required AptosAccountRepository accountRepository,
+    required JwkRepository jwkRepository,
+    required EntropyRepository entropyRepository,
+    required PrivateJwkRepository privateJwkRepository,
+  })  : _accountRepository = accountRepository,
+        _jwkRepository = jwkRepository,
+        _entropyRepository = entropyRepository,
+        _privateJwkRepository = privateJwkRepository;
+
+  final AptosAccountRepository _accountRepository;
+  final JwkRepository _jwkRepository;
+  final EntropyRepository _entropyRepository;
+  final PrivateJwkRepository _privateJwkRepository;
+
+  Future<(Uint8List, Uint8List)> call({
+    required AccountAddress accountAddress,
+    required Uint8List message,
+  }) async {
+    final AptosAccount? account =
+        _accountRepository.getByAddress(accountAddress: accountAddress);
+    if (account == null) {
+      throw StateError('Account not found');
+    }
+
+    final AuthenticatorConfig? authConfig =
+        _accountRepository.getAuthConfigByAuthKey(
+      authKey: account.authenticationKey,
+    );
+    if (authConfig == null) {
+      throw StateError('Auth configuration not found');
+    }
+
+    try {
+      late final Uint8List privateKeyBytes;
+      final HDKeySourceConfig? hdConfig =
+          _jwkRepository.getHDKeySourceConfig(keyId: authConfig.keyId);
+
+      if (hdConfig != null) {
+        final Uint8List? entropy =
+            await _entropyRepository.get(hash: hdConfig.entropyHash);
+        if (entropy == null) {
+          throw StateError('Entropy not found');
+        }
+        privateKeyBytes =
+            _derivePrivateKey(entropy, hdConfig.derivationPath.toBytes());
+      } else {
+        final Jwk? privateJwk =
+            await _privateJwkRepository.get(keyId: authConfig.keyId);
+        if (privateJwk == null) {
+          throw StateError('Private key not found');
+        }
+
+        privateKeyBytes = switch (privateJwk) {
+          Ed25519Jwk(:final Uint8List d?) => d,
+          Secp256k1Jwk(:final Uint8List d?) => d,
+          Secp256r1Jwk(:final Uint8List d?) => d,
+          _ => throw StateError('Invalid private key format'),
+        };
+      }
+
+      final ed25519.PrivateKey privateKey =
+          ed25519.newKeyFromSeed(privateKeyBytes);
+      final Uint8List signature = ed25519.sign(privateKey, message);
+      final ed25519.PublicKey publicKey = ed25519.public(privateKey);
+
+      return (signature, Uint8List.fromList(publicKey.bytes));
+    } catch (e) {
+      throw StateError('Failed to sign message: $e');
+    }
+  }
+
+  Uint8List _derivePrivateKey(Uint8List entropy, Uint8List derivationPath) {
+    try {
+      final String mnemonic = bip39.entropyToMnemonic(bytesToHex(entropy));
+      final String seed = bip39.mnemonicToSeedHex(mnemonic);
+      final aptos.Keys keys = aptos.derivePath(
+        AptosDerivationPath.fromBytes(derivationPath).toString(),
+        seed,
+      );
+
+      if (keys.key == null || keys.key!.isEmpty) {
+        throw StateError('Key derivation failed: invalid key generated');
+      }
+
+      return keys.key!;
+    } catch (e) {
+      throw StateError('Key derivation failed: $e');
+    }
   }
 }

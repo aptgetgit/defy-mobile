@@ -56,17 +56,21 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
   Future<void> _startRotationAnimation() async {
     while (!_isTextFieldFocused) {
       await Future<void>.delayed(const Duration(seconds: 3));
-      if (!_isTextFieldFocused) await _controller.forward();
+      if (!_isTextFieldFocused) {
+        await _controller.forward();
+      }
       await Future<void>.delayed(const Duration(seconds: 1));
-      if (!_isTextFieldFocused) await _controller.reverse();
+      if (!_isTextFieldFocused) {
+        await _controller.reverse();
+      }
     }
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _focusNode.removeListener(_onFocusChange);
-    _focusNode.dispose();
+    _focusNode..removeListener(_onFocusChange)
+    ..dispose();
     super.dispose();
   }
 
@@ -94,7 +98,7 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                       bottom: 20,
                       child: Column(
                         children: <Widget>[
-                          const Text(
+                          Text(
                             'Welcome',
                             style: TextStyle(
                               fontSize: 28,
@@ -102,7 +106,7 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                               color: Colors.black,
                             ),
                           ),
-                          const Text(
+                          Text(
                             'on your first Defy journey',
                             style: TextStyle(
                               fontSize: 16,
@@ -116,7 +120,7 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                   ],
                 ),
                 AnimatedContainer(
-                    duration: const Duration(milliseconds: 300), height: 20),
+                    duration: const Duration(milliseconds: 300), height: 20,),
                 AnimatedBuilder(
                   animation: _animation,
                   builder: (BuildContext context, Widget? child) =>
@@ -179,7 +183,7 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                         style: TextStyle(
                             color: AppColors.white,
                             fontSize: 16,
-                            fontWeight: FontWeight.w600),
+                            fontWeight: FontWeight.w600,),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -194,7 +198,7 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                         fontSize: 14,
                         color: AppColors.greyDark,
                       ),
-                      children: [
+                      children: <InlineSpan>[
                         TextSpan(text: 'Defy is still in '),
                         TextSpan(
                           text: 'beta program',

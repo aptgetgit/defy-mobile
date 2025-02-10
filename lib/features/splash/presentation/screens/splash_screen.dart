@@ -44,8 +44,8 @@ class SplashScreen extends HookConsumerWidget {
       });
 
       return () {
-        videoController.removeListener(() {});
-        videoController.dispose();
+        videoController..removeListener(() {})
+        ..dispose();
       };
     }, <Object?>[videoController],);
 

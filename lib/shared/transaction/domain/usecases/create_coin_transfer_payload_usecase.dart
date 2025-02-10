@@ -4,9 +4,9 @@ import '../../../account/domain/entities/account_address.dart';
 import '../repositories/transaction_payload_repository.dart';
 
 class CreateCoinTransferPayloadUseCase {
-  CreateCoinTransferPayloadUseCase(
-      {required ITransactionPayloadRepository repository})
-      : _repository = repository;
+  CreateCoinTransferPayloadUseCase({
+    required ITransactionPayloadRepository repository,
+  }) : _repository = repository;
 
   final ITransactionPayloadRepository _repository;
 

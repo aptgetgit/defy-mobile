@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../shared/utils/hex_utils.dart';
+import '../../../../utils/hex_utils.dart';
 import '../../../../account/domain/entities/authentication_key.dart';
 import '../../../domain/entities/account_data.dart';
 

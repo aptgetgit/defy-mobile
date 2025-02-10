@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:objectbox/objectbox.dart';
 
-import '../../../../../shared/utils/crypto_utils.dart';
+import '../../../../utils/crypto_utils.dart';
 import '../../../../account/domain/entities/account_address.dart';
 import '../../../../account/domain/entities/authentication_key.dart';
 import '../../../domain/entities/account_data.dart';
@@ -44,6 +44,9 @@ class AccountDataLocalModel {
   DateTime lastUpdated;
 
   AccountData toDomain() => AccountData(
-      sequenceNumber: BigInt.parse(sequenceNumber),
-      authenticationKey: AuthenticationKey(bytes: authenticationKey));
+        sequenceNumber: BigInt.parse(sequenceNumber),
+        authenticationKey: AuthenticationKey(
+          bytes: authenticationKey,
+        ),
+      );
 }

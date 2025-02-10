@@ -31,7 +31,7 @@ analyzer:
 
   errors:
     invalid_annotation_target: ignore
-    deprecated_member_use_from_same_package: warning
+    deprecated_member_use_from_same_package: error
     dead_code: warning
     invalid_use_of_visible_for_testing_member: error
     invalid_use_of_protected_member: error

@@ -26,23 +26,30 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
   }
 
   void _setupJavaScriptHandlers(InAppWebViewController controller) {
-    controller.addJavaScriptHandler(
-      handlerName: 'getConfig',
-      callback: (List args) async {
-        final ByteData imageData =
-            await rootBundle.load('assets/icons/app-icon.png');
-        final Uint8List bytes = imageData.buffer.asUint8List();
-        final String base64Icon =
-            'data:image/png;base64,${base64Encode(bytes)}';
+    // ignore: avoid_single_cascade_in_expression_statements
+    controller
+      ..addJavaScriptHandler(
+        handlerName: 'getConfig',
+        callback: (List args) async {
+          final ByteData imageData =
+              await rootBundle.load('assets/icons/app-icon.png');
+          final Uint8List bytes = imageData.buffer.asUint8List();
+          final String base64Icon =
+              'data:image/png;base64,${base64Encode(bytes)}';
 
-        return <String, Object>{
-          'url': 'https://avex.id/defy',
-          'name': 'Defy',
-          'icon': base64Icon,
-          'chains': <String>['aptos:devnet', 'aptos:testnet', 'aptos:localnet', 'aptos:mainnet'],
-        };
-      },
-    );
+          return <String, Object>{
+            'url': 'https://avex.id/defy',
+            'name': 'Defy',
+            'icon': base64Icon,
+            'chains': <String>[
+              'aptos:devnet',
+              'aptos:testnet',
+              'aptos:localnet',
+              'aptos:mainnet',
+            ],
+          };
+        },
+      );
 
     // // Handler for getting account info
     // ..addJavaScriptHandler(
@@ -59,18 +66,16 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
     //       'icon': 'your_base64_icon',
     //     };
     //   },
-    // )
+    // );
 
-    // // Handler for connecting wallet
+    // // // Handler for connecting wallet
     // ..addJavaScriptHandler(
     //   handlerName: 'connect',
     //   callback: (List args) async {
     //     try {
-    //       // Implement your connect logic here
     //       return <String, String>{
     //         'accountAddress': 'connected_address',
     //         'publicKey': 'public_key',
-    //         // ... other account properties
     //       };
     //     } catch (e) {
     //       throw Exception('Connection failed: $e');
@@ -184,7 +189,8 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
                 child: InAppWebView(
                   initialUrlRequest: URLRequest(
                     url: WebUri(
-                        'https://avex-id.github.io/aptos-wallet-adapter/',),
+                      'https://avex-id.github.io/aptos-wallet-adapter/',
+                    ),
                   ),
                   initialUserScripts:
                       UnmodifiableListView<UserScript>(<UserScript>[

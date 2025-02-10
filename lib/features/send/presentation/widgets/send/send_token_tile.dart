@@ -38,10 +38,9 @@ class _SendTokenTileState extends ConsumerState<SendTokenTile> {
     final String subHeadingText = widget.subHeading;
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+        children: <Widget>[
           if (assetPath == null)
             Container(
               width: 50,
@@ -52,7 +51,8 @@ class _SendTokenTileState extends ConsumerState<SendTokenTile> {
               child: Center(
                 child: Text(
                   headingText.substring(0, 1).toUpperCase(),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w600),
                 ),
               ),
             )
@@ -64,7 +64,7 @@ class _SendTokenTileState extends ConsumerState<SendTokenTile> {
           const Gap(12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(
                 headingText,
                 style: const TextStyle(
@@ -89,7 +89,7 @@ class _SendTokenTileState extends ConsumerState<SendTokenTile> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const Gap(12),
+          if (widget.isSelectionMode) const Gap(12),
           if (widget.isSelectionMode)
             CustomCheckbox(
               isChecked: widget.tileSelected,

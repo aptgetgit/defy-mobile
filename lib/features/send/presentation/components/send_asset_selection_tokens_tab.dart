@@ -6,7 +6,6 @@ import '../screens/send_token.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 
 import 'package:defy/features/send/presentation/widgets/send/send_token_tile.dart';
 
@@ -24,7 +23,6 @@ class SendAssetSelectionTokensTab<T extends SelectableItem>
     required this.selectedToItems,
     super.key,
     required this.isSelectionMode,
- 
   });
 
   @override
@@ -35,7 +33,6 @@ class SendAssetSelectionTokensTab<T extends SelectableItem>
 
     return ListView(
       children: [
-        const Gap(20),
         ...tokens.asMap().entries.map((entry) {
           final index = entry.key;
           final token = entry.value;

@@ -22,7 +22,7 @@ class _SendScreenState extends ConsumerState<SendScreen>
   late AnimationController _expandController;
   late Animation<double> _expandAnimation;
   bool _isSearchFocused = false;
-  List<UserModel> _filteredUsers = [];
+  List<UserModel> _filteredUsers = <UserModel>[];
   final FocusNode _searchFocusNode = FocusNode();
 
   @override
@@ -37,13 +37,15 @@ class _SendScreenState extends ConsumerState<SendScreen>
       curve: Curves.easeInOutCubic,
     );
     _searchFocusNode.addListener(_onFocusChange);
+    _filteredUsers = <UserModel>[];
   }
 
   @override
   void dispose() {
     _expandController.dispose();
-    _searchFocusNode.removeListener(_onFocusChange);
-    _searchFocusNode.dispose();
+    _searchFocusNode
+      ..removeListener(_onFocusChange)
+      ..dispose();
     super.dispose();
   }
 
@@ -55,11 +57,19 @@ class _SendScreenState extends ConsumerState<SendScreen>
 
   void _performSearch(String query, List<UserModel> users) {
     setState(() {
-      _filteredUsers = users
-          .where((user) =>
-              user.userName.toLowerCase().contains(query.toLowerCase()) ||
-              user.walletAddress.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      if (query.isEmpty) {
+        _filteredUsers = users;
+      } else {
+        _filteredUsers = users
+            .where(
+              (UserModel user) =>
+                  user.userName.toLowerCase().contains(query.toLowerCase()) ||
+                  user.walletAddress
+                      .toLowerCase()
+                      .contains(query.toLowerCase()),
+            )
+            .toList();
+      }
     });
   }
 
@@ -140,7 +150,7 @@ class _SendScreenState extends ConsumerState<SendScreen>
         body: SafeArea(
           bottom: false,
           child: Column(
-            children: [
+            children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: _buildSearchBar(sendState, sendController, users),
@@ -158,19 +168,22 @@ class _SendScreenState extends ConsumerState<SendScreen>
                           child: _isSearchFocused
                               ? const SizedBox.shrink()
                               : Column(
-                                  children: [
+                                  children: <Widget>[
                                     const SizedBox(height: 12),
                                     _buildWalletTiles(),
                                     const SizedBox(height: 20),
                                     _buildSelfTransferSection(),
                                     const SizedBox(height: 16),
                                     _buildContactsSection(
-                                        sendState, sendController),
+                                      sendState,
+                                      sendController,
+                                    ),
                                   ],
                                 ),
                         ),
                         _buildRecentSection(
-                            _isSearchFocused ? _filteredUsers : users),
+                          _isSearchFocused ? _filteredUsers : users,
+                        ),
                       ],
                     ),
                   ),
@@ -223,7 +236,10 @@ class _SendScreenState extends ConsumerState<SendScreen>
                   contentPadding: EdgeInsets.only(bottom: 4),
                 ),
                 textAlignVertical: TextAlignVertical.top,
-                onChanged: (value) => _performSearch(value, users),
+                onChanged: (String value) {
+                  _performSearch(value, users);
+                  setState(() {});
+                },
               ),
             ),
             GestureDetector(
@@ -266,6 +282,27 @@ class _SendScreenState extends ConsumerState<SendScreen>
             backgroundColor: AppColors.greyVeryLight,
             iconColor: AppColors.greyLight,
           ),
+        ],
+      );
+  Widget _buildWalletTilesForSearch() => Column(
+        children: <Widget>[
+          _buildWalletTile(
+            icon: PhosphorIconsRegular.scan,
+            title: 'Scan QR Code',
+            subTitle: 'Tap to Scan QR Address',
+            onTap: () {},
+            backgroundColor: AppColors.greyVeryLight,
+            iconColor: AppColors.greyLight,
+          ),
+          const Gap(20),
+          _buildWalletTile(
+            icon: PhosphorIconsRegular.scan,
+            title: 'Phone Contacts',
+            subTitle: 'Send crypto via phone number',
+            backgroundColor: AppColors.greyVeryLight,
+            iconColor: AppColors.greyLight,
+          ),
+          const Gap(20),
         ],
       );
 
@@ -602,6 +639,14 @@ class _SendScreenState extends ConsumerState<SendScreen>
   Widget _buildRecentSection(List<UserModel> users) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          if (_isSearchFocused) const SizedBox(height: 20),
+          if (_isSearchFocused &&
+              ref
+                  .read(sendScreenProviderProvider)
+                  .searchController
+                  .text
+                  .isEmpty)
+            _buildWalletTilesForSearch(),
           const Text(
             'Recent',
             style: TextStyle(color: AppColors.greyLight),
@@ -616,10 +661,11 @@ class _SendScreenState extends ConsumerState<SendScreen>
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: users.length,
+            itemCount: _isSearchFocused ? _filteredUsers.length : users.length,
             padding: EdgeInsets.zero,
             itemBuilder: (BuildContext context, int index) {
-              final UserModel contact = users[index];
+              final UserModel contact =
+                  _isSearchFocused ? _filteredUsers[index] : users[index];
               return ListTile(
                 minVerticalPadding: 0,
                 contentPadding: EdgeInsets.zero,

@@ -174,11 +174,7 @@ class _SendAssetSelectionState<T extends SelectableItem>
                       fontSize: 20,
                     ),
                   ),
-                  Icon(
-                    PhosphorIcons.paperPlaneTilt(PhosphorIconsStyle.bold),
-                    color: Colors.black,
-                    size: 21,
-                  ),
+                  SizedBox.shrink()
                 ],
               ),
               const Gap(20),

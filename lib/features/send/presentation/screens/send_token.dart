@@ -45,18 +45,19 @@ class _SendTokenState extends State<SendToken> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
-            children: [
+            children: <Widget>[
+              const Gap(20),
               _buildAppBar(),
               const Gap(20),
               _buildRecipientBar(),
-              const Gap(18),
+              const Gap(40),
               _buildAmountDisplay(width),
               const Spacer(),
               _buildTokenSelector(),
               const Gap(12),
               _buildNumpad(),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.only(bottom: 12),
                 child: CustomSwipeButton(onSwipeCompleted: _continueToLoading),
               ),
             ],
@@ -68,16 +69,20 @@ class _SendTokenState extends State<SendToken> {
 
   Widget _buildAppBar() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        children: <Widget>[
           GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: Icon(PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
-                color: Colors.black, size: 18),
+            child: Icon(
+              PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
+              color: Colors.black,
+              size: 24,
+            ),
           ),
-          const Text('Send',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
-          Icon(PhosphorIcons.paperPlaneTilt(PhosphorIconsStyle.bold),
-              color: Colors.black, size: 21),
+          const Text(
+            'Send',
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+          ),
+          const SizedBox.shrink(),
         ],
       );
 
@@ -89,16 +94,19 @@ class _SendTokenState extends State<SendToken> {
           borderRadius: BorderRadius.circular(60),
         ),
         child: Row(
-          children: [
+          children: <Widget>[
             const Gap(16),
-            const Text('To',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const Text(
+              'To',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
             const Gap(20),
             _buildRecipientAvatars(),
             const Gap(4),
-            Text(_buildSelectedText()!,
-                style:
-                    const TextStyle(fontSize: 16, color: AppColors.greyLight)),
+            Text(
+              _buildSelectedText()!,
+              style: const TextStyle(fontSize: 16, color: AppColors.greyLight),
+            ),
             const Spacer(),
             _buildAddRecipientButton(),
           ],
@@ -107,7 +115,7 @@ class _SendTokenState extends State<SendToken> {
 
   Widget _buildRecipientAvatars() => RowSuper(
         innerDistance: -24,
-        children: widget.selectedToItems.map((item) {
+        children: widget.selectedToItems.map((SelectableItem item) {
           String assetPath = '';
           if (item is UserModel) {
             assetPath = item.asset;
@@ -128,10 +136,16 @@ class _SendTokenState extends State<SendToken> {
           height: 24,
           width: 24,
           decoration: BoxDecoration(
-              color: Colors.black, borderRadius: BorderRadius.circular(24)),
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(24),
+          ),
           child: Center(
-              child: Icon(PhosphorIcons.plus(PhosphorIconsStyle.bold),
-                  color: Colors.white, size: 15)),
+            child: Icon(
+              PhosphorIcons.plus(PhosphorIconsStyle.bold),
+              color: Colors.white,
+              size: 15,
+            ),
+          ),
         ),
       );
 
@@ -139,124 +153,110 @@ class _SendTokenState extends State<SendToken> {
         height: 180,
         padding: const EdgeInsets.all(0),
         alignment: Alignment.center,
-        child: Stack(children: [
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.bounceInOut,
-            bottom: _isSwapped ? 0 : 55,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: width * 0.6,
-                  height: 100,
-                  child: FittedBox(
+        child: Stack(
+          children: <Widget>[
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.bounceInOut,
+              bottom: _isSwapped ? 0 : 55,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width: width * 0.6,
+                    height: 100,
+                    child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Row(
-                        children: List.generate(20, (index) {
-                          final String char =
-                              index < _amount.length ? _amount[index] : "";
-                          bool isNotVisible = (_amount.length > _amount.length
-                              ? index >= _amount.length
-                              : index >= _amount.length);
-                          return AnimatedSlide(
-                            duration: const Duration(milliseconds: 150),
-                            offset:
-                                (!isNotVisible) ? Offset(0, 0) : Offset(0, 0.5),
-                            child: AnimatedOpacity(
-                              opacity: (!isNotVisible) ? 1 : 0,
-                              duration: const Duration(milliseconds: 200),
-                              child: AnimatedDefaultTextStyle(
-                                duration: const Duration(milliseconds: 200),
-                                style: TextStyle(
-                                    fontFamily: 'SfCompactRounded',
-                                    fontWeight: _isSwapped
-                                        ? FontWeight.w500
-                                        : FontWeight.w700,
-                                    color: _isSwapped
-                                        ? Color(0xff646d80)
-                                        : Colors.black,
-                                    fontSize: _isSwapped
-                                        ? 14
-                                        : 80 - (_amount.length * 3)),
-                                child: Text(char),
-                              ),
+                        children: List.generate(_amount.length, (int index) {
+                          final String char = _amount[index];
+                          return AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 200),
+                            style: TextStyle(
+                              fontFamily: 'SfCompactRounded',
+                              fontWeight: _isSwapped
+                                  ? FontWeight.w400
+                                  : FontWeight.w600,
+                              color: _isSwapped
+                                  ? const Color(0xff646d80)
+                                  : Colors.black,
+                              fontSize: _isSwapped
+                                  ? 14
+                                  : (72 - (_amount.length * 3))
+                                      .clamp(24.0, 72.0)
+                                      .toDouble(),
                             ),
+                            child: Text(char),
                           );
                         }),
-                      )),
-                ),
-              ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.bounceInOut,
-            bottom: !_isSwapped ? 0 : 55,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: width * 0.6,
-                  height: 100,
-                  child: FittedBox(
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.bounceInOut,
+              bottom: !_isSwapped ? 0 : 55,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width: width * 0.6,
+                    height: 100,
+                    child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Row(
-                          children: List.generate(20, (index) {
-                        final String char =
-                            index < _amount2.length ? _amount2[index] : "";
-                        bool isNotVisible = (_amount2.length > _amount2.length
-                            ? index >= _amount2.length
-                            : index >= _amount2.length);
-                        return AnimatedSlide(
-                          duration: const Duration(milliseconds: 150),
-                          offset:
-                              (!isNotVisible) ? Offset(0, 0) : Offset(0, 0.5),
-                          child: AnimatedOpacity(
-                            opacity: (!isNotVisible) ? 1 : 0,
+                        children: List.generate(_amount2.length, (int index) {
+                          final String char = _amount2[index];
+                          return AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 200),
-                            child: AnimatedDefaultTextStyle(
-                              duration: const Duration(milliseconds: 200),
-                              style: TextStyle(
-                                  fontWeight: !_isSwapped
-                                      ? FontWeight.w500
-                                      : FontWeight.w700,
-                                  color: !_isSwapped
-                                      ? Color(0xff646d80)
-                                      : Colors.black,
-                                  fontSize: !_isSwapped
-                                      ? 14
-                                      : 80 - (_amount2.length * 3)),
-                              child: Text(char),
+                            style: TextStyle(
+                              fontWeight: !_isSwapped
+                                  ? FontWeight.w500
+                                  : FontWeight.w700,
+                              color: !_isSwapped
+                                  ? const Color(0xff646d80)
+                                  : Colors.black,
+                              fontSize: !_isSwapped
+                                  ? 14
+                                  : (80 - (_amount2.length * 3))
+                                      .clamp(24.0, 80.0)
+                                      .toDouble(),
                             ),
-                          ),
-                        );
-                      }))),
-                ),
-              ],
+                            child: Text(char),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Positioned(
+            Positioned(
               bottom: 40,
               left: 100,
               right: 0,
               child: GestureDetector(
                 onTap: _swap,
                 child: AnimatedRotation(
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.bounceInOut,
                   turns: _isSwapped ? 0.5 : 0,
-                  child: Icon(
+                  child: const Icon(
                     PhosphorIconsBold.arrowsDownUp,
                     size: 18,
                   ),
                 ),
-              ))
-        ]),
+              ),
+            ),
+          ],
+        ),
       );
 
   Widget _buildTokenSelector() => Container(
@@ -269,7 +269,7 @@ class _SendTokenState extends State<SendToken> {
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               _buildTokenInfo(),
               _buildMaxButton(),
             ],
@@ -280,30 +280,37 @@ class _SendTokenState extends State<SendToken> {
   Widget _buildTokenInfo() => Container(
         height: 48,
         decoration: BoxDecoration(
-          color: Colors.white,
           borderRadius: BorderRadius.circular(100),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Row(
-            children: [
+            children: <Widget>[
               Image(
-                  height: 32,
-                  width: 32,
-                  image: AssetImage(widget.selectedToken.tokenImage!)),
+                height: 44,
+                width: 44,
+                image: AssetImage(widget.selectedToken.tokenImage!),
+              ),
               const Gap(10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(widget.selectedToken.tokenName!,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500)),
-                  Text(widget.selectedToken.tokenBalance!,
-                      style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.greyDark)),
+                children: <Widget>[
+                  Text(
+                    widget.selectedToken.tokenName!,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    widget.selectedToken.tokenBalance!,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyDark,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -312,21 +319,26 @@ class _SendTokenState extends State<SendToken> {
       );
 
   Widget _buildMaxButton() => Container(
-        height: 38,
+        height: 34,
         width: 80,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.black,
           borderRadius: BorderRadius.circular(100),
         ),
-        child: const Center(child: Text('Max')),
+        child: const Center(
+          child: Text(
+            'Max',
+            style: TextStyle(color: AppColors.white),
+          ),
+        ),
       );
 
   Widget _buildNumpad() => Column(
-        children: [
-          _buildNumpadRow(['1', '2', '3']),
-          _buildNumpadRow(['4', '5', '6']),
-          _buildNumpadRow(['7', '8', '9']),
-          _buildNumpadRow(['.', '0', 'cancel']),
+        children: <Widget>[
+          _buildNumpadRow(<String>['1', '2', '3']),
+          _buildNumpadRow(<String>['4', '5', '6']),
+          _buildNumpadRow(<String>['7', '8', '9']),
+          _buildNumpadRow(<String>['.', '0', 'cancel']),
         ],
       );
 
@@ -334,7 +346,7 @@ class _SendTokenState extends State<SendToken> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: buttons.map((e) => _buildNumpadButton(e)).toList(),
+          children: buttons.map(_buildNumpadButton).toList(),
         ),
       );
 
@@ -343,14 +355,14 @@ class _SendTokenState extends State<SendToken> {
           onTap: () => _onNumpadTap(label),
           borderRadius: BorderRadius.circular(100),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 6),
             child: Center(
               child: label != 'cancel'
-                  ? Text(label,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontSize: 22))
+                  ? Text(
+                      label,
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.w500),
+                    )
                   : const Icon(PhosphorIconsBold.backspace),
             ),
           ),
@@ -379,7 +391,6 @@ class _SendTokenState extends State<SendToken> {
               : '0';
         }
       } else {
-        if ((isFirstAmount ? _amount : _amount2).length >= 12) return;
         if (isFirstAmount) {
           if (_amount == r'$0') {
             _amount = r'$' + label;

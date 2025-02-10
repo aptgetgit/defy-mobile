@@ -1,0 +1,136 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../domain/entities/collection_details_entity.dart';
+
+part 'generated/collection_details_model.freezed.dart';
+part 'generated/collection_details_model.g.dart';
+
+@Freezed(fromJson: true, toJson: true)
+class CollectionDetailsModel extends CollectionDetailsEntity
+    with _$CollectionDetailsModel {
+  const factory CollectionDetailsModel({
+    @JsonKey(name: 'collections') required List<CollectionInfoModel>? collectionInfo,
+    @JsonKey(name: 'listings') required List<CollectionListingsModel>? listings,
+    @JsonKey(name: 'collection_stats') required CollectionStatsModel? stats,
+    @JsonKey(name: 'actions') required List<CollectionActivityModel>? activity,
+  }) = _CollectionDetailsModel;
+ factory CollectionDetailsModel.fromJson(Map<String, dynamic> json) => _$CollectionDetailsModelFromJson(json);
+}
+
+
+@Freezed(fromJson: true, toJson: true)
+class CollectionInfoModel extends CollectionInfoEntity with _$CollectionInfoModel {
+  factory CollectionInfoModel({
+    @JsonKey(name: 'id') required String? id,
+    @JsonKey(name: 'title') required String? title,
+    @JsonKey(name: 'slug') required String? slug,
+    @JsonKey(name: 'semantic_slug') required String? semanticSlug,
+    @JsonKey(name: 'description') required String? description,
+    @JsonKey(name: 'floor') required int? floor,
+    @JsonKey(name: 'volume') required int? volume,
+    @JsonKey(name: 'usd_volume') required double? usdVolume,
+    @JsonKey(name: 'cover_url') required String? coverUrl,
+    @JsonKey(name: 'supply') required int? supply,
+    @JsonKey(name: 'verified') required bool? verified,
+    @JsonKey(name: 'discord') required String? discord,
+    @JsonKey(name: 'twitter') required String? twitter,
+    @JsonKey(name: 'website') required String? website,
+  }) = _CollectionInfoModel;
+
+   factory CollectionInfoModel.fromJson(Map<String, dynamic> json) =>
+      _$CollectionInfoModelFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class CollectionListingsModel extends CollectionListingsEntity
+    with _$CollectionListingsModel {
+  factory CollectionListingsModel({
+    @JsonKey(name: 'id') required String? id,
+    @JsonKey(name: 'price') required int? price,
+    @JsonKey(name: 'block_time') required String? blockTime,
+    @JsonKey(name: 'seller') required String? seller,
+    @JsonKey(name: 'nft') required CollectionListingsNFTModel? nft,
+    @JsonKey(name: 'contract') required CollectionListingsContractModel? contract,
+  }) = _CollectionListingsModel;
+
+   factory CollectionListingsModel.fromJson(Map<String, dynamic> json) =>
+      _$CollectionListingsModelFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class CollectionListingsNFTModel extends CollectionListingsNFTEntity
+    with _$CollectionListingsNFTModel {
+  factory CollectionListingsNFTModel({
+    @JsonKey(name: 'id') required String? id,
+    @JsonKey(name: 'name') required String? name,
+    @JsonKey(name: 'media_url') required String? mediaUrl,
+    @JsonKey(name: 'media_type') required String? mediaType,
+    @JsonKey(name: 'ranking') required int? ranking,
+  }) = _CollectionListingsNFTModel;
+
+   factory CollectionListingsNFTModel.fromJson(Map<String, dynamic> json) =>
+      _$CollectionListingsNFTModelFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class CollectionListingsContractModel extends CollectionListingsContractEntity
+    with _$CollectionListingsContractModel {
+  factory CollectionListingsContractModel({
+    @JsonKey(name: 'key') required String? key,
+  }) = _CollectionListingsContractModel;
+
+   factory CollectionListingsContractModel.fromJson(Map<String, dynamic> json) =>
+      _$CollectionListingsContractModelFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class CollectionStatsModel extends CollectionStatsEntity
+    with _$CollectionStatsModel {
+  factory CollectionStatsModel({
+    @JsonKey(name: 'total_mint_volume') required String? totalMintVolume,
+    @JsonKey(name: 'total_mint_usd_volume') required String? totalMintUsdVolume,
+    @JsonKey(name: 'total_sales') required int? totalSales,
+    @JsonKey(name: 'total_usd_volume') required String? totalUsdVolume,
+    @JsonKey(name: 'total_volume') required String? totalVolume,
+    @JsonKey(name: 'day_volume') required String? dayVolume,
+    @JsonKey(name: 'day_sales') required int? daySales,
+    @JsonKey(name: 'day_usd_volume') required String? dayUsdVolume,
+  }) = _CollectionStatsModel;
+
+   factory CollectionStatsModel.fromJson(Map<String, dynamic> json) =>
+      _$CollectionStatsModelFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class CollectionActivityModel extends CollectionActivityEntity
+    with _$CollectionActivityModel {
+  factory CollectionActivityModel({
+    @JsonKey(name: 'id') required String? id,
+    @JsonKey(name: 'type') required String? type,
+    @JsonKey(name: 'price') required int? price,
+    @JsonKey(name: 'usd_price') required double? usdPrice,
+    @JsonKey(name: 'sender') required String? sender,
+    @JsonKey(name: 'receiver') required String? receiver,
+    @JsonKey(name: 'block_time') required String? blockTime,
+    @JsonKey(name: 'nft') required CollectionActivityNFTModel? nft,
+
+  }) = _CollectionActivityModel;
+
+   factory CollectionActivityModel.fromJson(Map<String, dynamic> json) =>
+      _$CollectionActivityModelFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class CollectionActivityNFTModel extends CollectionActivityNFTEntity
+    with _$CollectionActivityNFTModel {
+  factory CollectionActivityNFTModel({
+    @JsonKey(name: 'id') required String? id,
+    @JsonKey(name: 'name') required String? name,
+    @JsonKey(name: 'media_url') required String? mediaUrl,
+    @JsonKey(name: 'ranking') required int? ranking,
+  }) = _CollectionActivityNFTModel;
+
+   factory CollectionActivityNFTModel.fromJson(Map<String, dynamic> json) =>
+      _$CollectionActivityNFTModelFromJson(json);
+}
+

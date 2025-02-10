@@ -9,6 +9,7 @@ part of '../router.dart';
 List<RouteBase> get $appRoutes => [
       $browserRoute,
       $homeRoute,
+      $nFTMarketplaceScreenRoute,
       $onboardingRoute,
       $loginPageRoute,
       $accountSetUpFullNameScreenRoute,
@@ -57,6 +58,29 @@ extension $HomeRouteExtension on HomeRoute {
 
   String get location => GoRouteData.$location(
         '/home',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $nFTMarketplaceScreenRoute => GoRouteData.$route(
+      path: '/marketplace',
+      factory: $NFTMarketplaceScreenRouteExtension._fromState,
+    );
+
+extension $NFTMarketplaceScreenRouteExtension on NFTMarketplaceScreenRoute {
+  static NFTMarketplaceScreenRoute _fromState(GoRouterState state) =>
+      const NFTMarketplaceScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/marketplace',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -399,7 +423,7 @@ extension $ImportWalletScreenRouteExtension on ImportWalletScreenRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'd32b4645cc9face3189ef9483abc209a92c13192';
+String _$routerHash() => r'3d5b93e966ab1004d9f90bfebe9a5cb31877a73c';
 
 /// See also [router].
 @ProviderFor(router)

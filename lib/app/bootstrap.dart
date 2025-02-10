@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../core/di/dependency_injector.dart';
+import '../core/dio/dependency_injector.dart';
 import '../core/logging/app_logger.dart';
 
 Future<void> bootstrap({

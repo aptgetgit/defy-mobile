@@ -87,6 +87,14 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/Carousel-Placeholder.png
+  AssetGenImage get carouselPlaceholder =>
+      const AssetGenImage('assets/images/Carousel-Placeholder.png');
+
+  /// File path: assets/images/Spiderman.png
+  AssetGenImage get spiderman =>
+      const AssetGenImage('assets/images/Spiderman.png');
+
   /// File path: assets/images/avatar-1.png
   AssetGenImage get avatar1 =>
       const AssetGenImage('assets/images/avatar-1.png');
@@ -220,6 +228,8 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        carouselPlaceholder,
+        spiderman,
         avatar1,
         avatar2,
         avatar3,

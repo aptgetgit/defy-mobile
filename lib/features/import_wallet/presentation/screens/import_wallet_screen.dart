@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,54 +21,78 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
   int _currentPage = 0;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handleStateChanges();
+    });
+    print('ImportWalletScreen initialized'); // Debug print
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+    print('ImportWalletScreen disposed'); // Debug print
+  }
+
+  void _handleStateChanges() {
+    ref.listen<AccountGenerationFlowState>(
+      accountGenerationFlowManagerProvider,
+      (AccountGenerationFlowState? previous, AccountGenerationFlowState next) {
+        print('Previous state: $previous'); // Debug print
+        print('Current state: $next'); // Debug print
+
+        switch (next) {
+          case AccountGenerationFlowState.ready:
+            print('State is ready, moving to next page'); // Debug print
+            if (mounted) {
+              _nextPage();
+            }
+            break;
+          case AccountGenerationFlowState.idle:
+            print('State is idle'); // Debug print
+            if (mounted) {
+              // You can add any idle state handling here
+            }
+            break;
+          case AccountGenerationFlowState.error:
+            print('State is error, showing snackbar'); // Debug print
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Please Try Again')),
+              );
+            }
+            break;
+          default:
+            print('Unknown state: $next'); // Debug print
+            break;
+        }
+      },
+    );
   }
 
   void _nextPage() {
+    print('Current page before next: $_currentPage'); // Debug print
     if (_currentPage < 3) {
       setState(() {
         _currentPage++;
       });
-      unawaited(
-        _pageController.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        ),
+      _pageController.animateToPage(
+        _currentPage,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
       );
+      print('Moved to page: $_currentPage'); // Debug print
+    } else {
+      print('Already at the last page'); // Debug print
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final state = ref.read(accountGenerationFlowManagerProvider);
-
-      switch (state) {
-        case AccountGenerationFlowState.ready:
-          if (mounted) {
-            Navigator.pushReplacementNamed(context, '/nextScreen');
-          }
-          break;
-        case AccountGenerationFlowState.idle:
-          if (mounted) {
-            _pageController.nextPage(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.bounceInOut);
-          }
-          break;
-        case AccountGenerationFlowState.error:
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Please Try Again ')),
-          );
-          break;
-        default:
-          break;
-      }
-    });
-
+    print(
+        'Building ImportWalletScreen, current page: $_currentPage'); // Debug print
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
@@ -78,20 +100,21 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
         title: Row(
           children: <Widget>[
             GestureDetector(
-              onTap: () {
+              onTap: () async {
                 if (_currentPage == 0) {
+                  print('Popping screen'); // Debug print
                   context.pop();
                 } else {
+                  print('Moving to previous page'); // Debug print
                   setState(() {
                     _currentPage--;
                   });
-                  unawaited(
-                    _pageController.animateToPage(
-                      _currentPage,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    ),
+                  await _pageController.animateToPage(
+                    _currentPage,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
                   );
+                  print('Moved to page: $_currentPage'); // Debug print
                 }
               },
               child: const Icon(PhosphorIconsBold.caretLeft),
@@ -142,13 +165,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
               ],
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(16),
-          //   child: ElevatedButton(
-          //     onPressed: _nextPage,
-          //     child: Text(_currentPage == 3 ? 'Finish' : 'Next'),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -168,7 +184,10 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
         ),
       );
 
-  Widget _buildPage(String title) => Center(
-        child: Text(title, style: const TextStyle(fontSize: 24)),
-      );
+  Widget _buildPage(String title) {
+    print('Building page: $title'); // Debug print
+    return Center(
+      child: Text(title, style: const TextStyle(fontSize: 24)),
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class CustomSwipeButton extends StatefulWidget {
   const CustomSwipeButton({required this.onSwipeCompleted, super.key});
@@ -15,6 +16,7 @@ class CustomSwipeButtonState extends State<CustomSwipeButton>
   late Animation<double> _animation;
   double _dragPercentage = 0;
   bool _swiped = false;
+  double _dragStartX = 0;
 
   @override
   void initState() {
@@ -34,10 +36,15 @@ class CustomSwipeButtonState extends State<CustomSwipeButton>
     super.dispose();
   }
 
+  void _onDragStart(DragStartDetails details) {
+    _dragStartX = details.localPosition.dx;
+  }
+
   void _onDragUpdate(DragUpdateDetails details, BoxConstraints constraints) {
     setState(() {
-      _dragPercentage =
-          (details.localPosition.dx / constraints.maxWidth).clamp(0.0, 1.0);
+      _dragPercentage = ((details.localPosition.dx - _dragStartX) /
+              (constraints.maxWidth - 60))
+          .clamp(0.0, 1.0);
       _animationController.value = _dragPercentage;
     });
   }
@@ -70,6 +77,7 @@ class CustomSwipeButtonState extends State<CustomSwipeButton>
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) =>
               GestureDetector(
+            onHorizontalDragStart: _onDragStart,
             onHorizontalDragUpdate: (DragUpdateDetails details) =>
                 _onDragUpdate(details, constraints),
             onHorizontalDragEnd: (DragEndDetails details) =>
@@ -79,18 +87,11 @@ class CustomSwipeButtonState extends State<CustomSwipeButton>
               builder: (BuildContext context, Widget? child) => Stack(
                 children: <Widget>[
                   Container(
-                    height: 70,
+                    height: 60,
                     decoration: BoxDecoration(
                       color: Color.lerp(
                           Colors.black, Colors.green, _animation.value),
                       borderRadius: BorderRadius.circular(40),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Colors.black.withAlpha((0.2 * 255).toInt()),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -102,11 +103,10 @@ class CustomSwipeButtonState extends State<CustomSwipeButton>
                     ),
                   ),
                   Positioned(
-                    left: (_animation.value * (constraints.maxWidth - 70))
-                        .clamp(0.0, constraints.maxWidth - 70),
+                    left: (_animation.value * (constraints.maxWidth - 60)),
                     child: Container(
-                      height: 70,
-                      width: 70,
+                      height: 60,
+                      width: 60,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Color.lerp(
@@ -115,16 +115,11 @@ class CustomSwipeButtonState extends State<CustomSwipeButton>
                         ),
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(40),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: Colors.black.withAlpha((0.2 * 255).toInt()),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
                       ),
                       child: Icon(
-                        _swiped ? Icons.check : Icons.arrow_forward,
+                        _swiped
+                            ? Icons.check
+                            : PhosphorIconsRegular.caretDoubleRight,
                         color: Color.lerp(
                             Colors.black, Colors.green, _animation.value),
                       ),

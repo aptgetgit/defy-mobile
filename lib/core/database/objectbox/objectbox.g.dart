@@ -19,6 +19,10 @@ import '../../../features/account/data/models/local/auth_key_config_local_model.
 import '../../../features/account/data/models/local/hd_key_local_model.dart';
 import '../../../features/account/data/models/local/jwk_local_model.dart';
 import '../../../features/account/data/models/local/signing_key_local_model.dart';
+import '../../../features/shared/data/models/blockchain_network/blockchain_network_local_model.dart';
+import '../../../features/shared/data/models/user_blockchain_account/user_blockchain_account_local_model.dart';
+import '../../../features/shared/data/models/user_blockchain_account_group/user_blockchain_account_group_local_model.dart';
+import '../../../features/shared/data/models/user_blockchain_account_group_assignment/user_blockchain_account_group_assignment_local_model.dart';
 import '../../../features/transaction/data/models/local/account_data_local_model.dart';
 import '../../../shared/currency/data/models/local/currency_rate_local_model.dart';
 
@@ -241,6 +245,152 @@ final _entities = <obx_int.ModelEntity>[
             flags: 8192)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(8, 9071154955692955989),
+      name: 'BlockchainNetworkLocalModel',
+      lastPropertyId: const obx_int.IdUid(4, 5112312521409630840),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 8396415726075542138),
+            name: 'localId',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 1267927321037445358),
+            name: 'remoteId',
+            type: 9,
+            flags: 2080,
+            indexId: const obx_int.IdUid(5, 166699455508389422)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 8737229210408249008),
+            name: 'namespace',
+            type: 9,
+            flags: 8,
+            indexId: const obx_int.IdUid(6, 285661674116209692)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 5112312521409630840),
+            name: 'reference',
+            type: 9,
+            flags: 8,
+            indexId: const obx_int.IdUid(7, 721222920408058059))
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'blockchainAccounts',
+            srcEntity: 'UserBlockchainAccountLocalModel',
+            srcField: 'blockchainNetwork')
+      ]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(9, 1517687562780093431),
+      name: 'UserBlockchainAccountGroupAssignmentLocalModel',
+      lastPropertyId: const obx_int.IdUid(3, 826135000932458966),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 4510750232483041826),
+            name: 'localId',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 354369349567832878),
+            name: 'blockchainAccountGroupId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(8, 2070613764351214788),
+            relationTarget: 'UserBlockchainAccountGroupLocalModel'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 826135000932458966),
+            name: 'blockchainAccountId',
+            type: 11,
+            flags: 552,
+            indexId: const obx_int.IdUid(9, 5844934561991367105),
+            relationTarget: 'UserBlockchainAccountLocalModel')
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(10, 2133694621289128853),
+      name: 'UserBlockchainAccountGroupLocalModel',
+      lastPropertyId: const obx_int.IdUid(5, 4926668334175085663),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 4761180912746819936),
+            name: 'localId',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 773515834810564165),
+            name: 'remoteId',
+            type: 9,
+            flags: 2080,
+            indexId: const obx_int.IdUid(10, 4538059989649257128)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 2644554844263603487),
+            name: 'name',
+            type: 9,
+            flags: 2080,
+            indexId: const obx_int.IdUid(11, 6523552183110578494)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 1218312355178467048),
+            name: 'animatedIconUrl',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 4926668334175085663),
+            name: 'backgroundColor',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'blockchainAccountAssignments',
+            srcEntity: 'UserBlockchainAccountGroupAssignmentLocalModel',
+            srcField: 'blockchainAccountGroup')
+      ]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(11, 2830799793914721749),
+      name: 'UserBlockchainAccountLocalModel',
+      lastPropertyId: const obx_int.IdUid(5, 4787011139189204987),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 1987913467719859942),
+            name: 'localId',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 8480681084309949178),
+            name: 'remoteId',
+            type: 9,
+            flags: 2080,
+            indexId: const obx_int.IdUid(12, 8757154163892952102)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 2825967728935377750),
+            name: 'accountAddress',
+            type: 9,
+            flags: 8,
+            indexId: const obx_int.IdUid(13, 5374291818693080062)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 5143452594775940538),
+            name: 'blockchainNetworkId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(14, 507759037007264202),
+            relationTarget: 'BlockchainNetworkLocalModel'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 4787011139189204987),
+            name: 'blockchainAccountGroupAssignmentId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(15, 4325128758390802584),
+            relationTarget: 'UserBlockchainAccountGroupAssignmentLocalModel')
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -279,8 +429,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(7, 321863732965903275),
-      lastIndexId: const obx_int.IdUid(4, 5937483962678904033),
+      lastEntityId: const obx_int.IdUid(11, 2830799793914721749),
+      lastIndexId: const obx_int.IdUid(15, 4325128758390802584),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -568,6 +718,209 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
+        }),
+    BlockchainNetworkLocalModel: obx_int.EntityDefinition<
+            BlockchainNetworkLocalModel>(
+        model: _entities[7],
+        toOneRelations: (BlockchainNetworkLocalModel object) => [],
+        toManyRelations: (BlockchainNetworkLocalModel object) => {
+              obx_int.RelInfo<UserBlockchainAccountLocalModel>.toOneBacklink(
+                  4,
+                  object.localId,
+                  (UserBlockchainAccountLocalModel srcObject) =>
+                      srcObject.blockchainNetwork): object.blockchainAccounts
+            },
+        getId: (BlockchainNetworkLocalModel object) => object.localId,
+        setId: (BlockchainNetworkLocalModel object, int id) {
+          object.localId = id;
+        },
+        objectToFB: (BlockchainNetworkLocalModel object, fb.Builder fbb) {
+          final remoteIdOffset = fbb.writeString(object.remoteId);
+          final namespaceOffset = fbb.writeString(object.namespace);
+          final referenceOffset = fbb.writeString(object.reference);
+          fbb.startTable(5);
+          fbb.addInt64(0, object.localId);
+          fbb.addOffset(1, remoteIdOffset);
+          fbb.addOffset(2, namespaceOffset);
+          fbb.addOffset(3, referenceOffset);
+          fbb.finish(fbb.endTable());
+          return object.localId;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final remoteIdParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final namespaceParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final referenceParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 10, '');
+          final object = BlockchainNetworkLocalModel(
+              remoteId: remoteIdParam,
+              namespace: namespaceParam,
+              reference: referenceParam)
+            ..localId =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          obx_int.InternalToManyAccess.setRelInfo<BlockchainNetworkLocalModel>(
+              object.blockchainAccounts,
+              store,
+              obx_int.RelInfo<UserBlockchainAccountLocalModel>.toOneBacklink(
+                  4,
+                  object.localId,
+                  (UserBlockchainAccountLocalModel srcObject) =>
+                      srcObject.blockchainNetwork));
+          return object;
+        }),
+    UserBlockchainAccountGroupAssignmentLocalModel: obx_int.EntityDefinition<
+            UserBlockchainAccountGroupAssignmentLocalModel>(
+        model: _entities[8],
+        toOneRelations:
+            (UserBlockchainAccountGroupAssignmentLocalModel object) =>
+                [object.blockchainAccountGroup, object.blockchainAccount],
+        toManyRelations:
+            (UserBlockchainAccountGroupAssignmentLocalModel object) => {},
+        getId: (UserBlockchainAccountGroupAssignmentLocalModel object) =>
+            object.localId,
+        setId: (UserBlockchainAccountGroupAssignmentLocalModel object, int id) {
+          object.localId = id;
+        },
+        objectToFB: (UserBlockchainAccountGroupAssignmentLocalModel object,
+            fb.Builder fbb) {
+          fbb.startTable(4);
+          fbb.addInt64(0, object.localId);
+          fbb.addInt64(1, object.blockchainAccountGroup.targetId);
+          fbb.addInt64(2, object.blockchainAccount.targetId);
+          fbb.finish(fbb.endTable());
+          return object.localId;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final blockchainAccountGroupParam =
+              obx.ToOne<UserBlockchainAccountGroupLocalModel>(
+                  targetId: const fb.Int64Reader()
+                      .vTableGet(buffer, rootOffset, 6, 0));
+          final blockchainAccountParam =
+              obx.ToOne<UserBlockchainAccountLocalModel>(
+                  targetId: const fb.Int64Reader()
+                      .vTableGet(buffer, rootOffset, 8, 0));
+          final object = UserBlockchainAccountGroupAssignmentLocalModel(
+              blockchainAccountGroup: blockchainAccountGroupParam,
+              blockchainAccount: blockchainAccountParam)
+            ..localId =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.blockchainAccountGroup.attach(store);
+          object.blockchainAccount.attach(store);
+          return object;
+        }),
+    UserBlockchainAccountGroupLocalModel: obx_int.EntityDefinition<
+            UserBlockchainAccountGroupLocalModel>(
+        model: _entities[9],
+        toOneRelations: (UserBlockchainAccountGroupLocalModel object) => [],
+        toManyRelations: (UserBlockchainAccountGroupLocalModel object) => {
+              obx_int.RelInfo<
+                      UserBlockchainAccountGroupAssignmentLocalModel>.toOneBacklink(
+                  2,
+                  object.localId,
+                  (UserBlockchainAccountGroupAssignmentLocalModel srcObject) =>
+                      srcObject.blockchainAccountGroup): object
+                  .blockchainAccountAssignments
+            },
+        getId: (UserBlockchainAccountGroupLocalModel object) => object.localId,
+        setId: (UserBlockchainAccountGroupLocalModel object, int id) {
+          object.localId = id;
+        },
+        objectToFB:
+            (UserBlockchainAccountGroupLocalModel object, fb.Builder fbb) {
+          final remoteIdOffset = fbb.writeString(object.remoteId);
+          final nameOffset = fbb.writeString(object.name);
+          final animatedIconUrlOffset = fbb.writeString(object.animatedIconUrl);
+          final backgroundColorOffset = fbb.writeString(object.backgroundColor);
+          fbb.startTable(6);
+          fbb.addInt64(0, object.localId);
+          fbb.addOffset(1, remoteIdOffset);
+          fbb.addOffset(2, nameOffset);
+          fbb.addOffset(3, animatedIconUrlOffset);
+          fbb.addOffset(4, backgroundColorOffset);
+          fbb.finish(fbb.endTable());
+          return object.localId;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final remoteIdParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final animatedIconUrlParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 10, '');
+          final backgroundColorParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 12, '');
+          final object = UserBlockchainAccountGroupLocalModel(
+              remoteId: remoteIdParam,
+              name: nameParam,
+              animatedIconUrl: animatedIconUrlParam,
+              backgroundColor: backgroundColorParam)
+            ..localId =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          obx_int.InternalToManyAccess.setRelInfo<
+                  UserBlockchainAccountGroupLocalModel>(
+              object.blockchainAccountAssignments,
+              store,
+              obx_int.RelInfo<
+                      UserBlockchainAccountGroupAssignmentLocalModel>.toOneBacklink(
+                  2,
+                  object.localId,
+                  (UserBlockchainAccountGroupAssignmentLocalModel srcObject) =>
+                      srcObject.blockchainAccountGroup));
+          return object;
+        }),
+    UserBlockchainAccountLocalModel: obx_int.EntityDefinition<
+            UserBlockchainAccountLocalModel>(
+        model: _entities[10],
+        toOneRelations: (UserBlockchainAccountLocalModel object) =>
+            [object.blockchainNetwork, object.blockchainAccountGroupAssignment],
+        toManyRelations: (UserBlockchainAccountLocalModel object) => {},
+        getId: (UserBlockchainAccountLocalModel object) => object.localId,
+        setId: (UserBlockchainAccountLocalModel object, int id) {
+          object.localId = id;
+        },
+        objectToFB: (UserBlockchainAccountLocalModel object, fb.Builder fbb) {
+          final remoteIdOffset = fbb.writeString(object.remoteId);
+          final accountAddressOffset = fbb.writeString(object.accountAddress);
+          fbb.startTable(6);
+          fbb.addInt64(0, object.localId);
+          fbb.addOffset(1, remoteIdOffset);
+          fbb.addOffset(2, accountAddressOffset);
+          fbb.addInt64(3, object.blockchainNetwork.targetId);
+          fbb.addInt64(4, object.blockchainAccountGroupAssignment.targetId);
+          fbb.finish(fbb.endTable());
+          return object.localId;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final remoteIdParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final accountAddressParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, '');
+          final blockchainNetworkParam = obx.ToOne<BlockchainNetworkLocalModel>(
+              targetId:
+                  const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0));
+          final object = UserBlockchainAccountLocalModel(
+              remoteId: remoteIdParam,
+              accountAddress: accountAddressParam,
+              blockchainNetwork: blockchainNetworkParam)
+            ..localId =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.blockchainNetwork.attach(store);
+          object.blockchainAccountGroupAssignment.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          object.blockchainAccountGroupAssignment.attach(store);
+          return object;
         })
   };
 
@@ -722,4 +1075,109 @@ class SigningKeyLocalModel_ {
   static final jwkThumbprint =
       obx.QueryByteVectorProperty<SigningKeyLocalModel>(
           _entities[6].properties[2]);
+}
+
+/// [BlockchainNetworkLocalModel] entity fields to define ObjectBox queries.
+class BlockchainNetworkLocalModel_ {
+  /// See [BlockchainNetworkLocalModel.localId].
+  static final localId = obx.QueryIntegerProperty<BlockchainNetworkLocalModel>(
+      _entities[7].properties[0]);
+
+  /// See [BlockchainNetworkLocalModel.remoteId].
+  static final remoteId = obx.QueryStringProperty<BlockchainNetworkLocalModel>(
+      _entities[7].properties[1]);
+
+  /// See [BlockchainNetworkLocalModel.namespace].
+  static final namespace = obx.QueryStringProperty<BlockchainNetworkLocalModel>(
+      _entities[7].properties[2]);
+
+  /// See [BlockchainNetworkLocalModel.reference].
+  static final reference = obx.QueryStringProperty<BlockchainNetworkLocalModel>(
+      _entities[7].properties[3]);
+
+  /// see [BlockchainNetworkLocalModel.blockchainAccounts]
+  static final blockchainAccounts = obx.QueryBacklinkToMany<
+          UserBlockchainAccountLocalModel, BlockchainNetworkLocalModel>(
+      UserBlockchainAccountLocalModel_.blockchainNetwork);
+}
+
+/// [UserBlockchainAccountGroupAssignmentLocalModel] entity fields to define ObjectBox queries.
+class UserBlockchainAccountGroupAssignmentLocalModel_ {
+  /// See [UserBlockchainAccountGroupAssignmentLocalModel.localId].
+  static final localId =
+      obx.QueryIntegerProperty<UserBlockchainAccountGroupAssignmentLocalModel>(
+          _entities[8].properties[0]);
+
+  /// See [UserBlockchainAccountGroupAssignmentLocalModel.blockchainAccountGroup].
+  static final blockchainAccountGroup = obx.QueryRelationToOne<
+      UserBlockchainAccountGroupAssignmentLocalModel,
+      UserBlockchainAccountGroupLocalModel>(_entities[8].properties[1]);
+
+  /// See [UserBlockchainAccountGroupAssignmentLocalModel.blockchainAccount].
+  static final blockchainAccount = obx.QueryRelationToOne<
+      UserBlockchainAccountGroupAssignmentLocalModel,
+      UserBlockchainAccountLocalModel>(_entities[8].properties[2]);
+}
+
+/// [UserBlockchainAccountGroupLocalModel] entity fields to define ObjectBox queries.
+class UserBlockchainAccountGroupLocalModel_ {
+  /// See [UserBlockchainAccountGroupLocalModel.localId].
+  static final localId =
+      obx.QueryIntegerProperty<UserBlockchainAccountGroupLocalModel>(
+          _entities[9].properties[0]);
+
+  /// See [UserBlockchainAccountGroupLocalModel.remoteId].
+  static final remoteId =
+      obx.QueryStringProperty<UserBlockchainAccountGroupLocalModel>(
+          _entities[9].properties[1]);
+
+  /// See [UserBlockchainAccountGroupLocalModel.name].
+  static final name =
+      obx.QueryStringProperty<UserBlockchainAccountGroupLocalModel>(
+          _entities[9].properties[2]);
+
+  /// See [UserBlockchainAccountGroupLocalModel.animatedIconUrl].
+  static final animatedIconUrl =
+      obx.QueryStringProperty<UserBlockchainAccountGroupLocalModel>(
+          _entities[9].properties[3]);
+
+  /// See [UserBlockchainAccountGroupLocalModel.backgroundColor].
+  static final backgroundColor =
+      obx.QueryStringProperty<UserBlockchainAccountGroupLocalModel>(
+          _entities[9].properties[4]);
+
+  /// see [UserBlockchainAccountGroupLocalModel.blockchainAccountAssignments]
+  static final blockchainAccountAssignments = obx.QueryBacklinkToMany<
+          UserBlockchainAccountGroupAssignmentLocalModel,
+          UserBlockchainAccountGroupLocalModel>(
+      UserBlockchainAccountGroupAssignmentLocalModel_.blockchainAccountGroup);
+}
+
+/// [UserBlockchainAccountLocalModel] entity fields to define ObjectBox queries.
+class UserBlockchainAccountLocalModel_ {
+  /// See [UserBlockchainAccountLocalModel.localId].
+  static final localId =
+      obx.QueryIntegerProperty<UserBlockchainAccountLocalModel>(
+          _entities[10].properties[0]);
+
+  /// See [UserBlockchainAccountLocalModel.remoteId].
+  static final remoteId =
+      obx.QueryStringProperty<UserBlockchainAccountLocalModel>(
+          _entities[10].properties[1]);
+
+  /// See [UserBlockchainAccountLocalModel.accountAddress].
+  static final accountAddress =
+      obx.QueryStringProperty<UserBlockchainAccountLocalModel>(
+          _entities[10].properties[2]);
+
+  /// See [UserBlockchainAccountLocalModel.blockchainNetwork].
+  static final blockchainNetwork = obx.QueryRelationToOne<
+      UserBlockchainAccountLocalModel,
+      BlockchainNetworkLocalModel>(_entities[10].properties[3]);
+
+  /// See [UserBlockchainAccountLocalModel.blockchainAccountGroupAssignment].
+  static final blockchainAccountGroupAssignment = obx.QueryRelationToOne<
+          UserBlockchainAccountLocalModel,
+          UserBlockchainAccountGroupAssignmentLocalModel>(
+      _entities[10].properties[4]);
 }

@@ -12,7 +12,7 @@ import '../../../../app/routes/router.dart';
 import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
 
-import '../../../../core/di/providers/locale/locale_provider.dart';
+import '../../../../core/dio/providers/locale/locale_provider.dart';
 import '../../../../core/extensions/button_size_extension.dart';
 import '../../../../core/extensions/context_extensions.dart';
 

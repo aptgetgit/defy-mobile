@@ -1,5 +1,6 @@
 
-import 'selectable_item_model.dart';
+import '../../domain/models/selectable_item_model.dart';
+
 
 class SendAssetSelectionScreenState<T extends SelectableItem> {
   final List<T> selectedAssetItems;

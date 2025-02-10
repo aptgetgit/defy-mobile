@@ -7,7 +7,7 @@ part of '../send_provider.dart';
 // **************************************************************************
 
 String _$sendScreenProviderHash() =>
-    r'a2e8b6ab592e4d6ff3971383bc5c5a9ab08a8497';
+    r'47f51563f0e24e2b36631daecab6ac07ae551b40';
 
 /// See also [SendScreenProvider].
 @ProviderFor(SendScreenProvider)
@@ -23,8 +23,25 @@ final sendScreenProviderProvider =
 );
 
 typedef _$SendScreenProvider = Notifier<SendScreenState>;
+String _$sendNFTScreenProviderHash() =>
+    r'ef6f4f1cb6ed36be3d02b07cec080c68c1b65982';
+
+/// See also [SendNFTScreenProvider].
+@ProviderFor(SendNFTScreenProvider)
+final sendNFTScreenProviderProvider =
+    NotifierProvider<SendNFTScreenProvider, SendNFTState<NFT>>.internal(
+  SendNFTScreenProvider.new,
+  name: r'sendNFTScreenProviderProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$sendNFTScreenProviderHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$SendNFTScreenProvider = Notifier<SendNFTState<NFT>>;
 String _$sendAssetSelectionScreenHash() =>
-    r'c81a3ce9f1b160af5978c9e0d4d4e6ecc79e8e40';
+    r'43552b401eac76f23964dabb326dd5d3d37aa866';
 
 /// See also [SendAssetSelectionScreen].
 @ProviderFor(SendAssetSelectionScreen)
@@ -40,7 +57,7 @@ final sendAssetSelectionScreenProvider = NotifierProvider<
 );
 
 typedef _$SendAssetSelectionScreen = Notifier<SendAssetSelectionScreenState>;
-String _$sendToFriendHash() => r'bd911e1c97ff91019b34d6cf38cb7c3713dd859b';
+String _$sendToFriendHash() => r'fb699fbbe495fe91ce9a420b5bf13ef62adbea47';
 
 /// See also [SendToFriend].
 @ProviderFor(SendToFriend)
@@ -55,7 +72,7 @@ final sendToFriendProvider =
 );
 
 typedef _$SendToFriend = Notifier<SendToState<Friend>>;
-String _$sendToWalletHash() => r'1ca0af04cdfd3adfce3560d4ac9252f0498ea6ac';
+String _$sendToWalletHash() => r'250fc07d7b20bb578cc2b10e5b5eb70d131f55cf';
 
 /// See also [SendToWallet].
 @ProviderFor(SendToWallet)
@@ -70,7 +87,7 @@ final sendToWalletProvider =
 );
 
 typedef _$SendToWallet = Notifier<SendToState<Wallet>>;
-String _$sendToContactHash() => r'caa2af2ff329a7d4497670f395704f835d59add1';
+String _$sendToContactHash() => r'14d62475aa03138b72e8faf1936f14c61ac67e4b';
 
 /// See also [SendToContact].
 @ProviderFor(SendToContact)

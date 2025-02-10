@@ -12,6 +12,7 @@ import '../../features/authentication/presentation/screens/login_page.dart';
 import '../../features/browser/presentation/screens/browser_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/import_wallet/presentation/screens/import_wallet_screen.dart';
+import '../../features/marketplace/presentation/screens/nft_marketplace_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/send/presentation/screens/send_screen.dart';
 import '../../features/send/presentation/screens/send_to_contacts.dart';
@@ -27,6 +28,7 @@ part 'browser_route.dart';
 part 'generated/router.freezed.dart';
 part 'generated/router.g.dart';
 part 'home_route.dart';
+part 'nft_marketplace_route.dart';
 part 'onboarding_route.dart';
 part 'send_route.dart';
 part 'splash_route.dart';
@@ -91,7 +93,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const SendScreenRoute().location,
+      initialLocation: const LoginPageRoute().location,
       routes: $appRoutes,
       errorBuilder: (BuildContext context, GoRouterState state) =>
           const Scaffold(

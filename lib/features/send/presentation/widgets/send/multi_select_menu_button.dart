@@ -51,17 +51,10 @@ class _MultiSelectMenuButtonState extends ConsumerState<MultiSelectMenuButton> {
         )
       : GestureDetector(
           onTap: widget.onTap,
-          child: Container(
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              color: AppColors.greyLightest,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Icon(
-              PhosphorIcons.dotsThreeVertical(PhosphorIconsStyle.bold),
-              color: AppColors.greyDark,
-              size: 20,
-            ),
+          child: Icon(
+            PhosphorIcons.dotsThreeVertical(PhosphorIconsStyle.bold),
+            color: AppColors.greyDark,
+            size: 20,
           ).animate().slideX(
                 begin: 0.2,
                 end: 0,

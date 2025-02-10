@@ -238,10 +238,157 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "8:9071154955692955989",
+      "lastPropertyId": "4:5112312521409630840",
+      "name": "BlockchainNetworkLocalModel",
+      "properties": [
+        {
+          "id": "1:8396415726075542138",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1267927321037445358",
+          "name": "remoteId",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "5:166699455508389422"
+        },
+        {
+          "id": "3:8737229210408249008",
+          "name": "namespace",
+          "type": 9,
+          "flags": 8,
+          "indexId": "6:285661674116209692"
+        },
+        {
+          "id": "4:5112312521409630840",
+          "name": "reference",
+          "type": 9,
+          "flags": 8,
+          "indexId": "7:721222920408058059"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:1517687562780093431",
+      "lastPropertyId": "3:826135000932458966",
+      "name": "UserBlockchainAccountGroupAssignmentLocalModel",
+      "properties": [
+        {
+          "id": "1:4510750232483041826",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:354369349567832878",
+          "name": "blockchainAccountGroupId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:2070613764351214788",
+          "relationTarget": "UserBlockchainAccountGroupLocalModel"
+        },
+        {
+          "id": "3:826135000932458966",
+          "name": "blockchainAccountId",
+          "type": 11,
+          "flags": 552,
+          "indexId": "9:5844934561991367105",
+          "relationTarget": "UserBlockchainAccountLocalModel"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:2133694621289128853",
+      "lastPropertyId": "5:4926668334175085663",
+      "name": "UserBlockchainAccountGroupLocalModel",
+      "properties": [
+        {
+          "id": "1:4761180912746819936",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:773515834810564165",
+          "name": "remoteId",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "10:4538059989649257128"
+        },
+        {
+          "id": "3:2644554844263603487",
+          "name": "name",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "11:6523552183110578494"
+        },
+        {
+          "id": "4:1218312355178467048",
+          "name": "animatedIconUrl",
+          "type": 9
+        },
+        {
+          "id": "5:4926668334175085663",
+          "name": "backgroundColor",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "11:2830799793914721749",
+      "lastPropertyId": "5:4787011139189204987",
+      "name": "UserBlockchainAccountLocalModel",
+      "properties": [
+        {
+          "id": "1:1987913467719859942",
+          "name": "localId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8480681084309949178",
+          "name": "remoteId",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "12:8757154163892952102"
+        },
+        {
+          "id": "3:2825967728935377750",
+          "name": "accountAddress",
+          "type": 9,
+          "flags": 8,
+          "indexId": "13:5374291818693080062"
+        },
+        {
+          "id": "4:5143452594775940538",
+          "name": "blockchainNetworkId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "14:507759037007264202",
+          "relationTarget": "BlockchainNetworkLocalModel"
+        },
+        {
+          "id": "5:4787011139189204987",
+          "name": "blockchainAccountGroupAssignmentId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "15:4325128758390802584",
+          "relationTarget": "UserBlockchainAccountGroupAssignmentLocalModel"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "7:321863732965903275",
-  "lastIndexId": "4:5937483962678904033",
+  "lastEntityId": "11:2830799793914721749",
+  "lastIndexId": "15:4325128758390802584",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

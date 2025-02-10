@@ -88,11 +88,6 @@ class _$HDKeySourceConfigImpl implements HDKeySourceConfig {
   final AptosDerivationPath derivationPath;
 
   @override
-  String toString() {
-    return 'KeySourceConfig.fromHDKey(entropyHash: $entropyHash, derivationPath: $derivationPath)';
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -175,11 +170,6 @@ class _$SigningKeySourceConfigImpl implements SigningKeySourceConfig {
 
   @override
   final Uint8List jwkThumbprint;
-
-  @override
-  String toString() {
-    return 'KeySourceConfig.fromSigningKey(jwkThumbprint: $jwkThumbprint)';
-  }
 
   @override
   bool operator ==(Object other) {

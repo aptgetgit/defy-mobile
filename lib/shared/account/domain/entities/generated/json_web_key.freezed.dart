@@ -128,11 +128,6 @@ class _$Ed25519JwkImpl extends Ed25519Jwk {
   final Uint8List? d;
 
   @override
-  String toString() {
-    return 'Jwk.ed25519(x: $x, d: $d)';
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -247,11 +242,6 @@ class _$Secp256k1JwkImpl extends Secp256k1Jwk {
   @protected
   @JsonKey(name: 'd')
   final Uint8List? d;
-
-  @override
-  String toString() {
-    return 'Jwk.secp256k1(x: $x, y: $y, d: $d)';
-  }
 
   @override
   bool operator ==(Object other) {
@@ -374,11 +364,6 @@ class _$Secp256r1JwkImpl extends Secp256r1Jwk {
   @protected
   @JsonKey(name: 'd')
   final Uint8List? d;
-
-  @override
-  String toString() {
-    return 'Jwk.secp256r1(x: $x, y: $y, d: $d)';
-  }
 
   @override
   bool operator ==(Object other) {

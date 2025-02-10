@@ -1,9 +1,17 @@
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:pointycastle/digests/sha3.dart';
+
+final SHA3Digest _sha3Hash = SHA3Digest(256);
 
 Uint8List computeSha256Hash(Uint8List data) =>
     Uint8List.fromList(crypto.sha256.convert(data).bytes);
+
+Uint8List computeSha3256Hash(Uint8List data) {
+  _sha3Hash.reset();
+  return _sha3Hash.process(data);
+}
 
 int bytes32ToInt(Uint8List bytes) {
   final int chunk1 = ByteData.sublistView(bytes, 0, 8).getUint64(0, Endian.little);

@@ -107,11 +107,6 @@ class _$Ed25519AuthenticatorConfigImpl extends Ed25519AuthenticatorConfig {
   final Uint8List keyId;
 
   @override
-  String toString() {
-    return 'AuthenticatorConfig.ed25519(keyId: $keyId)';
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&

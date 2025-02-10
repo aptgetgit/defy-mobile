@@ -63,7 +63,7 @@ class WalletCreationWalletNameScreenState
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               const Text(
                 "Let's create your new Wallet 🥳",
                 style: TextStyle(
@@ -75,7 +75,7 @@ class WalletCreationWalletNameScreenState
                 height: 12,
               ),
               const Row(
-                children: [
+                children: <Widget>[
                   Icon(
                     PhosphorIconsRegular.identificationCard,
                   ),
@@ -88,7 +88,7 @@ class WalletCreationWalletNameScreenState
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(
@@ -146,10 +146,10 @@ class WalletCreationWalletNameScreenState
                 height: 12,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   AppLogger.debug('Here');
-                  const WalletCreationWalletBackgroundScreenRoute()
-                      .push(context);
+                  await const WalletCreationWalletBackgroundScreenRoute()
+                      .push<void>(context);
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -164,7 +164,7 @@ class WalletCreationWalletNameScreenState
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.white),
+                          color: AppColors.white,),
                     ),
                   ),
                 ),

@@ -32,7 +32,7 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                             Colors.white,
                             Colors.white,
                           ],
-                          stops: <double>[0.575, 0.675, 0.775, 1.0],
+                          stops: const <double>[0.575, 0.675, 0.775, 1],
                         ),
                       ),
                       child: Padding(
@@ -181,14 +181,13 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                             ),
                           ],
                         ),
-                      )),
+                      ),),
                 ),
               ],
             ),
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(height: 20),
                   const Text(
@@ -213,15 +212,15 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                   ),
                   const SizedBox(height: 40),
                   GestureDetector(
-                    onTap: () {
-                      const ImportWalletScreenRoute().push(context);
+                    onTap: () async {
+                     await const ImportWalletScreenRoute().push<void>(context);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 40),
+                          vertical: 20, horizontal: 40,),
                       decoration: BoxDecoration(
                           color: AppColors.black,
-                          borderRadius: BorderRadius.circular(40)),
+                          borderRadius: BorderRadius.circular(40),),
                       child: const Center(
                         child: Text(
                           'Import Wallet',
@@ -236,8 +235,8 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                   ),
                   const SizedBox(height: 20),
                   GestureDetector(
-                    onTap: () {
-                      const WalletCreationWalletNameScreenRoute().push(context);
+                    onTap: () async {
+                      await const WalletCreationWalletNameScreenRoute().push<void>(context);
                     },
                     child: const Text(
                       'Create Wallet',
@@ -250,7 +249,7 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       );

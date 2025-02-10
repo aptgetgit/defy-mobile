@@ -3,9 +3,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import '../../domain/entities/browser_state.dart';
 
 class BrowserRepositoryImpl implements IBrowserRepository {
-  final InAppWebViewController controller;
   
   BrowserRepositoryImpl(this.controller);
+  final InAppWebViewController controller;
 
   @override
   Future<void> loadUrl(String url) async {

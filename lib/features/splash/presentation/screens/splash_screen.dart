@@ -13,7 +13,7 @@ class SplashScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final VideoPlayerController videoController = useMemoized(
-        () => VideoPlayerController.asset('assets/videos/splash_video.mp4'));
+        () => VideoPlayerController.asset('assets/videos/splash_video.mp4'),);
     final ValueNotifier<bool> isInitialized = useState(false);
     final ValueNotifier<bool> isVideoCompleted = useState(false);
 
@@ -36,10 +36,10 @@ class SplashScreen extends HookConsumerWidget {
         }
       }
 
-      videoController.addListener(() {
+      videoController.addListener(() async {
         if (videoController.value.isInitialized &&
             videoController.value.position >= videoController.value.duration) {
-          handleVideoCompletion();
+          await handleVideoCompletion();
         }
       });
 
@@ -47,7 +47,7 @@ class SplashScreen extends HookConsumerWidget {
         videoController.removeListener(() {});
         videoController.dispose();
       };
-    }, <Object?>[videoController]);
+    }, <Object?>[videoController],);
 
     return Scaffold(
       backgroundColor: Colors.black,

@@ -46,8 +46,8 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
       _isTextFieldFocused = _focusNode.hasFocus;
     });
     if (_isTextFieldFocused) {
-      _controller.stop();
-      _controller.animateTo(0, duration: const Duration(milliseconds: 500));
+      _controller..stop()
+      ..animateTo(0, duration: const Duration(milliseconds: 500));
     } else {
       unawaited(_startRotationAnimation());
     }
@@ -164,7 +164,7 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                 if (_isTextFieldFocused)
                   GestureDetector(
                     onTap: () async {
-                      await WalletCreationScreenRoute().push(context);
+                      await const WalletCreationScreenRoute().push<void>(context);
                     },
                     child: Container(
                       width: double.infinity,

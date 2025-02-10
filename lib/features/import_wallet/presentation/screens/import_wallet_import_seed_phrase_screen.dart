@@ -47,7 +47,7 @@ class _ImportWalletImportSeedPhraseScreenState
     }
   }
 
-  void _importMnemonic() async {
+  Future<void> _importMnemonic() async {
     final String mnemonic = _words.join(' ');
 
     await ref
@@ -56,11 +56,11 @@ class _ImportWalletImportSeedPhraseScreenState
   }
 
   void _addWord(String word) {
-    word = word.trim().toLowerCase();
+    final String trimmedWord = word.trim().toLowerCase();
 
-    if (word.isEmpty || !bip39Wordlist.contains(word)) {
+    if (word.isEmpty || !bip39Wordlist.contains(trimmedWord)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid word: $word')),
+        SnackBar(content: Text('Invalid word: $trimmedWord')),
       );
       _controller.clear();
       return;
@@ -120,7 +120,7 @@ class _ImportWalletImportSeedPhraseScreenState
           Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                  maxWidth: double.infinity, minWidth: double.infinity),
+                  minWidth: double.infinity,),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 height: dynamicHeight,
@@ -168,7 +168,7 @@ class _ImportWalletImportSeedPhraseScreenState
   }
 
   Widget _buildWordChip(String word) => Animate(
-        effects: <Effect>[
+        effects: <Effect<dynamic>>[
           FadeEffect(duration: 300.ms),
           ScaleEffect(duration: 300.ms),
         ],

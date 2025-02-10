@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../features/dive_in/presentation/screens/dive_in_page.dart';
 import '../../features/browser/presentation/screens/browser_screen.dart';
+import '../../features/dive_in/presentation/screens/dive_in_page.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/import_wallet/presentation/screens/import_wallet_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -23,8 +23,8 @@ part 'generated/router.g.dart';
 part 'home_route.dart';
 part 'onboarding_route.dart';
 part 'splash_route.dart';
-part 'wallet_creation_route.dart';
 part 'waitlist_route.dart';
+part 'wallet_creation_route.dart';
 
 @freezed
 class AppRoute with _$AppRoute {

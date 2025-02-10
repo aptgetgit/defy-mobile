@@ -19,7 +19,6 @@ class WalletCreationWalletBackgroundScreenState
     extends ConsumerState<WalletCreationWalletBackgroundScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<Color?> _colorAnimation;
 
   @override
   void initState() {
@@ -28,10 +27,6 @@ class WalletCreationWalletBackgroundScreenState
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _colorAnimation = ColorTween(
-      begin: AppColors.blue,
-      end: AppColors.blue,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -41,14 +36,8 @@ class WalletCreationWalletBackgroundScreenState
   }
 
   void _animateSlider(int index, Color newColor) {
-    final Color previousColor =
-        ref.read(walletBackgroundProvider).selectedColor;
 
     // Update the animation color and index
-    _colorAnimation = ColorTween(
-      begin: previousColor,
-      end: newColor,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     ref
         .read(walletBackgroundProvider.notifier)
@@ -201,35 +190,35 @@ class WalletCreationWalletBackgroundScreenState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    _ColorButton(
+                    ColorButton(
                       color: AppColors.blue,
                       index: 0,
                       onTap: (int index) =>
                           _animateSlider(index, AppColors.blue),
                     ),
                     const SizedBox(width: 20),
-                    _ColorButton(
+                    ColorButton(
                       color: AppColors.greenLight,
                       index: 1,
                       onTap: (int index) =>
                           _animateSlider(index, AppColors.greenLight),
                     ),
                     const SizedBox(width: 20),
-                    _ColorButton(
+                    ColorButton(
                       color: AppColors.orange,
                       index: 2,
                       onTap: (int index) =>
                           _animateSlider(index, AppColors.orange),
                     ),
                     const SizedBox(width: 20),
-                    _ColorButton(
+                    ColorButton(
                       color: AppColors.yellow,
                       index: 3,
                       onTap: (int index) =>
                           _animateSlider(index, AppColors.yellow),
                     ),
                     const SizedBox(width: 20),
-                    _ColorButton(
+                    ColorButton(
                       color: AppColors.pink,
                       index: 4,
                       onTap: (int index) =>
@@ -265,21 +254,21 @@ class WalletCreationWalletBackgroundScreenState
   }
 }
 
-class _ColorButton extends ConsumerWidget {
-  final Color color;
-  final int index;
-  final Function(int) onTap;
+class ColorButton extends ConsumerWidget {
 
-  const _ColorButton({
+  const ColorButton({super.key, 
     required this.color,
     required this.index,
     required this.onTap,
   });
+  final Color color;
+  final int index;
+  final void Function(int) onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final WalletBackgroundState state = ref.watch(walletBackgroundProvider);
-    final isSelected = state.selectedIndex == index;
+    final bool isSelected = state.selectedIndex == index;
 
     return GestureDetector(
       onTap: () {
@@ -297,14 +286,14 @@ class _ColorButton extends ConsumerWidget {
           color: color,
           borderRadius: BorderRadius.circular(40),
           boxShadow: isSelected
-              ? [
+              ? <BoxShadow>[
                   BoxShadow(
                     color: color.withOpacity(0.6),
                     blurRadius: 8,
                     spreadRadius: 2,
                   ),
                 ]
-              : [],
+              : <BoxShadow>[],
         ),
       ),
     );

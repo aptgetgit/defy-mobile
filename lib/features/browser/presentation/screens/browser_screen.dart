@@ -20,7 +20,7 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
   late final Future<String> _loadWalletScript;
 
   @override
-  void initState() {
+  Future<void> initState() async {
     super.initState();
     _loadWalletScript = rootBundle.loadString('assets/js/wallet.js');
   }
@@ -30,7 +30,7 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
     controller
       ..addJavaScriptHandler(
         handlerName: 'getConfig',
-        callback: (List args) async {
+        callback: (List<dynamic> args) async {
           final ByteData imageData =
               await rootBundle.load('assets/icons/app-icon.png');
           final Uint8List bytes = imageData.buffer.asUint8List();

@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
+import '../../../../core/logging/app_logger.dart';
 import '../../../../shared/account/presentation/providers/generate_account_flow.dart';
 import '../../../../shared/account/presentation/states/generate_account_flow_state.dart';
 import 'import_wallet_import_seed_phrase_screen.dart';
@@ -26,73 +27,72 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handleStateChanges();
     });
-    print('ImportWalletScreen initialized'); // Debug print
+    AppLogger.debug('ImportWalletScreen initialized'); // Debug AppLogger.debug
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
-    print('ImportWalletScreen disposed'); // Debug print
+    AppLogger.debug('ImportWalletScreen disposed'); // Debug AppLogger.debug
   }
 
   void _handleStateChanges() {
     ref.listen<GenerateAccountFlowState>(
       generateAccountFlowProvider,
-      (GenerateAccountFlowState? previous, GenerateAccountFlowState next) {
-        print('Previous state: $previous'); // Debug print
-        print('Current state: $next'); // Debug print
+      (GenerateAccountFlowState? previous, GenerateAccountFlowState next) async {
+        AppLogger.debug('Previous state: $previous'); // Debug AppLogger.debug
+        AppLogger.debug('Current state: $next'); // Debug AppLogger.debug
 
         switch (next) {
           case GenerateAccountFlowState.generated:
-            print('State is ready, moving to next page'); // Debug print
+            AppLogger.debug(
+                'State is ready, moving to next page',); // Debug AppLogger.debug
             if (mounted) {
-              _nextPage();
+              await _nextPage();
             }
-            break;
           case GenerateAccountFlowState.idle:
-            print('State is idle'); // Debug print
+            AppLogger.debug('State is idle'); // Debug AppLogger.debug
             if (mounted) {
               // You can add any idle state handling here
             }
-            break;
           case GenerateAccountFlowState.error:
-            print('State is error, showing snackbar'); // Debug print
+            AppLogger.debug(
+                'State is error, showing snackbar',); // Debug AppLogger.debug
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Please Try Again')),
               );
             }
-            break;
           default:
-            print('Unknown state: $next'); // Debug print
-            break;
+            AppLogger.debug('Unknown state: $next'); // Debug AppLogger.debug
         }
       },
     );
   }
 
-  void _nextPage() {
-    print('Current page before next: $_currentPage'); // Debug print
+  Future<void> _nextPage() async {
+    AppLogger.debug(
+        'Current page before next: $_currentPage',); // Debug AppLogger.debug
     if (_currentPage < 3) {
       setState(() {
         _currentPage++;
       });
-      _pageController.animateToPage(
+      await _pageController.animateToPage(
         _currentPage,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-      print('Moved to page: $_currentPage'); // Debug print
+      AppLogger.debug('Moved to page: $_currentPage'); // Debug AppLogger.debug
     } else {
-      print('Already at the last page'); // Debug print
+      AppLogger.debug('Already at the last page'); // Debug AppLogger.debug
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'Building ImportWalletScreen, current page: $_currentPage'); // Debug print
+    AppLogger.debug(
+        'Building ImportWalletScreen, current page: $_currentPage',); // Debug AppLogger.debug
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
@@ -102,10 +102,11 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
             GestureDetector(
               onTap: () async {
                 if (_currentPage == 0) {
-                  print('Popping screen'); // Debug print
+                  AppLogger.debug('Popping screen'); // Debug AppLogger.debug
                   context.pop();
                 } else {
-                  print('Moving to previous page'); // Debug print
+                  AppLogger.debug(
+                      'Moving to previous page',); // Debug AppLogger.debug
                   setState(() {
                     _currentPage--;
                   });
@@ -114,7 +115,8 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
-                  print('Moved to page: $_currentPage'); // Debug print
+                  AppLogger.debug(
+                      'Moved to page: $_currentPage',); // Debug AppLogger.debug
                 }
               },
               child: const Icon(PhosphorIconsBold.caretLeft),
@@ -185,7 +187,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
       );
 
   Widget _buildPage(String title) {
-    print('Building page: $title'); // Debug print
+    AppLogger.debug('Building page: $title'); // Debug AppLogger.debug
     return Center(
       child: Text(title, style: const TextStyle(fontSize: 24)),
     );

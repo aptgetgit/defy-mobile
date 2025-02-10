@@ -7,6 +7,7 @@ import '../../../../config/theme/colors.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../shared/account/presentation/providers/generate_account_flow.dart';
 import '../../../../shared/account/presentation/states/generate_account_flow_state.dart';
+import '../enums/page_type_enum.dart';
 import 'import_wallet_import_seed_phrase_screen.dart';
 
 class ImportWalletScreen extends ConsumerStatefulWidget {
@@ -20,6 +21,7 @@ class ImportWalletScreen extends ConsumerStatefulWidget {
 class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  final List<String> _words = <String>[];
 
   @override
   void initState() {
@@ -27,72 +29,123 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handleStateChanges();
     });
-    AppLogger.debug('ImportWalletScreen initialized'); // Debug AppLogger.debug
+    AppLogger.debug('ImportWalletScreen initialized');
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
-    AppLogger.debug('ImportWalletScreen disposed'); // Debug AppLogger.debug
   }
 
   void _handleStateChanges() {
     ref.listen<GenerateAccountFlowState>(
       generateAccountFlowProvider,
-      (GenerateAccountFlowState? previous, GenerateAccountFlowState next) async {
-        AppLogger.debug('Previous state: $previous'); // Debug AppLogger.debug
-        AppLogger.debug('Current state: $next'); // Debug AppLogger.debug
+      (previous, next) {
+        AppLogger.debug('Previous state: $previous');
+        AppLogger.debug('Current state: $next');
 
-        switch (next) {
-          case GenerateAccountFlowState.generated:
-            AppLogger.debug(
-                'State is ready, moving to next page',); // Debug AppLogger.debug
-            if (mounted) {
-              await _nextPage();
-            }
-          case GenerateAccountFlowState.idle:
-            AppLogger.debug('State is idle'); // Debug AppLogger.debug
-            if (mounted) {
-              // You can add any idle state handling here
-            }
-          case GenerateAccountFlowState.error:
-            AppLogger.debug(
-                'State is error, showing snackbar',); // Debug AppLogger.debug
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Please Try Again')),
-              );
-            }
-          default:
-            AppLogger.debug('Unknown state: $next'); // Debug AppLogger.debug
+        if (next is GenerateAccountFlowStateError) {
+          AppLogger.debug('Error state detected: ${next.message}');
+          _showErrorSnackBar(next.message);
+        } else if (next is GenerateAccountFlowStateWaitingForMetadata) {
+          AppLogger.debug('State is waiting for metadata');
+          _navigateToPage(PageType.seedPhraseImported);
+        } else if (next is GenerateAccountFlowStateImporting) {
+          AppLogger.debug('State is importing, showing progress');
+          _showImportingProgress();
+        } else if (next is GenerateAccountFlowStateReady) {
+          AppLogger.debug('Account generated successfully');
+          //TODO: Navigate to account screen
+        } else {
+          AppLogger.debug('Other state: $next');
         }
       },
     );
   }
 
-  Future<void> _nextPage() async {
-    AppLogger.debug(
-        'Current page before next: $_currentPage',); // Debug AppLogger.debug
-    if (_currentPage < 3) {
-      setState(() {
-        _currentPage++;
+  void _showErrorSnackBar(String message) {
+    AppLogger.debug('Attempting to show error snackbar: $message');
+    if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message.contains('Entropy already exists')
+                ? 'This wallet has already been imported'
+                : 'Error: $message'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+        AppLogger.debug('Snackbar should be visible now');
       });
-      await _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      AppLogger.debug('Moved to page: $_currentPage'); // Debug AppLogger.debug
     } else {
-      AppLogger.debug('Already at the last page'); // Debug AppLogger.debug
+      AppLogger.debug('Widget is not mounted, cannot show snackbar');
     }
+  }
+
+  Future<void> _showImportingProgress() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => const AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Importing wallet...'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _navigateToPage(PageType pageType) async {
+    switch (pageType) {
+      case PageType.seedPhraseImported:
+        setState(() {
+          _currentPage++;
+        });
+        AppLogger.debug('Attempting to navigate to page: ${_currentPage + 1}');
+        await _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        AppLogger.debug('Navigation completed. Current page: $_currentPage');
+      case PageType.accountNameEntered:
+        setState(() {
+          _currentPage++;
+        });
+        await _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        AppLogger.debug('Navigated to page: $_currentPage');
+      case PageType.accountIconSelected:
+        // Handle this case if needed
+        break;
+    }
+  }
+
+  void updateWords(List<String> words) {
+    setState(() {
+      _words.clear();
+      _words.addAll(words);
+    });
+  }
+
+  Future<void> importMnemonic() async {
+    final String mnemonic = _words.join(' ');
+    await ref.read(generateAccountFlowProvider.notifier).importMnemonic(mnemonic);
   }
 
   @override
   Widget build(BuildContext context) {
     AppLogger.debug(
-        'Building ImportWalletScreen, current page: $_currentPage',); // Debug AppLogger.debug
+      'Building ImportWalletScreen, current page: $_currentPage',
+    );
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
@@ -102,11 +155,10 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
             GestureDetector(
               onTap: () async {
                 if (_currentPage == 0) {
-                  AppLogger.debug('Popping screen'); // Debug AppLogger.debug
+                  AppLogger.debug('Popping screen');
                   context.pop();
                 } else {
-                  AppLogger.debug(
-                      'Moving to previous page',); // Debug AppLogger.debug
+                  AppLogger.debug('Moving to previous page');
                   setState(() {
                     _currentPage--;
                   });
@@ -115,8 +167,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
-                  AppLogger.debug(
-                      'Moved to page: $_currentPage',); // Debug AppLogger.debug
+                  AppLogger.debug('Moved to page: $_currentPage');
                 }
               },
               child: const Icon(PhosphorIconsBold.caretLeft),
@@ -160,7 +211,11 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: <Widget>[
-                const ImportWalletImportSeedPhraseScreen(),
+                ImportWalletImportSeedPhraseScreen(
+                  words: _words,
+                  onWordsUpdated: updateWords,
+                  onImport: importMnemonic,
+                ),
                 _buildPage('Page 2'),
                 _buildPage('Page 3'),
                 _buildPage('Page 4'),
@@ -187,7 +242,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
       );
 
   Widget _buildPage(String title) {
-    AppLogger.debug('Building page: $title'); // Debug AppLogger.debug
+    AppLogger.debug('Building page: $title');
     return Center(
       child: Text(title, style: const TextStyle(fontSize: 24)),
     );

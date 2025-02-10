@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/bip39_wordlist.dart';
-import '../../../../shared/account/presentation/providers/generate_account_flow.dart';
 
-class ImportWalletImportSeedPhraseScreen extends ConsumerStatefulWidget {
-  const ImportWalletImportSeedPhraseScreen({super.key});
+class ImportWalletImportSeedPhraseScreen extends StatefulWidget {
+  final List<String> words;
+  final Function(List<String>) onWordsUpdated;
+  final VoidCallback onImport;
+
+  const ImportWalletImportSeedPhraseScreen({
+    Key? key,
+    required this.words,
+    required this.onWordsUpdated,
+    required this.onImport,
+  }) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
+  State<ImportWalletImportSeedPhraseScreen> createState() =>
       _ImportWalletImportSeedPhraseScreenState();
 }
 
 class _ImportWalletImportSeedPhraseScreenState
-    extends ConsumerState<ImportWalletImportSeedPhraseScreen> {
+    extends State<ImportWalletImportSeedPhraseScreen> {
   final TextEditingController _controller = TextEditingController();
-  final List<String> _words = <String>[];
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -29,9 +35,8 @@ class _ImportWalletImportSeedPhraseScreenState
 
   @override
   void dispose() {
-    _controller
-      ..removeListener(_onTextChanged)
-      ..dispose();
+    _controller.removeListener(_onTextChanged);
+    _controller.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -47,14 +52,6 @@ class _ImportWalletImportSeedPhraseScreenState
     }
   }
 
-  Future<void> _importMnemonic() async {
-    final String mnemonic = _words.join(' ');
-
-    await ref
-        .watch(generateAccountFlowProvider.notifier)
-        .importMnemonic(mnemonic);
-  }
-
   void _addWord(String word) {
     final String trimmedWord = word.trim().toLowerCase();
 
@@ -66,7 +63,7 @@ class _ImportWalletImportSeedPhraseScreenState
       return;
     }
 
-    if (_words.contains(word)) {
+    if (widget.words.contains(trimmedWord)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Word already added')),
       );
@@ -74,7 +71,7 @@ class _ImportWalletImportSeedPhraseScreenState
       return;
     }
 
-    if (_words.length >= 24) {
+    if (widget.words.length >= 24) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Seed phrase cannot exceed 24 words')),
       );
@@ -83,20 +80,20 @@ class _ImportWalletImportSeedPhraseScreenState
       return;
     }
 
-    setState(() {
-      _words.add(word);
-      _controller.clear();
-    });
+    final List<String> updatedWords = List.from(widget.words)..add(trimmedWord);
+    widget.onWordsUpdated(updatedWords);
+    _controller.clear();
 
-    if (_words.length < 24) {
+    if (updatedWords.length < 24) {
       _focusNode.requestFocus();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final double baseHeight = _words.isEmpty ? 100 : 60;
-    final double dynamicHeight = baseHeight + (_words.length / 3).ceil() * 40;
+    final double baseHeight = widget.words.isEmpty ? 100 : 60;
+    final double dynamicHeight =
+        baseHeight + (widget.words.length / 3).ceil() * 40;
 
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -120,7 +117,8 @@ class _ImportWalletImportSeedPhraseScreenState
           Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                  minWidth: double.infinity,),
+                minWidth: double.infinity,
+              ),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 height: dynamicHeight,
@@ -134,7 +132,7 @@ class _ImportWalletImportSeedPhraseScreenState
                   spacing: 8,
                   runSpacing: 8,
                   children: <Widget>[
-                    ..._words.map(_buildWordChip),
+                    ...widget.words.map(_buildWordChip),
                     _buildTextField(),
                   ],
                 ),
@@ -143,7 +141,8 @@ class _ImportWalletImportSeedPhraseScreenState
           ),
           const Spacer(),
           GestureDetector(
-            onTap: _words.isNotEmpty ? _importMnemonic : _pasteFromClipboard,
+            onTap:
+                widget.words.isNotEmpty ? widget.onImport : _pasteFromClipboard,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -152,7 +151,7 @@ class _ImportWalletImportSeedPhraseScreenState
                 borderRadius: BorderRadius.circular(40),
               ),
               child: Text(
-                _words.isEmpty ? 'Paste from clipboard' : 'Continue',
+                widget.words.isEmpty ? 'Paste from clipboard' : 'Continue',
                 style: const TextStyle(
                   color: AppColors.white,
                   fontSize: 16,
@@ -183,9 +182,9 @@ class _ImportWalletImportSeedPhraseScreenState
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _words.remove(word);
-                  });
+                  final List<String> updatedWords = List.from(widget.words)
+                    ..remove(word);
+                  widget.onWordsUpdated(updatedWords);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(2),
@@ -262,11 +261,7 @@ class _ImportWalletImportSeedPhraseScreenState
         return;
       }
 
-      setState(() {
-        _words
-          ..clear()
-          ..addAll(pastedWords);
-      });
+      widget.onWordsUpdated(pastedWords);
     }
   }
 }

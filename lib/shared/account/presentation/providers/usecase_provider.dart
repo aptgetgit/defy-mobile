@@ -2,8 +2,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/database/objectbox/objectbox.g.dart';
-import '../../../../core/di/providers/services/object_box_service_provider.dart';
-import '../../../../core/di/providers/services/secure_storage_service_provider.dart';
+import '../../../../core/dio/providers/services/object_box_service_provider.dart';
+import '../../../../core/dio/providers/services/secure_storage_service_provider.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../data/repositories/aptos_account_repository_implementation.dart';
 import '../../data/repositories/entropy_repository_implementation.dart';

@@ -14,3 +14,17 @@ class OnboardingRoute extends GoRouteData {
         const OnboardingScreen(),
   );
 }
+
+@TypedGoRoute<DiveInPageRoute>(path: '/dive-in')
+class DiveInPageRoute extends GoRouteData {
+  const DiveInPageRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const DiveInPage();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (BuildContext context, GoRouterState state) => const DiveInPage(),
+  );
+}

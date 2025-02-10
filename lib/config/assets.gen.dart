@@ -27,6 +27,89 @@ class $AssetsIconsGen {
   List<AssetGenImage> get values => [appIcon, appLogoDark, appLogoLight];
 }
 
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/dive-in-1.png
+  AssetGenImage get diveIn1 =>
+      const AssetGenImage('assets/images/dive-in-1.png');
+
+  /// File path: assets/images/dive-in-2.png
+  AssetGenImage get diveIn2 =>
+      const AssetGenImage('assets/images/dive-in-2.png');
+
+  /// File path: assets/images/dive-in-3.png
+  AssetGenImage get diveIn3 =>
+      const AssetGenImage('assets/images/dive-in-3.png');
+
+  /// File path: assets/images/dive-in-4.png
+  AssetGenImage get diveIn4 =>
+      const AssetGenImage('assets/images/dive-in-4.png');
+
+  /// File path: assets/images/dive-in-5.png
+  AssetGenImage get diveIn5 =>
+      const AssetGenImage('assets/images/dive-in-5.png');
+
+  /// File path: assets/images/dive-in-6.png
+  AssetGenImage get diveIn6 =>
+      const AssetGenImage('assets/images/dive-in-6.png');
+
+  /// File path: assets/images/dive-in-7.png
+  AssetGenImage get diveIn7 =>
+      const AssetGenImage('assets/images/dive-in-7.png');
+
+  /// File path: assets/images/dive-in-8.png
+  AssetGenImage get diveIn8 =>
+      const AssetGenImage('assets/images/dive-in-8.png');
+
+  /// File path: assets/images/grinning-face-with-smiling-eyes.gif
+  AssetGenImage get grinningFaceWithSmilingEyes =>
+      const AssetGenImage('assets/images/grinning-face-with-smiling-eyes.gif');
+
+  /// File path: assets/images/onboarding-1.gif
+  AssetGenImage get onboarding1 =>
+      const AssetGenImage('assets/images/onboarding-1.gif');
+
+  /// File path: assets/images/onboarding-2.gif
+  AssetGenImage get onboarding2 =>
+      const AssetGenImage('assets/images/onboarding-2.gif');
+
+  /// File path: assets/images/onboarding-3.gif
+  AssetGenImage get onboarding3 =>
+      const AssetGenImage('assets/images/onboarding-3.gif');
+
+  /// File path: assets/images/onboarding-4.gif
+  AssetGenImage get onboarding4 =>
+      const AssetGenImage('assets/images/onboarding-4.gif');
+
+  /// File path: assets/images/slightly-smiling-face.gif
+  AssetGenImage get slightlySmilingFace =>
+      const AssetGenImage('assets/images/slightly-smiling-face.gif');
+
+  /// File path: assets/images/star-struck.gif
+  AssetGenImage get starStruck =>
+      const AssetGenImage('assets/images/star-struck.gif');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+        diveIn1,
+        diveIn2,
+        diveIn3,
+        diveIn4,
+        diveIn5,
+        diveIn6,
+        diveIn7,
+        diveIn8,
+        grinningFaceWithSmilingEyes,
+        onboarding1,
+        onboarding2,
+        onboarding3,
+        onboarding4,
+        slightlySmilingFace,
+        starStruck
+      ];
+}
+
 class $AssetsJsGen {
   const $AssetsJsGen();
 
@@ -37,11 +120,23 @@ class $AssetsJsGen {
   List<String> get values => [wallet];
 }
 
+class $AssetsVideosGen {
+  const $AssetsVideosGen();
+
+  /// File path: assets/videos/splash_video.mp4
+  String get splashVideo => 'assets/videos/splash_video.mp4';
+
+  /// List of all assets
+  List<String> get values => [splashVideo];
+}
+
 class Assets {
   const Assets._();
 
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsJsGen js = $AssetsJsGen();
+  static const $AssetsVideosGen videos = $AssetsVideosGen();
 }
 
 class AssetGenImage {

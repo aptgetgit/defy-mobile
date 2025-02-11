@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-final Set<String> bip39Wordlist = HashSet<String>.from([
+final Set<String> bip39Wordlist = HashSet<String>.from(<String>[
   'abandon',
   'ability',
   'able',

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -6,20 +7,29 @@ import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/bip39_wordlist.dart';
 
 class ImportWalletImportSeedPhraseScreen extends StatefulWidget {
-  final List<String> words;
-  final Function(List<String>) onWordsUpdated;
-  final VoidCallback onImport;
-
   const ImportWalletImportSeedPhraseScreen({
-    Key? key,
     required this.words,
     required this.onWordsUpdated,
     required this.onImport,
-  }) : super(key: key);
+    super.key,
+  });
+  final List<String> words;
+  final void Function(List<String>) onWordsUpdated;
+  final VoidCallback onImport;
 
   @override
   State<ImportWalletImportSeedPhraseScreen> createState() =>
       _ImportWalletImportSeedPhraseScreenState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(ObjectFlagProperty<void Function(List<String> p1)>.has(
+          'onWordsUpdated', onWordsUpdated,),)
+      ..add(ObjectFlagProperty<VoidCallback>.has('onImport', onImport))
+      ..add(IterableProperty<String>('words', words));
+  }
 }
 
 class _ImportWalletImportSeedPhraseScreenState
@@ -35,8 +45,9 @@ class _ImportWalletImportSeedPhraseScreenState
 
   @override
   void dispose() {
-    _controller.removeListener(_onTextChanged);
-    _controller.dispose();
+    _controller
+      ..removeListener(_onTextChanged)
+      ..dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -72,6 +83,9 @@ class _ImportWalletImportSeedPhraseScreenState
     }
 
     if (widget.words.length >= 24) {
+      if (!mounted) {
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Seed phrase cannot exceed 24 words')),
       );
@@ -80,7 +94,8 @@ class _ImportWalletImportSeedPhraseScreenState
       return;
     }
 
-    final List<String> updatedWords = List.from(widget.words)..add(trimmedWord);
+    final List<String> updatedWords = List<String>.from(widget.words)
+      ..add(trimmedWord);
     widget.onWordsUpdated(updatedWords);
     _controller.clear();
 
@@ -182,8 +197,8 @@ class _ImportWalletImportSeedPhraseScreenState
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  final List<String> updatedWords = List.from(widget.words)
-                    ..remove(word);
+                  final List<String> updatedWords =
+                      List<String>.from(widget.words)..remove(word);
                   widget.onWordsUpdated(updatedWords);
                 },
                 child: Container(
@@ -246,6 +261,9 @@ class _ImportWalletImportSeedPhraseScreenState
           .toList();
 
       if (pastedWords.isEmpty) {
+        if (!mounted) {
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Clipboard does not contain a valid seed phrase'),
@@ -255,6 +273,9 @@ class _ImportWalletImportSeedPhraseScreenState
       }
 
       if (pastedWords.length > 24) {
+        if (!mounted) {
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Seed phrase cannot exceed 24 words')),
         );

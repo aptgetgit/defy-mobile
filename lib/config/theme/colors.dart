@@ -40,7 +40,7 @@ class AppColors {
   static const Color red = Color(0xFFFF6767);
   static const Color orange = Color(0xFFFFAD29);
   static const Color purple = Color(0xFFB621F2);
-  static const Color yellow = Color(0xFFF2AB21);
+  static const Color yellow = Color(0xFFF0B90B);
   static const Color pink = Color(0xFFFA7AA2);
 
   // Utility colors

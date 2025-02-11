@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/logging/app_logger.dart';
+
 import '../../domain/entities/aptos_account_with_metadata.dart';
 import '../../domain/repositories/aptos_account_repository_interface.dart';
 import '../states/generate_account_flow_state.dart';
@@ -15,7 +15,6 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
   GenerateAccountFlowState build() => const GenerateAccountFlowState.idle();
 
   Future<void> importMnemonic(String mnemonic) async {
-    AppLogger.debug('Attempting to import mnemonic');
     state = const GenerateAccountFlowState.importing();
 
     try {
@@ -23,18 +22,16 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
           .read(importMnemonicUseCaseProvider)
           .call(mnemonic: mnemonic);
 
-      AppLogger.debug('Mnemonic imported successfully');
       state = GenerateAccountFlowState.waitingForMetadata(
         keySource: KeySource.mnemonic(entropyHash: entropyHash),
       );
-    } catch (e) {
-      AppLogger.debug('Error importing mnemonic: ${e.toString()}');
+    } on Exception catch (e) {
+      
       if (e.toString().contains('Entropy already exists')) {
         state = const GenerateAccountFlowState.error('Entropy already exists');
       } else {
         state = GenerateAccountFlowState.error(e.toString());
       }
-      AppLogger.debug('State set to error: ${state.toString()}');
     }
   }
 

@@ -67,4 +67,10 @@ class SmoothBottomUpTransition extends StatelessWidget {
       child: child,
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Animation<double>>('animation', animation));
+  }
 }

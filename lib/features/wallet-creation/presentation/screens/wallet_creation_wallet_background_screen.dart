@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -36,7 +37,6 @@ class WalletCreationWalletBackgroundScreenState
   }
 
   void _animateSlider(int index, Color newColor) {
-
     // Update the animation color and index
 
     ref
@@ -255,11 +255,8 @@ class WalletCreationWalletBackgroundScreenState
 }
 
 class ColorButton extends ConsumerWidget {
-
-  const ColorButton({super.key, 
-    required this.color,
-    required this.index,
-    required this.onTap,
+  const ColorButton({
+    required this.color, required this.index, required this.onTap, super.key,
   });
   final Color color;
   final int index;
@@ -297,5 +294,13 @@ class ColorButton extends ConsumerWidget {
         ),
       ),
     );
+  }
+  
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(ColorProperty('color', color))
+    ..add(IntProperty('index', index))
+    ..add(ObjectFlagProperty<void Function(int p1)>.has('onTap', onTap));
   }
 }

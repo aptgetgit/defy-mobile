@@ -15,7 +15,7 @@ Uint8List deriveHDKeyFromEntropy({
     final String seed = bip39.mnemonicToSeedHex(mnemonic);
 
     final aptos.Keys keys = aptos.derivePath(
-      AptosDerivationPath.fromBytes(derivationPath).toString(),
+       AptosDerivationPath.fromBytes(derivationPath).toDerivationPath(),
       seed,
     );
 

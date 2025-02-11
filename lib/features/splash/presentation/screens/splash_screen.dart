@@ -21,9 +21,8 @@ class SplashScreen extends HookConsumerWidget {
       Future<void> initializeVideo() async {
         await videoController.initialize();
         isInitialized.value = true;
-        videoController
-          ..play()
-          ..setLooping(false);
+        await videoController.play();
+        await videoController.setLooping(false);
       }
 
       unawaited(initializeVideo());
@@ -43,9 +42,9 @@ class SplashScreen extends HookConsumerWidget {
         }
       });
 
-      return () {
-        videoController..removeListener(() {})
-        ..dispose();
+      return () async {
+        videoController.removeListener(() {});
+        await videoController.dispose();
       };
     }, <Object?>[videoController],);
 

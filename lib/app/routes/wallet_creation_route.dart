@@ -16,7 +16,7 @@ class WalletCreationScreenRoute extends GoRouteData {
 }
 
 @TypedGoRoute<WalletCreationWalletNameScreenRoute>(
-    path: '/wallet-creation/wallet-name')
+    path: '/wallet-creation/wallet-name',)
 class WalletCreationWalletNameScreenRoute extends GoRouteData {
   const WalletCreationWalletNameScreenRoute();
 
@@ -31,7 +31,7 @@ class WalletCreationWalletNameScreenRoute extends GoRouteData {
 }
 
 @TypedGoRoute<WalletCreationWalletBackgroundScreenRoute>(
-    path: '/wallet-creation/wallet-background')
+    path: '/wallet-creation/wallet-background',)
 class WalletCreationWalletBackgroundScreenRoute extends GoRouteData {
   const WalletCreationWalletBackgroundScreenRoute();
 
@@ -57,5 +57,20 @@ class ImportWalletScreenRoute extends GoRouteData {
   static final AppRoute route = AppRoute.protected(
     builder: (BuildContext context, GoRouterState state) =>
         const ImportWalletScreen(),
+  );
+}
+
+
+@TypedGoRoute<CreatedWalletScreenRoute>(path: '/wallet-creation/created-wallet')
+class CreatedWalletScreenRoute extends GoRouteData {
+  const CreatedWalletScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const CreatedWalletScreen();
+
+  static final AppRoute route = AppRoute.protected(
+    builder: (BuildContext context, GoRouterState state) =>
+        const CreatedWalletScreen(),
   );
 }

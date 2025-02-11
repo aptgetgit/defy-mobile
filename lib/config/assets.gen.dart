@@ -15,6 +15,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/app-icon.png
   AssetGenImage get appIcon => const AssetGenImage('assets/icons/app-icon.png');
 
+  /// File path: assets/icons/app-logo-dark-3d.png
+  AssetGenImage get appLogoDark3d =>
+      const AssetGenImage('assets/icons/app-logo-dark-3d.png');
+
   /// File path: assets/icons/app-logo-dark.png
   AssetGenImage get appLogoDark =>
       const AssetGenImage('assets/icons/app-logo-dark.png');
@@ -23,12 +27,20 @@ class $AssetsIconsGen {
   AssetGenImage get appLogoLight =>
       const AssetGenImage('assets/icons/app-logo-light.png');
 
+  /// File path: assets/icons/coins.png
+  AssetGenImage get coins => const AssetGenImage('assets/icons/coins.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [appIcon, appLogoDark, appLogoLight];
+  List<AssetGenImage> get values =>
+      [appIcon, appLogoDark3d, appLogoDark, appLogoLight, coins];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/beaming-face-with-smiling-eyes.gif
+  AssetGenImage get beamingFaceWithSmilingEyes =>
+      const AssetGenImage('assets/images/beaming-face-with-smiling-eyes.gif');
 
   /// File path: assets/images/dive-in-1.png
   AssetGenImage get diveIn1 =>
@@ -62,9 +74,37 @@ class $AssetsImagesGen {
   AssetGenImage get diveIn8 =>
       const AssetGenImage('assets/images/dive-in-8.png');
 
+  /// File path: assets/images/face-blowing-a-kiss.gif
+  AssetGenImage get faceBlowingAKiss =>
+      const AssetGenImage('assets/images/face-blowing-a-kiss.gif');
+
+  /// File path: assets/images/face-with-tears-of-joy.gif
+  AssetGenImage get faceWithTearsOfJoy =>
+      const AssetGenImage('assets/images/face-with-tears-of-joy.gif');
+
+  /// File path: assets/images/grinning-face-with-big-eyes.gif
+  AssetGenImage get grinningFaceWithBigEyes =>
+      const AssetGenImage('assets/images/grinning-face-with-big-eyes.gif');
+
   /// File path: assets/images/grinning-face-with-smiling-eyes.gif
   AssetGenImage get grinningFaceWithSmilingEyes =>
       const AssetGenImage('assets/images/grinning-face-with-smiling-eyes.gif');
+
+  /// File path: assets/images/grinning-face-with-sweat.gif
+  AssetGenImage get grinningFaceWithSweat =>
+      const AssetGenImage('assets/images/grinning-face-with-sweat.gif');
+
+  /// File path: assets/images/grinning-face.gif
+  AssetGenImage get grinningFace =>
+      const AssetGenImage('assets/images/grinning-face.gif');
+
+  /// File path: assets/images/grinning-squinting-face.gif
+  AssetGenImage get grinningSquintingFace =>
+      const AssetGenImage('assets/images/grinning-squinting-face.gif');
+
+  /// File path: assets/images/kissing-face.gif
+  AssetGenImage get kissingFace =>
+      const AssetGenImage('assets/images/kissing-face.gif');
 
   /// File path: assets/images/onboarding-1.gif
   AssetGenImage get onboarding1 =>
@@ -82,16 +122,59 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding4 =>
       const AssetGenImage('assets/images/onboarding-4.gif');
 
+  /// File path: assets/images/rolling-on-the-floor-laughing.gif
+  AssetGenImage get rollingOnTheFloorLaughing =>
+      const AssetGenImage('assets/images/rolling-on-the-floor-laughing.gif');
+
   /// File path: assets/images/slightly-smiling-face.gif
   AssetGenImage get slightlySmilingFace =>
       const AssetGenImage('assets/images/slightly-smiling-face.gif');
+
+  /// File path: assets/images/smiling-face-with-halo.gif
+  AssetGenImage get smilingFaceWithHalo =>
+      const AssetGenImage('assets/images/smiling-face-with-halo.gif');
+
+  /// File path: assets/images/smiling-face-with-heart-eyes.gif
+  AssetGenImage get smilingFaceWithHeartEyes =>
+      const AssetGenImage('assets/images/smiling-face-with-heart-eyes.gif');
+
+  /// File path: assets/images/smiling-face-with-hearts.gif
+  AssetGenImage get smilingFaceWithHearts =>
+      const AssetGenImage('assets/images/smiling-face-with-hearts.gif');
+
+  /// File path: assets/images/smiling-face-with-smiling-eyes.gif
+  AssetGenImage get smilingFaceWithSmilingEyes =>
+      const AssetGenImage('assets/images/smiling-face-with-smiling-eyes.gif');
 
   /// File path: assets/images/star-struck.gif
   AssetGenImage get starStruck =>
       const AssetGenImage('assets/images/star-struck.gif');
 
+  /// File path: assets/images/upside-down-face.gif
+  AssetGenImage get upsideDownFace =>
+      const AssetGenImage('assets/images/upside-down-face.gif');
+
+  /// File path: assets/images/waitlist-screen-header-gradient-component.png
+  AssetGenImage get waitlistScreenHeaderGradientComponent =>
+      const AssetGenImage(
+          'assets/images/waitlist-screen-header-gradient-component.png');
+
+  /// File path: assets/images/wallet-creation-bg.png
+  AssetGenImage get walletCreationBg =>
+      const AssetGenImage('assets/images/wallet-creation-bg.png');
+
+  /// File path: assets/images/wallet-creation-wallet-background-wallet-component.png
+  AssetGenImage get walletCreationWalletBackgroundWalletComponent =>
+      const AssetGenImage(
+          'assets/images/wallet-creation-wallet-background-wallet-component.png');
+
+  /// File path: assets/images/winking-face.gif
+  AssetGenImage get winkingFace =>
+      const AssetGenImage('assets/images/winking-face.gif');
+
   /// List of all assets
   List<AssetGenImage> get values => [
+        beamingFaceWithSmilingEyes,
         diveIn1,
         diveIn2,
         diveIn3,
@@ -100,13 +183,30 @@ class $AssetsImagesGen {
         diveIn6,
         diveIn7,
         diveIn8,
+        faceBlowingAKiss,
+        faceWithTearsOfJoy,
+        grinningFaceWithBigEyes,
         grinningFaceWithSmilingEyes,
+        grinningFaceWithSweat,
+        grinningFace,
+        grinningSquintingFace,
+        kissingFace,
         onboarding1,
         onboarding2,
         onboarding3,
         onboarding4,
+        rollingOnTheFloorLaughing,
         slightlySmilingFace,
-        starStruck
+        smilingFaceWithHalo,
+        smilingFaceWithHeartEyes,
+        smilingFaceWithHearts,
+        smilingFaceWithSmilingEyes,
+        starStruck,
+        upsideDownFace,
+        waitlistScreenHeaderGradientComponent,
+        walletCreationBg,
+        walletCreationWalletBackgroundWalletComponent,
+        winkingFace
       ];
 }
 

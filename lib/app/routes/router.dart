@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
@@ -7,8 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../features/browser/presentation/screens/browser_screen.dart';
-import '../../features/dive_in/presentation/screens/dive_in_page.dart';
+import '../../features/onboarding/presentation/screens/dive_in_page.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/import_wallet/presentation/screens/created_wallet_screen.dart';
 import '../../features/import_wallet/presentation/screens/import_wallet_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';

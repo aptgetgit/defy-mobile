@@ -104,7 +104,7 @@ class __$$PublicRouteImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PublicRouteImpl implements PublicRoute {
+class _$PublicRouteImpl with DiagnosticableTreeMixin implements PublicRoute {
   const _$PublicRouteImpl(
       {required this.builder, this.redirectIfAuthenticated});
 
@@ -114,8 +114,18 @@ class _$PublicRouteImpl implements PublicRoute {
   final String? redirectIfAuthenticated;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'AppRoute.public(builder: $builder, redirectIfAuthenticated: $redirectIfAuthenticated)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'AppRoute.public'))
+      ..add(DiagnosticsProperty('builder', builder))
+      ..add(DiagnosticsProperty(
+          'redirectIfAuthenticated', redirectIfAuthenticated));
   }
 
   @override
@@ -196,15 +206,25 @@ class __$$ProtectedRouteImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProtectedRouteImpl implements ProtectedRoute {
+class _$ProtectedRouteImpl
+    with DiagnosticableTreeMixin
+    implements ProtectedRoute {
   const _$ProtectedRouteImpl({required this.builder});
 
   @override
   final Widget Function(BuildContext, GoRouterState) builder;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'AppRoute.protected(builder: $builder)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'AppRoute.protected'))
+      ..add(DiagnosticsProperty('builder', builder));
   }
 
   @override

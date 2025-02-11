@@ -7,7 +7,7 @@ class SplashRoute extends GoRouteData {
   const SplashRoute();
 
   @override
-  Page<void> buildPage(BuildContext context, GoRouterState state) => CustomTransitionPage(
+  Page<void> buildPage(BuildContext context, GoRouterState state) => CustomTransitionPage<void>(
       key: state.pageKey,
       child: const SplashScreen(),
       transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) => ZoomTransition(animation: animation, child: child),
@@ -41,4 +41,10 @@ class ZoomTransition extends StatelessWidget {
         ),
       child: child,
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Animation<double>>('animation', animation));
+  }
 }

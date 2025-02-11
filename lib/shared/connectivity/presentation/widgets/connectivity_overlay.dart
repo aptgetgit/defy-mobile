@@ -4,12 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/logging/app_logger.dart';
-import '../../domain/entities/network_status.dart';
-import '../providers/network_status_provider.dart';
-import 'network_status_banner.dart';
+import '../../domain/entities/connectivity_status.dart';
+import '../providers/connectivity_provider.dart';
+import 'connectivity_banner.dart';
 
-class NetworkStatusOverlay extends ConsumerStatefulWidget {
-  const NetworkStatusOverlay({
+class ConnectivityOverlay extends ConsumerStatefulWidget {
+  const ConnectivityOverlay({
     required this.child,
     super.key,
   });
@@ -17,18 +17,18 @@ class NetworkStatusOverlay extends ConsumerStatefulWidget {
   final Widget child;
 
   @override
-  ConsumerState<NetworkStatusOverlay> createState() =>
-      _NetworkStatusOverlayState();
+  ConsumerState<ConnectivityOverlay> createState() =>
+      _ConnectivityOverlayState();
 }
 
-class _NetworkStatusOverlayState extends ConsumerState<NetworkStatusOverlay>
+class _ConnectivityOverlayState extends ConsumerState<ConnectivityOverlay>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _animation;
   late final Animation<Offset> _slideAnimation;
   final OverlayPortalController _portalController = OverlayPortalController();
-  StreamSubscription<NetworkStatus>? _subscription;
-  NetworkStatus? _currentStatus;
+  StreamSubscription<ConnectivityStatus>? _subscription;
+  ConnectivityStatus? _currentStatus;
   bool _isDisposed = false;
 
   @override
@@ -59,12 +59,12 @@ class _NetworkStatusOverlayState extends ConsumerState<NetworkStatusOverlay>
   }
 
   void _handleAnimationStatus(AnimationStatus status) {
-    if (status == AnimationStatus.dismissed) {
+    if (status == AnimationStatus.dismissed && !_isDisposed) {
       _portalController.hide();
     }
   }
 
-  void _updateNetworkStatus(NetworkStatus status) {
+  void _updateConnectivityStatus(ConnectivityStatus status) {
     if (_isDisposed) {
       return;
     }
@@ -73,7 +73,7 @@ class _NetworkStatusOverlayState extends ConsumerState<NetworkStatusOverlay>
     _updateOverlayVisibility(status);
   }
 
-  void _updateOverlayVisibility(NetworkStatus status) {
+  void _updateOverlayVisibility(ConnectivityStatus status) {
     final bool shouldShow = status is Offline || status is Limited;
 
     if (shouldShow && !_portalController.isShowing) {
@@ -84,41 +84,35 @@ class _NetworkStatusOverlayState extends ConsumerState<NetworkStatusOverlay>
     }
   }
 
-  void _setupStreamSubscription(Stream<NetworkStatus> stream) {
-    _subscription?.cancel();
+  void _setupStreamSubscription(Stream<ConnectivityStatus> stream) {
+    unawaited(_subscription?.cancel());
     _subscription = stream.distinct().listen(
-      _updateNetworkStatus,
+      _updateConnectivityStatus,
       onError: (Object error) {
-        AppLogger.debug('Error in network status stream', error: error);
+        AppLogger.debug('Error in connectivity status stream', error: error);
         if (_isDisposed) {
           return;
         }
 
-        setState(() => _currentStatus = const NetworkStatus.offline());
+        setState(() => _currentStatus = const ConnectivityStatus.offline());
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // Listen for network status changes
-    ref.listen<AsyncValue<Stream<NetworkStatus>>>(
-      networkStatusProvider,
-      (_, AsyncValue<Stream<NetworkStatus>> next) {
+    // Listen for connectivity status changes
+    ref.listen<AsyncValue<Stream<ConnectivityStatus>>>(
+      connectivityStatusProvider,
+      (_, AsyncValue<Stream<ConnectivityStatus>> next) {
         next.whenData(_setupStreamSubscription);
       },
     );
 
-    return Material(
-      child: Navigator(
-        onGenerateRoute: (RouteSettings settings) => MaterialPageRoute<void>(
-          builder: (BuildContext context) => OverlayPortal(
-            controller: _portalController,
-            overlayChildBuilder: (BuildContext context) => _buildOverlay(),
-            child: widget.child,
-          ),
-        ),
-      ),
+    return OverlayPortal(
+      controller: _portalController,
+      overlayChildBuilder: (BuildContext context) => _buildOverlay(),
+      child: widget.child,
     );
   }
 
@@ -134,7 +128,7 @@ class _NetworkStatusOverlayState extends ConsumerState<NetworkStatusOverlay>
               child: SlideTransition(
                 position: _slideAnimation,
                 child: _currentStatus != null
-                    ? NetworkStatusBanner(status: _currentStatus!)
+                    ? ConnectivityBanner(status: _currentStatus!)
                     : const SizedBox.shrink(),
               ),
             ),
@@ -146,7 +140,7 @@ class _NetworkStatusOverlayState extends ConsumerState<NetworkStatusOverlay>
   void dispose() {
     _isDisposed = true;
     _controller.removeStatusListener(_handleAnimationStatus);
-    _subscription?.cancel();
+    unawaited(_subscription?.cancel());
     _controller.dispose();
     super.dispose();
   }
@@ -156,7 +150,8 @@ class _NetworkStatusOverlayState extends ConsumerState<NetworkStatusOverlay>
     super.debugFillProperties(properties);
     properties
       ..add(
-        DiagnosticsProperty<NetworkStatus?>('currentStatus', _currentStatus),
+        DiagnosticsProperty<ConnectivityStatus?>(
+            'currentStatus', _currentStatus),
       )
       ..add(
         DiagnosticsProperty<bool>(

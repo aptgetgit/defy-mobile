@@ -7,35 +7,19 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../data/models/local/network_config.dart';
-import '../../domain/entities/network_status.dart';
+import '../../data/models/local/connectivity_config.dart';
+import '../../domain/entities/connectivity_status.dart';
 
-part 'generated/network_status_provider.g.dart';
+part 'generated/connectivity_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-NetworkConfig networkInitializer(Ref ref) {
-  throw UnimplementedError('Network config must be initialized');
+ConnectivityConfig connectivityInitializer(Ref ref) {
+  throw UnimplementedError('Connectivity config must be initialized');
 }
 
-// @Riverpod(keepAlive: true)
-// Future<Stream<NetworkStatus>> networkStatus(Ref ref) async {
-//   debugPrint('networkStatus provider called');
-
-//   // Create a periodic stream that emits every second
-//   return Stream.periodic(
-//     const Duration(seconds: 1),
-//     (int count) {
-//       final status = count.isEven
-//           ? const NetworkStatus.offline()
-//           : const NetworkStatus.online();
-//       debugPrint('Emitting network status: $status');
-//       return status;
-//     },
-//   ).asBroadcastStream();
-// }
 @Riverpod(keepAlive: true)
-Future<Stream<NetworkStatus>> networkStatus(Ref ref) async {
-  final NetworkConfig config = ref.watch(networkInitializerProvider);
+Future<Stream<ConnectivityStatus>> connectivityStatus(Ref ref) async {
+  final ConnectivityConfig config = ref.watch(connectivityInitializerProvider);
   final Connectivity connectivity = Connectivity();
 
   Future<bool> checkInternetAccess() async {
@@ -95,7 +79,7 @@ Future<Stream<NetworkStatus>> networkStatus(Ref ref) async {
           results.contains(ConnectivityResult.none) ||
           (results.contains(ConnectivityResult.bluetooth) &&
               results.length == 1)) {
-        return const NetworkStatus.offline();
+        return const ConnectivityStatus.offline();
       }
 
       final bool hasInternet = await checkInternetAccess();
@@ -118,26 +102,26 @@ Future<Stream<NetworkStatus>> networkStatus(Ref ref) async {
       // Determine network status based on primary connection
       return switch (primaryConnection) {
         ConnectivityResult.mobile => hasInternet
-            ? const NetworkStatus.online()
-            : const NetworkStatus.offline(),
+            ? const ConnectivityStatus.online()
+            : const ConnectivityStatus.offline(),
         ConnectivityResult.wifi ||
         ConnectivityResult.ethernet ||
         ConnectivityResult.vpn =>
           hasInternet
-              ? const NetworkStatus.online()
-              : const NetworkStatus.limited(),
-        _ => const NetworkStatus.offline(),
+              ? const ConnectivityStatus.online()
+              : const ConnectivityStatus.limited(),
+        _ => const ConnectivityStatus.offline(),
       };
     } on Exception catch (_) {
-      return const NetworkStatus.offline();
+      return const ConnectivityStatus.offline();
     }
   }).distinct();
 }
 
 @riverpod
-Stream<bool> isOnline(Ref ref) => ref.watch(networkStatusProvider).when(
-      data: (Stream<NetworkStatus> stream) =>
-          stream.map((NetworkStatus status) => status.isOnline),
+Stream<bool> isOnline(Ref ref) => ref.watch(connectivityStatusProvider).when(
+      data: (Stream<ConnectivityStatus> stream) =>
+          stream.map((ConnectivityStatus status) => status.isOnline),
       error: Stream.error,
       loading: Stream.empty,
     );

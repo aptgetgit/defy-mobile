@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../domain/entities/network_status.dart';
+import '../../domain/entities/connectivity_status.dart';
 
-class NetworkStatusBanner extends StatelessWidget {
-  const NetworkStatusBanner({
+class ConnectivityBanner extends StatelessWidget {
+  const ConnectivityBanner({
     required this.status,
     super.key,
   });
 
-  final NetworkStatus status;
+  final ConnectivityStatus status;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +45,6 @@ class NetworkStatusBanner extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<NetworkStatus>('status', status));
+    properties.add(DiagnosticsProperty<ConnectivityStatus>('status', status));
   }
 }

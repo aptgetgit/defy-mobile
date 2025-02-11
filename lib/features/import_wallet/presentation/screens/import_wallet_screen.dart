@@ -32,7 +32,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
   void initState() {
     super.initState();
     _pageController.addListener(_onPageChanged);
-    AppLogger.debug('ImportWalletScreen initialized');
   }
 
   @override
@@ -49,10 +48,10 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
   }
 
   Future<void> _handleStateChanges(GenerateAccountFlowState state) async {
-    if (state == _previousState) return;
+    if (state == _previousState) {
+      return;
+    }
     _previousState = state;
-
-    AppLogger.debug('Current state: $state');
 
     if (state is GenerateAccountFlowStateError) {
       _showErrorSnackBar(state.message);
@@ -72,7 +71,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
   }
 
   void _showErrorSnackBar(String message) {
-    AppLogger.debug('Attempting to show error snackbar: $message');
     if (!mounted) {
       return;
     }
@@ -88,7 +86,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
           duration: const Duration(seconds: 3),
         ),
       );
-      AppLogger.debug('Snackbar should be visible now');
     });
   }
 
@@ -99,8 +96,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
 
     final int newPage = currentPage + 1;
     notifier.setCurrentPage(newPage);
-
-    AppLogger.debug('Navigated to page: $newPage');
   }
 
   @override
@@ -116,10 +111,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _handleStateChanges(generateAccountFlowState);
     });
-
-    AppLogger.debug(
-      'Building ImportWalletScreen, current page: ${importWalletState.currentPage}',
-    );
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -220,10 +211,8 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
     ImportWalletNotifier notifier,
   ) async {
     if (state.currentPage == 0) {
-      AppLogger.debug('Popping screen');
       context.pop();
     } else {
-      AppLogger.debug('Moving to previous page');
       final int newPage = state.currentPage - 1;
       notifier.setCurrentPage(newPage);
       await _pageController.animateToPage(
@@ -231,7 +220,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-      AppLogger.debug('Moved to page: $newPage');
     }
   }
 

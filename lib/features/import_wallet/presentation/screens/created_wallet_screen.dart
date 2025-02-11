@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:confetti/confetti.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -9,6 +11,7 @@ import '../../../../config/theme/colors.dart';
 import '../../../../shared/account/presentation/providers/generate_account_flow.dart';
 import '../../../../shared/account/presentation/states/generate_account_flow_state.dart';
 import '../../../common/presentation/widgets/black_button.dart';
+import '../components/wallet_card_back.dart';
 import '../providers/import_wallet_provider.dart';
 import '../state/import_wallet_state.dart';
 
@@ -16,7 +19,7 @@ class CreatedWalletScreen extends ConsumerStatefulWidget {
   const CreatedWalletScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
+  ConsumerState<CreatedWalletScreen> createState() =>
       _CreatedWalletScreenState();
 }
 
@@ -24,7 +27,11 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
     with SingleTickerProviderStateMixin {
   late ConfettiController _confettiController;
   late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
+  bool _isFrontCard = true;
+  bool _isFlipping = true;
+  late Timer _flipTimer;
+  int _flipCount = 0;
+  double _cardTopPosition = 0;
 
   @override
   void initState() {
@@ -33,15 +40,30 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
         ConfettiController(duration: const Duration(seconds: 3));
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
-    );
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+      duration: const Duration(seconds: 1),
     );
 
-    Future<void>.delayed(const Duration(milliseconds: 300), () {
-      _confettiController.play();
-      _animationController.forward();
+    _flipTimer =
+        Timer.periodic(const Duration(milliseconds: 1000), (Timer timer) {
+      if (_flipCount < 3) {
+        setState(() {
+          _isFrontCard = !_isFrontCard;
+          _flipCount++;
+        });
+      } else {
+        _flipTimer.cancel();
+        setState(() {
+          _isFlipping = false;
+          _isFrontCard = true;
+        });
+        _animationController.forward();
+      }
+    });
+
+    _animationController.addListener(() {
+      if (_animationController.value >= 1) {
+        _confettiController.play();
+      }
     });
   }
 
@@ -49,14 +71,8 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
   void dispose() {
     _confettiController.dispose();
     _animationController.dispose();
+    _flipTimer.cancel();
     super.dispose();
-  }
-
-  String _truncateAddress(String address) {
-    if (address.length > 10) {
-      return '${address.substring(0, 6)}...${address.substring(address.length - 4)}';
-    }
-    return address;
   }
 
   @override
@@ -103,70 +119,36 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
       ),
       body: Stack(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: <Widget>[
-                ScaleTransition(
-                  scale: _scaleAnimation,
-                  child: Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: state.selectedWalletColor,
-                      image: const DecorationImage(
-                        image: AssetImage(
-                          'assets/images/wallet-creation-wallet-background-wallet-component.png',
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 110, top: 12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                state.accountName,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.white,
-                                ),
-                              ),
-                              Text(
-                                walletAddress,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (BuildContext context, Widget? child) =>
-                      Transform.translate(
-                    offset: Offset(0, 50 * (1 - _animationController.value)),
-                    child: Opacity(
-                      opacity: _animationController.value,
-                      child: BlackButtonXL(
-                        onClick: () {},
-                        title: 'Continue',
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+          TweenAnimationBuilder<double>(
+            tween: Tween<double>(
+              begin: MediaQuery.of(context).size.height / 4,
+              end: _isFlipping ? MediaQuery.of(context).size.height / 4 : 20,
+            ),
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            builder: (BuildContext context, double value, Widget? child) =>
+                Positioned(
+              top: value,
+              left: 20,
+              right: 20,
+              child: FlipCard(
+                toggler: _isFrontCard,
+                frontCard: _buildWalletCard(state, walletAddress),
+                backCard: const WalletCardBack(),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 20,
+            right: 20,
+            bottom: 20,
+            child: AnimatedOpacity(
+              opacity: !_isFlipping ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 500),
+              child: BlackButtonXL(
+                onClick: () {},
+                title: 'Continue',
+              ),
             ),
           ),
           Align(
@@ -187,5 +169,105 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
         ],
       ),
     );
+  }
+
+  String _truncateAddress(String address) {
+    if (address.length > 10) {
+      return '${address.substring(0, 6)}...${address.substring(address.length - 4)}';
+    }
+    return address;
+  }
+
+  Widget _buildWalletCard(ImportWalletState state, String walletAddress) =>
+      Container(
+        height: 200,
+        decoration: BoxDecoration(
+          color: state.selectedWalletColor,
+          image: const DecorationImage(
+            image: AssetImage(
+                'assets/images/wallet-creation-wallet-background-wallet-component.png'),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 110, top: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    state.accountName,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  Text(
+                    walletAddress,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+class FlipCard extends StatelessWidget {
+  const FlipCard({
+    required this.toggler,
+    required this.frontCard,
+    required this.backCard,
+    super.key,
+  });
+  final bool toggler;
+  final Widget frontCard;
+  final Widget backCard;
+
+  @override
+  Widget build(BuildContext context) => AnimatedSwitcher(
+        duration: const Duration(milliseconds: 800),
+        transitionBuilder: _transitionBuilder,
+        layoutBuilder: (Widget? widget, List<Widget> list) =>
+            Stack(children: <Widget>[widget!, ...list]),
+        switchInCurve: Curves.ease,
+        switchOutCurve: Curves.ease.flipped,
+        child: toggler
+            ? KeyedSubtree(key: const ValueKey('front'), child: frontCard)
+            : KeyedSubtree(key: const ValueKey('back'), child: backCard),
+      );
+
+  Widget _transitionBuilder(Widget widget, Animation<double> animation) {
+    final Animation<double> rotateAnimation =
+        Tween<double>(begin: pi, end: 0.0).animate(animation);
+    return AnimatedBuilder(
+      animation: rotateAnimation,
+      child: widget,
+      builder: (BuildContext context, Widget? widget) {
+        final bool isFront = ValueKey(toggler) == widget!.key;
+        final double rotationY = isFront
+            ? rotateAnimation.value
+            : min(rotateAnimation.value, pi * 0.5);
+        return Transform(
+          transform: Matrix4.rotationY(rotationY)..setEntry(3, 0, 0),
+          alignment: Alignment.center,
+          child: widget,
+        );
+      },
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('toggler', toggler));
   }
 }

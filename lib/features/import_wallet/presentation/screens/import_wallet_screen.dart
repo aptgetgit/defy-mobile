@@ -7,7 +7,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../../app/routes/router.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../../core/logging/app_logger.dart';
-import '../../../../shared/account/presentation/providers/generate_account_flow.dart';
+import '../../../../shared/account/presentation/providers/generate_account_flow_provider.dart';
 import '../../../../shared/account/presentation/states/generate_account_flow_state.dart';
 import '../enums/page_type_enum.dart';
 import '../providers/import_wallet_provider.dart';

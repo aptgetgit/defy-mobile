@@ -2,14 +2,18 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/database/objectbox/objectbox.g.dart';
-import '../../../../core/dio/providers/services/object_box_service_provider.dart';
-import '../../../../core/dio/providers/services/secure_storage_service_provider.dart';
+import '../../../../core/di/providers/services/object_box_service_provider.dart';
+import '../../../../core/di/providers/services/secure_storage_service_provider.dart';
+import '../../../../core/di/providers/services/shared_preference_service_provider.dart';
 import '../../../../core/services/secure_storage_service.dart';
+import '../../../../core/services/shared_preference_service.dart';
+import '../../data/repositories/active_account_repository_implementation.dart';
 import '../../data/repositories/aptos_account_repository_implementation.dart';
 import '../../data/repositories/entropy_repository_implementation.dart';
 import '../../data/repositories/jwk_repository_implementation.dart';
 import '../../data/repositories/private_jwk_repository_implementation.dart';
 import '../../data/sources/local/account_metadata_local_data_source.dart';
+import '../../data/sources/local/active_account_local_data_source.dart';
 import '../../data/sources/local/aptos_account_local_data_source.dart';
 import '../../data/sources/local/ed25519_auth_key_config_local_data_source.dart';
 import '../../data/sources/local/entropy_local_data_source.dart';
@@ -17,7 +21,9 @@ import '../../data/sources/local/hd_key_local_data_source.dart';
 import '../../data/sources/local/jwk_local_data_source.dart';
 import '../../data/sources/local/private_jwk_local_data_source.dart';
 import '../../data/sources/local/signing_key_local_data_source.dart';
+import '../../domain/repositories/active_account_repository_interface.dart';
 import '../../domain/usecases/check_mnemonic_availability_usecase.dart';
+import '../../domain/usecases/clear_active_account_usecase.dart';
 import '../../domain/usecases/create_aptos_account_usecase.dart';
 import '../../domain/usecases/delete_aptos_account_usecase.dart';
 import '../../domain/usecases/generate_mnemonic_usecase.dart';
@@ -26,12 +32,15 @@ import '../../domain/usecases/get_account_mnemonic_usecase.dart';
 import '../../domain/usecases/get_account_private_key_usecase.dart';
 import '../../domain/usecases/get_account_public_key_usecase.dart';
 import '../../domain/usecases/get_accounts_from_mnemonic_usecase.dart';
+import '../../domain/usecases/get_active_account_usecase.dart';
 import '../../domain/usecases/get_aptos_account_usecase.dart';
 import '../../domain/usecases/get_mnemonic_usecase.dart';
 import '../../domain/usecases/get_private_key_usecase.dart';
+import '../../domain/usecases/has_active_account_usecase.dart';
 import '../../domain/usecases/import_mnemonic_usecase.dart';
 import '../../domain/usecases/import_private_key_usecase.dart';
 import '../../domain/usecases/list_aptos_account_usecase.dart';
+import '../../domain/usecases/set_active_account_usecase.dart';
 import '../../domain/usecases/sign_buffer_usecase.dart';
 
 part 'generated/usecase_provider.g.dart';
@@ -116,6 +125,26 @@ AptosAccountRepository aptosAccountRepository(Ref ref) {
     accountDataSource: aptosAccountDataSource,
     jwkDataSource: jwkDataSource,
     ed25519ConfigDataSource: ed25519ConfigDataSource,
+  );
+}
+
+@riverpod
+IActiveAccountRepository activeAccountRepository(Ref ref) {
+  final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
+  final SharedPreferencesService sharedPreferences =
+      ref.watch(sharedPreferencesServiceProvider);
+
+  final ActiveAccountLocalDataSource activeAccountDataSource =
+      ActiveAccountLocalDataSource(sharedPreferences: sharedPreferences);
+  final AptosAccountDataSource accountDataSource =
+      AptosAccountDataSource(box: objectBoxStore.box());
+  final AccountMetadataDataSource accountMetadataDataSource =
+      AccountMetadataDataSource(box: objectBoxStore.box());
+
+  return ActiveAccountRepository(
+    activeAccountDataSource: activeAccountDataSource,
+    accountDataSource: accountDataSource,
+    accountMetadataDataSource: accountMetadataDataSource,
   );
 }
 
@@ -220,4 +249,28 @@ SignBufferUseCase signBufferUseCase(Ref ref) => SignBufferUseCase(
       jwkRepository: ref.read(jwkRepositoryProvider),
       entropyRepository: ref.read(entropyRepositoryProvider),
       privateJwkRepository: ref.read(privateJwkRepositoryProvider),
+    );
+
+@riverpod
+GetActiveAccountUseCase getActiveAccountUseCase(Ref ref) =>
+    GetActiveAccountUseCase(
+      repository: ref.read(activeAccountRepositoryProvider),
+    );
+
+@riverpod
+SetActiveAccountUseCase setActiveAccountUseCase(Ref ref) =>
+    SetActiveAccountUseCase(
+      repository: ref.read(activeAccountRepositoryProvider),
+    );
+
+@riverpod
+ClearActiveAccountUseCase clearActiveAccountUseCase(Ref ref) =>
+    ClearActiveAccountUseCase(
+      repository: ref.read(activeAccountRepositoryProvider),
+    );
+
+@riverpod
+HasActiveAccountUseCase hasActiveAccountUseCase(Ref ref) =>
+    HasActiveAccountUseCase(
+      repository: ref.read(activeAccountRepositoryProvider),
     );

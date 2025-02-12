@@ -20,10 +20,10 @@ class AptosAccountWithMetadata with _$AptosAccountWithMetadata {
 
   @override
   String toString() => 'AptosAccountWithMetadata{'
-      '\n label: $label, '
-      '\n iconUri: $iconUri, '
-      '\n accountAddress: ${accountAddress.toHex()}, '
-      '\n authenticationKey: ${authenticationKey.toHex()}, '
+      '\n label: $label,'
+      '\n iconUri: $iconUri,'
+      '\n accountAddress: ${accountAddress.toHex()},'
+      '\n authenticationKey: ${authenticationKey.toHex()},'
       '\n authenticationKeyScheme: ${authenticationKeyScheme.toHex()}'
       '\n}';
 }

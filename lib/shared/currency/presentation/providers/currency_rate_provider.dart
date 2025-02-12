@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:objectbox/src/native/store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/dio/providers/services/object_box_service_provider.dart';
+import '../../../../core/di/providers/services/object_box_service_provider.dart';
 import '../../data/repositories/currency_rate_repository_implementation.dart';
 import '../../data/sources/local/currency_rate_local_source.dart';
 import '../../data/sources/remote/currency_rate_remote_source.dart';

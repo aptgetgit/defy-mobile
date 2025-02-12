@@ -3,10 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../config/theme/theme.dart';
-import '../core/dio/providers/locale/locale_provider.dart';
-import '../core/dio/providers/theme/theme_provider.dart';
+import '../core/di/providers/locale/locale_provider.dart';
+import '../core/di/providers/theme/theme_provider.dart';
 import '../l10n/generated/app_localizations.dart';
-import '../shared/network/presentation/widgets/network_status_overlay.dart';
+import '../shared/connectivity/presentation/widgets/connectivity_overlay.dart';
 import 'routes/router.dart';
 
 class DefyApp extends ConsumerWidget {
@@ -31,7 +31,14 @@ class DefyApp extends ConsumerWidget {
         if (child == null) {
           return const SizedBox.shrink();
         }
-        return NetworkStatusOverlay(child: child);
+        return Overlay(
+          initialEntries: <OverlayEntry>[
+            OverlayEntry(
+              builder: (BuildContext context) =>
+                  ConnectivityOverlay(child: child),
+            ),
+          ],
+        );
       },
     );
   }

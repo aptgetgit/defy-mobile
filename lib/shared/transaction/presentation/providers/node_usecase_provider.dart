@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/database/objectbox/objectbox.g.dart';
-import '../../../../core/dio/providers/network/base_dio_service_provider.dart';
-import '../../../../core/dio/providers/services/object_box_service_provider.dart';
+import '../../../../core/di/providers/network/base_dio_service_provider.dart';
+import '../../../../core/di/providers/services/object_box_service_provider.dart';
 import '../../data/repositories/node_repository_implementation.dart';
 import '../../data/sources/local/account_data_local_data_source.dart';
 import '../../data/sources/remote/account_data_remote_data_source.dart';

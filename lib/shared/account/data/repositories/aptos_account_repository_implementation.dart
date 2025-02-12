@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:objectbox/objectbox.dart';
 
 import '../../domain/entities/account_address.dart';
@@ -38,21 +39,25 @@ class AptosAccountRepository implements IAptosAccountRepository {
   AptosAccountWithMetadata _combineToAccountWithMetadata({
     required AptosAccountLocalModel account,
     required AccountMetadataLocalModel metadata,
-  }) =>
-      (account.accountAddress != metadata.accountAddress)
-          ? throw StateError(
-              'Account and metadata address mismatch',
-            )
-          : AptosAccountWithMetadata(
-              label: metadata.label,
-              iconUri: Uri.parse(metadata.iconUri),
-              accountAddress: AccountAddress(bytes: account.accountAddress),
-              authenticationKey:
-                  AuthenticationKey(bytes: account.authenticationKey),
-              authenticationKeyScheme: AuthenticationKeyScheme.fromByte(
-                account.authenticationKeyScheme,
-              ),
-            );
+  }) {
+    const ListEquality<int> listEquals = ListEquality<int>();
+
+    if (!listEquals.equals(account.accountAddress, metadata.accountAddress)) {
+      throw StateError(
+        'Account and metadata address mismatch',
+      );
+    }
+
+    return AptosAccountWithMetadata(
+      label: metadata.label,
+      iconUri: Uri.parse(metadata.iconUri),
+      accountAddress: AccountAddress(bytes: account.accountAddress),
+      authenticationKey: AuthenticationKey(bytes: account.authenticationKey),
+      authenticationKeyScheme: AuthenticationKeyScheme.fromByte(
+        account.authenticationKeyScheme,
+      ),
+    );
+  }
 
   @override
   AptosAccountWithMetadata createAccount({
@@ -253,21 +258,36 @@ class AptosAccountRepository implements IAptosAccountRepository {
       _store.runInTransaction(TxMode.read, () {
         final List<AptosAccountLocalModel> accounts =
             _accountDataSource.getAll();
+        final List<AccountMetadataLocalModel> allMetadata =
+            _metadataDataSource.getAll();
+        const ListEquality<int> listEquals = ListEquality<int>();
 
-        return accounts.map((AptosAccountLocalModel accountModel) {
-          final AccountMetadataLocalModel? metadataModel =
-              _metadataDataSource.getByAddress(
-            accountAddress: accountModel.accountAddress,
-          );
-          if (metadataModel == null) {
-            throw StateError('Metadata not found for account');
-          }
+        // final Map<Uint8List, AccountMetadataLocalModel> metadataByAddress = <Uint8List, AccountMetadataLocalModel>{
+        //   for (final AccountMetadataLocalModel metadata in allMetadata)
+        //     metadata.accountAddress: metadata,
+        // };
 
-          return _combineToAccountWithMetadata(
-            account: accountModel,
-            metadata: metadataModel,
-          );
-        }).toList();
+        return accounts
+            .where(
+              (AptosAccountLocalModel account) => allMetadata.any(
+                (AccountMetadataLocalModel metadata) => listEquals.equals(
+                  account.accountAddress,
+                  metadata.accountAddress,
+                ),
+              ),
+            )
+            .map(
+              (AptosAccountLocalModel account) => _combineToAccountWithMetadata(
+                account: account,
+                metadata: allMetadata.firstWhere(
+                  (AccountMetadataLocalModel metadata) => listEquals.equals(
+                    account.accountAddress,
+                    metadata.accountAddress,
+                  ),
+                ),
+              ),
+            )
+            .toList();
       });
 
   @override

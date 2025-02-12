@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/dio/providers/services/shared_preference_service_provider.dart';
+import '../../../../core/di/providers/services/shared_preference_service_provider.dart';
 import '../../../../core/services/shared_preference_service.dart';
 import '../../../../shared/currency/domain/entities/currency.dart';
 import '../../data/models/local/supported_currencies.dart';

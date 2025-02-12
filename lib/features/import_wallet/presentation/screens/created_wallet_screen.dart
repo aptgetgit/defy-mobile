@@ -9,7 +9,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../app/routes/router.dart';
 import '../../../../config/theme/colors.dart';
-import '../../../../shared/account/presentation/providers/generate_account_flow.dart';
+import '../../../../shared/account/presentation/providers/generate_account_flow_provider.dart';
 import '../../../../shared/account/presentation/states/generate_account_flow_state.dart';
 import '../../../common/presentation/widgets/black_button.dart';
 import '../components/wallet_card_back.dart';

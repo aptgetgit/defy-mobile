@@ -172,7 +172,7 @@ generate-icons:
 
 generate-splash:
 	@echo "💦 Generating splash screen..."
-	@cd $(PROJECT_ROOT) && $(FLUTTER_NATIVE_SPLASH_CMD):create --path=flutter_native_splash.yaml || \
+	@cd $(PROJECT_ROOT) && $(FLUTTER_NATIVE_SPLASH_CMD):create || \
 		(echo "$(COLOR_RED)❌ Splash screen generation failed$(COLOR_RESET)" && exit 1)
 
 # Main generate target

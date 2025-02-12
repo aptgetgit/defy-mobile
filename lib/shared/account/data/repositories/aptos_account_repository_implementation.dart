@@ -253,21 +253,21 @@ class AptosAccountRepository implements IAptosAccountRepository {
       _store.runInTransaction(TxMode.read, () {
         final List<AptosAccountLocalModel> accounts =
             _accountDataSource.getAll();
+        final List<AccountMetadataLocalModel> allMetadata =
+            _metadataDataSource.getAll();
 
-        return accounts.map((AptosAccountLocalModel accountModel) {
-          final AccountMetadataLocalModel? metadataModel =
-              _metadataDataSource.getByAddress(
-            accountAddress: accountModel.accountAddress,
-          );
-          if (metadataModel == null) {
-            throw StateError('Metadata not found for account');
-          }
+        final Map<Uint8List, AccountMetadataLocalModel> metadataByAddress = <Uint8List, AccountMetadataLocalModel>{
+          for (final AccountMetadataLocalModel metadata in allMetadata) metadata.accountAddress: metadata,
+        };
 
-          return _combineToAccountWithMetadata(
-            account: accountModel,
-            metadata: metadataModel,
-          );
-        }).toList();
+        return accounts
+            .where((AptosAccountLocalModel account) =>
+                metadataByAddress.containsKey(account.accountAddress),)
+            .map((AptosAccountLocalModel account) => _combineToAccountWithMetadata(
+                  account: account,
+                  metadata: metadataByAddress[account.accountAddress]!,
+                ),)
+            .toList();
       });
 
   @override

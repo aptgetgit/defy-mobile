@@ -80,6 +80,26 @@ final aptosAccountRepositoryProvider =
 // ignore: unused_element
 typedef AptosAccountRepositoryRef
     = AutoDisposeProviderRef<AptosAccountRepository>;
+String _$activeAccountRepositoryHash() =>
+    r'ffa8337ac0d855a44be002464a52f850d922f739';
+
+/// See also [activeAccountRepository].
+@ProviderFor(activeAccountRepository)
+final activeAccountRepositoryProvider =
+    AutoDisposeProvider<IActiveAccountRepository>.internal(
+  activeAccountRepository,
+  name: r'activeAccountRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$activeAccountRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ActiveAccountRepositoryRef
+    = AutoDisposeProviderRef<IActiveAccountRepository>;
 String _$generateMnemonicUseCaseHash() =>
     r'f6cdc71b835a2f00813b3b6d92364fddad4f5161';
 
@@ -396,5 +416,85 @@ final signBufferUseCaseProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SignBufferUseCaseRef = AutoDisposeProviderRef<SignBufferUseCase>;
+String _$getActiveAccountUseCaseHash() =>
+    r'3f28829f6191ef802dd94bc0e2fdced35a7d045d';
+
+/// See also [getActiveAccountUseCase].
+@ProviderFor(getActiveAccountUseCase)
+final getActiveAccountUseCaseProvider =
+    AutoDisposeProvider<GetActiveAccountUseCase>.internal(
+  getActiveAccountUseCase,
+  name: r'getActiveAccountUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getActiveAccountUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetActiveAccountUseCaseRef
+    = AutoDisposeProviderRef<GetActiveAccountUseCase>;
+String _$setActiveAccountUseCaseHash() =>
+    r'aad4aadac2476cdb6d9eb028f3ee61ed86a89202';
+
+/// See also [setActiveAccountUseCase].
+@ProviderFor(setActiveAccountUseCase)
+final setActiveAccountUseCaseProvider =
+    AutoDisposeProvider<SetActiveAccountUseCase>.internal(
+  setActiveAccountUseCase,
+  name: r'setActiveAccountUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$setActiveAccountUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SetActiveAccountUseCaseRef
+    = AutoDisposeProviderRef<SetActiveAccountUseCase>;
+String _$clearActiveAccountUseCaseHash() =>
+    r'f91b32d4e80f04d06a17f33829b8caf4fc96786c';
+
+/// See also [clearActiveAccountUseCase].
+@ProviderFor(clearActiveAccountUseCase)
+final clearActiveAccountUseCaseProvider =
+    AutoDisposeProvider<ClearActiveAccountUseCase>.internal(
+  clearActiveAccountUseCase,
+  name: r'clearActiveAccountUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$clearActiveAccountUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ClearActiveAccountUseCaseRef
+    = AutoDisposeProviderRef<ClearActiveAccountUseCase>;
+String _$hasActiveAccountUseCaseHash() =>
+    r'1758119f878d0cfc46d83e848e619cf927834547';
+
+/// See also [hasActiveAccountUseCase].
+@ProviderFor(hasActiveAccountUseCase)
+final hasActiveAccountUseCaseProvider =
+    AutoDisposeProvider<HasActiveAccountUseCase>.internal(
+  hasActiveAccountUseCase,
+  name: r'hasActiveAccountUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$hasActiveAccountUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef HasActiveAccountUseCaseRef
+    = AutoDisposeProviderRef<HasActiveAccountUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

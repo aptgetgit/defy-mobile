@@ -7,6 +7,8 @@ part of '../router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
+      $welcomeAgainScreenRoute,
+      $chooseWalletScreenRoute,
       $browserRoute,
       $homeRoute,
       $onboardingRoute,
@@ -19,6 +21,52 @@ List<RouteBase> get $appRoutes => [
       $importWalletScreenRoute,
       $createdWalletScreenRoute,
     ];
+
+RouteBase get $welcomeAgainScreenRoute => GoRouteData.$route(
+      path: '/welcome-again',
+      factory: $WelcomeAgainScreenRouteExtension._fromState,
+    );
+
+extension $WelcomeAgainScreenRouteExtension on WelcomeAgainScreenRoute {
+  static WelcomeAgainScreenRoute _fromState(GoRouterState state) =>
+      const WelcomeAgainScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/welcome-again',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $chooseWalletScreenRoute => GoRouteData.$route(
+      path: '/choose-wallet',
+      factory: $ChooseWalletScreenRouteExtension._fromState,
+    );
+
+extension $ChooseWalletScreenRouteExtension on ChooseWalletScreenRoute {
+  static ChooseWalletScreenRoute _fromState(GoRouterState state) =>
+      const ChooseWalletScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/choose-wallet',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 RouteBase get $browserRoute => GoRouteData.$route(
       path: '/browser',
@@ -277,7 +325,7 @@ extension $CreatedWalletScreenRouteExtension on CreatedWalletScreenRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'86df02709d5e7a75fb28698dc1d73e4b21302fbf';
+String _$routerHash() => r'c974849a7f750535bdcbe5c282306b450078804e';
 
 /// See also [router].
 @ProviderFor(router)

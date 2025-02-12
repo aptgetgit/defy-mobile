@@ -7,7 +7,7 @@ part of '../import_wallet_provider.dart';
 // **************************************************************************
 
 String _$importWalletNotifierHash() =>
-    r'3782e13fc54e98e2dedc1bd0b0af6cace51fac81';
+    r'34f5f398e1d524af0b614cea29d0adb62b13302c';
 
 /// See also [ImportWalletNotifier].
 @ProviderFor(ImportWalletNotifier)

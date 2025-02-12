@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../../../app/routes/router.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../../shared/account/presentation/providers/generate_account_flow.dart';
 import '../../../../shared/account/presentation/states/generate_account_flow_state.dart';
@@ -31,7 +32,6 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
   bool _isFlipping = true;
   late Timer _flipTimer;
   int _flipCount = 0;
-  double _cardTopPosition = 0;
 
   @override
   void initState() {
@@ -146,7 +146,9 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
               opacity: !_isFlipping ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 500),
               child: BlackButtonXL(
-                onClick: () {},
+                onClick: () {
+                  WelcomeAgainScreenRoute().go(context);
+                },
                 title: 'Continue',
               ),
             ),
@@ -185,7 +187,8 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
           color: state.selectedWalletColor,
           image: const DecorationImage(
             image: AssetImage(
-                'assets/images/wallet-creation-wallet-background-wallet-component.png'),
+              'assets/images/wallet-creation-wallet-background-wallet-component.png',
+            ),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(20),
@@ -241,8 +244,10 @@ class FlipCard extends StatelessWidget {
         switchInCurve: Curves.ease,
         switchOutCurve: Curves.ease.flipped,
         child: toggler
-            ? KeyedSubtree(key: const ValueKey('front'), child: frontCard)
-            : KeyedSubtree(key: const ValueKey('back'), child: backCard),
+            ? KeyedSubtree(
+                key: const ValueKey<String>('front'), child: frontCard)
+            : KeyedSubtree(
+                key: const ValueKey<String>('back'), child: backCard),
       );
 
   Widget _transitionBuilder(Widget widget, Animation<double> animation) {
@@ -252,7 +257,7 @@ class FlipCard extends StatelessWidget {
       animation: rotateAnimation,
       child: widget,
       builder: (BuildContext context, Widget? widget) {
-        final bool isFront = ValueKey(toggler) == widget!.key;
+        final bool isFront = ValueKey<bool>(toggler) == widget!.key;
         final double rotationY = isFront
             ? rotateAnimation.value
             : min(rotateAnimation.value, pi * 0.5);

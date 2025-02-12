@@ -27,12 +27,23 @@ class $AssetsIconsGen {
   AssetGenImage get appLogoLight =>
       const AssetGenImage('assets/icons/app-logo-light.png');
 
-  /// File path: assets/icons/coins.png
-  AssetGenImage get coins => const AssetGenImage('assets/icons/coins.png');
+  /// File path: assets/icons/coin-white.png
+  AssetGenImage get coinWhite =>
+      const AssetGenImage('assets/icons/coin-white.png');
+
+  /// File path: assets/icons/coin-yellow.png
+  AssetGenImage get coinYellow =>
+      const AssetGenImage('assets/icons/coin-yellow.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [appIcon, appLogoDark3d, appLogoDark, appLogoLight, coins];
+  List<AssetGenImage> get values => [
+        appIcon,
+        appLogoDark3d,
+        appLogoDark,
+        appLogoLight,
+        coinWhite,
+        coinYellow
+      ];
 }
 
 class $AssetsImagesGen {
@@ -73,6 +84,12 @@ class $AssetsImagesGen {
   /// File path: assets/images/dive-in-8.png
   AssetGenImage get diveIn8 =>
       const AssetGenImage('assets/images/dive-in-8.png');
+
+  /// File path: assets/images/doodle-left.svg
+  String get doodleLeft => 'assets/images/doodle-left.svg';
+
+  /// File path: assets/images/doodle-right.svg
+  String get doodleRight => 'assets/images/doodle-right.svg';
 
   /// File path: assets/images/face-blowing-a-kiss.gif
   AssetGenImage get faceBlowingAKiss =>
@@ -146,6 +163,12 @@ class $AssetsImagesGen {
   AssetGenImage get smilingFaceWithSmilingEyes =>
       const AssetGenImage('assets/images/smiling-face-with-smiling-eyes.gif');
 
+  /// File path: assets/images/sprinkle-bottom.svg
+  String get sprinkleBottom => 'assets/images/sprinkle-bottom.svg';
+
+  /// File path: assets/images/sprinkle.svg
+  String get sprinkle => 'assets/images/sprinkle.svg';
+
   /// File path: assets/images/star-struck.gif
   AssetGenImage get starStruck =>
       const AssetGenImage('assets/images/star-struck.gif');
@@ -173,7 +196,7 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/winking-face.gif');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
+  List<dynamic> get values => [
         beamingFaceWithSmilingEyes,
         diveIn1,
         diveIn2,
@@ -183,6 +206,8 @@ class $AssetsImagesGen {
         diveIn6,
         diveIn7,
         diveIn8,
+        doodleLeft,
+        doodleRight,
         faceBlowingAKiss,
         faceWithTearsOfJoy,
         grinningFaceWithBigEyes,
@@ -201,6 +226,8 @@ class $AssetsImagesGen {
         smilingFaceWithHeartEyes,
         smilingFaceWithHearts,
         smilingFaceWithSmilingEyes,
+        sprinkleBottom,
+        sprinkle,
         starStruck,
         upsideDownFace,
         waitlistScreenHeaderGradientComponent,

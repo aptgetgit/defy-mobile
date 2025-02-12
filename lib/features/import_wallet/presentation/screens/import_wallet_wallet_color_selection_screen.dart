@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../common/presentation/widgets/black_button.dart';
@@ -70,7 +69,7 @@ class _ImportWalletWalletColorSelectionScreenState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Text(
-              "Let's create your new Wallet 🥳",
+              'Choose a Color',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -79,28 +78,8 @@ class _ImportWalletWalletColorSelectionScreenState
             const SizedBox(
               height: 12,
             ),
-            const Row(
-              children: <Widget>[
-                Icon(
-                  PhosphorIconsRegular.palette,
-                ),
-                SizedBox(
-                  width: 4,
-                ),
-                Text(
-                  'Select Background',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 4,
-            ),
             const Text(
-              'Choose the colour of your wallet, you can edit this anytime.',
+              'Color your wallet',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,

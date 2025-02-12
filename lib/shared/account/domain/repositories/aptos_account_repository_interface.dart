@@ -36,16 +36,19 @@ abstract class IAptosAccountRepository {
     AccountAddress? accountAddress,
   });
 
-  AptosAccountWithMetadata? getByAddress(
-      {required AccountAddress accountAddress,});
+  AptosAccountWithMetadata? getByAddress({
+    required AccountAddress accountAddress,
+  });
 
   AptosAccountWithMetadata? getByLabel({required String label});
 
-  List<AptosAccountWithMetadata> getByAuthKey(
-      {required AuthenticationKey authKey,});
+  List<AptosAccountWithMetadata> getByAuthKey({
+    required AuthenticationKey authKey,
+  });
 
-  List<AptosAccountWithMetadata> getByAuthScheme(
-      {required AuthenticationKeyScheme scheme,});
+  List<AptosAccountWithMetadata> getByAuthScheme({
+    required AuthenticationKeyScheme scheme,
+  });
 
   List<AptosAccountWithMetadata> getAll();
 

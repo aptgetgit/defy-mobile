@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -238,8 +239,8 @@ class ImportWalletEmojiSelectionScreenState
 
   Widget getEmoji(int index) {
     if (index == 0) {
-      return Image.asset(
-        'assets/images/grinning-face.gif',
+      return CachedNetworkImage(
+        imageUrl: 'https://stavexidblob.blob.core.windows.net/images/emojis/fluent/smilies/astonished-face.png',
         height: 40,
         width: 40,
       );

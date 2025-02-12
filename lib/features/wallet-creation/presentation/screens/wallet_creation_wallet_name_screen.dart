@@ -40,7 +40,7 @@ class WalletCreationWalletNameScreenState
                 child: Row(
                   children: <Widget>[
                     Image.asset(
-                      'assets/icons/coins.png',
+                      'assets/icons/coin-yellow.png',
                       width: 24,
                       height: 24,
                     ),
@@ -162,9 +162,10 @@ class WalletCreationWalletNameScreenState
                     child: Text(
                       'Confirm',
                       style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.white,),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.white,
+                      ),
                     ),
                   ),
                 ),

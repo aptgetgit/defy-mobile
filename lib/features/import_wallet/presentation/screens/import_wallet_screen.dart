@@ -252,7 +252,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
         ),
         child: Row(
           children: <Widget>[
-            Image.asset('assets/icons/coins.png', width: 16, height: 16),
+            Image.asset('assets/icons/coin-yellow.png', width: 16, height: 16),
             const SizedBox(width: 8),
             const Text(
               '20',

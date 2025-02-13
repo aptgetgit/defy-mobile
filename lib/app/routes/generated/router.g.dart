@@ -325,7 +325,7 @@ extension $CreatedWalletScreenRouteExtension on CreatedWalletScreenRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'c974849a7f750535bdcbe5c282306b450078804e';
+String _$routerHash() => r'8f5ec33f3cec3fbfbf1c785e4380a0b9b58681a0';
 
 /// See also [router].
 @ProviderFor(router)

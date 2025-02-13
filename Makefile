@@ -43,10 +43,10 @@ COLOR_RESET := \033[0m
 # Environment check function
 define check_environment
 	@echo "🔍 Checking development environment..."
-	@cd $(PROJECT_ROOT) || { \
-		echo "$(COLOR_RED)❌ Could not change to project root directory$(COLOR_RESET)" >&2; \
-		exit 1; \
-	}
+	   @cd "$(PROJECT_ROOT)" || { \
+       echo "$(COLOR_RED)❌ Could not change to project root directory$(COLOR_RESET)" >&2; \
+       exit 1; \
+   	}
 	@for cmd in $(REQUIRED_EXECUTABLES) ; do \
 		command -v $$cmd >/dev/null 2>&1 || { \
 			echo "$(COLOR_RED)❌ Required command not found: $$cmd$(COLOR_RESET)" >&2; \
@@ -157,22 +157,22 @@ clean: check-environment clean-flutter clean-builder clean-coverage clean-ios \
 # Generate targets
 generate-builder:
 	@echo "📦 Running build_runner..."
-	@cd $(PROJECT_ROOT) && $(BUILD_RUNNER_CMD) build --delete-conflicting-outputs || \
+	@cd "$(PROJECT_ROOT)" && $(BUILD_RUNNER_CMD) build --delete-conflicting-outputs || \
 		(echo "$(COLOR_RED)❌ Build runner failed$(COLOR_RESET)" && exit 1)
 
 generate-l10n:
 	@echo "🌍 Generating l10n files..."
-	@cd $(PROJECT_ROOT) && $(FLUTTER_CMD) gen-l10n || \
+	@cd "$(PROJECT_ROOT)" && $(FLUTTER_CMD) gen-l10n || \
 		(echo "$(COLOR_RED)❌ L10n generation failed$(COLOR_RESET)" && exit 1)
 
 generate-icons:
 	@echo "🎨 Generating launcher icons..."
-	@cd $(PROJECT_ROOT) && $(FLUTTER_LAUNCHER_ICONS_CMD) || \
-		(echo "$(COLOR_RED)❌ Icon generation failed$(COLOR_RESET)" && exit 1)
+	@cd "$(PROJECT_ROOT)" && $(FLUTTER_LAUNCHER_ICONS_CMD) || \
+   		(echo "$(COLOR_RED)❌ Icon generation failed$(COLOR_RESET)" && exit 1)
 
 generate-splash:
 	@echo "💦 Generating splash screen..."
-	@cd $(PROJECT_ROOT) && $(FLUTTER_NATIVE_SPLASH_CMD):create || \
+	@cd "$(PROJECT_ROOT)" && $(FLUTTER_NATIVE_SPLASH_CMD):create || \
 		(echo "$(COLOR_RED)❌ Splash screen generation failed$(COLOR_RESET)" && exit 1)
 
 # Main generate target

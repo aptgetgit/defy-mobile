@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../app/routes/router.dart';
-import '../../../config/assets.gen.dart';
-import '../../../config/theme/colors.dart';
-import '../../common/presentation/widgets/black_button.dart';
+import '../../../../app/routes/router.dart';
+import '../../../../config/assets.gen.dart';
+import '../../../../config/theme/colors.dart';
+import '../../../common/presentation/widgets/black_button.dart';
 
 class WelcomeAgainScreen extends ConsumerStatefulWidget {
   const WelcomeAgainScreen({super.key});
@@ -242,7 +242,6 @@ class _WelcomeAgainScreenState extends ConsumerState<WelcomeAgainScreen> {
     Gradient? gradient,
     Color dashedBorderColor = Colors.grey,
     double dashedBorderWidth = 1,
-    double dashedBorderGap = 5,
   }) {
     assert(
       backgroundColor != null || gradient != null,
@@ -307,7 +306,7 @@ class DashedCirclePainter extends CustomPainter {
     final PathMetrics pathMetrics = path.computeMetrics();
 
     for (final PathMetric metric in pathMetrics) {
-      double distance = 0.0;
+      double distance = 0;
       while (distance < metric.length) {
         final double nextSegment =
             (distance + dashLength).clamp(0, metric.length);

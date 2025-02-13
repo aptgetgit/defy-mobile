@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../features/accounts/presentation/choose_wallet_screen.dart';
-import '../../features/accounts/presentation/welcome_again_screen.dart';
+import '../../features/accounts/presentation/screens/choose_wallet_screen.dart';
+import '../../features/accounts/presentation/screens/welcome_again_screen.dart';
 import '../../features/browser/presentation/screens/browser_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/import_wallet/presentation/screens/created_wallet_screen.dart';
@@ -44,7 +44,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const WalletCreationScreenRoute().location,
+      initialLocation: const WelcomeAgainScreenRoute().location,
       routes: $appRoutes,
       errorBuilder: (BuildContext context, GoRouterState state) =>
           const Scaffold(

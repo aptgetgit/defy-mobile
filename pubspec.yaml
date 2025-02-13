@@ -63,6 +63,7 @@ dependencies:
   flutter_swiper_view: ^1.1.8
   carousel_slider: ^5.0.0
   collection: ^1.19.0
+  flutter_card_swiper: ^7.0.2
 
 dev_dependencies:
   flutter_test:

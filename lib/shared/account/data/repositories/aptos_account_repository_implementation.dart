@@ -42,7 +42,7 @@ class AptosAccountRepository implements IAptosAccountRepository {
     required AptosAccountLocalModel account,
     required AccountMetadataLocalModel metadata,
   }) =>
-      (areByteListsEqual(account.accountAddress, metadata.accountAddress))
+      (!areByteListsEqual(account.accountAddress, metadata.accountAddress))
           ? throw StateError(
               'Account and metadata address mismatch',
             )

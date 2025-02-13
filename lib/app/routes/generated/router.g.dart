@@ -9,6 +9,7 @@ part of '../router.dart';
 List<RouteBase> get $appRoutes => [
       $welcomeAgainScreenRoute,
       $chooseWalletScreenRoute,
+      $chooseWalletUserScreenRoute,
       $browserRoute,
       $homeRoute,
       $onboardingRoute,
@@ -56,6 +57,29 @@ extension $ChooseWalletScreenRouteExtension on ChooseWalletScreenRoute {
 
   String get location => GoRouteData.$location(
         '/choose-wallet',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $chooseWalletUserScreenRoute => GoRouteData.$route(
+      path: '/choose-wallet-user',
+      factory: $ChooseWalletUserScreenRouteExtension._fromState,
+    );
+
+extension $ChooseWalletUserScreenRouteExtension on ChooseWalletUserScreenRoute {
+  static ChooseWalletUserScreenRoute _fromState(GoRouterState state) =>
+      const ChooseWalletUserScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/choose-wallet-user',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -325,7 +349,7 @@ extension $CreatedWalletScreenRouteExtension on CreatedWalletScreenRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'8f5ec33f3cec3fbfbf1c785e4380a0b9b58681a0';
+String _$routerHash() => r'f93e02dcabf7e00e5b55dab56ec2311cf586f24a';
 
 /// See also [router].
 @ProviderFor(router)

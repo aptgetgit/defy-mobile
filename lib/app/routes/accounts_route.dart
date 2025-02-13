@@ -28,3 +28,34 @@ class ChooseWalletScreenRoute extends GoRouteData {
         const ChooseWalletScreen(),
   );
 }
+
+@TypedGoRoute<ChooseWalletUserScreenRoute>(path: '/choose-wallet-user')
+class ChooseWalletUserScreenRoute extends GoRouteData {
+  const ChooseWalletUserScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ChooseWalletUserScreen();
+
+  static final AppRoute route = AppRoute.public(
+    builder: (BuildContext context, GoRouterState state) =>
+        const ChooseWalletUserScreen(),
+  );
+}
+
+// @TypedGoRoute<WalletSettingsScreenRoute>(path: '/wallet-settings')
+// class WalletSettingsScreenRoute extends GoRouteData {
+//   const WalletSettingsScreenRoute({required this.walletCard});
+//   final Widget walletCard;
+
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) =>
+//       WalletSettingsScreen(walletCard: walletCard);
+
+//   static final AppRoute route = AppRoute.public(
+//     builder: (BuildContext context, GoRouterState state) {
+//       final Widget walletCard = state.extra! as Widget;
+//       return WalletSettingsScreen(walletCard: walletCard);
+//     },
+//   );
+// }

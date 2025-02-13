@@ -36,17 +36,19 @@ class BlackButton extends StatelessWidget {
 }
 
 class BlackButtonXL extends StatelessWidget {
-  const BlackButtonXL(
-      {required this.onClick,
-      super.key,
-      this.title = 'Try Now',
-      this.horizontalPadding = true,
-      this.color = AppColors.black,
-      });
+  const BlackButtonXL({
+    required this.onClick,
+    super.key,
+    this.title = 'Try Now',
+    this.horizontalPadding = true,
+    this.color = AppColors.black,
+    this.textColor = AppColors.white,
+  });
   final String title;
   final VoidCallback onClick;
   final bool horizontalPadding;
   final Color color;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) => Align(
@@ -60,14 +62,16 @@ class BlackButtonXL extends StatelessWidget {
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: horizontalPadding ? 24 : 0, vertical: 16,),
+                horizontal: horizontalPadding ? 24 : 0,
+                vertical: 16,
+              ),
               child: Center(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.white,
+                    color: textColor,
                   ),
                 ),
               ),
@@ -79,9 +83,10 @@ class BlackButtonXL extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties..add(StringProperty('title', title))
-    ..add(ObjectFlagProperty<VoidCallback>.has('onClick', onClick))
-    ..add(DiagnosticsProperty<bool>('horizontalPadding', horizontalPadding))
-    ..add(ColorProperty('color', color));
+    properties
+      ..add(StringProperty('title', title))
+      ..add(ObjectFlagProperty<VoidCallback>.has('onClick', onClick))
+      ..add(DiagnosticsProperty<bool>('horizontalPadding', horizontalPadding))
+      ..add(ColorProperty('color', color));
   }
 }

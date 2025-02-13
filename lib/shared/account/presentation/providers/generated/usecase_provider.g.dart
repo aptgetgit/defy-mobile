@@ -6,12 +6,12 @@ part of '../usecase_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$entropyRepositoryHash() => r'415542628ee2ce22bb9d56f8dcda2abaccb7686e';
+String _$entropyRepositoryHash() => r'fc629f61c8cc0a0071a0e11d2a7ac78ef8b83647';
 
 /// See also [entropyRepository].
 @ProviderFor(entropyRepository)
 final entropyRepositoryProvider =
-    AutoDisposeProvider<EntropyRepository>.internal(
+    AutoDisposeProvider<IEntropyRepository>.internal(
   entropyRepository,
   name: r'entropyRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -23,14 +23,14 @@ final entropyRepositoryProvider =
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef EntropyRepositoryRef = AutoDisposeProviderRef<EntropyRepository>;
+typedef EntropyRepositoryRef = AutoDisposeProviderRef<IEntropyRepository>;
 String _$privateJwkRepositoryHash() =>
-    r'ba28a71e0dfd097b49878b39732e77d1b6675c58';
+    r'c26cbb673f95653d88289acf3a2793ca319cdf23';
 
 /// See also [privateJwkRepository].
 @ProviderFor(privateJwkRepository)
 final privateJwkRepositoryProvider =
-    AutoDisposeProvider<PrivateJwkRepository>.internal(
+    AutoDisposeProvider<IPrivateJwkRepository>.internal(
   privateJwkRepository,
   name: r'privateJwkRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -42,12 +42,12 @@ final privateJwkRepositoryProvider =
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef PrivateJwkRepositoryRef = AutoDisposeProviderRef<PrivateJwkRepository>;
-String _$jwkRepositoryHash() => r'7eaabdc6cd3eac7aa23da5f491bf288f088b296f';
+typedef PrivateJwkRepositoryRef = AutoDisposeProviderRef<IPrivateJwkRepository>;
+String _$jwkRepositoryHash() => r'6cf7763e362b7d01cc49bb244299b713efc5d9b7';
 
 /// See also [jwkRepository].
 @ProviderFor(jwkRepository)
-final jwkRepositoryProvider = AutoDisposeProvider<JwkRepository>.internal(
+final jwkRepositoryProvider = AutoDisposeProvider<IJwkRepository>.internal(
   jwkRepository,
   name: r'jwkRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -59,14 +59,14 @@ final jwkRepositoryProvider = AutoDisposeProvider<JwkRepository>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef JwkRepositoryRef = AutoDisposeProviderRef<JwkRepository>;
+typedef JwkRepositoryRef = AutoDisposeProviderRef<IJwkRepository>;
 String _$aptosAccountRepositoryHash() =>
-    r'3a873eca1d67fee4b0e2b97b9b139ae2022d581e';
+    r'03d532e30006b0978332a6760870d63c9f8aaa58';
 
 /// See also [aptosAccountRepository].
 @ProviderFor(aptosAccountRepository)
 final aptosAccountRepositoryProvider =
-    AutoDisposeProvider<AptosAccountRepository>.internal(
+    AutoDisposeProvider<IAptosAccountRepository>.internal(
   aptosAccountRepository,
   name: r'aptosAccountRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -79,9 +79,9 @@ final aptosAccountRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AptosAccountRepositoryRef
-    = AutoDisposeProviderRef<AptosAccountRepository>;
+    = AutoDisposeProviderRef<IAptosAccountRepository>;
 String _$activeAccountRepositoryHash() =>
-    r'ffa8337ac0d855a44be002464a52f850d922f739';
+    r'4cdbc20be96b698f8c9b65923bdbc84c1a36bd91';
 
 /// See also [activeAccountRepository].
 @ProviderFor(activeAccountRepository)
@@ -496,5 +496,65 @@ final hasActiveAccountUseCaseProvider =
 // ignore: unused_element
 typedef HasActiveAccountUseCaseRef
     = AutoDisposeProviderRef<HasActiveAccountUseCase>;
+String _$updateAccountBackgroundColorUseCaseHash() =>
+    r'74eb33b12ca209a49f8eea5a2ae7c7ec607cd70c';
+
+/// See also [updateAccountBackgroundColorUseCase].
+@ProviderFor(updateAccountBackgroundColorUseCase)
+final updateAccountBackgroundColorUseCaseProvider =
+    AutoDisposeProvider<UpdateAccountBackgroundColorUseCase>.internal(
+  updateAccountBackgroundColorUseCase,
+  name: r'updateAccountBackgroundColorUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$updateAccountBackgroundColorUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef UpdateAccountBackgroundColorUseCaseRef
+    = AutoDisposeProviderRef<UpdateAccountBackgroundColorUseCase>;
+String _$updateAccountIconUriUseCaseHash() =>
+    r'11412d57061372a33443f741929a4ee277928d00';
+
+/// See also [updateAccountIconUriUseCase].
+@ProviderFor(updateAccountIconUriUseCase)
+final updateAccountIconUriUseCaseProvider =
+    AutoDisposeProvider<UpdateAccountIconUriUseCase>.internal(
+  updateAccountIconUriUseCase,
+  name: r'updateAccountIconUriUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$updateAccountIconUriUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef UpdateAccountIconUriUseCaseRef
+    = AutoDisposeProviderRef<UpdateAccountIconUriUseCase>;
+String _$updateAccountLabelUseCaseHash() =>
+    r'839065c71999a83f80361308672deec32ec2f070';
+
+/// See also [updateAccountLabelUseCase].
+@ProviderFor(updateAccountLabelUseCase)
+final updateAccountLabelUseCaseProvider =
+    AutoDisposeProvider<UpdateAccountLabelUseCase>.internal(
+  updateAccountLabelUseCase,
+  name: r'updateAccountLabelUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$updateAccountLabelUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef UpdateAccountLabelUseCaseRef
+    = AutoDisposeProviderRef<UpdateAccountLabelUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

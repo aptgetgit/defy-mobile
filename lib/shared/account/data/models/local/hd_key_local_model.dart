@@ -29,6 +29,6 @@ class HDKeyLocalModel {
       '\n  localId: $localId,'
       '\n  jwkKeyId: $jwkKeyId,'
       '\n  entropyHash: $entropyHash,'
-      '\n  derivationPath: $derivationPath,'
+      '\n  derivationPath: $derivationPath'
       '\n}';
 }

@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import '../../../utils/comparison_utils.dart';
 import '../../data/sources/local/aptos_account_local_data_source.dart';
 import '../../domain/entities/account_address.dart';
 import '../../domain/entities/aptos_account_with_metadata.dart';
@@ -12,15 +15,15 @@ import '../sources/local/active_account_local_data_source.dart';
 class ActiveAccountRepository implements IActiveAccountRepository {
   const ActiveAccountRepository({
     required ActiveAccountLocalDataSource activeAccountDataSource,
-    required AptosAccountDataSource accountDataSource,
-    required AccountMetadataDataSource accountMetadataDataSource,
+    required AptosAccountLocalDataSource accountDataSource,
+    required AccountMetadataLocalDataSource accountMetadataDataSource,
   })  : _activeAccountDataSource = activeAccountDataSource,
         _accountDataSource = accountDataSource,
         _accountMetadataDataSource = accountMetadataDataSource;
 
   final ActiveAccountLocalDataSource _activeAccountDataSource;
-  final AptosAccountDataSource _accountDataSource;
-  final AccountMetadataDataSource _accountMetadataDataSource;
+  final AptosAccountLocalDataSource _accountDataSource;
+  final AccountMetadataLocalDataSource _accountMetadataDataSource;
 
   @override
   AptosAccountWithMetadata? getActiveAccount() {
@@ -44,9 +47,14 @@ class ActiveAccountRepository implements IActiveAccountRepository {
       return null;
     }
 
-    if (aptosAccountMetadata.accountAddress !=
-            aptosAccountLocalModel.accountAddress ||
-        aptosAccountMetadata.accountAddress != accountAddress.toBytes()) {
+    if (!areByteListsEqual(
+          accountAddress.toBytes(),
+          aptosAccountLocalModel.accountAddress,
+        ) ||
+        !areByteListsEqual(
+          aptosAccountMetadata.accountAddress,
+          accountAddress.toBytes(),
+        )) {
       throw StateError('Account address mismatch');
     }
 
@@ -56,7 +64,7 @@ class ActiveAccountRepository implements IActiveAccountRepository {
 
     final AuthenticationKeyScheme authenticationKeyScheme =
         AuthenticationKeyScheme.fromByte(
-      aptosAccountLocalModel.authenticationKeyScheme,
+      byte: aptosAccountLocalModel.authenticationKeyScheme,
     );
 
     final Uri iconUri = Uri.parse(aptosAccountMetadata.iconUri);
@@ -67,6 +75,7 @@ class ActiveAccountRepository implements IActiveAccountRepository {
       authenticationKeyScheme: authenticationKeyScheme,
       iconUri: iconUri,
       label: aptosAccountMetadata.label,
+      backgroundColor: Color(aptosAccountMetadata.backgroundColor),
     );
   }
 
@@ -81,8 +90,9 @@ class ActiveAccountRepository implements IActiveAccountRepository {
       throw ArgumentError('Account does not exist: $accountAddress');
     }
 
-    await _activeAccountDataSource
-        .setActiveAccountAddress(accountAddress.toString());
+    await _activeAccountDataSource.setActiveAccountAddress(
+      accountAddress: accountAddress.toHex(),
+    );
   }
 
   @override
@@ -91,8 +101,5 @@ class ActiveAccountRepository implements IActiveAccountRepository {
   }
 
   @override
-  Future<bool> hasActiveAccount() async {
-    final AptosAccountWithMetadata? activeAccount = getActiveAccount();
-    return activeAccount != null;
-  }
+  bool hasActiveAccount() => getActiveAccount() != null;
 }

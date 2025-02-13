@@ -27,7 +27,7 @@ class JwkRepository implements IJwkRepository {
     required JwkDataSource jwkDataSource,
     required HDKeyDataSource hdKeyDataSource,
     required SigningKeyDataSource signingKeyDataSource,
-    required Ed25519AuthKeyConfigDataSource ed25519AuthKeyConfigDataSource,
+    required Ed25519AuthKeyConfigLocalDataSource ed25519AuthKeyConfigDataSource,
     required EntropyDataSource entropyDataSource,
     required PrivateJwkDataSource privateJwkDataSource,
   })  : _store = store,
@@ -42,7 +42,7 @@ class JwkRepository implements IJwkRepository {
   final JwkDataSource _jwkDataSource;
   final HDKeyDataSource _hdKeyDataSource;
   final SigningKeyDataSource _signingKeyDataSource;
-  final Ed25519AuthKeyConfigDataSource _ed25519AuthKeyConfigDataSource;
+  final Ed25519AuthKeyConfigLocalDataSource _ed25519AuthKeyConfigDataSource;
   final EntropyDataSource _entropyDataSource;
   final PrivateJwkDataSource _privateJwkDataSource;
 

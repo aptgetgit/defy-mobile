@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import '../../../../../core/database/objectbox/objectbox.g.dart';
 import '../../models/local/aptos_account_local_model.dart';
 
-class AptosAccountDataSource {
-  AptosAccountDataSource({required Box<AptosAccountLocalModel> box})
+class AptosAccountLocalDataSource {
+  AptosAccountLocalDataSource({required Box<AptosAccountLocalModel> box})
       : _box = box;
   final Box<AptosAccountLocalModel> _box;
 

@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AptosAccountWithMetadata {
   String get label => throw _privateConstructorUsedError;
   Uri get iconUri => throw _privateConstructorUsedError;
+  Color get backgroundColor => throw _privateConstructorUsedError;
   AccountAddress get accountAddress => throw _privateConstructorUsedError;
   AuthenticationKey get authenticationKey => throw _privateConstructorUsedError;
   AuthenticationKeyScheme get authenticationKeyScheme =>
@@ -39,6 +40,7 @@ abstract class $AptosAccountWithMetadataCopyWith<$Res> {
   $Res call(
       {String label,
       Uri iconUri,
+      Color backgroundColor,
       AccountAddress accountAddress,
       AuthenticationKey authenticationKey,
       AuthenticationKeyScheme authenticationKeyScheme});
@@ -65,6 +67,7 @@ class _$AptosAccountWithMetadataCopyWithImpl<$Res,
   $Res call({
     Object? label = null,
     Object? iconUri = null,
+    Object? backgroundColor = null,
     Object? accountAddress = null,
     Object? authenticationKey = null,
     Object? authenticationKeyScheme = null,
@@ -78,6 +81,10 @@ class _$AptosAccountWithMetadataCopyWithImpl<$Res,
           ? _value.iconUri
           : iconUri // ignore: cast_nullable_to_non_nullable
               as Uri,
+      backgroundColor: null == backgroundColor
+          ? _value.backgroundColor
+          : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
       accountAddress: null == accountAddress
           ? _value.accountAddress
           : accountAddress // ignore: cast_nullable_to_non_nullable
@@ -126,6 +133,7 @@ abstract class _$$AptosAccountWithMetadataImplCopyWith<$Res>
   $Res call(
       {String label,
       Uri iconUri,
+      Color backgroundColor,
       AccountAddress accountAddress,
       AuthenticationKey authenticationKey,
       AuthenticationKeyScheme authenticationKeyScheme});
@@ -153,6 +161,7 @@ class __$$AptosAccountWithMetadataImplCopyWithImpl<$Res>
   $Res call({
     Object? label = null,
     Object? iconUri = null,
+    Object? backgroundColor = null,
     Object? accountAddress = null,
     Object? authenticationKey = null,
     Object? authenticationKeyScheme = null,
@@ -166,6 +175,10 @@ class __$$AptosAccountWithMetadataImplCopyWithImpl<$Res>
           ? _value.iconUri
           : iconUri // ignore: cast_nullable_to_non_nullable
               as Uri,
+      backgroundColor: null == backgroundColor
+          ? _value.backgroundColor
+          : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
       accountAddress: null == accountAddress
           ? _value.accountAddress
           : accountAddress // ignore: cast_nullable_to_non_nullable
@@ -188,6 +201,7 @@ class _$AptosAccountWithMetadataImpl extends _AptosAccountWithMetadata {
   const _$AptosAccountWithMetadataImpl(
       {required this.label,
       required this.iconUri,
+      required this.backgroundColor,
       required this.accountAddress,
       required this.authenticationKey,
       required this.authenticationKeyScheme})
@@ -197,6 +211,8 @@ class _$AptosAccountWithMetadataImpl extends _AptosAccountWithMetadata {
   final String label;
   @override
   final Uri iconUri;
+  @override
+  final Color backgroundColor;
   @override
   final AccountAddress accountAddress;
   @override
@@ -211,6 +227,8 @@ class _$AptosAccountWithMetadataImpl extends _AptosAccountWithMetadata {
             other is _$AptosAccountWithMetadataImpl &&
             (identical(other.label, label) || other.label == label) &&
             (identical(other.iconUri, iconUri) || other.iconUri == iconUri) &&
+            (identical(other.backgroundColor, backgroundColor) ||
+                other.backgroundColor == backgroundColor) &&
             (identical(other.accountAddress, accountAddress) ||
                 other.accountAddress == accountAddress) &&
             (identical(other.authenticationKey, authenticationKey) ||
@@ -221,8 +239,8 @@ class _$AptosAccountWithMetadataImpl extends _AptosAccountWithMetadata {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, label, iconUri, accountAddress,
-      authenticationKey, authenticationKeyScheme);
+  int get hashCode => Object.hash(runtimeType, label, iconUri, backgroundColor,
+      accountAddress, authenticationKey, authenticationKeyScheme);
 
   /// Create a copy of AptosAccountWithMetadata
   /// with the given fields replaced by the non-null parameter values.
@@ -238,6 +256,7 @@ abstract class _AptosAccountWithMetadata extends AptosAccountWithMetadata {
   const factory _AptosAccountWithMetadata(
           {required final String label,
           required final Uri iconUri,
+          required final Color backgroundColor,
           required final AccountAddress accountAddress,
           required final AuthenticationKey authenticationKey,
           required final AuthenticationKeyScheme authenticationKeyScheme}) =
@@ -248,6 +267,8 @@ abstract class _AptosAccountWithMetadata extends AptosAccountWithMetadata {
   String get label;
   @override
   Uri get iconUri;
+  @override
+  Color get backgroundColor;
   @override
   AccountAddress get accountAddress;
   @override

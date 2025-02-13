@@ -24,7 +24,7 @@ class NetworkConfigLocalModel {
       );
 
   @Id(assignable: false)
-  int id = 0;
+  int localId = 0;
 
   @Unique(onConflict: ConflictStrategy.replace)
   final String caipChainId;
@@ -33,7 +33,7 @@ class NetworkConfigLocalModel {
 
   @override
   String toString() => 'NetworkConfigLocalModel{'
-      '\n  id: $id,'
+      '\n  id: $localId,'
       '\n  caipChainId: $caipChainId,'
       '\n  rpcUrl: $rpcUrl,'
       '\n}';

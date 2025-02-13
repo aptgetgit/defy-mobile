@@ -27,6 +27,6 @@ class Ed25519AuthKeyConfigLocalModel {
   String toString() => 'Ed25519AuthKeyConfigLocalModel{'
       '\n  localId: $localId,'
       '\n  authenticationKey: $authenticationKey,'
-      '\n  jwkKeyId: $jwkKeyId,'
+      '\n  jwkKeyId: $jwkKeyId'
       '\n}';
 }

@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 
@@ -53,6 +54,7 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
   Future<void> completeWithMetadata({
     required String label,
     required Uri iconUri,
+    required Color backgroundColor,
   }) async {
     final GenerateAccountFlowState currentState = state;
     if (currentState is! GenerateAccountFlowStateWaitingForMetadata) {
@@ -65,6 +67,7 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
       keySource: currentState.keySource,
       label: label,
       iconUri: iconUri,
+      backgroundColor: backgroundColor,
     );
 
     try {
@@ -74,12 +77,26 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
           :final Uint8List entropyHash,
           :final int? accountIndex
         ) =>
-          _generateFromMnemonic(label, iconUri, entropyHash, accountIndex),
+          _generateFromMnemonic(
+            label,
+            iconUri,
+            backgroundColor,
+            entropyHash,
+            accountIndex,
+          ),
         KeySourcePrivateKey(:final Uint8List jwkThumbprint) =>
-          _generateFromPrivateKey(label, iconUri, jwkThumbprint),
+          _generateFromPrivateKey(
+            label,
+            iconUri,
+            backgroundColor,
+            jwkThumbprint,
+          ),
       };
 
       state = GenerateAccountFlowState.generated(account: account);
+      await ref
+          .read(setActiveAccountUseCaseProvider)
+          .call(accountAddress: account.accountAddress);
     } on Exception catch (e) {
       state = GenerateAccountFlowState.error(e.toString());
     }
@@ -88,23 +105,26 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
   Future<AptosAccountWithMetadata> _generateFromMnemonic(
     String label,
     Uri iconUri,
+    Color backgroundColor,
     Uint8List entropyHash,
     int? accountIndex,
   ) async {
     final Uint8List keyId = await ref
         .read(generatePrivateKeyFromMnemonicUseCaseProvider)
         .call(entropyHash: entropyHash, accountIndex: accountIndex);
-    return _generateFromPrivateKey(label, iconUri, keyId);
+    return _generateFromPrivateKey(label, iconUri, backgroundColor, keyId);
   }
 
   Future<AptosAccountWithMetadata> _generateFromPrivateKey(
     String label,
     Uri iconUri,
+    Color backgroundColor,
     Uint8List jwkThumbprint,
   ) async =>
       ref.read(createAptosAccountUseCaseProvider).call(
             label: label,
             iconUri: iconUri,
+            backgroundColor: backgroundColor,
             authenticatorConfig: AuthenticatorConfig.ed25519(
               keyId: jwkThumbprint,
             ),

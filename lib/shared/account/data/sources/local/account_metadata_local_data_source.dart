@@ -3,14 +3,15 @@ import 'dart:typed_data';
 import '../../../../../core/database/objectbox/objectbox.g.dart';
 import '../../models/local/account_metadata_local_model.dart';
 
-class AccountMetadataDataSource {
-  AccountMetadataDataSource({required Box<AccountMetadataLocalModel> box})
+class AccountMetadataLocalDataSource {
+  AccountMetadataLocalDataSource({required Box<AccountMetadataLocalModel> box})
       : _box = box;
   final Box<AccountMetadataLocalModel> _box;
 
   AccountMetadataLocalModel store({
     required String label,
     required String iconUri,
+    required int backgroundColor,
     required Uint8List accountAddress,
   }) {
     if (getByAddress(accountAddress: accountAddress) != null) {
@@ -24,6 +25,7 @@ class AccountMetadataDataSource {
     final AccountMetadataLocalModel model = AccountMetadataLocalModel(
       label: label,
       iconUri: iconUri,
+      backgroundColor: backgroundColor,
       accountAddress: accountAddress,
     );
     _box.put(model);
@@ -72,6 +74,7 @@ class AccountMetadataDataSource {
     required int localId,
     String? label,
     String? iconUri,
+    int? backgroundColor,
   }) {
     final AccountMetadataLocalModel? existing = get(localId: localId);
     if (existing == null) {
@@ -88,6 +91,7 @@ class AccountMetadataDataSource {
     final AccountMetadataLocalModel updated = AccountMetadataLocalModel(
       label: label ?? existing.label,
       iconUri: iconUri ?? existing.iconUri,
+      backgroundColor: backgroundColor ?? existing.backgroundColor,
       accountAddress: existing.accountAddress,
     );
 

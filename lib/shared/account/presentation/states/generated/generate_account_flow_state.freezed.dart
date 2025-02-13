@@ -251,7 +251,8 @@ abstract class _$$GenerateAccountFlowStateGeneratingImplCopyWith<$Res> {
           $Res Function(_$GenerateAccountFlowStateGeneratingImpl) then) =
       __$$GenerateAccountFlowStateGeneratingImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({KeySource keySource, String label, Uri iconUri});
+  $Res call(
+      {KeySource keySource, String label, Uri iconUri, Color backgroundColor});
 
   $KeySourceCopyWith<$Res> get keySource;
 }
@@ -274,6 +275,7 @@ class __$$GenerateAccountFlowStateGeneratingImplCopyWithImpl<$Res>
     Object? keySource = null,
     Object? label = null,
     Object? iconUri = null,
+    Object? backgroundColor = null,
   }) {
     return _then(_$GenerateAccountFlowStateGeneratingImpl(
       keySource: null == keySource
@@ -288,6 +290,10 @@ class __$$GenerateAccountFlowStateGeneratingImplCopyWithImpl<$Res>
           ? _value.iconUri
           : iconUri // ignore: cast_nullable_to_non_nullable
               as Uri,
+      backgroundColor: null == backgroundColor
+          ? _value.backgroundColor
+          : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
     ));
   }
 
@@ -307,7 +313,10 @@ class __$$GenerateAccountFlowStateGeneratingImplCopyWithImpl<$Res>
 class _$GenerateAccountFlowStateGeneratingImpl
     implements GenerateAccountFlowStateGenerating {
   const _$GenerateAccountFlowStateGeneratingImpl(
-      {required this.keySource, required this.label, required this.iconUri});
+      {required this.keySource,
+      required this.label,
+      required this.iconUri,
+      required this.backgroundColor});
 
   @override
   final KeySource keySource;
@@ -315,10 +324,12 @@ class _$GenerateAccountFlowStateGeneratingImpl
   final String label;
   @override
   final Uri iconUri;
+  @override
+  final Color backgroundColor;
 
   @override
   String toString() {
-    return 'GenerateAccountFlowState.generating(keySource: $keySource, label: $label, iconUri: $iconUri)';
+    return 'GenerateAccountFlowState.generating(keySource: $keySource, label: $label, iconUri: $iconUri, backgroundColor: $backgroundColor)';
   }
 
   @override
@@ -329,11 +340,14 @@ class _$GenerateAccountFlowStateGeneratingImpl
             (identical(other.keySource, keySource) ||
                 other.keySource == keySource) &&
             (identical(other.label, label) || other.label == label) &&
-            (identical(other.iconUri, iconUri) || other.iconUri == iconUri));
+            (identical(other.iconUri, iconUri) || other.iconUri == iconUri) &&
+            (identical(other.backgroundColor, backgroundColor) ||
+                other.backgroundColor == backgroundColor));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, keySource, label, iconUri);
+  int get hashCode =>
+      Object.hash(runtimeType, keySource, label, iconUri, backgroundColor);
 
   /// Create a copy of GenerateAccountFlowState
   /// with the given fields replaced by the non-null parameter values.
@@ -349,13 +363,16 @@ class _$GenerateAccountFlowStateGeneratingImpl
 abstract class GenerateAccountFlowStateGenerating
     implements GenerateAccountFlowState {
   const factory GenerateAccountFlowStateGenerating(
-      {required final KeySource keySource,
-      required final String label,
-      required final Uri iconUri}) = _$GenerateAccountFlowStateGeneratingImpl;
+          {required final KeySource keySource,
+          required final String label,
+          required final Uri iconUri,
+          required final Color backgroundColor}) =
+      _$GenerateAccountFlowStateGeneratingImpl;
 
   KeySource get keySource;
   String get label;
   Uri get iconUri;
+  Color get backgroundColor;
 
   /// Create a copy of GenerateAccountFlowState
   /// with the given fields replaced by the non-null parameter values.

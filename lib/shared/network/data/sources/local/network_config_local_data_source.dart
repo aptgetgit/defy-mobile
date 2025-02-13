@@ -43,7 +43,7 @@ class NetworkConfigLocalDataSource {
     final NetworkConfigLocalModel? config = getByCaipChainId(
       caipChainId: caipChainId,
     );
-    return config != null && delete(id: config.id);
+    return config != null && delete(id: config.localId);
   }
 
   bool deleteMany(List<String> caipChainIds) {
@@ -53,7 +53,8 @@ class NetworkConfigLocalDataSource {
         .find();
     return configs.isNotEmpty &&
         _box.removeMany(
-                configs.map((NetworkConfigLocalModel c) => c.id).toList()) >
+              configs.map((NetworkConfigLocalModel c) => c.localId).toList(),
+            ) >
             0;
   }
 
@@ -77,7 +78,4 @@ class NetworkConfigLocalDataSource {
     );
     _box.put(updated);
   }
-
-  @override
-  String toString() => 'NetworkConfigLocalDataSource{box: $_box}';
 }

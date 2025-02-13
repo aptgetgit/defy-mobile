@@ -1,8 +1,11 @@
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:objectbox/objectbox.dart';
 
+import '../../../utils/color_utils.dart';
+import '../../../utils/comparison_utils.dart';
 import '../../domain/entities/account_address.dart';
 import '../../domain/entities/aptos_account_with_metadata.dart';
 import '../../domain/entities/authentication_key.dart';
@@ -21,9 +24,9 @@ class AptosAccountRepository implements IAptosAccountRepository {
   AptosAccountRepository({
     required Store store,
     required JwkDataSource jwkDataSource,
-    required AptosAccountDataSource accountDataSource,
-    required AccountMetadataDataSource metadataDataSource,
-    required Ed25519AuthKeyConfigDataSource ed25519ConfigDataSource,
+    required AptosAccountLocalDataSource accountDataSource,
+    required AccountMetadataLocalDataSource metadataDataSource,
+    required Ed25519AuthKeyConfigLocalDataSource ed25519ConfigDataSource,
   })  : _store = store,
         _jwkDataSource = jwkDataSource,
         _accountDataSource = accountDataSource,
@@ -32,37 +35,35 @@ class AptosAccountRepository implements IAptosAccountRepository {
 
   final Store _store;
   final JwkDataSource _jwkDataSource;
-  final AptosAccountDataSource _accountDataSource;
-  final AccountMetadataDataSource _metadataDataSource;
-  final Ed25519AuthKeyConfigDataSource _ed25519ConfigDataSource;
+  final AptosAccountLocalDataSource _accountDataSource;
+  final AccountMetadataLocalDataSource _metadataDataSource;
+  final Ed25519AuthKeyConfigLocalDataSource _ed25519ConfigDataSource;
 
   AptosAccountWithMetadata _combineToAccountWithMetadata({
     required AptosAccountLocalModel account,
     required AccountMetadataLocalModel metadata,
-  }) {
-    const ListEquality<int> listEquals = ListEquality<int>();
-
-    if (!listEquals.equals(account.accountAddress, metadata.accountAddress)) {
-      throw StateError(
-        'Account and metadata address mismatch',
-      );
-    }
-
-    return AptosAccountWithMetadata(
-      label: metadata.label,
-      iconUri: Uri.parse(metadata.iconUri),
-      accountAddress: AccountAddress(bytes: account.accountAddress),
-      authenticationKey: AuthenticationKey(bytes: account.authenticationKey),
-      authenticationKeyScheme: AuthenticationKeyScheme.fromByte(
-        account.authenticationKeyScheme,
-      ),
-    );
-  }
+  }) =>
+      (areByteListsEqual(account.accountAddress, metadata.accountAddress))
+          ? throw StateError(
+              'Account and metadata address mismatch',
+            )
+          : AptosAccountWithMetadata(
+              label: metadata.label,
+              iconUri: Uri.parse(metadata.iconUri),
+              backgroundColor: Color(metadata.backgroundColor),
+              accountAddress: AccountAddress(bytes: account.accountAddress),
+              authenticationKey:
+                  AuthenticationKey(bytes: account.authenticationKey),
+              authenticationKeyScheme: AuthenticationKeyScheme.fromByte(
+                byte: account.authenticationKeyScheme,
+              ),
+            );
 
   @override
   AptosAccountWithMetadata createAccount({
     required String label,
     required Uri iconUri,
+    required Color backgroundColor,
     required AuthenticatorConfig config,
     AccountAddress? accountAddress,
   }) =>
@@ -84,6 +85,7 @@ class AptosAccountRepository implements IAptosAccountRepository {
         final AccountMetadataLocalModel metadataModel = _storeMetadata(
           label: label,
           iconUri: iconUri,
+          backgroundColor: colorToInt(backgroundColor),
           accountAddress: address.toBytes(),
         );
 
@@ -118,6 +120,7 @@ class AptosAccountRepository implements IAptosAccountRepository {
   AccountMetadataLocalModel _storeMetadata({
     required String label,
     required Uri iconUri,
+    required int backgroundColor,
     required Uint8List accountAddress,
   }) {
     if (_metadataDataSource.getByLabel(label: label) != null) {
@@ -127,6 +130,7 @@ class AptosAccountRepository implements IAptosAccountRepository {
     return _metadataDataSource.store(
       label: label,
       iconUri: iconUri.toString(),
+      backgroundColor: backgroundColor,
       accountAddress: accountAddress,
     );
   }
@@ -262,29 +266,21 @@ class AptosAccountRepository implements IAptosAccountRepository {
             _metadataDataSource.getAll();
         const ListEquality<int> listEquals = ListEquality<int>();
 
-        // final Map<Uint8List, AccountMetadataLocalModel> metadataByAddress = <Uint8List, AccountMetadataLocalModel>{
-        //   for (final AccountMetadataLocalModel metadata in allMetadata)
-        //     metadata.accountAddress: metadata,
-        // };
+        final Map<Uint8List, AccountMetadataLocalModel> metadataByAddress =
+            <Uint8List, AccountMetadataLocalModel>{
+          for (final AccountMetadataLocalModel metadata in allMetadata)
+            metadata.accountAddress: metadata,
+        };
 
         return accounts
             .where(
-              (AptosAccountLocalModel account) => allMetadata.any(
-                (AccountMetadataLocalModel metadata) => listEquals.equals(
-                  account.accountAddress,
-                  metadata.accountAddress,
-                ),
-              ),
+              (AptosAccountLocalModel account) =>
+                  metadataByAddress.containsKey(account.accountAddress),
             )
             .map(
               (AptosAccountLocalModel account) => _combineToAccountWithMetadata(
                 account: account,
-                metadata: allMetadata.firstWhere(
-                  (AccountMetadataLocalModel metadata) => listEquals.equals(
-                    account.accountAddress,
-                    metadata.accountAddress,
-                  ),
-                ),
+                metadata: metadataByAddress[account.accountAddress]!,
               ),
             )
             .toList();
@@ -443,6 +439,28 @@ class AptosAccountRepository implements IAptosAccountRepository {
           label: newLabel,
         )) {
           throw StateError('Failed to update label');
+        }
+      });
+
+  @override
+  void updateBackgroundColor({
+    required AccountAddress accountAddress,
+    required Color newBackgroundColor,
+  }) =>
+      _store.runInTransaction(TxMode.write, () {
+        final AccountMetadataLocalModel? metadata =
+            _metadataDataSource.getByAddress(
+          accountAddress: accountAddress.toBytes(),
+        );
+        if (metadata == null) {
+          throw StateError('Account not found');
+        }
+
+        if (!_metadataDataSource.update(
+          localId: metadata.localId,
+          backgroundColor: colorToInt(newBackgroundColor),
+        )) {
+          throw StateError('Failed to update background color');
         }
       });
 }

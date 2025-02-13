@@ -14,28 +14,27 @@ _$NetworkConfigRemoteModelImpl _$$NetworkConfigRemoteModelImplFromJson(
       ($checkedConvert) {
         $checkKeys(
           json,
-          allowedKeys: const ['namespace', 'reference', 'rpc_url'],
+          allowedKeys: const ['namespace', 'reference', 'rpcUrl'],
         );
         final val = _$NetworkConfigRemoteModelImpl(
           namespace: $checkedConvert('namespace', (v) => v as String),
           reference: $checkedConvert('reference', (v) => v as String),
-          rpcUrl: $checkedConvert('rpc_url', (v) => v as String),
+          rpcUrl: $checkedConvert('rpcUrl', (v) => v as String),
         );
         return val;
       },
-      fieldKeyMap: const {'rpcUrl': 'rpc_url'},
     );
 
 const _$$NetworkConfigRemoteModelImplFieldMap = <String, String>{
   'namespace': 'namespace',
   'reference': 'reference',
-  'rpcUrl': 'rpc_url',
+  'rpcUrl': 'rpcUrl',
 };
 
 abstract final class _$$NetworkConfigRemoteModelImplJsonKeys {
   static const String namespace = 'namespace';
   static const String reference = 'reference';
-  static const String rpcUrl = 'rpc_url';
+  static const String rpcUrl = 'rpcUrl';
 }
 
 // ignore: unused_element
@@ -53,48 +52,5 @@ Map<String, dynamic> _$$NetworkConfigRemoteModelImplToJson(
     <String, dynamic>{
       'namespace': instance.namespace,
       'reference': instance.reference,
-      'rpc_url': instance.rpcUrl,
-    };
-
-_$NetworkConfigResponseModelImpl _$$NetworkConfigResponseModelImplFromJson(
-        Map json) =>
-    $checkedCreate(
-      r'_$NetworkConfigResponseModelImpl',
-      json,
-      ($checkedConvert) {
-        $checkKeys(
-          json,
-          allowedKeys: const ['data'],
-        );
-        final val = _$NetworkConfigResponseModelImpl(
-          data: $checkedConvert(
-              'data',
-              (v) => (v as List<dynamic>)
-                  .map((e) => NetworkConfigRemoteModel.fromJson(
-                      Map<String, dynamic>.from(e as Map)))
-                  .toList()),
-        );
-        return val;
-      },
-    );
-
-const _$$NetworkConfigResponseModelImplFieldMap = <String, String>{
-  'data': 'data',
-};
-
-abstract final class _$$NetworkConfigResponseModelImplJsonKeys {
-  static const String data = 'data';
-}
-
-// ignore: unused_element
-abstract class _$$NetworkConfigResponseModelImplPerFieldToJson {
-  // ignore: unused_element
-  static Object? data(List<NetworkConfigRemoteModel> instance) =>
-      instance.map((e) => e.toJson()).toList();
-}
-
-Map<String, dynamic> _$$NetworkConfigResponseModelImplToJson(
-        _$NetworkConfigResponseModelImpl instance) =>
-    <String, dynamic>{
-      'data': instance.data.map((e) => e.toJson()).toList(),
+      'rpcUrl': instance.rpcUrl,
     };

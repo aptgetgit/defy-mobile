@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import '../../../../../core/database/objectbox/objectbox.g.dart';
 import '../../models/local/ed25519_auth_key_config_local_model.dart';
 
-class Ed25519AuthKeyConfigDataSource {
-  Ed25519AuthKeyConfigDataSource({
+class Ed25519AuthKeyConfigLocalDataSource {
+  Ed25519AuthKeyConfigLocalDataSource({
     required Box<Ed25519AuthKeyConfigLocalModel> box,
   }) : _box = box;
   final Box<Ed25519AuthKeyConfigLocalModel> _box;

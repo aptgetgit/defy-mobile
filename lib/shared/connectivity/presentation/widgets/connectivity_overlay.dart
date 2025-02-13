@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/logging/app_logger.dart';
-import '../../domain/entities/connectivity_status.dart';
-import '../providers/connectivity_provider.dart';
+import '../providers/connectivity_status_provider.dart';
+import '../states/connectivity_state.dart';
 import 'connectivity_banner.dart';
 
 class ConnectivityOverlay extends ConsumerStatefulWidget {
@@ -27,8 +27,8 @@ class _ConnectivityOverlayState extends ConsumerState<ConnectivityOverlay>
   late final Animation<double> _animation;
   late final Animation<Offset> _slideAnimation;
   final OverlayPortalController _portalController = OverlayPortalController();
-  StreamSubscription<ConnectivityStatus>? _subscription;
-  ConnectivityStatus? _currentStatus;
+  StreamSubscription<ConnectivityState>? _subscription;
+  ConnectivityState? _currentStatus;
   bool _isDisposed = false;
 
   @override
@@ -64,7 +64,7 @@ class _ConnectivityOverlayState extends ConsumerState<ConnectivityOverlay>
     }
   }
 
-  void _updateConnectivityStatus(ConnectivityStatus status) {
+  void _updateConnectivityStatus(ConnectivityState status) {
     if (_isDisposed) {
       return;
     }
@@ -73,8 +73,9 @@ class _ConnectivityOverlayState extends ConsumerState<ConnectivityOverlay>
     _updateOverlayVisibility(status);
   }
 
-  void _updateOverlayVisibility(ConnectivityStatus status) {
-    final bool shouldShow = status is Offline || status is Limited;
+  void _updateOverlayVisibility(ConnectivityState status) {
+    final bool shouldShow = status == ConnectivityState.offline ||
+        status == ConnectivityState.limited;
 
     if (shouldShow && !_portalController.isShowing) {
       _portalController.show();
@@ -84,7 +85,7 @@ class _ConnectivityOverlayState extends ConsumerState<ConnectivityOverlay>
     }
   }
 
-  void _setupStreamSubscription(Stream<ConnectivityStatus> stream) {
+  void _setupStreamSubscription(Stream<ConnectivityState> stream) {
     unawaited(_subscription?.cancel());
     _subscription = stream.distinct().listen(
       _updateConnectivityStatus,
@@ -94,7 +95,7 @@ class _ConnectivityOverlayState extends ConsumerState<ConnectivityOverlay>
           return;
         }
 
-        setState(() => _currentStatus = const ConnectivityStatus.offline());
+        setState(() => _currentStatus = ConnectivityState.offline);
       },
     );
   }
@@ -102,9 +103,9 @@ class _ConnectivityOverlayState extends ConsumerState<ConnectivityOverlay>
   @override
   Widget build(BuildContext context) {
     // Listen for connectivity status changes
-    ref.listen<AsyncValue<Stream<ConnectivityStatus>>>(
+    ref.listen<AsyncValue<Stream<ConnectivityState>>>(
       connectivityStatusProvider,
-      (_, AsyncValue<Stream<ConnectivityStatus>> next) {
+      (_, AsyncValue<Stream<ConnectivityState>> next) {
         next.whenData(_setupStreamSubscription);
       },
     );
@@ -150,8 +151,10 @@ class _ConnectivityOverlayState extends ConsumerState<ConnectivityOverlay>
     super.debugFillProperties(properties);
     properties
       ..add(
-        DiagnosticsProperty<ConnectivityStatus?>(
-            'currentStatus', _currentStatus),
+        DiagnosticsProperty<ConnectivityState?>(
+          'currentStatus',
+          _currentStatus,
+        ),
       )
       ..add(
         DiagnosticsProperty<bool>(

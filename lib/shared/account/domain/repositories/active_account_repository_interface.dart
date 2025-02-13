@@ -8,5 +8,5 @@ abstract class IActiveAccountRepository {
   
   Future<void> clearActiveAccount();
   
-  Future<bool> hasActiveAccount();
+  bool hasActiveAccount();
 }

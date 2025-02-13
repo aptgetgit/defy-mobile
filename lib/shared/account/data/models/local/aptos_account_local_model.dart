@@ -37,6 +37,6 @@ class AptosAccountLocalModel {
       '\n  localId: $localId,'
       '\n  accountAddress: $accountAddress,'
       '\n  authenticationKey: $authenticationKey,'
-      '\n  authenticationKeyScheme: $authenticationKeyScheme,'
+      '\n  authenticationKeyScheme: $authenticationKeyScheme'
       '\n}';
 }

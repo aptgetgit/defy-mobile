@@ -11,8 +11,8 @@ class ActiveAccountLocalDataSource {
   String? getActiveAccountAddress() =>
       _sharedPreferences.getString(_activeAccountKey);
 
-  Future<void> setActiveAccountAddress(String address) async {
-    await _sharedPreferences.set(_activeAccountKey, address);
+  Future<void> setActiveAccountAddress({required String accountAddress}) async {
+    await _sharedPreferences.set(_activeAccountKey, accountAddress);
   }
 
   Future<void> removeActiveAccountAddress() async {

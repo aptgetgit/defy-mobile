@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -32,6 +33,7 @@ abstract class IAptosAccountRepository {
   AptosAccountWithMetadata createAccount({
     required String label,
     required Uri iconUri,
+    required Color backgroundColor,
     required AuthenticatorConfig config,
     AccountAddress? accountAddress,
   });
@@ -74,6 +76,11 @@ abstract class IAptosAccountRepository {
   void updateIconUri({
     required AccountAddress accountAddress,
     required Uri newIconUri,
+  });
+
+  void updateBackgroundColor({
+    required AccountAddress accountAddress,
+    required Color newBackgroundColor,
   });
 
   void deleteByAddress({required AccountAddress accountAddress});

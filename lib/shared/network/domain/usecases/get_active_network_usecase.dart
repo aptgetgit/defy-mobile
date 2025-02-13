@@ -5,5 +5,5 @@ class GetActiveNetworkUseCase {
   const GetActiveNetworkUseCase(this._repository);
   final IActiveNetworkRepository _repository;
 
-  Future<AptosNetwork> call() => _repository.getActiveNetwork();
+  AptosNetwork? call() => _repository.getActiveNetwork();
 }

@@ -22,32 +22,42 @@ class _NetworkConfigRemoteDataSource implements NetworkConfigRemoteDataSource {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<NetworkConfigResponseModel>> getNetworks() async {
+  Future<HttpResponse<ApiResponse<List<NetworkConfigRemoteModel>>>>
+      getNetworks() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options =
-        _setStreamType<HttpResponse<NetworkConfigResponseModel>>(Options(
+    final String? _data = null;
+    final _options = _setStreamType<
+        HttpResponse<ApiResponse<List<NetworkConfigRemoteModel>>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/v1/blockchain-networks',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            )));
+        .compose(
+          _dio.options,
+          '/v1/blockchain-networks',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late NetworkConfigResponseModel _value;
+    late ApiResponse<List<NetworkConfigRemoteModel>> _value;
     try {
-      _value = NetworkConfigResponseModel.fromJson(_result.data!);
+      _value = ApiResponse<List<NetworkConfigRemoteModel>>.fromJson(
+        _result.data!,
+        (json) => json is List<dynamic>
+            ? json
+                .map<NetworkConfigRemoteModel>((i) =>
+                    NetworkConfigRemoteModel.fromJson(
+                        i as Map<String, dynamic>))
+                .toList()
+            : List.empty(),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -57,33 +67,38 @@ class _NetworkConfigRemoteDataSource implements NetworkConfigRemoteDataSource {
   }
 
   @override
-  Future<HttpResponse<NetworkConfigRemoteModel>> getNetwork(
+  Future<HttpResponse<ApiResponse<NetworkConfigRemoteModel>>> getNetwork(
       String blockchainNetworkId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final String? _data = null;
     final _options =
-        _setStreamType<HttpResponse<NetworkConfigRemoteModel>>(Options(
+        _setStreamType<HttpResponse<ApiResponse<NetworkConfigRemoteModel>>>(
+            Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/v1/blockchain-networks/${blockchainNetworkId}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            )));
+                .compose(
+                  _dio.options,
+                  '/v1/blockchain-networks/${blockchainNetworkId}',
+                  queryParameters: queryParameters,
+                  data: _data,
+                )
+                .copyWith(
+                    baseUrl: _combineBaseUrls(
+                  _dio.options.baseUrl,
+                  baseUrl,
+                )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late NetworkConfigRemoteModel _value;
+    late ApiResponse<NetworkConfigRemoteModel> _value;
     try {
-      _value = NetworkConfigRemoteModel.fromJson(_result.data!);
+      _value = ApiResponse<NetworkConfigRemoteModel>.fromJson(
+        _result.data!,
+        (json) =>
+            NetworkConfigRemoteModel.fromJson(json as Map<String, dynamic>),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

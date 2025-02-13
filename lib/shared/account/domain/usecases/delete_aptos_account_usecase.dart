@@ -7,7 +7,7 @@ class DeleteAptosAccountUseCase {
 
   final IAptosAccountRepository _repository;
 
-  Future<void> call(AccountAddress accountAddress) async {
+  Future<void> call({required AccountAddress accountAddress}) async {
     try {
       _repository.deleteByAddress(accountAddress: accountAddress);
     } catch (e) {

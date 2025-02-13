@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:retrofit/dio.dart';
 
+import '../../../../core/api/models/api_response.dart';
 import '../../domain/entities/network_config.dart';
 import '../../domain/repositories/network_config_repository_interface.dart';
 import '../models/local/network_config_local_model.dart';
@@ -25,12 +26,27 @@ class NetworkConfigRepository implements INetworkConfigRepository {
   @override
   Future<void> syncWithRemote() async {
     try {
-      final HttpResponse<NetworkConfigResponseModel> response =
+      final HttpResponse<ApiResponse<List<NetworkConfigRemoteModel>>> response =
           await _remoteDataSource.getNetworks();
-      final List<NetworkConfig> networks = response.data.data
-          .map((NetworkConfigRemoteModel model) => model.toDomain())
-          .toList();
-      storeMany(networkConfigs: networks);
+
+      switch (response.data) {
+        case SuccessResponse<List<NetworkConfigRemoteModel>>(
+            data: final List<NetworkConfigRemoteModel> networkConfigs
+          ):
+          if (networkConfigs.isEmpty) {
+            throw StateError('Failed to sync networks: No data returned');
+          }
+          final List<NetworkConfig> domainNetworks = networkConfigs
+              .map((NetworkConfigRemoteModel model) => model.toDomain())
+              .toList();
+          storeMany(networkConfigs: domainNetworks);
+
+        case ErrorResponse<List<NetworkConfigRemoteModel>>(
+            code: final int _,
+            message: final String message
+          ):
+          throw StateError('Failed to sync networks: $message');
+      }
     } on DioException catch (e) {
       throw StateError('Failed to sync networks: ${e.message}');
     }

@@ -24,6 +24,6 @@ class SigningKeyLocalModel {
   String toString() => 'SigningKeyLocalModel{'
       '\n  localId: $localId,'
       '\n  jwkKeyId: $jwkKeyId,'
-      '\n  jwkThumbprint: $jwkThumbprint,'
+      '\n  jwkThumbprint: $jwkThumbprint'
       '\n}';
 }

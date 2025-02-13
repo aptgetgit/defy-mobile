@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../entities/account_address.dart';
 import '../entities/aptos_account_with_metadata.dart';
 import '../repositories/aptos_account_repository_interface.dart';
@@ -11,6 +13,7 @@ class CreateAptosAccountUseCase {
   Future<AptosAccountWithMetadata> call({
     required String label,
     required Uri iconUri,
+    required Color backgroundColor,
     required AuthenticatorConfig authenticatorConfig,
     AccountAddress? accountAddress,
   }) async {
@@ -22,6 +25,7 @@ class CreateAptosAccountUseCase {
       return _repository.createAccount(
         label: label,
         iconUri: iconUri,
+        backgroundColor: backgroundColor,
         config: authenticatorConfig,
         accountAddress: accountAddress,
       );

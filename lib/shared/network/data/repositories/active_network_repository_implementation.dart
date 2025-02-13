@@ -1,41 +1,34 @@
-import '../../../../core/services/shared_preference_service.dart';
 import '../../domain/entities/aptos_network.dart';
 import '../../domain/repositories/active_network_repository_interface.dart';
+import '../sources/local/active_network_local_data_source.dart';
 
 class ActiveNetworkRepository implements IActiveNetworkRepository {
   const ActiveNetworkRepository({
-    required SharedPreferencesService sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences;
+    required ActiveNetworkLocalDataSource localDataSource,
+  }) : _localDataSource = localDataSource;
 
-  final SharedPreferencesService _sharedPreferences;
-  static const String _networkKey = 'app:setting:network';
+  final ActiveNetworkLocalDataSource _localDataSource;
 
   @override
-  Future<AptosNetwork> getActiveNetwork() async {
-    final String? savedNetwork = _sharedPreferences.getString(_networkKey);
+  AptosNetwork? getActiveNetwork() {
+    final String? savedNetwork = _localDataSource.getActiveNetworkId();
 
     if (savedNetwork == null) {
-      const AptosNetwork defaultNetwork = AptosNetwork.mainnet();
-      await setActiveNetwork(defaultNetwork);
-      return defaultNetwork;
+      return null;
     }
-
-    try {
-      final AptosNetwork parsedNetwork =
-          AptosNetwork.fromCaipChainId(savedNetwork);
-      return parsedNetwork;
-    } catch (e) {
-      if (e is ArgumentError) {
-        const AptosNetwork defaultNetwork = AptosNetwork.mainnet();
-        await setActiveNetwork(defaultNetwork);
-        return defaultNetwork;
-      }
-      rethrow;
-    }
+    return AptosNetwork.fromCaipChainId(savedNetwork);
   }
 
   @override
   Future<void> setActiveNetwork(AptosNetwork network) async {
-    await _sharedPreferences.set<String>(_networkKey, network.toCaipChainId());
+    await _localDataSource.setActiveNetworkId(
+      networkId: network.toCaipChainId(),
+    );
   }
+
+  @override
+  Future<void> clearActiveNetwork() => _localDataSource.removeActiveNetworkId();
+
+  @override
+  bool hasActiveNetwork() => getActiveNetwork() != null;
 }

@@ -23,7 +23,7 @@ final currentNetworkProvider = AutoDisposeProvider<AptosNetwork?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentNetworkRef = AutoDisposeProviderRef<AptosNetwork?>;
-String _$activeNetworkHash() => r'dde6ee98aac36b73b3a9a50a82c5f648f551adde';
+String _$activeNetworkHash() => r'5e7c8df1c3202511c1c5d6175031d84bd573b6b2';
 
 /// See also [ActiveNetwork].
 @ProviderFor(ActiveNetwork)

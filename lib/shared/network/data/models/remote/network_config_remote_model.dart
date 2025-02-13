@@ -9,7 +9,7 @@ class NetworkConfigRemoteModel with _$NetworkConfigRemoteModel {
   const factory NetworkConfigRemoteModel({
     required String namespace,
     required String reference,
-    required String rpcUrl,
+    @JsonKey(name: 'rpcUrl') required String rpcUrl,
   }) = _NetworkConfigRemoteModel;
 
   factory NetworkConfigRemoteModel.fromJson(Map<String, dynamic> json) =>
@@ -21,14 +21,4 @@ class NetworkConfigRemoteModel with _$NetworkConfigRemoteModel {
         caipChainId: '$namespace:$reference',
         rpcUrl: Uri.parse(rpcUrl),
       );
-}
-
-@Freezed(fromJson: true, toJson: true)
-class NetworkConfigResponseModel with _$NetworkConfigResponseModel {
-  const factory NetworkConfigResponseModel({
-    required List<NetworkConfigRemoteModel> data,
-  }) = _NetworkConfigResponseModel;
-
-  factory NetworkConfigResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$NetworkConfigResponseModelFromJson(json);
 }

@@ -7,7 +7,7 @@ part of '../usecase_provider.dart';
 // **************************************************************************
 
 String _$activeNetworkRepositoryHash() =>
-    r'109558892ca9ca52d9829949f059001a4cc390d6';
+    r'281d761e5615de92e5f064d6746943fb233c4386';
 
 /// See also [activeNetworkRepository].
 @ProviderFor(activeNetworkRepository)
@@ -47,7 +47,7 @@ final networkConfigRepositoryProvider =
 typedef NetworkConfigRepositoryRef
     = AutoDisposeProviderRef<INetworkConfigRepository>;
 String _$getActiveNetworkUseCaseHash() =>
-    r'a3cc337ef9b9b1ae39a4654ff7d16bc5d4ffbc45';
+    r'73698baae2b25e5599eb1fd5a0fb701fd8026f22';
 
 /// See also [getActiveNetworkUseCase].
 @ProviderFor(getActiveNetworkUseCase)
@@ -67,7 +67,7 @@ final getActiveNetworkUseCaseProvider =
 typedef GetActiveNetworkUseCaseRef
     = AutoDisposeProviderRef<GetActiveNetworkUseCase>;
 String _$setActiveNetworkUseCaseHash() =>
-    r'46ec82c46358fa98f5977fdace22539bea829068';
+    r'09ddd39a500632d76888ee58f2081f7b48f791fe';
 
 /// See also [setActiveNetworkUseCase].
 @ProviderFor(setActiveNetworkUseCase)
@@ -87,7 +87,7 @@ final setActiveNetworkUseCaseProvider =
 typedef SetActiveNetworkUseCaseRef
     = AutoDisposeProviderRef<SetActiveNetworkUseCase>;
 String _$syncNetworkConfigsUseCaseHash() =>
-    r'8cb5f21e7dac9d7d18c099260c0be72e0171b022';
+    r'd5ebeef6cf27a6535724287e255dd0ee8df2ec3c';
 
 /// See also [syncNetworkConfigsUseCase].
 @ProviderFor(syncNetworkConfigsUseCase)
@@ -107,7 +107,7 @@ final syncNetworkConfigsUseCaseProvider =
 typedef SyncNetworkConfigsUseCaseRef
     = AutoDisposeProviderRef<SyncNetworkConfigsUseCase>;
 String _$getAllNetworkConfigsUseCaseHash() =>
-    r'cda47e62bd2a5af71546a029c98ae44e0e406471';
+    r'620e7e42a200ed462a759222b7a6b447aea53360';
 
 /// See also [getAllNetworkConfigsUseCase].
 @ProviderFor(getAllNetworkConfigsUseCase)
@@ -127,7 +127,7 @@ final getAllNetworkConfigsUseCaseProvider =
 typedef GetAllNetworkConfigsUseCaseRef
     = AutoDisposeProviderRef<GetAllNetworkConfigsUseCase>;
 String _$getNetworkConfigUseCaseHash() =>
-    r'f25414b24ce8501d9bae8ef52f71563834cd031b';
+    r'db5abd3f873445a85cfca076e2e870105506729a';
 
 /// See also [getNetworkConfigUseCase].
 @ProviderFor(getNetworkConfigUseCase)
@@ -147,7 +147,7 @@ final getNetworkConfigUseCaseProvider =
 typedef GetNetworkConfigUseCaseRef
     = AutoDisposeProviderRef<GetNetworkConfigUseCase>;
 String _$storeNetworkConfigUseCaseHash() =>
-    r'451fdb16a6dfffd79a7de3cf96fdf01befa7e39a';
+    r'8407154e84e32cbfff9ad7025accb82e19156a48';
 
 /// See also [storeNetworkConfigUseCase].
 @ProviderFor(storeNetworkConfigUseCase)
@@ -167,7 +167,7 @@ final storeNetworkConfigUseCaseProvider =
 typedef StoreNetworkConfigUseCaseRef
     = AutoDisposeProviderRef<StoreNetworkConfigUseCase>;
 String _$storeManyNetworkConfigsUseCaseHash() =>
-    r'7120e409c5805de83155b17e3622a8bb89182f09';
+    r'5c5b2b59c7440f39700b01c815044bf95f5ee694';
 
 /// See also [storeManyNetworkConfigsUseCase].
 @ProviderFor(storeManyNetworkConfigsUseCase)
@@ -187,7 +187,7 @@ final storeManyNetworkConfigsUseCaseProvider =
 typedef StoreManyNetworkConfigsUseCaseRef
     = AutoDisposeProviderRef<StoreManyNetworkConfigsUseCase>;
 String _$deleteNetworkConfigUseCaseHash() =>
-    r'4c76786b18df6df35e1d9b68c84a49df4a869844';
+    r'87b100ff7119f36ca7f58f8940bc0612213bd99b';
 
 /// See also [deleteNetworkConfigUseCase].
 @ProviderFor(deleteNetworkConfigUseCase)
@@ -207,7 +207,7 @@ final deleteNetworkConfigUseCaseProvider =
 typedef DeleteNetworkConfigUseCaseRef
     = AutoDisposeProviderRef<DeleteNetworkConfigUseCase>;
 String _$deleteManyNetworkConfigsUseCaseHash() =>
-    r'daaa9c62b66f61ff54cda4235c31f9c85989befb';
+    r'1afe34d9b44ee6f2b2c2e650e5893cd2d46f1e36';
 
 /// See also [deleteManyNetworkConfigsUseCase].
 @ProviderFor(deleteManyNetworkConfigsUseCase)
@@ -226,5 +226,25 @@ final deleteManyNetworkConfigsUseCaseProvider =
 // ignore: unused_element
 typedef DeleteManyNetworkConfigsUseCaseRef
     = AutoDisposeProviderRef<DeleteManyNetworkConfigsUseCase>;
+String _$clearActiveNetworkUseCaseHash() =>
+    r'8100fbc42022cbe7b4db693089e33eff35a769c5';
+
+/// See also [clearActiveNetworkUseCase].
+@ProviderFor(clearActiveNetworkUseCase)
+final clearActiveNetworkUseCaseProvider =
+    AutoDisposeProvider<ClearActiveNetworkUseCase>.internal(
+  clearActiveNetworkUseCase,
+  name: r'clearActiveNetworkUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$clearActiveNetworkUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ClearActiveNetworkUseCaseRef
+    = AutoDisposeProviderRef<ClearActiveNetworkUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../config/environment/env.dart';
-import '../../../shared/connectivity/data/models/local/connectivity_config.dart';
-import '../../../shared/connectivity/presentation/providers/connectivity_provider.dart';
+import '../../../shared/connectivity/domain/entities/connectivity_config.dart';
+import '../../../shared/connectivity/presentation/providers/connectivity_status_provider.dart';
 import '../providers/network/dio_init_provider.dart';
 
 Future<List<Override>> initializeConnectivityModule() async {
@@ -11,7 +11,7 @@ Future<List<Override>> initializeConnectivityModule() async {
   );
 
   final List<Override> overrides = <Override>[
-    connectivityInitializerProvider.overrideWithValue(connectivityConfig),
+    connectivityStatusInitializerProvider.overrideWithValue(connectivityConfig),
     dioInitializerProvider(Env.apiBaseUrl),
   ];
 

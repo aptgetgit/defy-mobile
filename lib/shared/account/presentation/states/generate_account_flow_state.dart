@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/aptos_account_with_metadata.dart';
 
@@ -19,6 +20,7 @@ sealed class GenerateAccountFlowState with _$GenerateAccountFlowState {
     required KeySource keySource,
     required String label,
     required Uri iconUri,
+    required Color backgroundColor,
   }) = GenerateAccountFlowStateGenerating;
 
   const factory GenerateAccountFlowState.generated({

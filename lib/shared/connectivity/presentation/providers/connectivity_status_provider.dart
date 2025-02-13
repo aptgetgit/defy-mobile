@@ -7,19 +7,20 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../data/models/local/connectivity_config.dart';
-import '../../domain/entities/connectivity_status.dart';
+import '../../domain/entities/connectivity_config.dart';
+import '../states/connectivity_state.dart';
 
-part 'generated/connectivity_provider.g.dart';
+part 'generated/connectivity_status_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-ConnectivityConfig connectivityInitializer(Ref ref) {
+ConnectivityConfig connectivityStatusInitializer(Ref ref) {
   throw UnimplementedError('Connectivity config must be initialized');
 }
 
 @Riverpod(keepAlive: true)
-Future<Stream<ConnectivityStatus>> connectivityStatus(Ref ref) async {
-  final ConnectivityConfig config = ref.watch(connectivityInitializerProvider);
+Future<Stream<ConnectivityState>> connectivityStatus(Ref ref) async {
+  final ConnectivityConfig config =
+      ref.watch(connectivityStatusInitializerProvider);
   final Connectivity connectivity = Connectivity();
 
   Future<bool> checkInternetAccess() async {
@@ -79,7 +80,7 @@ Future<Stream<ConnectivityStatus>> connectivityStatus(Ref ref) async {
           results.contains(ConnectivityResult.none) ||
           (results.contains(ConnectivityResult.bluetooth) &&
               results.length == 1)) {
-        return const ConnectivityStatus.offline();
+        return ConnectivityState.offline;
       }
 
       final bool hasInternet = await checkInternetAccess();
@@ -101,27 +102,24 @@ Future<Stream<ConnectivityStatus>> connectivityStatus(Ref ref) async {
 
       // Determine network status based on primary connection
       return switch (primaryConnection) {
-        ConnectivityResult.mobile => hasInternet
-            ? const ConnectivityStatus.online()
-            : const ConnectivityStatus.offline(),
+        ConnectivityResult.mobile =>
+          hasInternet ? ConnectivityState.online : ConnectivityState.offline,
         ConnectivityResult.wifi ||
         ConnectivityResult.ethernet ||
         ConnectivityResult.vpn =>
-          hasInternet
-              ? const ConnectivityStatus.online()
-              : const ConnectivityStatus.limited(),
-        _ => const ConnectivityStatus.offline(),
+          hasInternet ? ConnectivityState.online : ConnectivityState.limited,
+        _ => ConnectivityState.offline,
       };
     } on Exception catch (_) {
-      return const ConnectivityStatus.offline();
+      return ConnectivityState.offline;
     }
   }).distinct();
 }
 
 @riverpod
 Stream<bool> isOnline(Ref ref) => ref.watch(connectivityStatusProvider).when(
-      data: (Stream<ConnectivityStatus> stream) =>
-          stream.map((ConnectivityStatus status) => status.isOnline),
+      data: (Stream<ConnectivityState> stream) =>
+          stream.map((ConnectivityState status) => status.isOnline),
       error: Stream.error,
       loading: Stream.empty,
     );

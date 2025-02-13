@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+import '../../../../../core/api/models/api_response.dart';
 import '../../models/remote/network_config_remote_model.dart';
 
 part 'generated/network_config_remote_data_source.g.dart';
@@ -10,10 +11,13 @@ abstract class NetworkConfigRemoteDataSource {
       _NetworkConfigRemoteDataSource;
 
   @GET('/v1/blockchain-networks')
-  Future<HttpResponse<NetworkConfigResponseModel>> getNetworks();
+  @NoBody()
+  Future<HttpResponse<ApiResponse<List<NetworkConfigRemoteModel>>>>
+      getNetworks();
 
   @GET('/v1/blockchain-networks/{blockchain-network-id}')
-  Future<HttpResponse<NetworkConfigRemoteModel>> getNetwork(
+  @NoBody()
+  Future<HttpResponse<ApiResponse<NetworkConfigRemoteModel>>> getNetwork(
     @Path('blockchain-network-id') String blockchainNetworkId,
   );
 }

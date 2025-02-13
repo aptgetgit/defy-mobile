@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../domain/entities/connectivity_status.dart';
+import '../states/connectivity_state.dart';
 
 class ConnectivityBanner extends StatelessWidget {
   const ConnectivityBanner({
@@ -8,12 +8,12 @@ class ConnectivityBanner extends StatelessWidget {
     super.key,
   });
 
-  final ConnectivityStatus status;
+  final ConnectivityState status;
 
   @override
   Widget build(BuildContext context) {
-    final bool isOffline = status is Offline;
-    final bool isLimited = status is Limited;
+    final bool isOffline = status == ConnectivityState.offline;
+    final bool isLimited = status == ConnectivityState.limited;
 
     return Container(
       width: double.infinity,
@@ -45,6 +45,6 @@ class ConnectivityBanner extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ConnectivityStatus>('status', status));
+    properties.add(DiagnosticsProperty<ConnectivityState>('status', status));
   }
 }

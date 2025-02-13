@@ -3,7 +3,7 @@ enum AuthenticationKeyScheme {
 
   const AuthenticationKeyScheme(this._scheme);
 
-  factory AuthenticationKeyScheme.fromByte(int byte) {
+  factory AuthenticationKeyScheme.fromByte({required int byte}) {
     if (byte < 0 || byte > 0xFF) {
       throw ArgumentError('Scheme must be a single byte (0-255)');
     }

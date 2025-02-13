@@ -7,5 +7,5 @@ class HasActiveAccountUseCase {
 
   final IActiveAccountRepository _repository;
 
-  Future<bool> call() => _repository.hasActiveAccount();
+  bool call() => _repository.hasActiveAccount();
 }

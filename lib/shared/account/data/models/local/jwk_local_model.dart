@@ -74,6 +74,6 @@ class JwkLocalModel {
       '\n  localId: $localId,'
       '\n  keyId: $keyId,'
       '\n  keyType: $keyType,'
-      '\n  curve: $curve,'
+      '\n  curve: $curve'
       '\n}';
 }

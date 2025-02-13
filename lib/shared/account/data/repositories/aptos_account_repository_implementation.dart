@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:objectbox/objectbox.dart';
 
 import '../../../utils/color_utils.dart';
@@ -264,7 +263,6 @@ class AptosAccountRepository implements IAptosAccountRepository {
             _accountDataSource.getAll();
         final List<AccountMetadataLocalModel> allMetadata =
             _metadataDataSource.getAll();
-        const ListEquality<int> listEquals = ListEquality<int>();
 
         final Map<Uint8List, AccountMetadataLocalModel> metadataByAddress =
             <Uint8List, AccountMetadataLocalModel>{

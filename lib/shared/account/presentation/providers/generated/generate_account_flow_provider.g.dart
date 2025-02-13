@@ -7,7 +7,7 @@ part of '../generate_account_flow_provider.dart';
 // **************************************************************************
 
 String _$generateAccountFlowHash() =>
-    r'c271a5137182097742f9da8738a3b6a8bb0a6b58';
+    r'6d5a95adb072bac145fdd2a3071bea63884dbf09';
 
 /// See also [GenerateAccountFlow].
 @ProviderFor(GenerateAccountFlow)

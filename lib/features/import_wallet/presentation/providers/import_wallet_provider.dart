@@ -48,6 +48,7 @@ class ImportWalletNotifier extends _$ImportWalletNotifier {
         await generateAccountFlow.completeWithMetadata(
           label: state.accountName,
           iconUri: Uri.parse('https://blockorps.com/images/Avex-LogoFinal.png'),
+          backgroundColor: const Color.fromARGB(255, 61, 37, 165),
         );
       } else {
         throw Exception(

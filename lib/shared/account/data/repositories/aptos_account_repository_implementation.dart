@@ -264,24 +264,39 @@ class AptosAccountRepository implements IAptosAccountRepository {
         final List<AccountMetadataLocalModel> allMetadata =
             _metadataDataSource.getAll();
 
-        final Map<Uint8List, AccountMetadataLocalModel> metadataByAddress =
-            <Uint8List, AccountMetadataLocalModel>{
-          for (final AccountMetadataLocalModel metadata in allMetadata)
-            metadata.accountAddress: metadata,
-        };
+        for (final AptosAccountLocalModel account in accounts) {
+          final List<AccountMetadataLocalModel> matchingMetadata = allMetadata
+              .where(
+                (AccountMetadataLocalModel metadata) => areByteListsEqual(
+                  account.accountAddress,
+                  metadata.accountAddress,
+                ),
+              )
+              .toList();
 
-        return accounts
-            .where(
-              (AptosAccountLocalModel account) =>
-                  metadataByAddress.containsKey(account.accountAddress),
-            )
-            .map(
-              (AptosAccountLocalModel account) => _combineToAccountWithMetadata(
-                account: account,
-                metadata: metadataByAddress[account.accountAddress]!,
-              ),
-            )
-            .toList();
+          if (matchingMetadata.length > 1) {
+            throw StateError(
+                'Database corruption detected: Multiple metadata entries '
+                'for account address: ${account.accountAddress}');
+          }
+        }
+
+        return accounts.map((AptosAccountLocalModel account) {
+          final AccountMetadataLocalModel metadata = allMetadata.firstWhere(
+            (AccountMetadataLocalModel metadata) => areByteListsEqual(
+              account.accountAddress,
+              metadata.accountAddress,
+            ),
+            orElse: () => throw StateError(
+                'Database corruption detected: No metadata found '
+                'for account address: ${account.accountAddress}'),
+          );
+
+          return _combineToAccountWithMetadata(
+            account: account,
+            metadata: metadata,
+          );
+        }).toList();
       });
 
   @override

@@ -5,6 +5,7 @@ REQUIRED_FILES := pubspec.yaml
 # Project root - where pubspec.yaml exists
 PROJECT_ROOT := $(shell pwd)
 PUBSPEC_FILE := $(PROJECT_ROOT)/pubspec.yaml
+PACKAGES_DIR := $(PROJECT_ROOT)/packages
 
 # Flutter and Dart commands
 FLUTTER_CMD := flutter
@@ -99,7 +100,7 @@ clean-builder:
 	@cd $(PROJECT_ROOT) && $(BUILD_RUNNER_CMD) clean || \
 		(echo "$(COLOR_RED)❌ Build runner clean failed$(COLOR_RESET)" && exit 1)
 	@cd $(PROJECT_ROOT) && for pattern in $(GENERATED_FILE_PATTERNS); do \
-		find . -name "$$pattern" -type f -delete; \
+		find . -type f -name "$$pattern" ! -path "*/packages/*" -delete; \
 	done
 
 clean-coverage:
@@ -126,8 +127,8 @@ clean-dart-tool:
 
 clean-objectbox:
 	@echo "🗑️  Cleaning ObjectBox files..."
-	@find $(LIB_DIR) -name "objectbox-model.json" -type f -delete
-	@find $(LIB_DIR) -name "*.objectbox.g.dart" -type f -delete
+	@find $(LIB_DIR) -type f -name "objectbox-model.json" ! -path "*/packages/*" -delete
+	@find $(LIB_DIR) -type f -name "*.objectbox.g.dart" ! -path "*/packages/*" -delete
 	@rm -rf $(DART_TOOL_DIR)/objectbox
 
 clean-l10n:

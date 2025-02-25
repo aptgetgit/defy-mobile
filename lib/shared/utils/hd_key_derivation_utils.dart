@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:aptos_dart/aptos.dart' as aptos;
 import 'package:bip39/bip39.dart' as bip39;
 
-import '../account/domain/entities/aptos_derivation_path.dart';
+import '../blockchain/account/domain/entities/aptos_derivation_path.dart';
 import 'mnemonic_utils.dart';
 
 Uint8List deriveHDKeyFromEntropy({

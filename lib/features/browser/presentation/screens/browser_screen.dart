@@ -77,7 +77,7 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
                 child: InAppWebView(
                   initialUrlRequest: URLRequest(
                     url: WebUri(
-                      'https://explorer.aptoslabs.com/',
+                      'https://avex-id.github.io/aptos-wallet-adapter/',
                     ),
                   ),
                   initialUserScripts:
@@ -147,7 +147,7 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
           final Uint8List accountAddress =
               activeAccountAsync.accountAddress.toBytes();
           final Uint8List publicKey = await ref
-              .read(getAccountPrivateKeyUseCaseProvider)
+              .read(getAccountPublicKeyUseCaseProvider)
               .call(accountAddress: activeAccountAsync.accountAddress);
 
           return <String, Object>{
@@ -159,8 +159,8 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
               const AptosNetwork.testnet().toCaipChainId(),
               const AptosNetwork.devnet().toCaipChainId(),
             ],
-            'accounts': [
-              {
+            'accounts': <Map<String, Object>>[
+              <String, Object>{
                 'accountAddress': accountAddress.toList(),
                 'publicKey': publicKey.toList(),
                 'chains': <String>[
@@ -168,7 +168,7 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
                   const AptosNetwork.testnet().toCaipChainId(),
                   const AptosNetwork.devnet().toCaipChainId(),
                 ],
-                'features': [
+                'features': <String>[
                   'aptos:connect',
                   'aptos:network',
                   'aptos:account',
@@ -186,22 +186,27 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
         },
       )
 
-      // // Handler for getting account info
-      // ..addJavaScriptHandler(
-      //   handlerName: 'getAccount',
-      //   callback: (List args) async {
-      //     // Implement your account fetching logic here
-      //     return <String, Object>{
-      //       'accountAddress': 'your_account_address',
-      //       'publicKey': 'your_public_key',
-      //       'chains': <String>['chain1'],
-      //       'features': <String>['feature1'],
-      //       'signingScheme': 'ed25519',
-      //       'label': 'Account 1',
-      //       'icon': 'your_base64_icon',
-      //     };
-      //   },
-      // );
+      // Handler for getting account info
+      ..addJavaScriptHandler(
+        handlerName: 'account',
+        callback: (JavaScriptHandlerFunctionData data) async {
+          final AptosAccountWithMetadata? activeAccountAsync =
+              await ref.read(activeAccountProvider.future);
+          if (activeAccountAsync == null) {
+            throw Exception('No account connected');
+          }
+          final Uint8List accountAddress =
+              activeAccountAsync.accountAddress.toBytes();
+          final Uint8List publicKey = await ref
+              .read(getAccountPublicKeyUseCaseProvider)
+              .call(accountAddress: activeAccountAsync.accountAddress);
+
+          return <String, Object>{
+            'accountAddress': accountAddress.toList(),
+            'publicKey': publicKey.toList(),
+          };
+        },
+      )
 
       // // // Handler for connecting wallet
       ..addJavaScriptHandler(
@@ -214,11 +219,11 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
               throw Exception('No account connected');
             }
             final Uint8List publicKey = await ref
-                .read(getAccountPrivateKeyUseCaseProvider)
+                .read(getAccountPublicKeyUseCaseProvider)
                 .call(accountAddress: activeAccountAsync.accountAddress);
             return <String, Object>{
               'approved': true,
-              'data': {
+              'data': <String, List<int>>{
                 'accountAddress':
                     activeAccountAsync.accountAddress.toBytes().toList(),
                 'publicKey': publicKey.toList(),
@@ -249,7 +254,7 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
               .toString();
           return <String, Object>{
             'name': currentNetwork.reference,
-            'chainId': 1,
+            'chainId': 2,
             'url': rpcUrl,
           };
         },
@@ -259,10 +264,10 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
       ..addJavaScriptHandler(
         handlerName: 'changeNetwork',
         callback: (JavaScriptHandlerFunctionData data) async {
-          AppLogger.fatal("Change network Called");
+          AppLogger.fatal('Change network Called');
           final ActiveNetwork activeNetworkNotifier =
               ref.read(activeNetworkProvider.notifier);
-          AppLogger.error("data.args.first.name: ${data.args.first.name}");
+          AppLogger.error('data.args.first.name: ${data.args.first.name}');
           final AptosNetwork newNetwork =
               AptosNetwork.fromCaipChainId('aptos:${data.args.first.name}');
           await activeNetworkNotifier.setActiveNetwork(newNetwork);
@@ -278,10 +283,95 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
           //     .toString();
           return <String, Object>{
             'approved': true,
-            'data': {
+            'data': <String, bool>{
               'success': true,
             }
           };
+        },
+      )
+      ..addJavaScriptHandler(
+        handlerName: 'signMessage',
+        callback: (JavaScriptHandlerFunctionData data) async {
+          final bool? withAccountAddress =
+              data.args.first["accountAddress"] as bool?;
+          final bool? withApplication = data.args.first["application"] as bool?;
+          final bool? withChainId = data.args.first["chainId"] as bool?;
+          AppLogger.error(data.args.first);
+          final String message = data.args.first['message'] as String;
+          final String nonce = data.args.first['nonce'] as String;
+
+          String buildMessageToSign({
+            required String message,
+            required String nonce,
+            bool? accountAddress,
+            bool? application,
+            bool? chainId,
+            required String accountAddressHex,
+          }) {
+            final parts = ['APTOS'];
+
+            if (application == true) {
+              parts.add('https://avex-id.github.io');
+            }
+
+            if (accountAddress == true) {
+              parts.add(accountAddressHex);
+            }
+
+            parts.add(nonce);
+
+            if (chainId == true) {
+              parts.add('2');
+            }
+
+            parts.add(message);
+
+            return parts.join('\n');
+          }
+
+// Usage:
+          
+
+          final AptosAccountWithMetadata? activeAccountAsync =
+              await ref.read(activeAccountProvider.future);
+          if (activeAccountAsync == null) {
+            throw Exception('No account connected');
+          }
+
+          // final String messageToSign =
+          //     '\nAptos\nDefy\n0x${activeAccountAsync.accountAddress.toHex()}\n$nonce\n2\n$message';
+
+          //       final String messageToSign =
+          // 'Aptos\n    Defy\n    ${activeAccountAsync.accountAddress.toHex()}\n    $nonce\n    2\n    $message';
+          final messageToSign = buildMessageToSign(
+            message: message,
+            nonce: nonce,
+            accountAddress: withAccountAddress,
+            application: withApplication,
+            chainId: withChainId,
+            accountAddressHex: activeAccountAsync.accountAddress.toHex(),
+          );
+          // final String messageToSign =
+          //     'Aptos\n    Defy\n    ${activeAccountAsync.accountAddress.toHex()}\n    $nonce\n    2\n    $message';
+          final Uint8List encodedMessageToSign = utf8.encode(messageToSign);
+
+          final (Uint8List signature, Uint8List publicKey) =
+              await ref.read(signBufferUseCaseProvider).call(
+                    accountAddress: activeAccountAsync.accountAddress,
+                    buffer: encodedMessageToSign,
+                  );
+return <String, Object>{
+ 'approved': true,
+ 'data': <String, Object>{
+   if (withAccountAddress != null && withAccountAddress) 'address': activeAccountAsync.accountAddress.toHex(),
+   if (withApplication != null &&  withApplication) 'application': 'https://avex-id.github.io',
+   if (withChainId != null &&  withChainId) 'chainId': 2,
+   'fullMessage': messageToSign,
+   'message': message, 
+   'nonce': nonce,
+   'signature': signature.toList(),
+ }
+};
         },
       )
 
@@ -308,17 +398,6 @@ class _BrowserScreenState extends ConsumerState<BrowserScreen> {
     // );
 
     // // Handler for signing messages
-    // controller.addJavaScriptHandler(
-    //   handlerName: 'signMessage',
-    //   callback: (List args) async {
-    //     final message = args[0];
-    //     // Implement your message signing logic here
-    //     return <String, String>{
-    //       'signature': 'signed_message_data',
-    //       // ... other signature properties
-    //     };
-    //   },
-    // );
 
     // // Handler for network changes
     // ..addJavaScriptHandler(

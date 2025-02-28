@@ -43,13 +43,13 @@ abstract class IAptosAccountRepository {
 
   AptosAccountWithMetadata? getByLabel({required String label});
 
-  List<AptosAccountWithMetadata> getByAuthKey(
+  Set<AptosAccountWithMetadata> getByAuthKey(
       {required AuthenticationKey authKey,});
 
-  List<AptosAccountWithMetadata> getByAuthScheme(
+  Set<AptosAccountWithMetadata> getByAuthScheme(
       {required AuthenticationKeyScheme scheme,});
 
-  List<AptosAccountWithMetadata> getAll();
+  Set<AptosAccountWithMetadata> getAll();
 
   int count();
 
@@ -84,7 +84,7 @@ abstract class IAptosAccountRepository {
 
   void deleteByLabel({required String label});
 
-  void deleteMany(List<AccountAddress> accountAddresses);
+  void deleteMany(Set<AccountAddress> accountAddresses);
 
   void clear();
 }

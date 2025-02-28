@@ -33,10 +33,6 @@ class AptosAccountLocalModel {
   final int authenticationKeyScheme;
 
   @override
-  String toString() => 'AptosAccountLocalModel{'
-      '\n  localId: $localId,'
-      '\n  accountAddress: $accountAddress,'
-      '\n  authenticationKey: $authenticationKey,'
-      '\n  authenticationKeyScheme: $authenticationKeyScheme'
-      '\n}';
+  String toString() =>
+      'AptosAccountLocalModel(localId: $localId, accountAddress: $accountAddress, authenticationKey: $authenticationKey, authenticationKeyScheme: $authenticationKeyScheme)';
 }

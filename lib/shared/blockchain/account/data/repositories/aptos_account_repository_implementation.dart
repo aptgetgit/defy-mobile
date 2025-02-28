@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:objectbox/objectbox.dart';
 
+import '../../../../../core/logging/app_logger.dart';
 import '../../../../utils/color_utils.dart';
 import '../../../../utils/comparison_utils.dart';
 import '../../domain/entities/account_address.dart';
@@ -65,8 +66,9 @@ class AptosAccountRepository implements IAptosAccountRepository {
     required Color backgroundColor,
     required AuthenticatorConfig config,
     AccountAddress? accountAddress,
-  }) =>
-      _store.runInTransaction(TxMode.write, () {
+  }) {
+    try {
+      return _store.runInTransaction(TxMode.write, () {
         final AuthenticationKeyScheme scheme = config.scheme;
         final AuthenticationKey authKey = _storeAuthConfig(config: config);
 
@@ -93,6 +95,15 @@ class AptosAccountRepository implements IAptosAccountRepository {
           metadata: metadataModel,
         );
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to create account',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   AuthenticationKey _storeAuthConfig({required AuthenticatorConfig config}) {
     switch (config) {
@@ -121,39 +132,56 @@ class AptosAccountRepository implements IAptosAccountRepository {
     required Uri iconUri,
     required int backgroundColor,
     required Uint8List accountAddress,
-  }) {
-    if (_metadataDataSource.getByLabel(label: label) != null) {
-      throw StateError('Label already exists');
-    }
-
-    return _metadataDataSource.store(
-      label: label,
-      iconUri: iconUri.toString(),
-      backgroundColor: backgroundColor,
-      accountAddress: accountAddress,
-    );
-  }
+  }) =>
+      _metadataDataSource.store(
+        label: label,
+        iconUri: iconUri.toString(),
+        backgroundColor: backgroundColor,
+        accountAddress: accountAddress,
+      );
 
   @override
-  void deleteByAddress({required AccountAddress accountAddress}) =>
+  void deleteByAddress({required AccountAddress accountAddress}) {
+    try {
       _store.runInTransaction(TxMode.write, () {
         _deleteAddressImpl(accountAddress: accountAddress);
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to delete account by address',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  void deleteMany(List<AccountAddress> accountAddresses) =>
+  void deleteMany(Set<AccountAddress> accountAddresses) {
+    try {
       _store.runInTransaction(TxMode.write, () {
         for (final AccountAddress address in accountAddresses) {
           _deleteAddressImpl(accountAddress: address);
         }
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to delete multiple accounts',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  void clear() => _store.runInTransaction(TxMode.write, () {
+  void clear() {
+    try {
+      _store.runInTransaction(TxMode.write, () {
         _metadataDataSource.clear();
         _accountDataSource.clear();
 
-        final List<Ed25519AuthKeyConfigLocalModel> authConfigs =
+        final Set<Ed25519AuthKeyConfigLocalModel> authConfigs =
             _ed25519ConfigDataSource.getAll();
 
         for (final Ed25519AuthKeyConfigLocalModel config in authConfigs) {
@@ -178,12 +206,22 @@ class AptosAccountRepository implements IAptosAccountRepository {
           }
         }
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to clear all accounts',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
   AptosAccountWithMetadata? getByAddress({
     required AccountAddress accountAddress,
-  }) =>
-      _store.runInTransaction(TxMode.read, () {
+  }) {
+    try {
+      return _store.runInTransaction(TxMode.read, () {
         final AptosAccountLocalModel? accountModel =
             _accountDataSource.getByAddress(
           accountAddress: accountAddress.toBytes(),
@@ -205,13 +243,23 @@ class AptosAccountRepository implements IAptosAccountRepository {
           metadata: metadataModel,
         );
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to get account by address',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  List<AptosAccountWithMetadata> getByAuthKey({
+  Set<AptosAccountWithMetadata> getByAuthKey({
     required AuthenticationKey authKey,
-  }) =>
-      _store.runInTransaction(TxMode.read, () {
-        final List<AptosAccountLocalModel> accounts = _accountDataSource
+  }) {
+    try {
+      return _store.runInTransaction(TxMode.read, () {
+        final Set<AptosAccountLocalModel> accounts = _accountDataSource
             .getByAuthKey(authenticationKey: authKey.toBytes());
 
         return accounts.map((AptosAccountLocalModel accountModel) {
@@ -227,15 +275,25 @@ class AptosAccountRepository implements IAptosAccountRepository {
             account: accountModel,
             metadata: metadataModel,
           );
-        }).toList();
+        }).toSet();
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to get accounts by authentication key',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  List<AptosAccountWithMetadata> getByAuthScheme({
+  Set<AptosAccountWithMetadata> getByAuthScheme({
     required AuthenticationKeyScheme scheme,
-  }) =>
-      _store.runInTransaction(TxMode.read, () {
-        final List<AptosAccountLocalModel> accounts =
+  }) {
+    try {
+      return _store.runInTransaction(TxMode.read, () {
+        final Set<AptosAccountLocalModel> accounts =
             _accountDataSource.getByScheme(
           authenticationKeyScheme: scheme.toByte(),
         );
@@ -253,26 +311,36 @@ class AptosAccountRepository implements IAptosAccountRepository {
             account: accountModel,
             metadata: metadataModel,
           );
-        }).toList();
+        }).toSet();
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to get accounts by authentication scheme',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  List<AptosAccountWithMetadata> getAll() =>
-      _store.runInTransaction(TxMode.read, () {
-        final List<AptosAccountLocalModel> accounts =
+  Set<AptosAccountWithMetadata> getAll() {
+    try {
+      return _store.runInTransaction(TxMode.read, () {
+        final Set<AptosAccountLocalModel> accounts =
             _accountDataSource.getAll();
-        final List<AccountMetadataLocalModel> allMetadata =
+        final Set<AccountMetadataLocalModel> allMetadata =
             _metadataDataSource.getAll();
 
         for (final AptosAccountLocalModel account in accounts) {
-          final List<AccountMetadataLocalModel> matchingMetadata = allMetadata
+          final Set<AccountMetadataLocalModel> matchingMetadata = allMetadata
               .where(
                 (AccountMetadataLocalModel metadata) => areByteListsEqual(
                   account.accountAddress,
                   metadata.accountAddress,
                 ),
               )
-              .toList();
+              .toSet();
 
           if (matchingMetadata.length > 1) {
             throw StateError(
@@ -296,24 +364,55 @@ class AptosAccountRepository implements IAptosAccountRepository {
             account: account,
             metadata: metadata,
           );
-        }).toList();
+        }).toSet();
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to get all accounts',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  int count() => _accountDataSource.count();
+  int count() {
+    try {
+      return _accountDataSource.count();
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to count accounts',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  bool hasAddress({required AccountAddress accountAddress}) =>
-      _accountDataSource.getByAddress(
-        accountAddress: accountAddress.toBytes(),
-      ) !=
-      null;
+  bool hasAddress({required AccountAddress accountAddress}) {
+    try {
+      return _accountDataSource.getByAddress(
+            accountAddress: accountAddress.toBytes(),
+          ) !=
+          null;
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to check if address exists',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
   AuthenticatorConfig? getAuthConfigByAuthKey({
     required AuthenticationKey authKey,
-  }) =>
-      _store.runInTransaction(TxMode.read, () {
+  }) {
+    try {
+      return _store.runInTransaction(TxMode.read, () {
         final Ed25519AuthKeyConfigLocalModel? config = _ed25519ConfigDataSource
             .getByAuthKey(authenticationKey: authKey.toBytes());
         if (config == null) {
@@ -321,12 +420,22 @@ class AptosAccountRepository implements IAptosAccountRepository {
         }
         return AuthenticatorConfig.ed25519(keyId: config.jwkKeyId);
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to get authenticator config by auth key',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
   AuthenticatorConfig? getEd25519AuthConfigsByJwkKeyId({
     required Uint8List keyId,
-  }) =>
-      _store.runInTransaction(TxMode.read, () {
+  }) {
+    try {
+      return _store.runInTransaction(TxMode.read, () {
         final Ed25519AuthKeyConfigLocalModel? config =
             _ed25519ConfigDataSource.getByKeyId(keyId: keyId);
         if (config == null) {
@@ -334,9 +443,19 @@ class AptosAccountRepository implements IAptosAccountRepository {
         }
         return AuthenticatorConfig.ed25519(keyId: config.jwkKeyId);
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to get ED25519 auth config by JWK key ID',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  void deleteByLabel({required String label}) =>
+  void deleteByLabel({required String label}) {
+    try {
       _store.runInTransaction(TxMode.write, () {
         final AccountMetadataLocalModel? metadataModel =
             _metadataDataSource.getByLabel(label: label);
@@ -347,6 +466,15 @@ class AptosAccountRepository implements IAptosAccountRepository {
           accountAddress: AccountAddress(bytes: metadataModel.accountAddress),
         );
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to delete account by label',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   void _deleteAddressImpl({required AccountAddress accountAddress}) {
     final AptosAccountLocalModel? account = _accountDataSource.getByAddress(
@@ -361,7 +489,7 @@ class AptosAccountRepository implements IAptosAccountRepository {
     _accountDataSource.deleteByAddress(
       accountAddress: accountAddress.toBytes(),
     );
-    final List<AptosAccountLocalModel> remainingAccounts =
+    final Set<AptosAccountLocalModel> remainingAccounts =
         _accountDataSource.getByAuthKey(
       authenticationKey: account.authenticationKey,
     );
@@ -385,8 +513,9 @@ class AptosAccountRepository implements IAptosAccountRepository {
   }
 
   @override
-  AptosAccountWithMetadata? getByLabel({required String label}) =>
-      _store.runInTransaction(TxMode.read, () {
+  AptosAccountWithMetadata? getByLabel({required String label}) {
+    try {
+      return _store.runInTransaction(TxMode.read, () {
         final AccountMetadataLocalModel? metadataModel =
             _metadataDataSource.getByLabel(label: label);
         if (metadataModel == null) {
@@ -406,16 +535,36 @@ class AptosAccountRepository implements IAptosAccountRepository {
           metadata: metadataModel,
         );
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to get account by label',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  bool hasLabel({required String label}) =>
-      _metadataDataSource.getByLabel(label: label) != null;
+  bool hasLabel({required String label}) {
+    try {
+      return _metadataDataSource.getByLabel(label: label) != null;
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to check if label exists',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
   void updateIconUri({
     required AccountAddress accountAddress,
     required Uri newIconUri,
-  }) =>
+  }) {
+    try {
       _store.runInTransaction(TxMode.write, () {
         final AccountMetadataLocalModel? metadata =
             _metadataDataSource.getByAddress(
@@ -425,19 +574,27 @@ class AptosAccountRepository implements IAptosAccountRepository {
           throw StateError('Account not found');
         }
 
-        if (!_metadataDataSource.update(
+        _metadataDataSource.update(
           localId: metadata.localId,
           iconUri: newIconUri.toString(),
-        )) {
-          throw StateError('Failed to update icon URI');
-        }
+        );
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to update icon URI',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
   void updateLabel({
     required AccountAddress accountAddress,
     required String newLabel,
-  }) =>
+  }) {
+    try {
       _store.runInTransaction(TxMode.write, () {
         final AccountMetadataLocalModel? metadata =
             _metadataDataSource.getByAddress(
@@ -447,19 +604,27 @@ class AptosAccountRepository implements IAptosAccountRepository {
           throw StateError('Account not found');
         }
 
-        if (!_metadataDataSource.update(
+        _metadataDataSource.update(
           localId: metadata.localId,
           label: newLabel,
-        )) {
-          throw StateError('Failed to update label');
-        }
+        );
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to update label',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
   void updateBackgroundColor({
     required AccountAddress accountAddress,
     required Color newBackgroundColor,
-  }) =>
+  }) {
+    try {
       _store.runInTransaction(TxMode.write, () {
         final AccountMetadataLocalModel? metadata =
             _metadataDataSource.getByAddress(
@@ -469,11 +634,18 @@ class AptosAccountRepository implements IAptosAccountRepository {
           throw StateError('Account not found');
         }
 
-        if (!_metadataDataSource.update(
+        _metadataDataSource.update(
           localId: metadata.localId,
           backgroundColor: colorToInt(newBackgroundColor),
-        )) {
-          throw StateError('Failed to update background color');
-        }
+        );
       });
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to update background color',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 }

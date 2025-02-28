@@ -28,7 +28,7 @@ class ActiveAccount extends _$ActiveAccount {
       return activeAccount;
     }
 
-    final List<AptosAccountWithMetadata> accounts = await listAccounts.call();
+    final Set<AptosAccountWithMetadata> accounts = await listAccounts.call();
     if (accounts.isNotEmpty) {
       await setActiveAccount.call(
         accountAddress: accounts.first.accountAddress,

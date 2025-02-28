@@ -25,10 +25,6 @@ class HDKeyLocalModel {
   final Uint8List entropyHash;
 
   @override
-  String toString() => 'HDKeyLocalModel{'
-      '\n  localId: $localId,'
-      '\n  jwkKeyId: $jwkKeyId,'
-      '\n  entropyHash: $entropyHash,'
-      '\n  derivationPath: $derivationPath'
-      '\n}';
+  String toString() =>
+      'HDKeyLocalModel(localId: $localId, jwkKeyId: $jwkKeyId, entropyHash: $entropyHash, derivationPath: $derivationPath)';
 }

@@ -7,7 +7,7 @@ class ListAptosAccountsUseCase {
 
   final IAptosAccountRepository _repository;
 
-  Future<List<AptosAccountWithMetadata>> call() async {
+  Future<Set<AptosAccountWithMetadata>> call() async {
     try {
       return _repository.getAll();
     } catch (e) {

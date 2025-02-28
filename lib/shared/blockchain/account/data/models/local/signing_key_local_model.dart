@@ -21,9 +21,6 @@ class SigningKeyLocalModel {
   final Uint8List jwkThumbprint;
 
   @override
-  String toString() => 'SigningKeyLocalModel{'
-      '\n  localId: $localId,'
-      '\n  jwkKeyId: $jwkKeyId,'
-      '\n  jwkThumbprint: $jwkThumbprint'
-      '\n}';
+  String toString() =>
+      'SigningKeyLocalModel(localId: $localId, jwkKeyId: $jwkKeyId, jwkThumbprint: $jwkThumbprint)';
 }

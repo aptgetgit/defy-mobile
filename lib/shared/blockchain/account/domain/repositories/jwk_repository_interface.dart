@@ -43,7 +43,7 @@ abstract class IJwkRepository {
 
   Jwk? get({required Uint8List keyId});
 
-  List<Jwk> getAll();
+  Set<Jwk> getAll();
 
   int count();
 
@@ -59,11 +59,11 @@ abstract class IJwkRepository {
 
   void delete({required Uint8List keyId});
 
-  void deleteMany(List<Uint8List> keyIds);
+  void deleteMany(Set<Uint8List> keyIds);
 
   void clear();
 
-  List<(Uint8List, HDKeySourceConfig)> getAllHDKeySourceConfigs();
+  Set<(Uint8List, HDKeySourceConfig)> getAllHDKeySourceConfigs();
 
-  List<(Uint8List, SigningKeySourceConfig)> getAllSigningKeySourceConfigs();
+  Set<(Uint8List, SigningKeySourceConfig)> getAllSigningKeySourceConfigs();
 }

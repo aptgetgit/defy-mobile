@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:objectbox/objectbox.dart';
 
+import '../../../../../core/logging/app_logger.dart';
 import '../../domain/entities/aptos_derivation_path.dart';
 import '../../domain/entities/json_web_key.dart';
 import '../../domain/repositories/jwk_repository_interface.dart';
@@ -47,42 +48,53 @@ class JwkRepository implements IJwkRepository {
   final PrivateJwkDataSource _privateJwkDataSource;
 
   @override
+  @override
   Future<Jwk> store({required Jwk jwk, required KeySourceConfig config}) async {
-    switch (config) {
-      case HDKeySourceConfig(
-          :final Uint8List entropyHash,
-        ):
-        if (!await _entropyDataSource.has(hash: entropyHash)) {
-          throw StateError('Cannot store: entropy not found');
-        }
-
-      case SigningKeySourceConfig():
-        if (!await _privateJwkDataSource.has(keyId: jwk.keyId)) {
-          throw StateError('Cannot store: private key not found');
-        }
-    }
-
-    return _store.runInTransaction(TxMode.write, () {
+    try {
       switch (config) {
         case HDKeySourceConfig(
             :final Uint8List entropyHash,
-            :final AptosDerivationPath derivationPath
           ):
-          _hdKeyDataSource.store(
-            keyId: jwk.keyId,
-            entropyHash: entropyHash,
-            derivationPath: derivationPath.toBytes(),
-          );
+          if (!await _entropyDataSource.has(hash: entropyHash)) {
+            throw StateError('Cannot store: entropy not found');
+          }
 
-        case SigningKeySourceConfig(:final Uint8List jwkThumbprint):
-          _signingKeyDataSource.store(
-            keyId: jwk.keyId,
-            jwkThumbprint: jwkThumbprint,
-          );
+        case SigningKeySourceConfig():
+          if (!await _privateJwkDataSource.has(keyId: jwk.keyId)) {
+            throw StateError('Cannot store: private key not found');
+          }
       }
 
-      return _jwkDataSource.store(jwk: jwk).toDomain();
-    });
+      final Jwk result = await _store.runInTransaction(TxMode.write, () {
+        switch (config) {
+          case HDKeySourceConfig(
+              :final Uint8List entropyHash,
+              :final AptosDerivationPath derivationPath
+            ):
+            _hdKeyDataSource.store(
+              keyId: jwk.keyId,
+              entropyHash: entropyHash,
+              derivationPath: derivationPath.toBytes(),
+            );
+
+          case SigningKeySourceConfig(:final Uint8List jwkThumbprint):
+            _signingKeyDataSource.store(
+              keyId: jwk.keyId,
+              jwkThumbprint: jwkThumbprint,
+            );
+        }
+
+        return _jwkDataSource.store(jwk: jwk).toDomain();
+      });
+      return result;
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to store JWK',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
   }
 
   _DeletionResult _performKeyDeletion({required Uint8List keyId}) {
@@ -116,115 +128,205 @@ class JwkRepository implements IJwkRepository {
 
   @override
   Future<void> delete({required Uint8List keyId}) async {
-    final _DeletionResult result = _store.runInTransaction(
-      TxMode.write,
-      () => _performKeyDeletion(keyId: keyId),
-    );
-
-    if (result.shouldDeleteEntropy && result.entropyHash != null) {
-      await _entropyDataSource.delete(hash: result.entropyHash!);
-    }
-    if (result.shouldDeletePrivateKey) {
-      await _privateJwkDataSource.delete(keyId: keyId);
-    }
-  }
-
-  @override
-  Future<void> deleteMany(List<Uint8List> keyIds) async {
-    final List<_DeletionResult> results = _store.runInTransaction(
-      TxMode.write,
-      () => keyIds
-          .map((Uint8List keyId) => _performKeyDeletion(keyId: keyId))
-          .toList(),
-    );
-
-    for (int i = 0; i < results.length; i++) {
-      final _DeletionResult result = results[i];
+    try {
+      final _DeletionResult result = await _store.runInTransaction(
+        TxMode.write,
+        () => _performKeyDeletion(keyId: keyId),
+      );
       if (result.shouldDeleteEntropy && result.entropyHash != null) {
         await _entropyDataSource.delete(hash: result.entropyHash!);
       }
       if (result.shouldDeletePrivateKey) {
-        await _privateJwkDataSource.delete(keyId: keyIds[i]);
+        await _privateJwkDataSource.delete(keyId: keyId);
       }
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to delete JWK',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteMany(Set<Uint8List> keyIds) async {
+    try {
+      if (keyIds.isEmpty) {
+        return;
+      }
+
+      final Set<_DeletionResult> results = await _store.runInTransaction(
+        TxMode.write,
+        () => keyIds
+            .map((Uint8List keyId) => _performKeyDeletion(keyId: keyId))
+            .toSet(),
+      );
+
+      for (int i = 0; i < results.length; i++) {
+        final _DeletionResult result = results.elementAt(i);
+        if (result.shouldDeleteEntropy && result.entropyHash != null) {
+          await _entropyDataSource.delete(hash: result.entropyHash!);
+        }
+        if (result.shouldDeletePrivateKey) {
+          await _privateJwkDataSource.delete(keyId: keyIds.elementAt(i));
+        }
+      }
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to delete multiple JWKs',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
     }
   }
 
   @override
   Future<void> clear() async {
-    final List<JwkLocalModel> jwks = _jwkDataSource.getAll();
+    try {
+      final Set<JwkLocalModel> jwks = _jwkDataSource.getAll();
 
-    for (final JwkLocalModel jwk in jwks) {
-      if (_ed25519AuthKeyConfigDataSource.getByKeyId(keyId: jwk.keyId) !=
-          null) {
-        throw StateError(
-          'Cannot clear: some JWKs are used in auth configuration',
-        );
+      for (final JwkLocalModel jwk in jwks) {
+        if (_ed25519AuthKeyConfigDataSource.getByKeyId(keyId: jwk.keyId) !=
+            null) {
+          throw StateError(
+            'Cannot clear: some JWKs are used in auth configuration',
+          );
+        }
       }
-    }
+      final Set<HDKeyLocalModel> hdConfigs = _hdKeyDataSource.getAll();
+      final Set<SigningKeyLocalModel> signingConfigs =
+          _signingKeyDataSource.getAll();
 
-    final List<HDKeyLocalModel> hdConfigs = _hdKeyDataSource.getAll();
-    final List<SigningKeyLocalModel> signingConfigs =
-        _signingKeyDataSource.getAll();
+      _store.runInTransaction(TxMode.write, () {
+        _jwkDataSource.clear();
+        _hdKeyDataSource.clear();
+        _signingKeyDataSource.clear();
+      });
 
-    _store.runInTransaction(TxMode.write, () {
-      _jwkDataSource.clear();
-      _hdKeyDataSource.clear();
-      _signingKeyDataSource.clear();
-    });
+      for (final HDKeyLocalModel config in hdConfigs) {
+        await _entropyDataSource.delete(hash: config.entropyHash);
+      }
 
-    for (final HDKeyLocalModel config in hdConfigs) {
-      await _entropyDataSource.delete(hash: config.entropyHash);
-    }
-
-    for (final SigningKeyLocalModel config in signingConfigs) {
-      await _privateJwkDataSource.delete(keyId: config.jwkKeyId);
+      for (final SigningKeyLocalModel config in signingConfigs) {
+        await _privateJwkDataSource.delete(keyId: config.jwkKeyId);
+      }
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to clear JWKs',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
     }
   }
 
   @override
-  Jwk? get({required Uint8List keyId}) =>
-      _jwkDataSource.getByKeyId(keyId: keyId)?.toDomain();
+  Jwk? get({required Uint8List keyId}) {
+    try {
+      return _jwkDataSource.getByKeyId(keyId: keyId)?.toDomain();
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to retrieve JWK',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  bool has({required Uint8List keyId}) =>
-      _jwkDataSource.getByKeyId(keyId: keyId) != null;
+  bool has({required Uint8List keyId}) {
+    try {
+      return _jwkDataSource.getByKeyId(keyId: keyId) != null;
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to check JWK existence',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  List<Jwk> getAll() => _jwkDataSource
-      .getAll()
-      .map((JwkLocalModel model) => model.toDomain())
-      .toList();
+  Set<Jwk> getAll() {
+    try {
+      return _jwkDataSource
+          .getAll()
+          .map((JwkLocalModel model) => model.toDomain())
+          .toSet();
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to retrieve all JWKs',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  int count() => _jwkDataSource.count();
+  int count() {
+    try {
+      return _jwkDataSource.count();
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to count JWKs',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
   HDKeySourceConfig? getHDKeySourceConfig({required Uint8List keyId}) {
-    final HDKeyLocalModel? hdKey = _hdKeyDataSource.getByKeyId(keyId: keyId);
-    if (hdKey == null) {
-      return null;
+    try {
+      final HDKeyLocalModel? hdKey = _hdKeyDataSource.getByKeyId(keyId: keyId);
+      if (hdKey == null) {
+        return null;
+      }
+      return HDKeySourceConfig(
+        entropyHash: hdKey.entropyHash,
+        derivationPath: AptosDerivationPath.fromBytes(hdKey.derivationPath),
+      );
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to retrieve HD key config',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
     }
-    return HDKeySourceConfig(
-      entropyHash: hdKey.entropyHash,
-      derivationPath: AptosDerivationPath.fromBytes(hdKey.derivationPath),
-    );
   }
 
   @override
   SigningKeySourceConfig? getSigningKeySourceConfig({
     required Uint8List keyId,
   }) {
-    final SigningKeyLocalModel? key =
-        _signingKeyDataSource.getByKeyId(keyId: keyId);
-    if (key == null) {
-      return null;
+    try {
+      final SigningKeyLocalModel? key =
+          _signingKeyDataSource.getByKeyId(keyId: keyId);
+      if (key == null) {
+        return null;
+      }
+      return SigningKeySourceConfig(jwkThumbprint: key.jwkThumbprint);
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to retrieve signing key config',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
     }
-    return SigningKeySourceConfig(jwkThumbprint: key.jwkThumbprint);
   }
 
   @override
-  List<(Uint8List, HDKeySourceConfig)> getAllHDKeySourceConfigs() =>
-      _hdKeyDataSource
+  Set<(Uint8List, HDKeySourceConfig)> getAllHDKeySourceConfigs() {
+    try {
+      return _hdKeyDataSource
           .getAll()
           .map(
             (HDKeyLocalModel key) => (
@@ -236,11 +338,21 @@ class JwkRepository implements IJwkRepository {
               )
             ),
           )
-          .toList();
+          .toSet();
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to retrieve all HD key configs',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 
   @override
-  List<(Uint8List, SigningKeySourceConfig)> getAllSigningKeySourceConfigs() =>
-      _signingKeyDataSource
+  Set<(Uint8List, SigningKeySourceConfig)> getAllSigningKeySourceConfigs() {
+    try {
+      return _signingKeyDataSource
           .getAll()
           .map(
             (SigningKeyLocalModel key) => (
@@ -248,5 +360,14 @@ class JwkRepository implements IJwkRepository {
               SigningKeySourceConfig(jwkThumbprint: key.jwkThumbprint)
             ),
           )
-          .toList();
+          .toSet();
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to retrieve all signing key configs',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 }

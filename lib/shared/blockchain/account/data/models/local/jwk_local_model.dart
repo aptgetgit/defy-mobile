@@ -70,10 +70,6 @@ class JwkLocalModel {
   final Uint8List? y;
 
   @override
-  String toString() => 'JwkLocalModel{'
-      '\n  localId: $localId,'
-      '\n  keyId: $keyId,'
-      '\n  keyType: $keyType,'
-      '\n  curve: $curve'
-      '\n}';
+  String toString() =>
+      'JwkLocalModel(localId: $localId, keyId: $keyId, keyType: $keyType, curve: $curve)';
 }

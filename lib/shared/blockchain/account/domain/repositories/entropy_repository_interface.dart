@@ -5,7 +5,7 @@ abstract class IEntropyRepository {
 
   Future<Uint8List?> get({required Uint8List hash});
 
-  Future<List<Uint8List>> getAllHashes();
+  Future<Set<Uint8List>> getAllHashes();
 
   Future<int> count();
 
@@ -13,7 +13,7 @@ abstract class IEntropyRepository {
 
   Future<void> delete({required Uint8List hash});
   
-  Future<void> deleteMany(List<Uint8List> hashes);
+  Future<void> deleteMany(Set<Uint8List> hashes);
 
   Future<void> clear();
 }

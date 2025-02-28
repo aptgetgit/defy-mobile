@@ -24,9 +24,6 @@ class Ed25519AuthKeyConfigLocalModel {
   final Uint8List jwkKeyId;
 
   @override
-  String toString() => 'Ed25519AuthKeyConfigLocalModel{'
-      '\n  localId: $localId,'
-      '\n  authenticationKey: $authenticationKey,'
-      '\n  jwkKeyId: $jwkKeyId'
-      '\n}';
+  String toString() =>
+      'Ed25519AuthKeyConfigLocalModel(localId: $localId, authenticationKey: $authenticationKey, jwkKeyId: $jwkKeyId)';
 }

@@ -7,7 +7,7 @@ abstract class IPrivateJwkRepository {
 
   Future<Jwk?> get({required Uint8List keyId});
 
-  Future<List<Uint8List>> getAllKeyIds();
+  Future<Set<Uint8List>> getAllKeyIds();
 
   Future<int> count();
 
@@ -15,7 +15,7 @@ abstract class IPrivateJwkRepository {
 
   Future<void> delete({required Uint8List keyId});
 
-  Future<void> deleteMany(List<Uint8List> keyIds);
+  Future<void> deleteMany(Set<Uint8List> keyIds);
 
   Future<void> clear();
 }

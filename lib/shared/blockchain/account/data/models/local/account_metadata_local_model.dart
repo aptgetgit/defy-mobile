@@ -39,11 +39,6 @@ class AccountMetadataLocalModel {
   final Uint8List accountAddress;
 
   @override
-  String toString() => 'AccountMetadataLocalModel{'
-      '\n  localId: $localId,'
-      '\n  label: $label,'
-      '\n  iconUri: $iconUri,'
-      '\n  backgroundColor: $backgroundColor,'
-      '\n  accountAddress: $accountAddress'
-      '\n}';
+  String toString() =>
+      'AccountMetadataLocalModel(localId: $localId, label: $label, iconUri: $iconUri, backgroundColor: $backgroundColor, accountAddress: $accountAddress)';
 }

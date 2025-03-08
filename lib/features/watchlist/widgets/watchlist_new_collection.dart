@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
 import 'watchlist_newList_tile.dart';
@@ -62,13 +63,16 @@ class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScr
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(PhosphorIconsBold.caretLeft, size: 24),
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.star_border),
-            onPressed: () {},
+          Padding(
+            padding: const EdgeInsets.only(right: 6),
+            child: IconButton(
+              icon: const Icon(PhosphorIconsRegular.star, size: 24,),
+              onPressed: () {},
+            ),
           ),
         ],
       ),

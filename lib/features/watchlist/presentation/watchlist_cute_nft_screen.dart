@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import '../widgets/watchlist_nft_tile.dart'; // Import the WatchlistNFTTile widget
+import '../../../config/theme/colors.dart';
+import '../widgets/watchlist_nft_tile.dart';
+import '../widgets/watchlist_update_collection.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,6 +31,7 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   bool showDeleteButton = false;
+  String collectionName = "Cute NFTs🐣";
 
   @override
   void initState() {
@@ -63,8 +67,7 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -76,27 +79,43 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          "Cute NFTs🐣",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Colors.black,
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              collectionName,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+            const Gap(40),
+            GestureDetector(
+              onTap: () async {
+                final updatedCollectionName = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WatchListUpdateCollectionScreen(),
+                  ),
+                );
+                if (updatedCollectionName != null) {
+                  setState(() {
+                    collectionName = updatedCollectionName as String;
+                  });
+                }
+              },
+              child: Icon(
+                PhosphorIcons.pencilSimpleLine(PhosphorIconsStyle.bold),
+                color: AppColors.greyLight,
+                size: 18,
+              ),
+            ),
+          ],
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 50.0), // Increased padding to the right
-            child: Icon(
-              PhosphorIcons.pencilSimple(PhosphorIconsStyle.bold),
-              color: Colors.black,
-              size: 21,
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: Column(
@@ -121,13 +140,13 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                         height: 32,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.grey[300],
+                          color: AppColors.greyVeryLight,
                         ),
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            PhosphorIcons.arrowUpRight(PhosphorIconsStyle.bold),
-                            color: Colors.black,
+                            PhosphorIcons.trendUp(PhosphorIconsStyle.bold),
+                            color: AppColors.grey,
                             size: 18,
                           ),
                           onPressed: () {
@@ -141,13 +160,13 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                         width: 32,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.grey[300],
+                          color: AppColors.greyVeryLight,
                         ),
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
                             PhosphorIcons.dotsThreeVertical(PhosphorIconsStyle.bold),
-                            color: Colors.black,
+                            color: AppColors.grey,
                             size: 18,
                           ),
                           onPressed: _toggleDeleteButton,
@@ -162,33 +181,31 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
               child: ListView.builder(
                 itemCount: 6, // Number of tiles
                 itemBuilder: (context, index) {
-                  return Stack(
-                    children: [
-                      WatchlistNFTTile(deleteNft: showDeleteButton),
-                      if (showDeleteButton)
-                        Positioned(
-                          right: 0,
-                          child: SlideTransition(
-                            position: _offsetAnimation,
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              ),
-                              onPressed: () {
-                                // Handle delete button press
-                              },
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
+                  return WatchlistNFTTile(deleteNft: showDeleteButton);
                 },
               ),
             ),
+            const Gap(50),
+            if(showDeleteButton)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Handle delete button press
+                  },
+                  child: const Text("Delete Collection"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.red,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    minimumSize: const Size(double.infinity, 54),
+                  ),
+                ),
+              )
           ],
         ),
       ),
     );
-  }
 }

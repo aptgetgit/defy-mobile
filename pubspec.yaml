@@ -58,6 +58,12 @@ dependencies:
   expandable: ^5.0.1
   cached_network_image: ^3.4.1
   qr_flutter: ^4.1.0
+  graphql_flutter: ^5.2.0-beta.8
+  lottie: ^3.3.1
+  syncfusion_flutter_charts: ^28.2.4+1
+  fl_chart: ^0.70.2
+  audioplayers: ^6.1.2
+  video_player: ^2.9.2
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +100,7 @@ flutter:
     - assets/videos/
     - assets/animations/
     - assets/icons/
+    - assets/audios/
 
   # TODO: Do we need resolution aware images ?
   # An image asset can refer to one or more resolution-specific "variants", see

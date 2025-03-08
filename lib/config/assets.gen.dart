@@ -9,11 +9,24 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsAudiosGen {
+  const $AssetsAudiosGen();
+
+  /// File path: assets/audios/cyborg.mp3
+  String get cyborg => 'assets/audios/cyborg.mp3';
+
+  /// List of all assets
+  List<String> get values => [cyborg];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
   /// File path: assets/icons/Buy-logo.png
   AssetGenImage get buyLogo => const AssetGenImage('assets/icons/Buy-logo.png');
+
+  /// File path: assets/icons/Cellana.png
+  AssetGenImage get cellana => const AssetGenImage('assets/icons/Cellana.png');
 
   /// File path: assets/icons/Frame.svg
   String get frame => 'assets/icons/Frame.svg';
@@ -105,6 +118,9 @@ class $AssetsIconsGen {
   AssetGenImage get invitefriendLogo =>
       const AssetGenImage('assets/icons/invitefriend-logo.png');
 
+  /// File path: assets/icons/koinly.png
+  AssetGenImage get koinly => const AssetGenImage('assets/icons/koinly.png');
+
   /// File path: assets/icons/kraken.png
   AssetGenImage get kraken => const AssetGenImage('assets/icons/kraken.png');
 
@@ -112,9 +128,15 @@ class $AssetsIconsGen {
   AssetGenImage get ledborrowLogo =>
       const AssetGenImage('assets/icons/ledborrow-logo.png');
 
+  /// File path: assets/icons/lock.png
+  AssetGenImage get lock => const AssetGenImage('assets/icons/lock.png');
+
   /// File path: assets/icons/male-emoji.png
   AssetGenImage get maleEmoji =>
       const AssetGenImage('assets/icons/male-emoji.png');
+
+  /// File path: assets/icons/marble.png
+  AssetGenImage get marble => const AssetGenImage('assets/icons/marble.png');
 
   /// File path: assets/icons/market-explore-logo.png
   AssetGenImage get marketExploreLogo =>
@@ -201,6 +223,9 @@ class $AssetsIconsGen {
   AssetGenImage get uniswapDexLogo =>
       const AssetGenImage('assets/icons/uniswap-dex-logo.png');
 
+  /// File path: assets/icons/unkown.png
+  AssetGenImage get unkown => const AssetGenImage('assets/icons/unkown.png');
+
   /// File path: assets/icons/usdc.png
   AssetGenImage get usdc => const AssetGenImage('assets/icons/usdc.png');
 
@@ -210,6 +235,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/watchlist-logo.png
   AssetGenImage get watchlistLogo =>
       const AssetGenImage('assets/icons/watchlist-logo.png');
+
+  /// File path: assets/icons/watchlist-logo2.png
+  AssetGenImage get watchlistLogo2 =>
+      const AssetGenImage('assets/icons/watchlist-logo2.png');
 
   /// File path: assets/icons/whatsapp.png
   AssetGenImage get whatsapp =>
@@ -221,6 +250,7 @@ class $AssetsIconsGen {
   /// List of all assets
   List<dynamic> get values => [
         buyLogo,
+        cellana,
         frame,
         addtokenLogo,
         amnis,
@@ -246,9 +276,12 @@ class $AssetsIconsGen {
         google,
         guiInu,
         invitefriendLogo,
+        koinly,
         kraken,
         ledborrowLogo,
+        lock,
         maleEmoji,
+        marble,
         marketExploreLogo,
         mintsLogo,
         moreLogo,
@@ -271,9 +304,11 @@ class $AssetsIconsGen {
         thala,
         uniswapDappLogo,
         uniswapDexLogo,
+        unkown,
         usdc,
         warning,
         watchlistLogo,
+        watchlistLogo2,
         whatsapp,
         x
       ];
@@ -376,6 +411,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/cyborg.png
   AssetGenImage get cyborg => const AssetGenImage('assets/images/cyborg.png');
 
+  /// File path: assets/images/cyborg2.png
+  AssetGenImage get cyborg2 => const AssetGenImage('assets/images/cyborg2.png');
+
   /// File path: assets/images/emo.png
   AssetGenImage get emo => const AssetGenImage('assets/images/emo.png');
 
@@ -412,6 +450,12 @@ class $AssetsImagesGen {
   /// File path: assets/images/nft-bg-header.png
   AssetGenImage get nftBgHeader =>
       const AssetGenImage('assets/images/nft-bg-header.png');
+
+  /// File path: assets/images/nft.gif
+  AssetGenImage get nft => const AssetGenImage('assets/images/nft.gif');
+
+  /// File path: assets/images/nft1.png
+  AssetGenImage get nft1 => const AssetGenImage('assets/images/nft1.png');
 
   /// File path: assets/images/onboarding-nft-1.png
   AssetGenImage get onboardingNft1 =>
@@ -503,6 +547,7 @@ class $AssetsImagesGen {
         avatar,
         cosmosBg,
         cyborg,
+        cyborg2,
         emo,
         invest,
         marketPhone,
@@ -513,6 +558,8 @@ class $AssetsImagesGen {
         mobileFrameNotch,
         mobileFrame,
         nftBgHeader,
+        nft,
+        nft1,
         onboardingNft1,
         onboardingNft2,
         onboardingNft3,
@@ -533,11 +580,23 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsVideosGen {
+  const $AssetsVideosGen();
+
+  /// File path: assets/videos/nft_video.mp4
+  String get nftVideo => 'assets/videos/nft_video.mp4';
+
+  /// List of all assets
+  List<String> get values => [nftVideo];
+}
+
 class Assets {
   Assets._();
 
+  static const $AssetsAudiosGen audios = $AssetsAudiosGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsVideosGen videos = $AssetsVideosGen();
 }
 
 class AssetGenImage {

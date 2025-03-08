@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../../../config/theme/colors.dart';
 
 class WatchlistNFTTile extends StatefulWidget {
   final bool deleteNft;
@@ -15,14 +18,22 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
   bool isDeleted = false;
 
   late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 6),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(-0.2, 0),
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
   }
 
   @override
@@ -49,6 +60,12 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+    if (widget.deleteNft) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+
     return Column(
       children: [
         Visibility(
@@ -79,7 +96,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 height: 55,
                                 width: 55,
                                 fit: BoxFit.cover,
-                                image: AssetImage("assets/images/watchlist2.png"),
+                                image: AssetImage("assets/images/onboarding-nft-6.png"),
                               ),
                             ],
                           ),
@@ -91,7 +108,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text.rich(
+                                    const Text.rich(
                                       TextSpan(
                                         text: "Funky Monkey",
                                         style: TextStyle(
@@ -100,20 +117,29 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      "14K",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
+                                    if(widget.deleteNft)
+                                      const Text(
+                                        "14K",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.5, end: 0),
+                                    if(!widget.deleteNft)
+                                      const Text(
+                                        "14K",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 ),
                                 const Gap(4),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text.rich(
+                                    const Text.rich(
                                       TextSpan(
                                         text: "\$123.39",
                                         style: TextStyle(
@@ -123,16 +149,28 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                         ),
                                       ),
                                     ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: "32 APT ",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.grey,
+                                    if(widget.deleteNft)
+                                      const Text.rich(
+                                        TextSpan(
+                                          text: "32 APT ",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey,
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                      ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.3, end: 0),
+                                    if(!widget.deleteNft)
+                                      const Text.rich(
+                                        TextSpan(
+                                          text: "32 APT ",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      )
                                   ],
                                 ),
                               ],
@@ -175,22 +213,21 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 visible: clickDelete,
                                 child: AnimatedBuilder(
                                   animation: _controller,
-                                  builder: (context, child) {
-                                    return ShaderMask(
+                                  builder: (context, child) => ShaderMask(
                                       shaderCallback: (Rect bounds) => LinearGradient(
-                                        colors: <Color>[Colors.grey, Colors.grey.withOpacity(0.6)],
+                                        // colors: <Color>[Colors.grey, Colors.grey.withOpacity(0.6)],
+                                           colors: <Color>[AppColors.greyDark, AppColors.greyLight.withOpacity(0.6)],
                                         stops: <double>[_controller.value, _controller.value],
                                       ).createShader(bounds),
                                       child: Text(
                                         "Removing from collection",
                                         style: TextStyle(
-                                          color: Colors.grey.withOpacity(0.6),
+                                          color: AppColors.greyLight.withOpacity(0.6),
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
                                         ),
                                       ),
-                                    );
-                                  },
+                                    ),
                                 ),
                               ),
                               GestureDetector(
@@ -200,8 +237,8 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(color: Colors.black, width: 1),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 4),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 4),
                                     child: Text(
                                       "undo",
                                       style: TextStyle(

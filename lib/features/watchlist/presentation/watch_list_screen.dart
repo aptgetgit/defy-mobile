@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../components/watchlist_nft_tab.dart';
 import '../components/watchlist_token_tab.dart';
-import '../../../../config/theme/colors.dart'; // Adjust the import path as needed
+
+
+
+
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
- const MyApp({super.key});
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const WatchListScreen(),
+  Widget build(BuildContext context) => const MaterialApp(
+      home: WatchListScreen(),
     );
-  }
 }
 
 class WatchListScreen extends StatefulWidget {
@@ -27,15 +29,8 @@ class WatchListScreen extends StatefulWidget {
   State<WatchListScreen> createState() => _WatchListScreenState();
 }
 
-class _WatchListScreenState extends State<WatchListScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _WatchListScreenState extends State<WatchListScreen> {
   int tabIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
 
   void changeTab(int i) {
     setState(() {
@@ -44,94 +39,109 @@ class _WatchListScreenState extends State<WatchListScreen> with SingleTickerProv
   }
 
   @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
-            PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
-            color: Colors.black,
-            size: 18,
-          ),
           onPressed: () {
             Navigator.pop(context);
           },
+          icon: Icon(
+            PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
+            color: Colors.black,
+            size: 24,
+          ),
         ),
-        title: Text(
+        title: const Text(
           "Watchlist",
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Colors.black,
+            fontSize: 18,
           ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16.0), // Add padding to the right
+            padding: const EdgeInsets.only(right: 18),
             child: Icon(
-              PhosphorIcons.star(PhosphorIconsStyle.bold),
+              PhosphorIcons.star(PhosphorIconsStyle.regular),
               color: Colors.black,
-              size: 21,
+              size: 24,
             ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(48.0),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add padding to the TabBar
-                child: TabBar(
-                  controller: _tabController,
-                  isScrollable: true,
-                  indicatorColor: Colors.black,
-                  indicator: const UnderlineTabIndicator(
-                    borderSide: BorderSide(width: 2),
+              const Gap(24),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      changeTab(0);
+                    },
+                    child: SizedBox(
+                      width: 80,
+                      child: Center(
+                        child: Text(
+                          "NFTs",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: tabIndex == 0 ? Colors.black : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  labelColor: Colors.black,
-                  unselectedLabelColor: AppColors.greyLight,
-                  labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                  unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                  labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  padding: EdgeInsets.zero,
-                  indicatorWeight: 1,
-                  dividerHeight: 1,
-                  dividerColor: AppColors.greyVeryLight,
-                  tabs: const <Widget>[
-                    Tab(text: 'NFTs'),
-                    Tab(text: 'Tokens'),
-                  ],
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      changeTab(1);
+                    },
+                    child: SizedBox(
+                      width: 80,
+                      child: Center(
+                        child: Text(
+                          "Tokens",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: tabIndex == 1 ? Colors.black : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add padding to the grey line
-                child: Container(
+              const Gap(2),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  width: 160,
                   height: 1,
-                  color: AppColors.greyVeryLight, // Light grey line
+                  child: Stack(
+                    children: [
+                      AnimatedPositioned(
+                        duration: const Duration(milliseconds: 300),
+                        left: tabIndex * 80,
+                        child: Container(
+                          color: Colors.black,
+                          width: 80,
+                          height: 1,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+              const Gap(32),
+              if (tabIndex == 0) const WatchlistNFTTab(),
+              if (tabIndex == 1) const WatchlistTokensTab(),
             ],
           ),
         ),
       ),
-      body: SafeArea(
-        child: TabBarView(
-          controller: _tabController,
-          children: const <Widget>[
-            WatchlistNFTTab(),
-            WatchlistTokensTab(),
-          ],
-        ),
-      ),
     );
-  }
 }

@@ -12,12 +12,14 @@ import '../../../config/theme/colors.dart';
 
 import '../../shared/presentation/widgets/custom_check_box.dart';
 import '../../shared/presentation/widgets/nft_item.dart';
+import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
+import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
+import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
 
 import '../data/models/nft_models.dart';
 import '../data/models/token_data.dart';
 
 import '../data/models/token_models.dart';
-
 
 import '../widgets/watchlist_sheet.dart';
 import 'custom_nav_bar.dart';
@@ -47,12 +49,19 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
   bool _isSortAlphabetButtonSelected = false;
   bool _isSort24hrButtonSelected = false;
   bool _isUserScrolling = false;
-  bool _isChecked = false;
   String _selectedBalanceOption = 'Total Balance';
   final Map<int, Set<int>> _selectedNFTs = <int, Set<int>>{};
   List<NFTCollection> _displayedNFTCollections = <NFTCollection>[];
-  Map<int, bool> _expandedStates = {};
-  Map<int, bool> _allCollectionNFTsSelected = {}; // New map to track collection checkbox states
+  final Map<int, bool> _expandedStates = <int, bool>{};
+  final Map<int, bool> _allCollectionNFTsSelected = <int, bool>{}; // New map to track collection checkbox states
+  final Set<int> _watchlistTokens = <int>{}; // Track the watchlist tokens
+  OverlayEntry? _overlayEntry;
+
+  final Map<int, Widget> _collectionScreens = {
+    0: const WatchlistSafetyTokensScreen(), // Replace with your actual screen widgets
+    1: const WatchlistAvatarNFTScreen(),
+    2: const WatchlistCuteNFTScreen(),
+  };
 
   void _onMoreButtonPressed() {
     setState(() {
@@ -60,7 +69,7 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
 
       if (_isMoreButtonSelected) {
         _scrollController.animateTo(
-          180,
+          170,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
@@ -76,7 +85,7 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
     _displayedNFTCollections = _buildNFTCollections();
     _scrollController2 = ScrollController();
 
-    _scrollController.addListener(() {
+    _scrollController..addListener(() {
       if (_scrollController.position.userScrollDirection != ScrollDirection.idle) {
         setState(() {
           _isUserScrolling = true;
@@ -86,9 +95,9 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
           _isUserScrolling = false;
         });
       }
-    });
+    })
 
-    _scrollController.addListener(() {
+    ..addListener(() {
       final double offset = _scrollController.offset;
       final double newOpacity = (1 - (offset / 100)).clamp(0.0, 1.0);
 
@@ -150,14 +159,14 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
         _displayedTokens.removeWhere((Token token) => _selectedTokens.contains(tokens.indexOf(token)));
 
         // Update NFT Collections (Fixed)
-        final allCollections = _buildNFTCollections();
-        _displayedNFTCollections = allCollections.map((collection) {
-          final collectionIndex = allCollections.indexOf(collection);
+        final List<NFTCollection> allCollections = _buildNFTCollections();
+        _displayedNFTCollections = allCollections.map((NFTCollection collection) {
+          final int collectionIndex = allCollections.indexOf(collection);
           return NFTCollection(
             name: collection.name,
             count: collection.count,
-            nfts: collection.nfts.where((nft) {
-              final nftIndex = collection.nfts.indexOf(nft);
+            nfts: collection.nfts.where((NFT nft) {
+              final int nftIndex = collection.nfts.indexOf(nft);
               return !_selectedNFTs.containsKey(collectionIndex) || 
                     !_selectedNFTs[collectionIndex]!.contains(nftIndex);
             }).toList(),
@@ -280,72 +289,79 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _TabBarDelegate(
-                  Container(
-                    color: Colors.white,
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TabBar(
-
-                            controller: _tabController,
-                            isScrollable: true,
-                            indicatorColor: Colors.black,
-                            indicator: const UnderlineTabIndicator(
-                              borderSide: BorderSide(width: 2),
-                            ),
-                            tabAlignment: TabAlignment.start,
-                            labelColor: Colors.black,
-                            unselectedLabelColor: AppColors.greyLight,
-                            labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                            unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                            labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                            padding: EdgeInsets.zero,
-                            indicatorWeight: 1,
-                            dividerHeight: 1,
-                            dividerColor: AppColors.greyVeryLight,
-                            tabs: const <Widget>[
-                              Tab(text: 'Token'),
-                              Tab(text: 'NFT'),
-                            ],
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: AppColors.greyVeryLight,
                           ),
                         ),
-                        if(!_isMoreButtonSelected)
-                          // Show the balance text only when it's hidden from the main UI
-                          AnimatedOpacity(
-                            opacity: _isBalanceHidden && _isUserScrolling ? 1 : 0,
-                            duration: const Duration(milliseconds: 250),
-                            child: const Padding(
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                r'$1,038.56',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.black,
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TabBar(   
+                              controller: _tabController,
+                              isScrollable: true,
+                              indicatorColor: Colors.black,
+                              indicator: const UnderlineTabIndicator(
+                                borderSide: BorderSide(width: 2),
+                              ),
+                              tabAlignment: TabAlignment.start,
+                              labelColor: Colors.black,
+                              unselectedLabelColor: AppColors.greyLight,
+                              labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                              unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                              labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding: EdgeInsets.zero,
+                              indicatorWeight: 1,
+                              dividerHeight: 1,
+                              dividerColor: AppColors.greyVeryLight,
+                              tabs: const <Widget>[
+                                Tab(text: 'Token'),
+                                Tab(text: 'NFT'),
+                              ],
+                            ),
+                          ),
+                          if(!_isMoreButtonSelected)
+                            // Show the balance text only when it's hidden from the main UI
+                            AnimatedOpacity(
+                              opacity: _isBalanceHidden && _isUserScrolling ? 1 : 0,
+                              duration: const Duration(milliseconds: 250),
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  r'$1,038.56',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.black,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const Gap(9),
-                        // More options button
-                        if (_isMoreButtonSelected)
-                          TextButton(
-                            onPressed: _onDonePressed,
-                            child: const Text(
-                              'Done',
-                              style: TextStyle(color: AppColors.blue, fontSize: 18),
+                            const Gap(9),
+                          // More options button
+                          if (_isMoreButtonSelected)
+                            TextButton(
+                              onPressed: _onDonePressed,
+                              child: const Text(
+                                'Done',
+                                style: TextStyle(color: AppColors.blue, fontSize: 18),
+                              ),
+                            )
+                          else
+                            GestureDetector(
+                              onTap: _onMoreButtonPressed,
+                              child: const Icon(
+                                PhosphorIconsBold.dotsThreeVertical,
+                                color: AppColors.greyLight,
+                              ),
                             ),
-                          )
-                        else
-                          GestureDetector(
-                            onTap: _onMoreButtonPressed,
-                            child: const Icon(
-                              PhosphorIconsBold.dotsThreeVertical,
-                              color: AppColors.greyLight,
-                            ),
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -569,9 +585,83 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (BuildContext context) => WatchlistBottomSheet(),
+      builder: (BuildContext context) => WatchlistBottomSheet(
+        onAddToWatchlist: (int? collectionIndex) {
+            setState(() {
+              _watchlistTokens.addAll(_selectedTokens);
+              _showWatchlistAddedMessage(collectionIndex);
+              _selectedTokens.clear();
+            });
+          },
+      ),
     );
   }
+
+  void _showWatchlistAddedMessage(int? collectionIndex) {
+    _overlayEntry?.remove(); // Remove any existing overlay
+
+    _overlayEntry = OverlayEntry(
+      builder: (BuildContext context) => Positioned(
+        bottom: 120, // Adjust position as needed
+        left: 35,
+        right: 35,
+        child: Material( // Wrap with Material for shadow
+          elevation: 4.0,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            height: 60,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                _overlayEntry?.remove(); // Remove the overlay
+                _overlayEntry = null;
+
+                // Navigate to the appropriate screen based on the collection index
+                if (collectionIndex != null && _collectionScreens.containsKey(collectionIndex)) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => _collectionScreens[collectionIndex]!),
+                  );
+                } else {
+                  // Handle the case where the collection index is null or not found in the map
+                  print("Invalid collection index or screen not found.");
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Image.asset('assets/icons/watchlist-logo2.png', width: 32, height: 32,),
+                  const Text(
+                    'Tokens Added to Watchlist',
+                    style: TextStyle(color: AppColors.greyDark, fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20, color: AppColors.greyLight,),
+                    onPressed: () {
+                      _overlayEntry?.remove();
+                      _overlayEntry = null;
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    Overlay.of(context).insert(_overlayEntry!);
+
+    // Hide the message after a delay
+    Future.delayed(const Duration(seconds: 3), () {
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+    });
+  }
+
 
   Widget _buildBalanceSheetContent() => StatefulBuilder(
     builder: (BuildContext context, StateSetter setState) => Align(
@@ -706,6 +796,7 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
       final int actualIndex = tokens.indexOf(token);
       final bool isSelected = _selectedTokens.contains(actualIndex);
       final bool isHidden = _hideSelected && isSelected;
+      final bool isInWatchlist = _watchlistTokens.contains(actualIndex);
 
       if (isHidden && !_isMoreButtonSelected) {
         return const SizedBox.shrink(); // Hide the item
@@ -716,11 +807,21 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
         child: ListTile(
           title: Text(token.name, style: TextStyle(fontSize: 18, color: isSelected ? Colors.grey : Colors.black)),
           subtitle: Text('${token.amount} ${token.currency}', style: TextStyle(fontSize: 14, color: isSelected ? Colors.grey : AppColors.greyLight)),
-          leading: Opacity(
-            opacity: isSelected ? 0.5 : 1,
-            child: ClipOval(
-              child: Image.asset(token.imagePath, width: 44, height: 44,),
-            ),
+          leading: Stack(
+            children: <Widget>[
+              Opacity(
+                opacity: isSelected ? 0.5 : 1,
+                child: ClipOval(
+                  child: Image.asset(token.imagePath, width: 44, height: 44,),
+                ),
+              ),
+              if (isInWatchlist && _isMoreButtonSelected) // Show star if watchlisted
+                Positioned(
+                  top: -4, // Adjust position as needed
+                  left: -4,
+                  child: Image.asset('assets/icons/watchlist-logo2.png', width: 21, height: 21,),
+                ),
+            ],
           ),
           trailing: _isMoreButtonSelected
               ? Row(
@@ -739,7 +840,7 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
                           ),
                         ),
                       ],
-                    ),
+                    ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.5, end: 0),
         
                     const Gap(16),
                     CustomCheckbox(
@@ -747,14 +848,14 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
                       isRound: true,
                       onTap: () {
                         setState(() {
-                          if (isSelected) {
+                          if (_selectedTokens.contains(actualIndex)) {
                             _selectedTokens.remove(actualIndex);
                           } else {
                             _selectedTokens.add(actualIndex);
                           }
                         });
                       },
-                    ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 1, end: 0),
+                    )
                   ],
                 )
               : Row(
@@ -810,10 +911,10 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
         ? _buildNFTCollections()[collectionIndex] 
         : _displayedNFTCollections[collectionIndex];
 
-      bool isExpanded = _expandedStates[collectionIndex] ?? true;
+      final bool isExpanded = _expandedStates[collectionIndex] ?? true;
       bool isCollectionSelected = _allCollectionNFTsSelected[collectionIndex] ?? false;
 
-      bool areAllItemsSelected = _selectedNFTs[collectionIndex]?.length == collection.nfts.length;
+      final bool areAllItemsSelected = _selectedNFTs[collectionIndex]?.length == collection.nfts.length;
       if (areAllItemsSelected && !isCollectionSelected) {
         _allCollectionNFTsSelected[collectionIndex] = true;
         isCollectionSelected = true;
@@ -824,120 +925,143 @@ class _WalletScreenState extends State<WalletScreen> with SingleTickerProviderSt
       }
 
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Gap(8),
             // Collection Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      const CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/nft1.png'),
-                        radius: 14,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    const CircleAvatar(
+                      backgroundImage: AssetImage('assets/images/nft1.png'),
+                      radius: 14,
+                    ),
+                    const Gap(8),
+                    Text(
+                      collection.name,
+                      style: const TextStyle(
+                        fontSize: 18, 
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        collection.name,
-                        style: const TextStyle(
-                          fontSize: 18, 
-                          fontWeight: FontWeight.w500
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    if (_isMoreButtonSelected) 
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          collection.count.toString(),
+                          style: const TextStyle(
+                            fontSize: 18, 
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        collection.count.toString(),
-                        style: const TextStyle(
-                          fontSize: 18, 
-                          fontWeight: FontWeight.w600
+                        const Gap(28),
+                        CustomCheckbox( // Use your CustomCheckbox
+                          isChecked: isCollectionSelected,
+                          isRound: true,
+                          onTap: () {
+                            setState(() {
+                              _allCollectionNFTsSelected[collectionIndex] = !isCollectionSelected; // Toggle the state
+                              if (_allCollectionNFTsSelected[collectionIndex]!) { // Check if it's now selected
+                                _selectedNFTs[collectionIndex] = Set.from(List.generate(collection.nfts.length, (int index) => index));
+                              } else {
+                                _selectedNFTs.remove(collectionIndex);
+                              }
+                            });
+                          },
                         ),
+                      ],
+                    ) else 
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            collection.count.toString(),
+                            style: const TextStyle(
+                              fontSize: 18, 
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          IconButton( 
+                            padding: EdgeInsets.zero,
+                            alignment:  Alignment.centerRight,
+                            onPressed: () {
+                              setState(() {
+                                _expandedStates[collectionIndex] = !isExpanded;
+                              });
+                            },
+                            icon: Icon(
+                              isExpanded ? PhosphorIconsBold.caretDown : PhosphorIconsBold.caretUp,
+                              size: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                      const Gap(16),
-                      if (_isMoreButtonSelected) 
-                      CustomCheckbox( // Use your CustomCheckbox
-                        isChecked: isCollectionSelected,
-                        isRound: true,
-                        onTap: () {
-                          setState(() {
-                            _allCollectionNFTsSelected[collectionIndex] = !isCollectionSelected; // Toggle the state
-                            if (_allCollectionNFTsSelected[collectionIndex]!) { // Check if it's now selected
-                              _selectedNFTs[collectionIndex] = Set.from(List.generate(collection.nfts.length, (index) => index));
-                            } else {
-                              _selectedNFTs.remove(collectionIndex);
-                            }
-                          });
-                        },
-                      ) else IconButton( 
-                        onPressed: () {
-                          setState(() {
-                            _expandedStates[collectionIndex] = !isExpanded;
-                          });
-                        },
-                        icon: Icon(
-                          isExpanded ? PhosphorIconsBold.caretUp : PhosphorIconsBold.caretDown,
-                          size: 16,
-                        ),
-                      ),
-                ],
-                  ),
-                ],
-              ),
+              ],
+                ),
+              ],
             ),
-            const Gap(16),
+            if(_isMoreButtonSelected) const Gap(12),
 
-            if (isExpanded)
-              // NFT Grid
-              SizedBox(
-                width: double.infinity,
-                height: (collection.nfts.length / 2).ceil() * 250,
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    mainAxisExtent: 250,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              height: isExpanded || _isMoreButtonSelected ? (collection.nfts.length / 2).ceil() * 240 : 0,
+              child: ClipRect(
+                child: AnimatedOpacity(
+                  opacity: isExpanded ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        mainAxisExtent: 250,
+                      ),
+                      itemCount: collection.nfts.length,
+                      itemBuilder: (BuildContext context, int nftIndex) {
+                        final NFT nft = collection.nfts[nftIndex];
+                        final bool isSelected = _selectedNFTs.containsKey(collectionIndex) && 
+                                            _selectedNFTs[collectionIndex]!.contains(nftIndex);
+                        final bool isHidden = _hideSelected && isSelected;
+                  
+                        // Hide the item if it's selected and hide is active (but not in selection mode)
+                        if (isHidden && !_isMoreButtonSelected) {
+                          return const SizedBox.shrink();
+                        }
+                  
+                        return NFTItem(
+                          nft: nft,
+                          isSelected: isSelected,
+                          showCheckbox: _isMoreButtonSelected, // Only show checkbox when in selection mode
+                          onCheckboxChanged: _isMoreButtonSelected ? (bool newValue) {
+                            setState(() {
+                              if (!_selectedNFTs.containsKey(collectionIndex)) {
+                                _selectedNFTs[collectionIndex] = <int>{};
+                              }
+                              if (newValue) {
+                                _selectedNFTs[collectionIndex]!.add(nftIndex);
+                              } else {
+                                _selectedNFTs[collectionIndex]!.remove(nftIndex);
+                              }
+                            });
+                          } : null,
+                        );
+                      },
+                    ),
                   ),
-                  itemCount: collection.nfts.length,
-                  itemBuilder: (BuildContext context, int nftIndex) {
-                    final NFT nft = collection.nfts[nftIndex];
-                    final bool isSelected = _selectedNFTs.containsKey(collectionIndex) && 
-                                        _selectedNFTs[collectionIndex]!.contains(nftIndex);
-                    final bool isHidden = _hideSelected && isSelected;
-
-                    // Hide the item if it's selected and hide is active (but not in selection mode)
-                    if (isHidden && !_isMoreButtonSelected) {
-                      return const SizedBox.shrink();
-                    }
-
-                    return NFTItem(
-                      nft: nft,
-                      isSelected: isSelected,
-                      showCheckbox: _isMoreButtonSelected, // Only show checkbox when in selection mode
-                      onCheckboxChanged: _isMoreButtonSelected ? (bool newValue) {
-                        setState(() {
-                          if (!_selectedNFTs.containsKey(collectionIndex)) {
-                            _selectedNFTs[collectionIndex] = <int>{};
-                          }
-                          if (newValue) {
-                            _selectedNFTs[collectionIndex]!.add(nftIndex);
-                          } else {
-                            _selectedNFTs[collectionIndex]!.remove(nftIndex);
-                          }
-                        });
-                      } : null,
-                    );
-                  },
                 ),
               ),
+            ),
           ],
         ),
       );

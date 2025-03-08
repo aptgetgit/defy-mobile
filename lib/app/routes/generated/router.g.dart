@@ -19,6 +19,9 @@ List<RouteBase> get $appRoutes => [
       $pumpFunTokenPreviewScreenRoute,
       $exploreLeaderboardScreenRoute,
       $homeRoute,
+      $nftInfoRoute,
+      $nftInfoAudioRoute,
+      $nftInfoVideoRoute,
       $onboardingRoute,
       $receiveScreenRoute,
       $receiveSelectScreenRoute,
@@ -26,10 +29,19 @@ List<RouteBase> get $appRoutes => [
       $receiveShareScreenRoute,
       $receiveMethodScreenRoute,
       $splashRoute,
+      $stakeRoute,
+      $stakeAmountRoute,
+      $stakeAmountDelegateRoute,
+      $tokensInfoRoute,
       $walletScreenRoute,
       $walletMoreScreenRoute,
       $walletSearchScreenRoute,
       $walletWatchListScreenRoute,
+      $lendRoute,
+      $lendAmountRoute,
+      $borrowRoute,
+      $borrowAmountRoute,
+      $swapRoute,
     ];
 
 RouteBase get $exploreScreenRoute => GoRouteData.$route(
@@ -311,6 +323,74 @@ extension $HomeRouteExtension on HomeRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $nftInfoRoute => GoRouteData.$route(
+      path: '/nft-info',
+      factory: $NftInfoRouteExtension._fromState,
+    );
+
+extension $NftInfoRouteExtension on NftInfoRoute {
+  static NftInfoRoute _fromState(GoRouterState state) => const NftInfoRoute();
+
+  String get location => GoRouteData.$location(
+        '/nft-info',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $nftInfoAudioRoute => GoRouteData.$route(
+      path: '/nft-info-audio',
+      factory: $NftInfoAudioRouteExtension._fromState,
+    );
+
+extension $NftInfoAudioRouteExtension on NftInfoAudioRoute {
+  static NftInfoAudioRoute _fromState(GoRouterState state) =>
+      const NftInfoAudioRoute();
+
+  String get location => GoRouteData.$location(
+        '/nft-info-audio',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $nftInfoVideoRoute => GoRouteData.$route(
+      path: '/nft-info-video',
+      factory: $NftInfoVideoRouteExtension._fromState,
+    );
+
+extension $NftInfoVideoRouteExtension on NftInfoVideoRoute {
+  static NftInfoVideoRoute _fromState(GoRouterState state) =>
+      const NftInfoVideoRoute();
+
+  String get location => GoRouteData.$location(
+        '/nft-info-video',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $onboardingRoute => GoRouteData.$route(
       path: '/onboarding',
       factory: $OnboardingRouteExtension._fromState,
@@ -471,6 +551,97 @@ extension $SplashRouteExtension on SplashRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $stakeRoute => GoRouteData.$route(
+      path: '/stake',
+      factory: $StakeRouteExtension._fromState,
+    );
+
+extension $StakeRouteExtension on StakeRoute {
+  static StakeRoute _fromState(GoRouterState state) => const StakeRoute();
+
+  String get location => GoRouteData.$location(
+        '/stake',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $stakeAmountRoute => GoRouteData.$route(
+      path: '/stake-amount',
+      factory: $StakeAmountRouteExtension._fromState,
+    );
+
+extension $StakeAmountRouteExtension on StakeAmountRoute {
+  static StakeAmountRoute _fromState(GoRouterState state) =>
+      const StakeAmountRoute();
+
+  String get location => GoRouteData.$location(
+        '/stake-amount',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $stakeAmountDelegateRoute => GoRouteData.$route(
+      path: '/stake-amount-delegate',
+      factory: $StakeAmountDelegateRouteExtension._fromState,
+    );
+
+extension $StakeAmountDelegateRouteExtension on StakeAmountDelegateRoute {
+  static StakeAmountDelegateRoute _fromState(GoRouterState state) =>
+      const StakeAmountDelegateRoute();
+
+  String get location => GoRouteData.$location(
+        '/stake-amount-delegate',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tokensInfoRoute => GoRouteData.$route(
+      path: '/token',
+      factory: $TokensInfoRouteExtension._fromState,
+    );
+
+extension $TokensInfoRouteExtension on TokensInfoRoute {
+  static TokensInfoRoute _fromState(GoRouterState state) =>
+      const TokensInfoRoute();
+
+  String get location => GoRouteData.$location(
+        '/token',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $walletScreenRoute => GoRouteData.$route(
       path: '/wallet',
       factory: $WalletScreenRouteExtension._fromState,
@@ -563,11 +734,123 @@ extension $WalletWatchListScreenRouteExtension on WalletWatchListScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $lendRoute => GoRouteData.$route(
+      path: '/lend',
+      factory: $LendRouteExtension._fromState,
+    );
+
+extension $LendRouteExtension on LendRoute {
+  static LendRoute _fromState(GoRouterState state) => const LendRoute();
+
+  String get location => GoRouteData.$location(
+        '/lend',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $lendAmountRoute => GoRouteData.$route(
+      path: '/lend-amount',
+      factory: $LendAmountRouteExtension._fromState,
+    );
+
+extension $LendAmountRouteExtension on LendAmountRoute {
+  static LendAmountRoute _fromState(GoRouterState state) =>
+      const LendAmountRoute();
+
+  String get location => GoRouteData.$location(
+        '/lend-amount',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $borrowRoute => GoRouteData.$route(
+      path: '/borrow',
+      factory: $BorrowRouteExtension._fromState,
+    );
+
+extension $BorrowRouteExtension on BorrowRoute {
+  static BorrowRoute _fromState(GoRouterState state) => const BorrowRoute();
+
+  String get location => GoRouteData.$location(
+        '/borrow',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $borrowAmountRoute => GoRouteData.$route(
+      path: '/borrow-amount',
+      factory: $BorrowAmountRouteExtension._fromState,
+    );
+
+extension $BorrowAmountRouteExtension on BorrowAmountRoute {
+  static BorrowAmountRoute _fromState(GoRouterState state) =>
+      const BorrowAmountRoute();
+
+  String get location => GoRouteData.$location(
+        '/borrow-amount',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $swapRoute => GoRouteData.$route(
+      path: '/swap',
+      factory: $SwapRouteExtension._fromState,
+    );
+
+extension $SwapRouteExtension on SwapRoute {
+  static SwapRoute _fromState(GoRouterState state) => const SwapRoute();
+
+  String get location => GoRouteData.$location(
+        '/swap',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'90bfb70b632ecf65ea2219744dad31624394b1cd';
+String _$routerHash() => r'e441a26e6c3a05810b0a6c601b7a88e5879f7032';
 
 /// See also [router].
 @ProviderFor(router)

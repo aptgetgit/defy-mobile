@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../presentation/watchlist_cute_nft_screen.dart';
 import '../widgets/watchlist_cute_nft_tile.dart';
 import '../widgets/watchlist_grid_tile.dart';
 import '../widgets/watchlist_newList_tile.dart';
 import '../widgets/watchlist_new_collection.dart';
+import '../presentation/watchlist_cute_nft_screen.dart';
 
 
 class WatchlistNFTTab extends StatefulWidget {

@@ -6,7 +6,9 @@ import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_check_box.dart';
 
 class WatchlistBottomSheet extends StatefulWidget {
-  const WatchlistBottomSheet({super.key});
+  final Function(int?) onAddToWatchlist;
+
+  const WatchlistBottomSheet({super.key, required this.onAddToWatchlist});
 
   @override
   State<WatchlistBottomSheet> createState() => _WatchlistBottomSheetState();
@@ -15,9 +17,16 @@ class WatchlistBottomSheet extends StatefulWidget {
 class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
   // Add your selection logic here.  For example:
   int? _selectedCollectionIndex; // Track the selected collection
+  bool _isCreatingCollection = false;
 
   @override
-  Widget build(BuildContext context) => Align(
+  Widget build(BuildContext context) {
+    return _isCreatingCollection // Show create collection screen if true
+        ? _buildCreateCollectionScreen()
+        : _buildMainBottomSheet(); // Otherwise, show the main bottom sheet
+  }
+
+  Widget _buildMainBottomSheet() => Align(
       alignment: Alignment.bottomCenter,
       child: Container(
         decoration: const BoxDecoration(
@@ -89,7 +98,11 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                   ),
                   const Gap(10),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      setState(() {
+                        _isCreatingCollection = true; // Navigate to create screen
+                      });
+                    },
                     child: Container(
                       height: 54,
                       width: double.infinity,
@@ -112,13 +125,14 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                     onPressed: () {
                       // Implement add to watchlist logic, using _selectedCollectionIndex
                       if (_selectedCollectionIndex != null) {
-                        // Access the selected collection using _selectedCollectionIndex
-                        print(
-                            'Adding collection at index $_selectedCollectionIndex to watchlist',);
+                        widget.onAddToWatchlist(_selectedCollectionIndex!);
+                        Navigator.pop(context);
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.black,
+                      backgroundColor: _selectedCollectionIndex != null
+                          ? AppColors.black
+                          : AppColors.greyMedium,
                       elevation: 0,
                       foregroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 54),
@@ -136,6 +150,85 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
         ),
       ),
     );
+
+  Widget _buildCreateCollectionScreen() => Align(
+    alignment: Alignment.bottomCenter,
+    child: Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(21),
+            topRight: Radius.circular(21),
+          ),
+        ),
+        padding: const EdgeInsets.only(top: 12,bottom: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 4, right: 4),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isCreatingCollection = false; // Go back to main sheet
+                      });
+                    },
+                    icon: const Icon(PhosphorIconsBold.caretLeft, size: 24), // Back button
+                  ),
+                  const Text(
+                    'New Token Collection',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close the whole sheet
+                    },
+                    icon: const Icon(PhosphorIconsBold.x, color: Colors.black, size: 24),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Gap(8),
+                  const Text("Collections helps you to group tokens and keep track on them",
+                    style: TextStyle(fontSize: 16, color: AppColors.greyLight),),
+                  const Gap(20),
+                  const Text("Collection name", style: TextStyle(fontSize: 14,color: AppColors.greyLight)),
+                  const Gap(4),
+                  Container(
+                    height: 54,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.greyVeryLight,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 
   Widget _buildCollectionItem({
     required String title,

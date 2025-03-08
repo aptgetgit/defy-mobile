@@ -63,7 +63,7 @@ bool _isListVisible = false; // Controls animation
   }
 
   Future<void> _nextPage() async {
-    print("Current Page Before: $_currentPage");
+    print("Current Page Before next page: $_currentPage");
     if (_currentPage < 2) {
       setState(() {
         _currentPage++; // Update the page first
@@ -73,22 +73,30 @@ bool _isListVisible = false; // Controls animation
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-      print("Current Page After: $_currentPage");
+      print("Current Page After next page: $_currentPage");
     }
   }
 
   void _previousPage() {
+
+    print("Current Page Before back page: $_currentPage");
+
     if (_currentPage > 0) {
       setState(() {
         _currentPage--;
       });
+      print("after set state: $_currentPage");
+
       _pageController.animateToPage(
         _currentPage,
+        
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
+      print("Current Page animatteTo: $_currentPage");
     } else {
-      Navigator.pop(context); // Go back to the previous screen if on the first page
+      Navigator.pop(context);
+      print("Current Page else case: $_currentPage"); // Go back to the previous screen if on the first page
     }
   }
 
@@ -193,6 +201,8 @@ bool _isListVisible = false; // Controls animation
                             contentPadding: EdgeInsets.symmetric(vertical: 12),
                           ),
                         ),
+                        //don't use positioned directly in the stack
+
                         Positioned(
                           left: 100,
                           child: Icon(

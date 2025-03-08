@@ -139,11 +139,15 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
     final width = context.screenWidth;
     return GestureDetector(
       onTap : (){
-        _controller..reset() // Reset the animation
-        ..forward(); // Start the animation
-        Future.delayed(_controller.duration!, () {
+         _controller..reset() // Reset the animation
+         ..forward() // Start the animation
+         ..reverse(); // Reverse the animation
+        Future.delayed(Duration(milliseconds: 600), () {
+          _controller..animateTo(0.0, duration: Duration(milliseconds: 300));
           ExploreMarketScreenRoute().push(context);
+          
         });
+        
       },
       child: SlideTransition(
         position: slideAnimation1,

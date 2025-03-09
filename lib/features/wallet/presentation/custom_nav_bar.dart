@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../config/theme/colors.dart';
-
-import '../../shared/presentation/widgets/dashboard_floating_action.dart';
+import '../../shared/presentation/dashboard-floating-action-button.dart';
 
 class CustomNavBar extends ConsumerWidget {
-  final int pageIndex;
-  final Function(int) onTabChange;
-  final bool isMoreOptionsSelected;
-  final VoidCallback onHidePressed;
-  final VoidCallback onSortPressed;
-  final VoidCallback onWatchlistPressed;
 
   const CustomNavBar({
     super.key,
@@ -24,6 +17,12 @@ class CustomNavBar extends ConsumerWidget {
     required this.onSortPressed,
     required this.onWatchlistPressed,
   });
+  final int pageIndex;
+  final Function(int) onTabChange;
+  final bool isMoreOptionsSelected;
+  final VoidCallback onHidePressed;
+  final VoidCallback onSortPressed;
+  final VoidCallback onWatchlistPressed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Container(
@@ -37,7 +36,7 @@ class CustomNavBar extends ConsumerWidget {
           child: FractionallySizedBox(
             widthFactor: !isMoreOptionsSelected ? 1 : 0.8,
             child: Stack(
-              children: [
+              children: <Widget>[
                 Container(
                   height: 90,
                   alignment: Alignment.bottomCenter,
@@ -50,8 +49,7 @@ class CustomNavBar extends ConsumerWidget {
                     child: !isMoreOptionsSelected
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
+                            children: <Widget>[
                               IconButton(
                                 onPressed: () => onTabChange(0),
                                 icon: Icon(
@@ -101,15 +99,15 @@ class CustomNavBar extends ConsumerWidget {
                           )
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
+                            children: <Widget>[
                               IconButton(
                                 onPressed: onSortPressed,
                                 icon: Column(
-                                  children: [
+                                  children: <Widget>[
                                     Icon(
                                       color: AppColors.greyLight, // Replace with your color
                                       PhosphorIcons.arrowBendDoubleUpLeft(
-                                        PhosphorIconsStyle.regular,
+                                        
                                       ),
                                     ),
                                     const Text(
@@ -124,11 +122,11 @@ class CustomNavBar extends ConsumerWidget {
                               IconButton(
                                 onPressed: onWatchlistPressed,
                                 icon: Column(
-                                  children: [
+                                  children: <Widget>[
                                     Icon(
                                       color: AppColors.greyLight, // Replace with your color
                                       PhosphorIcons.star(
-                                        PhosphorIconsStyle.regular,
+                                        
                                       ),
                                     ),
                                     const Text(
@@ -143,11 +141,11 @@ class CustomNavBar extends ConsumerWidget {
                               IconButton(
                                 onPressed: onHidePressed,
                                 icon: Column(
-                                  children: [
+                                  children: <Widget>[
                                     Icon(
                                       color: AppColors.greyLight, // Replace with your color
                                       PhosphorIcons.eye(
-                                        PhosphorIconsStyle.regular,
+                                        
                                       ),
                                     ),
                                     const Text(

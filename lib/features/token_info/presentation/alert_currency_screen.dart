@@ -11,7 +11,7 @@ class CurrencyChooserScreen extends StatefulWidget {
 }
 
 class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
-  List<String> currencies = ['Pound', 'INR', 'Dollar']; // Sample currency list
+  List<String> currencies = <String>['Pound', 'INR', 'Dollar']; // Sample currency list
   String searchText = '';
   String? selectedCurrency;
 
@@ -20,18 +20,18 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white, // White AppBar
         leading: IconButton(
-          icon: Icon(PhosphorIconsBold.caretLeft, color: Colors.black, size: 24,), // Black back arrow
+          icon: const Icon(PhosphorIconsBold.caretLeft, color: Colors.black, size: 24,), // Black back arrow
           onPressed: () {
             Navigator.pop(context); // Handle back button press
           },
         ),
-        title: Text(
+        title: const Text(
           'Choose Currency',
           style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600), // Black title text
         ),
-        actions: [
+        actions: <Widget>[
           IconButton(
-            icon: Icon(PhosphorIconsBold.gear, color: Colors.black, size: 24,), // Black settings icon
+            icon: const Icon(PhosphorIconsBold.gear, color: Colors.black, size: 24,), // Black settings icon
             onPressed: () {
               // Handle settings button press
             },
@@ -39,9 +39,9 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         child: Column(
-          children: [
+          children: <Widget>[
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -51,17 +51,17 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
                 color: const Color(0xFFF4F4F6),
               ),
               child: Row(
-                children: [
+                children: <Widget>[
                   Icon(PhosphorIconsBold.magnifyingGlass, color: Colors.grey[500], size: 24), // Grey search icon
                   const Gap(8),
                   Expanded(
                     child: TextField(
-                      onChanged: (value) {
+                      onChanged: (String value) {
                         setState(() {
                           searchText = value;
                         });
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Search currency type',
                         hintStyle: TextStyle(
                           color: AppColors.grey,
@@ -75,21 +75,21 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
                 itemCount: currencies.length,
-                itemBuilder: (context, index) {
-                  final currency = currencies[index];
+                itemBuilder: (BuildContext context, int index) {
+                  final String currency = currencies[index];
                   if (currency.toLowerCase().contains(searchText.toLowerCase())) {
                     return ListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       leading: Text(
                         getCurrencySymbol(currency), // Get symbol based on currency
-                        style: TextStyle(fontSize: 24, color: AppColors.greyLight),
+                        style: const TextStyle(fontSize: 24, color: AppColors.greyLight),
                       ),
-                      title: Text(currency, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                      title: Text(currency, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
                       onTap: () {
                         // Handle currency selection
                         print('Selected: $currency');
@@ -105,11 +105,11 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
                               selectedCurrency = currency;
                             }
                           }); 
-                        }
+                        },
                       ),
                     );
                   } else {
-                    return SizedBox.shrink(); // Hide if not matching search
+                    return const SizedBox.shrink(); // Hide if not matching search
                   }
                 },
               ),
@@ -124,13 +124,13 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
                   fixedSize: const Size(double.maxFinite, 54),
                   backgroundColor: Colors.black, // Black button
                   foregroundColor: Colors.white, // White text
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  textStyle: TextStyle(fontSize: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  textStyle: const TextStyle(fontSize: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(56),
                   ),
                 ),
-                child: Center(child: Text('Apply')),
+                child: const Center(child: Text('Apply')),
               ),
             ),
           ],
@@ -146,7 +146,7 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
       case 'INR':
         return '₹';
       case 'Dollar':
-        return '\$';
+        return r'$';
       default:
         return '';
     }

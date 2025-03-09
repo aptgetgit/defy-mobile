@@ -1,8 +1,9 @@
-import 'package:defy/config/theme/colors.dart';
-import 'package:defy/core/extensions/button_size_extension.dart';
-import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../config/theme/colors.dart';
+import '../../../../core/extensions/button_size_extension.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 class ActiveButton extends StatelessWidget {
   const ActiveButton({
@@ -36,7 +37,7 @@ class ActiveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final darkMode = isDarkMode ?? context.isDarkMode;
+    final bool darkMode = isDarkMode ?? context.isDarkMode;
     return Visibility(
       visible: darkMode,
       replacement: SizedBox(
@@ -50,7 +51,7 @@ class ActiveButton extends StatelessWidget {
           onPressed: active ? onTap : null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               icon ?? const SizedBox(),
               SizedBox(width: icon == null ? 0 : 10),
               Text(
@@ -75,7 +76,7 @@ class ActiveButton extends StatelessWidget {
           onPressed: active ? onTap : null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               icon ?? const SizedBox(),
               SizedBox(width: icon == null ? 0 : 10),
               Text(
@@ -111,7 +112,7 @@ class OutlineButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final darkMode = isDarkMode ?? context.isDarkMode;
+    final bool darkMode = isDarkMode ?? context.isDarkMode;
     return SizedBox(
       width: width,
       child: OutlinedButton(
@@ -135,4 +136,3 @@ class OutlineButton extends ConsumerWidget {
     );
   }
 }
-

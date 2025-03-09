@@ -40,7 +40,7 @@ class _WatchListUpdateCollectionScreenState extends State<WatchListUpdateCollect
     WidgetsBinding.instance.addObserver(
       LifecycleEventHandler(
         onChange: () {
-          final isOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+          final bool isOpen = MediaQuery.of(context).viewInsets.bottom > 0;
           setState(() {
             _isKeyboardOpen = isOpen;
           });
@@ -134,8 +134,8 @@ class _WatchListUpdateCollectionScreenState extends State<WatchListUpdateCollect
 }
 
 class LifecycleEventHandler extends WidgetsBindingObserver {
-  final VoidCallback onChange;
   LifecycleEventHandler({required this.onChange});
+  final VoidCallback onChange;
 
   @override
   void didChangeMetrics() {

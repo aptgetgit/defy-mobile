@@ -42,7 +42,7 @@ class _LimitTabState extends State<LimitTab> {
   // Swap tokens
   void _swapTokens() {
     setState(() {
-      final temp = _fromToken;
+      final String temp = _fromToken;
       _fromToken = _toToken;
       _toToken = temp;
     });
@@ -53,13 +53,13 @@ class _LimitTabState extends State<LimitTab> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           const Gap(24),
           Stack(
             alignment: Alignment.center,
-            children: [
+            children: <Widget>[
               Column(
-                children: [
+                children: <Widget>[
                   // First container's Row layout
                   Container(
                     width: 361,
@@ -71,11 +71,11 @@ class _LimitTabState extends State<LimitTab> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Text(
                               _amount,
                               style: TextStyle(
@@ -87,7 +87,7 @@ class _LimitTabState extends State<LimitTab> {
                             const Gap(4),
                             Text(
                               _amount != '0.00' ? '160.92' : '0.00',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.greyLight,
@@ -103,7 +103,7 @@ class _LimitTabState extends State<LimitTab> {
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
                           child: Row(
-                            children: [
+                            children: <Widget>[
                               Image.asset(
                                 'assets/icons/aptos.png',
                                 width: 32,
@@ -139,11 +139,11 @@ class _LimitTabState extends State<LimitTab> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Text(
                               _amount != '0.00' ? '329' : '--',
                               style: const TextStyle(
@@ -155,7 +155,7 @@ class _LimitTabState extends State<LimitTab> {
                             const Gap(4),
                             Text(
                               _amount != '0.00' ? '179.45' : '--',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.greyLight,
@@ -170,7 +170,7 @@ class _LimitTabState extends State<LimitTab> {
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
                           child: Row(
-                            children: [
+                            children: <Widget>[
                               Image.asset(
                                 'assets/icons/usdc.png',
                                 width: 32,
@@ -218,7 +218,7 @@ class _LimitTabState extends State<LimitTab> {
               ),
             ],
           ),
-          if (_amount != '0.00') ...[
+          if (_amount != '0.00') ...<Widget>[
             const Gap(34),
             Container(
               height: 66,
@@ -244,7 +244,7 @@ class _LimitTabState extends State<LimitTab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Row(
-                              children: [
+                              children: <Widget>[
                                 Text(
                                   'Via',
                                   style: TextStyle(fontSize: 16, color: AppColors.greyDark),
@@ -285,12 +285,12 @@ class _LimitTabState extends State<LimitTab> {
                 ),
               ),
             ),
-          ] else ...[
+          ] else ...<Widget>[
             const Gap(100),
           ],
           Expanded(
             child: Column(
-              children: [
+              children: <Widget>[
                 _buildRowButtons(<String>['1', '2', '3']),
                 _buildRowButtons(<String>['4', '5', '6']),
                 _buildRowButtons(<String>['7', '8', '9']),
@@ -328,7 +328,7 @@ class _LimitTabState extends State<LimitTab> {
   Widget _buildRowButtons(List<String> items) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: items.map((String item) => _buildButton(item,
-            item == 'cancel' ? PhosphorIconsBold.backspace : null)).toList(),
+            item == 'cancel' ? PhosphorIconsBold.backspace : null),).toList(),
       );
 
   // Helper function to build a single button

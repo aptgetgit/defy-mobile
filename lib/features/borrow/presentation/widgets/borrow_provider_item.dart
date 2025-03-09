@@ -5,12 +5,6 @@ import 'package:gap/gap.dart';
 import '../../../../config/theme/colors.dart';
 
 class BorrowProviderItem extends StatelessWidget {
-  final dynamic name;
-  final dynamic percentage;
-  final dynamic imagePath;
-  final dynamic ltv;
-  final VoidCallback? onTap;
-  final bool isDisabled;
 
   const BorrowProviderItem({
     super.key,
@@ -21,6 +15,12 @@ class BorrowProviderItem extends StatelessWidget {
     this.onTap,
     this.isDisabled = false,
   });
+  final dynamic name;
+  final dynamic percentage;
+  final dynamic imagePath;
+  final dynamic ltv;
+  final VoidCallback? onTap;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) => GestureDetector(

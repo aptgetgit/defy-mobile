@@ -3,12 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class ProviderItem extends StatelessWidget {
-  final String name;
-  final String percentage;
-  final String imagePath;
-  final bool isLocked;
-  final bool isLiquid;
-  final VoidCallback? onTap;
 
   const ProviderItem({
     super.key,
@@ -19,6 +13,12 @@ class ProviderItem extends StatelessWidget {
     this.isLiquid = false,
     this.onTap,
   });
+  final String name;
+  final String percentage;
+  final String imagePath;
+  final bool isLocked;
+  final bool isLiquid;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -26,7 +26,7 @@ class ProviderItem extends StatelessWidget {
     child: Container(
         margin: const EdgeInsets.only(bottom: 8),
         child: Row(
-          children: [
+          children: <Widget>[
             Container(
               width: 44,
               height: 44,
@@ -42,18 +42,18 @@ class ProviderItem extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     name,
                     style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                   ),
-                  if (isLocked) ...[
+                  if (isLocked) ...<Widget>[
                     const Text(
                       'Locked',
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                   ],
-                  if (isLiquid) ...[
+                  if (isLiquid) ...<Widget>[
                     const Text(
                       'Liquid',
                       style: TextStyle(color: Colors.grey, fontSize: 14),

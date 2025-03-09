@@ -1,14 +1,11 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
-import 'package:defy/config/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class CustomSliverAppBar extends StatefulWidget {
-  final List<String> imageUrls;
-  final String appBarTitle; 
-  final List<Widget>? flexibleSpaceWidgets; 
-  final Widget? flexibleSpaceFooter; 
+import '../../../../config/theme/colors.dart';
+
+class CustomSliverAppBar extends StatefulWidget { 
 
   const CustomSliverAppBar({
     super.key,
@@ -17,6 +14,10 @@ class CustomSliverAppBar extends StatefulWidget {
     this.flexibleSpaceWidgets,
     this.flexibleSpaceFooter,
   });
+  final List<String> imageUrls;
+  final String appBarTitle; 
+  final List<Widget>? flexibleSpaceWidgets; 
+  final Widget? flexibleSpaceFooter;
 
   @override
   CustomSliverAppBarState createState() => CustomSliverAppBarState();
@@ -34,24 +35,22 @@ class CustomSliverAppBarState extends State<CustomSliverAppBar> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (scrollNotification) {
+  Widget build(BuildContext context) => NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollNotification) {
         if (scrollNotification is ScrollUpdateNotification) {
           _scrollListener(scrollNotification.metrics as ScrollController);
         }
         return true;
       },
       child: SliverAppBar(
-        expandedHeight: 200.0,
-        floating: false,
+        expandedHeight: 200,
         pinned: true,
         backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: const Icon(PhosphorIconsBold.caretLeft, color: AppColors.black),
         ),
-        actions: [
+        actions: <Widget>[
           IconButton(
             icon: const Icon(PhosphorIconsBold.share, color: AppColors.black),
             onPressed: () {
@@ -63,7 +62,7 @@ class CustomSliverAppBarState extends State<CustomSliverAppBar> {
           opacity: _showTitle ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 300),
           child: Row(
-            children: [
+            children: <Widget>[
               _buildPoolLogo(imageUrls: widget.imageUrls, small: true),
               const SizedBox(width: 10),
               Expanded(
@@ -82,10 +81,10 @@ class CustomSliverAppBarState extends State<CustomSliverAppBar> {
         flexibleSpace: FlexibleSpaceBar(
           background: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 56.0, 16.0, 16.0),
+              padding: const EdgeInsets.fromLTRB(16, 56, 16, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   _buildPoolLogo(imageUrls: widget.imageUrls),
                   const SizedBox(height: 20),
                   if (widget.flexibleSpaceWidgets != null)
@@ -101,31 +100,28 @@ class CustomSliverAppBarState extends State<CustomSliverAppBar> {
         ),
       ),
     );
-  }
 
   Widget _buildPoolLogo({
     required List<String> imageUrls,
     bool small = false,
   }) {
-    bool isDual = imageUrls.length > 1;
+    final bool isDual = imageUrls.length > 1;
 
     if (isDual) {
       return RowSuper(
         innerDistance: -20,
-        children: imageUrls.map<Widget>((logoUrl) {
-          return logoUrl.endsWith('.svg')
+        children: imageUrls.map<Widget>((String logoUrl) => logoUrl.endsWith('.svg')
               ? SvgPicture.network(logoUrl, height: small ? 24.0 : 40.0)
-              : Image.network(logoUrl, height: small ? 24.0 : 40.0);
-        }).toList(),
+              : Image.network(logoUrl, height: small ? 24.0 : 40.0),).toList(),
       );
     } else if (imageUrls.isNotEmpty) {
-      final logoUrl = imageUrls.first;
+      final String logoUrl = imageUrls.first;
       return logoUrl.endsWith('.svg')
           ? SvgPicture.network(logoUrl, height: small ? 24.0 : 40.0)
           : Image.network(logoUrl, height: small ? 24.0 : 40.0);
     } else {
       return Image.asset('assets/icons/staking-default.png',
-          height: small ? 24.0 : 40.0);
+          height: small ? 24.0 : 40.0,);
     }
   }
 }

@@ -11,10 +11,9 @@ class BlueChipBottomSheet extends ConsumerStatefulWidget {
 class _BlueChipBottomSheetState extends ConsumerState<BlueChipBottomSheet> {
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       color: Colors.white,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -22,5 +21,4 @@ class _BlueChipBottomSheetState extends ConsumerState<BlueChipBottomSheet> {
         ),
       ),
     );
-  }
 }

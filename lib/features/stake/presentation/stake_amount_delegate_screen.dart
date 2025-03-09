@@ -104,7 +104,7 @@ class _StakeAmountDelegateScreenState extends State<StakeAmountDelegateScreen> {
                       color: AppColors.white,
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: AppColors.greyLight.withOpacity(0.2),
+                          color: AppColors.greyLight.withValues(alpha: 0.2),
                           blurRadius: 10,
                           offset: const Offset(0, 2),
                         ),
@@ -149,7 +149,6 @@ class _StakeAmountDelegateScreenState extends State<StakeAmountDelegateScreen> {
                               foregroundColor: AppColors.blue,
                               side: const BorderSide(
                                 color: AppColors.blue,
-                                width: 1,
                               ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),

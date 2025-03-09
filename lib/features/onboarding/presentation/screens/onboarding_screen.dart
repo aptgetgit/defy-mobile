@@ -155,7 +155,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       controller: _pageController,
       onPageChanged: _onPageChanged,
       itemCount: _pageCount,
-      pageSnapping: true,
       padEnds: false,
       clipBehavior: Clip.none,
       itemBuilder: (BuildContext context, int index) {

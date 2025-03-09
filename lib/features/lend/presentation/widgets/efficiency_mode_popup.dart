@@ -36,7 +36,7 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
             spreadRadius: 5,
             blurRadius: 7,
             offset: const Offset(0, 3), // Changes position of shadow
@@ -152,18 +152,18 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
       context: context,
       barrierColor: Colors.black54,
       builder: (BuildContext context) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [
+            children: <Widget>[
               Container(
                 width: screenSize.width * 0.95, // Make it slightly less than screen width
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       spreadRadius: 1,
                       blurRadius: 8,
                       offset: const Offset(0, 2),

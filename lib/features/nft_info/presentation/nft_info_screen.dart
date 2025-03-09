@@ -1,22 +1,22 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
-import 'package:defy/config/theme/colors.dart';
-import 'package:defy/features/token_info/presentation/about_page.dart';
-import 'package:defy/features/token_info/presentation/activity_page.dart';
-import 'package:defy/features/token_info/presentation/analytics_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../app/routes/router.dart';
+import '../../../config/theme/colors.dart';
+import '../../shared/presentation/widgets/custom_tab_bar.dart';
+import '../../token_info/presentation/about_page.dart';
+import '../../token_info/presentation/activity_page.dart';
+import '../../token_info/presentation/analytics_page.dart';
 import '../../token_info/presentation/price_alert_page.dart';
-import '../../token_info/presentation/shared/token_bottom_sheet.dart';
-
+import '../../token_info/presentation/shared/token_watchlist_bottom_sheet.dart';
 import '../../token_info/providers/token_info_controller.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
 import '../shared/nft_info_bottom_navbar.dart';
+import 'nft_gif_screen.dart';
 
 class NftInfoScreen extends ConsumerStatefulWidget {
   const NftInfoScreen({super.key});
@@ -34,15 +34,15 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
   bool _showTitle = false;
   late ScrollController _scrollController;
   late TokensController controller;
-  final List<String> timePeriods = <String>["1M", "3M", "6M", "1Y", "5Y", "ALL"];
-  String selectedPeriod = "1M";
+  final List<String> timePeriods = <String>['1M', '3M', '6M', '1Y', '5Y', 'ALL'];
+  String selectedPeriod = '1M';
   late TabController _tabController;
   bool _alertCreated = false;
   OverlayEntry? _overlayEntry;
   final Set<int> _watchlistTokens = <int>{};
   final Set<int> _selectedTokens = <int>{};
 
-  final Map<int, Widget> _collectionScreens = {
+  final Map<int, Widget> _collectionScreens = <int, Widget>{
     0: const WatchlistSafetyTokensScreen(), // Replace with your actual screen widgets
     1: const WatchlistAvatarNFTScreen(),
     2: const WatchlistCuteNFTScreen(),
@@ -59,8 +59,8 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    _scrollController..removeListener(_onScroll)
+    ..dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -79,11 +79,11 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double appBarExpandedHeight = 188;
-    final double imageWidth = 353;
-    final double imageHeight = 353;
-    final double appBarImageSize = 32;
-    final double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
+    const double appBarExpandedHeight = 188;
+    const double imageWidth = 353;
+    const double imageHeight = 353;
+    const double appBarImageSize = 32;
+    const double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -100,11 +100,11 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                   children: <Widget>[
                     GestureDetector(
                       onTap:() {
-                        NftInfoAudioRoute().push(context);
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const NftGifScreen()));
                       },
                       child: Stack(
                         alignment: Alignment.topCenter,
-                        children: [
+                        children: <Widget>[
                           // Image.asset(
                           //   'assets/images/cyborg2.png',
                           //   width: imageWidth,
@@ -114,26 +114,26 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                           AnimatedBuilder(
                             animation: _scrollController,
                             builder: (BuildContext context, Widget? child) {
-                              double scrollProgress = _scrollController.hasClients
+                              final double scrollProgress = _scrollController.hasClients
                                   ? (_scrollController.offset / maxScrollExtent)
                                       .clamp(0.0, 1.0)
                                   : 0.0;
                       
-                              double animatedWidth =
+                              final double animatedWidth =
                                   imageWidth - (imageWidth - appBarImageSize) * scrollProgress;
-                              double animatedHeight =
+                              final double animatedHeight =
                                   imageHeight - (imageHeight - appBarImageSize) * scrollProgress;
                       
-                              double imageXOffset = (353 - imageWidth) / 2;
-                              double targetXOffset = 16.0; // Position in the app bar
+                              const double imageXOffset = (353 - imageWidth) / 2;
+                              const double targetXOffset = 16; // Position in the app bar
                       
-                              double animatedX = imageXOffset +
+                              final double animatedX = imageXOffset +
                                   (targetXOffset - imageXOffset) * scrollProgress;
                       
-                              double imageYOffset = 0;
-                              double targetYOffset = 16.0;
+                              const double imageYOffset = 0;
+                              const double targetYOffset = 16;
                       
-                              double animatedY = imageYOffset +
+                              final double animatedY = imageYOffset +
                                   (targetYOffset - imageYOffset) * scrollProgress;
                       
                               return SizedBox(
@@ -143,7 +143,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 24),
                                     child: AnimatedPositioned(
-                                      duration: Duration(milliseconds: 300),
+                                      duration: const Duration(milliseconds: 300),
                                       top: animatedY,
                                       left: animatedX,
                                       child: Image.asset(
@@ -163,10 +163,10 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                     ),
                     const Gap(12),
                     Row(
-                      children: [
+                      children: <Widget>[
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             const Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -176,7 +176,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.black,
-                                    )),
+                                    ),),
                               ),
                             ),
                             const Gap(2),
@@ -184,22 +184,21 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   RowSuper(
                                     innerDistance: -12,
-                                    children: [
+                                    children: <Widget?>[
                                       Image.asset('assets/images/avatar-1.png',
-                                          height: 22),
+                                          height: 22,),
                                       Image.asset('assets/images/avatar-2.png',
-                                          height: 22),
+                                          height: 22,),
                                       Image.asset('assets/images/avatar-3.png',
-                                          height: 22),
+                                          height: 22,),
                                     ],
                                   ),
                                   const Gap(10),
                                   Text(
-                                    "James, Jane and 14+ hold",
+                                    'James, Jane and 14+ hold',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -207,15 +206,15 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                                           fontWeight: FontWeight.w500,
                                           color: AppColors.greyLight,
                                         ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
                           ],
                         ),
                         const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20),
+                        const Padding(
+                          padding: EdgeInsets.only(right: 20),
                           child: Icon(
                             PhosphorIconsRegular.shareNetwork,
                             color: AppColors.black,
@@ -226,12 +225,12 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                     ),
                     const Gap(26),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          _buildInfoContainer("100 APT", "BOUGHT AT"),
-                          _buildInfoContainer("3", "ACTIVE BIDS"),
+                          _buildInfoContainer('100 APT', 'BOUGHT AT'),
+                          _buildInfoContainer('3', 'ACTIVE BIDS'),
                         ],
                       ),
                     ),
@@ -241,44 +240,32 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
               ),
             ),
             SliverPersistentHeader(
-              delegate: _TabBarSliverPersistentHeaderDelegate(
-                tabBar: TabBar(
-                  controller: _tabController,
-                  isScrollable: true,
-                  indicatorColor: Colors.black,
-                  indicator: const UnderlineTabIndicator(
-                    borderSide: BorderSide(width: 2),
-                  ),
-                  tabAlignment: TabAlignment.start,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: AppColors.greyLight,
-                  labelStyle: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 18),
-                  unselectedLabelStyle: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 16),
-                  labelPadding:
-                      const EdgeInsets.symmetric(horizontal: 10),
-                  padding: EdgeInsets.zero,
-                  indicatorWeight: 1,
-                  dividerHeight: 1,
-                  dividerColor: AppColors.greyVeryLight,
-                  tabs: const <Widget>[
-                    Tab(text: 'About'),
-                    Tab(text: 'Activity'),
-                    Tab(text: 'Analytics'),
+              delegate: TabBarDelegate(
+                CustomTabBar(
+                  tabController: _tabController,
+                  tabs: const <String>[
+                    'About',
+                    'Activity',
+                    'Analytics',
                   ],
                 ),
               ),
               pinned: true,
             ),
-            SliverFillRemaining(
-              child: TabBarView(
-                controller: _tabController,
-                children: const <Widget>[
-                  AboutPage(),
-                  ActivityPage(),
-                  AnalyticsPage(),
-                ],
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 1.3,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: const <Widget>[
+                    SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: AboutPage(),
+                    ),
+                    ActivityPage(),
+                    AnalyticsPage(),
+                  ],
+                ),
               ),
             ),
           ],
@@ -322,7 +309,6 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
       elevation: 4,
       shadowColor: Colors.black,
       surfaceTintColor: Colors.black,
-      floating: false,
       pinned: true,
       backgroundColor: Colors.white,
       leading: GestureDetector(
@@ -341,9 +327,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
             PhosphorIconsRegular.star,
             color: AppColors.black,
           ),
-          onPressed: () {
-            _showWatchlistBottomSheet();
-          },
+          onPressed: _showWatchlistBottomSheet,
         ),
         Stack(
           children: <Widget>[
@@ -391,7 +375,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
               duration: const Duration(milliseconds: 300),
               child: Row(
                 children: <Widget>[
-                  _buildPoolLogo(small: false),
+                  _buildPoolLogo(),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
@@ -423,7 +407,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                               PhosphorIconsFill.sealCheck,
                               color: AppColors.blue,
                               size: 16,
-                            )
+                            ),
                           ],
                         ),
                       ],
@@ -433,7 +417,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
               ),
             )
           : Row(
-              children: [
+              children: <Widget>[
                 Image.asset(
                   'assets/images/Fantasy-Ruins.png',
                   width: 32,
@@ -446,7 +430,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: AppColors.black,
-                    )),
+                    ),),
                 const Gap(4),
                 const Icon(
                   PhosphorIconsFill.sealCheck,
@@ -454,7 +438,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                   size: 20,
                 ),
               ],
-            ));
+            ),);
 
   void _showWatchlistBottomSheet() {
     showModalBottomSheet(
@@ -483,7 +467,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
         right: 35,
         child: Material(
           // Wrap with Material for shadow
-          elevation: 4.0,
+          elevation: 4,
           borderRadius: BorderRadius.circular(10),
           child: Container(
             height: 60,
@@ -503,12 +487,12 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            _collectionScreens[collectionIndex]!),
+                        builder: (BuildContext context) =>
+                            _collectionScreens[collectionIndex]!,),
                   );
                 } else {
                   // Handle the case where the collection index is null or not found in the map
-                  print("Invalid collection index or screen not found.");
+                  print('Invalid collection index or screen not found.');
                 }
               },
               child: Row(
@@ -524,7 +508,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                     style: TextStyle(
                         color: AppColors.greyDark,
                         fontWeight: FontWeight.w500,
-                        fontSize: 16),
+                        fontSize: 16,),
                   ),
                   IconButton(
                     icon: const Icon(
@@ -557,34 +541,4 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
         'assets/images/cyborg2.png',
         height: small ? 24 : 32,
       );
-}
-
-class _TabBarSliverPersistentHeaderDelegate
-    extends SliverPersistentHeaderDelegate {
-  final TabBar tabBar;
-
-  _TabBarSliverPersistentHeaderDelegate({required this.tabBar});
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: tabBar,
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => tabBar.preferredSize.height;
-
-  @override
-  double get minExtent => tabBar.preferredSize.height;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
-  }
 }

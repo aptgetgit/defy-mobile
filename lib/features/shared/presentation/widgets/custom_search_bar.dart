@@ -1,11 +1,12 @@
 
-import 'package:defy/config/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../../../config/theme/colors.dart';
+
 class CustomSearchBar extends StatefulWidget {
+  const CustomSearchBar({this.title = 'Search Token', super.key});
   final String title;
-  const CustomSearchBar({this.title = "Search Token", super.key});
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
@@ -13,9 +14,8 @@ class CustomSearchBar extends StatefulWidget {
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(0),
+  Widget build(BuildContext context) => Container(
+      padding: EdgeInsets.zero,
       child: TextField(
         cursorColor: AppColors.greyLight,
         style: Theme.of(context).textTheme.bodyMedium,
@@ -28,14 +28,14 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             color: AppColors.greyLight,
           ),
           enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent, width: 0.0),
-              borderRadius: BorderRadius.circular(8.0)),
+              borderSide: const BorderSide(color: Colors.transparent, width: 0),
+              borderRadius: BorderRadius.circular(8),),
           border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent, width: 0.0),
-              borderRadius: BorderRadius.circular(8.0)),
+              borderSide: const BorderSide(color: Colors.transparent, width: 0),
+              borderRadius: BorderRadius.circular(8),),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent, width: 0.0),
-              borderRadius: BorderRadius.circular(8.0)),
+              borderSide: const BorderSide(color: Colors.transparent, width: 0),
+              borderRadius: BorderRadius.circular(8),),
           prefixIcon: const Icon(
             PhosphorIconsBold.magnifyingGlass,
             size: 20,
@@ -44,5 +44,4 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         ),
       ),
     );
-  }
 }

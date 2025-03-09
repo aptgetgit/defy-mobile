@@ -9,11 +9,11 @@ class WatchlistTokensTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-      children: [
+      children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            WatchlistGridTile(),
+          children: <Widget>[
+            const WatchlistGridTile(),
             Padding(
                 padding: const EdgeInsets.only(bottom: 38),
                 child: GestureDetector(
@@ -24,12 +24,10 @@ class WatchlistTokensTab extends StatelessWidget {
                       PageRouteBuilder(
                         transitionDuration: const Duration(milliseconds: 500),
                         pageBuilder: (_, __, ___) => const WatchListNewCollectionScreen(),
-                        transitionsBuilder: (_, animation, __, child) {
-                          return FadeTransition(
+                        transitionsBuilder: (_, Animation<double> animation, __, Widget child) => FadeTransition(
                             opacity: animation,
                             child: child,
-                          );
-                        },
+                          ),
                       ),
                     );
                   },

@@ -5,13 +5,12 @@ class WatchlistGridTile extends StatelessWidget {
   const WatchlistGridTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: () {
         // Navigate to WatchListNFTScreen
       },
       child: Column(
-        children: [
+        children: <Widget>[
           Container(
             width: MediaQuery.of(context).size.width * 0.4,
             height: MediaQuery.of(context).size.width * 0.4,
@@ -20,9 +19,8 @@ class WatchlistGridTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.4),
             ),
             child: Stack(
-              children: [
+              children: <Widget>[
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -35,13 +33,12 @@ class WatchlistGridTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist1.png"),
+                        image: AssetImage('assets/images/watchlist1.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -54,13 +51,12 @@ class WatchlistGridTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist2.png"),
+                        image: AssetImage('assets/images/watchlist2.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -73,13 +69,12 @@ class WatchlistGridTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist3.png"),
+                        image: AssetImage('assets/images/watchlist3.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -92,7 +87,7 @@ class WatchlistGridTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist4.png"),
+                        image: AssetImage('assets/images/watchlist4.png'),
                       ),
                     ),
                   ),
@@ -101,8 +96,8 @@ class WatchlistGridTile extends StatelessWidget {
             ),
           ),
           const Gap(12),
-          Text(
-            "Avatar NFTs🐣",
+          const Text(
+            'Avatar NFTs🐣',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
@@ -110,15 +105,15 @@ class WatchlistGridTile extends StatelessWidget {
           ),
           RichText(
             text: TextSpan(
-              text: "6 NFTs",
-              style: TextStyle(
+              text: '6 NFTs',
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
                 color: Colors.grey,
               ),
-              children: [
+              children: <InlineSpan>[
                 TextSpan(
-                  text: "   Jan 2 2024",
+                  text: '   Jan 2 2024',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[400],
@@ -130,5 +125,4 @@ class WatchlistGridTile extends StatelessWidget {
         ],
       ),
     );
-  }
 }

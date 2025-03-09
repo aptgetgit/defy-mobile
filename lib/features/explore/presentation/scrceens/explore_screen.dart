@@ -1,16 +1,17 @@
+import 'dart:math' as math;
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:defy/app/routes/router.dart';
-import 'package:defy/config/assets.gen.dart';
-import 'package:defy/config/theme/colors.dart';
-import 'package:defy/config/theme/font.dart';
-import 'package:defy/core/extensions/context_extensions.dart';
-import 'package:defy/features/explore/presentation/providers/explore_ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import 'dart:math' as math;
+import '../../../../app/routes/router.dart';
+import '../../../../config/assets.gen.dart';
+import '../../../../config/theme/colors.dart';
+import '../../../../config/theme/font.dart';
+import '../../../../core/extensions/context_extensions.dart';
+import '../providers/explore_ui_provider.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -25,20 +26,18 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
   Animation<Offset> slideAnimation({
     required Offset begin,
     required Offset end,
-  }) {
-    return Tween<Offset>(
+  }) => Tween<Offset>(
       begin: begin,
       end: end,
     ).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
-  }
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
   }
@@ -51,14 +50,14 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final height = context.screenHeight;
+    final double height = context.screenHeight;
     return Scaffold(
       backgroundColor: const Color(0xfff4f4f6),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
-            children: [
+            children: <Widget>[
               //search bar
               Container(
                 width: double.infinity,
@@ -69,14 +68,14 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
                 ),
                 child: GestureDetector(
                   onTap: () {
-                    ExploreSearchScreenRoute().push(context);
+                    const ExploreSearchScreenRoute().push(context);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: <Widget>[
                       const Gap(16),
-                      Icon(
+                      const Icon(
                         PhosphorIconsBold.magnifyingGlass,
                         color: AppColors.greyMedium,
                       ),
@@ -84,10 +83,9 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
                       Expanded(
                         child: TextField(
                           enabled: false,
-                          textAlign: TextAlign.start,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Search browser or in-app",
+                            hintText: 'Search browser or in-app',
                             hintStyle: TextStyle(
                               fontWeight: AppFont.medium,
                               color: AppColors.greyMedium,
@@ -96,7 +94,7 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
                           ),
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         PhosphorIconsBold.cards,
                         color: AppColors.greyMedium,
                       ),
@@ -105,7 +103,7 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
                   ),
                 ),
               ),
-              Gap(16),
+              const Gap(16),
               SizedBox(
                 height: height / 4 * 2,
                 child: Expanded(
@@ -113,11 +111,11 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      mainAxisSpacing: 4.0,
-                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4,
                       mainAxisExtent: height / 4,
                     ),
-                    children: [
+                    children: <Widget>[
                       _buildMarket(context),
                       _buildDapps(context),
                       _buildCoins(context),
@@ -135,40 +133,36 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
   }
 
   Widget _buildMarket(BuildContext context) {
-    final Animation<Offset> slideAnimation1 = slideAnimation(begin: Offset(0.0, 0.0), end: Offset(-1.0, -0.3));
-    final width = context.screenWidth;
+    final Animation<Offset> slideAnimation1 = slideAnimation(begin: Offset.zero, end: const Offset(-1, -0.3));
+    final double width = context.screenWidth;
     return GestureDetector(
       onTap : (){
-         _controller..reset() // Reset the animation
-         ..forward() // Start the animation
-         ..reverse(); // Reverse the animation
-        Future.delayed(Duration(milliseconds: 600), () {
-          _controller..animateTo(0.0, duration: Duration(milliseconds: 300));
-          ExploreMarketScreenRoute().push(context);
-          
+        _controller..reset() // Reset the animation
+        ..forward(); // Start the animation
+        Future.delayed(_controller.duration!, () {
+          const ExploreMarketScreenRoute().push(context);
         });
-        
       },
       child: SlideTransition(
         position: slideAnimation1,
         child: Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [
+            children: <Widget>[
               Assets.icons.marketExploreLogo.image(
                 width: width * 1.34,
               ),
               Transform.rotate(
                 angle: -math.pi / 38,
-                child: Text('Invest',
+                child: const Text('Invest',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: AppColors.greyLight,
-                    )),
-              )
+                    ),),
+              ),
             ],
           ),
         ),
@@ -177,20 +171,20 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
   }
 
   Widget _buildDapps(BuildContext context) {
-    final width = context.screenWidth;
-    final height = context.screenHeight;
+    final double width = context.screenWidth;
+    final double height = context.screenHeight;
     return GestureDetector(
       onTap : () {
-        ExploreDappsScreenRoute().push(context);
+        const ExploreDappsScreenRoute().push(context);
       },
       child: Column(
-        children: [
+        children: <Widget>[
           SizedBox(
             height: height / 4.5 * 0.63,
             width: width * .4,
             child: Stack(
               alignment: Alignment.bottomCenter,
-              children: [
+              children: <Widget>[
                 Assets.icons.uniswapDexLogo.image(
                   width: width * .2,
                 ),
@@ -211,39 +205,38 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
               ],
             ),
           ),
-          Text('Dapps',
+          const Text('Dapps',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 color: AppColors.greyLight,
-              )),
+              ),),
         ],
       ),
     );
   }
 
   Widget _buildCoins(BuildContext context) {
-    final Animation<Offset> slideAnimation1 = slideAnimation(begin: Offset(0.0, 0.0), end: Offset(-1.0, 0.3));
-    final width = context.screenWidth;
-    final coinsLogos = [
-      "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
-      "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-      "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-      "https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png"
+    final Animation<Offset> slideAnimation1 = slideAnimation(begin: Offset.zero, end: const Offset(-1, 0.3));
+    final double width = context.screenWidth;
+    final List<String> coinsLogos = <String>[
+      'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+      'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+      'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+      'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
     ];
-    return Consumer(builder: (ctx, ref, child) {
-      final index = ref.watch(coinsAnimationIndexProvider);
+    return Consumer(builder: (BuildContext ctx, WidgetRef ref, Widget? child) {
+      final int index = ref.watch(coinsAnimationIndexProvider);
       return GestureDetector(
         onTap : () {
-          ExploreCoinsScreenRoute().push(context);
+          // const ExploreCoinsScreenRoute().push(context);
         },
         child: SlideTransition(
           position: slideAnimation1,
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               SizedBox(
                 child: Image.network(
                   coinsLogos[index],
@@ -251,39 +244,39 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
                 ),
               ),
               const Gap(6),
-              Text('Coins',
+              const Text('Coins',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: AppColors.greyLight,
-                  )),
+                  ),),
             ],
           ),
         ),
       );
-    });
+    },);
   }
 
 Widget _buildNFTs(BuildContext context) {
-  final Animation<Offset> slideAnimation2 = slideAnimation(begin: Offset(0.0, 0.0), end: Offset(1.0, -0.3));
-  final width = context.screenWidth;
-  final nftImages = [
-    "https://i.seadn.io/s/raw/files/10ccabdfb75f075c6a86e80c2c8ab33b.png?auto=format&dpr=1&w=1000",
-    "https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000",
-    "https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000",
+  final Animation<Offset> slideAnimation2 = slideAnimation(begin: Offset.zero, end: const Offset(1, -0.3));
+  final double width = context.screenWidth;
+  final List<String> nftImages = <String>[
+    'https://i.seadn.io/s/raw/files/10ccabdfb75f075c6a86e80c2c8ab33b.png?auto=format&dpr=1&w=1000',
+    'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
+    'https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000',
   ];
 
   return SlideTransition(
     position: slideAnimation2,
     child: GestureDetector(
       onTap: () {
-        ExploreNFTScreenRoute().push(context); // Navigating to ExploreNFTScreenRoute
+        const ExploreNFTScreenRoute().push(context); // Navigating to ExploreNFTScreenRoute
       },
       child: Column(
-        children: [
+        children: <Widget>[
           Stack(
             alignment: Alignment.center,
-            children: [
+            children: <Widget>[
               // First NFT image with a slight rotation
               Transform.rotate(
                 angle: -math.pi / 14,
@@ -293,8 +286,8 @@ Widget _buildNFTs(BuildContext context) {
                     width: width * 0.3,
                     height: width * 0.45,
                     imageUrl: nftImages[0],
-                    errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-                    progressIndicatorBuilder: (ctx, str, download) =>
+                    errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
+                    progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                         const CircularProgressIndicator(),
                   ),
                 ),
@@ -307,8 +300,8 @@ Widget _buildNFTs(BuildContext context) {
                   height: width * 0.4,
                   imageUrl: nftImages[1],
                   fit: BoxFit.cover, // Ensures proper scaling of the image
-                  errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-                  progressIndicatorBuilder: (ctx, str, download) =>
+                  errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
+                  progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                       const CircularProgressIndicator(),
                 ),
               ),
@@ -322,8 +315,8 @@ Widget _buildNFTs(BuildContext context) {
                     height: width * 0.4,
                     imageUrl: nftImages[2],
                     fit: BoxFit.cover, 
-                    errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-                    progressIndicatorBuilder: (ctx, str, download) =>
+                    errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
+                    progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                         const CircularProgressIndicator(),
                   ),
                 ),
@@ -332,7 +325,7 @@ Widget _buildNFTs(BuildContext context) {
           ),
           
           const SizedBox(height: 8), 
-          Text(
+          const Text(
             'NFTs',
             style: TextStyle(
               fontSize: 16,
@@ -430,27 +423,27 @@ Widget _buildNFTs(BuildContext context) {
 
 
   Widget _buildRankings(BuildContext context) {
-    final width = context.screenWidth;
+    final double width = context.screenWidth;
     return GestureDetector(
-      onTap : () => ExploreLeaderboardScreenRoute().push(context),
+      onTap : () => const ExploreLeaderboardScreenRoute().push(context),
       child: Transform.rotate(
         angle: math.pi / 22,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             Stack(
-              children: [
+              children: <Widget>[
                 Assets.icons.exploreRankingsBanner.image(
                   width: width * .78,
                 ),
               ],
             ),
-            Text('Rankings',
+            const Text('Rankings',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: AppColors.greyLight,
-                )),
+                ),),
           ],
         ),
       ),

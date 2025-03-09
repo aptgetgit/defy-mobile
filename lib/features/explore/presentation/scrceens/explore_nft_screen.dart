@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:defy/config/theme/colors.dart';
-import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../../../../config/theme/colors.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 class ExploreNFTScreen extends StatefulWidget {
   const ExploreNFTScreen({super.key});
@@ -90,7 +91,7 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
       backgroundColor: const Color(0xfff4f4f6),
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'NFT Explore',
           style: TextStyle(
             fontSize: 20,
@@ -104,7 +105,7 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 //search bar
                 Container(
                   width: double.infinity,
@@ -116,20 +117,19 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: <Widget>[
                       const Gap(16),
-                      Icon(
+                      const Icon(
                         PhosphorIconsBold.magnifyingGlass,
                         color: AppColors.greyMedium,
                       ),
                       const Gap(8),
                       Expanded(
                         child: TextField(
-                          textAlign: TextAlign.start,
                           controller: _searchConroller,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Search or paste URL",
+                            hintText: 'Search or paste URL',
                             hintStyle: TextStyle(
                               color: AppColors.greyMedium,
                               fontSize: 14,
@@ -137,7 +137,7 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                           ),
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         PhosphorIconsBold.cards,
                         color: AppColors.greyMedium,
                       ),
@@ -148,7 +148,7 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                 const Gap(16),
 
                 //minting now banner
-                Text(
+                const Text(
                   'Minting now',
                   style: TextStyle(
                     fontSize: 18,
@@ -157,12 +157,12 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                 ),
                 SlideTransition(
                   position: _slideAnimation2,
-                  child: _buildMintingBanner(context)
+                  child: _buildMintingBanner(context),
                 ),
                 SlideTransition(
                   position: _slideAnimation,
                   child: Column(
-                    children: [
+                    children: <Widget>[
                       //top nfts
                       _buildCategoryHeader('Top NFTs', (){}),
                       const Gap(4),
@@ -190,31 +190,30 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
     );
 
   Widget _buildMintingBanner(BuildContext context) {
-    final height = context.screenHeight;
-    final width = context.screenWidth;
+    final double height = context.screenHeight;
+    final double width = context.screenWidth;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       height: height * .28,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
         color: Colors.grey,
       ),
       child: Stack(
-        children: [
+        children: <Widget>[
           Positioned(
             right: 16,
             top: 22,
             child: Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  color: AppColors.white.withOpacity(.2),
+                  color: AppColors.white.withValues(alpha: .2),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                child: const Row(
+                  children: <Widget>[
                     Icon(PhosphorIconsFill.sparkle, color: AppColors.green,size: 18),
-                    const Gap(2),
+                    Gap(2),
                     Text(
                       'Minting',
                       style: TextStyle(
@@ -224,7 +223,7 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                       ),
                     ),
                   ],
-                )),
+                ),),
           ),
           Positioned(
             bottom : 22,
@@ -232,33 +231,33 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
             child : Column(
               mainAxisSize : MainAxisSize.min,
               crossAxisAlignment : CrossAxisAlignment.start,
-              children : [
+              children : <Widget>[
                 Container(
                   width : width * .11,
                   height : width * .11,
                   decoration : BoxDecoration(borderRadius : BorderRadius.circular(12),color : AppColors.white),
                 ),
                 const Gap(4),
-                Text('Get Minecrafts',style: TextStyle(
+                const Text('Get Minecrafts',style: TextStyle(
                   fontSize : 24,
                   fontWeight: FontWeight.w600,
                   color: AppColors.white,
-                )),
+                ),),
                 const Gap(6),
-                Row(
+                const Row(
                   mainAxisSize : MainAxisSize.min,
-                  children: [
+                  children: <Widget>[
                     Text('By Jerrold',style: TextStyle(
                       fontSize : 16,
                       fontWeight: FontWeight.w600,
                       color: AppColors.white,
                     ),
                     ),
-                    const Gap(3),
+                    Gap(3),
                     Icon(PhosphorIconsFill.sealCheck,color : AppColors.white, size: 24),
                   ],
                 ), 
-                Text('Open edition 0.22APT',style: TextStyle(
+                const Text('Open edition 0.22APT',style: TextStyle(
                       fontSize : 16,
                       fontWeight: FontWeight.w600,
                       color: AppColors.white,
@@ -271,12 +270,12 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
             right: 16,
             bottom: 22,
             child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8,horizontal: 12),
+                padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   color: AppColors.black,
                 ),
-                child: Text(
+                child: const Text(
                       'View Drop',
                       style: TextStyle(
                         fontSize: 16,
@@ -290,15 +289,14 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
     );
   }
 
-  Widget _buildCategoryHeader(String title, VoidCallback onTap) {
-    return Padding(
+  Widget _buildCategoryHeader(String title, VoidCallback onTap) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        children: <Widget>[
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
@@ -307,8 +305,8 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
             onTap: onTap,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
+              children: <Widget>[
+                const Text(
                   'See all',
                   style: TextStyle(
                     fontSize: 14,
@@ -319,21 +317,20 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                 Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 18),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
-  }
 
   Widget _buildNFTSGrid(BuildContext context) {
-    final nftImages = [
-      "https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000",
+    final List<String> nftImages = <String>[
+      'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000',
     ];
-    final width = context.screenWidth;
-    final height = context.screenHeight;
+    final double width = context.screenWidth;
+    final double height = context.screenHeight;
     return SizedBox(
       height: height *.285 * 2,
       child: GridView.builder(
@@ -341,18 +338,17 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 4.0,
-                crossAxisSpacing: 4.0,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4,
                 mainAxisExtent: height* .285,
               ),
               itemCount: nftImages.length,
-              itemBuilder: (context, index) {
-                return Padding(
+              itemBuilder: (BuildContext context, int index) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8,vertical:4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: <Widget>[
                       _getNftAsset(
                           context: context,
                           imageUrl: nftImages[index],
@@ -360,23 +356,22 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                       const Gap(6),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: width / 3),
-                        child: Text(
+                        child: const Text(
                           'Cyberpunk kid #6823',
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.greyDark),
+                              color: AppColors.greyDark,),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const Gap(3),
-                     Text('0.0APT',
+                     const Text('0.0APT',
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500))
+                                  fontSize: 16, fontWeight: FontWeight.w500,),),
                     ],
                   ),
-                );
-              },
+                ),
             ),
     );
   }
@@ -384,20 +379,20 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
   Widget _getNftAsset(
       {required BuildContext context,
       required String? imageUrl,}) {
-    final width = context.screenWidth;
+    final double width = context.screenWidth;
     if (imageUrl == null) {
       return const CircleAvatar(radius: 22, backgroundColor: Colors.amber);
     } else {
       //two cases - ipfs and url to call
       return ClipRRect(
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(12),
         child: CachedNetworkImage(
           fit: BoxFit.cover,
           width: width * .5,
           height: width * .45,
           imageUrl: imageUrl,
-          errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-          progressIndicatorBuilder: (ctx, str, download) =>
+          errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
+          progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
               const CircularProgressIndicator(),
         ),
       );

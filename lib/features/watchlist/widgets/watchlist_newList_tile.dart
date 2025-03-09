@@ -6,15 +6,14 @@ class WatchlistNewListTile extends StatelessWidget {
   const WatchlistNewListTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
+  Widget build(BuildContext context) => SizedBox(
       width: 164,
       height: 164,
       child: CustomPaint(
         painter: DashedCirclePainter(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Icon(
               PhosphorIcons.listPlus(),
               size: 48,
@@ -22,7 +21,7 @@ class WatchlistNewListTile extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             const Text(
-              "New List",
+              'New List',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -33,13 +32,13 @@ class WatchlistNewListTile extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 class DashedCirclePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    const double dashWidth = 8, dashSpace = 4;
+    const double dashWidth = 8;
+    const double dashSpace = 4;
     final Paint paint = Paint()
       ..color = Colors.grey
       ..strokeWidth = 2
@@ -53,10 +52,10 @@ class DashedCirclePainter extends CustomPainter {
     while (distance < circumference) {
       path.addArc(
         Rect.fromCircle(center: Offset(radius, radius), radius: radius),
-        (distance / radius),
-        (dashWidth / radius),
+        distance / radius,
+        dashWidth / radius,
       );
-      distance += (dashWidth + dashSpace);
+      distance += dashWidth + dashSpace;
     }
 
     canvas.drawPath(path, paint);

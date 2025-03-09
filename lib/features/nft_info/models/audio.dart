@@ -1,8 +1,4 @@
 class Audio {
-  final String audioName;
-  final String authorName;
-  final String nftArtPath;
-  final String audioPath;
 
   Audio({
     required this.audioName,
@@ -10,4 +6,8 @@ class Audio {
     required this.nftArtPath,
     required this.audioPath,
   });
+  final String audioName;
+  final String authorName;
+  final String nftArtPath;
+  final String audioPath;
 }

@@ -33,7 +33,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
-    ));
+    ),);
   }
 
   @override
@@ -43,7 +43,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
   }
 
   void delete() {
-    _controller.forward(from: 0.0);
+    _controller.forward(from: 0);
 
     setState(() {
       clickDelete = !clickDelete;
@@ -67,14 +67,14 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
     }
 
     return Column(
-      children: [
+      children: <Widget>[
         Visibility(
           visible: !isDeleted,
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 70,
             child: Stack(
-              children: [
+              children: <Widget>[
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   right: clickDelete ? MediaQuery.of(context).size.width : 0,
@@ -84,19 +84,18 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                     height: 55,
                     width: MediaQuery.of(context).size.width,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        children: <Widget>[
                           const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: <Widget>[
                               Image(
                                 height: 55,
                                 width: 55,
                                 fit: BoxFit.cover,
-                                image: AssetImage("assets/images/onboarding-nft-6.png"),
+                                image: AssetImage('assets/images/onboarding-nft-6.png'),
                               ),
                             ],
                           ),
@@ -104,13 +103,13 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children: <Widget>[
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
+                                  children: <Widget>[
                                     const Text.rich(
                                       TextSpan(
-                                        text: "Funky Monkey",
+                                        text: 'Funky Monkey',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -119,7 +118,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                     ),
                                     if(widget.deleteNft)
                                       const Text(
-                                        "14K",
+                                        '14K',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
@@ -127,7 +126,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                       ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.5, end: 0),
                                     if(!widget.deleteNft)
                                       const Text(
-                                        "14K",
+                                        '14K',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
@@ -138,10 +137,10 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 const Gap(4),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
+                                  children: <Widget>[
                                     const Text.rich(
                                       TextSpan(
-                                        text: "\$123.39",
+                                        text: r'$123.39',
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
@@ -152,7 +151,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                     if(widget.deleteNft)
                                       const Text.rich(
                                         TextSpan(
-                                          text: "32 APT ",
+                                          text: '32 APT ',
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -163,14 +162,14 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                     if(!widget.deleteNft)
                                       const Text.rich(
                                         TextSpan(
-                                          text: "32 APT ",
+                                          text: '32 APT ',
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.grey,
                                           ),
                                         ),
-                                      )
+                                      ),
                                   ],
                                 ),
                               ],
@@ -204,25 +203,24 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                       color: Colors.grey[200],
                       child: Center(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
+                            children: <Widget>[
                               Visibility(
                                 visible: clickDelete,
                                 child: AnimatedBuilder(
                                   animation: _controller,
-                                  builder: (context, child) => ShaderMask(
+                                  builder: (BuildContext context, Widget? child) => ShaderMask(
                                       shaderCallback: (Rect bounds) => LinearGradient(
                                         // colors: <Color>[Colors.grey, Colors.grey.withOpacity(0.6)],
-                                           colors: <Color>[AppColors.greyDark, AppColors.greyLight.withOpacity(0.6)],
+                                           colors: <Color>[AppColors.greyDark, AppColors.greyLight.withValues(alpha: 0.6),],
                                         stops: <double>[_controller.value, _controller.value],
                                       ).createShader(bounds),
                                       child: Text(
-                                        "Removing from collection",
+                                        'Removing from collection',
                                         style: TextStyle(
-                                          color: AppColors.greyLight.withOpacity(0.6),
+                                          color: AppColors.greyLight.withValues(alpha: 0.6),
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
                                         ),
@@ -232,15 +230,15 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                               ),
                               GestureDetector(
                                 onTap: delete,
-                                child: Container(
+                                child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(color: Colors.black, width: 1),
+                                    border: Border.all(),
                                   ),
                                   child: const Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 4),
+                                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                                     child: Text(
-                                      "undo",
+                                      'undo',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,

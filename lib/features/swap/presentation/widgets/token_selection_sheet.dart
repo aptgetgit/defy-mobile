@@ -6,33 +6,33 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../../config/theme/colors.dart';
 
 class TokenSelectionSheet extends StatelessWidget {
-  final Function(Map<String, String>) onTokenSelected;
 
   const TokenSelectionSheet({super.key, required this.onTokenSelected});
+  final Function(Map<String, String>) onTokenSelected;
 
   @override
   Widget build(BuildContext context) {
     // Sample token data
-    final List<Map<String, String>> tokens = [
-      {
+    final List<Map<String, String>> tokens = <Map<String, String>>[
+      <String, String>{
         'name': 'Ethereum',
         'icon': 'assets/icons/ethereum.png',
         'usdValue': r'$852.02',
         'amount': '0.5 ETH',
       },
-      {
+      <String, String>{
         'name': 'Polygon',
         'icon': 'assets/icons/polygon.png',
         'usdValue': r'$62.90',
         'amount': '8.01 MATIC',
       },
-      {
+      <String, String>{
         'name': 'DAI',
         'icon': 'assets/icons/dai.png',
         'usdValue': '23.10',
         'amount': '00.23 DAI',
       },
-      {
+      <String, String>{
         'name': 'USDC',
         'icon': 'assets/icons/usdc.png',
         'usdValue': r'$89.02',
@@ -49,7 +49,7 @@ class TokenSelectionSheet extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           const Text(
             'Choose Token',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -62,7 +62,7 @@ class TokenSelectionSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Row(
-              children: [
+              children: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Icon(PhosphorIconsBold.magnifyingGlass, color: AppColors.greyDark),
@@ -83,8 +83,8 @@ class TokenSelectionSheet extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               itemCount: tokens.length,
-              itemBuilder: (context, index) {
-                final token = tokens[index];
+              itemBuilder: (BuildContext context, int index) {
+                final Map<String, String> token = tokens[index];
                 return GestureDetector(
                   onTap: () {
                     onTokenSelected(token);
@@ -94,9 +94,9 @@ class TokenSelectionSheet extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 32),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         Row(
-                          children: [
+                          children: <Widget>[
                             Image.asset(
                               token['icon']!,
                               width: 40,
@@ -105,7 +105,7 @@ class TokenSelectionSheet extends StatelessWidget {
                             const Gap(12),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 Text(
                                   token['name']!,
                                   style: const TextStyle(
@@ -119,7 +119,7 @@ class TokenSelectionSheet extends StatelessWidget {
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
+                          children: <Widget>[
                             Text(
                               token['usdValue']!,
                               style: const TextStyle(
@@ -129,7 +129,7 @@ class TokenSelectionSheet extends StatelessWidget {
                             ),
                             Text(
                               token['amount']!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                                 color: AppColors.greyLight,
                               ),

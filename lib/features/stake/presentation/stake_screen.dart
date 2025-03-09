@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
+import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../widgets/provider_item.dart';
 import 'stake_info_screen.dart';
 
@@ -194,50 +195,30 @@ class _StakeScreenState extends State<StakeScreen> with SingleTickerProviderStat
         ),
         SliverPersistentHeader(
           pinned: true,
-          delegate: _TabBarDelegate(
+          delegate: TabBarDelegate(
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  TabBar(
-                    controller: _tabController,
-                    isScrollable: true,
-                    indicatorColor: Colors.black,
-                    indicator: const UnderlineTabIndicator(
-                      borderSide: BorderSide(width: 2),
-                    ),
-                    tabAlignment: TabAlignment.start,
-                    labelColor: Colors.black,
-                    unselectedLabelColor: AppColors.greyLight,
-                    labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                    unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                    labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    padding: EdgeInsets.zero,
-                    indicatorWeight: 1,
-                    dividerHeight: 1,
-                    dividerColor: AppColors.greyVeryLight,
-                    tabs: const <Widget>[
-                      Tab(text: 'All'),
-                      Tab(text: 'Native'),
-                      Tab(text: 'Delegate'),
+              child: CustomTabBar(
+                tabController: _tabController,
+                tabs: const <String>[
+                  'All',
+                  'Native',
+                  'Delegate',
+                ],
+                trailing: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                  child: Row(
+                    children: <Widget>[
+                      AnimatedOpacity(
+                        opacity: _isSearchIconVisible ? 0 : 1,
+                        duration: const Duration(milliseconds: 200),
+                        child: const Icon(PhosphorIconsBold.magnifyingGlass, size: 20,color: AppColors.greyLight,),
+                      ),
+                      const Gap(15),
+                      const Icon(PhosphorIconsBold.funnelSimple, size: 20,color: AppColors.greyLight,),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Row(
-                      children: <Widget>[
-                        AnimatedOpacity(
-                          opacity: _isSearchIconVisible ? 0 : 1,
-                          duration: const Duration(milliseconds: 200),
-                          child: const Icon(PhosphorIconsBold.magnifyingGlass, size: 20,color: AppColors.greyLight,),
-                        ),
-                        const Gap(15),
-                        const Icon(PhosphorIconsBold.funnelSimple, size: 20,color: AppColors.greyLight,),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -408,26 +389,4 @@ class _StakeScreenState extends State<StakeScreen> with SingleTickerProviderStat
       ),
     ),
   );
-}
-
-class _TabBarDelegate extends SliverPersistentHeaderDelegate {
-  _TabBarDelegate(this.tabBar);
-  final Widget tabBar;
-
-  @override
-  double get minExtent => kToolbarHeight - 10; // Minimum height for tab bar
-
-  @override
-  double get maxExtent => kToolbarHeight - 10; // Maximum height remains same
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => Material(
-      color: Colors.white,
-      elevation: overlapsContent ? 4 : 0, // Add elevation when overlapping
-      shadowColor: Colors.black.withOpacity(0.1),
-      child: tabBar, // The entire row containing balance + tabs
-    );
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
 }

@@ -13,7 +13,7 @@ class NftInfoBottomNavBar extends StatelessWidget {
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
         ),
-        boxShadow: [
+        boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.black12,
             blurRadius: 20,
@@ -35,7 +35,7 @@ class NftInfoBottomNavBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text(
+              Text(
                 '89.02 APT',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
@@ -60,7 +60,7 @@ class NftInfoBottomNavBar extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    side: const BorderSide(color: Colors.black),
+                    side: const BorderSide(),
                   ),
                   child: const Text('Bid', style: TextStyle(color: Colors.black, fontSize: 18)),
                 ),

@@ -35,7 +35,7 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
                   const Gap(8),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       Text(
                         '7.06 APT',
                         style: TextStyle(fontSize: 14, color: AppColors.greyLight, fontWeight: FontWeight.w600),
@@ -62,7 +62,7 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           const Row(
-                            children: [
+                            children: <Widget>[
                               CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 backgroundImage: AssetImage('assets/icons/aptos.png'),
@@ -71,7 +71,7 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
                               Gap(12),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     'Aptos',
                                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -91,7 +91,7 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
                               Navigator.pop(context);
                             },
                             child: const Text(
-                              "Change",
+                              'Change',
                               style: TextStyle(color: AppColors.blue, fontSize: 16),
                             ),
                           ),
@@ -103,13 +103,13 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
 
                   // Number Pad
                   Column(
-                    children: [
-                      _buildRowButtons(['1', '2', '3']),
-                      _buildRowButtons(['4', '5', '6']),
-                      _buildRowButtons(['7', '8', '9']),
+                    children: <Widget>[
+                      _buildRowButtons(<String>['1', '2', '3']),
+                      _buildRowButtons(<String>['4', '5', '6']),
+                      _buildRowButtons(<String>['7', '8', '9']),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
+                        children: <Widget>[
                           _buildButton('.'),
                           _buildButton('0'),
                           _buildButton('cancel', PhosphorIconsBold.backspace),
@@ -129,7 +129,7 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
   // Helper function to build a row of buttons
   Widget _buildRowButtons(List<String> items) => Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: items.map((e) => _buildButton(e)).toList(),
+      children: items.map(_buildButton).toList(),
     );
 
   // Helper function to build a single button

@@ -16,36 +16,36 @@ class FromTokenScreen extends StatefulWidget {
 
 class _FromTokenScreenState extends State<FromTokenScreen> {
   bool _isSelectionMode = false;
-  final List<Map<String, String>> tokens = [
-    {
+  final List<Map<String, String>> tokens = <Map<String, String>>[
+    <String, String>{
       'name': 'APT',
       'icon': 'assets/icons/aptos.png',
       'usdValue': r'$22.12',
       'amount': '7 APTOS',
       'isSelected': 'false',
     },
-    {
+    <String, String>{
       'name': 'Ethereum',
       'icon': 'assets/icons/ethereum.png',
       'usdValue': r'$852.02',
       'amount': '0.5 ETH',
       'isSelected': 'false',
     },
-    {
+    <String, String>{
       'name': 'Polygon',
       'icon': 'assets/icons/polygon.png',
       'usdValue': r'$62.90',
       'amount': '8.01 MATIC',
       'isSelected': 'false',
     },
-    {
+    <String, String>{
       'name': 'DAI',
       'icon': 'assets/icons/dai.png',
       'usdValue': '23.10',
       'amount': '00.23 DAI',
       'isSelected': 'false',
     },
-    {
+    <String, String>{
       'name': 'USDC',
       'icon': 'assets/icons/usdc.png',
       'usdValue': r'$89.02',
@@ -59,7 +59,7 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
       _isSelectionMode = !_isSelectionMode;
       if (!_isSelectionMode) {
         // Reset selection when exiting selection mode
-        for (var token in tokens) {
+        for (final Map<String, String> token in tokens) {
           token['isSelected'] = 'false';
         }
       }
@@ -68,14 +68,12 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
 
   void _toggleTokenSelection(int index) {
     setState(() {
-      bool currentValue = tokens[index]['isSelected'] == 'true';
+      final bool currentValue = tokens[index]['isSelected'] == 'true';
       tokens[index]['isSelected'] = (!currentValue).toString();
     });
   }
 
-  int getSelectedCount() {
-    return tokens.where((token) => token['isSelected'] == 'true').length;
-  }
+  int getSelectedCount() => tokens.where((Map<String, String> token) => token['isSelected'] == 'true').length;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -93,7 +91,7 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
           'Swap',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
@@ -108,17 +106,17 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const Gap(8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 const Text(
                   'From Token',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 Row(
-                  children: [
+                  children: <Widget>[
                     const Icon(
                       PhosphorIconsBold.magnifyingGlass,
                       color: AppColors.greyLight,
@@ -163,9 +161,9 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
             Expanded(
               child: ListView.builder(
                 itemCount: tokens.length,
-                itemBuilder: (context, index) {
-                  final token = tokens[index];
-                  final isSelected = token['isSelected'] == 'true';
+                itemBuilder: (BuildContext context, int index) {
+                  final Map<String, String> token = tokens[index];
+                  final bool isSelected = token['isSelected'] == 'true';
                   // Inside the ListView.builder itemBuilder
                   return GestureDetector(
                     onTap: _isSelectionMode
@@ -178,10 +176,10 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
                       padding: const EdgeInsets.only(bottom: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: <Widget>[
                           // Left side - Token icon and information
                           Row(
-                            children: [
+                            children: <Widget>[
                               Image.asset(
                                 token['icon']!,
                                 width: 40,
@@ -190,7 +188,7 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
                               const Gap(12),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     token['name']!,
                                     style: const TextStyle(
@@ -205,10 +203,10 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
                           
                           // Right side - Price information and checkbox (if in selection mode)
                           Row(
-                            children: [
+                            children: <Widget>[
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     token['usdValue']!,
                                     style: TextStyle(
@@ -219,7 +217,7 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
                                   ),
                                   Text(
                                     token['amount']!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       color: AppColors.greyLight,
                                     ),
@@ -254,14 +252,14 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       // Collect all selected tokens
-                      final selectedTokens = tokens
-                          .where((token) => token['isSelected'] == 'true')
+                      final List<Map<String, String>> selectedTokens = tokens
+                          .where((Map<String, String> token) => token['isSelected'] == 'true')
                           .toList();
                       
                       if (selectedTokens.isNotEmpty) {
                         // Return all selected tokens to the previous screen
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SwapFromScreen(selectedTokens: selectedTokens))
+                          MaterialPageRoute(builder: (BuildContext context) => SwapFromScreen(selectedTokens: selectedTokens))
                         );
                       }
                     },
@@ -276,7 +274,7 @@ class _FromTokenScreenState extends State<FromTokenScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           CircleAvatar(
                             backgroundColor: AppColors.blue,
                             radius: 12,

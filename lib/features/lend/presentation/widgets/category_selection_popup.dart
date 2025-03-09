@@ -33,7 +33,7 @@ class _CategorySelectionPopupState extends State<CategorySelectionPopup> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           // Title
           const Text(
             'Select Category',
@@ -45,13 +45,13 @@ class _CategorySelectionPopupState extends State<CategorySelectionPopup> {
           const Gap(16), // Spacing
 
           // Category List with Custom Checkboxes
-          ...widget.categories.map((category) {
-            int index = widget.categories.indexOf(category);
+          ...widget.categories.map((Map<String, dynamic> category) {
+            final int index = widget.categories.indexOf(category);
             return ListTile(
               contentPadding: EdgeInsets.zero,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     category['name'] as String,
                     style: const TextStyle(

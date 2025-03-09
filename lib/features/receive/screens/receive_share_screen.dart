@@ -20,13 +20,12 @@ class ReceiveShareScreen extends StatelessWidget {
             Align(
               child: Stack(
                 alignment: Alignment.center,
-                children: [
+                children: <Widget>[
                   QrImageView( // Use QrImageView
                     data: walletAddress, // The data for the QR code
-                    version: QrVersions.auto, // Use auto versioning
-                    size: 300.0, // Adjust size as needed
-                    embeddedImageStyle: QrEmbeddedImageStyle( // Style embedded image
-                      size: const Size(99, 99), // Size of embedded image
+                    size: 300, // Adjust size as needed
+                    embeddedImageStyle: const QrEmbeddedImageStyle( // Style embedded image
+                      size: Size(99, 99), // Size of embedded image
                     ),
                     embeddedImage:
                         const AssetImage('assets/images/avatar-7.png'), // Embedded image
@@ -50,7 +49,7 @@ class ReceiveShareScreen extends StatelessWidget {
               ),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Text(
                     'defy.app/request/10/maharsipatel',
                     style: TextStyle(fontSize: 16, color: AppColors.greyLight),
@@ -60,11 +59,11 @@ class ReceiveShareScreen extends StatelessWidget {
                     PhosphorIconsBold.clipboard,
                     color: AppColors.greyLight,
                     size: 24,
-                  )
+                  ),
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),

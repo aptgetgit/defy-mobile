@@ -4,23 +4,21 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'generated/token_info_controller.g.dart';
 
 class TokensState {
-  final bool isSecondPage;
-  final int selectedTab;
 
   TokensState({
     this.isSecondPage = false,
     this.selectedTab = 0,
   });
+  final bool isSecondPage;
+  final int selectedTab;
 
   TokensState copyWith({
     bool? isSecondPage,
     int? selectedTab,
-  }) {
-    return TokensState(
+  }) => TokensState(
       isSecondPage: isSecondPage ?? this.isSecondPage,
       selectedTab: selectedTab ?? this.selectedTab,
     );
-  }
 }
 
 @riverpod

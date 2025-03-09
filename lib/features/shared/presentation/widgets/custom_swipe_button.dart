@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomSwipeButton extends StatefulWidget {
-  final VoidCallback onSwipeCompleted;
 
-  CustomSwipeButton({required this.onSwipeCompleted});
+  const CustomSwipeButton({super.key, required this.onSwipeCompleted});
+  final VoidCallback onSwipeCompleted;
 
   @override
   _CustomSwipeButtonState createState() => _CustomSwipeButtonState();
@@ -11,24 +11,22 @@ class CustomSwipeButton extends StatefulWidget {
 
 class _CustomSwipeButtonState extends State<CustomSwipeButton>
     with SingleTickerProviderStateMixin {
-  double _dragPercentage = 0.0;
+  double _dragPercentage = 0;
   bool _swiped = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: LayoutBuilder(
-        builder: (context, constraints) {
-          return GestureDetector(
-            onHorizontalDragUpdate: (details) {
+        builder: (BuildContext context, BoxConstraints constraints) => GestureDetector(
+            onHorizontalDragUpdate: (DragUpdateDetails details) {
               setState(() {
                 _dragPercentage =
                     (details.localPosition.dx / constraints.maxWidth)
                         .clamp(0.0, 1.0);
               });
             },
-            onHorizontalDragEnd: (details) {
+            onHorizontalDragEnd: (DragEndDetails details) {
               if (_dragPercentage > 0.5) {
                 setState(() {
                   _swiped = true;
@@ -43,7 +41,7 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
               }
             },
             child: Stack(
-              children: [
+              children: <Widget>[
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,
@@ -53,11 +51,11 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
                         ? Colors.green
                         : Colors.black,
                     borderRadius: BorderRadius.circular(40),
-                    boxShadow: [
+                    boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 10,
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),
@@ -78,7 +76,7 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                   left: (_dragPercentage * constraints.maxWidth).clamp(
-                      0.0, constraints.maxWidth - 70), // Clamp within bounds
+                      0.0, constraints.maxWidth - 70,), // Clamp within bounds
                   child: Container(
                     height: 70,
                     width: 70,
@@ -91,11 +89,11 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
                       ),
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(40),
-                      boxShadow: [
+                      boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 10,
-                          offset: Offset(0, 5),
+                          offset: const Offset(0, 5),
                         ),
                       ],
                     ),
@@ -109,9 +107,7 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
                 ),
               ],
             ),
-          );
-        },
+          ),
       ),
     );
-  }
 }

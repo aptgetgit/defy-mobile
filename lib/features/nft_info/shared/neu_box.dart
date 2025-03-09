@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NeuBox extends StatelessWidget {
-  const NeuBox({super.key, required this.child});
+  const NeuBox({required this.child, super.key});
   final Widget? child;
 
   @override
@@ -9,7 +9,7 @@ class NeuBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.grey.shade500,
             blurRadius: 15,
@@ -23,7 +23,7 @@ class NeuBox extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       child: child,
     );
 }

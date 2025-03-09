@@ -1,13 +1,13 @@
-import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../../../core/extensions/context_extensions.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       height: context.screenHeight * 0.11, 
       decoration: BoxDecoration(
         color: Colors.white,
@@ -15,9 +15,9 @@ class BottomNavBar extends StatelessWidget {
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
-        boxShadow: [
+        boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
             spreadRadius: 5,
             blurRadius: 7,
             offset: const Offset(0, 3),
@@ -27,10 +27,9 @@ class BottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
+        children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Image.asset(
                 'assets/icons/aptos-logo.png',
                 height: context.screenHeight * 0.0375, 
@@ -39,7 +38,7 @@ class BottomNavBar extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'Balance',
                     style: context.labelSmall?.copyWith(
@@ -60,7 +59,7 @@ class BottomNavBar extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Container(
                 height: context.screenHeight * 0.0625,
                 width: context.screenWidth * 0.3, 
@@ -69,7 +68,6 @@ class BottomNavBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Align(
-                  alignment: Alignment.center,
                   child: Text(
                     'Buy',
                     style: context.titleSmall?.copyWith(
@@ -94,5 +92,4 @@ class BottomNavBar extends StatelessWidget {
         ],
       ),
     );
-  }
 }

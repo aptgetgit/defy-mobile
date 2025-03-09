@@ -5,28 +5,26 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'generated/price_alert_controller.g.dart';
 
 class PriceAlertState {
+
+  PriceAlertState({
+    this.priceValue = '',
+    this.alertType = 'Goes Over',
+  });
   final String priceValue;
   final TextEditingController priceController = TextEditingController();
   final FocusNode priceFocusNode = FocusNode();
   final TextEditingController notesController = TextEditingController();
   final FocusNode notesFocusNode = FocusNode();
   final String alertType;
-  final StateProvider<bool> alertCreatedProvider = StateProvider<bool>((ref) => false);
-
-  PriceAlertState({
-    this.priceValue = '',
-    this.alertType = 'Goes Over',
-  });
+  final StateProvider<bool> alertCreatedProvider = StateProvider<bool>((StateProviderRef<bool> ref) => false);
 
   PriceAlertState copyWith({
     String? priceValue,
     String? alertType,
-  }) {
-    return PriceAlertState(
+  }) => PriceAlertState(
       priceValue: priceValue ?? this.priceValue,
       alertType: alertType ?? this.alertType,
     );
-  }
 }
 
 @Riverpod(keepAlive: true)

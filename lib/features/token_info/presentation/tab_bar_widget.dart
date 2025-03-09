@@ -1,23 +1,24 @@
-import 'package:defy/features/token_info/providers/token_info_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/token_info_controller.dart';
 
 class TabBarWidget extends ConsumerWidget {
   const TabBarWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.read(tokensControllerProvider.notifier);
+    final TokensController controller = ref.read(tokensControllerProvider.notifier);
 
     return Material(
       color: Colors.white,
-      child: Container(
+      child: ColoredBox(
         color: Colors.white,
         child: Row(
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 TabButton(
                   title: 'About',
                   isSelected:
@@ -38,7 +39,7 @@ class TabBarWidget extends ConsumerWidget {
                 ),
               ],
             ),
-            const Row()
+            const Row(),
           ],
         ),
       ),
@@ -47,9 +48,6 @@ class TabBarWidget extends ConsumerWidget {
 }
 
 class TabButton extends StatelessWidget {
-  final String title;
-  final bool isSelected;
-  final VoidCallback onTap;
 
   const TabButton({
     super.key,
@@ -57,10 +55,12 @@ class TabButton extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
   });
+  final String title;
+  final bool isSelected;
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -74,5 +74,4 @@ class TabButton extends StatelessWidget {
         ),
       ),
     );
-  }
 }

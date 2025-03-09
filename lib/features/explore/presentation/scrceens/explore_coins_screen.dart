@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:defy/app/routes/router.dart';
-import 'package:defy/config/theme/colors.dart';
-import 'package:defy/core/extensions/context_extensions.dart';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../../../../app/routes/router.dart';
+import '../../../../config/theme/colors.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 class ExploreCoinsScreen extends StatefulWidget {
   const ExploreCoinsScreen({super.key});
@@ -93,17 +93,14 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               //search bar
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Icon(PhosphorIconsBold.caretLeft),
-                    ),
+                  children: <Widget>[
+                    const Icon(PhosphorIconsBold.caretLeft),
                     const Gap(12),
                     Expanded(
                       child: Container(
@@ -116,20 +113,19 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
-                          children: [
+                          children: <Widget>[
                             const Gap(16),
-                            Icon(
+                            const Icon(
                               PhosphorIconsBold.magnifyingGlass,
                               color: AppColors.greyMedium,
                             ),
                             const Gap(8),
                             Expanded(
                               child: TextField(
-                                textAlign: TextAlign.start,
                                 controller: _searchConroller,
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "Search or paste URL",
+                                  hintText: 'Search or paste URL',
                                   hintStyle: TextStyle(
                                     color: AppColors.greyMedium,
                                     fontSize: 14,
@@ -137,7 +133,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                                 ),
                               ),
                             ),
-                            Icon(
+                            const Icon(
                               PhosphorIconsBold.cards,
                               color: AppColors.greyMedium,
                             ),
@@ -158,9 +154,9 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
               SlideTransition(
                 position: _slideAnimation2,
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     //pump.uptos.fun
-                    _buildCategoryHeader('Uptos Pump', () => ExplorePumpFunScreenRoute().push(context)),
+                    _buildCategoryHeader('Uptos Pump', () => const ExplorePumpFunScreenRoute().push(context)),
                     _buildPumpFunTile(context),
                   ],
                 ),
@@ -169,7 +165,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
               SlideTransition(
                 position: _slideAnimation,
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     //mcap coins
                     _buildCategoryHeader('Top MCAP Coins', () {}),
                     _buildTopMCAPCoin(context),
@@ -194,15 +190,14 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
       ),
     );
 
-  Widget _buildCategoryHeader(String title, VoidCallback onTap) {
-    return Padding(
+  Widget _buildCategoryHeader(String title, VoidCallback onTap) => Padding(
       padding: const EdgeInsets.only(left : 18,right:18,bottom : 14,top :22),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        children: <Widget>[
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
@@ -211,8 +206,8 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
             onTap: onTap,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
+              children: <Widget>[
+                const Text(
                   'See all',
                   style: TextStyle(
                     fontSize: 14,
@@ -223,11 +218,10 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                 Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 18),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
-  }
 
   // Widget _buildTopBanner(BuildContext context) {
   //   final width = context.screenWidth;
@@ -252,60 +246,57 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
 
 
 
-  Widget _buildTopBanner(BuildContext context) {
-    return Card(
+  Widget _buildTopBanner(BuildContext context) => Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 0,
-      margin: EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
            
             // Tab Buttons
             Row(
-              children: [
-                _buildTabButton("Meme coins 🔥", isActive: true, height: 34, width: 126),
-                SizedBox(width: 8),
-                _buildTabButton("MCAP Coins", isActive: false, height: 34, width: 109),
+              children: <Widget>[
+                _buildTabButton('Meme coins 🔥', isActive: true, width: 126),
+                const SizedBox(width: 8),
+                _buildTabButton('MCAP Coins', isActive: false, width: 109),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             // List Items
             _buildListItem(
               context,
-              iconUrl: "https://via.placeholder.com/40", // Replace with image URL
-              title: "Bonk",
-              subtitle: "BONK",
-              change: "2.5%",
+              iconUrl: 'https://via.placeholder.com/40', // Replace with image URL
+              title: 'Bonk',
+              subtitle: 'BONK',
+              change: '2.5%',
             ),
             _buildListItem(
               context,
-              iconUrl: "https://via.placeholder.com/40", // Replace with image URL
-              title: "GUI",
-              subtitle: "GUI",
-              change: "2.5%",
+              iconUrl: 'https://via.placeholder.com/40', // Replace with image URL
+              title: 'GUI',
+              subtitle: 'GUI',
+              change: '2.5%',
             ),
             _buildListItem(
               context,
-              iconUrl: "https://via.placeholder.com/40", // Replace with image URL
-              title: "Bonk",
-              subtitle: "BONK",
-              change: "2.5%",
+              iconUrl: 'https://via.placeholder.com/40', // Replace with image URL
+              title: 'Bonk',
+              subtitle: 'BONK',
+              change: '2.5%',
             ),
           ],
         ),
       ),
     );
-  }
-Widget _buildTabButton(String label, {required bool isActive, double? width, double height = 34}) {
-  return Container(
-    constraints: BoxConstraints(
+Widget _buildTabButton(String label, {required bool isActive, double? width, double height = 34}) => Container(
+    constraints: const BoxConstraints(
       minWidth: 126, // Ensure a minimum width for the container
     ),
     height: height, // Fixed height
-    padding: EdgeInsets.symmetric(horizontal: 16), // Padding for inner spacing
+    padding: const EdgeInsets.symmetric(horizontal: 16), // Padding for inner spacing
     decoration: BoxDecoration(
       color: isActive ? Colors.orange.shade100 : Colors.white, // Background color
       borderRadius: BorderRadius.circular(32),
@@ -315,8 +306,7 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
     ),
     child: Row(
       mainAxisSize: MainAxisSize.min, // Ensures container resizes to fit content
-      crossAxisAlignment: CrossAxisAlignment.center, // Vertically centers content
-      children: [
+      children: <Widget>[
         Flexible(
           child: Text(
             label,
@@ -332,7 +322,6 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
       ],
     ),
   );
-}
 
 
   Widget _buildListItem(
@@ -341,31 +330,30 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
     required String title,
     required String subtitle,
     required String change,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+  }) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        children: [
+        children: <Widget>[
           // Icon
           CircleAvatar(
             backgroundImage: NetworkImage(iconUrl),
             radius: 20,
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           // Texts
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
                 ),
               ),
               Text(
                 subtitle,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
@@ -373,15 +361,15 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           // Change Value
           Row(
-            children: [
-              Icon(PhosphorIconsFill.caretUp, color: Colors.green, size: 16),
-              SizedBox(width: 4),
+            children: <Widget>[
+              const Icon(PhosphorIconsFill.caretUp, color: Colors.green, size: 16),
+              const SizedBox(width: 4),
               Text(
                 change,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.green,
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
@@ -392,41 +380,39 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
         ],
       ),
     );
-  }
 }
 
 
   Widget _buildPumpFunTile(BuildContext context) {
-  final width = context.screenWidth;
-  final nftImages = [
-    "https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000",
-    "https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000",
+  final double width = context.screenWidth;
+  final List<String> nftImages = <String>[
+    'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
+    'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
   ];
 
   return ListView.builder(
-    physics: NeverScrollableScrollPhysics(),
+    physics: const NeverScrollableScrollPhysics(),
     shrinkWrap: true,
     itemCount: 2,
-    itemBuilder: (ctx, index) {
-      return Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    itemBuilder: (BuildContext ctx, int index) => Container(
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(18),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start, // Ensures alignment of text with image
-          children: [
+          children: <Widget>[
             ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
                 width: width * .28,
                 height: width * .28,
                 imageUrl: nftImages[index],
-                errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-                progressIndicatorBuilder: (ctx, str, download) =>
+                errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
+                progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                     const CircularProgressIndicator(),
               ),
             ),
@@ -434,34 +420,34 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
             Expanded( // Makes the column expand to fill the remaining space
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+                children: <Widget>[
+                  const Text(
                     'APTMAN (APTMAN)',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Are you APTMAN?',
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.greyLight),
+                        color: AppColors.greyLight,),
                   ),
                   const Gap(10), // Added extra gap here between the "TheWeimals" and MCAP
                   RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       text: 'Created by ',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppColors.greyLight,
                       ),
-                      children: [
+                      children: <InlineSpan>[
                         WidgetSpan(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 4.0),
+                            padding: EdgeInsets.only(right: 4),
                             // child: Image.asset(
                             //   'assets/images/sam.png', // Your local image path
                             //   width: 16,
@@ -483,16 +469,16 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                   const Gap(12), // Added gap to separate from MCAP
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: <Widget>[
                       RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: 'MCAP:',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             color: AppColors.greyLight,
                           ),
-                          children: [
+                          children: <InlineSpan>[
                             TextSpan(
                               text: '313',
                               style: TextStyle(
@@ -505,14 +491,14 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                         ),
                       ),
                       RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: 'Replies:',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: AppColors.greyLight,
                           ),
-                          children: [
+                          children: <InlineSpan>[
                             TextSpan(
                               text: '1,322',
                               style: TextStyle(
@@ -531,28 +517,26 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
             ),
           ],
         ),
-      );
-    },
+      ),
   );
 }
 
   Widget _buildTopMCAPCoin(BuildContext context) {
-    final coinsLogos = [
-      "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
-      "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-      "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-      "https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png"
+    final List<String> coinsLogos = <String>[
+      'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+      'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+      'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+      'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
     ];
-    final width = context.screenWidth;
+    final double width = context.screenWidth;
     return SizedBox(
       height: width * .33,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: coinsLogos.length,
-          itemBuilder: (ctx, index) {
-            return Container(
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(left: 16),
+          itemBuilder: (BuildContext ctx, int index) => Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.only(left: 16),
               width: width * .45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
@@ -561,27 +545,26 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(12),
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           width: width * .4 * .23,
                           height: width * .4 * .23,
                           imageUrl: coinsLogos[index],
-                          errorWidget: (ctx, str, obg) =>
+                          errorWidget: (BuildContext ctx, String str, Object obg) =>
                               Container(color: Colors.amber),
-                          progressIndicatorBuilder: (ctx, str, download) =>
+                          progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                               const CircularProgressIndicator(),
                         ),
                       ),
                       const Gap(6),
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Text(
                             'Aptos',
                             style: TextStyle(
@@ -594,28 +577,28 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.greyLight),
+                                color: AppColors.greyLight,),
                           ),
                         ],
                       ),
                     ],
                   ),
                     Container(
-                    padding: EdgeInsets.all(4),
-                    child: Column(
+                    padding: const EdgeInsets.all(4),
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
-                          '\$3.15M',
+                          r'$3.15M',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Row(
-                          children: [
+                          children: <Widget>[
                             Icon(PhosphorIconsFill.caretUp,
-                                color: AppColors.green, size: 18),
+                                color: AppColors.green, size: 18,),
                             Text(
                               '2.5%',
                               style: TextStyle(
@@ -631,28 +614,26 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                   ),
                 ],
               ),
-            );
-          }),
+            ),),
     );
   }
 
   Widget _buildTopMemeCoins(BuildContext context) {
-    final coinsLogos = [
-      "https://cryptologos.cc/logos/bonk1-bonk-logo.png?v=035",
-      "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-      "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-      "https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png"
+    final List<String> coinsLogos = <String>[
+      'https://cryptologos.cc/logos/bonk1-bonk-logo.png?v=035',
+      'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+      'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+      'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
     ];
-    final width = context.screenWidth;
+    final double width = context.screenWidth;
     return SizedBox(
       height: width * .33,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: coinsLogos.length,
-          itemBuilder: (ctx, index) {
-            return Container(
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(left: 16),
+          itemBuilder: (BuildContext ctx, int index) => Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.only(left: 16),
               width: width * .45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
@@ -661,27 +642,26 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(12),
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           width: width * .4 * .23,
                           height: width * .4 * .23,
                           imageUrl: coinsLogos[index],
-                          errorWidget: (ctx, str, obg) =>
+                          errorWidget: (BuildContext ctx, String str, Object obg) =>
                               Container(color: Colors.amber),
-                          progressIndicatorBuilder: (ctx, str, download) =>
+                          progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                               const CircularProgressIndicator(),
                         ),
                       ),
                       const Gap(6),
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Text(
                             'Bonk',
                             style: TextStyle(
@@ -694,28 +674,28 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.greyLight),
+                                color: AppColors.greyLight,),
                           ),
                         ],
                       ),
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.all(4),
-                    child: Column(
+                    padding: const EdgeInsets.all(4),
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
-                          '\$0.00002348',
+                          r'$0.00002348',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Row(
-                          children: [
+                          children: <Widget>[
                             Icon(PhosphorIconsFill.caretUp,
-                                color: AppColors.green, size: 18),
+                                color: AppColors.green, size: 18,),
                             Text(
                               '2.5%',
                               style: TextStyle(
@@ -731,28 +711,26 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                   ),
                 ],
               ),
-            );
-          }),
+            ),),
     );
   }
 
   Widget _buildTopVolume(BuildContext context) {
-  final coinsLogos = [
-    "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
-    "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-    "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-    "https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png"
+  final List<String> coinsLogos = <String>[
+    'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+    'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+    'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+    'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
   ];
-  final width = context.screenWidth;
+  final double width = context.screenWidth;
   return SizedBox(
     height: width * .33,
     child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: coinsLogos.length,
-        itemBuilder: (ctx, index) {
-          return Container(
-            padding: EdgeInsets.all(8),
-            margin: EdgeInsets.only(left: 16),
+        itemBuilder: (BuildContext ctx, int index) => Container(
+            padding: const EdgeInsets.all(8),
+            margin: const EdgeInsets.only(left: 16),
             width: width * .45,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
@@ -761,27 +739,26 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(12.0),
+                      borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,
                         width: width * .4 * .23,
                         height: width * .4 * .23,
                         imageUrl: coinsLogos[index],
-                        errorWidget: (ctx, str, obg) =>
+                        errorWidget: (BuildContext ctx, String str, Object obg) =>
                             Container(color: Colors.amber),
-                        progressIndicatorBuilder: (ctx, str, download) =>
+                        progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                             const CircularProgressIndicator(),
                       ),
                     ),
                     const Gap(6),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Aptos',
                           style: TextStyle(
@@ -795,47 +772,45 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                   ],
                 ),
                 Container(
-                  padding: EdgeInsets.all(4),
-                  child: Row(
-                    children: [
+                  padding: const EdgeInsets.all(4),
+                  child: const Row(
+                    children: <Widget>[
                       Text(
-                        '\$32M',
+                        r'$32M',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
                           color: AppColors.black,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Icon(PhosphorIconsBold.arrowCircleUpRight,
-                          color: AppColors.grey, size: 19.5),
+                          color: AppColors.grey, size: 19.5,),
                     ],
                   ),
                 ),
               ],
             ),
-          );
-        }),
+          ),),
   );
 }
 
   Widget _buildHighestGainers(BuildContext context) {
-    final coinsLogos = [
-      "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
-      "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-      "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-      "https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png"
+    final List<String> coinsLogos = <String>[
+      'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+      'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+      'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+      'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
     ];
-    final width = context.screenWidth;
+    final double width = context.screenWidth;
     return SizedBox(
       height: width * .33,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: coinsLogos.length,
-          itemBuilder: (ctx, index) {
-            return Container(
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(left: 16),
+          itemBuilder: (BuildContext ctx, int index) => Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.only(left: 16),
               width: width * .45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
@@ -844,27 +819,26 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(12),
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           width: width * .4 * .23,
                           height: width * .4 * .23,
                           imageUrl: coinsLogos[index],
-                          errorWidget: (ctx, str, obg) =>
+                          errorWidget: (BuildContext ctx, String str, Object obg) =>
                               Container(color: Colors.amber),
-                          progressIndicatorBuilder: (ctx, str, download) =>
+                          progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                               const CircularProgressIndicator(),
                         ),
                       ),
                       const Gap(6),
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Text(
                             'Aptos',
                             style: TextStyle(
@@ -877,40 +851,40 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.greyLight),
+                                color: AppColors.greyLight,),
                           ),
                         ],
                       ),
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(9),
                       color: AppColors.white,
                     ),
-                    child: Column(
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'MCAP',
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.greyLight),
+                              color: AppColors.greyLight,),
                         ),
                         Row(
-                          children: [
+                          children: <Widget>[
                             Text(
-                              '\$3.15M',
+                              r'$3.15M',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const Spacer(),
+                            Spacer(),
                             Icon(PhosphorIconsFill.caretUp,
-                                color: AppColors.green, size: 18),
+                                color: AppColors.green, size: 18,),
                             Text(
                               '2.5%',
                               style: TextStyle(
@@ -926,7 +900,6 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
                   ),
                 ],
               ),
-            );
-          }),
+            ),),
     );
   }

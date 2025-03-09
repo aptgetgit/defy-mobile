@@ -1,6 +1,7 @@
-import 'package:defy/config/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../../../../config/theme/colors.dart';
 
 class CustomCheckbox extends StatefulWidget {
   const CustomCheckbox({
@@ -19,18 +20,17 @@ class CustomCheckbox extends StatefulWidget {
 
 class CustomCheckboxState extends State<CustomCheckbox> {
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: widget.onTap,
       child: Container(
         alignment: Alignment.center,
-        width: 20.0,
-        height: 20.0,
+        width: 20,
+        height: 20,
         decoration: !widget.isChecked
             ? BoxDecoration(
                 borderRadius: widget.isRound
-                    ? BorderRadius.circular(30.0)
-                    : BorderRadius.circular(6.0),
+                    ? BorderRadius.circular(30)
+                    : BorderRadius.circular(6),
                 border: Border.all(
                   width: 1.5,
                   color: AppColors.grey,
@@ -39,15 +39,13 @@ class CustomCheckboxState extends State<CustomCheckbox> {
               )
             : null,
         child: widget.isChecked
-            ? Align(
-                alignment: Alignment.center,
+            ? const Align(
                 child: Icon(
                   PhosphorIconsFill.checkCircle,
                   size: 20,
                   color: AppColors.blue,
-                ))
+                ),)
             : null,
       ),
     );
-  }
 }

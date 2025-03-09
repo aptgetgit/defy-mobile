@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
-import '../../../wallet/presentation/wallet_more_screen.dart';
+import '../../wallet/presentation/wallet_more_screen.dart';
 
 class DashboardFloatingActionButton extends StatefulWidget {
   final bool show;
@@ -48,7 +48,6 @@ class _DashboardFloatingActionButtonState
 
   @override
   Widget build(BuildContext context) => Align(
-        alignment: Alignment.center,
         child: GestureDetector(
           onTap: () async {
             _controller.forward(); // Start scale animation
@@ -58,7 +57,7 @@ class _DashboardFloatingActionButtonState
             await showDialog(
               context: context,
               useSafeArea: false,
-              builder: (BuildContext context) => DashboardActionButtonDialog(),
+              builder: (BuildContext context) => const DashboardActionButtonDialog(),
             );
             _controller.reverse();
             setState(() {
@@ -70,7 +69,7 @@ class _DashboardFloatingActionButtonState
             radius: 50 / 2,
             child: AnimatedRotation(
               turns: dialogOpen ? 0.5 : 0,
-              duration: Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 200),
               curve: Curves.fastOutSlowIn,
               child: Icon(
                 size: 26,
@@ -126,7 +125,7 @@ class _DashboardActionButtonDialogState
   void _scrollToEnd() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeOutCubic,
     );
   }
@@ -134,7 +133,7 @@ class _DashboardActionButtonDialogState
   void _scrollToTop() {
     _scrollController.animateTo(
       0,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeOutCubic,
     );
   }
@@ -142,13 +141,13 @@ class _DashboardActionButtonDialogState
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
         animation: _animation,
-        builder: (context, child) => Opacity(
+        builder: (BuildContext context, Widget? child) => Opacity(
           opacity: _animation.value,
           child: Center(
             child: GestureDetector(
               onTap: () {
                 _controller.animateBack(0);
-                Navigator.of(context, rootNavigator: false).pop();
+                Navigator.of(context).pop();
               },
               child: Container(
                 alignment: Alignment.bottomLeft,
@@ -160,20 +159,20 @@ class _DashboardActionButtonDialogState
                   gradient: LinearGradient(
                     begin: Alignment.bottomLeft, // Start from the bottom left
                     end: Alignment.topRight, // End at the top right
-                    colors: [
+                    colors: <Color>[
                       Colors.white, // More white at the bottom
                       Color.fromARGB(182, 255, 255, 255), // Less white at the top
                     ],
-                    stops: [0.1, 0.9], // 10% of the screen is solid white, then it starts fading
+                    stops: <double>[0.1, 0.9], // 10% of the screen is solid white, then it starts fading
                   ),
                 ),
                 child: Material(
                   color: Colors.transparent,
                   child: SingleChildScrollView(
-                    physics: PageScrollPhysics(),
+                    physics: const PageScrollPhysics(),
                     controller: _scrollController,
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.87,
                           child: Padding(
@@ -181,14 +180,14 @@ class _DashboardActionButtonDialogState
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 _IconButton(
                                   onTap: () {},
                                   backgroundColor: AppColors.green, //*Green
                                   label: 'Buy', //*Green
                                   child: Icon(PhosphorIcons.plus()),
                                 ),
-                                _IconButton(
+                                const _IconButton(
                                   // onTap: (){
                                   //   SendScreenRoute().push(context);
                                   // },
@@ -198,7 +197,7 @@ class _DashboardActionButtonDialogState
                                 ),
                                 _IconButton(
                                   onTap: () {},
-                                  backgroundColor: Color.fromARGB(255, 249, 34, 112), //*Pink
+                                  backgroundColor: const Color.fromARGB(255, 249, 34, 112), //*Pink
                                   label: 'Receive',
                                   child: Icon(PhosphorIcons.arrowDown()),
                                 ),
@@ -213,7 +212,7 @@ class _DashboardActionButtonDialogState
                                 _IconButton(
                                   onTap: () => Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(builder: (context) => WalletMoreScreen()),
+                                    MaterialPageRoute(builder: (BuildContext context) => const WalletMoreScreen()),
                                   ),
                                   backgroundColor: AppColors.red, //*Yellow
                                   label: 'More',
@@ -248,10 +247,9 @@ class _IconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        children: [
+        children: <Widget>[
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               GestureDetector(
                 onTap: onTap,
                 child: CircleAvatar(
@@ -267,11 +265,11 @@ class _IconButton extends StatelessWidget {
                 style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black),
+                    color: Colors.black,),
               ),
             ],
           ),
-          const Gap(20)
+          const Gap(20),
         ],
       );
 }

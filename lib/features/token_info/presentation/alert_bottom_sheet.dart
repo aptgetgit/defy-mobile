@@ -1,11 +1,11 @@
-import 'package:defy/core/extensions/context_extensions.dart';
-import 'package:defy/features/token_info/providers/price_alert_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../../../config/theme/colors.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../shared/presentation/widgets/custom_check_box.dart';
+import '../providers/price_alert_controller.dart';
 
 class AlertBottomSheet extends ConsumerWidget {
   const AlertBottomSheet({super.key});
@@ -25,13 +25,13 @@ class AlertBottomSheet extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
+            const Text(
               'Limit',
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
             ),
             const Gap(4),
-            Text(
-              "Choose any to set the limit to get notified if the\nselected criteria is satisfied",
+            const Text(
+              'Choose any to set the limit to get notified if the\nselected criteria is satisfied',
               style: TextStyle(
                 fontSize: 16,
                 color: AppColors.greyLight,
@@ -42,13 +42,13 @@ class AlertBottomSheet extends ConsumerWidget {
               'Goes Under',
               'Crosses',
               'Goes up more than',
-              'Goes down more than'
+              'Goes down more than',
             ].map(
               (String type) => ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(
                   type,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -76,12 +76,12 @@ class AlertBottomSheet extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                
+                Navigator.pop(context);
               },
-              child: Text('Apply', style: TextStyle(
+              child: const Text('Apply', style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
-              )),
+              ),),
             ),
           ],
         ),

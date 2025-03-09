@@ -12,11 +12,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const WatchlistSafetyTokensScreen(),
+  Widget build(BuildContext context) => const MaterialApp(
+      home: WatchlistSafetyTokensScreen(),
     );
-  }
 }
 
 class WatchlistSafetyTokensScreen extends StatefulWidget {
@@ -77,8 +75,8 @@ class _WatchlistSafetyTokensScreenState extends State<WatchlistSafetyTokensScree
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          "Safety Tokens 🤩",
+        title: const Text(
+          'Safety Tokens 🤩',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 20,
@@ -88,9 +86,9 @@ class _WatchlistSafetyTokensScreenState extends State<WatchlistSafetyTokensScree
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
+        actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 50.0), // Increased padding to the right
+            padding: const EdgeInsets.only(right: 50), // Increased padding to the right
             child: Icon(
               PhosphorIcons.pencilSimple(PhosphorIconsStyle.bold),
               color: Colors.black,
@@ -101,14 +99,14 @@ class _WatchlistSafetyTokensScreenState extends State<WatchlistSafetyTokensScree
       ),
       body: SafeArea(
         child: Column(
-          children: [
+          children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   const Text(
-                    "Tokens",
+                    'Tokens',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
@@ -116,7 +114,7 @@ class _WatchlistSafetyTokensScreenState extends State<WatchlistSafetyTokensScree
                     ),
                   ),
                   Row(
-                    children: [
+                    children: <Widget>[
                       Container(
                         width: 32,
                         height: 32,
@@ -162,9 +160,7 @@ class _WatchlistSafetyTokensScreenState extends State<WatchlistSafetyTokensScree
             Expanded(
               child: ListView.builder(
                 itemCount: 6, // Number of tiles
-                itemBuilder: (context, index) {
-                  return WatchlistTokenTile(deleteNft: showDeleteButton);
-                },
+                itemBuilder: (BuildContext context, int index) => WatchlistTokenTile(deleteNft: showDeleteButton),
               ),
             ),
             const Gap(50),
@@ -175,7 +171,6 @@ class _WatchlistSafetyTokensScreenState extends State<WatchlistSafetyTokensScree
                   onPressed: () {
                     // Handle delete button press
                   },
-                  child: const Text("Delete Collection"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.red,
                     elevation: 0,
@@ -184,8 +179,9 @@ class _WatchlistSafetyTokensScreenState extends State<WatchlistSafetyTokensScree
                     ),
                     minimumSize: const Size(double.infinity, 54),
                   ),
+                  child: const Text('Delete Collection'),
                 ),
-              )
+              ),
           ],
         ),
       ),

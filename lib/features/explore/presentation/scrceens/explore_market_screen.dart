@@ -65,6 +65,12 @@ class _ExploreMarketScreenState extends State<ExploreMarketScreen> with SingleTi
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(PhosphorIconsBold.caretLeft),
+        ),
         centerTitle: true,
         title: const Text(
           'Market Explore',
@@ -205,7 +211,7 @@ Widget _buildTopBanner(BuildContext context) {
                     gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
-                      colors: <Color>[Colors.black.withOpacity(0.6), Colors.transparent],
+                      colors: <Color>[Colors.black.withValues(alpha: 0.6), Colors.transparent],
                     ),
                   ),
                 ),
@@ -219,7 +225,7 @@ Widget _buildTopBanner(BuildContext context) {
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: AppColors.white.withOpacity(.2),
+                    color: AppColors.white.withValues(alpha: .2),
                   ),
                   child: Row(
                     children: <Widget>[

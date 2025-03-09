@@ -1,24 +1,24 @@
-import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/extensions/context_extensions.dart';
+
 class ActivityPage extends StatelessWidget {
-  const ActivityPage({Key? key}) : super(key: key);
+  const ActivityPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
+  Widget build(BuildContext context) => SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(context.screenWidth * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
-              "Activity",
+              'Activity',
               style: context.headlineLarge,
             ),
             SizedBox(height: context.screenHeight * 0.025),
             Text(
-              "This section displays recent activities and interactions within the app. You can present logs, user interactions, or any recent actions taken by the user or the system.",
+              'This section displays recent activities and interactions within the app. You can present logs, user interactions, or any recent actions taken by the user or the system.',
               style: context.bodyMedium,
             ),
             SizedBox(height: context.screenHeight * 0.025),
@@ -27,17 +27,14 @@ class ActivityPage extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: 10, // Replace with actual item count
-              itemBuilder: (context, index) {
-                return ListTile(
+              itemBuilder: (BuildContext context, int index) => ListTile(
                   leading: const Icon(Icons.event),
-                  title: Text("Activity ${index + 1}", style: context.titleMedium),
-                  subtitle: Text("Description of activity ${index + 1}", style: context.bodySmall),
-                );
-              },
+                  title: Text('Activity ${index + 1}', style: context.titleMedium),
+                  subtitle: Text('Description of activity ${index + 1}', style: context.bodySmall),
+                ),
             ),
           ],
         ),
       ),
     );
-  }
 }

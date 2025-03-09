@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:defy/app/routes/router.dart';
-import 'package:defy/config/theme/colors.dart';
-import 'package:defy/core/extensions/context_extensions.dart';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../../../../app/routes/router.dart';
+import '../../../../config/theme/colors.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 class ExplorePumpFunScreen extends StatefulWidget {
   const ExplorePumpFunScreen({super.key});
@@ -17,23 +17,22 @@ class ExplorePumpFunScreen extends StatefulWidget {
 class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
   final TextEditingController _searchConroller = TextEditingController();
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Pump Fun',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
         ),
-              actions : [
+              actions : <Widget>[
         Padding(
           padding: const EdgeInsets.only(right: 14),
           child: IconButton(
-            icon: Icon(PhosphorIconsFill.plusCircle,size: 36,),
-            onPressed: () => CreateTokenScreenRoute().push(context),
+            icon: const Icon(PhosphorIconsFill.plusCircle,size: 36,),
+            onPressed: () => const CreateTokenScreenRoute().push(context),
           ),
         ),
       ],
@@ -41,7 +40,7 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               //search bar
               Padding(
                 padding:
@@ -50,26 +49,25 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: Color(0xfff4f4f6),
+                    color: const Color(0xfff4f4f6),
                     borderRadius: BorderRadius.circular(58),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: <Widget>[
                       const Gap(16),
-                      Icon(
+                      const Icon(
                         PhosphorIconsBold.magnifyingGlass,
                         color: AppColors.greyMedium,
                       ),
                       const Gap(8),
                       Expanded(
                         child: TextField(
-                          textAlign: TextAlign.start,
                           controller: _searchConroller,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Search or paste URL",
+                            hintText: 'Search or paste URL',
                             hintStyle: TextStyle(
                               color: AppColors.greyMedium,
                               fontSize: 14,
@@ -77,7 +75,7 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
                           ),
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         PhosphorIconsBold.cards,
                         color: AppColors.greyMedium,
                       ),
@@ -93,79 +91,77 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
         ),
       ),
     );
-  }
 
   Widget _buildPumpFunTile(BuildContext context) {
-    final width = context.screenWidth;
-    final nftImages = [
-      "https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000",
-      "https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000",
+    final double width = context.screenWidth;
+    final List<String> nftImages = <String>[
+      'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000',
     ];
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: nftImages.length,
-      itemBuilder: (ctx, index) {
-        return GestureDetector(
+      itemBuilder: (BuildContext ctx, int index) => GestureDetector(
           onTap : () {
-            ExplorePumpFunTokenTransactionsScreenRoute().push(context);
+            const ExplorePumpFunTokenTransactionsScreenRoute().push(context);
           },
           child: Container(
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: AppColors.greyVeryLight2,
               borderRadius: BorderRadius.circular(18),
             ),
             child: Row(
-              children: [
+              children: <Widget>[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(12),
                   child: CachedNetworkImage(
                     fit: BoxFit.cover,
                     width: width * .28,
                     height: width * .28,
                     imageUrl: nftImages[index],
-                    errorWidget: (ctx, str, obg) =>
+                    errorWidget: (BuildContext ctx, String str, Object obg) =>
                         Container(color: Colors.amber),
-                    progressIndicatorBuilder: (ctx, str, download) =>
+                    progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
                         const CircularProgressIndicator(),
                   ),
                 ),
                 const Gap(8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+                  children: <Widget>[
+                    const Text(
                       'APTMAN (APTMAN)',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Are you APTMAN?',
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.greyLight),
+                          color: AppColors.greyLight,),
                     ),
                     const Gap(6),
                     RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                         text: 'Created by ',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: AppColors.greyLight,
                         ),
-                        children: [
+                        children: <InlineSpan>[
                           TextSpan(
                             text: 'TheWeimals',
                             style: TextStyle(
@@ -173,22 +169,22 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
                               fontWeight: FontWeight.w600,
                               color: AppColors.black,
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             text: 'MCAP:',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: AppColors.greyLight,
                             ),
-                            children: [
+                            children: <InlineSpan>[
                               TextSpan(
                                 text: '313',
                                 style: TextStyle(
@@ -196,19 +192,19 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.black,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
                         RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             text: 'Replies:',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: AppColors.greyLight,
                             ),
-                            children: [
+                            children: <InlineSpan>[
                               TextSpan(
                                 text: '1,322',
                                 style: TextStyle(
@@ -216,7 +212,7 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.black,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -227,8 +223,7 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
               ],
             ),
           ),
-        );
-      },
+        ),
     );
   }
 }

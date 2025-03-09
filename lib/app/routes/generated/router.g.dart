@@ -12,7 +12,6 @@ List<RouteBase> get $appRoutes => [
       $exploreMarketScreenRoute,
       $exploreNFTScreenRoute,
       $exploreDappsScreenRoute,
-      $exploreCoinsScreenRoute,
       $explorePumpFunScreenRoute,
       $explorePumpFunTokenTransactionsScreenRoute,
       $createTokenScreenRoute,
@@ -147,29 +146,6 @@ extension $ExploreDappsScreenRouteExtension on ExploreDappsScreenRoute {
 
   String get location => GoRouteData.$location(
         '/explore-dapps',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $exploreCoinsScreenRoute => GoRouteData.$route(
-      path: '/explore-coins',
-      factory: $ExploreCoinsScreenRouteExtension._fromState,
-    );
-
-extension $ExploreCoinsScreenRouteExtension on ExploreCoinsScreenRoute {
-  static ExploreCoinsScreenRoute _fromState(GoRouterState state) =>
-      const ExploreCoinsScreenRoute();
-
-  String get location => GoRouteData.$location(
-        '/explore-coins',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -850,7 +826,7 @@ extension $SwapRouteExtension on SwapRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'e441a26e6c3a05810b0a6c601b7a88e5879f7032';
+String _$routerHash() => r'8828f7233978a9011da881230f1b78a0725f6e33';
 
 /// See also [router].
 @ProviderFor(router)

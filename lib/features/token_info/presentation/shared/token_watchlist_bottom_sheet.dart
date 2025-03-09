@@ -7,9 +7,9 @@ import '../../../../config/theme/colors.dart';
 import '../../../shared/presentation/widgets/custom_check_box.dart';
 
 class TokenWatchlistBottomSheet extends StatefulWidget {
-  final Function(int?) onAddToWatchlist;
 
-  const TokenWatchlistBottomSheet({super.key, required this.onAddToWatchlist});
+  const TokenWatchlistBottomSheet({required this.onAddToWatchlist, super.key});
+  final Function(int?) onAddToWatchlist;
 
   @override
   State<TokenWatchlistBottomSheet> createState() => _TokenWatchlistBottomSheetState();
@@ -41,7 +41,7 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
           top: 12,
           left: 20,
           right: 4,
-          bottom: 32
+          bottom: 32,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -66,7 +66,7 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Column(
-                children: [
+                children: <Widget>[
                   _buildCollectionItem(
                     title: 'Safety Tokens 🤩',
                     count: 4,
@@ -111,12 +111,12 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
                         color: AppColors.greyVeryLight,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Row(
-                        children: [
+                      child: const Row(
+                        children: <Widget>[
                           Gap(10),
-                          const Icon(PhosphorIconsFill.plusCircle,size: 28),
+                          Icon(PhosphorIconsFill.plusCircle,size: 28),
                           Gap(10),
-                          const Text('Create new collection', style: TextStyle(fontSize:16,color: AppColors.greyLight)),
+                          Text('Create new collection', style: TextStyle(fontSize:16,color: AppColors.greyLight)),
                         ],
                       ),
                     ),
@@ -126,8 +126,8 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
                     onPressed: () {
                       // Implement add to watchlist logic, using _selectedCollectionIndex
                       if (_selectedCollectionIndex != null) {
-                        widget.onAddToWatchlist(_selectedCollectionIndex!);
-                        WalletScreenRoute().pushReplacement(context);
+                        widget.onAddToWatchlist(_selectedCollectionIndex);
+                        const WalletScreenRoute().pushReplacement(context);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -174,7 +174,7 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
             Padding(
               padding: const EdgeInsets.only(left: 4, right: 4),
               child: Row(
-                children: [
+                children: <Widget>[
                   IconButton(
                     onPressed: () {
                       setState(() {
@@ -201,12 +201,12 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   const Gap(8),
-                  const Text("Collections helps you to group tokens and keep track on them",
+                  const Text('Collections helps you to group tokens and keep track on them',
                     style: TextStyle(fontSize: 16, color: AppColors.greyLight),),
                   const Gap(20),
-                  const Text("Collection name", style: TextStyle(fontSize: 14,color: AppColors.greyLight)),
+                  const Text('Collection name', style: TextStyle(fontSize: 14,color: AppColors.greyLight)),
                   const Gap(4),
                   Container(
                     height: 54,

@@ -1,7 +1,8 @@
-import 'package:defy/config/theme/colors.dart';
-import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+
+import '../../../../config/theme/colors.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 class ExplorePumpFunTokenTransactionsScreen extends StatefulWidget {
   const ExplorePumpFunTokenTransactionsScreen({super.key});
@@ -15,37 +16,37 @@ class _ExplorePumpFunTokenTransactionsScreenState
     extends State<ExplorePumpFunTokenTransactionsScreen> {
   @override
   Widget build(BuildContext context) {
-    final width = context.screenWidth;
+    final double width = context.screenWidth;
     return Scaffold(
       appBar : AppBar(
         centerTitle: true,
         title: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             Image.network(
-                      "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
+                      'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
                       width: width * .08,
                     ),
                     const Gap(4),
-                    Text('APTMAN (APTMAN)',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                    const Text('APTMAN (APTMAN)',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
           ],
         ),
       ),
       body: SafeArea(
         child: Column(
-          children: [
+          children: <Widget>[
             const Gap(8),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               child: Row(
-                children: [
+                children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(right: 8),
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                     decoration: BoxDecoration(
                         color: AppColors.black,
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Text(
+                        borderRadius: BorderRadius.circular(30),),
+                    child: const Text(
                       'All',
                       style: TextStyle(
                         color: AppColors.white,
@@ -53,12 +54,12 @@ class _ExplorePumpFunTokenTransactionsScreenState
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(right: 8),
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                     decoration: BoxDecoration(
                         color: AppColors.greyVeryLight2,
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Text(
+                        borderRadius: BorderRadius.circular(30),),
+                    child: const Text(
                       'Sell',
                       style: TextStyle(
                         color: AppColors.greyLight,
@@ -66,18 +67,18 @@ class _ExplorePumpFunTokenTransactionsScreenState
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(right: 8),
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                     decoration: BoxDecoration(
                         color: AppColors.greyVeryLight2,
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Text(
+                        borderRadius: BorderRadius.circular(30),),
+                    child: const Text(
                       'Buy',
                       style: TextStyle(
                         color: AppColors.greyLight,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -87,15 +88,15 @@ class _ExplorePumpFunTokenTransactionsScreenState
             Expanded(
               child: ListView.builder(
                 itemCount: 7,
-                itemBuilder: (ctx, index) {
-                  final coinsLogos = [
-                    "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
-                    "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-                    "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-                    "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
-                    "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-                    "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-                    "https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png",
+                itemBuilder: (BuildContext ctx, int index) {
+                  final List<String> coinsLogos = <String>[
+                    'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+                    'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+                    'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+                    'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+                    'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+                    'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+                    'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
                   ];
                   return ListTile(
                     horizontalTitleGap: 12,
@@ -103,9 +104,9 @@ class _ExplorePumpFunTokenTransactionsScreenState
                       coinsLogos[index],
                       width: width * .08,
                     ),
-                    title: Row(
+                    title: const Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: <Widget>[
                         Text(
                           '0x1a2b3c',
                           style: TextStyle(
@@ -113,7 +114,7 @@ class _ExplorePumpFunTokenTransactionsScreenState
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const Gap(12),
+                        Gap(12),
                         Text(
                           'SELL',
                           style: TextStyle(
@@ -124,16 +125,16 @@ class _ExplorePumpFunTokenTransactionsScreenState
                         ),
                       ],
                     ),
-                    subtitle: Text(
+                    subtitle: const Text(
                       '2 mins ago',
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.greyLight),
+                          color: AppColors.greyLight,),
                     ),
-                    trailing: Column(
+                    trailing: const Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
+                      children: <Widget>[
                         Text(
                           '4.55 APT',
                           style: TextStyle(
@@ -154,7 +155,7 @@ class _ExplorePumpFunTokenTransactionsScreenState
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
-import 'package:defy/config/theme/colors.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../config/theme/colors.dart';
 
 class CurvedCheckbox extends StatefulWidget   {
   const CurvedCheckbox({
@@ -18,17 +19,16 @@ class CurvedCheckbox extends StatefulWidget   {
 
 class CurvedCheckboxState extends State<CurvedCheckbox> {
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: widget.onTap,
       child: Container(
         alignment: Alignment.center,
-        width: 20.0,
-        height: 20.0,
+        width: 20,
+        height: 20,
         decoration: BoxDecoration(
           borderRadius: widget.isRound
-              ? BorderRadius.circular(30.0)
-              : BorderRadius.circular(6.0),
+              ? BorderRadius.circular(30)
+              : BorderRadius.circular(6),
           border: Border.all(
             width: 1.5,
             color: AppColors.grey,
@@ -37,17 +37,16 @@ class CurvedCheckboxState extends State<CurvedCheckbox> {
         ),
         child: widget.isChecked
             ? Container(
-                height: 12.0,
-                width: 12.0,
+                height: 12,
+                width: 12,
                 decoration: BoxDecoration(
                   color: AppColors.black,
                   borderRadius: widget.isRound
-                      ? BorderRadius.circular(30.0)
-                      : BorderRadius.circular(4.0),
+                      ? BorderRadius.circular(30)
+                      : BorderRadius.circular(4),
                 ),
               )
             : null,
       ),
     );
-  }
 }

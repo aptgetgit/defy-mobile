@@ -1,7 +1,8 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
-import 'package:defy/config/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+
+import '../../../../config/theme/colors.dart';
 
 class CustomBottomNavBarWithHolders extends StatelessWidget {
   final String? image1;
@@ -42,22 +43,20 @@ class CustomBottomNavBarWithHolders extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        Gap(10),
+      children: <Widget>[
+        const Gap(10),
         if (upperWidget != null) upperWidget!,
         if (showImageRow &&
             (image1 != null || image2 != null || image3 != null))
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 RowSuper(
                   innerDistance: -12,
-                  children: [
+                  children: <Widget?>[
                     if (image1 != null)
                       Image.asset('assets/images/$image1', height: 24),
                     if (image2 != null)
@@ -66,7 +65,7 @@ class CustomBottomNavBarWithHolders extends StatelessWidget {
                       Image.asset('assets/images/$image3', height: 24),
                   ],
                 ),
-                if (headerText != null) ...[
+                if (headerText != null) ...<Widget>[
                   const SizedBox(width: 10),
                   Text(
                     headerText!,
@@ -74,15 +73,15 @@ class CustomBottomNavBarWithHolders extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           color: AppColors.greyLight,
                         ),
-                  )
+                  ),
                 ],
               ],
             ),
           ),
         if (showHoldersRow)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: const Divider(
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(
               color: AppColors.greyVeryLight,
               thickness: 2,
             ),
@@ -93,17 +92,15 @@ class CustomBottomNavBarWithHolders extends StatelessWidget {
           _buildSingleButton(context),
       ],
     );
-  }
 
-  Widget _buildSingleButton(BuildContext context) {
-    return GestureDetector(
+  Widget _buildSingleButton(BuildContext context) => GestureDetector(
       onTap: onTap1,
       child: Container(
         margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
           color: buttonColor1,
-          border: Border(top: BorderSide(color: AppColors.grey, width: 0.5)),
+          border: const Border(top: BorderSide(color: AppColors.grey, width: 0.5)),
         ),
         height: 60,
         child: Center(
@@ -117,11 +114,9 @@ class CustomBottomNavBarWithHolders extends StatelessWidget {
         ),
       ),
     );
-  }
 
-  Widget _buildDualButtons(BuildContext context) {
-    return Row(
-      children: [
+  Widget _buildDualButtons(BuildContext context) => Row(
+      children: <Widget>[
         Expanded(
           child: isLeftWidgetCustom && leftCustomWidget != null
               ? leftCustomWidget!
@@ -132,8 +127,8 @@ class CustomBottomNavBarWithHolders extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
                       color: buttonColor1,
-                      border: Border(
-                          top: BorderSide(color: AppColors.grey, width: 0.5)),
+                      border: const Border(
+                          top: BorderSide(color: AppColors.grey, width: 0.5),),
                     ),
                     height: 60,
                     child: Center(
@@ -158,7 +153,7 @@ class CustomBottomNavBarWithHolders extends StatelessWidget {
                 borderRadius: BorderRadius.circular(40),
                 color: buttonColor2,
                 border:
-                    Border(top: BorderSide(color: AppColors.grey, width: 0.5)),
+                    const Border(top: BorderSide(color: AppColors.grey, width: 0.5)),
               ),
               height: 60,
               child: Center(
@@ -175,5 +170,4 @@ class CustomBottomNavBarWithHolders extends StatelessWidget {
         ),
       ],
     );
-  }
 }

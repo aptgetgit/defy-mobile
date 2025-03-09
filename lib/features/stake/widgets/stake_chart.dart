@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -54,8 +53,8 @@ class _StakeChartState extends State<StakeChart> {
     return SideTitleWidget(
       fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
       space: 16,
-      child: Text(meta.formattedValue, style: style),
       meta: meta,
+      child: Text(meta.formattedValue, style: style),
     );
   }
 
@@ -68,12 +67,12 @@ class _StakeChartState extends State<StakeChart> {
     return SideTitleWidget(
       fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
       space: 16,
-      child: Text(meta.formattedValue, style: style),
       meta: meta,
+      child: Text(meta.formattedValue, style: style),
     );
   }
 
-  String index = "1M";
+  String index = '1M';
 
   void changeChartTime(String _index) {
     setState(() {
@@ -82,7 +81,7 @@ class _StakeChartState extends State<StakeChart> {
     });
   }
 
-  final List<String> chartTimes = <String>["1M", "3M", "6M", "1Y", "ALL"];
+  final List<String> chartTimes = <String>['1M', '3M', '6M', '1Y', 'ALL'];
 
   @override
   Widget build(BuildContext context) => Column(
@@ -91,9 +90,7 @@ class _StakeChartState extends State<StakeChart> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(
-                left: 0,
                 bottom: 24,
-                right: 0,
                 top: 8,
               ),
               child: AspectRatio(
@@ -135,81 +132,71 @@ class _StakeChartState extends State<StakeChart> {
                             );
                           }).toList(),
                         ),
-                        handleBuiltInTouches: true,
                         getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) => spotIndexes.map((int spotIndex) => TouchedSpotIndicatorData(
                               const FlLine(
                                 color: Colors.black,
                                 strokeWidth: 1.5,
                               ),
                               FlDotData(
-                                show: true,
                                 getDotPainter: (FlSpot spot, double percent, LineChartBarData barData, int index) => FlDotCirclePainter(
                                     radius: 6,
                                     color: Colors.black,
-                                    strokeWidth: 0,
                                     strokeColor: Colors.black,
                                   ),
                               ),
-                            )).toList(),
+                            ),).toList(),
                       ),
                       lineBarsData: <LineChartBarData>[
                         LineChartBarData(
                           color: Colors.black,
-                          spots: index == "3M" ? spots : index == "6M" ? spots2 : spots3,
+                          spots: index == '3M' ? spots : index == '6M' ? spots2 : spots3,
                           isCurved: true,
                           isStrokeCapRound: true,
                           barWidth: 3,
                           belowBarData: BarAreaData(
-                            show: false,
+                            
                           ),
                           dotData: const FlDotData(show: false),
                         ),
                         if (lastTouchedSpot != null)
                           LineChartBarData(
                             color: Colors.grey,
-                            spots: (index == "3M" ? spots : index == "6M" ? spots2 : spots3)
+                            spots: (index == '3M' ? spots : index == '6M' ? spots2 : spots3)
                                 .where((FlSpot spot) => spot.x >= lastTouchedSpot!.x)
                                 .toList(),
                             isCurved: true,
                             isStrokeCapRound: true,
                             barWidth: 3,
                             belowBarData: BarAreaData(
-                              show: false,
+                              
                             ),
                             dotData: const FlDotData(show: false),
                           ),
                       ],
-                      minY: index == "6M" ? -1 : 1,
-                      maxY: index == "6M" ? 1 : 2.5,
+                      minY: index == '6M' ? -1 : 1,
+                      maxY: index == '6M' ? 1 : 2.5,
                       titlesData: FlTitlesData(
                         leftTitles: AxisTitles(
                           sideTitles: SideTitles(
-                            showTitles: false,
                             getTitlesWidget: (double value, TitleMeta meta) => leftTitleWidgets(value, meta, constraints.maxWidth),
                             reservedSize: 56,
                           ),
-                          drawBelowEverything: true,
                         ),
                         rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+                          
                         ),
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
-                            showTitles: false,
                             getTitlesWidget: (double value, TitleMeta meta) => bottomTitleWidgets(value, meta, constraints.maxWidth),
                             reservedSize: 36,
                             interval: 1,
                           ),
-                          drawBelowEverything: true,
                         ),
                         topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+                          
                         ),
                       ),
                       gridData: FlGridData(
-                        show: true,
-                        drawHorizontalLine: true,
-                        drawVerticalLine: true,
                         horizontalInterval: 1.5,
                         verticalInterval: 5,
                         checkToShowHorizontalLine: (double value) => value.toInt() == 0,
@@ -261,7 +248,7 @@ class _StakeChartState extends State<StakeChart> {
                           border: Border.all(
                               color: index == item ? AppColors.blue : AppColors.transparent,),
                           color: AppColors.greyVeryLight,
-                          borderRadius: BorderRadius.circular(40)),
+                          borderRadius: BorderRadius.circular(40),),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           child: Center(
@@ -270,16 +257,16 @@ class _StakeChartState extends State<StakeChart> {
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: index == item ? AppColors.blue : AppColors.greyLight),
+                                  color: index == item ? AppColors.blue : AppColors.greyLight,),
                             ),
                           ),
                         ),
                       ),
                     ),
                   );
-                })),
+                }),),
           ],
-        )
+        ),
       ],
     );
 }

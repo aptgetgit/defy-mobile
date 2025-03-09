@@ -13,11 +13,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const WatchlistCuteNFTScreen(),
+  Widget build(BuildContext context) => const MaterialApp(
+      home: WatchlistCuteNFTScreen(),
     );
-  }
 }
 
 class WatchlistCuteNFTScreen extends StatefulWidget {
@@ -31,7 +29,7 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   bool showDeleteButton = false;
-  String collectionName = "Cute NFTs🐣";
+  String collectionName = 'Cute NFTs🐣';
 
   @override
   void initState() {
@@ -46,7 +44,7 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
-    ));
+    ),);
   }
 
   @override
@@ -81,10 +79,10 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text(
               collectionName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
                 color: Colors.black,
@@ -96,7 +94,7 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                 final updatedCollectionName = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const WatchListUpdateCollectionScreen(),
+                    builder: (BuildContext context) => const WatchListUpdateCollectionScreen(),
                   ),
                 );
                 if (updatedCollectionName != null) {
@@ -119,14 +117,14 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
       ),
       body: SafeArea(
         child: Column(
-          children: [
+          children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   const Text(
-                    "NFT",
+                    'NFT',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
@@ -134,11 +132,11 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                     ),
                   ),
                   Row(
-                    children: [
+                    children: <Widget>[
                       Container(
                         width: 32,
                         height: 32,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.greyVeryLight,
                         ),
@@ -158,7 +156,7 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                       Container(
                         height: 32,
                         width: 32,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.greyVeryLight,
                         ),
@@ -180,9 +178,7 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
             Expanded(
               child: ListView.builder(
                 itemCount: 6, // Number of tiles
-                itemBuilder: (context, index) {
-                  return WatchlistNFTTile(deleteNft: showDeleteButton);
-                },
+                itemBuilder: (BuildContext context, int index) => WatchlistNFTTile(deleteNft: showDeleteButton),
               ),
             ),
             const Gap(50),
@@ -193,7 +189,6 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                   onPressed: () {
                     // Handle delete button press
                   },
-                  child: const Text("Delete Collection"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.red,
                     elevation: 0,
@@ -202,8 +197,9 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                     ),
                     minimumSize: const Size(double.infinity, 54),
                   ),
+                  child: const Text('Delete Collection'),
                 ),
-              )
+              ),
           ],
         ),
       ),

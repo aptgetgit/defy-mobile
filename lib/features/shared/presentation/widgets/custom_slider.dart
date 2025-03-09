@@ -1,7 +1,26 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
+
 class CustomSlider extends StatefulWidget {
+
+  const CustomSlider({
+    required this.min, required this.max, required this.value, required this.onChanged, super.key,
+    this.secondaryValue,
+    this.onSecondaryChanged,
+    this.divisions,
+    this.label,
+    this.activeColor = Colors.blue,
+    this.inactiveColor = Colors.grey,
+    this.thumbColor = Colors.white,
+    this.trackHeight = 4.0,
+    this.thumbSize = 16.0,
+    this.isDual = false,
+    this.showLabel = true,
+    this.animateOnChange = true,
+    this.animationDuration = const Duration(milliseconds: 200),
+    this.animationCurve = Curves.easeInOut,
+  });
   final double min;
   final double max;
   final double value;
@@ -20,28 +39,6 @@ class CustomSlider extends StatefulWidget {
   final bool animateOnChange;
   final Duration animationDuration;
   final Curve animationCurve;
-
-  const CustomSlider({
-    super.key,
-    required this.min,
-    required this.max,
-    required this.value,
-    this.secondaryValue,
-    required this.onChanged,
-    this.onSecondaryChanged,
-    this.divisions,
-    this.label,
-    this.activeColor = Colors.blue,
-    this.inactiveColor = Colors.grey,
-    this.thumbColor = Colors.white,
-    this.trackHeight = 4.0,
-    this.thumbSize = 16.0,
-    this.isDual = false,
-    this.showLabel = true,
-    this.animateOnChange = true,
-    this.animationDuration = const Duration(milliseconds: 200),
-    this.animationCurve = Curves.easeInOut,
-  });
 
   @override
   _CustomSliderState createState() => _CustomSliderState();
@@ -81,7 +78,7 @@ class _CustomSliderState extends State<CustomSlider>
       _animatedSecondaryValue = widget.secondaryValue ?? widget.value;
     });
     if (widget.animateOnChange) {
-      _animationController.forward(from: 0.0);
+      _animationController.forward(from: 0);
     }
   }
 
@@ -95,23 +92,22 @@ class _CustomSliderState extends State<CustomSlider>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
+  Widget build(BuildContext context) => AnimatedBuilder(
       animation: _animation,
-      builder: (context, child) {
+      builder: (BuildContext context, Widget? child) {
         final double primaryPosition =
             (_animatedValue - widget.min) / (widget.max - widget.min);
         final double secondaryPosition =
             (_animatedSecondaryValue - widget.min) / (widget.max - widget.min);
 
         return GestureDetector(
-          onHorizontalDragUpdate: (details) {
-            final RenderBox box = context.findRenderObject() as RenderBox;
+          onHorizontalDragUpdate: (DragUpdateDetails details) {
+            final RenderBox box = context.findRenderObject()! as RenderBox;
             final double newValue =
                 (details.localPosition.dx / box.size.width) *
                         (widget.max - widget.min) +
                     widget.min;
-            final clampedValue = newValue.clamp(widget.min, widget.max);
+            final double clampedValue = newValue.clamp(widget.min, widget.max);
 
             if (widget.isDual) {
               if ((newValue - widget.min).abs() <
@@ -124,7 +120,7 @@ class _CustomSliderState extends State<CustomSlider>
               widget.onChanged(clampedValue);
             }
           },
-          child: Container(
+          child: SizedBox(
             height: math.max(widget.trackHeight, widget.thumbSize),
             width: double.infinity,
             child: CustomPaint(
@@ -147,10 +143,22 @@ class _CustomSliderState extends State<CustomSlider>
         );
       },
     );
-  }
 }
 
 class _SliderPainter extends CustomPainter {
+
+  _SliderPainter({
+    required this.primaryPosition,
+    required this.secondaryPosition,
+    required this.isDual,
+    required this.activeColor,
+    required this.inactiveColor,
+    required this.thumbColor,
+    required this.trackHeight,
+    required this.thumbSize,
+    required this.showLabel,
+    required this.value, required this.secondaryValue, this.label,
+  });
   final double primaryPosition;
   final double secondaryPosition;
   final bool isDual;
@@ -163,21 +171,6 @@ class _SliderPainter extends CustomPainter {
   final String? label;
   final double value;
   final double secondaryValue;
-
-  _SliderPainter({
-    required this.primaryPosition,
-    required this.secondaryPosition,
-    required this.isDual,
-    required this.activeColor,
-    required this.inactiveColor,
-    required this.thumbColor,
-    required this.trackHeight,
-    required this.thumbSize,
-    required this.showLabel,
-    this.label,
-    required this.value,
-    required this.secondaryValue,
-  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -193,7 +186,7 @@ class _SliderPainter extends CustomPainter {
       ..color = thumbColor
       ..style = PaintingStyle.fill;
 
-    final double trackLeft = 0;
+    const double trackLeft = 0;
     final double trackRight = size.width;
     final double trackTop = (size.height - trackHeight) / 2;
 
@@ -225,7 +218,7 @@ class _SliderPainter extends CustomPainter {
       canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(trackLeft, trackTop,
-              (trackRight - trackLeft) * primaryPosition, trackHeight),
+              (trackRight - trackLeft) * primaryPosition, trackHeight,),
           Radius.circular(trackHeight / 2),
         ),
         activeTrackPaint,
@@ -241,66 +234,63 @@ class _SliderPainter extends CustomPainter {
     final double clampedPrimaryThumbCenterX =
         primaryThumbCenterX.clamp(thumbSize / 2, size.width - thumbSize / 2);
     canvas.drawCircle(Offset(clampedPrimaryThumbCenterX, thumbCenterY),
-        thumbSize / 2, thumbPaint);
+        thumbSize / 2, thumbPaint,);
 
     if (isDual) {
       final double secondaryThumbCenterX =
           trackLeft + (trackRight - trackLeft) * secondaryPosition;
       final double clampedSecondaryThumbCenterX = secondaryThumbCenterX.clamp(
-          thumbSize / 2, size.width - thumbSize / 2);
+          thumbSize / 2, size.width - thumbSize / 2,);
       canvas.drawCircle(Offset(clampedSecondaryThumbCenterX, thumbCenterY),
-          thumbSize / 2, thumbPaint);
+          thumbSize / 2, thumbPaint,);
     }
 
     // Draw labels
     if (showLabel) {
-      final textPainter = TextPainter(
+      final TextPainter textPainter = TextPainter(
         text: TextSpan(
           text: label ?? value.toStringAsFixed(1),
           style: TextStyle(color: activeColor, fontSize: 12),
         ),
         textDirection: TextDirection.ltr,
-      );
-      textPainter.layout();
+      )
+      ..layout();
       textPainter.paint(
         canvas,
         Offset(clampedPrimaryThumbCenterX - textPainter.width / 2,
-            thumbCenterY - thumbSize - textPainter.height),
+            thumbCenterY - thumbSize - textPainter.height,),
       );
 
       if (isDual) {
-        final secondaryTextPainter = TextPainter(
+        final TextPainter secondaryTextPainter = TextPainter(
           text: TextSpan(
             text: secondaryValue.toStringAsFixed(1),
             style: TextStyle(color: activeColor, fontSize: 12),
           ),
           textDirection: TextDirection.ltr,
-        );
-        secondaryTextPainter.layout();
+        )
+        ..layout();
         final double clampedSecondaryThumbCenterX =
             (trackLeft + (trackRight - trackLeft) * secondaryPosition)
                 .clamp(thumbSize / 2, size.width - thumbSize / 2);
         secondaryTextPainter.paint(
           canvas,
           Offset(clampedSecondaryThumbCenterX - secondaryTextPainter.width / 2,
-              thumbCenterY - thumbSize - secondaryTextPainter.height),
+              thumbCenterY - thumbSize - secondaryTextPainter.height,),
         );
       }
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
 class CustomTrackShape extends RoundedRectSliderTrackShape {
   @override
   Rect getPreferredRect({
     required RenderBox parentBox,
-    Offset offset = Offset.zero,
-    required SliderThemeData sliderTheme,
+    required SliderThemeData sliderTheme, Offset offset = Offset.zero,
     bool isEnabled = false,
     bool isDiscrete = false,
   }) {
@@ -314,20 +304,18 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
 }
 
 class CustomThumbShape extends SliderComponentShape {
-  final double thumbRadius;
-  final double borderWidth;
-  final double dotRadius;
 
   const CustomThumbShape({
     this.thumbRadius = 10.0,
     this.borderWidth = 2.0,
     this.dotRadius = 5.0,
   });
+  final double thumbRadius;
+  final double borderWidth;
+  final double dotRadius;
 
   @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size.fromRadius(thumbRadius);
-  }
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.fromRadius(thumbRadius);
 
   @override
   void paint(
@@ -360,12 +348,12 @@ class CustomThumbShape extends SliderComponentShape {
       ..style = PaintingStyle.fill;
 
     // Draw the blue border
-    canvas.drawCircle(center, thumbRadius, borderPaint);
+    canvas..drawCircle(center, thumbRadius, borderPaint)
 
     // Draw the white inner circle
-    canvas.drawCircle(center, thumbRadius - borderWidth / 2, innerCirclePaint);
+    ..drawCircle(center, thumbRadius - borderWidth / 2, innerCirclePaint)
 
     // Draw the blue dot
-    canvas.drawCircle(center, dotRadius, dotPaint);
+    ..drawCircle(center, dotRadius, dotPaint);
   }
 }

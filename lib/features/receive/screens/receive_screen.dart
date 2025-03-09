@@ -5,17 +5,16 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../app/routes/router.dart';
-import 'dart:ui'; 
 
 class ReceiveScreen extends StatelessWidget {
   const ReceiveScreen({super.key});
 
-  final String walletAddress = "0xWalletAddress";
+  final String walletAddress = '0xWalletAddress';
 
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
-        title: const Text("Receive"),
+        title: const Text('Receive'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(PhosphorIconsBold.caretLeft),
@@ -26,20 +25,20 @@ class ReceiveScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
-            children: [
+            children: <Widget>[
               const Gap(30),
               const Text(
-                "Allan Jerrold",
+                'Allan Jerrold',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               const Text(
-                "@allan_j",
+                '@allan_j',
                 style: TextStyle(fontSize: 14, color: AppColors.greyLight),
               ),
               const Gap(20),
               Stack(
                 alignment: Alignment.center,
-                children: [
+                children: <Widget>[
                   QrImageView( 
                     data: walletAddress,
                     size: 245,
@@ -58,15 +57,15 @@ class ReceiveScreen extends StatelessWidget {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Image.asset(
-                      "assets/icons/star-struck.png",
+                      'assets/icons/star-struck.png',
                       width: 24,
                       height: 24,
                     ),
                     const Gap(7),
                     const Text(
-                      "Business",
+                      'Business',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -86,7 +85,7 @@ class ReceiveScreen extends StatelessWidget {
               // Bottom Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   // Left Icon (Copy)
                   IconButton(
                     icon: const Icon(
@@ -113,7 +112,7 @@ class ReceiveScreen extends StatelessWidget {
                       minimumSize: const Size(239, 56),
                     ),
                     child: const Text(
-                      "Request",
+                      'Request',
                       style: TextStyle(
                         color: AppColors.white,
                         fontSize: 16,
@@ -141,84 +140,76 @@ class ReceiveScreen extends StatelessWidget {
     );
 
   void _showWalletBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent, // Set background color transparent
-    builder: (BuildContext context) => Stack(
-      children: [
-        // Apply blur effect to the background
-        Positioned.fill(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Apply blur effect
-            child: Container(
-              color: Colors.black.withOpacity(0.5), // Optional: darken the background a bit
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Material(
-              elevation: 8,
-              borderRadius: BorderRadius.circular(28), // Increase radius to 28
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Choose wallet',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(
-                            PhosphorIconsBold.x,
-                            size: 24,
-                            color: AppColors.greyLight,
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Material(
+                elevation: 8,
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // Title
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          const Text(
+                            'Choose wallet',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                           ),
-                        ),
-                      ],
-                    ),
-                    const Gap(12),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(
+                              PhosphorIconsBold.x,
+                              size: 24,
+                              color: AppColors.greyLight,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(12),
 
-                    // Wallet Options
-                    _buildWalletOption(
-                      imagePath: 'assets/icons/star-struck.png',
-                      title: 'Business',
-                      balance: '\$324.00',
-                      isDefault: true,
-                    ),
-                    _buildWalletOption(
-                      imagePath: 'assets/icons/face-blowing-kiss.png',
-                      title: 'Savings',
-                      balance: '\$60.20',
-                    ),
-                    _buildWalletOption(
-                      imagePath: 'assets/icons/star-struck.png',
-                      title: 'Business',
-                      balance: '\$324.00',
-                    ),
-                  ],
+                      // Wallet Options
+                      _buildWalletOption(
+                        imagePath: 'assets/icons/star-struck.png',
+                        title: 'Business',
+                        balance: r'$324.00',
+                        isDefault: true,
+                      ),
+                      _buildWalletOption(
+                        imagePath: 'assets/icons/face-blowing-kiss.png',
+                        title: 'Savings',
+                        balance: r'$60.20',
+                      ),
+                      _buildWalletOption(
+                        imagePath: 'assets/icons/star-struck.png',
+                        title: 'Business',
+                        balance: r'$324.00',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
-    ),
-  );
-}
+      ),
+    );
+  }
+
   // Helper function to build wallet option
   Widget _buildWalletOption({
     required String imagePath,
@@ -258,14 +249,14 @@ class ReceiveScreen extends StatelessWidget {
 
   // Function to copy address to clipboard
   void _copyAddressToClipboard(BuildContext context) {
-    final walletAddress = "0x0"; // Or get the actual address
-    Clipboard.setData(ClipboardData(text: walletAddress));
+    const String walletAddress = '0x0'; // Or get the actual address
+    Clipboard.setData(const ClipboardData(text: walletAddress));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text(
               'Address copied to clipboard',
               style: TextStyle(
@@ -285,8 +276,8 @@ class ReceiveScreen extends StatelessWidget {
         duration: const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         elevation: 0,
-        margin: const EdgeInsets.only(bottom: 80.0, left: 72, right: 72),
-        padding: EdgeInsets.fromLTRB(16, 8,  6, 8),
+        margin: const EdgeInsets.only(bottom: 80, left: 72, right: 72),
+        padding: const EdgeInsets.fromLTRB(16, 8,  10, 8),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -300,7 +291,7 @@ class ReceiveScreen extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (BuildContext context) => Container(
+      builder: (BuildContext context) => DecoratedBox(
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
@@ -314,7 +305,7 @@ class ReceiveScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20, top: 24, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   const Text(
                     'Share this page',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
@@ -394,10 +385,10 @@ class ReceiveScreen extends StatelessWidget {
 
   // Helper function to build share option buttons
   Widget _buildShareOption({
-    IconData? icon,
-    String? imagePath,
     required String label,
     required VoidCallback onPressed,
+    IconData? icon,
+    String? imagePath,
   }) => Column(
       children: <Widget>[
         CircleAvatar(

@@ -6,20 +6,18 @@ class WatchlistCuteTile extends StatelessWidget {
   const WatchlistCuteTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: () {
         // Navigate to WatchListNFTScreen
       },
       child: Column(
-        children: [
-          Container(
+        children: <Widget>[
+          SizedBox(
             width: MediaQuery.of(context).size.width * 0.4,
             height: MediaQuery.of(context).size.width * 0.4,
             child: Stack(
-              children: [
+              children: <Widget>[
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -28,13 +26,12 @@ class WatchlistCuteTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist1.png"),
+                        image: AssetImage('assets/images/watchlist1.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -43,13 +40,12 @@ class WatchlistCuteTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist2.png"),
+                        image: AssetImage('assets/images/watchlist2.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -58,13 +54,12 @@ class WatchlistCuteTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist3.png"),
+                        image: AssetImage('assets/images/watchlist3.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -73,13 +68,12 @@ class WatchlistCuteTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist4.png"),
+                        image: AssetImage('assets/images/watchlist4.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -88,13 +82,12 @@ class WatchlistCuteTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist1.png"),
+                        image: AssetImage('assets/images/watchlist1.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment.center,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -103,7 +96,7 @@ class WatchlistCuteTile extends StatelessWidget {
                       child: Image(
                         height: 36,
                         width: 36,
-                        image: AssetImage("assets/images/watchlist3.png"),
+                        image: AssetImage('assets/images/watchlist3.png'),
                       ),
                     ),
                   ),
@@ -114,9 +107,9 @@ class WatchlistCuteTile extends StatelessWidget {
           const Gap(12),
           Row(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: <Widget>[
               const Text(
-                "Cute NFTs🐣",
+                'Cute NFTs🐣',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -140,15 +133,15 @@ class WatchlistCuteTile extends StatelessWidget {
           ),
           RichText(
             text: TextSpan(
-              text: "6 NFTs",
-              style: TextStyle(
+              text: '6 NFTs',
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
                 color: Colors.grey,
               ),
-              children: [
+              children: <InlineSpan>[
                 TextSpan(
-                  text: "   Jan 2 2024",
+                  text: '   Jan 2 2024',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[400],
@@ -160,5 +153,4 @@ class WatchlistCuteTile extends StatelessWidget {
         ],
       ),
     );
-  }
 }

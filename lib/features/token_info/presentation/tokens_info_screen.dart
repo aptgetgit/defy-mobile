@@ -6,6 +6,7 @@ import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
 import '../../explore/presentation/scrceens/explore_screen.dart';
 import '../../shared/presentation/widgets/custom_bottom_nav_bar_with_holders.dart';
+import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../../token_info/presentation/shared/staking_chart.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
@@ -14,7 +15,7 @@ import 'about_page.dart';
 import 'activity_page.dart';
 import 'analytics_page.dart';
 import 'price_alert_page.dart';
-import 'shared/token_bottom_sheet.dart';
+import 'shared/token_watchlist_bottom_sheet.dart';
 
 class TokensInfoScreen extends StatefulWidget {
   const TokensInfoScreen({super.key});
@@ -125,33 +126,33 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                 backgroundColor: Colors.white,
                 expandedHeight: 200,
                 leading: IconButton(
-  icon: Icon(
-    PhosphorIconsBold.caretLeft, // Corrected to use PhosphorIconsBold
-    color: Colors.black,
-  ),
-  onPressed: () {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const ExploreScreen()),
-    );
-  },
-),
+                  icon: const Icon(
+                    PhosphorIconsBold.caretLeft, // Corrected to use PhosphorIconsBold
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ExploreScreen()),
+                    );
+                  },
+                ),
                 pinned: true,
                actions: <Widget>[
-     IconButton(
-      icon: Icon(PhosphorIcons.star(PhosphorIconsStyle.regular)),
-      onPressed: _showWatchlistBottomSheet,
-    ),
-    IconButton(
-      icon:  Icon(PhosphorIcons.bell(PhosphorIconsStyle.regular)),
-      onPressed: () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
-        );
-      },
-    ),
-  ],
+                IconButton(
+                  icon: Icon(PhosphorIcons.star()),
+                  onPressed: _showWatchlistBottomSheet,
+                ),
+                IconButton(
+                  icon:  Icon(PhosphorIcons.bell()),
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
+                    );
+                  },
+                ),
+              ],
               ),
               SliverToBoxAdapter(
                 child: Padding(
@@ -177,28 +178,13 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                 ),
               ),
               SliverPersistentHeader(
-                delegate: _TabBarSliverPersistentHeaderDelegate(
-                  tabBar: TabBar(
-                    controller: _tabController,
-                    isScrollable: true,
-                    indicatorColor: Colors.black,
-                    indicator: const UnderlineTabIndicator(
-                      borderSide: BorderSide(width: 2),
-                    ),
-                    tabAlignment: TabAlignment.start,
-                    labelColor: Colors.black,
-                    unselectedLabelColor: AppColors.greyLight,
-                    labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                    unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                    labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    padding: EdgeInsets.zero,
-                    indicatorWeight: 1,
-                    dividerHeight: 1,
-                    dividerColor: AppColors.greyVeryLight,
-                    tabs: const <Widget>[
-                      Tab(text: 'About'),
-                      Tab(text: 'Activity'),
-                      Tab(text: 'Analytics'),
+                delegate: TabBarDelegate(
+                  CustomTabBar(
+                    tabController: _tabController,
+                    tabs: const <String>[
+                      'About',
+                      'Activity',
+                      'Analytics',
                     ],
                   ),
                 ),
@@ -274,7 +260,7 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                 ),
                 const Gap(4),
                 Icon(
-  PhosphorIcons.arrowDown(PhosphorIconsStyle.regular), // Call the function with a style
+  PhosphorIcons.arrowDown(), // Call the function with a style
   size: 14,
   color: Colors.green,
 ),
@@ -410,27 +396,4 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
       'assets/icons/aptos.png',
       height: small ? 24 : 32,
     );
-}
-
-class _TabBarSliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  _TabBarSliverPersistentHeaderDelegate({required this.tabBar});
-  final TabBar tabBar;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => ColoredBox(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: tabBar
-      ),
-    );
-
-  @override
-  double get maxExtent => tabBar.preferredSize.height;
-
-  @override
-  double get minExtent => tabBar.preferredSize.height;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }

@@ -1,57 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
+import '../../../shared/presentation/widgets/keypad.dart'; // Import the Keypad widget
+import '../providers/lend_provider.dart';
+import '../providers/lend_state_model.dart';
 
-class LendAmountScreen extends StatefulWidget {
+class LendAmountScreen extends ConsumerWidget {
   const LendAmountScreen({super.key});
 
   @override
-  _LendAmountScreenState createState() => _LendAmountScreenState();
-}
-
-class _LendAmountScreenState extends State<LendAmountScreen> {
-  String _amount = '0'; // Track the entered amount
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      centerTitle: true,
-      title: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text('Lend', style: TextStyle(fontSize: 18, color: AppColors.black),),
-              const Gap(4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset('assets/icons/aptos.png', width: 20),
-                  const Gap(4),
-                  const Text('Aptos', style: TextStyle(fontSize: 14,color: AppColors.greyLight),),
-                ],
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the lend state from the provider
+    final LendState lendState = ref.watch(lendNotifierProvider);
+    
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text('Lend', style: TextStyle(fontSize: 18, color: AppColors.black),),
+                const Gap(4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(lendState.assetIconPath, width: 20),
+                    const Gap(4),
+                    Text(lendState.selectedAsset, 
+                      style: const TextStyle(fontSize: 14, color: AppColors.greyLight),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 23),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 7.5, vertical: 2.25),
+              decoration: BoxDecoration(
+                color: AppColors.green.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(30),
+              ), 
+              child: Text('${lendState.apy} APY', 
+                style: const TextStyle(color: AppColors.green),
               ),
-            ],
+            ),
           ),
         ],
-      ),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: 23),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7.5, vertical: 2.25),
-            decoration: BoxDecoration(
-              color: AppColors.green.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(30),
-            ), 
-            child: const Text('100% APY', style: TextStyle(color: AppColors.green),),
-          ),
-        ),
-      ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -64,16 +68,22 @@ class _LendAmountScreenState extends State<LendAmountScreen> {
                 const Gap(8),
                 const Text('Your Health Factor change', style: TextStyle(color: AppColors.greyLight, fontSize: 14),),
                 const Gap(4),
-                if(_amount == '0')
+                if(lendState.lendAmount == '0')
                   const Text('--', style: TextStyle(color: AppColors.greyLight, fontSize: 14, fontWeight: FontWeight.w600),),
-                if(_amount != '0')
-                  const Row(
+                if(lendState.lendAmount != '0')
+                  Row(
                     children: <Widget>[
-                      Text('104.05', style: TextStyle(color: AppColors.red, fontSize: 14, fontWeight: FontWeight.w600),),
-                      Gap(4),
-                      Text('-->', style: TextStyle(color: AppColors.greyLight, fontSize: 14, fontWeight: FontWeight.w600),),
-                      Gap(4),
-                      Text('140.50', style: TextStyle(color: AppColors.green, fontSize: 14, fontWeight: FontWeight.w600),),
+                      Text(
+                        '${lendState.currentHealthFactor}', 
+                        style: const TextStyle(color: AppColors.red, fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                      const Gap(4),
+                      const Text('-->', style: TextStyle(color: AppColors.greyLight, fontSize: 14, fontWeight: FontWeight.w600),),
+                      const Gap(4),
+                      Text(
+                        '${lendState.projectedHealthFactor}', 
+                        style: const TextStyle(color: AppColors.green, fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
                     ],
                   ),
               ],
@@ -85,18 +95,22 @@ class _LendAmountScreenState extends State<LendAmountScreen> {
               child: Column(
                 children: <Widget>[
                   Text(
-                    '\$$_amount', // Display the dynamic amount
-                    style: TextStyle(fontSize: 54, fontWeight: FontWeight.w600, color: _amount == '0' ? AppColors.greyLight : AppColors.black),
+                    '\$${lendState.lendAmount}', // Display the dynamic amount from provider
+                    style: TextStyle(
+                      fontSize: 54, 
+                      fontWeight: FontWeight.w600, 
+                      color: lendState.lendAmount == '0' ? AppColors.greyLight : AppColors.black,
+                    ),
                   ),
                   const Gap(8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Image.asset('assets/icons/aptos.png', width: 18),
+                      Image.asset(lendState.assetIconPath, width: 18),
                       const Gap(4),
-                      const Text(
-                        '0 APT',
-                        style: TextStyle(fontSize: 14, color: AppColors.greyLight, fontWeight: FontWeight.w600),
+                      Text(
+                        '0 ${lendState.maxAmountUnit}',
+                        style: const TextStyle(fontSize: 14, color: AppColors.greyLight, fontWeight: FontWeight.w600),
                       ),
                       const Gap(4),
                       const Icon(
@@ -116,7 +130,7 @@ class _LendAmountScreenState extends State<LendAmountScreen> {
                       color: AppColors.white,
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: AppColors.greyLight.withOpacity(0.2),
+                          color: AppColors.greyLight.withValues(alpha: 0.2),
                           blurRadius: 10,
                           offset: const Offset(0, 2),
                         ),
@@ -127,24 +141,24 @@ class _LendAmountScreenState extends State<LendAmountScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          const Row(
+                          Row(
                             children: <Widget>[
                               CircleAvatar(
                                 backgroundColor: Colors.transparent,
-                                backgroundImage: AssetImage('assets/icons/aptos.png'),
+                                backgroundImage: AssetImage(lendState.assetIconPath),
                                 radius: 22,
                               ),
-                              Gap(12),
+                              const Gap(12),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    'Aptos',
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                    lendState.selectedAsset,
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    '100.21 APT',
-                                    style: TextStyle(fontSize: 14, color: AppColors.greyLight),
+                                    '${lendState.maxAmount} ${lendState.maxAmountUnit}',
+                                    style: const TextStyle(fontSize: 14, color: AppColors.greyLight),
                                   ),
                                 ],
                               ),
@@ -152,8 +166,7 @@ class _LendAmountScreenState extends State<LendAmountScreen> {
                           ),
                           const Gap(8),
                           FilledButton(
-                            onPressed: () {
-                            },
+                            onPressed: () => ref.read(lendNotifierProvider.notifier).useMaxAmount(),
                             style: FilledButton.styleFrom(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
                               fixedSize: const Size(80, 36),
@@ -175,106 +188,25 @@ class _LendAmountScreenState extends State<LendAmountScreen> {
                       ),
                     ),
                   ),
-                  const Gap(20),
-
-                  // Number Pad
-                  Column(
-                    children: <Widget>[
-                      _buildRowButtons(<String>['1', '2', '3']),
-                      _buildRowButtons(<String>['4', '5', '6']),
-                      _buildRowButtons(<String>['7', '8', '9']),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          _buildButton('.'),
-                          _buildButton('0'),
-                          _buildButton('cancel', PhosphorIconsBold.backspace),
-                        ],
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
-            const Gap(24),
-            FilledButton(
-              onPressed: () {},
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                fixedSize: const Size(double.maxFinite, 56),
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              ), 
-              child: const Text('Continue'),
+            
+            // Use the reusable Keypad widget instead of custom implementation
+            Expanded(
+              child: Keypad(
+                onButtonPress: (String label) {
+                  if (label == 'cancelLongPress') {
+                    ref.read(lendNotifierProvider.notifier).setLendAmount('0');
+                  } else {
+                    ref.read(lendNotifierProvider.notifier).handleKeypadInput(label);
+                  }
+                },
+              ),
             ),
           ],
         ),
       ),
     );
-
-  // Helper function to build a row of buttons
-  Widget _buildRowButtons(List<String> items) => Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: items.map(_buildButton).toList(),
-    );
-
-  // Helper function to build a single button
-  Widget _buildButton(String label, [IconData? icon]) => Expanded(
-      child: InkWell(
-        onTap: () {
-          HapticFeedback.lightImpact();
-          _handleSinglePress(label);
-        },
-        onLongPress: label == 'cancel'
-            ? () {
-                // Handle long press for cancel button
-                setState(() {
-                  _amount = '0';
-                });
-              }
-            : null,
-        borderRadius: BorderRadius.circular(100),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: icon == null ? 16 : 8,
-            vertical: icon == null ? 12 : 10,
-          ),
-          child: icon == null
-              ? Center(
-                  child: Text(
-                    label,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                )
-              : Icon(icon),
-        ),
-      ),
-    );
-  // Handle button press
-  void _handleSinglePress(String label) {
-    setState(() {
-      if (label == 'cancel') {
-        // Clear the amount
-        _amount = '0';
-      } else if (label == '.') {
-        // Add a decimal point if it doesn't already exist
-        if (!_amount.contains('.')) {
-          _amount += '.';
-        }
-      } else {
-        // Append the digit to the amount
-        if (_amount == '0') {
-          _amount = label; // Replace '0' with the first digit
-        } else {
-          _amount += label;
-        }
-      }
-    });
   }
 }

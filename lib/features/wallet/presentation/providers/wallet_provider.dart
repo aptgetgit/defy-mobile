@@ -1,0 +1,349 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../data/models/nft_model.dart';
+import '../../data/models/token_model.dart';
+import '../../data/token_data.dart';
+import 'wallet_state.dart';
+
+part 'generated/wallet_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class WalletNotifier extends _$WalletNotifier {
+  @override
+  WalletState build() {
+    // Initialize with data from token_data.dart
+    final List<Token> initialTokens = List.from(tokens);
+    final List<NFTCollection> initialNFTCollections = _buildNFTCollections();
+    
+    return WalletState(
+      allTokens: initialTokens,
+      displayedTokens: initialTokens,
+      allNFTCollections: initialNFTCollections,
+      displayedNFTCollections: initialNFTCollections,
+    );
+  }
+
+  // Tab navigation
+  void setCurrentTab(int index) {
+    state = state.copyWith(
+      currentTabIndex: index,
+      isMoreButtonSelected: false,
+    );
+  }
+
+  // More button actions
+  void toggleMoreButton() {
+    state = state.copyWith(
+      isMoreButtonSelected: !state.isMoreButtonSelected,
+    );
+  }
+
+  // Balance actions
+  void setBalanceOption(String option) {
+    state = state.copyWith(
+      selectedBalanceOption: option,
+    );
+  }
+
+  // Token selection actions
+  void toggleTokenSelection(int tokenIndex) {
+    final Set<int> updatedSelection = Set<int>.from(state.selectedTokens);
+    
+    if (updatedSelection.contains(tokenIndex)) {
+      updatedSelection.remove(tokenIndex);
+    } else {
+      updatedSelection.add(tokenIndex);
+    }
+    
+    state = state.copyWith(
+      selectedTokens: updatedSelection,
+    );
+  }
+
+  // NFT selection actions
+  void toggleNFTSelection(int collectionIndex, int nftIndex) {
+    final Map<int, Set<int>> updatedSelection = Map<int, Set<int>>.from(state.selectedNFTs);
+    
+    if (!updatedSelection.containsKey(collectionIndex)) {
+      updatedSelection[collectionIndex] = <int>{};
+    }
+    
+    if (updatedSelection[collectionIndex]!.contains(nftIndex)) {
+      updatedSelection[collectionIndex]!.remove(nftIndex);
+      
+      // If no NFTs are selected in this collection, remove the collection entry
+      if (updatedSelection[collectionIndex]!.isEmpty) {
+        updatedSelection.remove(collectionIndex);
+      }
+    } else {
+      updatedSelection[collectionIndex]!.add(nftIndex);
+    }
+    
+    // Check if all NFTs in collection are selected
+    final bool allSelected = updatedSelection.containsKey(collectionIndex) && 
+        updatedSelection[collectionIndex]!.length == 
+        state.allNFTCollections[collectionIndex].nfts.length;
+    
+    final Map<int, bool> updatedAllSelected = Map<int, bool>.from(state.allCollectionNFTsSelected);
+    updatedAllSelected[collectionIndex] = allSelected;
+    
+    state = state.copyWith(
+      selectedNFTs: updatedSelection,
+      allCollectionNFTsSelected: updatedAllSelected,
+    );
+  }
+
+  // Collection selection actions
+  void toggleCollectionSelection(int collectionIndex) {
+    final Map<int, bool> updatedAllSelected = Map<int, bool>.from(state.allCollectionNFTsSelected);
+    final bool isCurrentlySelected = updatedAllSelected[collectionIndex] ?? false;
+    updatedAllSelected[collectionIndex] = !isCurrentlySelected;
+    
+    final Map<int, Set<int>> updatedSelection = Map<int, Set<int>>.from(state.selectedNFTs);
+    
+    if (!isCurrentlySelected) {
+      // Select all NFTs in the collection
+      final Set<int> allNFTIndices = Set<int>.from(
+        List<int>.generate(
+          state.allNFTCollections[collectionIndex].nfts.length, 
+          (int index) => index
+        )
+      );
+      updatedSelection[collectionIndex] = allNFTIndices;
+    } else {
+      // Deselect all NFTs in the collection
+      updatedSelection.remove(collectionIndex);
+    }
+    
+    state = state.copyWith(
+      selectedNFTs: updatedSelection,
+      allCollectionNFTsSelected: updatedAllSelected,
+    );
+  }
+
+  // Toggle NFT collection expand/collapse
+  void toggleCollectionExpanded(int collectionIndex) {
+    final Map<int, bool> updatedExpandedStates = Map<int, bool>.from(state.expandedStates);
+    updatedExpandedStates[collectionIndex] = !(updatedExpandedStates[collectionIndex] ?? true);
+    
+    state = state.copyWith(
+      expandedStates: updatedExpandedStates,
+    );
+  }
+
+  // Hiding functionality
+  void activateHiding() {
+    state = state.copyWith(
+      isHidingActive: true,
+    );
+  }
+
+  // Apply hide/unhide
+  void applyChanges() {
+    if (state.isHidingActive) {
+      // Filter tokens
+      final List<Token> updatedDisplayedTokens = state.allTokens
+          .where((Token token) => !state.selectedTokens.contains(
+              state.allTokens.indexOf(token)))
+          .toList();
+      
+      // Filter NFT collections
+      final List<NFTCollection> updatedDisplayedNFTCollections = state.allNFTCollections
+          .asMap()
+          .entries
+          .map((MapEntry<int, NFTCollection> entry) {
+            final int collectionIndex = entry.key;
+            final NFTCollection collection = entry.value;
+            
+            return NFTCollection(
+              name: collection.name,
+              count: collection.count,
+              nfts: collection.nfts.where((NFT nft) {
+                final int nftIndex = collection.nfts.indexOf(nft);
+                return !state.selectedNFTs.containsKey(collectionIndex) || 
+                      !state.selectedNFTs[collectionIndex]!.contains(nftIndex);
+              }).toList(),
+            );
+          })
+          .toList();
+      
+      state = state.copyWith(
+        isMoreButtonSelected: false,
+        displayedTokens: updatedDisplayedTokens,
+        displayedNFTCollections: updatedDisplayedNFTCollections,
+        hideSelected: true,
+        isHidingActive: false,
+        selectedTokens: {},
+        selectedNFTs: {},
+      );
+    } else {
+      // Just close more options panel
+      state = state.copyWith(
+        isMoreButtonSelected: false,
+        selectedTokens: {},
+        selectedNFTs: {},
+      );
+    }
+  }
+
+  // Sort functionality
+  void showSortSheet() {
+    state = state.copyWith(
+      isSortSheetVisible: true,
+    );
+  }
+  
+  void hideSortSheet() {
+    state = state.copyWith(
+      isSortSheetVisible: false,
+    );
+  }
+
+  void toggleSortPrice() {
+    state = state.copyWith(
+      isSortPriceButtonSelected: !state.isSortPriceButtonSelected,
+    );
+    
+    if (state.isSortPriceButtonSelected) {
+      _sortTokensByPrice();
+    }
+  }
+  
+  void toggleSortBalance() {
+    state = state.copyWith(
+      isSortBalanceButtonSelected: !state.isSortBalanceButtonSelected,
+    );
+    
+    if (state.isSortBalanceButtonSelected) {
+      _sortTokensByBalance();
+    }
+  }
+  
+  void toggleSortAlphabet() {
+    state = state.copyWith(
+      isSortAlphabetButtonSelected: !state.isSortAlphabetButtonSelected,
+    );
+    
+    if (state.isSortAlphabetButtonSelected) {
+      _sortTokensAlphabetically();
+    }
+  }
+  
+  void toggleSort24hr() {
+    state = state.copyWith(
+      isSort24hrButtonSelected: !state.isSort24hrButtonSelected,
+    );
+    
+    if (state.isSort24hrButtonSelected) {
+      _sortTokensBy24hrChange();
+    }
+  }
+
+  // Helper methods for sorting
+  void _sortTokensByPrice() {
+    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
+      ..sort((Token a, Token b) => _extractNumber(b.price).compareTo(_extractNumber(a.price)));
+      
+    state = state.copyWith(
+      displayedTokens: sortedTokens,
+    );
+  }
+  
+  void _sortTokensByBalance() {
+    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
+      ..sort((Token a, Token b) => _extractNumber(b.balance as String).compareTo(_extractNumber(a.balance as String)));
+      
+    state = state.copyWith(
+      displayedTokens: sortedTokens,
+    );
+  }
+  
+  void _sortTokensAlphabetically() {
+    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
+      ..sort((Token a, Token b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      
+    state = state.copyWith(
+      displayedTokens: sortedTokens,
+    );
+  }
+  
+  void _sortTokensBy24hrChange() {
+    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
+      ..sort((Token a, Token b) => _extractPercentage(b.change).compareTo(_extractPercentage(a.change)));
+      
+    state = state.copyWith(
+      displayedTokens: sortedTokens,
+    );
+  }
+
+  // Add to watchlist
+  void addSelectedTokensToWatchlist() {
+    final Set<int> updatedWatchlist = Set<int>.from(state.watchlistTokens)
+      ..addAll(state.selectedTokens);
+      
+    state = state.copyWith(
+      watchlistTokens: updatedWatchlist,
+      selectedTokens: {},
+    );
+  }
+
+  // QR Scanner toggle
+  void toggleQrScanner() {
+    state = state.copyWith(
+      isQrScannerOpen: !state.isQrScannerOpen,
+    );
+  }
+
+  void toggleBalanceVisibility(bool isHidden) {
+    state = state.copyWith(
+      isBalanceHidden: isHidden,
+    );
+  }
+
+  // Helper methods
+  double _extractNumber(String text) {
+    final String numericString = text.replaceAll(RegExp('[^0-9.]'), '');
+    return double.tryParse(numericString) ?? 0.0;
+  }
+  
+  double _extractPercentage(String text) {
+    final String numericString = text.replaceAll(RegExp('[^0-9.-]'), '');
+    return double.tryParse(numericString) ?? 0.0;
+  }
+  
+  List<NFTCollection> _buildNFTCollections() => <NFTCollection>[
+    NFTCollection(
+      name: 'Chum Chums NFT',
+      count: 2,
+      nfts: <NFT>[
+        NFT(
+          id: '#4147', 
+          price: '0.02 APT', 
+          imageUrl: 'assets/images/Mask group.png',
+        ),
+        NFT(
+          id: '#4148', 
+          price: '0.02 APT', 
+          imageUrl: 'assets/images/Mask group (1).png',
+          type: NFTType.audio,
+        ),
+      ],
+    ),
+    NFTCollection(
+      name: 'Chum Chums NFT',
+      count: 2,
+      nfts: <NFT>[
+        NFT(
+          id: '#4149', 
+          price: '0.02 APT', 
+          imageUrl: 'assets/images/Mask group (2).png',
+          type: NFTType.video,
+        ),
+        NFT(
+          id: '#4150', 
+          price: '0.02 APT', 
+          imageUrl: 'assets/images/Mask group (3).png',
+        ),
+      ],
+    ),
+  ];
+}

@@ -23,7 +23,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
     super.initState();
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 600), // Total animation duration
+      duration: const Duration(milliseconds: 400), // Total animation duration
       vsync: this,
     );
     // Define a combined slide + bounce animation
@@ -80,7 +80,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 //search bar
                 Container(
                   width: double.infinity,
@@ -92,7 +92,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: <Widget>[
                       const Gap(16),
                       const Icon(
                         PhosphorIconsBold.magnifyingGlass,
@@ -101,7 +101,6 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                       const Gap(8),
                       Expanded(
                         child: TextField(
-                          textAlign: TextAlign.start,
                           controller: _searchConroller,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
@@ -154,12 +153,12 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
 
   Widget _buildDappTile(BuildContext context) {
   final double width = context.screenWidth;
-  final List<AssetGenImage> dapps = [
+  final List<AssetGenImage> dapps = <AssetGenImage>[
     Assets.icons.uniswapDappLogo,
     Assets.icons.uniswapDappLogo,
     Assets.icons.uniswapDappLogo,
   ];
-  final List<String> dappNames = [
+  final List<String> dappNames = <String>[
     'Uniswap',
     'Petra Wallet',
     'Rainbow',
@@ -168,7 +167,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
     physics: const NeverScrollableScrollPhysics(),
     shrinkWrap: true,
     itemCount: dapps.length,
-    itemBuilder: (ctx, index) => GestureDetector(
+    itemBuilder: (BuildContext ctx, int index) => GestureDetector(
         onTap: () {
           showModalBottomSheet(
             isScrollControlled: true,
@@ -179,15 +178,15 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 16),
           child: Row(
-            children: [
+            children: <Widget>[
               dapps[index].image(width: width * .12),
               const SizedBox(width: 12), // Add space between image and text
               Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Row(
-                    children: [
+                    children: <Widget>[
                       Text(
                         dappNames[index],
                         style: const TextStyle(
@@ -261,23 +260,21 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
       'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
     ];
     final double width = context.screenWidth;
-    final double height = context.screenHeight;
     return Container(
        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             //header
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Assets.icons.uniswapDexLogo.image(width: width * .16),
                 const Gap(3),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const Text(
                       'Uniswap',
                       style: TextStyle(
@@ -286,7 +283,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                       ),
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         Container(
                           padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 8),
                           margin: const EdgeInsets.symmetric(horizontal: 3),
@@ -299,7 +296,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.greyDark),
+                                color: AppColors.greyDark,),
                           ),
                         ),
                         Container(
@@ -315,7 +312,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.greyDark),
+                                color: AppColors.greyDark,),
                           ),
                         ),
                       ],
@@ -354,7 +351,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
 
             //network
             Row(
-              children: [
+              children: <Widget>[
                 const Icon(
                   PhosphorIconsBold.shareNetwork,
                   color: AppColors.greyLight,
@@ -371,12 +368,12 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                 ),
                 const Spacer(),
                 Row(
-                  children: [
+                  children: <Widget>[
                     SizedBox(
                       height: width * .06,
                       width: width * .05 * 4,
                       child: Stack(
-                        children: [
+                        children: <Widget>[
                           for (int i = 0; i < 4; i++)
                             Positioned(
                               left: i * width * .04,
@@ -395,7 +392,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                         fontWeight: FontWeight.w500,
                         color: AppColors.greyLight,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -405,7 +402,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
 
             //socials
             Row(
-              children: [
+              children: <Widget>[
                 const Icon(
                   PhosphorIconsBold.cellSignalHigh,
                   color: AppColors.greyLight,
@@ -422,7 +419,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                 ),
                 const Spacer(),
                 Row(
-                  children: [
+                  children: <Widget>[
                     Container(
                       padding: const EdgeInsets.all(6),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -460,15 +457,14 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
             //skip page descrition
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 Transform.scale(
                   scale: 1.2,
                   child: Checkbox(
                     value: false, 
-                    onChanged: (v){},
+                    onChanged: (bool? v){},
             side: const BorderSide(
               color: AppColors.greyMedium,
-              width: 1,
             ),
                     ),),
                     const Gap(4),

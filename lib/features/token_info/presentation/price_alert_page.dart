@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
+import '../../shared/presentation/widgets/keypad.dart';
 import 'alert_bottom_sheet.dart';
 import 'alert_currency_screen.dart';
 
@@ -39,9 +40,7 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
-        builder: (BuildContext context) {
-          return const AlertBottomSheet();
-        },
+        builder: (BuildContext context) => const AlertBottomSheet(),
       );
     }
 
@@ -88,7 +87,7 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                          horizontal: 16, vertical: 8,),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF4F4F6),
                         borderRadius: BorderRadius.circular(20),
@@ -108,7 +107,7 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                     onTap: showGoesOverBottomSheet, // Trigger bottom sheet
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 8),
+                        horizontal: 16, vertical: 8,),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF4F4F6),
                         borderRadius: BorderRadius.circular(20),
@@ -132,12 +131,12 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
               const Text('Enter Value',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.greyDark)),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.greyDark),),
               const SizedBox(height: 10),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -191,7 +190,7 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
               ),
               const SizedBox(height: 20),
               const Text('Notes',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.greyDark)),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.greyDark),),
               const SizedBox(height: 10),
               Container(
                 alignment: Alignment.centerLeft,
@@ -223,11 +222,11 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
               ),
               const SizedBox(height: 20),
               const Text('Alert History',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),),
               const SizedBox(height: 10),
               ..._alerts.asMap().entries.map((MapEntry<int, Map<String, dynamic>> entry) {
-                int index = entry.key;
-                Map<String, dynamic> alert = entry.value;
+                final int index = entry.key;
+                final Map<String, dynamic> alert = entry.value;
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   height: MediaQuery.of(context).size.height * 0.13,
@@ -255,7 +254,7 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                             decoration: BoxDecoration(
-                              color: alert['status'] == 'active' ? const Color(0xFFDEF1DA) : AppColors.red.withOpacity(0.15),
+                              color: alert['status'] == 'active' ? const Color(0xFFDEF1DA) : AppColors.red.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Row(
@@ -300,14 +299,14 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                                 color: AppColors.greyDark,
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
                       const Row(
                         children: <Widget>[
                           Text(
-                            "Notify me when price ",
+                            'Notify me when price ',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -321,13 +320,13 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
-                          )
+                          ),
                         ],
                       ),
                       Text(
                         alert['status'] == 'active' ? ' Created 10 mins ago ' : ' Last Triggered 10 mins ago ',
                         style: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
+                          color: Colors.black.withValues(alpha: 0.5),
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -335,12 +334,12 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(30),
           child: GestureDetector(
             onTap: () {
               widget.onAlertCreated?.call();
@@ -390,87 +389,27 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
       ),
-      builder: (BuildContext context) => Padding(
-          padding: const EdgeInsets.only(
-            bottom: 24,
+      builder: (BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Gap(8),
+          Keypad(
+            onButtonPress: (String label) {
+              if (label == 'cancelLongPress') {
+                setState(() {
+                  _amount = '0';
+                  _priceController.text = _amount;
+                });
+                return;
+              }
+              
+              _handleSinglePress(label);
+            },
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Gap(8),
-              _buildRowButtons(<String>['1', '2', '3']),
-              _buildRowButtons(<String>['4', '5', '6']),
-              _buildRowButtons(<String>['7', '8', '9']),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _buildButton('.'),
-                  _buildButton('0'),
-                  _buildButton('cancel', PhosphorIconsBold.backspace),
-                ],
-              ),  
-              const Gap(16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: FilledButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }, 
-                  child: const Text('Confirm', style: TextStyle(fontSize: 16, color: AppColors.white, fontWeight: FontWeight.w500),),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.black,
-                    fixedSize: const Size(double.maxFinite, 56),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
+      ),
     );
   }
-
-  // Helper function to build a row of buttons
-  Widget _buildRowButtons(List<String> items) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: items.map((String e) => _buildButton(e)).toList(),
-      );
-
-  // Helper function to build a single button
-  Widget _buildButton(String label, [IconData? icon]) => Expanded(
-        child: InkWell(
-          onTap: () {
-            HapticFeedback.lightImpact();
-            _handleSinglePress(label);
-          },
-          onLongPress: label == 'cancel'
-              ? () {
-                  // Handle long press for cancel button
-                  setState(() {
-                    _amount = '0';
-                    _priceController.text = _amount;
-                  });
-                }
-              : null,
-          borderRadius: BorderRadius.circular(100),
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: icon == null ? 16 : 8,
-              vertical: icon == null ? 12 : 10,
-            ),
-            child: icon == null
-                ? Center(
-                    child: Text(
-                      label,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  )
-                : Icon(icon),
-          ),
-        ),
-      );
 
   // Handle button press
   void _handleSinglePress(String label) {

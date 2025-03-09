@@ -1,9 +1,10 @@
-import 'package:defy/config/assets.gen.dart';
-import 'package:defy/config/theme/colors.dart';
-import 'package:defy/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../../../../config/assets.gen.dart';
+import '../../../../config/theme/colors.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 class ExploreLeaderboardScreen extends StatefulWidget {
   const ExploreLeaderboardScreen({super.key});
@@ -17,14 +18,13 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
   final TextEditingController _searchConroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final height = context.screenHeight;
-    final width = context.screenWidth;
+    final double height = context.screenHeight;
     return Scaffold(
       backgroundColor: const Color(0xfff4f4f6),
       appBar: AppBar(
-        backgroundColor: Color(0xffd1d0c9),
+        backgroundColor: const Color(0xffd1d0c9),
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Leaderboard',
           style: TextStyle(
             fontSize: 20,
@@ -35,16 +35,16 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               Container(
-                color: Color(0xffd1d0c9),
+                color: const Color(0xffd1d0c9),
                 height: height * .44,
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     //search bar
                     Container(
                       margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 6),
+                          horizontal: 16, vertical: 6,),
                       width: double.infinity,
                       height: 48,
                       decoration: BoxDecoration(
@@ -54,20 +54,19 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
-                        children: [
+                        children: <Widget>[
                           const Gap(16),
-                          Icon(
+                          const Icon(
                             PhosphorIconsBold.magnifyingGlass,
                             color: AppColors.greyMedium,
                           ),
                           const Gap(8),
                           Expanded(
                             child: TextField(
-                              textAlign: TextAlign.start,
                               controller: _searchConroller,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
-                                hintText: "Search or paste URL",
+                                hintText: 'Search or paste URL',
                                 hintStyle: TextStyle(
                                   color: AppColors.greyMedium,
                                   fontSize: 14,
@@ -75,7 +74,7 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                               ),
                             ),
                           ),
-                          Icon(
+                          const Icon(
                             PhosphorIconsBold.cards,
                             color: AppColors.greyMedium,
                           ),
@@ -91,15 +90,15 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
-                        children: [
+                        children: <Widget>[
                           _buildLeaderBoardFilter(
-                              context, 'Top Coins', () {}, true),
+                              context, 'Top Coins', () {}, true,),
                           _buildLeaderBoardFilter(
-                              context, 'Top Referrals', () {}, false),
+                              context, 'Top Referrals', () {}, false,),
                           _buildLeaderBoardFilter(
-                              context, 'Top XP', () {}, false),
+                              context, 'Top XP', () {}, false,),
                           _buildLeaderBoardFilter(
-                              context, 'Top TVL', () {}, false),
+                              context, 'Top TVL', () {}, false,),
                         ],
                       ),
                     ),
@@ -122,14 +121,13 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
   }
 
   Widget _buildLeaderBoardFilter(
-      BuildContext context, String label, VoidCallback onTap, bool isSelected) {
-    return Container(
+      BuildContext context, String label, VoidCallback onTap, bool isSelected,) => Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 12,
         vertical: 6,
       ),
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         left: 14,
       ),
       decoration: BoxDecoration(
@@ -148,16 +146,15 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
         ),
       ),
     );
-  }
 
   Widget _buildLeaderBoard(BuildContext context) {
-    final height = context.screenHeight;
-    final width = context.screenWidth;
+    final double height = context.screenHeight;
+    final double width = context.screenWidth;
     return SizedBox(
       height: height * .44 * .62,
       width: width * .8,
       child: Stack(
-        children: [
+        children: <Widget>[
           Align(
             alignment: Alignment.bottomCenter,
             child: Assets.icons.exploreLeaderboardPodium.image(
@@ -165,21 +162,20 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
             ),
           ),
           Align(
-            alignment: Alignment.center,
             child: SizedBox(
               width: width * .7,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Column(
-                    children: [
+                    children: <Widget>[
                       const Gap(16),
                       Image.network(
-                        "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
+                        'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
                         width: width * .1,
                       ),
                       const Gap(4),
-                      Text(
+                      const Text(
                         'USDC',
                         style: TextStyle(
                           fontSize: 16,
@@ -188,16 +184,16 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                       ),
                       Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                              const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
                             color: AppColors.white,
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: <Widget>[
                               Icon(PhosphorIconsBold.alien, size: 16),
-                              const Gap(3),
+                              Gap(3),
                               Text(
                                 '3022',
                                 style: TextStyle(
@@ -206,17 +202,17 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                                 ),
                               ),
                             ],
-                          )),
+                          ),),
                     ],
                   ),
                   Column(
-                    children: [
+                    children: <Widget>[
                       Image.network(
-                        "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
+                        'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
                         width: width * .1,
                       ),
                       const Gap(4),
-                      Text(
+                      const Text(
                         'Aptos',
                         style: TextStyle(
                           fontSize: 16,
@@ -225,16 +221,16 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                       ),
                       Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                              const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
                             color: AppColors.white,
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: <Widget>[
                               Icon(PhosphorIconsBold.alien, size: 16),
-                              const Gap(3),
+                              Gap(3),
                               Text(
                                 '3022',
                                 style: TextStyle(
@@ -243,18 +239,18 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                                 ),
                               ),
                             ],
-                          )),
+                          ),),
                     ],
                   ),
                   Column(
-                    children: [
+                    children: <Widget>[
                       const Gap(18),
                       Image.network(
-                        "https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png",
+                        'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
                         width: width * .1,
                       ),
                       const Gap(4),
-                      Text(
+                      const Text(
                         'Doge',
                         style: TextStyle(
                           fontSize: 16,
@@ -263,16 +259,16 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                       ),
                       Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                              const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
                             color: AppColors.white,
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: <Widget>[
                               Icon(PhosphorIconsBold.alien, size: 16),
-                              const Gap(3),
+                              Gap(3),
                               Text(
                                 '3022',
                                 style: TextStyle(
@@ -281,7 +277,7 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
                                 ),
                               ),
                             ],
-                          )),
+                          ),),
                     ],
                   ),
                 ],
@@ -294,26 +290,26 @@ class _ExploreLeaderboardScreenState extends State<ExploreLeaderboardScreen> {
   }
 
 Widget _buildRankingList(BuildContext context) {
-    final width = context.screenWidth;
+    final double width = context.screenWidth;
   return Container(
-    padding: EdgeInsets.symmetric(vertical: 16),
+    padding: const EdgeInsets.symmetric(vertical: 16),
     decoration: BoxDecoration(
       color: AppColors.white,
       borderRadius: BorderRadius.circular(18),
     ),  
     child : ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
                 itemCount: 7,
-                itemBuilder: (ctx, index) {
-                  final coinsLogos = [
-                    "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
-                    "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-                    "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-                    "https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png",
-                    "https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png",
-                    "https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png",
-                    "https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png",
+                itemBuilder: (BuildContext ctx, int index) {
+                  final List<String> coinsLogos = <String>[
+                    'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+                    'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+                    'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+                    'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+                    'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+                    'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+                    'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
                   ];
                   return ListTile(
                     horizontalTitleGap: 12,
@@ -321,23 +317,23 @@ Widget _buildRankingList(BuildContext context) {
                       coinsLogos[index],
                       width: width * .12,
                     ),
-                    title: Text(
+                    title: const Text(
                           'Boomer',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                    subtitle: Text(
+                    subtitle: const Text(
                       'x0090901...123',
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.greyLight),
+                          color: AppColors.greyLight,),
                     ),
-                    trailing: Column(
+                    trailing: const Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
+                      children: <Widget>[
                         Text(
                           '#3',
                           style: TextStyle(
@@ -348,9 +344,9 @@ Widget _buildRankingList(BuildContext context) {
                         Expanded(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: <Widget>[
                               Icon(PhosphorIconsBold.alien, size: 16),
-                              const Gap(3),
+                              Gap(3),
                               Text(
                                 '3.8M',
                                 style: TextStyle(

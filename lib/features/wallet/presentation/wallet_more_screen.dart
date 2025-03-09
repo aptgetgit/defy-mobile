@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-
 
 import '../../../config/theme/colors.dart';
 import '../../watchlist/presentation/watch_list_screen.dart';
-
 
 class WalletMoreScreen extends StatefulWidget {
   const WalletMoreScreen({super.key});
@@ -74,13 +71,13 @@ class _WalletMoreScreenState extends State<WalletMoreScreen> with SingleTickerPr
                   ],
                 ),
                 const Gap(16),
-                 Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    MoreButton(imagePath: 'assets/icons/addtoken-logo.png', text: 'Add Tokens'),
-                    GestureDetector(child: MoreButton(imagePath: 'assets/icons/watchlist-logo.png', text: 'Watchlist'), onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const WatchListScreen()))),
-                    MoreButton(imagePath: 'assets/icons/invitefriend-logo.png', text: 'Invite friend'),
-                    MoreButton(imagePath: 'assets/icons/support-logo.png', text: 'Support'),
+                    const MoreButton(imagePath: 'assets/icons/addtoken-logo.png', text: 'Add Tokens'),
+                    GestureDetector(onTap:() => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const WatchListScreen())),child: const MoreButton(imagePath: 'assets/icons/watchlist-logo.png', text: 'Watchlist')),
+                    const MoreButton(imagePath: 'assets/icons/invitefriend-logo.png', text: 'Invite friend'),
+                    const MoreButton(imagePath: 'assets/icons/support-logo.png', text: 'Support'),
                   ],
                 ),
     
@@ -152,10 +149,10 @@ class _WalletMoreScreenState extends State<WalletMoreScreen> with SingleTickerPr
 
 // More Button Widget
 class MoreButton extends StatelessWidget {
+
+  const MoreButton({required this.imagePath, required this.text, super.key});
   final String imagePath;
   final String text;
-
-  const MoreButton({super.key, required this.imagePath, required this.text});
 
   @override
   Widget build(BuildContext context) => SizedBox(

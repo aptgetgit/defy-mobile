@@ -3,9 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'generated/watchlist_controller.g.dart';
 
 class WatchlistState {
-  final String collectionType;
-  final TextEditingController newTokenCollectionController;
-  final FocusNode newTokenCollectionFocusNode;
 
   WatchlistState({
     this.collectionType = '',
@@ -15,14 +12,15 @@ class WatchlistState {
             newTokenCollectionController ?? TextEditingController(),
         newTokenCollectionFocusNode =
             newTokenCollectionFocusNode ?? FocusNode();
+  final String collectionType;
+  final TextEditingController newTokenCollectionController;
+  final FocusNode newTokenCollectionFocusNode;
 
   WatchlistState copyWith({
     String? collectionType,
-  }) {
-    return WatchlistState(
+  }) => WatchlistState(
       collectionType: collectionType ?? this.collectionType,
     );
-  }
 }
 
 @Riverpod(keepAlive: true)

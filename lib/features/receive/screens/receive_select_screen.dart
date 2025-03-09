@@ -1,38 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
+import '../providers/receive_page_provider.dart';
 import 'receive_amount_screen.dart';
 import 'receive_share_screen.dart';
 
-class ReceiveSelectScreen extends StatefulWidget {
+class ReceiveSelectScreen extends ConsumerStatefulWidget {
   const ReceiveSelectScreen({super.key});
 
   @override
   _ReceiveSelectScreenState createState() => _ReceiveSelectScreenState();
 }
 
-class _ReceiveSelectScreenState extends State<ReceiveSelectScreen> {
+class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
   final ScrollController _scrollController = ScrollController();
-  final PageController _pageController = PageController();
   bool _showSearchIcon = false;
-  int _currentPage = 0;
 
-bool _isListVisible = false; // Controls animation
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-
-    // Delay the animation to make it appear after the screen builds
-    Future.delayed(Duration(milliseconds: 100), () {
-      setState(() {
-        _isListVisible = true;
-      });
-    });
-  }
   // Titles and subtitles for each page
   final List<Map<String, String>> _pageTitles = <Map<String, String>>[
     <String, String>{'title': 'Select Asset', 'subtitle': 'Request tokens'},
@@ -40,13 +26,16 @@ bool _isListVisible = false; // Controls animation
     <String, String>{'title': 'Share Link', 'subtitle': 'Request tokens'},
   ];
 
-
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    _pageController.dispose();
+    _scrollController..removeListener(_onScroll)
+    ..dispose();
     super.dispose();
   }
 
@@ -62,60 +51,31 @@ bool _isListVisible = false; // Controls animation
     }
   }
 
-  Future<void> _nextPage() async {
-    print("Current Page Before next page: $_currentPage");
-    if (_currentPage < 2) {
-      setState(() {
-        _currentPage++; // Update the page first
-      });
-      await _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      print("Current Page After next page: $_currentPage");
-    }
-  }
-
-  void _previousPage() {
-
-    print("Current Page Before back page: $_currentPage");
-
-    if (_currentPage > 0) {
-      setState(() {
-        _currentPage--;
-      });
-      print("after set state: $_currentPage");
-
-      _pageController.animateToPage(
-        _currentPage,
-        
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      print("Current Page animatteTo: $_currentPage");
-    } else {
-      Navigator.pop(context);
-      print("Current Page else case: $_currentPage"); // Go back to the previous screen if on the first page
-    }
-  }
-
   @override
-  Widget build(BuildContext context) => SafeArea(
+  Widget build(BuildContext context) {
+    final int currentPage = ref.watch(receivePageProvider);
+    final ReceivePageNotifier pageNotifier = ref.read(receivePageProvider.notifier);
+
+    return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(PhosphorIconsBold.caretLeft),
-            onPressed: _previousPage,
+            onPressed: () {
+              if (currentPage > 0) {
+                pageNotifier.previousPage();
+              } else {
+                Navigator.pop(context);
+              }
+            },
           ),
           backgroundColor: Colors.white,
           elevation: 0,
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: List.generate(3, (int index) {
-              final bool isActive = (index + 1) == _currentPage + 1;
-              final bool isVisited = (index + 1) <= _currentPage + 1;
+              final bool isActive = (index + 1) == currentPage + 1;
+              final bool isVisited = (index + 1) <= currentPage + 1;
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(horizontal: 3),
@@ -143,12 +103,12 @@ bool _isListVisible = false; // Controls animation
                   // Dynamic Title and Subtitle
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: <Widget>[
                       Text(
-                        _pageTitles[_currentPage]['title']!,
+                        _pageTitles[currentPage]['title']!,
                         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                       ),
-                      if (_currentPage == 0)
+                      if (currentPage == 0)
                         AnimatedOpacity(
                           opacity: _showSearchIcon ? 1.0 : 0.0,
                           duration: const Duration(milliseconds: 300),
@@ -163,17 +123,14 @@ bool _isListVisible = false; // Controls animation
                   ),
                   const Gap(8),
                   Text(
-                    _pageTitles[_currentPage]['subtitle']!,
+                    _pageTitles[currentPage]['subtitle']!,
                     style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   const Gap(20),
                 ],
               ),
             ),
-
-
-
-            if (_currentPage == 0)
+            if (currentPage == 0)
               AnimatedOpacity(
                 opacity: _showSearchIcon ? 0.0 : 1.0,
                 duration: const Duration(milliseconds: 300),
@@ -201,8 +158,6 @@ bool _isListVisible = false; // Controls animation
                             contentPadding: EdgeInsets.symmetric(vertical: 12),
                           ),
                         ),
-                        //don't use positioned directly in the stack
-
                         Positioned(
                           left: 100,
                           child: Icon(
@@ -221,79 +176,78 @@ bool _isListVisible = false; // Controls animation
             // Scrollable Section (PageView)
             Expanded(
               child: PageView(
-                controller: _pageController,
+                controller: pageNotifier.pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (int index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
+                  debugPrint('PageView onPageChanged: index = $index');
+                  // Only update if the index differs from the provider state.
+                  if (index != ref.read(receivePageProvider)) {
+                    pageNotifier.setPage(index);
+                  }
                 },
                 children: <Widget>[
                   // Page 1: Asset List
-                 
-              // Animated Asset List
-              AnimatedPositioned(
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeOut,
-                bottom: _isListVisible ? 0 : -600, // Moves from off-screen to bottom
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: 400, // Adjust as needed
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                    boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8)],
+                  KeyedSubtree(
+                    key: const ValueKey('assetListPage'),
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      itemCount: _assets.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Map<String, String> asset = _assets[index];
+                        return AssetItem(
+                          name: asset['name'],
+                          symbol: asset['symbol'],
+                          imagePath: asset['imagePath'],
+                          onTap: () {
+                            debugPrint('AssetItem tapped: ${asset['name']}, currentPage: $currentPage');
+                            if (currentPage == 0) { // only trigger if we're on the asset list page
+                              pageNotifier.nextPage();
+                            } else {
+                              debugPrint('Ignoring tap; already navigated.');
+                            }
+                          },
+                        );
+                      },
+                    ),
                   ),
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    itemCount: _assets.length,
-                    itemBuilder: (context, index) {
-                      final asset = _assets[index];
-                      return AssetItem(
-                        name: asset['name'],
-                        symbol: asset['symbol'],
-                        imagePath: asset['imagePath'],
-                        onTap: _nextPage,
-                      );
-                    },
-                  ),
-                ),
-              ),
-
                   // Page 2: Enter Amount Screen
-                  const ReceiveAmountScreen(),
-
+                  const KeyedSubtree(
+                    key: ValueKey('amountPage'),
+                    child: ReceiveAmountScreen(),
+                  ),
                   // Page 3: Share Link Screen
-                  const ReceiveShareScreen(),
+                  const KeyedSubtree(
+                    key: ValueKey('sharePage'),
+                    child: ReceiveShareScreen(),
+                  ),
                 ],
               ),
             ),
 
             // Next Button (Only shown on pages other than the first page)
-            if (_currentPage != 0)
+            if (currentPage != 0)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
-                  onPressed: _currentPage == 2 ? () {
+                  onPressed: currentPage == 2 ? () {
                     _showShareBottomSheet(context);
-                  } : _nextPage,
-                  child: Text(_currentPage == 2 ? 'Share Link' : 'Continue'),
+                  } : pageNotifier.nextPage,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _currentPage == 2 ? AppColors.blue : AppColors.black,
+                    backgroundColor: currentPage == 2 ? AppColors.blue : AppColors.black,
                     minimumSize: const Size(double.infinity, 56),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(40),
                     ),
                   ),
+                  child: Text(currentPage == 2 ? 'Share Link' : 'Continue'),
                 ),
               ),
           ],
         ),
       ),
     );
+  }
 
   final List<Map<String, String>> _assets = <Map<String, String>>[
     <String, String>{'name': 'Aptos', 'symbol': 'APT', 'imagePath': 'assets/icons/aptos.png'},
@@ -313,7 +267,7 @@ bool _isListVisible = false; // Controls animation
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (BuildContext context) => Container(
+      builder: (BuildContext context) => DecoratedBox(
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
@@ -324,11 +278,11 @@ bool _isListVisible = false; // Controls animation
             children: <Widget>[
               // Title
               Padding(
-                padding: EdgeInsets.only(left:20, top: 24, right: 20),
+                padding: const EdgeInsets.only(left:20, top: 24, right: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
+                  children: <Widget>[
+                    const Text(
                       'Share this page',
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.start,
@@ -337,7 +291,7 @@ bool _isListVisible = false; // Controls animation
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Icon(PhosphorIconsRegular.x, size: 24)
+                      child: const Icon(PhosphorIconsRegular.x, size: 24),
                     ),
                   ],
                 ),
@@ -451,22 +405,23 @@ class AssetItem extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-      onTap: onTap, // Use the provided onTap callback
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          backgroundImage: AssetImage(imagePath!),
-          radius: 22,
-        ),
-        title: Text(
-          name!,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-        ),
-        subtitle: Text(
-          symbol!,
-          style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 151, 157, 170)),
-        ),
+  Widget build(BuildContext context) => Material(
+    color: Colors.transparent,
+    child: ListTile(
+      onTap: onTap,
+      leading: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        backgroundImage: AssetImage(imagePath!),
+        radius: 22,
       ),
-    );
+      title: Text(
+        name!,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      ),
+      subtitle: Text(
+        symbol!,
+        style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 151, 157, 170)),
+      ),
+    ),
+  );
 }

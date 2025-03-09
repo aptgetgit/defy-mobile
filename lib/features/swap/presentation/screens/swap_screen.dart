@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../../shared/presentation/widgets/custom_tab_bar.dart';
 import 'limit_tab_screen.dart';
 import 'market_tab_screen.dart';
 
@@ -50,7 +51,7 @@ class _SwapScreenState extends State<SwapScreen> with SingleTickerProviderStateM
           'Swap',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
@@ -64,41 +65,19 @@ class _SwapScreenState extends State<SwapScreen> with SingleTickerProviderStateM
           preferredSize: const Size.fromHeight(kToolbarHeight - 8),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                // TabBar takes only the space it needs
-                Flexible(
-                  child: TabBar(
-                    controller: _tabController,
-                    isScrollable: true,
-                    indicatorColor: Colors.black,
-                    indicator: const UnderlineTabIndicator(
-                      borderSide: BorderSide(width: 2),
-                    ),
-                    tabAlignment: TabAlignment.start,
-                    labelColor: Colors.black,
-                    unselectedLabelColor: Colors.grey,
-                    labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                    unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                    labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    padding: EdgeInsets.zero, // Remove horizontal padding
-                    indicatorWeight: 1,
-                    dividerHeight: 1,
-                    dividerColor: Colors.grey[300],
-                    tabs: const [
-                      Tab(text: 'Market'),
-                      Tab(text: 'Limit'),
-                    ],
-                  ),
-                ),
-                // Icons on the right side of the tab bar
-                Row(
+            child: Flexible(
+              child: CustomTabBar(
+                tabController: _tabController,
+                tabs: const <String>[
+                  'Market',
+                  'Limit',
+                ],
+                trailing: Row(
                   children: <Widget>[
-                    if (_tabController.index == 1) ...[
+                    if (_tabController.index == 1) ...<Widget>[
                       // Show gear icon only in Limit tab
                       Row(
-                        children: [
+                        children: <Widget>[
                           IconButton(
                             icon: const Icon(
                               PhosphorIconsRegular.chartBar,
@@ -129,14 +108,14 @@ class _SwapScreenState extends State<SwapScreen> with SingleTickerProviderStateM
                     ],
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
     ),      
     body: TabBarView(
       controller: _tabController,
-      children: const [
+      children: const <Widget>[
         MarketTab(),
         LimitTab(),
       ],

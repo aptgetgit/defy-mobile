@@ -17,6 +17,7 @@ List<RouteBase> get $appRoutes => [
       $createTokenScreenRoute,
       $pumpFunTokenPreviewScreenRoute,
       $exploreLeaderboardScreenRoute,
+      $exploreCoinsScreenRoute,
       $homeRoute,
       $nftInfoRoute,
       $nftInfoAudioRoute,
@@ -265,6 +266,29 @@ extension $ExploreLeaderboardScreenRouteExtension
 
   String get location => GoRouteData.$location(
         '/explore-leaderboard',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreCoinsScreenRoute => GoRouteData.$route(
+      path: '/explore-coins',
+      factory: $ExploreCoinsScreenRouteExtension._fromState,
+    );
+
+extension $ExploreCoinsScreenRouteExtension on ExploreCoinsScreenRoute {
+  static ExploreCoinsScreenRoute _fromState(GoRouterState state) =>
+      const ExploreCoinsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-coins',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -826,7 +850,7 @@ extension $SwapRouteExtension on SwapRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'8828f7233978a9011da881230f1b78a0725f6e33';
+String _$routerHash() => r'3d06c19edab6a4e6660f76f0475dbd7d200ee189';
 
 /// See also [router].
 @ProviderFor(router)

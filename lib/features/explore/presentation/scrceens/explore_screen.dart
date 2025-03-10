@@ -229,7 +229,7 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
       final int index = ref.watch(coinsAnimationIndexProvider);
       return GestureDetector(
         onTap : () {
-          // const ExploreCoinsScreenRoute().push(context);
+          const ExploreCoinsScreenRoute().push(context);
         },
         child: SlideTransition(
           position: slideAnimation1,

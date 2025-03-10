@@ -1,35 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart'; // Add this import
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 import '../../../config/theme/colors.dart';
 import '../widgets/watchlist_nft_tile.dart';
 import '../widgets/watchlist_update_collection.dart';
+import 'providers/watchlist_collection_details_provider.dart';
+import 'providers/watchlist_collection_model.dart';
+import 'providers/watchlist_item_model.dart';
+import 'providers/watchlist_provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+// Remove standalone app code for integrated version
+// void main() {
+//   runApp(const MyApp());
+// }
+// 
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+// 
+//   @override
+//   Widget build(BuildContext context) => const MaterialApp(
+//       home: WatchlistCuteNFTScreen(),
+//     );
+// }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class WatchlistCuteNFTScreen extends ConsumerStatefulWidget { // Change to ConsumerStatefulWidget
+  const WatchlistCuteNFTScreen({this.collectionId, super.key});
+  
+  // Add optional collection ID parameter
+  final String? collectionId;
 
   @override
-  Widget build(BuildContext context) => const MaterialApp(
-      home: WatchlistCuteNFTScreen(),
-    );
+  ConsumerState<WatchlistCuteNFTScreen> createState() => _WatchlistCuteNFTScreenState();
 }
 
-class WatchlistCuteNFTScreen extends StatefulWidget {
-  const WatchlistCuteNFTScreen({super.key});
-
-  @override
-  State<WatchlistCuteNFTScreen> createState() => _WatchlistCuteNFTScreenState();
-}
-
-class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with SingleTickerProviderStateMixin {
+class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
-  bool showDeleteButton = false;
-  String collectionName = 'Cute NFTs🐣';
+  String? collectionId;
 
   @override
   void initState() {
@@ -44,7 +53,26 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
-    ),);
+    ));
+    
+    // If collection ID is passed directly, use it
+    if (widget.collectionId != null) {
+      collectionId = widget.collectionId;
+    } else {
+      // Otherwise find Cute NFTs collection
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final List<WatchlistCollection> cuteCollections = ref.read(watchlistProvider.notifier)
+            .getCollectionsByType(CollectionType.nft)
+            .where((WatchlistCollection c) => c.name.contains('Cute NFT'))
+            .toList();
+        
+        if (cuteCollections.isNotEmpty) {
+          setState(() {
+            collectionId = cuteCollections.first.id;
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -54,18 +82,38 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
   }
 
   void _toggleDeleteButton() {
-    setState(() {
-      showDeleteButton = !showDeleteButton;
-      if (showDeleteButton) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
-    });
+    if (collectionId == null) {
+      return;
+    }
+    
+    final bool isDeleteMode = ref.read(watchlistCollectionDetailsProvider(collectionId!)).isDeleteMode;
+    ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier).toggleDeleteMode();
+    
+    // Animation stays the same
+    if (!isDeleteMode) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    // Show loading while finding collection
+    if (collectionId == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    
+    // Get collection data from provider
+    final CollectionDetailsState collectionDetails = ref.watch(watchlistCollectionDetailsProvider(collectionId!));
+    final WatchlistCollection collection = collectionDetails.collection;
+    final bool showDeleteButton = collectionDetails.isDeleteMode;
+    
+    return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -81,7 +129,7 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              collectionName,
+              collection.name,
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
@@ -91,17 +139,18 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
             const Gap(40),
             GestureDetector(
               onTap: () async {
-                final updatedCollectionName = await Navigator.push(
+                // Pass collection data to update screen
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => const WatchListUpdateCollectionScreen(),
+                    builder: (BuildContext context) => WatchListUpdateCollectionScreen(
+                      initialName: collection.name,
+                      collectionId: collectionId!,
+                    ),
                   ),
                 );
-                if (updatedCollectionName != null) {
-                  setState(() {
-                    collectionName = updatedCollectionName as String;
-                  });
-                }
+                
+                // Collection will be updated through provider - no need to setState
               },
               child: Icon(
                 PhosphorIcons.pencilSimpleLine(PhosphorIconsStyle.bold),
@@ -148,7 +197,47 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                             size: 18,
                           ),
                           onPressed: () {
-                            // Handle rising arrow button press
+                            // Add sort functionality
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => SimpleDialog(
+                                title: const Text('Sort by'),
+                                children: <Widget>[
+                                  SimpleDialogOption(
+                                    onPressed: () {
+                                      ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
+                                          .setSortOption(SortOption.nameAsc);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Name (A-Z)'),
+                                  ),
+                                  SimpleDialogOption(
+                                    onPressed: () {
+                                      ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
+                                          .setSortOption(SortOption.nameDesc);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Name (Z-A)'),
+                                  ),
+                                  SimpleDialogOption(
+                                    onPressed: () {
+                                      ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
+                                          .setSortOption(SortOption.priceAsc);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Price (Low to High)'),
+                                  ),
+                                  SimpleDialogOption(
+                                    onPressed: () {
+                                      ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
+                                          .setSortOption(SortOption.priceDesc);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Price (High to Low)'),
+                                  ),
+                                ],
+                              ),
+                            );
                           },
                         ),
                       ),
@@ -176,10 +265,29 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 6, // Number of tiles
-                itemBuilder: (BuildContext context, int index) => WatchlistNFTTile(deleteNft: showDeleteButton),
-              ),
+              child: collection.items.isEmpty
+                ? const Center(child: Text('No NFTs in this collection'))
+                : ListView.builder(
+                  itemCount: collection.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final WatchlistItem item = collection.items[index];
+                    return WatchlistNFTTile(
+                      nftData: <String, String>{
+                        'id': item.id,
+                        'name': item.name,
+                        'imagePath': item.imagePath,
+                        'usdValue': item.usdValue ?? '',
+                        'nativeValue': item.nativeValue ?? '',
+                      },
+                      deleteNft: showDeleteButton,
+                      onDelete: () {
+                        // Delete the item through provider
+                        ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
+                            .deleteItem(item.id);
+                      },
+                    );
+                  },
+                ),
             ),
             const Gap(50),
             if(showDeleteButton)
@@ -187,7 +295,29 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle delete button press
+                    // Confirmation dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Delete Collection'),
+                        content: const Text('Are you sure? This action cannot be undone.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Delete collection using provider
+                              ref.read(watchlistProvider.notifier).deleteCollection(collectionId!);
+                              Navigator.pop(context); // close dialog
+                              Navigator.pop(context); // go back to previous screen
+                            },
+                            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.red,
@@ -204,4 +334,5 @@ class _WatchlistCuteNFTScreenState extends State<WatchlistCuteNFTScreen> with Si
         ),
       ),
     );
+  }
 }

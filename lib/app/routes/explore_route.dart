@@ -130,3 +130,17 @@ class ExploreLeaderboardScreenRoute extends GoRouteData {
     builder: (context, state) => ExploreLeaderboardScreen(),
   );
 }
+
+@TypedGoRoute<ExploreCoinsScreenRoute>(path: '/explore-coins')
+class ExploreCoinsScreenRoute extends GoRouteData {
+  const ExploreCoinsScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => ExploreCoinsScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => ExploreCoinsScreen(),
+  );
+}
+

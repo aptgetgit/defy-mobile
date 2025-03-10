@@ -10,6 +10,7 @@ import '../../features/borrow/presentation/screens/borrow_screen.dart';
 import '../../features/borrow/presentation/screens/borrow_amount_screen.dart';
 import '../../features/explore/presentation/scrceens/create_token_screen.dart';
 
+import '../../features/explore/presentation/scrceens/explore_coins_screen.dart';
 import '../../features/explore/presentation/scrceens/explore_dapps_screen.dart';
 import '../../features/explore/presentation/scrceens/explore_leaderboard.dart';
 import '../../features/explore/presentation/scrceens/explore_market_screen.dart';
@@ -17,6 +18,7 @@ import '../../features/explore/presentation/scrceens/explore_nft_screen.dart';
 import '../../features/explore/presentation/scrceens/explore_pump_fun_screen.dart';
 import '../../features/explore/presentation/scrceens/explore_pump_fun_token_transactions_screen.dart';
 import '../../features/explore/presentation/scrceens/explore_screen.dart';
+
 import '../../features/explore/presentation/scrceens/pump_fun_token_preview_screen.dart';
 import '../../features/explore/presentation/scrceens/search_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
@@ -72,7 +74,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const WalletScreenRoute().location,
+      initialLocation: const ExploreScreenRoute().location,
       routes: $appRoutes,
       errorBuilder: (BuildContext context, GoRouterState state) =>
           const Scaffold(

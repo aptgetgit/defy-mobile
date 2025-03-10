@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart'; // Add this for provider support
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
+import '../presentation/providers/watchlist_provider.dart'; // Add provider import
 import 'watchlist_newList_tile.dart';
 
-class WatchListUpdateCollectionScreen extends StatefulWidget {
-  const WatchListUpdateCollectionScreen({super.key});
+class WatchListUpdateCollectionScreen extends ConsumerStatefulWidget {
+  const WatchListUpdateCollectionScreen({
+    required this.initialName,  // Add this parameter
+    required this.collectionId, // Add this parameter
+    super.key,
+  });
+  
+  final String initialName;
+  final String collectionId;
 
   @override
-  State<WatchListUpdateCollectionScreen> createState() => _WatchListUpdateCollectionScreenState();
+  ConsumerState<WatchListUpdateCollectionScreen> createState() => _WatchListUpdateCollectionScreenState();
 }
 
-class _WatchListUpdateCollectionScreenState extends State<WatchListUpdateCollectionScreen> {
-  final TextEditingController _controller = TextEditingController();
+class _WatchListUpdateCollectionScreenState extends ConsumerState<WatchListUpdateCollectionScreen> {
+  late TextEditingController _controller;
   bool _isKeyboardOpen = false;
   bool _isButtonEnabled = false;
 
   @override
   void initState() {
     super.initState();
+    // Initialize controller with the initial name
+    _controller = TextEditingController(text: widget.initialName);
+    _isButtonEnabled = _controller.text.isNotEmpty; // Initialize button state
+    
     // Listen for keyboard visibility changes
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -63,14 +76,14 @@ class _WatchListUpdateCollectionScreenState extends State<WatchListUpdateCollect
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(PhosphorIconsBold.caretLeft, size: 24),
+          icon: Icon(PhosphorIcons.caretLeft(PhosphorIconsStyle.bold), size: 24),
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 6),
             child: IconButton(
-              icon: const Icon(PhosphorIconsRegular.star, size: 24,),
+              icon: Icon(PhosphorIcons.star(), size: 24),
               onPressed: () {},
             ),
           ),
@@ -107,7 +120,12 @@ class _WatchListUpdateCollectionScreenState extends State<WatchListUpdateCollect
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                        Navigator.pop(context, _controller.text); // Pass the updated collection name back
+                        // Update collection name in the provider
+                        ref.read(watchlistProvider.notifier)
+                           .updateCollectionName(widget.collectionId, _controller.text);
+                        
+                        // Pop back to previous screen - no need to return a value
+                        Navigator.pop(context);
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
@@ -120,10 +138,15 @@ class _WatchListUpdateCollectionScreenState extends State<WatchListUpdateCollect
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-                  child: Text('Update', style: TextStyle(color: _isButtonEnabled // Change text color too
-                            ? Colors.white // White when enabled
-                            : AppColors.greyLight,),),
-                            ),
+                  child: Text(
+                    'Update', 
+                    style: TextStyle(
+                      color: _isButtonEnabled
+                        ? Colors.white
+                        : AppColors.greyLight,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

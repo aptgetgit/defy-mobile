@@ -5,9 +5,17 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
 
-class WatchlistNFTTile extends StatefulWidget {
+class WatchlistNFTTile extends StatefulWidget { // Add this parameter
+  
+  const WatchlistNFTTile({
+    required this.nftData, // Make it required
+    required this.deleteNft, 
+    this.onDelete,  // Make it optional
+    super.key
+  });
+  final Map<String, String> nftData; // Add this parameter
   final bool deleteNft;
-  const WatchlistNFTTile({required this.deleteNft, super.key});
+  final VoidCallback? onDelete;
 
   @override
   State<WatchlistNFTTile> createState() => _WatchlistNFTTileState();
@@ -54,6 +62,11 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
         setState(() {
           isDeleted = true;
         });
+        
+        // Call the onDelete callback if provided
+        if (widget.onDelete != null) {
+          widget.onDelete!();
+        }
       }
     });
   }
@@ -65,6 +78,12 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
     } else {
       _controller.reverse();
     }
+
+    // Get values from nftData map with fallbacks
+    final String name = widget.nftData['name'] ?? 'Funky Monkey';
+    final String imagePath = widget.nftData['imagePath'] ?? 'assets/images/onboarding-nft-6.png';
+    final String usdValue = widget.nftData['usdValue'] ?? r'$123.39';
+    final String nativeValue = widget.nftData['nativeValue'] ?? '32 APT';
 
     return Column(
       children: <Widget>[
@@ -87,7 +106,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         children: <Widget>[
-                          const Column(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -95,7 +114,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 height: 55,
                                 width: 55,
                                 fit: BoxFit.cover,
-                                image: AssetImage('assets/images/onboarding-nft-6.png'),
+                                image: AssetImage(imagePath),
                               ),
                             ],
                           ),
@@ -107,27 +126,27 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    const Text.rich(
+                                    Text.rich(
                                       TextSpan(
-                                        text: 'Funky Monkey',
-                                        style: TextStyle(
+                                        text: name,
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ),
                                     if(widget.deleteNft)
-                                      const Text(
-                                        '14K',
-                                        style: TextStyle(
+                                      Text(
+                                        nativeValue.split(' ')[0], // First part of native value (e.g., "32" from "32 APT")
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.5, end: 0),
                                     if(!widget.deleteNft)
-                                      const Text(
-                                        '14K',
-                                        style: TextStyle(
+                                      Text(
+                                        nativeValue.split(' ')[0],
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
                                         ),
@@ -138,10 +157,10 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    const Text.rich(
+                                    Text.rich(
                                       TextSpan(
-                                        text: r'$123.39',
-                                        style: TextStyle(
+                                        text: usdValue,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
                                           color: Colors.grey,
@@ -149,10 +168,10 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                       ),
                                     ),
                                     if(widget.deleteNft)
-                                      const Text.rich(
+                                      Text.rich(
                                         TextSpan(
-                                          text: '32 APT ',
-                                          style: TextStyle(
+                                          text: nativeValue,
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.grey,
@@ -160,10 +179,10 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                         ),
                                       ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.3, end: 0),
                                     if(!widget.deleteNft)
-                                      const Text.rich(
+                                      Text.rich(
                                         TextSpan(
-                                          text: '32 APT ',
-                                          style: TextStyle(
+                                          text: nativeValue,
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.grey,

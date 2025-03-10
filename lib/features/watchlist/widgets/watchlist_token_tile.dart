@@ -4,9 +4,17 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
 
-class WatchlistTokenTile extends StatefulWidget {
+class WatchlistTokenTile extends StatefulWidget { // Add onDelete parameter
+  
+  const WatchlistTokenTile({
+    required this.tokenData, // Make it required
+    required this.deleteNft, 
+    this.onDelete, // Optional callback
+    super.key,
+  });
+  final Map<String, String> tokenData; // Add tokenData parameter
   final bool deleteNft;
-  const WatchlistTokenTile({required this.deleteNft, super.key});
+  final VoidCallback? onDelete;
 
   @override
   State<WatchlistTokenTile> createState() => _WatchlistTokenTileState();
@@ -53,6 +61,11 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
         setState(() {
           isDeleted = true;
         });
+        
+        // Call the onDelete callback provided by parent
+        if (widget.onDelete != null) {
+          widget.onDelete!();
+        }
       }
     });
   }
@@ -64,6 +77,13 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
     } else {
       _controller.reverse();
     }
+    
+    // Extract values from tokenData with fallbacks
+    final String name = widget.tokenData['name'] ?? 'Funky Monkey';
+    final String imagePath = widget.tokenData['imagePath'] ?? 'assets/images/watchlist2.png';
+    final String usdValue = widget.tokenData['usdValue'] ?? r'$123.39';
+    final String nativeValue = widget.tokenData['nativeValue'] ?? '32 APT';
+    final String displayValue = widget.tokenData['displayValue'] ?? '14K';
 
     return Column(
       children: <Widget>[
@@ -86,7 +106,7 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         children: <Widget>[
-                          const Column(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -94,12 +114,12 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                 height: 55,
                                 width: 55,
                                 fit: BoxFit.cover,
-                                image: AssetImage('assets/images/watchlist2.png'),
+                                image: AssetImage(imagePath),
                               ),
                             ],
                           ),
                           const Gap(12),
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -108,30 +128,30 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                   children: <Widget>[
                                     Text.rich(
                                       TextSpan(
-                                        text: 'Funky Monkey',
-                                        style: TextStyle(
+                                        text: name,
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ),
                                     Text(
-                                      '14K',
-                                      style: TextStyle(
+                                      displayValue,
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                   ],
                                 ),
-                                Gap(4),
+                                const Gap(4),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text.rich(
                                       TextSpan(
-                                        text: r'$123.39',
-                                        style: TextStyle(
+                                        text: usdValue,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
                                           color: Colors.grey,
@@ -140,8 +160,8 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                     ),
                                     Text.rich(
                                       TextSpan(
-                                        text: '32 APT ',
-                                        style: TextStyle(
+                                        text: nativeValue,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
                                           color: Colors.grey,
@@ -194,8 +214,7 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                   animation: _controller,
                                   builder: (BuildContext context, Widget? child) => ShaderMask(
                                       shaderCallback: (Rect bounds) => LinearGradient(
-                                        // colors: <Color>[Colors.grey, Colors.grey.withOpacity(0.6)],
-                                           colors: <Color>[AppColors.greyDark, AppColors.greyLight.withValues(alpha: 0.6),],
+                                        colors: <Color>[AppColors.greyDark, AppColors.greyLight.withValues(alpha: 0.6)],
                                         stops: <double>[_controller.value, _controller.value],
                                       ).createShader(bounds),
                                       child: Text(

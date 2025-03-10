@@ -6,6 +6,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../../app/routes/router.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../widgets/coins_category_header.dart';
+import '../widgets/coins_list_item.dart';
 
 class ExploreCoinsScreen extends StatefulWidget {
   const ExploreCoinsScreen({super.key});
@@ -14,7 +16,7 @@ class ExploreCoinsScreen extends StatefulWidget {
   State<ExploreCoinsScreen> createState() => _ExploreCoinsScreenState();
 }
 
-class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTickerProviderStateMixin{
+class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _searchConroller = TextEditingController();
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
@@ -25,31 +27,31 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
     super.initState();
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 650), // Total animation duration
+      duration: const Duration(milliseconds: 650),
       vsync: this,
     );
     // Define a combined slide + bounce animation
     _slideAnimation = TweenSequence<Offset>(<TweenSequenceItem<Offset>>[
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: const Offset(0, 1), // Start off-screen
-          end: Offset.zero, // Slide into position
+          begin: const Offset(0, 1),
+          end: Offset.zero,
         ).chain(CurveTween(curve: Curves.easeInOut)),
-        weight: 50, // Slide takes up 80% of the duration
+        weight: 50,
       ),
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: Offset.zero, // From resting position
-          end: const Offset(0, -0.05), // Slight bounce up
+          begin: Offset.zero,
+          end: const Offset(0, -0.05),
         ).chain(CurveTween(curve: Curves.easeOut)),
-        weight: 25, // Bounce up takes 10%
+        weight: 25,
       ),
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: const Offset(0, -0.05), // From bounce peak
-          end: Offset.zero, // Settle back to resting
+          begin: const Offset(0, -0.05),
+          end: Offset.zero,
         ).chain(CurveTween(curve: Curves.bounceOut)),
-        weight: 25, // Settle back takes 10%
+        weight: 25,
       ),
     ]).animate(_animationController);
 
@@ -57,24 +59,24 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
     _slideAnimation2 = TweenSequence<Offset>(<TweenSequenceItem<Offset>>[
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: const Offset(0, -1), // Start off-screen
-          end: Offset.zero, // Slide into position
+          begin: const Offset(0, -1),
+          end: Offset.zero,
         ).chain(CurveTween(curve: Curves.easeInOut)),
-        weight: 60, // Slide takes up 80% of the duration
+        weight: 60,
       ),
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: Offset.zero, // From resting position
-          end: const Offset(0, 0.05), // Slight bounce up
+          begin: Offset.zero,
+          end: const Offset(0, 0.05),
         ).chain(CurveTween(curve: Curves.easeOut)),
-        weight: 20, // Bounce up takes 10%
+        weight: 20,
       ),
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: const Offset(0, 0.05), // From bounce peak
-          end: Offset.zero, // Settle back to resting
+          begin: const Offset(0, 0.05),
+          end: Offset.zero,
         ).chain(CurveTween(curve: Curves.bounceOut)),
-        weight: 20, // Settle back takes 10%
+        weight: 20,
       ),
     ]).animate(_animationController);
     
@@ -85,8 +87,10 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
   @override
   void dispose() {
     _animationController.dispose();
+    _searchConroller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) => Scaffold(
       backgroundColor: AppColors.greyVeryLight2,
@@ -96,8 +100,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
             children: <Widget>[
               //search bar
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   children: <Widget>[
                     const Icon(PhosphorIconsBold.caretLeft),
@@ -148,7 +151,6 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
               const Gap(12),
 
               //banners scroll
-              
               _buildTopBanner(context),
 
               SlideTransition(
@@ -156,7 +158,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                 child: Column(
                   children: <Widget>[
                     //pump.uptos.fun
-                    _buildCategoryHeader('Uptos Pump', () => const ExplorePumpFunScreenRoute().push(context)),
+                    CategoryHeader('Uptos Pump', () => const ExplorePumpFunScreenRoute().push(context)),
                     _buildPumpFunTile(context),
                   ],
                 ),
@@ -167,84 +169,28 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                 child: Column(
                   children: <Widget>[
                     //mcap coins
-                    _buildCategoryHeader('Top MCAP Coins', () {}),
-                    _buildTopMCAPCoin(context),
+                    CategoryHeader('Top MCAP Coins', () {}),
+                    _buildCoinsList(context, CoinListType.mcap),
                   ],
                 ),
               ),
 
               //top meme coins
-              _buildCategoryHeader('Top Meme Coins', () {}),
-              _buildTopMemeCoins(context),
+              CategoryHeader('Top Meme Coins', () {}),
+              _buildCoinsList(context, CoinListType.meme),
 
               //top volume
-              _buildCategoryHeader('Top Volume', () {}),
-              _buildTopVolume(context),
+              CategoryHeader('Top Volume', () {}),
+              _buildCoinsList(context, CoinListType.volume),
 
-              //mcap coins
-              _buildCategoryHeader('Highest Gainers', () {}),
-              _buildHighestGainers(context),
+              //highest gainers
+              CategoryHeader('Highest Gainers', () {}),
+              _buildCoinsList(context, CoinListType.gainers, bottomPadding: 16),
             ],
           ),
         ),
       ),
     );
-
-  Widget _buildCategoryHeader(String title, VoidCallback onTap) => Padding(
-      padding: const EdgeInsets.only(left : 18,right:18,bottom : 14,top :22),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          GestureDetector(
-            onTap: onTap,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Text(
-                  'See all',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.blue,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 18),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-
-  // Widget _buildTopBanner(BuildContext context) {
-  //   final width = context.screenWidth;
-  //   return SizedBox(
-  //     height: width * .6,
-  //     child: ListView.builder(
-  //         scrollDirection: Axis.horizontal,
-  //         itemCount: 3,
-  //         itemBuilder: (ctx, index) {
-  //           return Container(
-  //             margin: EdgeInsets.only(left: 18),
-  //             width: width * .55,
-  //             decoration: BoxDecoration(
-  //               color: const Color.fromARGB(255, 43, 123, 188),
-  //               borderRadius: BorderRadius.circular(18),
-  //             ),
-  //             //child:
-  //           );
-  //         }),
-  //   );
-  // }
-
-
 
   Widget _buildTopBanner(BuildContext context) => Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -268,21 +214,21 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
             // List Items
             _buildListItem(
               context,
-              iconUrl: 'https://via.placeholder.com/40', // Replace with image URL
+              iconUrl: 'https://via.placeholder.com/40',
               title: 'Bonk',
               subtitle: 'BONK',
               change: '2.5%',
             ),
             _buildListItem(
               context,
-              iconUrl: 'https://via.placeholder.com/40', // Replace with image URL
+              iconUrl: 'https://via.placeholder.com/40',
               title: 'GUI',
               subtitle: 'GUI',
               change: '2.5%',
             ),
             _buildListItem(
               context,
-              iconUrl: 'https://via.placeholder.com/40', // Replace with image URL
+              iconUrl: 'https://via.placeholder.com/40',
               title: 'Bonk',
               subtitle: 'BONK',
               change: '2.5%',
@@ -291,37 +237,38 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
         ),
       ),
     );
-Widget _buildTabButton(String label, {required bool isActive, double? width, double height = 34}) => Container(
-    constraints: const BoxConstraints(
-      minWidth: 126, // Ensure a minimum width for the container
-    ),
-    height: height, // Fixed height
-    padding: const EdgeInsets.symmetric(horizontal: 16), // Padding for inner spacing
-    decoration: BoxDecoration(
-      color: isActive ? Colors.orange.shade100 : Colors.white, // Background color
-      borderRadius: BorderRadius.circular(32),
-      border: isActive
-          ? Border.all(color: Colors.transparent)
-          : Border.all(color: Colors.grey.shade400), // Border color
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min, // Ensures container resizes to fit content
-      children: <Widget>[
-        Flexible(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isActive ? Colors.orange : Colors.grey, // Text color
-              fontWeight: FontWeight.w500,
-              fontSize: 16, // Font size for readability
+
+  Widget _buildTabButton(String label, {required bool isActive, double? width, double height = 34}) => Container(
+      constraints: const BoxConstraints(
+        minWidth: 126,
+      ),
+      height: height,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: isActive ? Colors.orange.shade100 : Colors.white,
+        borderRadius: BorderRadius.circular(32),
+        border: isActive
+            ? Border.all(color: Colors.transparent)
+            : Border.all(color: Colors.grey.shade400),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Flexible(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: isActive ? Colors.orange : Colors.grey,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
-            overflow: TextOverflow.ellipsis, // Prevent overflow
-            maxLines: 1, // Limit to one line
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
 
 
   Widget _buildListItem(
@@ -380,526 +327,170 @@ Widget _buildTabButton(String label, {required bool isActive, double? width, dou
         ],
       ),
     );
-}
-
 
   Widget _buildPumpFunTile(BuildContext context) {
-  final double width = context.screenWidth;
-  final List<String> nftImages = <String>[
-    'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
-    'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
-  ];
-
-  return ListView.builder(
-    physics: const NeverScrollableScrollPhysics(),
-    shrinkWrap: true,
-    itemCount: 2,
-    itemBuilder: (BuildContext ctx, int index) => Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start, // Ensures alignment of text with image
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                width: width * .28,
-                height: width * .28,
-                imageUrl: nftImages[index],
-                errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
-                progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                    const CircularProgressIndicator(),
-              ),
-            ),
-            const Gap(8),
-            Expanded( // Makes the column expand to fill the remaining space
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'APTMAN (APTMAN)',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const Text(
-                    'Are you APTMAN?',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.greyLight,),
-                  ),
-                  const Gap(10), // Added extra gap here between the "TheWeimals" and MCAP
-                  RichText(
-                    text: const TextSpan(
-                      text: 'Created by ',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.greyLight,
-                      ),
-                      children: <InlineSpan>[
-                        WidgetSpan(
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 4),
-                            // child: Image.asset(
-                            //   'assets/images/sam.png', // Your local image path
-                            //   width: 16,
-                            //   height: 16,
-                            // ),
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'TheWeimals',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(12), // Added gap to separate from MCAP
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RichText(
-                        text: const TextSpan(
-                          text: 'MCAP:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.greyLight,
-                          ),
-                          children: <InlineSpan>[
-                            TextSpan(
-                              text: '313',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          text: 'Replies:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.greyLight,
-                          ),
-                          children: <InlineSpan>[
-                            TextSpan(
-                              text: '1,322',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-  );
-}
-
-  Widget _buildTopMCAPCoin(BuildContext context) {
-    final List<String> coinsLogos = <String>[
-      'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
-      'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
-      'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
-      'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
-    ];
     final double width = context.screenWidth;
-    return SizedBox(
-      height: width * .33,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: coinsLogos.length,
-          itemBuilder: (BuildContext ctx, int index) => Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.only(left: 16),
-              width: width * .45,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                color: AppColors.white,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          width: width * .4 * .23,
-                          height: width * .4 * .23,
-                          imageUrl: coinsLogos[index],
-                          errorWidget: (BuildContext ctx, String str, Object obg) =>
-                              Container(color: Colors.amber),
-                          progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                              const CircularProgressIndicator(),
-                        ),
-                      ),
-                      const Gap(6),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Aptos',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            'APT',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.greyLight,),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                    Container(
-                    padding: const EdgeInsets.all(4),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          r'$3.15M',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Icon(PhosphorIconsFill.caretUp,
-                                color: AppColors.green, size: 18,),
-                            Text(
-                              '2.5%',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),),
-    );
-  }
-
-  Widget _buildTopMemeCoins(BuildContext context) {
-    final List<String> coinsLogos = <String>[
-      'https://cryptologos.cc/logos/bonk1-bonk-logo.png?v=035',
-      'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
-      'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
-      'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
+    final List<String> nftImages = <String>[
+      'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
+      'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
     ];
-    final double width = context.screenWidth;
-    return SizedBox(
-      height: width * .33,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: coinsLogos.length,
-          itemBuilder: (BuildContext ctx, int index) => Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.only(left: 16),
-              width: width * .45,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                color: AppColors.white,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          width: width * .4 * .23,
-                          height: width * .4 * .23,
-                          imageUrl: coinsLogos[index],
-                          errorWidget: (BuildContext ctx, String str, Object obg) =>
-                              Container(color: Colors.amber),
-                          progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                              const CircularProgressIndicator(),
-                        ),
-                      ),
-                      const Gap(6),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Bonk',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            'BONK',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.greyLight,),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          r'$0.00002348',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Icon(PhosphorIconsFill.caretUp,
-                                color: AppColors.green, size: 18,),
-                            Text(
-                              '2.5%',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),),
-    );
-  }
 
-  Widget _buildTopVolume(BuildContext context) {
-  final List<String> coinsLogos = <String>[
-    'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
-    'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
-    'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
-    'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
-  ];
-  final double width = context.screenWidth;
-  return SizedBox(
-    height: width * .33,
-    child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: coinsLogos.length,
-        itemBuilder: (BuildContext ctx, int index) => Container(
-            padding: const EdgeInsets.all(8),
-            margin: const EdgeInsets.only(left: 16),
-            width: width * .45,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: AppColors.white, // Set background color to white
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: 2,
+      itemBuilder: (BuildContext ctx, int index) => Container(
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: width * .28,
+                  height: width * .28,
+                  imageUrl: nftImages[index],
+                  errorWidget: (BuildContext ctx, String str, Object obj) => Container(color: Colors.amber),
+                  progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
+                      const CircularProgressIndicator(),
+                ),
+              ),
+              const Gap(8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        width: width * .4 * .23,
-                        height: width * .4 * .23,
-                        imageUrl: coinsLogos[index],
-                        errorWidget: (BuildContext ctx, String str, Object obg) =>
-                            Container(color: Colors.amber),
-                        progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                            const CircularProgressIndicator(),
+                    const Text(
+                      'APTMAN (APTMAN)',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const Gap(6),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    const Text(
+                      'Are you APTMAN?',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.greyLight,),
+                    ),
+                    const Gap(10),
+                    RichText(
+                      text: const TextSpan(
+                        text: 'Created by ',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.greyLight,
+                        ),
+                        children: <InlineSpan>[
+                          TextSpan(
+                            text: 'TheWeimals',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(
-                          'Aptos',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                        RichText(
+                          text: const TextSpan(
+                            text: 'MCAP:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.greyLight,
+                            ),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: '313',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                       
+                        RichText(
+                          text: const TextSpan(
+                            text: 'Replies:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.greyLight,
+                            ),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: '1,322',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  child: const Row(
-                    children: <Widget>[
-                      Text(
-                        r'$32M',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.black,
-                        ),
-                      ),
-                      Spacer(),
-                      Icon(PhosphorIconsBold.arrowCircleUpRight,
-                          color: AppColors.grey, size: 19.5,),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),),
-  );
-}
+              ),
+            ],
+          ),
+        ),
+    );
+  }
 
-  Widget _buildHighestGainers(BuildContext context) {
-    final List<String> coinsLogos = <String>[
+  Widget _buildCoinsList(BuildContext context, CoinListType type, {double? bottomPadding}) {
+    final List<String> coinsLogos = _getCoinsLogos(type);
+    final double width = context.screenWidth;
+    
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomPadding ?? 0),
+      child: SizedBox(
+        height: width * .33,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: coinsLogos.length,
+          itemBuilder: (BuildContext ctx, int index) => CoinListItem(
+            type: type,
+            logoUrl: coinsLogos[index],
+            width: width,
+          ),
+        ),
+      ),
+    );
+  }
+  
+  List<String> _getCoinsLogos(CoinListType type) {
+    if (type == CoinListType.meme) {
+      return <String>[
+        'https://cryptologos.cc/logos/bonk1-bonk-logo.png?v=035',
+        'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+        'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+        'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
+      ];
+    }
+    return <String>[
       'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
       'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
       'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
       'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
     ];
-    final double width = context.screenWidth;
-    return SizedBox(
-      height: width * .33,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: coinsLogos.length,
-          itemBuilder: (BuildContext ctx, int index) => Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.only(left: 16),
-              width: width * .45,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                color: AppColors.white,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          width: width * .4 * .23,
-                          height: width * .4 * .23,
-                          imageUrl: coinsLogos[index],
-                          errorWidget: (BuildContext ctx, String str, Object obg) =>
-                              Container(color: Colors.amber),
-                          progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                              const CircularProgressIndicator(),
-                        ),
-                      ),
-                      const Gap(6),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Aptos',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            'APT',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.greyLight,),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(9),
-                      color: AppColors.white,
-                    ),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'MCAP',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.greyLight,),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              r'$3.15M',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Spacer(),
-                            Icon(PhosphorIconsFill.caretUp,
-                                color: AppColors.green, size: 18,),
-                            Text(
-                              '2.5%',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),),
-    );
   }
+}

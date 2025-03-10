@@ -1,45 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../components/watchlist_nft_tab.dart';
 import '../components/watchlist_token_tab.dart';
+import 'providers/watchlist_provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+// Remove standalone app code for integrated version
+// void main() {
+//   runApp(const ProviderScope(child: MyApp()));
+// }
+// 
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+// 
+//   @override
+//   Widget build(BuildContext context) => const MaterialApp(
+//         home: WatchListScreen(),
+//         debugShowCheckedModeBanner: false,
+//       );
+// }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) => const MaterialApp(
-        home: WatchListScreen(),
-        debugShowCheckedModeBanner: false,
-      );
-}
-
-class WatchListScreen extends StatefulWidget {
+class WatchListScreen extends ConsumerStatefulWidget {
   const WatchListScreen({super.key});
 
   @override
-  State<WatchListScreen> createState() => _WatchListScreenState();
+  ConsumerState<WatchListScreen> createState() => _WatchListScreenState();
 }
 
-class _WatchListScreenState extends State<WatchListScreen>
+class _WatchListScreenState extends ConsumerState<WatchListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    
+    // Initialize tab controller and set to the last selected tab index from provider
+    final int selectedTabIndex = ref.read(watchlistProvider).selectedTabIndex;
+    _tabController = TabController(
+      length: 2, 
+      vsync: this, 
+      initialIndex: selectedTabIndex,
+    );
+    
+    // Listen for tab changes to update provider
+    _tabController.addListener(_handleTabChange);
+  }
+  
+  void _handleTabChange() {
+    if (_tabController.indexIsChanging) {
+      // Update the selected tab index in the provider
+      ref.read(watchlistProvider.notifier).setSelectedTab(_tabController.index);
+    }
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController..removeListener(_handleTabChange)
+    ..dispose();
     super.dispose();
   }
 
@@ -68,10 +89,16 @@ class _WatchListScreenState extends State<WatchListScreen>
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 18),
-              child: Icon(
-                PhosphorIcons.star(),
-                color: Colors.black,
-                size: 24,
+              child: IconButton(
+                onPressed: () {
+                  // This could show favorite collections or perform other actions
+                  // using the provider state
+                },
+                icon: Icon(
+                  PhosphorIcons.star(),
+                  color: Colors.black,
+                  size: 24,
+                ),
               ),
             ),
           ],

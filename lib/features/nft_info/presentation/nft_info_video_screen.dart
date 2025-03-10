@@ -33,6 +33,9 @@ class NftVideoScreen extends ConsumerStatefulWidget {
 
 class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
     with TickerProviderStateMixin {
+  bool _showMiniPlayer = false;
+  final double _miniPlayerHeight = 180;
+  final double _miniPlayerWidth = 180;
   String coinLogoUrl = '';
   String nftName = 'Cyborg 2078 #5623';
   String owner = 'Fantasy Ruins';
@@ -78,6 +81,9 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
   }
 
   void _onScroll() {
+    // Threshold should be around where the video player disappears from view
+    const double miniPlayerThreshold = 370; // Adjust based on your layout
+    
     if (_scrollController.offset > 100 && !_showTitle) {
       setState(() {
         _showTitle = true;
@@ -87,47 +93,17 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
         _showTitle = false;
       });
     }
-  }
-
-  void _showPopupVideoPlayer() {
-    final VideoPlayerProvider videoProvider = ref.read(videoPlayerProvider(_videoPath));
-
-    _overlayEntry = OverlayEntry(
-      builder: (BuildContext context) => Positioned(
-        bottom: 20,
-        right: 20,
-        child: Material(
-          elevation: 8,
-          borderRadius: BorderRadius.circular(8),
-          child: Container(
-            width: 150,
-            height: 100,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: videoProvider.isInitialized
-                ? AspectRatio(
-                    aspectRatio: videoProvider.videoPlayerController.value.aspectRatio,
-                    child: VideoPlayer(videoProvider.videoPlayerController),
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(_overlayEntry!);
-  }
-
-  void _hidePopupVideoPlayer() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
+    
+    // Control mini player visibility
+    if (_scrollController.offset > miniPlayerThreshold && !_showMiniPlayer) {
+      setState(() {
+        _showMiniPlayer = true;
+      });
+    } else if (_scrollController.offset <= miniPlayerThreshold && _showMiniPlayer) {
+      setState(() {
+        _showMiniPlayer = false;
+      });
+    }
   }
 
   @override
@@ -136,284 +112,412 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
     const double imageHeight = 353;
     final VideoPlayerProvider videoProvider = ref.watch(videoPlayerProvider(_videoPath));
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: ColoredBox(
-        color: Colors.white,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            _buildSliverAppBar(context),
-            SliverToBoxAdapter(
-              child: ColoredBox(
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    // Video player instead of static image
-                    GestureDetector(
-                      onTap:() {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (BuildContext context) => FullScreenVideoScreen(videoPath: _videoPath),
-                        ));
-                      },
-                      onVerticalDragEnd: (DragEndDetails details) {
-                        if (details.primaryVelocity! < 0) {
-                          // Swipe up
-                          _showPopupVideoPlayer();
-                        } else if (details.primaryVelocity! > 0) {
-                          // Swipe down
-                          _hidePopupVideoPlayer();
-                        }
-                      },
-                      child: Stack(
-                        alignment: Alignment.topCenter,
-                        children: <Widget>[
-                          // Video player
-                          Container(
-                            width: imageWidth,
-                            height: imageHeight,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: videoProvider.isInitialized
-                                ? AspectRatio(
-                                    aspectRatio: videoProvider.videoPlayerController.value.aspectRatio,
-                                    child: VideoPlayer(videoProvider.videoPlayerController),
-                                  )
-                                : const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                            ),
-                          ),
-                          // Play button overlay
-                          if (videoProvider.isInitialized && !videoProvider.isPlaying)
-                            Positioned.fill(
-                              child: Center(
-                                child: DecoratedBox(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black38,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: IconButton(
-                                    iconSize: 50,
-                                    icon: const Icon(PhosphorIconsFill.play),
-                                    onPressed: videoProvider.pauseOrResume,
-                                  ),
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.white,
+          body: ColoredBox(
+            color: Colors.white,
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: <Widget>[
+                _buildSliverAppBar(context),
+                SliverToBoxAdapter(
+                  child: ColoredBox(
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        // Video player instead of static image
+                        GestureDetector(
+                          onTap:() {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) => FullScreenVideoScreen(videoPath: _videoPath),
+                            ));
+                          },
+                          child: Stack(
+                            alignment: Alignment.topCenter,
+                            children: <Widget>[
+                              // Video player
+                              Container(
+                                width: imageWidth,
+                                height: imageHeight,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: videoProvider.isInitialized
+                                    ? AspectRatio(
+                                        aspectRatio: videoProvider.videoPlayerController.value.aspectRatio,
+                                        child: VideoPlayer(videoProvider.videoPlayerController),
+                                      )
+                                    : const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
                                 ),
                               ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    const Gap(12),
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                              // Play button overlay
+                              if (videoProvider.isInitialized && !videoProvider.isPlaying)
+                                Positioned.fill(
+                                  child: Center(
+                                    child: DecoratedBox(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.black38,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: IconButton(
+                                        iconSize: 50,
+                                        icon: const Icon(PhosphorIconsFill.play),
+                                        onPressed: videoProvider.pauseOrResume,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        const Gap(12),
+                        Row(
                           children: <Widget>[
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 20),
-                                child: Text('Cyborg 2078 #5623',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.black,
-                                    ),),
-                              ),
-                            ),
-                            const Gap(2),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Row(
-                                children: <Widget>[
-                                  RowSuper(
-                                    innerDistance: -12,
-                                    children: <Widget?>[
-                                      Image.asset('assets/images/avatar-1.png',
-                                          height: 22,),
-                                      Image.asset('assets/images/avatar-2.png',
-                                          height: 22,),
-                                      Image.asset('assets/images/avatar-3.png',
-                                          height: 22,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Text('Cyborg 2078 #5623',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.black,
+                                        ),),
+                                  ),
+                                ),
+                                const Gap(2),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 20),
+                                  child: Row(
+                                    children: <Widget>[
+                                      RowSuper(
+                                        innerDistance: -12,
+                                        children: <Widget?>[
+                                          Image.asset('assets/images/avatar-1.png',
+                                              height: 22,),
+                                          Image.asset('assets/images/avatar-2.png',
+                                              height: 22,),
+                                          Image.asset('assets/images/avatar-3.png',
+                                              height: 22,),
+                                        ],
+                                      ),
+                                      const Gap(10),
+                                      Text(
+                                        'James, Jane and 14+ hold',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColors.greyLight,
+                                            ),
+                                      ),
                                     ],
                                   ),
-                                  const Gap(10),
-                                  Text(
-                                    'James, Jane and 14+ hold',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.greyLight,
-                                        ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 46,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.greyVeryLight,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Center(child: Text('1x', style: TextStyle(fontSize: 14,color: AppColors.greyLight, fontWeight: FontWeight.w500),)),
+                                  ),
+                                  const Gap(16),
+                                  const Icon(
+                                    PhosphorIconsRegular.shareNetwork,
+                                    color: AppColors.black,
+                                    size: 20,
                                   ),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                        const Spacer(),
+                        const Gap(26),
+                        
+                        // Replace info containers with video controls
                         Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Row(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
                             children: <Widget>[
-                              Container(
-                                width: 46,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  color: AppColors.greyVeryLight,
-                                  borderRadius: BorderRadius.circular(20),
+                              // Video duration progress bar
+                              SliderTheme(
+                                data: SliderThemeData(
+                                  overlayShape: SliderComponentShape.noOverlay,
+                                  trackHeight: 14,
+                                  trackShape: const RectangularSliderTrackShape(),
+                                  thumbShape:
+                                      const RoundSliderThumbShape(enabledThumbRadius: 0),
                                 ),
-                                child: const Center(child: Text('1x', style: TextStyle(fontSize: 14,color: AppColors.greyLight, fontWeight: FontWeight.w500),)),
+                                child: Slider(
+                                  max: videoProvider.totalDuration.inSeconds.toDouble(),
+                                  value: videoProvider.currentDuration.inSeconds.toDouble(),
+                                  onChanged: (double value) {
+                                    videoProvider.seekTo(Duration(seconds: value.toInt()));
+                                  },
+                                  activeColor: Colors.black,
+                                  inactiveColor: Colors.grey[100],
+                                ),
                               ),
-                              const Gap(10),
-                              const Icon(
-                                PhosphorIconsRegular.shareNetwork,
-                                color: AppColors.black,
-                                size: 20,
+                              const Gap(8),
+                              
+                              // Time indicators
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      _formatTime(videoProvider.currentDuration),
+                                      style: const TextStyle(
+                                        color: AppColors.greyLight,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                      _formatTime(videoProvider.totalDuration),
+                                      style: const TextStyle(
+                                        color: AppColors.greyLight,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Gap(16),
+                              
+                              // Playback controls
+                              Row(
+                                children: <Widget>[
+                                  // Rewind button
+                                  Expanded(
+                                    child: IconButton(
+                                      iconSize: 40,
+                                      icon: const Icon(Icons.replay_10),
+                                      onPressed: videoProvider.seekBackward,
+                                    ),
+                                  ),
+                                  const Gap(20),
+                                  
+                                  // Play/pause button
+                                  Expanded(
+                                    child: IconButton(
+                                      iconSize: 50,
+                                      icon: Icon(videoProvider.isPlaying
+                                          ? PhosphorIconsFill.pause
+                                          : PhosphorIconsFill.play,),
+                                      onPressed: videoProvider.pauseOrResume,
+                                    ),
+                                  ),
+                                  const Gap(20),
+                                  
+                                  Expanded(
+                                    child: IconButton(
+                                      iconSize: 40,
+                                      icon: const Icon(Icons.forward_10),
+                                      onPressed: videoProvider.seekForward,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
+                        const SizedBox(height: 30),
                       ],
                     ),
-                    const Gap(26),
-                    
-                    // Replace info containers with video controls
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: <Widget>[
-                          // Video duration progress bar
-                          SliderTheme(
-                            data: SliderThemeData(
-                              overlayShape: SliderComponentShape.noOverlay,
-                              trackHeight: 14,
-                              trackShape: const RectangularSliderTrackShape(),
-                              thumbShape:
-                                  const RoundSliderThumbShape(enabledThumbRadius: 0),
-                            ),
-                            child: Slider(
-                              max: videoProvider.totalDuration.inSeconds.toDouble(),
-                              value: videoProvider.currentDuration.inSeconds.toDouble(),
-                              onChanged: (double value) {
-                                videoProvider.seekTo(Duration(seconds: value.toInt()));
-                              },
-                              activeColor: Colors.black,
-                              inactiveColor: Colors.grey[100],
-                            ),
-                          ),
-                          const Gap(8),
-                          
-                          // Time indicators
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  _formatTime(videoProvider.currentDuration),
-                                  style: const TextStyle(
-                                    color: AppColors.greyLight,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                Text(
-                                  _formatTime(videoProvider.totalDuration),
-                                  style: const TextStyle(
-                                    color: AppColors.greyLight,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Gap(16),
-                          
-                          // Playback controls
-                          Row(
-                            children: <Widget>[
-                              // Rewind button
-                              Expanded(
-                                child: IconButton(
-                                  iconSize: 40,
-                                  icon: const Icon(Icons.replay_10),
-                                  onPressed: videoProvider.seekBackward,
-                                ),
-                              ),
-                              const Gap(20),
-                              
-                              // Play/pause button
-                              Expanded(
-                                child: IconButton(
-                                  iconSize: 50,
-                                  icon: Icon(videoProvider.isPlaying
-                                      ? PhosphorIconsFill.pause
-                                      : PhosphorIconsFill.play,),
-                                  onPressed: videoProvider.pauseOrResume,
-                                ),
-                              ),
-                              const Gap(20),
-                              
-                              Expanded(
-                                child: IconButton(
-                                  iconSize: 40,
-                                  icon: const Icon(Icons.forward_10),
-                                  onPressed: videoProvider.seekForward,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                  ),
+                ),
+                SliverPersistentHeader(
+                  delegate: TabBarDelegate(
+                    CustomTabBar(
+                      tabController: _tabController,
+                      tabs: const <String>[
+                        'About',
+                        'Activity',
+                        'Analytics',
+                      ],
                     ),
-                    const SizedBox(height: 30),
-                  ],
+                  ),
+                  pinned: true,
                 ),
-              ),
-            ),
-            SliverPersistentHeader(
-              delegate: TabBarDelegate(
-                CustomTabBar(
-                  tabController: _tabController,
-                  tabs: const <String>[
-                    'About',
-                    'Activity',
-                    'Analytics',
-                  ],
-                ),
-              ),
-              pinned: true,
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 1.3,
-                child: TabBarView(
-                  controller: _tabController,
-                  children: const <Widget>[
-                    SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: AboutPage(),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 1.3,
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: const <Widget>[
+                        SingleChildScrollView(
+                          physics: NeverScrollableScrollPhysics(),
+                          child: AboutPage(),
+                        ),
+                        ActivityPage(),
+                        AnalyticsPage(),
+                      ],
                     ),
-                    ActivityPage(),
-                    AnalyticsPage(),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
+          bottomNavigationBar: const NftInfoBottomNavBar(),
         ),
-      ),
-      bottomNavigationBar: const NftInfoBottomNavBar(),
+        if (_showMiniPlayer)
+          Positioned(
+            right: 16,
+            bottom: 16 + (_miniPlayerHeight / 2), // Adjust based on your bottom nav height
+            child: _buildMiniPlayer(context, videoProvider),
+          ),
+      ],
     );
   }
+
+  Widget _buildMiniPlayer(BuildContext context, VideoPlayerProvider videoProvider) => AnimatedOpacity(
+      opacity: _showMiniPlayer ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 300),
+      child: GestureDetector(
+        onTap: () {
+          // Scroll back to the top when mini player is tapped
+          _scrollController.animateTo(
+            0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        },
+        child: Container(
+          width: _miniPlayerWidth,
+          height: _miniPlayerHeight,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: <Widget>[
+              // Mini video player
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: videoProvider.isInitialized
+                  ? SizedBox.expand(
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: videoProvider.videoPlayerController.value.size.width,
+                          height: videoProvider.videoPlayerController.value.size.height,
+                          child: VideoPlayer(videoProvider.videoPlayerController),
+                        ),
+                        ),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    ),
+              ),
+              
+              // Play/pause button overlay
+              Positioned.fill(
+                child: Center(
+                  child: AnimatedOpacity(
+                    opacity: videoProvider.isPlaying ? 0.0 : 1.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        videoProvider.isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              
+              // Video title and progress indicator
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7),
+                      ],
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        'Cyborg 2078',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      // Video progress bar
+                      LinearProgressIndicator(
+                        value: videoProvider.isInitialized
+                            ? videoProvider.currentDuration.inMilliseconds / 
+                              videoProvider.totalDuration.inMilliseconds
+                            : 0,
+                        backgroundColor: Colors.grey[700],
+                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                        minHeight: 2,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        ),
+    );
   
   // Format duration helper
   String _formatTime(Duration duration) {

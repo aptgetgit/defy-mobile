@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:fpdart/fpdart.dart';
+
 import '../../../../../../core/database/objectbox/objectbox.g.dart';
+import '../../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../../../core/logging/app_logger.dart';
 import '../../models/local/hd_key_local_model.dart';
 
@@ -8,11 +11,11 @@ class HDKeyDataSource {
   HDKeyDataSource({required Box<HDKeyLocalModel> box}) : _box = box;
   final Box<HDKeyLocalModel> _box;
 
-  HDKeyLocalModel store({
+  IOEither<ExceptionWithStackTrace, HDKeyLocalModel> store({
     required Uint8List keyId,
     required Uint8List entropyHash,
     required Uint8List derivationPath,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, HDKeyLocalModel>(() {
     if (keyId.length != 32) {
       throw ArgumentError.value(
         keyId,
@@ -36,8 +39,14 @@ class HDKeyDataSource {
     }
 
     try {
-      final HDKeyLocalModel? existingKey = getByKeyId(keyId: keyId);
-      if (existingKey != null) {
+      final Either<ExceptionWithStackTrace, Option<HDKeyLocalModel>>
+      existingKeyResult = getByKeyId(keyId: keyId).run();
+
+      if (existingKeyResult.isLeft()) {
+        return left(existingKeyResult.getLeft().toNullable()!);
+      }
+      if (existingKeyResult.isRight() &&
+          existingKeyResult.getRight().isSome()) {
         throw StateError('Key with this ID already exists');
       }
 
@@ -49,18 +58,15 @@ class HDKeyDataSource {
 
       _box.put(model, mode: PutMode.insert);
       AppLogger.debug('Stored HD key: $model');
-      return model;
+      return right(model);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to store HD key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Unexpected error while storing HD key: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  HDKeyLocalModel? get({required int localId}) {
+  IOEither<ExceptionWithStackTrace, Option<HDKeyLocalModel>> get({
+    required int localId,
+  }) => IOEither<ExceptionWithStackTrace, Option<HDKeyLocalModel>>(() {
     if (localId <= 0) {
       throw ArgumentError.value(
         localId,
@@ -70,18 +76,16 @@ class HDKeyDataSource {
     }
 
     try {
-      return _box.get(localId);
+      final HDKeyLocalModel? key = _box.get(localId);
+      return right(optionOf(key));
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve HD key with ID $localId',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve HD key with ID $localId: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  HDKeyLocalModel? getByKeyId({required Uint8List keyId}) {
+  IOEither<ExceptionWithStackTrace, Option<HDKeyLocalModel>> getByKeyId({
+    required Uint8List keyId,
+  }) => IOEither<ExceptionWithStackTrace, Option<HDKeyLocalModel>>(() {
     if (keyId.length != 32) {
       throw ArgumentError.value(
         keyId,
@@ -91,82 +95,20 @@ class HDKeyDataSource {
     }
 
     try {
-      return _box
-          .query(HDKeyLocalModel_.jwkKeyId.equals(keyId))
-          .build()
-          .findFirst();
+      final HDKeyLocalModel? key =
+          _box
+              .query(HDKeyLocalModel_.jwkKeyId.equals(keyId))
+              .build()
+              .findFirst();
+      return right(optionOf(key));
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve HD key by ID',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve HD key by ID: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Set<HDKeyLocalModel> getByEntropy({required Uint8List entropyHash}) {
-    if (entropyHash.length != 32) {
-      throw ArgumentError.value(
-        entropyHash,
-        'entropyHash',
-        'Entropy hash must be exactly 32 bytes in length',
-      );
-    }
-
-    try {
-      return _box
-          .query(HDKeyLocalModel_.entropyHash.equals(entropyHash))
-          .build()
-          .find()
-          .toSet();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve HD keys by entropy hash',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve HD keys by entropy hash: $e');
-    }
-  }
-
-  Set<HDKeyLocalModel> getByPath({required Uint8List derivationPath}) {
-    if (derivationPath.length != 20) {
-      throw ArgumentError.value(
-        derivationPath,
-        'derivationPath',
-        'Derivation path must be exactly 20 bytes in length',
-      );
-    }
-
-    try {
-      return _box
-          .query(HDKeyLocalModel_.derivationPath.equals(derivationPath))
-          .build()
-          .find()
-          .toSet();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve HD keys by derivation path',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve HD keys by derivation path: $e');
-    }
-  }
-
-  Set<HDKeyLocalModel> getByPathAndEntropy({
-    required Uint8List derivationPath,
+  IOEither<ExceptionWithStackTrace, Set<HDKeyLocalModel>> getByEntropy({
     required Uint8List entropyHash,
-  }) {
-    if (derivationPath.length != 20) {
-      throw ArgumentError.value(
-        derivationPath,
-        'derivationPath',
-        'Derivation path must be exactly 20 bytes in length',
-      );
-    }
-
+  }) => IOEither<ExceptionWithStackTrace, Set<HDKeyLocalModel>>(() {
     if (entropyHash.length != 32) {
       throw ArgumentError.value(
         entropyHash,
@@ -176,126 +118,21 @@ class HDKeyDataSource {
     }
 
     try {
-      return _box
-          .query(
-            HDKeyLocalModel_.derivationPath
-                .equals(derivationPath)
-                .and(HDKeyLocalModel_.entropyHash.equals(entropyHash)),
-          )
-          .build()
-          .find()
-          .toSet();
+      final Set<HDKeyLocalModel> keys =
+          _box
+              .query(HDKeyLocalModel_.entropyHash.equals(entropyHash))
+              .build()
+              .find()
+              .toSet();
+      return right(keys);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve HD keys by path and entropy hash',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-          'Failed to retrieve HD keys by path and entropy hash: $e',);
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Set<HDKeyLocalModel> getAll() {
-    try {
-      return _box.getAll().toSet();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve all HD keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve all HD keys: $e');
-    }
-  }
-
-  void delete({required int localId}) {
-    if (localId <= 0) {
-      throw ArgumentError.value(
-        localId,
-        'localId',
-        'Local ID must be a positive integer',
-      );
-    }
-
-    try {
-      final bool success = _box.remove(localId);
-      if (!success) {
-        throw StateError('HD key with local ID: $localId not found');
-      }
-      AppLogger.debug('Deleted HD key with local ID: $localId');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Error while deleting HD key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Error while deleting HD key: $e');
-    }
-  }
-
-  void deleteByKeyId({required Uint8List keyId}) {
-    if (keyId.length != 32) {
-      throw ArgumentError.value(
-        keyId,
-        'keyId',
-        'JWK Key ID must be exactly 32 bytes (SHA-256 thumbprint as per RFC 7638)',
-      );
-    }
-
-    try {
-      final HDKeyLocalModel? key = getByKeyId(keyId: keyId);
-      if (key == null) {
-        throw StateError('HD key not found with the specified ID');
-      }
-
-      delete(localId: key.localId);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete HD key by ID',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete HD key by ID: $e');
-    }
-  }
-
-  void deleteByEntropy({required Uint8List entropyHash}) {
-    if (entropyHash.length != 32) {
-      throw ArgumentError.value(
-        entropyHash,
-        'entropyHash',
-        'Entropy hash must be exactly 32 bytes in length',
-      );
-    }
-
-    try {
-      final Set<HDKeyLocalModel> keys = getByEntropy(entropyHash: entropyHash);
-      if (keys.isEmpty) {
-        throw StateError('No HD keys found with the specified entropy hash');
-      }
-
-      final Set<int> idsToDelete =
-          keys.map((HDKeyLocalModel k) => k.localId).toSet();
-      final int deletedCount = _box.removeMany(idsToDelete.toList());
-
-      if (deletedCount != idsToDelete.length) {
-        throw StateError(
-          'Failed to delete all specified keys: only deleted $deletedCount out of ${idsToDelete.length}',
-        );
-      }
-      AppLogger.debug('Deleted $deletedCount HD keys by entropy hash');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete HD keys by entropy hash',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete HD keys by entropy hash: $e');
-    }
-  }
-
-  void deleteByPath({required Uint8List derivationPath}) {
+  IOEither<ExceptionWithStackTrace, Set<HDKeyLocalModel>> getByPath({
+    required Uint8List derivationPath,
+  }) => IOEither<ExceptionWithStackTrace, Set<HDKeyLocalModel>>(() {
     if (derivationPath.length != 20) {
       throw ArgumentError.value(
         derivationPath,
@@ -306,32 +143,191 @@ class HDKeyDataSource {
 
     try {
       final Set<HDKeyLocalModel> keys =
-          getByPath(derivationPath: derivationPath);
-      if (keys.isEmpty) {
-        throw StateError('No HD keys found with the specified derivation path');
-      }
-
-      final Set<int> idsToDelete =
-          keys.map((HDKeyLocalModel k) => k.localId).toSet();
-      final int deletedCount = _box.removeMany(idsToDelete.toList());
-
-      if (deletedCount != idsToDelete.length) {
-        throw StateError(
-          'Failed to delete all specified keys: only deleted $deletedCount out of ${idsToDelete.length}',
-        );
-      }
-      AppLogger.debug('Deleted $deletedCount HD keys by derivation path');
+          _box
+              .query(HDKeyLocalModel_.derivationPath.equals(derivationPath))
+              .build()
+              .find()
+              .toSet();
+      return right(keys);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete HD keys by derivation path',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete HD keys by derivation path: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void deleteMany({required Set<int> localIds}) {
+  IOEither<ExceptionWithStackTrace, Set<HDKeyLocalModel>> getByPathAndEntropy({
+    required Uint8List derivationPath,
+    required Uint8List entropyHash,
+  }) => IOEither<ExceptionWithStackTrace, Set<HDKeyLocalModel>>(() {
+    if (derivationPath.length != 20) {
+      throw ArgumentError.value(
+        derivationPath,
+        'derivationPath',
+        'Derivation path must be exactly 20 bytes in length',
+      );
+    }
+
+    if (entropyHash.length != 32) {
+      throw ArgumentError.value(
+        entropyHash,
+        'entropyHash',
+        'Entropy hash must be exactly 32 bytes in length',
+      );
+    }
+
+    try {
+      final Set<HDKeyLocalModel> keys =
+          _box
+              .query(
+                HDKeyLocalModel_.derivationPath
+                    .equals(derivationPath)
+                    .and(HDKeyLocalModel_.entropyHash.equals(entropyHash)),
+              )
+              .build()
+              .find()
+              .toSet();
+      return right(keys);
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  IOEither<ExceptionWithStackTrace, Set<HDKeyLocalModel>> getAll() =>
+      IOEither<ExceptionWithStackTrace, Set<HDKeyLocalModel>>(() {
+        try {
+          return right(_box.getAll().toSet());
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  IOEither<ExceptionWithStackTrace, Unit> delete({required int localId}) =>
+      IOEither<ExceptionWithStackTrace, Unit>(() {
+        if (localId <= 0) {
+          throw ArgumentError.value(
+            localId,
+            'localId',
+            'Local ID must be a positive integer',
+          );
+        }
+
+        try {
+          final bool success = _box.remove(localId);
+          if (!success) {
+            throw StateError('HD key with local ID: $localId not found');
+          }
+          AppLogger.debug('Deleted HD key with local ID: $localId');
+          return right(unit);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  IOEither<ExceptionWithStackTrace, Unit> deleteByKeyId({
+    required Uint8List keyId,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
+    if (keyId.length != 32) {
+      throw ArgumentError.value(
+        keyId,
+        'keyId',
+        'JWK Key ID must be exactly 32 bytes (SHA-256 thumbprint as per RFC 7638)',
+      );
+    }
+
+    try {
+      final Either<ExceptionWithStackTrace, Option<HDKeyLocalModel>> keyResult =
+          getByKeyId(keyId: keyId).run();
+
+      return keyResult.fold(
+        left,
+        (Option<HDKeyLocalModel> keyOption) => keyOption.fold(
+          () => throw StateError('HD key not found with the specified ID'),
+          (HDKeyLocalModel key) => delete(localId: key.localId).run(),
+        ),
+      );
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  IOEither<ExceptionWithStackTrace, Unit> deleteByEntropy({
+    required Uint8List entropyHash,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
+    if (entropyHash.length != 32) {
+      throw ArgumentError.value(
+        entropyHash,
+        'entropyHash',
+        'Entropy hash must be exactly 32 bytes in length',
+      );
+    }
+
+    try {
+      final Either<ExceptionWithStackTrace, Set<HDKeyLocalModel>> keysResult =
+          getByEntropy(entropyHash: entropyHash).run();
+
+      return keysResult.fold(left, (Set<HDKeyLocalModel> keys) {
+        if (keys.isEmpty) {
+          throw StateError('No HD keys found with the specified entropy hash');
+        }
+
+        final Set<int> idsToDelete =
+            keys.map((HDKeyLocalModel k) => k.localId).toSet();
+        final int deletedCount = _box.removeMany(idsToDelete.toList());
+
+        if (deletedCount != idsToDelete.length) {
+          throw StateError(
+            'Failed to delete all specified keys: only deleted $deletedCount out of ${idsToDelete.length}',
+          );
+        }
+        AppLogger.debug('Deleted $deletedCount HD keys by entropy hash');
+        return right(unit);
+      });
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  IOEither<ExceptionWithStackTrace, Unit> deleteByPath({
+    required Uint8List derivationPath,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
+    if (derivationPath.length != 20) {
+      throw ArgumentError.value(
+        derivationPath,
+        'derivationPath',
+        'Derivation path must be exactly 20 bytes in length',
+      );
+    }
+
+    try {
+      final Either<ExceptionWithStackTrace, Set<HDKeyLocalModel>> keysResult =
+          getByPath(derivationPath: derivationPath).run();
+
+      return keysResult.fold(left, (Set<HDKeyLocalModel> keys) {
+        if (keys.isEmpty) {
+          throw StateError(
+            'No HD keys found with the specified derivation path',
+          );
+        }
+
+        final Set<int> idsToDelete =
+            keys.map((HDKeyLocalModel k) => k.localId).toSet();
+        final int deletedCount = _box.removeMany(idsToDelete.toList());
+
+        if (deletedCount != idsToDelete.length) {
+          throw StateError(
+            'Failed to delete all specified keys: only deleted $deletedCount out of ${idsToDelete.length}',
+          );
+        }
+        AppLogger.debug('Deleted $deletedCount HD keys by derivation path');
+        return right(unit);
+      });
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  IOEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<int> localIds,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (localIds.isEmpty) {
       throw ArgumentError.value(
         localIds,
@@ -358,40 +354,29 @@ class HDKeyDataSource {
         );
       }
       AppLogger.debug('Deleted $deletedCount HD keys');
+      return right(unit);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete HD keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Error while deleting multiple HD keys: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void clear() {
-    try {
-      _box.removeAll();
-      AppLogger.debug('Cleared all HD keys');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to clear all HD keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to clear all HD keys: $e');
-    }
-  }
+  IOEither<ExceptionWithStackTrace, Unit> clear() =>
+      IOEither<ExceptionWithStackTrace, Unit>(() {
+        try {
+          _box.removeAll();
+          AppLogger.debug('Cleared all HD keys');
+          return right(unit);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
-  int count() {
-    try {
-      return _box.count();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to count HD keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to count HD keys: $e');
-    }
-  }
+  IOEither<ExceptionWithStackTrace, int> count() =>
+      IOEither<ExceptionWithStackTrace, int>(() {
+        try {
+          return right(_box.count());
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 }

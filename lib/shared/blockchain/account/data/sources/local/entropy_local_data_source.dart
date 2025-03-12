@@ -1,22 +1,20 @@
 import 'package:flutter/services.dart';
+import 'package:fpdart/fpdart.dart';
 
+import '../../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../../../core/logging/app_logger.dart';
 import '../../../../../../core/services/secure_storage_service.dart';
 import '../../../../../utils/hex_utils.dart';
 
 class EntropyDataSource {
   EntropyDataSource({required SecureStorageService secureStorage})
-      : _secureStorage = secureStorage;
+    : _secureStorage = secureStorage;
 
   static const String _prefix = 'entropy:';
+
   final SecureStorageService _secureStorage;
 
-  String _makeKey(Uint8List hash) => '$_prefix${bytesToHex(hash)}';
-
-  Future<void> store({
-    required Uint8List hash,
-    required Uint8List entropy,
-  }) async {
+  String _makeKey(Uint8List hash) {
     if (hash.length != 32) {
       throw ArgumentError.value(
         hash,
@@ -25,6 +23,13 @@ class EntropyDataSource {
       );
     }
 
+    return '$_prefix${bytesToHex(hash)}';
+  }
+
+  TaskEither<ExceptionWithStackTrace, Unit> store({
+    required Uint8List hash,
+    required Uint8List entropy,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
     if (entropy.isEmpty ||
         entropy.length % 4 != 0 ||
         entropy.length < 16 ||
@@ -35,197 +40,207 @@ class EntropyDataSource {
         'BIP39 entropy must be between 16 and 32 bytes and a multiple of 4 bytes',
       );
     }
-
     try {
-      final bool exists = await has(hash: hash);
-      if (exists) {
-        throw StateError('Entropy already exists for the given hash');
+      final Either<ExceptionWithStackTrace, bool> existsResult =
+          await has(hash: hash).run();
+
+      if (existsResult.isLeft()) {
+        return left(existsResult.getLeft().toNullable()!);
       }
 
-      await _secureStorage.write(
-        key: _makeKey(hash),
-        value: bytesToHex(entropy),
-      );
-      AppLogger.debug('Stored entropy for hash: $hash');
+      final Either<ExceptionWithStackTrace, Unit> writeResult =
+          await _secureStorage
+              .write(key: _makeKey(hash), value: bytesToHex(entropy))
+              .run();
+
+      return writeResult.fold(left, (_) {
+        AppLogger.debug('Stored entropy for hash: $hash');
+        return right(unit);
+      });
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to store entropy',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to store entropy: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Future<Uint8List?> get({required Uint8List hash}) async {
-    if (hash.length != 32) {
-      throw ArgumentError.value(
-        hash,
-        'hash',
-        'SHA-256 hash must be exactly 32 bytes in length',
-      );
-    }
-
+  TaskEither<ExceptionWithStackTrace, Option<Uint8List>> get({
+    required Uint8List hash,
+  }) => TaskEither<ExceptionWithStackTrace, Option<Uint8List>>(() async {
     try {
-      final String? encoded = await _secureStorage.read(key: _makeKey(hash));
-      if (encoded == null) {
-        return null;
-      }
+      final Either<ExceptionWithStackTrace, Option<String>> readResult =
+          await _secureStorage.read(key: _makeKey(hash)).run();
 
-      return hexToBytes(encoded);
+      return readResult.fold(
+        left,
+        (Option<String> encodedOption) => right(encodedOption.map(hexToBytes)),
+      );
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve entropy',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve entropy: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Future<bool> has({required Uint8List hash}) async {
-    if (hash.length != 32) {
-      throw ArgumentError.value(
-        hash,
-        'hash',
-        'SHA-256 hash must be exactly 32 bytes in length',
-      );
-    }
+  TaskEither<ExceptionWithStackTrace, bool> has({required Uint8List hash}) =>
+      TaskEither<ExceptionWithStackTrace, bool>(() async {
+        final String key = _makeKey(hash);
+        try {
+          final Either<ExceptionWithStackTrace, bool> exists =
+              await _secureStorage.containsKey(key: key).run();
+          return exists.fold(left, right);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
-    try {
-      final bool exists = await _secureStorage.containsKey(key: _makeKey(hash));
-      return exists;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to check entropy existence',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to check entropy existence: $e');
-    }
-  }
+  TaskEither<ExceptionWithStackTrace, Unit> delete({required Uint8List hash}) =>
+      TaskEither<ExceptionWithStackTrace, Unit>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, bool> existsResult =
+              await has(hash: hash).run();
+          return existsResult.fold(left, (bool exists) async {
+            if (!exists) {
+              throw StateError('No entropy found for the given hash');
+            }
+            final Either<ExceptionWithStackTrace, Unit> deleteResult =
+                await _secureStorage.delete(key: _makeKey(hash)).run();
+            return deleteResult.fold(left, (_) {
+              AppLogger.debug('Deleted entropy for hash: $hash');
+              return right(unit);
+            });
+          });
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
-  Future<void> delete({required Uint8List hash}) async {
-    if (hash.length != 32) {
-      throw ArgumentError.value(
-        hash,
-        'hash',
-        'SHA-256 hash must be exactly 32 bytes in length',
-      );
-    }
-
-    try {
-      final bool exists = await has(hash: hash);
-      if (!exists) {
-        throw StateError('No entropy found for the given hash');
-      }
-
-      await _secureStorage.delete(key: _makeKey(hash));
-      AppLogger.debug('Deleted entropy for hash: $hash');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete entropy',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete entropy: $e');
-    }
-  }
-
-  Future<void> deleteMany({required Set<Uint8List> hashes}) async {
+  TaskEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<Uint8List> hashes,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
     if (hashes.isEmpty) {
-      throw ArgumentError.value(
-        hashes,
-        'hashes',
-        'Hash set cannot be empty',
-      );
+      throw ArgumentError.value(hashes, 'hashes', 'Hash set cannot be empty');
     }
-
-    for (final Uint8List hash in hashes) {
-      if (hash.length != 32) {
-        throw ArgumentError.value(
-          hash,
-          'hash',
-          'SHA-256 hash must be exactly 32 bytes in length',
-        );
-      }
-    }
-
+    final Set<String> keys = hashes.map(_makeKey).toSet();
     try {
-      for (final Uint8List hash in hashes) {
-        final bool exists = await has(hash: hash);
-        if (exists) {
-          await _secureStorage.delete(key: _makeKey(hash));
+      final List<Either<ExceptionWithStackTrace, bool>>
+      existenceResolvedFutures = await Future.wait(
+        keys
+            .map((String key) => _secureStorage.containsKey(key: key).run())
+            .toSet(),
+      );
+
+      final List<Either<ExceptionWithStackTrace, bool>> existenceResults =
+          existenceResolvedFutures
+              .where(
+                (Either<ExceptionWithStackTrace, bool> result) =>
+                    result.isLeft(),
+              )
+              .toList();
+
+      if (existenceResults.isNotEmpty) {
+        final Option<ExceptionWithStackTrace> errorOption =
+            existenceResults.first.getLeft();
+
+        if (errorOption.isSome()) {
+          return left(errorOption.toNullable()!);
         }
       }
+
+      final List<Either<ExceptionWithStackTrace, Unit>> deleteResolvedFutures =
+          await Future.wait(
+            keys
+                .map((String key) => _secureStorage.delete(key: key).run())
+                .toSet(),
+          );
+
+      final List<Either<ExceptionWithStackTrace, Unit>> deleteResults =
+          deleteResolvedFutures
+              .where(
+                (Either<ExceptionWithStackTrace, Unit> result) =>
+                    result.isLeft(),
+              )
+              .toList();
+
+      if (deleteResults.isNotEmpty) {
+        return deleteResults.first;
+      }
+
       AppLogger.debug('Deleted ${hashes.length} entropies');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete entropies',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete entropies: $e');
+      return right(unit);
+    } on Exception catch (error, stackTrace) {
+      return left(ExceptionWithStackTrace(error, stackTrace));
     }
-  }
+  });
 
-  Future<Set<Uint8List>> getAllHashes() async {
+  TaskEither<ExceptionWithStackTrace, Set<Uint8List>> getAllHashes() =>
+      TaskEither<ExceptionWithStackTrace, Set<Uint8List>>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, Set<String>> readAllResult =
+              await _secureStorage.readAll().run();
+
+          return readAllResult.fold(left, (Set<String> allValues) {
+            final Set<Uint8List> result =
+                allValues
+                    .where((String key) => key.startsWith(_prefix))
+                    .map((String key) => key.substring(_prefix.length))
+                    .map(hexToBytes)
+                    .toSet();
+
+            return right(result);
+          });
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  TaskEither<ExceptionWithStackTrace, int> count() =>
+      TaskEither<ExceptionWithStackTrace, int>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, Set<String>> readAllResult =
+              await _secureStorage.readAll().run();
+
+          return readAllResult.fold(left, (Set<String> allValues) {
+            final int count =
+                allValues.where((String key) => key.startsWith(_prefix)).length;
+            return right(count);
+          });
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  TaskEither<ExceptionWithStackTrace, Unit>
+  clear() => TaskEither<ExceptionWithStackTrace, Unit>(() async {
     try {
-      final Set<String> allValues = await _secureStorage.readAll();
-      final Set<Uint8List> result = allValues
-          .where((String key) => key.startsWith(_prefix))
-          .map((String key) => key.substring(_prefix.length))
-          .map(hexToBytes)
-          .toSet();
+      final Either<ExceptionWithStackTrace, Set<String>> readAllResult =
+          await _secureStorage.readAll().run();
 
-      return result;
+      return await readAllResult.fold(left, (Set<String> allValues) async {
+        final Set<String> entropyKeys =
+            allValues.where((String key) => key.startsWith(_prefix)).toSet();
+
+        if (entropyKeys.isEmpty) {
+          return right(unit);
+        }
+
+        final Iterable<Future<Either<ExceptionWithStackTrace, Unit>>> futures =
+            entropyKeys.map(
+              (String key) => _secureStorage.delete(key: key).run(),
+            );
+
+        final List<Either<ExceptionWithStackTrace, Unit>> results =
+            await Future.wait(futures);
+
+        final Iterable<Either<ExceptionWithStackTrace, Unit>> errors = results
+            .where(
+              (Either<ExceptionWithStackTrace, Unit> result) => result.isLeft(),
+            );
+        if (errors.isNotEmpty) {
+          return errors.first;
+        }
+
+        AppLogger.debug('Cleared all entropies');
+        return right(unit);
+      });
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to get entropy hashes',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to get entropy hashes: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
-
-  Future<int> count() async {
-    try {
-      final Set<String> allValues = await _secureStorage.readAll();
-      final int count =
-          allValues.where((String key) => key.startsWith(_prefix)).length;
-      return count;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to count entropies',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to count entropies: $e');
-    }
-  }
-
-  Future<void> clear() async {
-    try {
-      final Set<String> allValues = await _secureStorage.readAll();
-      final Set<String> entropyKeys =
-          allValues.where((String key) => key.startsWith(_prefix)).toSet();
-
-      if (entropyKeys.isEmpty) {
-        return;
-      }
-
-      for (final String key in entropyKeys) {
-        await _secureStorage.delete(key: key);
-      }
-      AppLogger.debug('Cleared all entropies');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to clear entropies',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to clear entropies: $e');
-    }
-  }
+  });
 }

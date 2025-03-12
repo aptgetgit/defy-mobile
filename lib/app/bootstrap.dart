@@ -1,29 +1,25 @@
+// lib/app/bootstrap.dart
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../core/di/dependency_injector.dart';
 import '../core/logging/app_logger.dart';
 
 Future<void> bootstrap({
-  required Widget Function(ProviderContainer container) builder,
+  required Widget Function() builder,
 }) async {
   AppLogger.init();
 
-  return runZonedGuarded(() async {
+  return runZonedGuarded(() {
     final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
     _setupErrorHandling();
-
-    final ProviderContainer container = await initializeApp();
-
+    
     FlutterNativeSplash.remove();
-    // ignore: missing_provider_scope
-    runApp(builder(container));
+    runApp(builder());
   }, (Object error, StackTrace stackTrace) {
     AppLogger.fatal(
       'Uncaught asynchronous error',

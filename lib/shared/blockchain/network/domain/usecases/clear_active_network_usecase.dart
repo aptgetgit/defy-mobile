@@ -1,11 +1,11 @@
-import '../repositories/active_network_repository_interface.dart';
+// import '../repositories/active_network_repository_interface.dart';
 
-class ClearActiveNetworkUseCase {
-  const ClearActiveNetworkUseCase({
-    required IActiveNetworkRepository repository,
-  }) : _repository = repository;
+// class ClearActiveNetworkUseCase {
+//   const ClearActiveNetworkUseCase({
+//     required IActiveNetworkRepository repository,
+//   }) : _repository = repository;
 
-  final IActiveNetworkRepository _repository;
+//   final IActiveNetworkRepository _repository;
 
-  Future<void> call() => _repository.clearActiveNetwork();
-}
+//   Future<void> call() => _repository.clearActiveNetwork();
+// }

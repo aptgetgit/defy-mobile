@@ -1,3 +1,6 @@
+import 'package:fpdart/fpdart.dart';
+
+import '../../../../../core/error/exception_with_stack_trace.dart';
 import '../repositories/active_account_repository_interface.dart';
 
 class ClearActiveAccountUseCase {
@@ -7,5 +10,6 @@ class ClearActiveAccountUseCase {
 
   final IActiveAccountRepository _repository;
 
-  Future<void> call() => _repository.clearActiveAccount();
+  TaskEither<ExceptionWithStackTrace, Unit> call() =>
+      _repository.clearActiveAccount();
 }

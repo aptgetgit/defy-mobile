@@ -6,27 +6,8 @@ part of '../connectivity_status_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$connectivityStatusInitializerHash() =>
-    r'a85e997a62c2e2a2bc784dafd4ee13049cf710a6';
-
-/// See also [connectivityStatusInitializer].
-@ProviderFor(connectivityStatusInitializer)
-final connectivityStatusInitializerProvider =
-    Provider<ConnectivityConfig>.internal(
-  connectivityStatusInitializer,
-  name: r'connectivityStatusInitializerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$connectivityStatusInitializerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ConnectivityStatusInitializerRef = ProviderRef<ConnectivityConfig>;
 String _$connectivityStatusHash() =>
-    r'96ec8f464a6f57a4c58603e7549fa196144663ea';
+    r'c64f6d7426e4e62e2cfda0d39e9369df227ee801';
 
 /// See also [connectivityStatus].
 @ProviderFor(connectivityStatus)

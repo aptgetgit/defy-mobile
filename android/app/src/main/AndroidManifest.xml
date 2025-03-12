@@ -23,23 +23,21 @@
             <meta-data
                 android:name="flutter_deeplinking_enabled"
                 android:value="true"/>
-            <!-- Deep linking intent filter -->
-            <intent-filter
-                android:autoVerify="true">
+            
+            <!-- Launcher intent filter -->
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-                <action
-                    android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-                <category
-                    android:name="android.intent.category.DEFAULT"/>
-                <category
-                    android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:scheme="https"/>
-                <data
-                    android:host="avex.id"/>
-                <data
-                    android:pathPattern=".*"/>
+            </intent-filter>
+            
+            <!-- Deep linking intent filter (separate) -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"/>
+                <data android:host="avex.id"/>
+                <data android:pathPattern=".*"/>
             </intent-filter>
         </activity>
         <meta-data
@@ -48,10 +46,8 @@
     </application>
     <queries>
         <intent>
-            <action
-                android:name="android.intent.action.PROCESS_TEXT"/>
-            <data
-                android:mimeType="text/plain"/>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
         </intent>
     </queries>
 </manifest>

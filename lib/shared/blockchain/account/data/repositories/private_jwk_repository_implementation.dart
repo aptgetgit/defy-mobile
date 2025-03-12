@@ -1,9 +1,13 @@
 import 'dart:typed_data';
 
+import 'package:fpdart/fpdart.dart';
+
 import '../../../../../core/database/objectbox/objectbox.g.dart';
-import '../../../../../core/logging/app_logger.dart';
+import '../../../../../core/error/exception_with_stack_trace.dart';
+import '../../../../utils/db_utils.dart';
 import '../../domain/entities/json_web_key.dart';
 import '../../domain/repositories/private_jwk_repository_interface.dart';
+import '../models/local/signing_key_local_model.dart';
 import '../sources/local/private_jwk_local_data_source.dart';
 import '../sources/local/signing_key_local_data_source.dart';
 
@@ -12,158 +16,204 @@ class PrivateJwkRepository implements IPrivateJwkRepository {
     required Store store,
     required PrivateJwkDataSource privateJwkDataSource,
     required SigningKeyDataSource signingKeyDataSource,
-  })  : _store = store,
-        _privateJwkDataSource = privateJwkDataSource,
-        _signingKeyDataSource = signingKeyDataSource;
+  }) : _store = store,
+       _privateJwkDataSource = privateJwkDataSource,
+       _signingKeyDataSource = signingKeyDataSource;
 
   final Store _store;
   final PrivateJwkDataSource _privateJwkDataSource;
   final SigningKeyDataSource _signingKeyDataSource;
 
   @override
-  Future<Uint8List> store({required Jwk jwk}) async {
-    if (!jwk.hasPrivateKey()) {
-      throw StateError('Cannot store jwk: missing private component "d"');
-    }
-
-    try {
-      await _privateJwkDataSource.store(keyId: jwk.keyId, jwk: jwk);
-      return jwk.keyId;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to store private key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
-  }
-
-  @override
-  Future<Jwk?> get({required Uint8List keyId}) async {
-    try {
-      final Jwk? result = await _privateJwkDataSource.get(keyId: keyId);
-      return result;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve private key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
-  }
-
-  @override
-  Future<bool> has({required Uint8List keyId}) async {
-    try {
-      final bool exists = await _privateJwkDataSource.has(keyId: keyId);
-      return exists;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to check private key existence',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> delete({required Uint8List keyId}) async {
-    try {
-      await _store.runInTransaction(TxMode.write, () async {
-        if (_signingKeyDataSource.getByKeyId(keyId: keyId) != null) {
-          throw StateError(
-            'Cannot delete: key is used in signing configuration',
-          );
+  TaskEither<ExceptionWithStackTrace, Jwk> store({required Jwk jwk}) =>
+      TaskEither<ExceptionWithStackTrace, Jwk>(() async {
+        if (!jwk.hasPrivateKey()) {
+          throw StateError('Cannot store jwk: missing private component "d"');
         }
-        await _privateJwkDataSource.delete(keyId: keyId);
+
+        try {
+          final Either<ExceptionWithStackTrace, Unit> result =
+              await _privateJwkDataSource
+                  .store(keyId: jwk.keyId, jwk: jwk)
+                  .run();
+
+          return result.fold(left, (_) => right(jwk));
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
       });
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete private key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
-  }
 
   @override
-  Future<void> deleteMany(Set<Uint8List> keyIds) async {
+  TaskEither<ExceptionWithStackTrace, Option<Jwk>> get({
+    required Uint8List keyId,
+  }) => TaskEither<ExceptionWithStackTrace, Option<Jwk>>(() async {
     try {
-      await _store.runInTransaction(TxMode.write, () async {
+      return _privateJwkDataSource.get(keyId: keyId).run();
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  @override
+  TaskEither<ExceptionWithStackTrace, bool> has({required Uint8List keyId}) =>
+      TaskEither<ExceptionWithStackTrace, bool>(() async {
+        try {
+          return await _privateJwkDataSource.has(keyId: keyId).run();
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  @override
+  TaskEither<ExceptionWithStackTrace, Unit> delete({
+    required Uint8List keyId,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
+    try {
+      final IOEither<ExceptionWithStackTrace, bool> checkKeyUsage =
+          IOEither<ExceptionWithStackTrace, bool>(() {
+            final Either<ExceptionWithStackTrace, Option<SigningKeyLocalModel>>
+            signingKeyResult =
+                _signingKeyDataSource.getByKeyId(keyId: keyId).run();
+            if (signingKeyResult.isLeft()) {
+              return left(signingKeyResult.getLeft().toNullable()!);
+            }
+            return right(signingKeyResult.getRight().toNullable()!.isSome());
+          });
+
+      final Either<ExceptionWithStackTrace, bool> keyUsageResult =
+          await runInsideTransaction(TxMode.read, checkKeyUsage).run(_store);
+
+      if (keyUsageResult.isLeft()) {
+        return left(keyUsageResult.getLeft().toNullable()!);
+      }
+
+      final bool keyInUse = keyUsageResult.getRight().toNullable()!;
+      if (keyInUse) {
+        throw StateError('Cannot delete: key is used in signing configuration');
+      }
+      return await _privateJwkDataSource.delete(keyId: keyId).run();
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  @override
+  TaskEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<Uint8List> keyIds,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
+    if (keyIds.isEmpty) {
+      return right(unit);
+    }
+    try {
+      final IOEither<ExceptionWithStackTrace, bool>
+      checkKeysInUse = IOEither<ExceptionWithStackTrace, bool>(() {
+        bool keyInUse = false;
         for (final Uint8List keyId in keyIds) {
-          if (_signingKeyDataSource.getByKeyId(keyId: keyId) != null) {
-            throw StateError(
-              'Cannot delete: key is used in signing configuration',
-            );
+          final Either<ExceptionWithStackTrace, Option<SigningKeyLocalModel>>
+          signingKeyResult =
+              _signingKeyDataSource.getByKeyId(keyId: keyId).run();
+
+          if (signingKeyResult.isLeft()) {
+            return left(signingKeyResult.getLeft().toNullable()!);
+          }
+
+          if (signingKeyResult.getRight().toNullable()!.isSome()) {
+            keyInUse = true;
+            break;
           }
         }
-        await _privateJwkDataSource.deleteMany(keyIds: keyIds.toSet());
+        return right(keyInUse);
       });
+
+      final Either<ExceptionWithStackTrace, bool> keysInUseResult =
+          await runInsideTransaction(TxMode.read, checkKeysInUse).run(_store);
+
+      if (keysInUseResult.isLeft()) {
+        return left(keysInUseResult.getLeft().toNullable()!);
+      }
+
+      final bool keysInUse = keysInUseResult.getRight().toNullable()!;
+      if (keysInUse) {
+        throw StateError('Cannot delete: key is used in signing configuration');
+      }
+      return _privateJwkDataSource.deleteMany(keyIds: keyIds).run();
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete multiple private keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      rethrow;
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
   @override
-  Future<int> count() async {
-    try {
-      final int result = await _privateJwkDataSource.count();
-      return result;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to count private keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
-  }
+  TaskEither<ExceptionWithStackTrace, int> count() =>
+      TaskEither<ExceptionWithStackTrace, int>(() async {
+        try {
+          return await _privateJwkDataSource.count().run();
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
   @override
-  Future<Set<Uint8List>> getAllKeyIds() async {
-    try {
-      final Set<Uint8List> keyIds = await _privateJwkDataSource.getAllKeyIds();
-      return keyIds;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve all key IDs',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
-  }
+  TaskEither<ExceptionWithStackTrace, Set<Uint8List>> getAllKeyIds() =>
+      TaskEither<ExceptionWithStackTrace, Set<Uint8List>>(() async {
+        try {
+          return await _privateJwkDataSource.getAllKeyIds().run();
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
   @override
-  Future<void> clear() async {
+  TaskEither<ExceptionWithStackTrace, Unit>
+  clear() => TaskEither<ExceptionWithStackTrace, Unit>(() async {
     try {
-      final Set<Uint8List> keyIds = await getAllKeyIds();
+      final Either<ExceptionWithStackTrace, Set<Uint8List>> keyIdsResult =
+          await getAllKeyIds().run();
 
-      await _store.runInTransaction(TxMode.write, () async {
+      if (keyIdsResult.isLeft()) {
+        return left(keyIdsResult.getLeft().toNullable()!);
+      }
+
+      final Set<Uint8List> keyIds = keyIdsResult.getRight().toNullable()!;
+
+      if (keyIds.isEmpty) {
+        return right(unit);
+      }
+
+      final IOEither<ExceptionWithStackTrace, bool>
+      checkKeysUsage = IOEither<ExceptionWithStackTrace, bool>(() {
+        bool keysInUse = false;
         for (final Uint8List keyId in keyIds) {
-          if (_signingKeyDataSource.getByKeyId(keyId: keyId) != null) {
-            throw StateError(
-                'Cannot clear: keys used in signing configuration',);
+          final Either<ExceptionWithStackTrace, Option<SigningKeyLocalModel>>
+          signingKeyResult =
+              _signingKeyDataSource.getByKeyId(keyId: keyId).run();
+
+          if (signingKeyResult.isLeft()) {
+            return left(signingKeyResult.getLeft().toNullable()!);
+          }
+
+          if (signingKeyResult.getRight().toNullable()!.isSome()) {
+            keysInUse = true;
+            break;
           }
         }
-        await _privateJwkDataSource.clear();
+        return right(keysInUse);
       });
+
+      final Either<ExceptionWithStackTrace, bool> keysUsageResult =
+          await runInsideTransaction(TxMode.read, checkKeysUsage).run(_store);
+
+      if (keysUsageResult.isLeft()) {
+        return left(keysUsageResult.getLeft().toNullable()!);
+      }
+
+      final bool keysInUse = keysUsageResult.getRight().toNullable()!;
+      if (keysInUse) {
+        throw StateError('Cannot clear: keys used in signing configuration');
+      }
+
+      return _privateJwkDataSource.clear().run();
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to clear all private keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      rethrow;
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 }

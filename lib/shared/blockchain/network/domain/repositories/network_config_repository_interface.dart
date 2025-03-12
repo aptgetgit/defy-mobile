@@ -1,17 +1,17 @@
-import '../entities/network_config.dart';
+// import '../entities/network_config.dart';
 
-abstract class INetworkConfigRepository {
-  Future<void> syncWithRemote();
+// abstract class INetworkConfigRepository {
+//   Future<void> syncWithRemote();
 
-  List<NetworkConfig> getAll();
+//   List<NetworkConfig> getAll();
 
-  NetworkConfig? getByCaipChainId({required String caipChainId});
+//   NetworkConfig? getByCaipChainId({required String caipChainId});
 
-  NetworkConfig store({required NetworkConfig networkConfig});
+//   NetworkConfig store({required NetworkConfig networkConfig});
 
-  List<NetworkConfig> storeMany({required List<NetworkConfig> networkConfigs});
+//   List<NetworkConfig> storeMany({required List<NetworkConfig> networkConfigs});
 
-  void delete({required String caipChainId});
+//   void delete({required String caipChainId});
 
-  void deleteMany({required List<String> caipChainIds});
-}
+//   void deleteMany({required List<String> caipChainIds});
+// }

@@ -123,7 +123,7 @@ clean-android:
 clean-dart-tool:
 	@echo "🗑️  Cleaning Dart tool..."
 	@rm -rf $(DART_TOOL_DIR)
-	@rm -rf $(PUB_CACHE_DIR)
+	@rm -rf $(PUB_CACHE_DIR)/ || true
 
 clean-objectbox:
 	@echo "🗑️  Cleaning ObjectBox files..."
@@ -203,7 +203,7 @@ deps-doctor:
 
 deps-clean-cache:
 	@echo "🧹 Cleaning pub cache..."
-	@rm -rf $(PUB_CACHE_DIR)
+	@rm -rf $(PUB_CACHE_DIR)/ || true
 	@echo "✨ Pub cache cleaned successfully!"
 
 # Complete dependencies management

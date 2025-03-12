@@ -1,40 +1,40 @@
 
-import 'package:objectbox/objectbox.dart';
+// import 'package:objectbox/objectbox.dart';
 
-import '../../../domain/entities/network_config.dart';
+// import '../../../domain/entities/network_config.dart';
 
-@Entity()
-class NetworkConfigLocalModel {
-  NetworkConfigLocalModel({
-    required this.caipChainId,
-    required this.rpcUrl,
-  });
+// @Entity()
+// class NetworkConfigLocalModel {
+//   NetworkConfigLocalModel({
+//     required this.caipChainId,
+//     required this.rpcUrl,
+//   });
 
-  factory NetworkConfigLocalModel.fromDomain(
-    NetworkConfig domain,
-  ) =>
-      NetworkConfigLocalModel(
-        caipChainId: domain.caipChainId,
-        rpcUrl: domain.rpcUrl.toString(),
-      );
+//   factory NetworkConfigLocalModel.fromDomain(
+//     NetworkConfig domain,
+//   ) =>
+//       NetworkConfigLocalModel(
+//         caipChainId: domain.caipChainId,
+//         rpcUrl: domain.rpcUrl.toString(),
+//       );
 
-  NetworkConfig toDomain() => NetworkConfig(
-        caipChainId: caipChainId,
-        rpcUrl: Uri.parse(rpcUrl),
-      );
+//   NetworkConfig toDomain() => NetworkConfig(
+//         caipChainId: caipChainId,
+//         rpcUrl: Uri.parse(rpcUrl),
+//       );
 
-  @Id(assignable: false)
-  int localId = 0;
+//   @Id(assignable: false)
+//   int localId = 0;
 
-  @Unique(onConflict: ConflictStrategy.replace)
-  final String caipChainId;
+//   @Unique(onConflict: ConflictStrategy.replace)
+//   final String caipChainId;
 
-  final String rpcUrl;
+//   final String rpcUrl;
 
-  @override
-  String toString() => 'NetworkConfigLocalModel{'
-      '\n  id: $localId,'
-      '\n  caipChainId: $caipChainId,'
-      '\n  rpcUrl: $rpcUrl,'
-      '\n}';
-}
+//   @override
+//   String toString() => 'NetworkConfigLocalModel{'
+//       '\n  id: $localId,'
+//       '\n  caipChainId: $caipChainId,'
+//       '\n  rpcUrl: $rpcUrl,'
+//       '\n}';
+// }

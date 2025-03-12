@@ -1,3 +1,6 @@
+import 'package:fpdart/fpdart.dart';
+
+import '../../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../../../core/logging/app_logger.dart';
 import '../../../../../../core/services/shared_preference_service.dart';
 
@@ -9,20 +12,26 @@ class ActiveAccountLocalDataSource {
   final SharedPreferencesService _sharedPreferences;
   static const String _activeAccountKey = 'app:state:active_account';
 
-  String? getActiveAccountAddress() {
-    try {
-      return _sharedPreferences.getString(key: _activeAccountKey);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve active account address',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve active account address: $e');
-    }
-  }
+  TaskEither<ExceptionWithStackTrace, Option<String>>
+  getActiveAccountAddress() =>
+      TaskEither<ExceptionWithStackTrace, Option<String>>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, Option<String>> result =
+              await _sharedPreferences.getString(key: _activeAccountKey).run();
 
-  Future<void> setActiveAccountAddress({required String accountAddress}) async {
+          return result;
+        } on Exception catch (e, stackTrace) {
+          AppLogger.error(
+            'Failed to retrieve active account address',
+            error: e,
+            stackTrace: stackTrace,
+          );
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+  TaskEither<ExceptionWithStackTrace, Unit> setActiveAccountAddress({
+    required String accountAddress,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
     if (accountAddress.trim().isEmpty) {
       throw ArgumentError.value(
         accountAddress,
@@ -32,51 +41,65 @@ class ActiveAccountLocalDataSource {
     }
 
     try {
-      await _sharedPreferences.set(
-        key: _activeAccountKey,
-        value: accountAddress.trim(),
-      );
+      final Either<ExceptionWithStackTrace, Unit> result =
+          await _sharedPreferences
+              .set(key: _activeAccountKey, value: accountAddress.trim())
+              .run();
+
+      return result;
     } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to set active account address',
         error: e,
         stackTrace: stackTrace,
       );
-      throw Exception('Failed to set active account address: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
+  TaskEither<ExceptionWithStackTrace, Unit> removeActiveAccountAddress() =>
+      TaskEither<ExceptionWithStackTrace, Unit>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, bool> existsResult =
+              await _sharedPreferences
+                  .containsKey(key: _activeAccountKey)
+                  .run();
 
-  Future<void> removeActiveAccountAddress() async {
-    try {
-      final bool exists =
-          _sharedPreferences.containsKey(key: _activeAccountKey);
+          return existsResult.fold(left, (bool exists) async {
+            if (!exists) {
+              throw StateError('No active account address found to remove');
+            }
 
-      if (!exists) {
-        throw StateError('No active account address found to remove');
-      }
-      await _sharedPreferences.remove(key: _activeAccountKey);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to remove active account address',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to remove active account address: $e');
-    }
-  }
+            final Either<ExceptionWithStackTrace, Unit> removeResult =
+                await _sharedPreferences.remove(key: _activeAccountKey).run();
 
-  bool hasActiveAccount() {
-    try {
-      final bool exists =
-          _sharedPreferences.containsKey(key: _activeAccountKey);
-      return exists;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to check if active account exists',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to check if active account exists: $e');
-    }
-  }
+            return removeResult;
+          });
+        } on Exception catch (e, stackTrace) {
+          AppLogger.error(
+            'Failed to remove active account address',
+            error: e,
+            stackTrace: stackTrace,
+          );
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  TaskEither<ExceptionWithStackTrace, bool> hasActiveAccount() =>
+      TaskEither<ExceptionWithStackTrace, bool>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, bool> result =
+              await _sharedPreferences
+                  .containsKey(key: _activeAccountKey)
+                  .run();
+
+          return result;
+        } on Exception catch (e, stackTrace) {
+          AppLogger.error(
+            'Failed to check if active account exists',
+            error: e,
+            stackTrace: stackTrace,
+          );
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 }

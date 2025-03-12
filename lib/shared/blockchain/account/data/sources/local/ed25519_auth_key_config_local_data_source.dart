@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:fpdart/fpdart.dart';
+
 import '../../../../../../core/database/objectbox/objectbox.g.dart';
+import '../../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../../../core/logging/app_logger.dart';
 import '../../models/local/ed25519_auth_key_config_local_model.dart';
 
@@ -10,10 +13,10 @@ class Ed25519AuthKeyConfigLocalDataSource {
   }) : _box = box;
   final Box<Ed25519AuthKeyConfigLocalModel> _box;
 
-  Ed25519AuthKeyConfigLocalModel store({
+  IOEither<ExceptionWithStackTrace, Ed25519AuthKeyConfigLocalModel> store({
     required Uint8List authenticationKey,
     required Uint8List keyId,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, Ed25519AuthKeyConfigLocalModel>(() {
     if (authenticationKey.length != 32) {
       throw ArgumentError.value(
         authenticationKey,
@@ -31,15 +34,23 @@ class Ed25519AuthKeyConfigLocalDataSource {
     }
 
     try {
-      final Ed25519AuthKeyConfigLocalModel? existingByAuthKey =
-          getByAuthKey(authenticationKey: authenticationKey);
-      if (existingByAuthKey != null) {
+      final Either<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>> existingByAuthKeyResult = 
+          getByAuthKey(authenticationKey: authenticationKey).run();
+          
+      if (existingByAuthKeyResult.isLeft()) {
+        return left(existingByAuthKeyResult.getLeft().toNullable()!);
+      }
+      if (existingByAuthKeyResult.isRight() && existingByAuthKeyResult.getRight().isSome()) {
         throw StateError('Authentication key already exists');
       }
 
-      final Ed25519AuthKeyConfigLocalModel? existingByKeyId =
-          getByKeyId(keyId: keyId);
-      if (existingByKeyId != null) {
+      final Either<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>> existingByKeyIdResult = 
+          getByKeyId(keyId: keyId).run();
+          
+      if (existingByKeyIdResult.isLeft()) {
+        return left(existingByKeyIdResult.getLeft().toNullable()!);
+      }
+      if (existingByKeyIdResult.isRight() && existingByKeyIdResult.getRight().isSome()) {
         throw StateError('JWK Key ID already exists');
       }
 
@@ -51,20 +62,15 @@ class Ed25519AuthKeyConfigLocalDataSource {
 
       _box.put(model, mode: PutMode.insert);
       AppLogger.debug('Stored Ed25519 auth key config: $model');
-      return model;
+      return right(model);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to store Ed25519 authentication key config',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-        'Unexpected error while storing Ed25519 authentication key config: $e',
-      );
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Ed25519AuthKeyConfigLocalModel? get({required int localId}) {
+  IOEither<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>> get({
+    required int localId,
+  }) => IOEither<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>>(() {
     if (localId <= 0) {
       throw ArgumentError.value(
         localId,
@@ -74,22 +80,16 @@ class Ed25519AuthKeyConfigLocalDataSource {
     }
 
     try {
-      return _box.get(localId);
+      final Ed25519AuthKeyConfigLocalModel? model = _box.get(localId);
+      return right(optionOf(model));
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve Ed25519 auth key config',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-        'Failed to retrieve Ed25519 auth key config with ID $localId: $e',
-      );
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Ed25519AuthKeyConfigLocalModel? getByAuthKey({
+  IOEither<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>> getByAuthKey({
     required Uint8List authenticationKey,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>>(() {
     if (authenticationKey.length != 32) {
       throw ArgumentError.value(
         authenticationKey,
@@ -99,28 +99,22 @@ class Ed25519AuthKeyConfigLocalDataSource {
     }
 
     try {
-      return _box
+      final Ed25519AuthKeyConfigLocalModel? model = _box
           .query(
             Ed25519AuthKeyConfigLocalModel_.authenticationKey
                 .equals(authenticationKey),
           )
           .build()
           .findFirst();
+      return right(optionOf(model));
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve Ed25519 auth key config by authentication key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-        'Failed to retrieve Ed25519 auth key config by authentication key: $e',
-      );
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Ed25519AuthKeyConfigLocalModel? getByKeyId({
+  IOEither<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>> getByKeyId({
     required Uint8List keyId,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>>(() {
     if (keyId.length != 32) {
       throw ArgumentError.value(
         keyId,
@@ -130,38 +124,30 @@ class Ed25519AuthKeyConfigLocalDataSource {
     }
 
     try {
-      return _box
+      final Ed25519AuthKeyConfigLocalModel? model = _box
           .query(
             Ed25519AuthKeyConfigLocalModel_.jwkKeyId.equals(keyId),
           )
           .build()
           .findFirst();
+      return right(optionOf(model));
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve Ed25519 auth key config by JWK Key ID',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-        'Failed to retrieve Ed25519 auth key config by JWK Key ID: $e',
-      );
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Set<Ed25519AuthKeyConfigLocalModel> getAll() {
-    try {
-      return _box.getAll().toSet();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve all Ed25519 auth key configs',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve all Ed25519 auth key configs: $e');
-    }
-  }
+  IOEither<ExceptionWithStackTrace, Set<Ed25519AuthKeyConfigLocalModel>> getAll() =>
+      IOEither<ExceptionWithStackTrace, Set<Ed25519AuthKeyConfigLocalModel>>(() {
+        try {
+          return right(_box.getAll().toSet());
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
-  void delete({required int localId}) {
+  IOEither<ExceptionWithStackTrace, Unit> delete({
+    required int localId,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (localId <= 0) {
       throw ArgumentError.value(
         localId,
@@ -180,17 +166,15 @@ class Ed25519AuthKeyConfigLocalDataSource {
       AppLogger.debug(
         'Deleted Ed25519 auth key config with local ID: $localId',
       );
+      return right(unit);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete Ed25519 auth key config',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Error while deleting Ed25519 auth key config: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void deleteMany({required Set<int> localIds}) {
+  IOEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<int> localIds,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (localIds.isEmpty) {
       throw ArgumentError.value(
         localIds,
@@ -217,19 +201,15 @@ class Ed25519AuthKeyConfigLocalDataSource {
         );
       }
       AppLogger.debug('Deleted $deletedCount Ed25519 auth key configs');
+      return right(unit);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete multiple Ed25519 auth key configs',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-        'Error while deleting multiple Ed25519 auth key configs: $e',
-      );
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void deleteByAuthKey({required Uint8List authenticationKey}) {
+  IOEither<ExceptionWithStackTrace, Unit> deleteByAuthKey({
+    required Uint8List authenticationKey,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (authenticationKey.length != 32) {
       throw ArgumentError.value(
         authenticationKey,
@@ -239,28 +219,26 @@ class Ed25519AuthKeyConfigLocalDataSource {
     }
 
     try {
-      final Ed25519AuthKeyConfigLocalModel? config =
-          getByAuthKey(authenticationKey: authenticationKey);
-      if (config == null) {
-        throw StateError(
-          'Ed25519 auth key config not found with the specified authentication key',
-        );
-      }
-
-      delete(localId: config.localId);
+      final Either<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>> configResult = 
+          getByAuthKey(authenticationKey: authenticationKey).run();
+      
+      return configResult.fold(
+        left,
+        (Option<Ed25519AuthKeyConfigLocalModel> configOption) => configOption.fold(
+          () => throw StateError(
+            'Ed25519 auth key config not found with the specified authentication key',
+          ),
+          (Ed25519AuthKeyConfigLocalModel config) => delete(localId: config.localId).run(),
+        ),
+      );
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete Ed25519 auth key config by authentication key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-        'Failed to delete Ed25519 auth key config by authentication key: $e',
-      );
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void deleteByKeyId({required Uint8List keyId}) {
+  IOEither<ExceptionWithStackTrace, Unit> deleteByKeyId({
+    required Uint8List keyId,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (keyId.length != 32) {
       throw ArgumentError.value(
         keyId,
@@ -270,50 +248,40 @@ class Ed25519AuthKeyConfigLocalDataSource {
     }
 
     try {
-      final Ed25519AuthKeyConfigLocalModel? config = getByKeyId(keyId: keyId);
-      if (config == null) {
-        throw StateError(
-          'Ed25519 auth key config not found with the specified JWK Key ID',
-        );
-      }
-
-      delete(localId: config.localId);
+      final Either<ExceptionWithStackTrace, Option<Ed25519AuthKeyConfigLocalModel>> configResult = 
+          getByKeyId(keyId: keyId).run();
+      
+      return configResult.fold(
+        left,
+        (Option<Ed25519AuthKeyConfigLocalModel> configOption) => configOption.fold(
+          () => throw StateError(
+            'Ed25519 auth key config not found with the specified JWK Key ID',
+          ),
+          (Ed25519AuthKeyConfigLocalModel config) => delete(localId: config.localId).run(),
+        ),
+      );
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete Ed25519 auth key config by JWK Key ID',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-        'Failed to delete Ed25519 auth key config by JWK Key ID: $e',
-      );
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void clear() {
-    try {
-      _box.removeAll();
-      AppLogger.debug('Cleared all Ed25519 auth key configs');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to clear all Ed25519 auth key configs',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to clear all Ed25519 auth key configs: $e');
-    }
-  }
+  IOEither<ExceptionWithStackTrace, Unit> clear() =>
+      IOEither<ExceptionWithStackTrace, Unit>(() {
+        try {
+          _box.removeAll();
+          AppLogger.debug('Cleared all Ed25519 auth key configs');
+          return right(unit);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
-  int count() {
-    try {
-      return _box.count();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to count Ed25519 auth key configs',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to count Ed25519 auth key configs: $e');
-    }
-  }
+  IOEither<ExceptionWithStackTrace, int> count() =>
+      IOEither<ExceptionWithStackTrace, int>(() {
+        try {
+          return right(_box.count());
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 }

@@ -1,3 +1,6 @@
+import 'package:fpdart/fpdart.dart';
+
+import '../../../../../core/error/exception_with_stack_trace.dart';
 import '../repositories/active_account_repository_interface.dart';
 
 class HasActiveAccountUseCase {
@@ -7,5 +10,5 @@ class HasActiveAccountUseCase {
 
   final IActiveAccountRepository _repository;
 
-  bool call() => _repository.hasActiveAccount();
+  TaskEither<ExceptionWithStackTrace, bool> call() => _repository.hasActiveAccount();
 }

@@ -1,0 +1,2 @@
+/home/panic0/Development/avex.id/Defy/android/app/.cxx/RelWithDebInfo/4y285f4m/x86/CMakeFiles/edit_cache.dir
+/home/panic0/Development/avex.id/Defy/android/app/.cxx/RelWithDebInfo/4y285f4m/x86/CMakeFiles/rebuild_cache.dir

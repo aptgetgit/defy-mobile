@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+import 'package:fpdart/fpdart.dart';
 
+import '../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../utils/mnemonic_utils.dart';
 import '../repositories/entropy_repository_interface.dart';
 
@@ -9,7 +11,9 @@ class ImportMnemonicUseCase {
 
   final IEntropyRepository _repository;
 
-  Future<Uint8List> call({required String mnemonic}) async {
+  TaskEither<ExceptionWithStackTrace, Uint8List> call({
+    required String mnemonic,
+  }) => TaskEither<ExceptionWithStackTrace, Uint8List>(() async {
     if (mnemonic.trim().isEmpty) {
       throw ArgumentError('Mnemonic cannot be empty');
     }
@@ -18,11 +22,7 @@ class ImportMnemonicUseCase {
       throw StateError('Invalid mnemonic phrase');
     }
 
-    try {
-      final Uint8List entropy = mnemonicToEntropy(mnemonic);
-      return _repository.store(entropy: entropy);
-    } catch (e) {
-      throw StateError('Failed to convert mnemonic to entropy: $e');
-    }
-  }
+    final Uint8List entropy = mnemonicToEntropy(mnemonic);
+    return _repository.store(entropy: entropy).run();
+  });
 }

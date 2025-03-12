@@ -1,19 +1,19 @@
-import 'dart:typed_data';
+// import 'dart:typed_data';
 
-import '../entities/transaction.dart';
-import '../repositories/node_repository.dart';
+// import '../entities/transaction.dart';
+// import '../repositories/node_repository.dart';
 
-class SubmitTransactionUseCase {
-  SubmitTransactionUseCase({
-    required INodeRepository nodeRepository,
-  }) : _nodeRepository = nodeRepository;
+// class SubmitTransactionUseCase {
+//   SubmitTransactionUseCase({
+//     required INodeRepository nodeRepository,
+//   }) : _nodeRepository = nodeRepository;
 
-  final INodeRepository _nodeRepository;
+//   final INodeRepository _nodeRepository;
 
-  Future<PendingTransaction> call({
-    required Uint8List signedTransaction,
-  }) async =>
-      _nodeRepository.submitTransaction(
-        signedTransaction: signedTransaction,
-      );
-}
+//   Future<PendingTransaction> call({
+//     required Uint8List signedTransaction,
+//   }) async =>
+//       _nodeRepository.submitTransaction(
+//         signedTransaction: signedTransaction,
+//       );
+// }

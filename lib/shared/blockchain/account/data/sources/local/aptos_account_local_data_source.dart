@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:fpdart/fpdart.dart';
+
 import '../../../../../../core/database/objectbox/objectbox.g.dart';
+import '../../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../../../core/logging/app_logger.dart';
 import '../../models/local/aptos_account_local_model.dart';
 
@@ -9,11 +12,11 @@ class AptosAccountLocalDataSource {
       : _box = box;
   final Box<AptosAccountLocalModel> _box;
 
-  AptosAccountLocalModel store({
+  IOEither<ExceptionWithStackTrace, AptosAccountLocalModel> store({
     required Uint8List accountAddress,
     required Uint8List authenticationKey,
     required int authenticationKeyScheme,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, AptosAccountLocalModel>(() {
     if (accountAddress.length != 32) {
       throw ArgumentError.value(
         accountAddress,
@@ -37,9 +40,13 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final AptosAccountLocalModel? existingAccount =
-          getByAddress(accountAddress: accountAddress);
-      if (existingAccount != null) {
+      final Either<ExceptionWithStackTrace, Option<AptosAccountLocalModel>> existingAccountResult = 
+          getByAddress(accountAddress: accountAddress).run();
+      
+      if (existingAccountResult.isLeft()) {
+        return left(existingAccountResult.getLeft().toNullable()!);
+      }
+      if (existingAccountResult.isRight() && existingAccountResult.getRight().isSome()) {
         throw StateError('Account with this address already exists');
       }
 
@@ -51,18 +58,15 @@ class AptosAccountLocalDataSource {
 
       _box.put(model, mode: PutMode.insert);
       AppLogger.debug('Stored aptos account: $model');
-      return model;
+      return right(model);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to store aptos account',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Unexpected error while storing Aptos account: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  AptosAccountLocalModel? getByAddress({required Uint8List accountAddress}) {
+  IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>> getByAddress({
+    required Uint8List accountAddress,
+  }) => IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>>(() {
     if (accountAddress.length != 32) {
       throw ArgumentError.value(
         accountAddress,
@@ -72,21 +76,19 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      return _box
+      final AptosAccountLocalModel? account = _box
           .query(AptosAccountLocalModel_.accountAddress.equals(accountAddress))
           .build()
           .findFirst();
+      return right(optionOf(account));
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve Aptos account by address',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve Aptos account by address: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  AptosAccountLocalModel? get({required int localId}) {
+  IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>> get({
+    required int localId,
+  }) => IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>>(() {
     if (localId <= 0) {
       throw ArgumentError.value(
         localId,
@@ -96,20 +98,16 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      return _box.get(localId);
+      final AptosAccountLocalModel? account = _box.get(localId);
+      return right(optionOf(account));
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve Aptos account',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve Aptos account with ID $localId: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Set<AptosAccountLocalModel> getByAuthKey({
+  IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>> getByAuthKey({
     required Uint8List authenticationKey,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>>(() {
     if (authenticationKey.length != 32) {
       throw ArgumentError.value(
         authenticationKey,
@@ -119,26 +117,22 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      return _box
+      final Set<AptosAccountLocalModel> accounts = _box
           .query(
             AptosAccountLocalModel_.authenticationKey.equals(authenticationKey),
           )
           .build()
-          .find().toSet();
+          .find()
+          .toSet();
+      return right(accounts);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve Aptos accounts by authentication key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception(
-          'Failed to retrieve Aptos accounts by authentication key: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Set<AptosAccountLocalModel> getByScheme({
+  IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>> getByScheme({
     required int authenticationKeyScheme,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>>(() {
     if (authenticationKeyScheme < 0 || authenticationKeyScheme > 3) {
       throw ArgumentError.value(
         authenticationKeyScheme,
@@ -148,37 +142,32 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      return _box
+      final Set<AptosAccountLocalModel> accounts = _box
           .query(
             AptosAccountLocalModel_.authenticationKeyScheme
                 .equals(authenticationKeyScheme),
           )
           .build()
-          .find().toSet();
+          .find()
+          .toSet();
+      return right(accounts);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve Aptos accounts by scheme',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve Aptos accounts by scheme: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Set<AptosAccountLocalModel> getAll() {
-    try {
-      return _box.getAll().toSet();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve all Aptos accounts',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve all Aptos accounts: $e');
-    }
-  }
+  IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>> getAll() =>
+    IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>>(() {
+      try {
+        return right(_box.getAll().toSet());
+      } on Exception catch (e, stackTrace) {
+        return left(ExceptionWithStackTrace(e, stackTrace));
+      }
+    });
 
-  void delete({required int localId}) {
+  IOEither<ExceptionWithStackTrace, Unit> delete({
+    required int localId,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (localId <= 0) {
       throw ArgumentError.value(
         localId,
@@ -193,17 +182,15 @@ class AptosAccountLocalDataSource {
         throw StateError('Aptos account with local ID: $localId not found');
       }
       AppLogger.debug('Deleted aptos account with local ID: $localId');
+      return right(unit);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete Aptos account',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Error while deleting Aptos account: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void deleteMany({required Set<int> localIds}) {
+  IOEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<int> localIds,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (localIds.isEmpty) {
       throw ArgumentError.value(
         localIds,
@@ -230,17 +217,15 @@ class AptosAccountLocalDataSource {
         );
       }
       AppLogger.debug('Deleted $deletedCount aptos accounts');
+      return right(unit);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete multiple Aptos accounts',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Error while deleting multiple Aptos accounts: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void deleteByAddress({required Uint8List accountAddress}) {
+  IOEither<ExceptionWithStackTrace, Unit> deleteByAddress({
+    required Uint8List accountAddress,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (accountAddress.length != 32) {
       throw ArgumentError.value(
         accountAddress,
@@ -250,24 +235,24 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final AptosAccountLocalModel? account =
-          getByAddress(accountAddress: accountAddress);
-      if (account == null) {
-        throw StateError('Aptos account not found with the specified address');
-      }
-
-      delete(localId: account.localId);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete Aptos account by address',
-        error: e,
-        stackTrace: stackTrace,
+      final Either<ExceptionWithStackTrace, Option<AptosAccountLocalModel>> accountResult =
+          getByAddress(accountAddress: accountAddress).run();
+      
+      return accountResult.fold(
+        left,
+        (Option<AptosAccountLocalModel> accountOption) => accountOption.fold(
+          () => throw StateError('Aptos account not found with the specified address'),
+          (AptosAccountLocalModel account) => delete(localId: account.localId).run(),
+        ),
       );
-      throw Exception('Failed to delete Aptos account by address: $e');
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void deleteByAuthKey({required Uint8List authenticationKey}) {
+  IOEither<ExceptionWithStackTrace, Unit> deleteByAuthKey({
+    required Uint8List authenticationKey,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (authenticationKey.length != 32) {
       throw ArgumentError.value(
         authenticationKey,
@@ -277,29 +262,31 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final Set<AptosAccountLocalModel> accounts =
-          getByAuthKey(authenticationKey: authenticationKey);
-      if (accounts.isEmpty) {
-        throw StateError(
-            'No Aptos accounts found with the specified authentication key');
-      }
+      final Either<ExceptionWithStackTrace, Set<AptosAccountLocalModel>> accountsResult =
+          getByAuthKey(authenticationKey: authenticationKey).run();
+      
+      return accountsResult.fold(
+        left,
+        (Set<AptosAccountLocalModel> accounts) {
+          if (accounts.isEmpty) {
+            throw StateError(
+                'No Aptos accounts found with the specified authentication key',);
+          }
 
-      final Set<int> idsToDelete =
-          accounts.map((AptosAccountLocalModel acc) => acc.localId).toSet();
+          final Set<int> idsToDelete =
+              accounts.map((AptosAccountLocalModel acc) => acc.localId).toSet();
 
-      deleteMany(localIds: idsToDelete);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete Aptos accounts by authentication key',
-        error: e,
-        stackTrace: stackTrace,
+          return deleteMany(localIds: idsToDelete).run();
+        },
       );
-      throw Exception(
-          'Failed to delete Aptos accounts by authentication key: $e');
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void deleteByScheme({required int authenticationKeyScheme}) {
+  IOEither<ExceptionWithStackTrace, Unit> deleteByScheme({
+    required int authenticationKeyScheme,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (authenticationKeyScheme < 0 || authenticationKeyScheme > 3) {
       throw ArgumentError.value(
         authenticationKeyScheme,
@@ -309,51 +296,45 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final Set<AptosAccountLocalModel> accounts =
-          getByScheme(authenticationKeyScheme: authenticationKeyScheme);
-      if (accounts.isEmpty) {
-        throw StateError(
-            'No Aptos accounts found with the specified authentication key scheme');
+      final Either<ExceptionWithStackTrace, Set<AptosAccountLocalModel>> accountsResult =
+          getByScheme(authenticationKeyScheme: authenticationKeyScheme).run();
+      
+      return accountsResult.fold(
+        left,
+        (Set<AptosAccountLocalModel> accounts) {
+          if (accounts.isEmpty) {
+            throw StateError(
+                'No Aptos accounts found with the specified authentication key scheme',);
+          }
+
+          final Set<int> idsToDelete =
+              accounts.map((AptosAccountLocalModel acc) => acc.localId).toSet();
+
+          return deleteMany(localIds: idsToDelete).run();
+        },
+      );
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  IOEither<ExceptionWithStackTrace, Unit> clear() =>
+    IOEither<ExceptionWithStackTrace, Unit>(() {
+      try {
+        _box.removeAll();
+        AppLogger.debug('Cleared all Aptos accounts');
+        return right(unit);
+      } on Exception catch (e, stackTrace) {
+        return left(ExceptionWithStackTrace(e, stackTrace));
       }
+    });
 
-      final Set<int> idsToDelete =
-          accounts.map((AptosAccountLocalModel acc) => acc.localId).toSet();
-
-      deleteMany(localIds: idsToDelete);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete Aptos accounts by scheme',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete Aptos accounts by scheme: $e');
-    }
-  }
-
-  void clear() {
-    try {
-      _box.removeAll();
-      AppLogger.debug('Cleared all Aptos accounts');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to clear all Aptos accounts',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to clear all Aptos accounts: $e');
-    }
-  }
-
-  int count() {
-    try {
-      return _box.count();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to count Aptos accounts',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to count Aptos accounts: $e');
-    }
-  }
+  IOEither<ExceptionWithStackTrace, int> count() =>
+    IOEither<ExceptionWithStackTrace, int>(() {
+      try {
+        return right(_box.count());
+      } on Exception catch (e, stackTrace) {
+        return left(ExceptionWithStackTrace(e, stackTrace));
+      }
+    });
 }

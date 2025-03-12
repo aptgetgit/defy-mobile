@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:fpdart/fpdart.dart';
 
+import '../../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../../../core/logging/app_logger.dart';
 import '../../../../../../core/services/secure_storage_service.dart';
 import '../../../../../utils/hex_utils.dart';
@@ -8,14 +10,12 @@ import '../../../domain/entities/json_web_key.dart';
 
 class PrivateJwkDataSource {
   PrivateJwkDataSource({required SecureStorageService secureStorage})
-      : _secureStorage = secureStorage;
+    : _secureStorage = secureStorage;
 
   static const String _prefix = 'private:';
   final SecureStorageService _secureStorage;
 
-  String _makeKey(Uint8List keyId) => '$_prefix${bytesToHex(keyId)}';
-
-  Future<void> store({required Uint8List keyId, required Jwk jwk}) async {
+  String _makeKey(Uint8List keyId) {
     if (keyId.length != 32) {
       throw ArgumentError.value(
         keyId,
@@ -24,6 +24,13 @@ class PrivateJwkDataSource {
       );
     }
 
+    return '$_prefix${bytesToHex(keyId)}';
+  }
+
+  TaskEither<ExceptionWithStackTrace, Unit> store({
+    required Uint8List keyId,
+    required Jwk jwk,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
     if (!jwk.hasPrivateKey()) {
       throw ArgumentError.value(
         jwk,
@@ -33,208 +40,255 @@ class PrivateJwkDataSource {
     }
 
     try {
-      final bool exists = await has(keyId: keyId);
-      if (exists) {
-        throw StateError('Private key already exists for the given key ID');
-      }
+      final String key = _makeKey(keyId);
 
-      await _secureStorage.write(
-        key: _makeKey(keyId),
-        value: json.encode(jwk.toJson()),
-      );
-      AppLogger.debug('Stored private key for key ID: $keyId');
+      final Either<ExceptionWithStackTrace, bool> existsResult =
+          await has(keyId: keyId).run();
+
+      return existsResult.fold(left, (bool exists) async {
+        if (exists) {
+          throw StateError('Private key already exists for the given key ID');
+        }
+
+        final String jwkJson = json.encode(jwk.toJson());
+
+        final Either<ExceptionWithStackTrace, Unit> writeResult =
+            await _secureStorage.write(key: key, value: jwkJson).run();
+
+        return writeResult.fold(left, (_) {
+          AppLogger.debug(
+            'Stored private key for key ID: ${bytesToHex(keyId)}',
+          );
+          return right(unit);
+        });
+      });
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to store private key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to store private key: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Future<Jwk?> get({required Uint8List keyId}) async {
-    if (keyId.length != 32) {
-      throw ArgumentError.value(
-        keyId,
-        'keyId',
-        'JWK Key ID must be exactly 32 bytes (SHA-256 thumbprint as per RFC 7638)',
+  TaskEither<ExceptionWithStackTrace, Option<Jwk>> get({
+    required Uint8List keyId,
+  }) => TaskEither<ExceptionWithStackTrace, Option<Jwk>>(() async {
+    try {
+      final String key = _makeKey(keyId);
+
+      final Either<ExceptionWithStackTrace, Option<String>> readResult =
+          await _secureStorage.read(key: key).run();
+
+      return readResult.fold(
+        left,
+        (
+          Option<String> jwkJsonOption,
+        ) => jwkJsonOption.fold(() => right(const Option<Jwk>.none()), (
+          String jwkJson,
+        ) {
+          final Jwk jwk = Jwk.fromJson(
+            json.decode(jwkJson) as Map<String, dynamic>,
+          );
+
+          if (!jwk.hasPrivateKey()) {
+            AppLogger.warning(
+              'Retrieved JWK missing private component "d" for key ID: ${bytesToHex(keyId)}',
+            );
+            throw StateError('Retrieved JWK missing private component "d"');
+          }
+
+          return right(Option<Jwk>.of(jwk));
+        }),
       );
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
+  });
+
+  TaskEither<ExceptionWithStackTrace, bool> has({required Uint8List keyId}) =>
+      TaskEither<ExceptionWithStackTrace, bool>(() async {
+        final String key = _makeKey(keyId);
+
+        try {
+          final Either<ExceptionWithStackTrace, bool> containsKeyResult =
+              await _secureStorage.containsKey(key: key).run();
+
+          return await containsKeyResult.fold(left, right);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  TaskEither<ExceptionWithStackTrace, Unit> delete({
+    required Uint8List keyId,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
+    final String key = _makeKey(keyId);
 
     try {
-      final String? jwkJson = await _secureStorage.read(key: _makeKey(keyId));
-      if (jwkJson == null) {
-        return null;
-      }
+      final Either<ExceptionWithStackTrace, bool> existsResult =
+          await has(keyId: keyId).run();
 
-      final Jwk jwk =
-          Jwk.fromJson(json.decode(jwkJson) as Map<String, dynamic>);
+      return await existsResult.fold(left, (bool exists) async {
+        if (!exists) {
+          throw StateError('No private key found for the given key ID');
+        }
 
-      if (!jwk.hasPrivateKey()) {
-        throw StateError('Retrieved JWK missing private component "d"');
-      }
+        final Either<ExceptionWithStackTrace, Unit> deleteResult =
+            await _secureStorage.delete(key: key).run();
 
-      return jwk;
+        return deleteResult.fold(left, (_) {
+          AppLogger.debug(
+            'Deleted private key for key ID: ${bytesToHex(keyId)}',
+          );
+          return right(unit);
+        });
+      });
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve private key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve private key: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  Future<bool> has({required Uint8List keyId}) async {
-    if (keyId.length != 32) {
-      throw ArgumentError.value(
-        keyId,
-        'keyId',
-        'JWK Key ID must be exactly 32 bytes (SHA-256 thumbprint as per RFC 7638)',
-      );
-    }
-
-    try {
-      final String? jwkJson = await _secureStorage.read(key: _makeKey(keyId));
-      if (jwkJson == null) {
-        return false;
-      }
-
-      final Jwk jwk =
-          Jwk.fromJson(json.decode(jwkJson) as Map<String, dynamic>);
-      return jwk.hasPrivateKey();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to check if private key exists',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to check if private key exists: $e');
-    }
-  }
-
-  Future<void> delete({required Uint8List keyId}) async {
-    if (keyId.length != 32) {
-      throw ArgumentError.value(
-        keyId,
-        'keyId',
-        'JWK Key ID must be exactly 32 bytes (SHA-256 thumbprint as per RFC 7638)',
-      );
-    }
-
-    try {
-      final bool exists = await has(keyId: keyId);
-      if (!exists) {
-        throw StateError('No private key found for the given key ID');
-      }
-
-      await _secureStorage.delete(key: _makeKey(keyId));
-      AppLogger.debug('Deleted private key for key ID: $keyId');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete private key',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete private key: $e');
-    }
-  }
-
-  Future<void> deleteMany({required Set<Uint8List> keyIds}) async {
+  TaskEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<Uint8List> keyIds,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
     if (keyIds.isEmpty) {
       throw ArgumentError.value(
         keyIds,
         'keyIds',
-        'Key IDs list cannot be empty',
+        'Key IDs set cannot be empty',
       );
     }
 
-    for (final Uint8List keyId in keyIds) {
-      if (keyId.length != 32) {
-        throw ArgumentError.value(
-          keyId,
-          'keyId',
-          'JWK Key ID must be exactly 32 bytes (SHA-256 thumbprint as per RFC 7638)',
-        );
-      }
-    }
+    final Set<String> keys = keyIds.map(_makeKey).toSet();
 
     try {
-      for (final Uint8List keyId in keyIds) {
-        final bool exists = await has(keyId: keyId);
-        if (exists) {
-          await _secureStorage.delete(key: _makeKey(keyId));
+      final List<Either<ExceptionWithStackTrace, bool>> existenceResults =
+          await Future.wait(
+            keyIds.map((Uint8List keyId) => has(keyId: keyId).run()).toList(),
+          );
+
+      final List<Either<ExceptionWithStackTrace, bool>> errors =
+          existenceResults
+              .where(
+                (Either<ExceptionWithStackTrace, bool> result) =>
+                    result.isLeft(),
+              )
+              .toList();
+
+      if (errors.isNotEmpty) {
+        final Option<ExceptionWithStackTrace> errorOption =
+            errors.first.getLeft();
+        if (errorOption.isSome()) {
+          return left(errorOption.toNullable()!);
         }
       }
-      AppLogger.debug('Deleted  ${keyIds.length} private keys');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete private keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete private keys: $e');
-    }
-  }
 
-  Future<Set<Uint8List>> getAllKeyIds() async {
-    try {
-      final Set<String> allValues = await _secureStorage.readAll();
-      final Set<Uint8List> result = allValues
-          .where((String key) => key.startsWith(_prefix))
-          .map((String key) => key.substring(_prefix.length))
-          .map(hexToBytes)
-          .toSet();
+      final List<Either<ExceptionWithStackTrace, Unit>> deleteResults =
+          await Future.wait(
+            keys
+                .map((String key) => _secureStorage.delete(key: key).run())
+                .toList(),
+          );
 
-      return result;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to get all key IDs',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to get all key IDs: $e');
-    }
-  }
+      final List<Either<ExceptionWithStackTrace, Unit>> deleteErrors =
+          deleteResults
+              .where(
+                (Either<ExceptionWithStackTrace, Unit> result) =>
+                    result.isLeft(),
+              )
+              .toList();
 
-  Future<int> count() async {
-    try {
-      final Set<String> allValues = await _secureStorage.readAll();
-      final int count =
-          allValues.where((String key) => key.startsWith(_prefix)).length;
-      return count;
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to count private keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to count private keys: $e');
-    }
-  }
-
-  Future<void> clear() async {
-    try {
-      final Set<String> allValues = await _secureStorage.readAll();
-      final Set<String> privateKeys =
-          allValues.where((String key) => key.startsWith(_prefix)).toSet();
-
-      if (privateKeys.isEmpty) {
-        return;
+      if (deleteErrors.isNotEmpty) {
+        return deleteErrors.first;
       }
 
-      for (final String key in privateKeys) {
-        await _secureStorage.delete(key: key);
-      }
-      AppLogger.debug('Cleared all private keys');
+      AppLogger.debug('Deleted ${keyIds.length} private keys');
+      return right(unit);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to clear private keys',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to clear private keys: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
+
+  TaskEither<ExceptionWithStackTrace, Set<Uint8List>> getAllKeyIds() =>
+      TaskEither<ExceptionWithStackTrace, Set<Uint8List>>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, Set<String>> readAllResult =
+              await _secureStorage.readAll().run();
+
+          return readAllResult.fold(left, (Set<String> allValues) {
+            final Set<Uint8List> result =
+                allValues
+                    .where((String key) => key.startsWith(_prefix))
+                    .map((String key) => key.substring(_prefix.length))
+                    .map(hexToBytes)
+                    .toSet();
+
+            return right(result);
+          });
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  TaskEither<ExceptionWithStackTrace, int> count() =>
+      TaskEither<ExceptionWithStackTrace, int>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, Set<String>> readAllResult =
+              await _secureStorage.readAll().run();
+
+          return readAllResult.fold(left, (Set<String> allValues) {
+            final int count =
+                allValues.where((String key) => key.startsWith(_prefix)).length;
+            return right(count);
+          });
+        } on Exception catch (e, stackTrace) {
+          AppLogger.error(
+            'Failed to count private keys',
+            error: e,
+            stackTrace: stackTrace,
+          );
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  TaskEither<ExceptionWithStackTrace, Unit> clear() =>
+      TaskEither<ExceptionWithStackTrace, Unit>(() async {
+        try {
+          final Either<ExceptionWithStackTrace, Set<String>> readAllResult =
+              await _secureStorage.readAll().run();
+
+          return await readAllResult.fold(left, (Set<String> allValues) async {
+            final Set<String> privateKeys =
+                allValues
+                    .where((String key) => key.startsWith(_prefix))
+                    .toSet();
+
+            if (privateKeys.isEmpty) {
+              return right(unit);
+            }
+
+            final Iterable<Future<Either<ExceptionWithStackTrace, Unit>>>
+            futures = privateKeys.map(
+              (String key) => _secureStorage.delete(key: key).run(),
+            );
+
+            final List<Either<ExceptionWithStackTrace, Unit>> results =
+                await Future.wait(futures);
+
+            final Set<Either<ExceptionWithStackTrace, Unit>> errors =
+                results
+                    .where(
+                      (Either<ExceptionWithStackTrace, Unit> result) =>
+                          result.isLeft(),
+                    )
+                    .toSet();
+
+            if (errors.isNotEmpty) {
+              return errors.first;
+            }
+
+            AppLogger.debug('Cleared all private keys');
+            return right(unit);
+          });
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 }

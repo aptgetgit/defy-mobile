@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../../core/error/exception_with_stack_trace.dart';
 import '../entities/aptos_derivation_path.dart';
 import '../entities/json_web_key.dart';
 
@@ -20,50 +22,54 @@ sealed class KeySourceConfig with _$KeySourceConfig {
 
   @override
   String toString() => switch (this) {
-        HDKeySourceConfig(
-          :final Uint8List entropyHash,
-          :final AptosDerivationPath derivationPath
-        ) =>
-          'HDKeySourceConfig{'
-              '\n entropyHash: $entropyHash,'
-              '\n derivationPath: $derivationPath'
-              '\n}',
-        SigningKeySourceConfig(:final Uint8List jwkThumbprint) =>
-          'SigningKeySourceConfig{'
-              '\n jwkThumbprint: $jwkThumbprint'
-              '\n}'
-      };
+    HDKeySourceConfig(
+      :final Uint8List entropyHash,
+      :final AptosDerivationPath derivationPath,
+    ) =>
+      'HDKeySourceConfig{'
+          '\n entropyHash: $entropyHash,'
+          '\n derivationPath: $derivationPath'
+          '\n}',
+    SigningKeySourceConfig(:final Uint8List jwkThumbprint) =>
+      'SigningKeySourceConfig{'
+          '\n jwkThumbprint: $jwkThumbprint'
+          '\n}',
+  };
 }
 
 abstract class IJwkRepository {
-  Future<Jwk> store({
+  TaskEither<ExceptionWithStackTrace, Jwk> store({
     required Jwk jwk,
     required KeySourceConfig config,
   });
 
-  Jwk? get({required Uint8List keyId});
-
-  Set<Jwk> getAll();
-
-  int count();
-
-  bool has({required Uint8List keyId});
-
-  HDKeySourceConfig? getHDKeySourceConfig({
+  IOEither<ExceptionWithStackTrace, Option<Jwk>> get({
     required Uint8List keyId,
   });
 
-  SigningKeySourceConfig? getSigningKeySourceConfig({
-    required Uint8List keyId,
+  IOEither<ExceptionWithStackTrace, Set<Jwk>> getAll();
+
+  IOEither<ExceptionWithStackTrace, int> count();
+
+  IOEither<ExceptionWithStackTrace, bool> has({required Uint8List keyId});
+
+  IOEither<ExceptionWithStackTrace, Option<HDKeySourceConfig>>
+  getHDKeySourceConfig({required Uint8List keyId});
+
+  IOEither<ExceptionWithStackTrace, Option<SigningKeySourceConfig>>
+  getSigningKeySourceConfig({required Uint8List keyId});
+
+  TaskEither<ExceptionWithStackTrace, void> delete({required Uint8List keyId});
+
+  TaskEither<ExceptionWithStackTrace, void> deleteMany({
+    required Set<Uint8List> keyIds,
   });
 
-  void delete({required Uint8List keyId});
+  TaskEither<ExceptionWithStackTrace, void> clear();
 
-  void deleteMany(Set<Uint8List> keyIds);
+  IOEither<ExceptionWithStackTrace, Set<(Uint8List, HDKeySourceConfig)>>
+  getAllHDKeySourceConfigs();
 
-  void clear();
-
-  Set<(Uint8List, HDKeySourceConfig)> getAllHDKeySourceConfigs();
-
-  Set<(Uint8List, SigningKeySourceConfig)> getAllSigningKeySourceConfigs();
+  IOEither<ExceptionWithStackTrace, Set<(Uint8List, SigningKeySourceConfig)>>
+  getAllSigningKeySourceConfigs();
 }

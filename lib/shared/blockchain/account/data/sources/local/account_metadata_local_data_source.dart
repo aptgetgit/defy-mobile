@@ -1,20 +1,23 @@
 import 'dart:typed_data';
 
+import 'package:fpdart/fpdart.dart';
+
 import '../../../../../../core/database/objectbox/objectbox.g.dart';
+import '../../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../../../core/logging/app_logger.dart';
 import '../../models/local/account_metadata_local_model.dart';
 
 class AccountMetadataLocalDataSource {
   AccountMetadataLocalDataSource({required Box<AccountMetadataLocalModel> box})
-      : _box = box;
+    : _box = box;
   final Box<AccountMetadataLocalModel> _box;
 
-  AccountMetadataLocalModel store({
+  IOEither<ExceptionWithStackTrace, AccountMetadataLocalModel> store({
     required String label,
     required String iconUri,
     required int backgroundColor,
     required Uint8List accountAddress,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, AccountMetadataLocalModel>(() {
     if (label.trim().isEmpty) {
       throw ArgumentError.value(
         label,
@@ -43,15 +46,28 @@ class AccountMetadataLocalDataSource {
         'Account address must be exactly 32 bytes in length',
       );
     }
+
     try {
-      final AccountMetadataLocalModel? existingAccount =
-          getByAddress(accountAddress: accountAddress);
-      if (existingAccount != null) {
+      final Either<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>
+      existingAddressResult =
+          getByAddress(accountAddress: accountAddress).run();
+
+      if (existingAddressResult.isLeft()) {
+        return left(existingAddressResult.getLeft().toNullable()!);
+      }
+      if (existingAddressResult.isRight() &&
+          existingAddressResult.getRight().isSome()) {
         throw StateError('Account with this address already exists');
       }
 
-      final AccountMetadataLocalModel? existingLabel = getByLabel(label: label);
-      if (existingLabel != null) {
+      final Either<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>
+      existingLabelResult = getByLabel(label: label).run();
+
+      if (existingLabelResult.isLeft()) {
+        return left(existingLabelResult.getLeft().toNullable()!);
+      }
+      if (existingLabelResult.isRight() &&
+          existingLabelResult.getRight().isSome()) {
         throw StateError('Account with label "$label" already exists');
       }
 
@@ -64,20 +80,116 @@ class AccountMetadataLocalDataSource {
 
       _box.put(model, mode: PutMode.insert);
       AppLogger.debug('Stored account metadata: $model');
-      return model;
+      return right(model);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to store account metadata',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Unexpected error while storing account: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  AccountMetadataLocalModel? getByAddress({
+  IOEither<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>
+  getByAddress({required Uint8List accountAddress}) =>
+      IOEither<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>(() {
+        if (accountAddress.length != 32) {
+          throw ArgumentError.value(
+            accountAddress,
+            'accountAddress',
+            'Account address must be exactly 32 bytes in length',
+          );
+        }
+
+        try {
+          final AccountMetadataLocalModel? metadata =
+              _box
+                  .query(
+                    AccountMetadataLocalModel_.accountAddress.equals(
+                      accountAddress,
+                    ),
+                  )
+                  .build()
+                  .findFirst();
+          return right(optionOf(metadata));
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  IOEither<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>
+  getByLabel({required String label}) =>
+      IOEither<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>(() {
+        if (label.trim().isEmpty) {
+          throw ArgumentError.value(
+            label,
+            'label',
+            'Account label cannot be empty',
+          );
+        }
+
+        try {
+          final AccountMetadataLocalModel? metadata =
+              _box
+                  .query(AccountMetadataLocalModel_.label.equals(label))
+                  .build()
+                  .findFirst();
+          return right(optionOf(metadata));
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  IOEither<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>> get({
+    required int localId,
+  }) =>
+      IOEither<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>(() {
+        if (localId <= 0) {
+          throw ArgumentError.value(
+            localId,
+            'localId',
+            'Local ID must be a positive integer',
+          );
+        }
+
+        try {
+          final AccountMetadataLocalModel? metadata = _box.get(localId);
+          return right(optionOf(metadata));
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  IOEither<ExceptionWithStackTrace, Set<AccountMetadataLocalModel>> getAll() =>
+      IOEither<ExceptionWithStackTrace, Set<AccountMetadataLocalModel>>(() {
+        try {
+          return right(_box.getAll().toSet());
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  IOEither<ExceptionWithStackTrace, Unit> delete({required int localId}) =>
+      IOEither<ExceptionWithStackTrace, Unit>(() {
+        if (localId <= 0) {
+          throw ArgumentError.value(
+            localId,
+            'localId',
+            'Local ID must be a positive integer',
+          );
+        }
+
+        try {
+          final bool success = _box.remove(localId);
+          if (!success) {
+            throw StateError('Account with local ID: $localId not found');
+          }
+          AppLogger.debug('Deleted account with ID: $localId');
+          return right(unit);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  IOEither<ExceptionWithStackTrace, Unit> deleteByAddress({
     required Uint8List accountAddress,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (accountAddress.length != 32) {
       throw ArgumentError.value(
         accountAddress,
@@ -87,25 +199,29 @@ class AccountMetadataLocalDataSource {
     }
 
     try {
-      return _box
-          .query(
-            AccountMetadataLocalModel_.accountAddress.equals(accountAddress),
-          )
-          .build()
-          .findFirst();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve account by address',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve account by address: $e');
-    }
-  }
+      final Either<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>
+      metadataResult = getByAddress(accountAddress: accountAddress).run();
 
-  AccountMetadataLocalModel? getByLabel({
+      return metadataResult.fold(
+        left,
+        (Option<AccountMetadataLocalModel> metadataOption) =>
+            metadataOption.fold(
+              () =>
+                  throw StateError(
+                    'Account not found with the specified address',
+                  ),
+              (AccountMetadataLocalModel metadata) =>
+                  delete(localId: metadata.localId).run(),
+            ),
+      );
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  IOEither<ExceptionWithStackTrace, Unit> deleteByLabel({
     required String label,
-  }) {
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (label.trim().isEmpty) {
       throw ArgumentError.value(
         label,
@@ -115,134 +231,26 @@ class AccountMetadataLocalDataSource {
     }
 
     try {
-      return _box
-          .query(AccountMetadataLocalModel_.label.equals(label))
-          .build()
-          .findFirst();
+      final Either<ExceptionWithStackTrace, Option<AccountMetadataLocalModel>>
+      metadataResult = getByLabel(label: label).run();
+
+      return metadataResult.fold(
+        left,
+        (Option<AccountMetadataLocalModel> metadataOption) =>
+            metadataOption.fold(
+              () => throw StateError('Account not found with label: $label'),
+              (AccountMetadataLocalModel metadata) =>
+                  delete(localId: metadata.localId).run(),
+            ),
+      );
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve account by label',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve account by label: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  AccountMetadataLocalModel? get({required int localId}) {
-    if (localId <= 0) {
-      throw ArgumentError.value(
-        localId,
-        'localId',
-        'Local ID must be a positive integer',
-      );
-    }
-
-    try {
-      return _box.get(localId);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve account with ID $localId',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve account with ID $localId: $e');
-    }
-  }
-
-  Set<AccountMetadataLocalModel> getAll() {
-    try {
-      return _box.getAll().toSet();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to retrieve all accounts',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to retrieve all accounts: $e');
-    }
-  }
-
-  void delete({required int localId}) {
-    if (localId <= 0) {
-      throw ArgumentError.value(
-        localId,
-        'localId',
-        'Local ID must be a positive integer',
-      );
-    }
-
-    try {
-      final bool success = _box.remove(localId);
-      if (!success) {
-        throw StateError('Account with local ID: $localId not found');
-      }
-      AppLogger.debug('Deleted account with ID: $localId');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete account with ID $localId',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Error while deleting account: $e');
-    }
-  }
-
-  void deleteByAddress({required Uint8List accountAddress}) {
-    if (accountAddress.length != 32) {
-      throw ArgumentError.value(
-        accountAddress,
-        'accountAddress',
-        'Account address must be exactly 32 bytes in length',
-      );
-    }
-
-    try {
-      final AccountMetadataLocalModel? metadata =
-          getByAddress(accountAddress: accountAddress);
-
-      if (metadata == null) {
-        throw StateError('Account not found with the specified address');
-      }
-      delete(localId: metadata.localId);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete account by address',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete account by address: $e');
-    }
-  }
-
-  void deleteByLabel({required String label}) {
-    if (label.trim().isEmpty) {
-      throw ArgumentError.value(
-        label,
-        'label',
-        'Account label cannot be empty',
-      );
-    }
-
-    try {
-      final AccountMetadataLocalModel? metadata = getByLabel(label: label);
-
-      if (metadata == null) {
-        throw StateError('Account not found with label: $label');
-      }
-
-      delete(localId: metadata.localId);
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete account by label',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to delete account by label: $e');
-    }
-  }
-
-  void deleteMany({required Set<int> localIds}) {
+  IOEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<int> localIds,
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (localIds.isEmpty) {
       throw ArgumentError.value(
         localIds,
@@ -269,49 +277,37 @@ class AccountMetadataLocalDataSource {
         );
       }
       AppLogger.debug('Deleted multiple accounts: $localIds');
+      return right(unit);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete multiple accounts',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Error while deleting multiple accounts: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
-  }
+  });
 
-  void clear() {
-    try {
-      _box.removeAll();
-      AppLogger.debug('Cleared all accounts');
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to clear all accounts',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to clear all accounts: $e');
-    }
-  }
+  IOEither<ExceptionWithStackTrace, Unit> clear() =>
+      IOEither<ExceptionWithStackTrace, Unit>(() {
+        try {
+          _box.removeAll();
+          AppLogger.debug('Cleared all accounts');
+          return right(unit);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
-  int count() {
-    try {
-      return _box.count();
-    } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to count accounts',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Failed to count accounts: $e');
-    }
-  }
-
-  void update({
+  IOEither<ExceptionWithStackTrace, int> count() =>
+      IOEither<ExceptionWithStackTrace, int>(() {
+        try {
+          return right(_box.count());
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+  IOEither<ExceptionWithStackTrace, Unit> update({
     required int localId,
-    String? label,
-    String? iconUri,
-    int? backgroundColor,
-  }) {
+    Option<String> label = const None(),
+    Option<String> iconUri = const None(),
+    Option<int> backgroundColor = const None(),
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (localId <= 0) {
       throw ArgumentError.value(
         localId,
@@ -320,59 +316,113 @@ class AccountMetadataLocalDataSource {
       );
     }
 
-    if (label != null && label.trim().isEmpty) {
-      throw ArgumentError.value(
-        label,
-        'label',
-        'Account label cannot be empty',
+    label.fold(
+      () => null, // No validation needed if None
+      (String labelValue) {
+        if (labelValue.trim().isEmpty) {
+          throw ArgumentError.value(
+            labelValue,
+            'label',
+            'Account label cannot be empty',
+          );
+        }
+      },
+    );
+
+    iconUri.fold(
+      () => null, // No validation needed if None
+      (String iconUriValue) {
+        if (iconUriValue.trim().isEmpty) {
+          throw ArgumentError.value(
+            iconUriValue,
+            'iconUri',
+            'Account icon URI cannot be empty',
+          );
+        }
+      },
+    );
+
+    backgroundColor.fold(
+      () => null,
+      (int bgColor) {
+        if (bgColor < 0 || bgColor > 0xFFFFFFFF) {
+          throw ArgumentError.value(
+            bgColor,
+            'backgroundColor',
+            'Background color must be a valid ARGB color value (0x00000000 to 0xFFFFFFFF)',
+          );
+        }
+      },
+    );
+
+    try {
+      return get(localId: localId).run().flatMap(
+        (
+          Option<AccountMetadataLocalModel> existingOption,
+        ) => existingOption.fold(
+          () => throw StateError('Account with local ID: $localId not found'),
+          (AccountMetadataLocalModel existing) => label.fold(
+            () =>
+                _updateAccountInBox(existing, label, iconUri, backgroundColor),
+            (String labelValue) {
+              if (labelValue != existing.label) {
+                return getByLabel(label: labelValue).run().flatMap(
+                  (Option<AccountMetadataLocalModel> existingLabelOption) =>
+                      existingLabelOption.fold(
+                        () => _updateAccountInBox(
+                          existing,
+                          label,
+                          iconUri,
+                          backgroundColor,
+                        ),
+                        (AccountMetadataLocalModel existingLabel) =>
+                            existingLabel.localId != localId
+                                ? throw StateError('Label already exists')
+                                : _updateAccountInBox(
+                                  existing,
+                                  label,
+                                  iconUri,
+                                  backgroundColor,
+                                ),
+                      ),
+                );
+              }
+              return _updateAccountInBox(
+                existing,
+                label,
+                iconUri,
+                backgroundColor,
+              );
+            },
+          ),
+        ),
       );
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
+  });
 
-    if (iconUri != null && iconUri.trim().isEmpty) {
-      throw ArgumentError.value(
-        iconUri,
-        'iconUri',
-        'Account icon URI cannot be empty',
-      );
-    }
-
-    if (backgroundColor != null &&
-        (backgroundColor < 0 || backgroundColor > 0xFFFFFFFF)) {
-      throw ArgumentError.value(
-        backgroundColor,
-        'backgroundColor',
-        'Background color must be a valid ARGB color value (0x00000000 to 0xFFFFFFFF)',
-      );
-    }
-
-    final AccountMetadataLocalModel? existing = get(localId: localId);
-    if (existing == null) {
-      throw StateError('Account with local ID: $localId not found');
-    }
-
-    if (label != null && label != existing.label) {
-      final AccountMetadataLocalModel? existingLabel = getByLabel(label: label);
-      if (existingLabel != null && existingLabel.localId != localId) {
-        throw StateError('Label already exists');
-      }
-    }
+  Either<ExceptionWithStackTrace, Unit> _updateAccountInBox(
+    AccountMetadataLocalModel existing,
+    Option<String> label,
+    Option<String> iconUri,
+    Option<int> backgroundColor,
+  ) {
     try {
       final AccountMetadataLocalModel updated = AccountMetadataLocalModel(
-        label: label ?? existing.label,
-        iconUri: iconUri ?? existing.iconUri,
-        backgroundColor: backgroundColor ?? existing.backgroundColor,
+        label: label.getOrElse(() => existing.label),
+        iconUri: iconUri.getOrElse(() => existing.iconUri),
+        backgroundColor: backgroundColor.getOrElse(
+          () => existing.backgroundColor,
+        ),
         accountAddress: existing.accountAddress,
       );
 
       _box.put(updated, mode: PutMode.update);
-      AppLogger.debug('Updated account with ID: $localId');
+      AppLogger.debug('Updated account with ID: ${existing.localId}');
+      return right(unit);
     } on Exception catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to update account with ID $localId',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      throw Exception('Error while updating account: $e');
+      return left(ExceptionWithStackTrace(e, stackTrace));
     }
   }
 }

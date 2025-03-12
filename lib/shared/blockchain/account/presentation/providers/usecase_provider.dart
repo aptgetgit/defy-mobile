@@ -2,9 +2,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../../core/database/objectbox/objectbox.g.dart';
-import '../../../../../core/di/providers/services/object_box_service_provider.dart';
 import '../../../../../core/di/providers/services/secure_storage_service_provider.dart';
-import '../../../../../core/di/providers/services/shared_preference_service_provider.dart';
+import '../../../../../core/di/providers/services/shared_preferences_service_provider.dart';
+import '../../../../../core/di/providers/storage/object_box_store_provider.dart';
 import '../../../../../core/services/secure_storage_service.dart';
 import '../../../../../core/services/shared_preference_service.dart';
 import '../../data/repositories/active_account_repository_implementation.dart';
@@ -54,13 +54,16 @@ part 'generated/usecase_provider.g.dart';
 
 @riverpod
 IEntropyRepository entropyRepository(Ref ref) {
-  final SecureStorageService secureStorage =
-      ref.read(secureStorageServiceProvider);
-  final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
-  final EntropyDataSource entropyDataSource =
-      EntropyDataSource(secureStorage: secureStorage);
-  final HDKeyDataSource hdKeyDataSource =
-      HDKeyDataSource(box: objectBoxStore.box());
+  final SecureStorageService secureStorage = ref.read(
+    secureStorageServiceProvider,
+  );
+  final Store objectBoxStore = ref.read(objectBoxStoreProvider).requireValue;
+  final EntropyDataSource entropyDataSource = EntropyDataSource(
+    secureStorage: secureStorage,
+  );
+  final HDKeyDataSource hdKeyDataSource = HDKeyDataSource(
+    box: objectBoxStore.box(),
+  );
 
   return EntropyRepository(
     store: objectBoxStore,
@@ -71,13 +74,16 @@ IEntropyRepository entropyRepository(Ref ref) {
 
 @riverpod
 IPrivateJwkRepository privateJwkRepository(Ref ref) {
-  final SecureStorageService secureStorage =
-      ref.read(secureStorageServiceProvider);
-  final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
-  final PrivateJwkDataSource privateJwkDataSource =
-      PrivateJwkDataSource(secureStorage: secureStorage);
-  final SigningKeyDataSource signingKeyDataSource =
-      SigningKeyDataSource(box: objectBoxStore.box());
+  final SecureStorageService secureStorage = ref.read(
+    secureStorageServiceProvider,
+  );
+  final Store objectBoxStore = ref.read(objectBoxStoreProvider).requireValue;
+  final PrivateJwkDataSource privateJwkDataSource = PrivateJwkDataSource(
+    secureStorage: secureStorage,
+  );
+  final SigningKeyDataSource signingKeyDataSource = SigningKeyDataSource(
+    box: objectBoxStore.box(),
+  );
 
   return PrivateJwkRepository(
     store: objectBoxStore,
@@ -88,21 +94,26 @@ IPrivateJwkRepository privateJwkRepository(Ref ref) {
 
 @riverpod
 IJwkRepository jwkRepository(Ref ref) {
-  final SecureStorageService secureStorage =
-      ref.read(secureStorageServiceProvider);
-  final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
+  final SecureStorageService secureStorage = ref.read(
+    secureStorageServiceProvider,
+  );
+  final Store objectBoxStore = ref.read(objectBoxStoreProvider).requireValue;
 
   final JwkDataSource jwkDataSource = JwkDataSource(box: objectBoxStore.box());
-  final HDKeyDataSource hdKeyDataSource =
-      HDKeyDataSource(box: objectBoxStore.box());
-  final SigningKeyDataSource signingKeyDataSource =
-      SigningKeyDataSource(box: objectBoxStore.box());
+  final HDKeyDataSource hdKeyDataSource = HDKeyDataSource(
+    box: objectBoxStore.box(),
+  );
+  final SigningKeyDataSource signingKeyDataSource = SigningKeyDataSource(
+    box: objectBoxStore.box(),
+  );
   final Ed25519AuthKeyConfigLocalDataSource ed25519AuthKeyConfigDataSource =
       Ed25519AuthKeyConfigLocalDataSource(box: objectBoxStore.box());
-  final EntropyDataSource entropyDataSource =
-      EntropyDataSource(secureStorage: secureStorage);
-  final PrivateJwkDataSource privateJwkDataSource =
-      PrivateJwkDataSource(secureStorage: secureStorage);
+  final EntropyDataSource entropyDataSource = EntropyDataSource(
+    secureStorage: secureStorage,
+  );
+  final PrivateJwkDataSource privateJwkDataSource = PrivateJwkDataSource(
+    secureStorage: secureStorage,
+  );
 
   return JwkRepository(
     store: objectBoxStore,
@@ -117,7 +128,7 @@ IJwkRepository jwkRepository(Ref ref) {
 
 @riverpod
 IAptosAccountRepository aptosAccountRepository(Ref ref) {
-  final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
+  final Store objectBoxStore = ref.read(objectBoxStoreProvider).requireValue;
   final JwkDataSource jwkDataSource = JwkDataSource(box: objectBoxStore.box());
   final Ed25519AuthKeyConfigLocalDataSource ed25519ConfigDataSource =
       Ed25519AuthKeyConfigLocalDataSource(box: objectBoxStore.box());
@@ -137,9 +148,9 @@ IAptosAccountRepository aptosAccountRepository(Ref ref) {
 
 @riverpod
 IActiveAccountRepository activeAccountRepository(Ref ref) {
-  final Store objectBoxStore = ref.read(objectBoxDbServiceProvider);
+  final Store objectBoxStore = ref.read(objectBoxStoreProvider).requireValue;
   final SharedPreferencesService sharedPreferences =
-      ref.read(sharedPreferencesServiceProvider);
+      ref.read(sharedPreferencesServiceProvider).requireValue;
 
   final ActiveAccountLocalDataSource activeAccountDataSource =
       ActiveAccountLocalDataSource(sharedPreferences: sharedPreferences);
@@ -149,6 +160,7 @@ IActiveAccountRepository activeAccountRepository(Ref ref) {
       AccountMetadataLocalDataSource(box: objectBoxStore.box());
 
   return ActiveAccountRepository(
+    store: objectBoxStore,
     activeAccountDataSource: activeAccountDataSource,
     accountDataSource: accountDataSource,
     accountMetadataDataSource: accountMetadataDataSource,
@@ -189,11 +201,10 @@ GetPrivateKeyUseCase getPrivateKeyUseCase(Ref ref) =>
 @riverpod
 GeneratePrivateKeyFromMnemonicUseCase generatePrivateKeyFromMnemonicUseCase(
   Ref ref,
-) =>
-    GeneratePrivateKeyFromMnemonicUseCase(
-      entropyRepository: ref.read(entropyRepositoryProvider),
-      jwkRepository: ref.read(jwkRepositoryProvider),
-    );
+) => GeneratePrivateKeyFromMnemonicUseCase(
+  entropyRepository: ref.read(entropyRepositoryProvider),
+  jwkRepository: ref.read(jwkRepositoryProvider),
+);
 
 @riverpod
 CreateAptosAccountUseCase createAptosAccountUseCase(Ref ref) =>
@@ -252,11 +263,11 @@ CheckMnemonicAvailabilityUseCase checkMnemonicAvailabilityUseCase(Ref ref) =>
 
 @riverpod
 SignBufferUseCase signBufferUseCase(Ref ref) => SignBufferUseCase(
-      accountRepository: ref.read(aptosAccountRepositoryProvider),
-      jwkRepository: ref.read(jwkRepositoryProvider),
-      entropyRepository: ref.read(entropyRepositoryProvider),
-      privateJwkRepository: ref.read(privateJwkRepositoryProvider),
-    );
+  accountRepository: ref.read(aptosAccountRepositoryProvider),
+  jwkRepository: ref.read(jwkRepositoryProvider),
+  entropyRepository: ref.read(entropyRepositoryProvider),
+  privateJwkRepository: ref.read(privateJwkRepositoryProvider),
+);
 
 @riverpod
 GetActiveAccountUseCase getActiveAccountUseCase(Ref ref) =>
@@ -283,19 +294,20 @@ HasActiveAccountUseCase hasActiveAccountUseCase(Ref ref) =>
     );
 
 @riverpod
-UpdateAccountBackgroundColorUseCase updateAccountBackgroundColorUseCase(Ref ref) =>
-   UpdateAccountBackgroundColorUseCase(
-     repository: ref.read(aptosAccountRepositoryProvider),
-   );
+UpdateAccountBackgroundColorUseCase updateAccountBackgroundColorUseCase(
+  Ref ref,
+) => UpdateAccountBackgroundColorUseCase(
+  repository: ref.read(aptosAccountRepositoryProvider),
+);
 
 @riverpod
 UpdateAccountIconUriUseCase updateAccountIconUriUseCase(Ref ref) =>
-   UpdateAccountIconUriUseCase(
-     repository: ref.read(aptosAccountRepositoryProvider),
-   );
+    UpdateAccountIconUriUseCase(
+      repository: ref.read(aptosAccountRepositoryProvider),
+    );
 
 @riverpod
 UpdateAccountLabelUseCase updateAccountLabelUseCase(Ref ref) =>
-   UpdateAccountLabelUseCase(
-     repository: ref.read(aptosAccountRepositoryProvider),
-   );
+    UpdateAccountLabelUseCase(
+      repository: ref.read(aptosAccountRepositoryProvider),
+    );

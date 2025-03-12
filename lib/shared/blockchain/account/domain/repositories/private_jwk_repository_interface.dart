@@ -1,21 +1,28 @@
 import 'dart:typed_data';
 
+import 'package:fpdart/fpdart.dart';
+
+import '../../../../../core/error/exception_with_stack_trace.dart';
 import '../entities/json_web_key.dart';
 
 abstract class IPrivateJwkRepository {
-  Future<Uint8List> store({required Jwk jwk});
+  TaskEither<ExceptionWithStackTrace, Jwk> store({required Jwk jwk});
 
-  Future<Jwk?> get({required Uint8List keyId});
+  TaskEither<ExceptionWithStackTrace, Option<Jwk>> get({
+    required Uint8List keyId,
+  });
 
-  Future<Set<Uint8List>> getAllKeyIds();
+  TaskEither<ExceptionWithStackTrace, Set<Uint8List>> getAllKeyIds();
 
-  Future<int> count();
+  TaskEither<ExceptionWithStackTrace, int> count();
 
-  Future<bool> has({required Uint8List keyId});
+  TaskEither<ExceptionWithStackTrace, bool> has({required Uint8List keyId});
 
-  Future<void> delete({required Uint8List keyId});
+  TaskEither<ExceptionWithStackTrace, Unit> delete({required Uint8List keyId});
 
-  Future<void> deleteMany(Set<Uint8List> keyIds);
+  TaskEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<Uint8List> keyIds,
+  });
 
-  Future<void> clear();
+  TaskEither<ExceptionWithStackTrace, Unit> clear();
 }

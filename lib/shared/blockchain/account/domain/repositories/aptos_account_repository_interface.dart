@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../../core/error/exception_with_stack_trace.dart';
 import '../entities/account_address.dart';
 import '../entities/aptos_account_with_metadata.dart';
 import '../entities/authentication_key.dart';
@@ -12,79 +14,86 @@ part 'generated/aptos_account_repository_interface.freezed.dart';
 
 @freezed
 sealed class AuthenticatorConfig with _$AuthenticatorConfig {
-  const factory AuthenticatorConfig.ed25519({
-    required Uint8List keyId,
-  }) = Ed25519AuthenticatorConfig;
+  const factory AuthenticatorConfig.ed25519({required Uint8List keyId}) =
+      Ed25519AuthenticatorConfig;
 
   const AuthenticatorConfig._();
 
   AuthenticationKeyScheme get scheme => switch (this) {
-        Ed25519AuthenticatorConfig() => AuthenticationKeyScheme.ed25519,
-      };
+    Ed25519AuthenticatorConfig() => AuthenticationKeyScheme.ed25519,
+  };
 
   @override
-  String toString() => 'AuthenticatorConfig{'
+  String toString() =>
+      'AuthenticatorConfig{'
       '\n scheme: $scheme,'
       '\n keyId: $keyId'
       '\n}';
 }
 
 abstract class IAptosAccountRepository {
-  AptosAccountWithMetadata createAccount({
+  TaskEither<ExceptionWithStackTrace, AptosAccountWithMetadata> createAccount({
     required String label,
     required Uri iconUri,
     required Color backgroundColor,
     required AuthenticatorConfig config,
-    AccountAddress? accountAddress,
+    Option<AccountAddress> accountAddress = const Option<AccountAddress>.none(),
   });
 
-  AptosAccountWithMetadata? getByAddress(
-      {required AccountAddress accountAddress,});
+  TaskEither<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
+  getByAddress({required AccountAddress accountAddress});
 
-  AptosAccountWithMetadata? getByLabel({required String label});
+  TaskEither<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
+  getByLabel({required String label});
 
-  Set<AptosAccountWithMetadata> getByAuthKey(
-      {required AuthenticationKey authKey,});
+  TaskEither<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
+  getByAuthKey({required AuthenticationKey authKey});
 
-  Set<AptosAccountWithMetadata> getByAuthScheme(
-      {required AuthenticationKeyScheme scheme,});
+  TaskEither<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
+  getByAuthScheme({required AuthenticationKeyScheme scheme});
 
-  Set<AptosAccountWithMetadata> getAll();
+  TaskEither<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>> getAll();
 
-  int count();
+  IOEither<ExceptionWithStackTrace, int> count();
 
-  bool hasAddress({required AccountAddress accountAddress});
-
-  bool hasLabel({required String label});
-
-  AuthenticatorConfig? getAuthConfigByAuthKey({
-    required AuthenticationKey authKey,
+  IOEither<ExceptionWithStackTrace, bool> hasAddress({
+    required AccountAddress accountAddress,
   });
 
-  AuthenticatorConfig? getEd25519AuthConfigsByJwkKeyId({
-    required Uint8List keyId,
-  });
+  IOEither<ExceptionWithStackTrace, bool> hasLabel({required String label});
 
-  void updateLabel({
+  TaskEither<ExceptionWithStackTrace, Option<AuthenticatorConfig>>
+  getAuthConfigByAuthKey({required AuthenticationKey authKey});
+
+  TaskEither<ExceptionWithStackTrace, Option<AuthenticatorConfig>>
+  getEd25519AuthConfigsByJwkKeyId({required Uint8List keyId});
+
+  TaskEither<ExceptionWithStackTrace, Unit> updateLabel({
     required AccountAddress accountAddress,
     required String newLabel,
   });
 
-  void updateIconUri({
+  TaskEither<ExceptionWithStackTrace, Unit> updateIconUri({
     required AccountAddress accountAddress,
     required Uri newIconUri,
   });
 
-  void updateBackgroundColor({
+  TaskEither<ExceptionWithStackTrace, Unit> updateBackgroundColor({
     required AccountAddress accountAddress,
     required Color newBackgroundColor,
   });
 
-  void deleteByAddress({required AccountAddress accountAddress});
+  TaskEither<ExceptionWithStackTrace, Unit> deleteByAddress({
+    required AccountAddress accountAddress,
+  });
 
-  void deleteByLabel({required String label});
+  TaskEither<ExceptionWithStackTrace, Unit> deleteByLabel({
+    required String label,
+  });
 
-  void deleteMany(Set<AccountAddress> accountAddresses);
+  TaskEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<AccountAddress> accountAddresses,
+  });
 
-  void clear();
+  TaskEither<ExceptionWithStackTrace, Unit> clear();
 }

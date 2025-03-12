@@ -74,7 +74,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final (double width, double height) =
         (context.screenWidth, context.screenHeight);
     final bool isDark = context.isDarkMode;
-    final AppLocalizations l10n = ref.watch(l10nProvider);
+    final AppLocalizations loc = ref.watch(appLocalizationProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -85,9 +85,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
           child: Column(
             children: <Widget>[
-              _buildHeader(context, isDark, l10n),
-              Expanded(child: _buildPageView(l10n)),
-              _buildFooter(context, height, isDark, l10n),
+              _buildHeader(context, isDark, loc),
+              Expanded(child: _buildPageView(loc)),
+              _buildFooter(context, height, isDark, loc),
             ],
           ),
         ),
@@ -98,7 +98,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Widget _buildHeader(
     BuildContext context,
     bool isDark,
-    AppLocalizations l10n,
+    AppLocalizations loc,
   ) =>
       RepaintBoundary(
         child: Row(
@@ -137,18 +137,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 textStyle: context.titleLarge,
               ),
               onPressed: () => _skipOnboarding(context),
-              label: Text(l10n.onboardingSkipButton),
+              label: Text(loc.onboardingSkipButton),
             ),
           ],
         ),
       );
 
-  Widget _buildPageView(AppLocalizations l10n) {
+  Widget _buildPageView(AppLocalizations loc) {
     final List<(String, String)> content = <(String, String)>[
-      (l10n.onboardingPage1Title, l10n.onboardingPage1Description),
-      (l10n.onboardingPage2Title, l10n.onboardingPage2Description),
-      (l10n.onboardingPage3Title, l10n.onboardingPage3Description),
-      (l10n.onboardingPage4Title, l10n.onboardingPage4Description),
+      (loc.onboardingPage1Title, loc.onboardingPage1Description),
+      (loc.onboardingPage2Title, loc.onboardingPage2Description),
+      (loc.onboardingPage3Title, loc.onboardingPage3Description),
+      (loc.onboardingPage4Title, loc.onboardingPage4Description),
     ];
 
     return PageView.builder(
@@ -192,7 +192,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     BuildContext context,
     double height,
     bool isDark,
-    AppLocalizations l10n,
+    AppLocalizations loc,
   ) =>
       Column(
         children: <Widget>[
@@ -201,7 +201,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             duration: const Duration(milliseconds: 300),
             child: _currentPage < _pageCount - 1
                 ? _buildPageIndicator(isDark)
-                : _buildGetStartedButton(context, l10n),
+                : _buildGetStartedButton(context, loc),
           ),
           const Gap(30),
         ],
@@ -232,7 +232,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
         ),
       );
-  Widget _buildGetStartedButton(BuildContext context, AppLocalizations l10n) =>
+  Widget _buildGetStartedButton(BuildContext context, AppLocalizations loc) =>
       RepaintBoundary(
         child: SizedBox(
           width: double.infinity,
@@ -243,7 +243,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             child: Text(
-              l10n.onboardingGetStartedButton,
+              loc.onboardingGetStartedButton,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),

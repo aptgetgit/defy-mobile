@@ -13,14 +13,11 @@ import '../states/connectivity_state.dart';
 part 'generated/connectivity_status_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-ConnectivityConfig connectivityStatusInitializer(Ref ref) {
-  throw UnimplementedError('Connectivity config must be initialized');
-}
-
-@Riverpod(keepAlive: true)
 Future<Stream<ConnectivityState>> connectivityStatus(Ref ref) async {
-  final ConnectivityConfig config =
-      ref.watch(connectivityStatusInitializerProvider);
+  const ConnectivityConfig config = ConnectivityConfig(
+    checkUrls: <String>['https://1.1.1.1'],
+    timeout: Duration(seconds: 3),
+  );
   final Connectivity connectivity = Connectivity();
 
   Future<bool> checkInternetAccess() async {

@@ -1,3 +1,6 @@
+import 'package:fpdart/fpdart.dart';
+
+import '../../../../../core/error/exception_with_stack_trace.dart';
 import '../entities/account_address.dart';
 import '../repositories/aptos_account_repository_interface.dart';
 
@@ -8,12 +11,11 @@ class UpdateAccountIconUriUseCase {
 
   final IAptosAccountRepository _repository;
 
-  void call({
+  TaskEither<ExceptionWithStackTrace, Unit> call({
     required AccountAddress accountAddress,
     required Uri newIconUri,
-  }) =>
-      _repository.updateIconUri(
-        accountAddress: accountAddress,
-        newIconUri: newIconUri,
-      );
+  }) => _repository.updateIconUri(
+    accountAddress: accountAddress,
+    newIconUri: newIconUri,
+  );
 }

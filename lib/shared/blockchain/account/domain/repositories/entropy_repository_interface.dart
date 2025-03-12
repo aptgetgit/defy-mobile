@@ -1,19 +1,29 @@
 import 'dart:typed_data';
 
+import 'package:fpdart/fpdart.dart';
+
+import '../../../../../core/error/exception_with_stack_trace.dart';
+
 abstract class IEntropyRepository {
-  Future<Uint8List> store({required Uint8List entropy});
+  TaskEither<ExceptionWithStackTrace, Uint8List> store({
+    required Uint8List entropy,
+  });
 
-  Future<Uint8List?> get({required Uint8List hash});
+  TaskEither<ExceptionWithStackTrace, Option<Uint8List>> get({
+    required Uint8List hash,
+  });
 
-  Future<Set<Uint8List>> getAllHashes();
+  TaskEither<ExceptionWithStackTrace, Set<Uint8List>> getAllHashes();
 
-  Future<int> count();
+  TaskEither<ExceptionWithStackTrace, int> count();
 
-  Future<bool> has({required Uint8List hash});
+  TaskEither<ExceptionWithStackTrace, bool> has({required Uint8List hash});
 
-  Future<void> delete({required Uint8List hash});
-  
-  Future<void> deleteMany(Set<Uint8List> hashes);
+  TaskEither<ExceptionWithStackTrace, Unit> delete({required Uint8List hash});
 
-  Future<void> clear();
+  TaskEither<ExceptionWithStackTrace, Unit> deleteMany({
+    required Set<Uint8List> hashes,
+  });
+
+  TaskEither<ExceptionWithStackTrace, Unit> clear();
 }

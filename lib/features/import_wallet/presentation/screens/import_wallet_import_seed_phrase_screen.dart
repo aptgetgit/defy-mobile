@@ -10,12 +10,12 @@ class ImportWalletImportSeedPhraseScreen extends StatefulWidget {
   const ImportWalletImportSeedPhraseScreen({
     required this.words,
     required this.onWordsUpdated,
-    required this.onImport,
+    
     super.key,
   });
   final List<String> words;
   final void Function(List<String>) onWordsUpdated;
-  final VoidCallback onImport;
+  
 
   @override
   State<ImportWalletImportSeedPhraseScreen> createState() =>
@@ -25,9 +25,12 @@ class ImportWalletImportSeedPhraseScreen extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(ObjectFlagProperty<void Function(List<String> p1)>.has(
-          'onWordsUpdated', onWordsUpdated,),)
-      ..add(ObjectFlagProperty<VoidCallback>.has('onImport', onImport))
+      ..add(
+        ObjectFlagProperty<void Function(List<String> p1)>.has(
+          'onWordsUpdated',
+          onWordsUpdated,
+        ),
+      )
       ..add(IterableProperty<String>('words', words));
   }
 }
@@ -155,27 +158,7 @@ class _ImportWalletImportSeedPhraseScreenState
             ),
           ),
           const Spacer(),
-          GestureDetector(
-            onTap:
-                widget.words.isNotEmpty ? widget.onImport : _pasteFromClipboard,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              decoration: BoxDecoration(
-                color: AppColors.black,
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: Text(
-                widget.words.isEmpty ? 'Paste from clipboard' : 'Continue',
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ).animate().scale(),
-          ),
+      
         ],
       ),
     );
@@ -249,40 +232,5 @@ class _ImportWalletImportSeedPhraseScreenState
         ).animate().fadeIn(),
       );
 
-  Future<void> _pasteFromClipboard() async {
-    final ClipboardData? clipboardData =
-        await Clipboard.getData(Clipboard.kTextPlain);
-    if (clipboardData != null) {
-      final List<String> pastedWords = clipboardData.text!
-          .toLowerCase()
-          .trim()
-          .split(RegExp(r'\s+'))
-          .where(bip39Wordlist.contains)
-          .toList();
-
-      if (pastedWords.isEmpty) {
-        if (!mounted) {
-          return;
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Clipboard does not contain a valid seed phrase'),
-          ),
-        );
-        return;
-      }
-
-      if (pastedWords.length > 24) {
-        if (!mounted) {
-          return;
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Seed phrase cannot exceed 24 words')),
-        );
-        return;
-      }
-
-      widget.onWordsUpdated(pastedWords);
-    }
-  }
+  
 }

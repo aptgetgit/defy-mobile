@@ -42,6 +42,8 @@ class AppColors {
   static const Color purple = Color(0xFFB621F2);
   static const Color yellow = Color(0xFFF0B90B);
   static const Color pink = Color(0xFFFA7AA2);
+  static const Color magenta = Color(0xFFDD2282);
+  static const Color orangeWarning = Color(0xFFFFAD29);
 
   // Utility colors
   static const Color divider = Color(0xFFF4F4F6);

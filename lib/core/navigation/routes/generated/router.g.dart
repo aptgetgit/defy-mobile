@@ -10,6 +10,11 @@ List<RouteBase> get $appRoutes => [
       $welcomeAgainScreenRoute,
       $chooseWalletScreenRoute,
       $chooseWalletUserScreenRoute,
+<<<<<<< Updated upstream:lib/core/navigation/routes/generated/router.g.dart
+=======
+      $walletSettingsManageScreenRoute,
+      $browserRoute,
+>>>>>>> Stashed changes:lib/app/routes/generated/router.g.dart
       $homeRoute,
       $onboardingRoute,
       $diveInPageRoute,
@@ -19,6 +24,8 @@ List<RouteBase> get $appRoutes => [
       $walletCreationWalletBackgroundScreenRoute,
       $importWalletScreenRoute,
       $createdWalletScreenRoute,
+      $createWalletScreenRoute,
+      $createWalletSelectSeedPhraseScreenRoute,
     ];
 
 RouteBase get $welcomeAgainScreenRoute => GoRouteData.$route(
@@ -90,6 +97,55 @@ extension $ChooseWalletUserScreenRouteExtension on ChooseWalletUserScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+<<<<<<< Updated upstream:lib/core/navigation/routes/generated/router.g.dart
+=======
+RouteBase get $walletSettingsManageScreenRoute => GoRouteData.$route(
+      path: '/wallet-settings/manage',
+      factory: $WalletSettingsManageScreenRouteExtension._fromState,
+    );
+
+extension $WalletSettingsManageScreenRouteExtension
+    on WalletSettingsManageScreenRoute {
+  static WalletSettingsManageScreenRoute _fromState(GoRouterState state) =>
+      const WalletSettingsManageScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-settings/manage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $browserRoute => GoRouteData.$route(
+      path: '/browser',
+      factory: $BrowserRouteExtension._fromState,
+    );
+
+extension $BrowserRouteExtension on BrowserRoute {
+  static BrowserRoute _fromState(GoRouterState state) => const BrowserRoute();
+
+  String get location => GoRouteData.$location(
+        '/browser',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+>>>>>>> Stashed changes:lib/app/routes/generated/router.g.dart
 RouteBase get $homeRoute => GoRouteData.$route(
       path: '/home',
       factory: $HomeRouteExtension._fromState,
@@ -287,6 +343,54 @@ extension $CreatedWalletScreenRouteExtension on CreatedWalletScreenRoute {
 
   String get location => GoRouteData.$location(
         '/wallet-creation/created-wallet',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $createWalletScreenRoute => GoRouteData.$route(
+      path: '/create-wallet',
+      factory: $CreateWalletScreenRouteExtension._fromState,
+    );
+
+extension $CreateWalletScreenRouteExtension on CreateWalletScreenRoute {
+  static CreateWalletScreenRoute _fromState(GoRouterState state) =>
+      const CreateWalletScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/create-wallet',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $createWalletSelectSeedPhraseScreenRoute => GoRouteData.$route(
+      path: '/create-wallet-select-seed-phrase',
+      factory: $CreateWalletSelectSeedPhraseScreenRouteExtension._fromState,
+    );
+
+extension $CreateWalletSelectSeedPhraseScreenRouteExtension
+    on CreateWalletSelectSeedPhraseScreenRoute {
+  static CreateWalletSelectSeedPhraseScreenRoute _fromState(
+          GoRouterState state) =>
+      const CreateWalletSelectSeedPhraseScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/create-wallet-select-seed-phrase',
       );
 
   void go(BuildContext context) => context.go(location);

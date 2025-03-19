@@ -140,6 +140,26 @@ final importMnemonicUseCaseProvider =
 // ignore: unused_element
 typedef ImportMnemonicUseCaseRef
     = AutoDisposeProviderRef<ImportMnemonicUseCase>;
+String _$getAllMnemonicsUseCaseHash() =>
+    r'8b8b268aae9a4883e536943d14b40c9ddcd9c414';
+
+/// See also [getAllMnemonicsUseCase].
+@ProviderFor(getAllMnemonicsUseCase)
+final getAllMnemonicsUseCaseProvider =
+    AutoDisposeProvider<GetAllMnemonicsUseCase>.internal(
+  getAllMnemonicsUseCase,
+  name: r'getAllMnemonicsUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getAllMnemonicsUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetAllMnemonicsUseCaseRef
+    = AutoDisposeProviderRef<GetAllMnemonicsUseCase>;
 String _$getMnemonicUseCaseHash() =>
     r'bf2657840a99f3d8e42c1d00be2992cf84c3cbf5';
 

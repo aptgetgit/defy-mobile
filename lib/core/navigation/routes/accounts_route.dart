@@ -1,6 +1,5 @@
 part of 'router.dart';
 
-
 @TypedGoRoute<WelcomeAgainScreenRoute>(path: '/welcome-again')
 class WelcomeAgainScreenRoute extends GoRouteData {
   const WelcomeAgainScreenRoute();
@@ -15,7 +14,7 @@ class WelcomeAgainScreenRoute extends GoRouteData {
   );
 }
 
-@TypedGoRoute<ChooseWalletScreenRoute>(path: '/choose-wallet') 
+@TypedGoRoute<ChooseWalletScreenRoute>(path: '/choose-wallet')
 class ChooseWalletScreenRoute extends GoRouteData {
   const ChooseWalletScreenRoute();
 
@@ -59,3 +58,32 @@ class ChooseWalletUserScreenRoute extends GoRouteData {
 //     },
 //   );
 // }
+
+// @TypedGoRoute<WalletSettingsSecurityScreenRoute>(
+//     path: '/wallet-settings/security')
+// class WalletSettingsSecurityScreenRoute extends GoRouteData {
+//   const WalletSettingsSecurityScreenRoute();
+
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) =>
+//       const WalletSettingsSecurityScreen();
+
+//   static final AppRoute route = AppRoute.public(
+//     builder: (BuildContext context, GoRouterState state) =>
+//         const WalletSettingsSecurityScreen(),
+//   );
+// }
+
+@TypedGoRoute<WalletSettingsManageScreenRoute>(path: '/wallet-settings/manage')
+class WalletSettingsManageScreenRoute extends GoRouteData {
+  const WalletSettingsManageScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const WalletSettingsManageScreen();
+
+  static final AppRoute route = AppRoute.public(
+    builder: (BuildContext context, GoRouterState state) =>
+        const WalletSettingsManageScreen(),
+  );
+}

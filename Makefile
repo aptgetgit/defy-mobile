@@ -244,13 +244,13 @@ check: format-check lint custom-lint
 build-apk:
 	$(call check_environment)
 	@echo "📱 Building Android APK..."
-	@cd $(PROJECT_ROOT) && $(FLUTTER_CMD) build apk --release || \
+	@cd "$(PROJECT_ROOT)" && $(FLUTTER_CMD) build apk --release || \
 		(echo "$(COLOR_RED)❌ APK build failed$(COLOR_RESET)" && exit 1)
 
 build-ios:
 	$(call check_environment)
 	@echo "🍎 Building iOS..."
-	@cd $(PROJECT_ROOT) && $(FLUTTER_CMD) build ios --release || \
+	@cd "$(PROJECT_ROOT)" && $(FLUTTER_CMD) build ios --release || \
 		(echo "$(COLOR_RED)❌ iOS build failed$(COLOR_RESET)" && exit 1)
 
 build: check-environment build-apk build-ios

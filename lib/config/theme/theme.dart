@@ -1,5 +1,6 @@
-import 'package:defy/config/fonts.gen.dart';
 import 'package:flutter/material.dart';
+
+import '../fonts.gen.dart';
 import 'colors.dart';
 
 class AppTheme {
@@ -95,7 +96,7 @@ class AppTheme {
     );
 
   static TextStyle _baseTextStyle(
-      bool isDark, double fontSize, FontWeight fontWeight) => TextStyle(
+      bool isDark, double fontSize, FontWeight fontWeight,) => TextStyle(
       fontFamily: _primaryFont,
       fontSize: fontSize,
       fontWeight: fontWeight,

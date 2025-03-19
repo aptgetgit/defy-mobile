@@ -24,25 +24,22 @@
             <!-- Flutter default deeplinking disabled -->
             <meta-data
                 android:name="flutter_deeplinking_enabled"
-                android:value="false"/>
+                android:value="true"/>
+            
             <!-- Launcher intent filter -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- App Link intent filter -->
-            <intent-filter
-                android:autoVerify="true">
-                <action
-                    android:name="android.intent.action.VIEW"/>
-                <category
-                    android:name="android.intent.category.DEFAULT"/>
-                <category
-                    android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:scheme="https"
-                    android:host="www.example.com"
-                    android:pathPattern=".*"/>
+            
+            <!-- Deep linking intent filter (separate) -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"/>
+                <data android:host="avex.id"/>
+                <data android:pathPattern=".*"/>
             </intent-filter>
             <!-- Deep linking intent filter -->
             <intent-filter>
@@ -63,10 +60,8 @@
     </application>
     <queries>
         <intent>
-            <action
-                android:name="android.intent.action.PROCESS_TEXT"/>
-            <data
-                android:mimeType="text/plain"/>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
         </intent>
     </queries>
 </manifest>

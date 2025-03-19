@@ -149,7 +149,7 @@ class _WelcomeAgainScreenState extends ConsumerState<WelcomeAgainScreen> {
                         ),
                       ),
                       Positioned(
-                        bottom: 160,
+                        bottom: 130,
                         left: 30,
                         child: _buildEmojiContainer(
                           emojiAssetPath:
@@ -183,7 +183,7 @@ class _WelcomeAgainScreenState extends ConsumerState<WelcomeAgainScreen> {
                         ),
                       ),
                       Positioned(
-                        bottom: 130,
+                        bottom: 100,
                         left: 150,
                         child: _buildEmojiContainer(
                           emojiAssetPath:
@@ -196,7 +196,7 @@ class _WelcomeAgainScreenState extends ConsumerState<WelcomeAgainScreen> {
                         ),
                       ),
                       Positioned(
-                        bottom: 130,
+                        bottom: 110,
                         right: 40,
                         child: _buildEmojiContainer(
                           emojiAssetPath: Assets.images.kissingFace.path,
@@ -221,6 +221,7 @@ class _WelcomeAgainScreenState extends ConsumerState<WelcomeAgainScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: BlackButtonXL(
+                  margin: EdgeInsets.zero,
                   onClick: () async {
                     await const ChooseWalletScreenRoute().push<void>(context);
                   },

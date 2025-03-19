@@ -1,269 +1,300 @@
-import 'package:animations/animations.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+// // import 'package:animations/animations.dart';
+// // import 'package:flutter/material.dart';
+// // import 'package:go_router/go_router.dart';
+// // import 'package:hooks_riverpod/hooks_riverpod.dart';
+// // import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../../config/theme/colors.dart';
-import '../../../../core/logging/app_logger.dart';
-import '../../../../core/navigation/routes/router.dart';
-import '../../../../shared/blockchain/account/presentation/providers/generate_account_flow_provider.dart' show generateAccountFlowProvider;
-import '../../../../shared/blockchain/account/presentation/states/generate_account_flow_state.dart';
-import '../enums/page_type_enum.dart';
-import '../providers/import_wallet_provider.dart';
-import '../state/import_wallet_state.dart';
-import 'import_wallet_account_name_screen.dart';
-import 'import_wallet_emoji_selection_screen.dart';
-import 'import_wallet_import_seed_phrase_screen.dart';
-import 'import_wallet_wallet_color_selection_screen.dart';
+// import '../../../../config/theme/colors.dart';
+// import '../../../../core/logging/app_logger.dart';
+// import '../../../../core/navigation/routes/router.dart';
+// import '../../../../shared/blockchain/account/presentation/providers/generate_account_flow_provider.dart' show generateAccountFlowProvider;
+// import '../../../../shared/blockchain/account/presentation/states/generate_account_flow_state.dart';
+// import '../enums/page_type_enum.dart';
+// import '../providers/import_wallet_provider.dart';
+// import '../state/import_wallet_state.dart';
+// import 'import_wallet_account_name_screen.dart';
+// import 'import_wallet_emoji_selection_screen.dart';
+// import 'import_wallet_import_seed_phrase_screen.dart';
+// import 'import_wallet_wallet_color_selection_screen.dart';
+// // import '../../../../app/routes/router.dart';
+// // import '../../../../config/theme/colors.dart';
+// // import '../../../../core/logging/app_logger.dart';
+// // import '../../../../shared/account/presentation/providers/generate_account_flow_provider.dart';
+// // import '../../../../shared/account/presentation/states/generate_account_flow_state.dart';
 
-class ImportWalletScreen extends ConsumerStatefulWidget {
-  const ImportWalletScreen({super.key});
+// // import '../providers/import_wallet_provider.dart';
+// // import '../state/import_wallet_state.dart';
+// // import 'import_wallet_account_name_screen.dart';
+// // import 'import_wallet_emoji_selection_screen.dart';
+// // import 'import_wallet_import_seed_phrase_screen.dart';
+// // import 'import_wallet_wallet_color_selection_screen.dart';
 
-  @override
-  ConsumerState<ImportWalletScreen> createState() => _ImportWalletScreenState();
-}
+// // class ImportWalletScreen extends ConsumerStatefulWidget {
+// //   const ImportWalletScreen({super.key});
 
-class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
-  final PageController _pageController = PageController();
-  GenerateAccountFlowState? _previousState;
+// //   @override
+// //   ConsumerState<ImportWalletScreen> createState() => _ImportWalletScreenState();
+// // }
 
-  @override
-  void initState() {
-    super.initState();
-    _pageController.addListener(_onPageChanged);
-  }
+// // class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
+// //   final PageController _pageController = PageController();
+// //   GenerateAccountFlowState? _previousState;
 
-  @override
-  void dispose() {
-    _pageController
-      ..removeListener(_onPageChanged)
-      ..dispose();
-    super.dispose();
-  }
+// //   @override
+// //   void initState() {
+// //     super.initState();
+// //     _pageController.addListener(_onPageChanged);
+// //   }
 
-  void _onPageChanged() {
-    final int currentPage = _pageController.page?.round() ?? 0;
-    ref.read(importWalletNotifierProvider.notifier).setCurrentPage(currentPage);
-  }
+// //   @override
+// //   void dispose() {
+// //     _pageController
+// //       ..removeListener(_onPageChanged)
+// //       ..dispose();
+// //     super.dispose();
+// //   }
 
-  Future<void> _handleStateChanges(GenerateAccountFlowState state) async {
-    if (state == _previousState) {
-      return;
-    }
-    _previousState = state;
+// //   void _onPageChanged() {
+// //     final int currentPage = _pageController.page?.round() ?? 0;
+// //     ref.read(importWalletNotifierProvider.notifier).setCurrentPage(currentPage);
+// //   }
 
-    if (state is GenerateAccountFlowStateError) {
-      _showErrorSnackBar(state.message);
-    } else if (state is GenerateAccountFlowStateWaitingForMetadata) {
-      await _navigateToPage(PageType.accountNameEntered);
-    } else if (state is GenerateAccountFlowStateImporting) {
-    } else if (state is GenerateAccountFlowStateReady) {
-      _handleAccountGenerated(state);
-    }
-  }
+// //   Future<void> _handleStateChanges(GenerateAccountFlowState state) async {
+// //     if (state == _previousState) {
+// //       return;
+// //     }
+// //     _previousState = state;
 
-  void _handleAccountGenerated(GenerateAccountFlowStateReady state) {
-    AppLogger.debug('Account generated successfully');
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      const CreatedWalletScreenRoute().go(context);
-    });
-  }
+// //     if (state is GenerateAccountFlowStateError) {
+// //       _showErrorSnackBar(state.message);
+// //     } else if (state is GenerateAccountFlowStateWaitingForMetadata) {
+// //       await _navigateToPage();
+// //     } else if (state is GenerateAccountFlowStateImporting) {
+// //     } else if (state is GenerateAccountFlowStateReady) {
+// //       _handleAccountGenerated(state);
+// //     }
+// //   }
 
-  void _showErrorSnackBar(String message) {
-    if (!mounted) {
-      return;
-    }
+// //   void _handleAccountGenerated(GenerateAccountFlowStateReady state) {
+// //     AppLogger.debug('Account generated successfully');
+// //     AppLogger.debug('Account ID: ${state.account}');
+// //     WidgetsBinding.instance.addPostFrameCallback((_) {
+// //       const CreatedWalletScreenRoute().go(context);
+// //     });
+// //   }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            message.contains('Entropy already exists')
-                ? 'This wallet has already been imported'
-                : 'Error: $message',
-          ),
-          duration: const Duration(seconds: 3),
-        ),
-      );
-    });
-  }
+// //   void _showErrorSnackBar(String message) {
+// //     if (!mounted) {
+// //       return;
+// //     }
 
-  Future<void> _navigateToPage(PageType pageType) async {
-    final ImportWalletNotifier notifier =
-        ref.read(importWalletNotifierProvider.notifier);
-    final int currentPage = ref.read(importWalletNotifierProvider).currentPage;
+// //     WidgetsBinding.instance.addPostFrameCallback((_) {
+// //       ScaffoldMessenger.of(context).showSnackBar(
+// //         SnackBar(
+// //           content: Text(
+// //             message.contains('Entropy already exists')
+// //                 ? 'This wallet has already been imported'
+// //                 : 'Error: $message',
+// //           ),
+// //           duration: const Duration(seconds: 3),
+// //         ),
+// //       );
+// //     });
+// //   }
 
-    final int newPage = currentPage + 1;
-    notifier.setCurrentPage(newPage);
-  }
+// //   Future<void> _navigateToPage() async {
+// //     final ImportWalletNotifier notifier =
+// //         ref.read(importWalletNotifierProvider.notifier);
+// //     final int currentPage = ref.read(importWalletNotifierProvider).currentPage;
 
-  @override
-  Widget build(BuildContext context) {
-    final ImportWalletState importWalletState =
-        ref.watch(importWalletNotifierProvider);
-    final ImportWalletNotifier importWalletNotifier =
-        ref.read(importWalletNotifierProvider.notifier);
+// //     final int newPage = currentPage + 1;
+// //     notifier.setCurrentPage(newPage);
+// //   }
 
-    final GenerateAccountFlowState generateAccountFlowState =
-        ref.watch(generateAccountFlowProvider);
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     final ImportWalletState importWalletState =
+// //         ref.watch(importWalletNotifierProvider);
+// //     final ImportWalletNotifier importWalletNotifier =
+// //         ref.read(importWalletNotifierProvider.notifier);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _handleStateChanges(generateAccountFlowState);
-    });
+// //     final GenerateAccountFlowState generateAccountFlowState =
+// //         ref.watch(generateAccountFlowProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: _buildAppBar(importWalletState, importWalletNotifier),
-      body: _buildBody(importWalletState, importWalletNotifier),
-    );
-  }
+// //     WidgetsBinding.instance.addPostFrameCallback((_) async {
+// //       await _handleStateChanges(generateAccountFlowState);
+// //     });
 
-  Widget _buildBody(ImportWalletState state, ImportWalletNotifier notifier) =>
-      Column(
-        children: <Widget>[
-          Expanded(
-            child: PageTransitionSwitcher(
-              duration: const Duration(milliseconds: 400),
-              reverse: state.currentPage < state.previousPage,
-              transitionBuilder: (
-                Widget child,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-              ) =>
-                  FadeTransition(
-                opacity: animation,
-                child: ScaleTransition(
-                  scale: animation.drive(
-                    Tween<double>(begin: 0.95, end: 1).chain(
-                      CurveTween(curve: Curves.easeInOut),
-                    ),
-                  ),
-                  child: child,
-                ),
-              ),
-              child: _buildPage(state, notifier),
-            ),
-          ),
-        ],
-      );
+// //     return Scaffold(
+// //       backgroundColor: AppColors.white,
+// //       appBar: _buildAppBar(importWalletState, importWalletNotifier),
+// //       body: _buildBody(importWalletState, importWalletNotifier),
+// //     );
+// //   }
 
-  Widget _buildPage(ImportWalletState state, ImportWalletNotifier notifier) {
-    switch (state.currentPage) {
-      case 0:
-        return ImportWalletImportSeedPhraseScreen(
-          key: const ValueKey<int>(0),
-          words: state.words,
-          onWordsUpdated: notifier.updateWords,
-          onImport: notifier.importMnemonic,
-        );
-      case 1:
-        return ImportWalletAccountNameScreen(
-          onSkip: () async => _navigateToPage(PageType.accountNameEntered),
-          key: const ValueKey<int>(1),
-          accountName: state.accountName,
-          onAccountNameUpdated: notifier.updateAccountName,
-          onContinue: () async => _navigateToPage(PageType.accountNameEntered),
-        );
-      case 2:
-        return ImportWalletWalletColorSelectionScreen(
-          key: const ValueKey<int>(2),
-          onContinue: () async {
-            await _navigateToPage(PageType.walletColorSelected);
-          },
-        );
-      case 3:
-        return ImportWalletEmojiSelectionScreen(
-          key: const ValueKey<int>(3),
-          onContinue: () async {
-            await ref
-                .read(importWalletNotifierProvider.notifier)
-                .generateAccount();
-          },
-        );
-      default:
-        return const SizedBox.shrink();
-    }
-  }
+// //   Widget _buildBody(ImportWalletState state, ImportWalletNotifier notifier) =>
+// //       Column(
+// //         children: <Widget>[
+// //           Expanded(
+// //             child: PageTransitionSwitcher(
+// //               duration: const Duration(milliseconds: 400),
+// //               reverse: state.currentPage < state.previousPage,
+// //               transitionBuilder: (
+// //                 Widget child,
+// //                 Animation<double> animation,
+// //                 Animation<double> secondaryAnimation,
+// //               ) =>
+// //                   FadeTransition(
+// //                 opacity: animation,
+// //                 child: ScaleTransition(
+// //                   scale: animation.drive(
+// //                     Tween<double>(begin: 0.95, end: 1).chain(
+// //                       CurveTween(curve: Curves.easeInOut),
+// //                     ),
+// //                   ),
+// //                   child: child,
+// //                 ),
+// //               ),
+// //               child: _buildPage(state, notifier),
+// //             ),
+// //           ),
+// //         ],
+// //       );
 
-  PreferredSizeWidget _buildAppBar(
-    ImportWalletState state,
-    ImportWalletNotifier notifier,
-  ) =>
-      AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: <Widget>[
-            GestureDetector(
-              // ignore: unnecessary_async
-              onTap: () async => _handleBackNavigation(state, notifier),
-              child: const Icon(PhosphorIconsBold.caretLeft),
-            ),
-            const Spacer(),
-            ..._buildProgressIndicators(state.currentPage),
-            const Spacer(),
-            _buildCoinIndicator(),
-          ],
-        ),
-      );
+//   PreferredSizeWidget _buildAppBar(
+//     ImportWalletState state,
+//     ImportWalletNotifier notifier,
+//   ) =>
+//       AppBar(
+//         automaticallyImplyLeading: false,
+//         title: Row(
+//           children: <Widget>[
+//             GestureDetector(
+//               // ignore: unnecessary_async
+//               onTap: () async => _handleBackNavigation(state, notifier),
+//               child: const Icon(PhosphorIconsBold.caretLeft),
+//             ),
+//             const Spacer(),
+//             ..._buildProgressIndicators(state.currentPage),
+//             const Spacer(),
+//             _buildCoinIndicator(),
+//           ],
+//         ),
+//       );
+// //   Widget _buildPage(ImportWalletState state, ImportWalletNotifier notifier) {
+// //     switch (state.currentPage) {
+// //       case 0:
+// //         return ImportWalletImportSeedPhraseScreen(
+// //           key: const ValueKey<int>(0),
+// //           words: state.words,
+// //           onWordsUpdated: notifier.updateWords,
+// //         );
+// //       case 1:
+// //         return ImportWalletAccountNameScreen(
+// //           onSkip: () async => _navigateToPage(),
+// //           key: const ValueKey<int>(1),
+// //           accountName: state.accountName,
+// //           onAccountNameUpdated: notifier.updateWalletName,
+// //           onContinue: () async => _navigateToPage(),
+// //         );
+// //       case 2:
+// //         return ImportWalletWalletColorSelectionScreen(
+// //           key: const ValueKey<int>(2),
+// //           onContinue: () async {
+// //             await _navigateToPage();
+// //           },
+// //         );
+// //       case 3:
+// //         return ImportWalletEmojiSelectionScreen(
+// //           key: const ValueKey<int>(3),
+// //           onContinue: () async {
+// //             await ref
+// //                 .read(importWalletNotifierProvider.notifier)
+// //                 .generateAccount();
+// //           },
+// //         );
+// //       default:
+// //         return const SizedBox.shrink();
+// //     }
+// //   }
 
-  Future<void> _handleBackNavigation(
-    ImportWalletState state,
-    ImportWalletNotifier notifier,
-  ) async {
-    if (state.currentPage == 0) {
-      context.pop();
-    } else {
-      final int newPage = state.currentPage - 1;
-      notifier.setCurrentPage(newPage);
-      await _pageController.animateToPage(
-        newPage,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
+// //   PreferredSizeWidget _buildAppBar(
+// //     ImportWalletState state,
+// //     ImportWalletNotifier notifier,
+// //   ) =>
+// //       AppBar(
+// //         automaticallyImplyLeading: false,
+// //         title: Row(
+// //           children: <Widget>[
+// //             GestureDetector(
+// //               onTap: () async => _handleBackNavigation(state, notifier),
+// //               child: const Icon(PhosphorIconsBold.caretLeft),
+// //             ),
+// //             const Spacer(),
+// //             ..._buildProgressIndicators(state.currentPage),
+// //             const Spacer(),
+// //             _buildCoinIndicator(),
+// //           ],
+// //         ),
+// //       );
 
-  List<Widget> _buildProgressIndicators(int currentPage) =>
-      List<Widget>.generate(
-        4,
-        (int index) => _buildProgressIndicator(index, currentPage),
-      );
+// //   Future<void> _handleBackNavigation(
+// //     ImportWalletState state,
+// //     ImportWalletNotifier notifier,
+// //   ) async {
+// //     if (state.currentPage == 0) {
+// //       context.pop();
+// //     } else {
+// //       final int newPage = state.currentPage - 1;
+// //       notifier.setCurrentPage(newPage);
+// //       await _pageController.animateToPage(
+// //         newPage,
+// //         duration: const Duration(milliseconds: 300),
+// //         curve: Curves.easeInOut,
+// //       );
+// //     }
+// //   }
 
-  Widget _buildProgressIndicator(int index, int currentPage) =>
-      AnimatedContainer(
-        height: currentPage == index ? 6 : 4,
-        width: currentPage == index ? 64 : 42,
-        margin: const EdgeInsets.symmetric(horizontal: 1),
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        decoration: BoxDecoration(
-          color: currentPage >= index
-              ? AppColors.greenLight
-              : AppColors.greyVeryLight,
-          borderRadius: BorderRadius.circular(40),
-        ),
-      );
+// //   List<Widget> _buildProgressIndicators(int currentPage) =>
+// //       List<Widget>.generate(
+// //         4,
+// //         (int index) => _buildProgressIndicator(index, currentPage),
+// //       );
 
-  Widget _buildCoinIndicator() => Container(
-        padding: const EdgeInsets.only(top: 4, bottom: 4, right: 12, left: 4),
-        decoration: BoxDecoration(
-          color: AppColors.greyVeryLight,
-          borderRadius: BorderRadius.circular(60),
-        ),
-        child: Row(
-          children: <Widget>[
-            Image.asset('assets/icons/coin-yellow.png', width: 16, height: 16),
-            const SizedBox(width: 8),
-            const Text(
-              '20',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppColors.greyDark,
-              ),
-            ),
-          ],
-        ),
-      );
-}
+// //   Widget _buildProgressIndicator(int index, int currentPage) =>
+// //       AnimatedContainer(
+// //         height: currentPage == index ? 6 : 4,
+// //         width: currentPage == index ? 64 : 42,
+// //         margin: const EdgeInsets.symmetric(horizontal: 1),
+// //         duration: const Duration(milliseconds: 300),
+// //         curve: Curves.easeInOut,
+// //         decoration: BoxDecoration(
+// //           color: currentPage >= index
+// //               ? AppColors.greenLight
+// //               : AppColors.greyVeryLight,
+// //           borderRadius: BorderRadius.circular(40),
+// //         ),
+// //       );
+
+// //   Widget _buildCoinIndicator() => Container(
+// //         padding: const EdgeInsets.only(top: 4, bottom: 4, right: 12, left: 4),
+// //         decoration: BoxDecoration(
+// //           color: AppColors.greyVeryLight,
+// //           borderRadius: BorderRadius.circular(60),
+// //         ),
+// //         child: Row(
+// //           children: <Widget>[
+// //             Image.asset('assets/icons/coin-yellow.png', width: 16, height: 16),
+// //             const SizedBox(width: 8),
+// //             const Text(
+// //               '20',
+// //               style: TextStyle(
+// //                 fontSize: 14,
+// //                 fontWeight: FontWeight.w500,
+// //                 color: AppColors.greyDark,
+// //               ),
+// //             ),
+// //           ],
+// //         ),
+// //       );
+// // }

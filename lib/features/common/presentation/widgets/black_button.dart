@@ -43,12 +43,14 @@ class BlackButtonXL extends StatelessWidget {
     this.horizontalPadding = true,
     this.color = AppColors.black,
     this.textColor = AppColors.white,
+    this.margin = const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
   });
   final String title;
   final VoidCallback onClick;
   final bool horizontalPadding;
   final Color color;
   final Color textColor;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) => Align(
@@ -60,19 +62,18 @@ class BlackButtonXL extends StatelessWidget {
               color: color,
               borderRadius: BorderRadius.circular(45),
             ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding ? 24 : 0,
-                vertical: 16,
-              ),
-              child: Center(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: textColor,
-                  ),
+            margin: margin,
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding ? 24 : 0,
+              vertical: 16,
+            ),
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: textColor,
                 ),
               ),
             ),
@@ -87,6 +88,7 @@ class BlackButtonXL extends StatelessWidget {
       ..add(StringProperty('title', title))
       ..add(ObjectFlagProperty<VoidCallback>.has('onClick', onClick))
       ..add(DiagnosticsProperty<bool>('horizontalPadding', horizontalPadding))
-      ..add(ColorProperty('color', color));
+      ..add(ColorProperty('color', color))
+      ..add(ColorProperty('textColor', textColor));
   }
 }

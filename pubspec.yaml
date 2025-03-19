@@ -5,8 +5,8 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.0
-  flutter: ^3.29.1
+  sdk: ^3.6.1
+  flutter: ^3.27.2
 
 dependencies:
   flutter:
@@ -67,6 +67,8 @@ dependencies:
   flutter_swiper_view: ^1.1.8
   carousel_slider: ^5.0.0
   flutter_card_swiper: ^7.0.2
+  fluttertoast: ^8.2.12
+  video_player: ^2.9.3
 
 dev_dependencies:
   flutter_test:

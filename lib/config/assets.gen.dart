@@ -137,6 +137,10 @@ class $AssetsImagesGen {
   AssetGenImage get rollingOnTheFloorLaughing =>
       const AssetGenImage('assets/images/rolling-on-the-floor-laughing.gif');
 
+  /// File path: assets/images/select-seed-phrase-screen.png
+  AssetGenImage get selectSeedPhraseScreen =>
+      const AssetGenImage('assets/images/select-seed-phrase-screen.png');
+
   /// File path: assets/images/slightly-smiling-face.gif
   AssetGenImage get slightlySmilingFace =>
       const AssetGenImage('assets/images/slightly-smiling-face.gif');
@@ -215,6 +219,7 @@ class $AssetsImagesGen {
         onboarding3,
         onboarding4,
         rollingOnTheFloorLaughing,
+        selectSeedPhraseScreen,
         slightlySmilingFace,
         smilingFaceWithHalo,
         smilingFaceWithHeartEyes,

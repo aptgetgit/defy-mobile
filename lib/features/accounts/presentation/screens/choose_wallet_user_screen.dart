@@ -9,6 +9,7 @@ import '../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../shared/blockchain/account/domain/entities/aptos_account_with_metadata.dart';
 import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
+import '../components/new_wallet_bottom_sheet.dart';
 import '../components/wallet_pagination_indicator.dart';
 import '../components/wallet_swiper.dart';
 import '../provider/choose_wallet_screen_provider.dart';
@@ -91,8 +92,8 @@ class _ChooseWalletUserScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 16),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               children: <Widget>[
                 Text(
@@ -104,15 +105,29 @@ class _ChooseWalletUserScreenState
                     color: AppColors.black,
                   ),
                 ),
-                Spacer(),
-                CircleAvatar(
+                const Spacer(),
+                const CircleAvatar(
                   maxRadius: 16,
                   child: Icon(PhosphorIconsBold.cardsThree, size: 20),
                 ),
-                SizedBox(width: 16),
-                CircleAvatar(
-                  maxRadius: 16,
-                  child: Icon(PhosphorIconsBold.plus, size: 20),
+                const SizedBox(width: 16),
+                GestureDetector(
+                  onTap: () async => showModalBottomSheet<void>(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    builder: (BuildContext context) =>
+                        const NewWalletBottomSheet(),
+                  ),
+                  child: const CircleAvatar(
+                    maxRadius: 16,
+                    child: Icon(
+                      PhosphorIconsBold.plus,
+                      size: 20,
+                    ),
+                  ),
                 ),
               ],
             ),

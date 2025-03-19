@@ -15,30 +15,66 @@ class WaitlistScreen extends ConsumerStatefulWidget {
 }
 
 class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+    with TickerProviderStateMixin {
+  late AnimationController _logoEntranceController;
+  late Animation<double> _logoSizeAnimation;
+  late Animation<double> _logoPositionAnimation;
+  late Animation<double> _logoInitialRotationAnimation;
+  late AnimationController _logoRotationController;
+  late Animation<double> _logoRotationAnimation;
   bool _isTextFieldFocused = false;
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _logoRotationController = AnimationController(
       duration: const Duration(milliseconds: 6000),
       vsync: this,
     );
 
-    final CurvedAnimation curvedAnimation = CurvedAnimation(
-      parent: _controller,
+    _logoEntranceController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    final CurvedAnimation rotationCurvedAnimation = CurvedAnimation(
+      parent: _logoRotationController,
       curve: const ElasticOutCurve(0.8),
     );
 
-    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+    _logoRotationAnimation =
+        Tween<double>(begin: 0, end: 1).animate(rotationCurvedAnimation);
+
+    _logoSizeAnimation = Tween<double>(begin: 0.5, end: 1).animate(
+      CurvedAnimation(
+        parent: _logoEntranceController,
+        curve: Curves.easeOut,
+      ),
+    );
+
+    _logoPositionAnimation = Tween<double>(begin: -100, end: 0).animate(
+      CurvedAnimation(
+        parent: _logoEntranceController,
+        curve: Curves.easeOut,
+      ),
+    );
+    _logoInitialRotationAnimation = Tween<double>(begin: -0.5, end: 0).animate(
+      CurvedAnimation(
+        parent: _logoEntranceController,
+        curve: Curves.easeOut,
+      ),
+    );
 
     _focusNode.addListener(_onFocusChange);
 
-    unawaited(_startRotationAnimation());
+    Future<void>.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        _logoEntranceController
+            .forward()
+            .then((_) async => _startLogoRotationAnimation());
+      }
+    });
   }
 
   void _onFocusChange() {
@@ -46,31 +82,34 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
       _isTextFieldFocused = _focusNode.hasFocus;
     });
     if (_isTextFieldFocused) {
-      _controller..stop()
-      ..animateTo(0, duration: const Duration(milliseconds: 500));
+      _logoRotationController
+        ..stop()
+        ..animateTo(0, duration: const Duration(milliseconds: 500));
     } else {
-      unawaited(_startRotationAnimation());
+      unawaited(_startLogoRotationAnimation());
     }
   }
 
-  Future<void> _startRotationAnimation() async {
+  Future<void> _startLogoRotationAnimation() async {
     while (!_isTextFieldFocused) {
       await Future<void>.delayed(const Duration(seconds: 3));
       if (!_isTextFieldFocused) {
-        await _controller.forward();
+        await _logoRotationController.forward();
       }
       await Future<void>.delayed(const Duration(seconds: 1));
       if (!_isTextFieldFocused) {
-        await _controller.reverse();
+        await _logoRotationController.reverse();
       }
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
-    _focusNode..removeListener(_onFocusChange)
-    ..dispose();
+    _logoRotationController.dispose();
+    _logoEntranceController.dispose();
+    _focusNode
+      ..removeListener(_onFocusChange)
+      ..dispose();
     super.dispose();
   }
 
@@ -120,16 +159,27 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                   ],
                 ),
                 AnimatedContainer(
-                    duration: const Duration(milliseconds: 300), height: 20,),
+                  duration: const Duration(milliseconds: 300),
+                  height: 20,
+                ),
                 AnimatedBuilder(
-                  animation: _animation,
+                  animation: Listenable.merge(
+                      [_logoRotationAnimation, _logoEntranceController]),
                   builder: (BuildContext context, Widget? child) =>
-                      Transform.rotate(
-                    angle: _animation.value * math.pi,
-                    child: Image.asset(
-                      'assets/icons/app-logo-dark-3d.png',
-                      width: _isTextFieldFocused ? 105 : 145,
-                      height: _isTextFieldFocused ? 105 : 145,
+                      Transform.translate(
+                    offset: Offset(0, _logoPositionAnimation.value),
+                    child: Transform.rotate(
+                      angle:
+                          _logoInitialRotationAnimation.value * -2 * math.pi +
+                              _logoRotationAnimation.value * math.pi,
+                      child: Transform.scale(
+                        scale: _logoSizeAnimation.value,
+                        child: Image.asset(
+                          'assets/icons/app-logo-dark-3d.png',
+                          width: _isTextFieldFocused ? 105 : 145,
+                          height: _isTextFieldFocused ? 105 : 145,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -168,7 +218,8 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                 if (_isTextFieldFocused)
                   GestureDetector(
                     onTap: () async {
-                      await const WalletCreationScreenRoute().push<void>(context);
+                      await const WalletCreationScreenRoute()
+                          .push<void>(context);
                     },
                     child: Container(
                       width: double.infinity,
@@ -181,9 +232,10 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                       child: const Text(
                         'Enter Defy (beta)',
                         style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,),
+                          color: AppColors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),

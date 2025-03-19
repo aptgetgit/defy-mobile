@@ -174,8 +174,17 @@ enum AnimatedEmoji {
 
 extension AnimatedIconExt on AnimatedEmoji {
   String get getEmoji {
-    final String kebabCase =
-        name.replaceAllMapped(RegExp('([a-z])([A-Z])'), (Match match) => '${match.group(1)}-${match.group(2)}').toLowerCase();
-    return 'https://stavexidblob.blob.core.windows.net/images/emojis/fluent/symbols/$kebabCase.png';
+    if (this == AnimatedEmoji.FaceBlowingAKiss) {
+      return 'https://stavexidblob.blob.core.windows.net/images/emojis/fluent/smilies/face-blowing-a-kiss.png';
+    }
+
+    final String kebabCase = name
+        .replaceAllMapped(
+          RegExp('([a-z])([A-Z])'),
+          (Match match) => '${match.group(1)}-${match.group(2)}',
+        )
+        .toLowerCase();
+
+    return 'https://stavexidblob.blob.core.windows.net/images/emojis/fluent/smilies/$kebabCase.png';
   }
 }

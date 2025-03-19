@@ -1,1 +1,0 @@
-/home/panic0/Development/avex.id/Defy/build/app/intermediates/cxx/RelWithDebInfo/4y285f4m/obj/armeabi-v7a

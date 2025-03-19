@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../config/theme/theme.dart';
+import '../core/constant/app_constant.dart';
+import '../core/navigation/routes/router.dart';
 import '../core/providers/locale/locale_provider.dart';
 import '../core/providers/theme/theme_provider.dart';
-import '../core/navigation/routes/router.dart';
 import '../features/startup/presentation/widgets/startup_handler_widget.dart';
 import '../l10n/generated/app_localizations.dart';
-// import '../shared/connectivity/presentation/providers/connectivity_status_provider.dart';
 import '../shared/connectivity/presentation/widgets/connectivity_overlay.dart';
 
 class DefyApp extends ConsumerWidget {
@@ -21,13 +21,14 @@ class DefyApp extends ConsumerWidget {
       final GoRouter router = ref.watch(routerProvider);
       final ThemeMode themeMode = ref.watch(themeNotifierProvider).requireValue;
       final Locale locale = ref.watch(localeNotifierProvider).requireValue;
+
       return MaterialApp.router(
         routerConfig: router,
         debugShowCheckedModeBanner: false,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         locale: locale,
-        title: 'Defy',
+        title: AppConstant.appName,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: themeMode,

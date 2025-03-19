@@ -6,7 +6,7 @@ part of '../object_box_store_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$objectBoxStoreHash() => r'309a3ae59fbae2d08707b9593fa43117ff70c986';
+String _$objectBoxStoreHash() => r'3f39382962293a86f965f1997da5b1e42dd9c997';
 
 /// See also [objectBoxStore].
 @ProviderFor(objectBoxStore)

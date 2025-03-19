@@ -5,9 +5,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../providers/deep_link/deep_link_provider.dart';
 import '../../error/exception_with_stack_trace.dart';
 import '../../logging/app_logger.dart';
+import '../../providers/deep_link/deep_link_provider.dart';
 import '../routes/router.dart';
 
 class DeepLinkHandler {

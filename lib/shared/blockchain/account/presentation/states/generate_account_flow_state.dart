@@ -36,7 +36,7 @@ sealed class GenerateAccountFlowState with _$GenerateAccountFlowState {
 sealed class KeySource with _$KeySource {
   const factory KeySource.mnemonic({
     required Uint8List entropyHash,
-    required Option<int> accountIndex 
+    required Option<int> accountIndex,
   }) = KeySourceMnemonic;
 
   const factory KeySource.privateKey({

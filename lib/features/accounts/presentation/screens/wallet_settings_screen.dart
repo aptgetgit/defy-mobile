@@ -1,15 +1,18 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fpdart/src/either.dart';
+import 'package:fpdart/src/option.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../../app/routes/router.dart';
 import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
+import '../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/navigation/routes/router.dart';
-import '../../../../shared/account/presentation/providers/usecase_provider.dart';
 import '../../../../shared/blockchain/account/domain/entities/aptos_account_with_metadata.dart';
 import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
 import '../../../common/presentation/widgets/black_button.dart';
@@ -43,7 +46,16 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
     final Future<AptosAccountWithMetadata?> accountFuture =
         ref.watch(getAptosAccountUseCaseProvider).call(
               accountAddress: widget.account.accountAddress,
-            );
+            ).then((Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>> either) => either.fold(
+                  (ExceptionWithStackTrace error) {
+                    AppLogger.error('Error fetching account: $error');
+                    return null;
+                  },
+                  (Option<AptosAccountWithMetadata> option) => option.fold(
+                    () => null,
+                    (AptosAccountWithMetadata account) => account,
+                  ),
+                ));
 
     return Scaffold(
       appBar: AppBar(
@@ -132,6 +144,9 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
                     _buildWalletSettingsItem(
                       title: 'Set as Default',
                       icon: PhosphorIconsRegular.gearSix,
+                      onTap: () async {
+                        // Add your asynchronous logic here if needed
+                      },
                     ),
                     _buildWalletSettingsItem(
                       title: 'Customize Wallet',
@@ -298,8 +313,17 @@ class DeleteWalletDialogState extends ConsumerState<DeleteWalletDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final Future<List<AptosAccountWithMetadata>> accountsFuture =
-        ref.watch(listAptosAccountsUseCaseProvider).call();
+    final Future<List<AptosAccountWithMetadata>> accountsFuture = (() async {
+      final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>> either =
+          await ref.watch(listAptosAccountsUseCaseProvider).call();
+      return either.fold(
+        (ExceptionWithStackTrace error) {
+          AppLogger.error('Error loading accounts: $error');
+          return <AptosAccountWithMetadata>[];
+        },
+        (Set<AptosAccountWithMetadata> accountsSet) => accountsSet.toList(),
+      );
+    })();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),

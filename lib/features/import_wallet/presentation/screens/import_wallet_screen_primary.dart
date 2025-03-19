@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fpdart/src/either.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/animated_emoji.dart';
 import '../../../../core/constants/bip39_wordlist.dart';
+import '../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/navigation/routes/router.dart';
 import '../../../../core/utils/emoji_utils.dart';
@@ -73,12 +75,20 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
   Future<void> _initializeWalletNames() async {
     final ListAptosAccountsUseCase listAptosAccountUsecaseProvider =
         ref.read(listAptosAccountsUseCaseProvider);
-    final List<AptosAccountWithMetadata> accounts =
-        await listAptosAccountUsecaseProvider.call();
-
-    existingWalletNames = accounts
-        .map((AptosAccountWithMetadata account) => account.label)
-        .toSet();
+    final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
+        result = await listAptosAccountUsecaseProvider.call();
+    result.fold(
+      (ExceptionWithStackTrace error) {
+        // Handle the error case
+        AppLogger.error('Failed to fetch accounts: $error');
+      },
+      (Set<AptosAccountWithMetadata> accountsSet) {
+        // Handle the success case
+        existingWalletNames = accountsSet
+            .map((AptosAccountWithMetadata account) => account.label)
+            .toSet();
+      },
+    );
   }
 
   void _onNameTextFieldChanged() {
@@ -418,19 +428,33 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
       BlackButtonXL(
         onClick: () async {
           if (state.words.isEmpty) {
+            AppLogger.debug(
+                'State words are empty, attempting to paste from clipboard.');
+            await _pasteFromClipboard(context, notifier);
+          } 
+
+          if (state.words.isEmpty) {
+            AppLogger.debug(
+                'State words are empty, attempting to paste from clipboard.');
             await _pasteFromClipboard(context, notifier);
           } else if (state.showWalletColor || state.showEmojiPicker) {
+            AppLogger.debug(
+                'Navigating to the next section: showWalletColor or showEmojiPicker is true.');
             await notifier.navigateToNextSection();
           } else if (state.showWalletName) {
+            AppLogger.debug('Checking for duplicate wallet names.');
             if (existingWalletNames
                 .contains(nameTextFieldController.text.trim())) {
-              await _showDuplicateNameDialog(
-                context,
-              );
+              AppLogger.debug(
+                  'Duplicate wallet name found, showing duplicate name dialog.');
+              await _showDuplicateNameDialog(context);
             } else {
+              AppLogger.debug(
+                  'No duplicate wallet name found, navigating to the next section.');
               await notifier.navigateToNextSection();
             }
           } else {
+            AppLogger.debug('Importing mnemonic.');
             await notifier.importMnemonic();
           }
         },
@@ -617,7 +641,10 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
           'colorAnimationController',
           colorAnimationController,
         ),
-      )..add(IterableProperty<String>('existingWalletNames', existingWalletNames));
+      )
+      ..add(
+        IterableProperty<String>('existingWalletNames', existingWalletNames),
+      );
   }
 }
 

@@ -15,16 +15,15 @@ import '../../../features/create_wallet/presentation/screens/create_wallet_scree
 import '../../../features/create_wallet/presentation/screens/create_wallet_select_seed_phrase_screen.dart';
 import '../../../features/home/presentation/screens/home_screen.dart';
 import '../../../features/import_wallet/presentation/screens/created_wallet_screen.dart';
-import '../../../features/import_wallet/presentation/screens/import_wallet_screen.dart';
 import '../../../features/import_wallet/presentation/screens/import_wallet_screen_primary.dart';
 import '../../../features/onboarding/presentation/screens/dive_in_page.dart';
 import '../../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../../features/splash/presentation/screens/splash_screen.dart';
 import '../../../features/waitlist/presentation/screens/waitlist_screen.dart';
 import '../../../features/wallet-creation/presentation/screens/wallet_creation_screen.dart';
 import '../../../features/wallet-creation/presentation/screens/wallet_creation_wallet_background_screen.dart';
 import '../../../features/wallet-creation/presentation/screens/wallet_creation_wallet_name_screen.dart';
 import '../transitions.dart';
-
 
 part 'accounts_route.dart';
 part 'generated/router.freezed.dart';
@@ -48,7 +47,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const ChooseWalletUserScreenRoute().location,
+      initialLocation: const SplashScreenRoute().location,
       routes: $appRoutes,
       redirectLimit: 0,
       errorBuilder: (BuildContext context, GoRouterState state) =>

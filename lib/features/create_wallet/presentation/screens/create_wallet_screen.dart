@@ -5,10 +5,12 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:fpdart/src/either.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
+import '../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/navigation/routes/router.dart';
 import '../../../../shared/blockchain/account/domain/entities/aptos_account_with_metadata.dart';
@@ -60,8 +62,14 @@ class CreateWalletScreenState extends ConsumerState<CreateWalletScreen>
   Future<void> _initializeWalletNames() async {
     final ListAptosAccountsUseCase listAptosAccountUsecaseProvider =
         ref.read(listAptosAccountsUseCaseProvider);
-    final List<AptosAccountWithMetadata> accounts =
-        await listAptosAccountUsecaseProvider.call();
+    final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>> result = await listAptosAccountUsecaseProvider.call();
+    final List<AptosAccountWithMetadata> accounts = result.fold(
+      (ExceptionWithStackTrace failure) {
+        AppLogger.error('Failed to fetch accounts: $failure');
+        return <AptosAccountWithMetadata>[];
+      },
+      (Set<AptosAccountWithMetadata> accountSet) => accountSet.toList(),
+    );
 
     existingWalletNames = accounts
         .map((AptosAccountWithMetadata account) => account.label)
@@ -95,7 +103,7 @@ class CreateWalletScreenState extends ConsumerState<CreateWalletScreen>
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
+                colors: <Color>[
                   Colors.white,
                   Colors.grey.shade50,
                 ],
@@ -103,7 +111,7 @@ class CreateWalletScreenState extends ConsumerState<CreateWalletScreen>
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 // Icon section
                 const Padding(
                   padding: EdgeInsets.only(top: 24),

@@ -7,11 +7,7 @@ part of '../import_wallet_provider.dart';
 // **************************************************************************
 
 String _$importWalletNotifierHash() =>
-<<<<<<< Updated upstream
-    r'03d31ea26d3e71144cc2155a9037be746902caae';
-=======
     r'b486eaba7e017f34a72573d3ec1b3d70027f2f5d';
->>>>>>> Stashed changes
 
 /// See also [ImportWalletNotifier].
 @ProviderFor(ImportWalletNotifier)

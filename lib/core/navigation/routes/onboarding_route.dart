@@ -1,5 +1,20 @@
 part of 'router.dart';
 
+@TypedGoRoute<SplashScreenRoute>(path: '/splash')
+class SplashScreenRoute extends GoRouteData {
+  const SplashScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SplashScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (BuildContext context, GoRouterState state) =>
+        const SplashScreen(),
+  );
+}
+
 @TypedGoRoute<OnboardingRoute>(path: '/onboarding')
 class OnboardingRoute extends GoRouteData {
   const OnboardingRoute();

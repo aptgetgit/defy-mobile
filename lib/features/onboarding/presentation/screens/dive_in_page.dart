@@ -157,7 +157,7 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                         const SizedBox(height: 240),
                         Center(
                           child: Image.asset(
-                            'assets/icons/app-logo-dark.png',
+                            'assets/icons/app-logo-dark-3d.png',
                             width: 68,
                             height: 68,
                           ).animate().slideY(
@@ -251,7 +251,7 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/icons/app-logo-dark.png',
+            Image.asset('assets/icons/app-logo-dark-3d.png',
                 width: 36, height: 36,),
             const SizedBox(width: 12),
             Text(

@@ -4,9 +4,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
-import '../../../../core/logging/app_logger.dart';
-import '../../../../shared/account/domain/usecases/get_all_menmonics_usecase.dart';
-import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
+// import '../../../../core/logging/app_logger.dart';
+// import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
 
 class CreateWalletSelectSeedPhraseScreen extends StatefulHookConsumerWidget {
   const CreateWalletSelectSeedPhraseScreen({super.key});
@@ -23,17 +22,17 @@ class _CreateWalletSelectSeedPhraseScreenState
   @override
   void initState() {
     super.initState();
-    mnemonicsFuture = _getAllMnemonics();
+    // mnemonicsFuture = _getAllMnemonics();
   }
 
-  Future<List<String>> _getAllMnemonics() async {
-    final GetAllMnemonicsUseCase getAllMnemonicsUseCase =
-        ref.read(getAllMnemonicsUseCaseProvider);
-    final List<String> mnemonics = await getAllMnemonicsUseCase.call();
-    AppLogger.debug(
-        'Fetched mnemonics: ${mnemonics.length}'); // Debug statement
-    return mnemonics;
-  }
+  // Future<List<String>> _getAllMnemonics() async {
+  //   final GetAllMnemonicsUseCase getAllMnemonicsUseCase =
+  //       ref.read(getAllMnemonicsUseCaseProvider);
+  //   final List<String> mnemonics = await getAllMnemonicsUseCase.call();
+  //   AppLogger.debug(
+  //       'Fetched mnemonics: ${mnemonics.length}'); // Debug statement
+  //   return mnemonics;
+  // }
 
   @override
   Widget build(BuildContext context) => Scaffold(

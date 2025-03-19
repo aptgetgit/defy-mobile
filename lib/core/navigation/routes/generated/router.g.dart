@@ -10,12 +10,9 @@ List<RouteBase> get $appRoutes => [
       $welcomeAgainScreenRoute,
       $chooseWalletScreenRoute,
       $chooseWalletUserScreenRoute,
-<<<<<<< Updated upstream:lib/core/navigation/routes/generated/router.g.dart
-=======
       $walletSettingsManageScreenRoute,
-      $browserRoute,
->>>>>>> Stashed changes:lib/app/routes/generated/router.g.dart
       $homeRoute,
+      $splashScreenRoute,
       $onboardingRoute,
       $diveInPageRoute,
       $waitlistScreenRoute,
@@ -97,8 +94,6 @@ extension $ChooseWalletUserScreenRouteExtension on ChooseWalletUserScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-<<<<<<< Updated upstream:lib/core/navigation/routes/generated/router.g.dart
-=======
 RouteBase get $walletSettingsManageScreenRoute => GoRouteData.$route(
       path: '/wallet-settings/manage',
       factory: $WalletSettingsManageScreenRouteExtension._fromState,
@@ -123,16 +118,16 @@ extension $WalletSettingsManageScreenRouteExtension
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $browserRoute => GoRouteData.$route(
-      path: '/browser',
-      factory: $BrowserRouteExtension._fromState,
+RouteBase get $homeRoute => GoRouteData.$route(
+      path: '/home',
+      factory: $HomeRouteExtension._fromState,
     );
 
-extension $BrowserRouteExtension on BrowserRoute {
-  static BrowserRoute _fromState(GoRouterState state) => const BrowserRoute();
+extension $HomeRouteExtension on HomeRoute {
+  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
 
   String get location => GoRouteData.$location(
-        '/browser',
+        '/home',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -145,17 +140,17 @@ extension $BrowserRouteExtension on BrowserRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
->>>>>>> Stashed changes:lib/app/routes/generated/router.g.dart
-RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/home',
-      factory: $HomeRouteExtension._fromState,
+RouteBase get $splashScreenRoute => GoRouteData.$route(
+      path: '/splash',
+      factory: $SplashScreenRouteExtension._fromState,
     );
 
-extension $HomeRouteExtension on HomeRoute {
-  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
+extension $SplashScreenRouteExtension on SplashScreenRoute {
+  static SplashScreenRoute _fromState(GoRouterState state) =>
+      const SplashScreenRoute();
 
   String get location => GoRouteData.$location(
-        '/home',
+        '/splash',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -407,7 +402,7 @@ extension $CreateWalletSelectSeedPhraseScreenRouteExtension
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'87e5912e0f8e10419688dd39359cf4b29be2e9cd';
+String _$routerHash() => r'2d92de56ac5dd69374fe1246c8e5ca9c01261423';
 
 /// See also [router].
 @ProviderFor(router)

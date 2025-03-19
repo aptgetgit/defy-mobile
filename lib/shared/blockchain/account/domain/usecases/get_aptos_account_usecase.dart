@@ -11,7 +11,7 @@ class GetAptosAccountUseCase {
 
   final IAptosAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>> call({
-    required AccountAddress accountAddress,
-  }) => _repository.getByAddress(accountAddress: accountAddress);
+  Future<Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>>
+  call({required AccountAddress accountAddress}) =>
+      _repository.getByAddress(accountAddress: accountAddress).run();
 }

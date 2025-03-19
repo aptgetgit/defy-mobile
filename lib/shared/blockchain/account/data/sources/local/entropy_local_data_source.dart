@@ -41,22 +41,24 @@ class EntropyDataSource {
       );
     }
     try {
+      final String key = _makeKey(hash);
       final Either<ExceptionWithStackTrace, bool> existsResult =
           await has(hash: hash).run();
 
-      if (existsResult.isLeft()) {
-        return left(existsResult.getLeft().toNullable()!);
+      return existsResult.fold(left, (bool exists) async {
+      if (exists) {
+        throw StateError('Entropy already exists for the given hash');
       }
 
+      final String entropyHex = bytesToHex(entropy);
       final Either<ExceptionWithStackTrace, Unit> writeResult =
-          await _secureStorage
-              .write(key: _makeKey(hash), value: bytesToHex(entropy))
-              .run();
+          await _secureStorage.write(key: key, value: entropyHex).run();
 
       return writeResult.fold(left, (_) {
-        AppLogger.debug('Stored entropy for hash: $hash');
+        AppLogger.debug('Stored entropy for hash: ${bytesToHex(hash)}');
         return right(unit);
       });
+    });
     } on Exception catch (e, stackTrace) {
       return left(ExceptionWithStackTrace(e, stackTrace));
     }
@@ -81,13 +83,7 @@ class EntropyDataSource {
   TaskEither<ExceptionWithStackTrace, bool> has({required Uint8List hash}) =>
       TaskEither<ExceptionWithStackTrace, bool>(() async {
         final String key = _makeKey(hash);
-        try {
-          final Either<ExceptionWithStackTrace, bool> exists =
-              await _secureStorage.containsKey(key: key).run();
-          return exists.fold(left, right);
-        } on Exception catch (e, stackTrace) {
-          return left(ExceptionWithStackTrace(e, stackTrace));
-        }
+        return _secureStorage.containsKey(key: key).run();
       });
 
   TaskEither<ExceptionWithStackTrace, Unit> delete({required Uint8List hash}) =>
@@ -126,7 +122,8 @@ class EntropyDataSource {
             .toSet(),
       );
 
-      final List<Either<ExceptionWithStackTrace, bool>> existenceResults =
+      final List<Either<ExceptionWithStackTrace, bool>>
+      existenceResultsExceptions =
           existenceResolvedFutures
               .where(
                 (Either<ExceptionWithStackTrace, bool> result) =>
@@ -134,13 +131,24 @@ class EntropyDataSource {
               )
               .toList();
 
-      if (existenceResults.isNotEmpty) {
+      if (existenceResultsExceptions.isNotEmpty) {
         final Option<ExceptionWithStackTrace> errorOption =
-            existenceResults.first.getLeft();
+            existenceResultsExceptions.first.getLeft();
 
         if (errorOption.isSome()) {
           return left(errorOption.toNullable()!);
         }
+      }
+
+      final bool allKeysExist = existenceResolvedFutures
+          .map(
+            (Either<ExceptionWithStackTrace, bool> result) =>
+                result.getOrElse((_) => false),
+          )
+          .every((bool exists) => exists);
+
+      if (!allKeysExist) {
+        throw StateError('Not all hashes exists');
       }
 
       final List<Either<ExceptionWithStackTrace, Unit>> deleteResolvedFutures =
@@ -150,7 +158,8 @@ class EntropyDataSource {
                 .toSet(),
           );
 
-      final List<Either<ExceptionWithStackTrace, Unit>> deleteResults =
+      final List<Either<ExceptionWithStackTrace, Unit>>
+      deleteResultsExceptions =
           deleteResolvedFutures
               .where(
                 (Either<ExceptionWithStackTrace, Unit> result) =>
@@ -158,8 +167,8 @@ class EntropyDataSource {
               )
               .toList();
 
-      if (deleteResults.isNotEmpty) {
-        return deleteResults.first;
+      if (deleteResultsExceptions.isNotEmpty) {
+        return deleteResultsExceptions.first;
       }
 
       AppLogger.debug('Deleted ${hashes.length} entropies');

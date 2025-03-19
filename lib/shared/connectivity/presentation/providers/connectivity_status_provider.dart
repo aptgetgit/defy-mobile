@@ -25,9 +25,9 @@ Future<Stream<ConnectivityState>> connectivityStatus(Ref ref) async {
     const int maxFailedAttempts = 3;
 
     try {
-      final List<InternetAddress> results =
-          await InternetAddress.lookup(config.lookupAddress)
-              .timeout(const Duration(seconds: 5));
+      final List<InternetAddress> results = await InternetAddress.lookup(
+        config.lookupAddress,
+      ).timeout(const Duration(seconds: 5));
       return results.isNotEmpty && results[0].rawAddress.isNotEmpty;
     } on Exception catch (_) {
       failedAttempts++;
@@ -38,8 +38,9 @@ Future<Stream<ConnectivityState>> connectivityStatus(Ref ref) async {
         if (failedAttempts >= maxFailedAttempts) {
           return false;
         }
-        final http.Response response =
-            await http.get(Uri.parse(url)).timeout(config.timeout);
+        final http.Response response = await http
+            .get(Uri.parse(url))
+            .timeout(config.timeout);
         if (response.statusCode == 200) {
           return true;
         }
@@ -53,14 +54,13 @@ Future<Stream<ConnectivityState>> connectivityStatus(Ref ref) async {
     return false;
   }
 
-  // Create a stream that combines initial check and subsequent changes
   final Stream<List<ConnectivityResult>> initialCheck =
       Stream<List<ConnectivityResult>>.fromFuture(
-    connectivity.checkConnectivity().timeout(
+        connectivity.checkConnectivity().timeout(
           const Duration(seconds: 5),
           onTimeout: () => <ConnectivityResult>[ConnectivityResult.none],
         ),
-  );
+      );
 
   final Stream<List<ConnectivityResult>> changes =
       connectivity.onConnectivityChanged;
@@ -68,9 +68,9 @@ Future<Stream<ConnectivityState>> connectivityStatus(Ref ref) async {
   return Rx.merge<List<ConnectivityResult>>(<Stream<List<ConnectivityResult>>>[
     initialCheck,
     changes,
-  ])
-      .debounceTime(const Duration(milliseconds: 500))
-      .asyncMap((List<ConnectivityResult> results) async {
+  ]).debounceTime(const Duration(milliseconds: 500)).asyncMap((
+    List<ConnectivityResult> results,
+  ) async {
     try {
       // Handle empty or invalid results
       if (results.isEmpty ||
@@ -114,9 +114,9 @@ Future<Stream<ConnectivityState>> connectivityStatus(Ref ref) async {
 }
 
 @riverpod
-Stream<bool> isOnline(Ref ref) => ref.watch(connectivityStatusProvider).when(
-      data: (Stream<ConnectivityState> stream) =>
-          stream.map((ConnectivityState status) => status.isOnline),
-      error: Stream.error,
-      loading: Stream.empty,
-    );
+Stream<bool> isOnline(Ref ref) {
+  final Stream<ConnectivityState> stream =
+      ref.watch(connectivityStatusProvider).requireValue;
+
+  return stream.map((ConnectivityState status) => status.isOnline);
+}

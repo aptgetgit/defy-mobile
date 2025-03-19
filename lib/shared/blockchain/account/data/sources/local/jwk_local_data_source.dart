@@ -320,6 +320,20 @@ class JwkDataSource {
     }
 
     try {
+      final List<JwkLocalModel?> existingObjects = _box.getMany(
+        localIds.toList(),
+      );
+
+      final Set<int> existingIds =
+          existingObjects
+              .map((JwkLocalModel? obj) => obj?.localId ?? 0)
+              .toSet();
+
+      final Set<int> missingIds = localIds.difference(existingIds);
+
+      if (missingIds.isNotEmpty) {
+        throw StateError('JWKs not found with the following IDs: $missingIds');
+      }
       final int deletedCount = _box.removeMany(localIds.toList());
       if (deletedCount != localIds.length) {
         throw StateError(

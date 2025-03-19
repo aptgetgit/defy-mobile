@@ -25,7 +25,7 @@ final connectivityStatusProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ConnectivityStatusRef = FutureProviderRef<Stream<ConnectivityState>>;
-String _$isOnlineHash() => r'2ca970499c0a2632f21f993bf6d442dac8040da3';
+String _$isOnlineHash() => r'7f23eba23a86b776c01f926bbb1802797aa7abb0';
 
 /// See also [isOnline].
 @ProviderFor(isOnline)

@@ -12,11 +12,11 @@ class UpdateAccountBackgroundColorUseCase {
 
   final IAptosAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Unit> call({
+  Future<Either<ExceptionWithStackTrace, Unit>> call({
     required AccountAddress accountAddress,
     required Color newBackgroundColor,
   }) => _repository.updateBackgroundColor(
     accountAddress: accountAddress,
     newBackgroundColor: newBackgroundColor,
-  );
+  ).run();
 }

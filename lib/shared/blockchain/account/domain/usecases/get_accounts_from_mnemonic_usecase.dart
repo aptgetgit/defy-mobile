@@ -112,7 +112,7 @@ class GetAccountsFromMnemonicUseCase {
  final IJwkRepository _jwkRepository;
  final IAptosAccountRepository _accountRepository;
 
- TaskEither<ExceptionWithStackTrace, DerivationPathToAccounts> call({
+ Future<Either<ExceptionWithStackTrace, DerivationPathToAccounts>> call({
    required Uint8List entropyHash,
  }) => TaskEither<ExceptionWithStackTrace, DerivationPathToAccounts>(() async {
    try {
@@ -179,7 +179,7 @@ class GetAccountsFromMnemonicUseCase {
    } on Exception catch (e, stackTrace) {
      return left(ExceptionWithStackTrace(e, stackTrace));
    }
- });
+ }).run();
 
  IOEither<ExceptionWithStackTrace, Map<AptosDerivationPath, Set<Uint8List>>> _getKeyIdsWithPaths(
    Uint8List entropyHash,

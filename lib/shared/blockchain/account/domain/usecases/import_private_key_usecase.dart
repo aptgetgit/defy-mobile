@@ -8,48 +8,53 @@ import '../repositories/jwk_repository_interface.dart';
 import '../repositories/private_jwk_repository_interface.dart';
 
 class ImportPrivateKeyUseCase {
- ImportPrivateKeyUseCase({
-   required IPrivateJwkRepository privateJwkRepository,
-   required IJwkRepository jwkRepository,
- })  : _privateJwkRepository = privateJwkRepository,
+  ImportPrivateKeyUseCase({
+    required IPrivateJwkRepository privateJwkRepository,
+    required IJwkRepository jwkRepository,
+  }) : _privateJwkRepository = privateJwkRepository,
        _jwkRepository = jwkRepository;
 
- final IPrivateJwkRepository _privateJwkRepository;
- final IJwkRepository _jwkRepository;
+  final IPrivateJwkRepository _privateJwkRepository;
+  final IJwkRepository _jwkRepository;
 
- TaskEither<ExceptionWithStackTrace, Uint8List> call(Uint8List privateKeyBytes) => 
-     TaskEither<ExceptionWithStackTrace, Uint8List>(() async {
-   try {
-     final Uint8List privateKey = expandSecretKey(privateKeyBytes);
+  Future<Either<ExceptionWithStackTrace, Uint8List>> call(
+    Uint8List privateKeyBytes,
+  ) =>
+      TaskEither<ExceptionWithStackTrace, Uint8List>(() async {
+        try {
+          final Uint8List privateKey = expandSecretKey(privateKeyBytes);
 
-     final Jwk jwk = Jwk.fromEd25519PrivateKey(
-       privateKey: Uint8List.fromList(privateKey.sublist(0, 32)),
-     );
+          final Jwk jwk = Jwk.fromEd25519PrivateKey(
+            privateKey: Uint8List.fromList(privateKey.sublist(0, 32)),
+          );
 
-     final Uint8List jwkKeyId = jwk.keyId;
-     
-     final Either<ExceptionWithStackTrace, Jwk> storePrivateResult = 
-         await _privateJwkRepository.store(jwk: jwk).run();
-         
-     if (storePrivateResult.isLeft()) {
-       return left(storePrivateResult.getLeft().toNullable()!);
-     }
+          final Uint8List jwkKeyId = jwk.keyId;
 
-     final Either<ExceptionWithStackTrace, Jwk> storePublicResult = 
-         await _jwkRepository.store(
-           jwk: jwk,
-           config: KeySourceConfig.fromSigningKey(jwkThumbprint: jwkKeyId),
-         ).run();
-         
-     if (storePublicResult.isLeft()) {
-       // Rollback the private key storage on error
-       await _privateJwkRepository.delete(keyId: jwkKeyId).run();
-       return left(storePublicResult.getLeft().toNullable()!);
-     }
+          final Either<ExceptionWithStackTrace, Jwk> storePrivateResult =
+              await _privateJwkRepository.store(jwk: jwk).run();
 
-     return right(jwkKeyId);
-   } on Exception catch (e, stackTrace) {
-     return left(ExceptionWithStackTrace(e, stackTrace));
-   }
- });
+          if (storePrivateResult.isLeft()) {
+            return left(storePrivateResult.getLeft().toNullable()!);
+          }
+
+          final Either<ExceptionWithStackTrace, Jwk> storePublicResult =
+              await _jwkRepository
+                  .store(
+                    jwk: jwk,
+                    config: KeySourceConfig.fromSigningKey(
+                      jwkThumbprint: jwkKeyId,
+                    ),
+                  )
+                  .run();
+
+          if (storePublicResult.isLeft()) {
+            await _privateJwkRepository.delete(keyId: jwkKeyId).run();
+            return left(storePublicResult.getLeft().toNullable()!);
+          }
+
+          return right(jwkKeyId);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      }).run();
 }

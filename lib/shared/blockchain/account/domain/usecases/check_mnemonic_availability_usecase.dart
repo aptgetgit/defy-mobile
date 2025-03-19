@@ -16,9 +16,9 @@ class CheckMnemonicAvailabilityUseCase {
   final IAptosAccountRepository _accountRepository;
   final IJwkRepository _jwkRepository;
 
-  TaskEither<ExceptionWithStackTrace, bool> call({
+  Future< Either<ExceptionWithStackTrace, bool>> call({
     required AccountAddress accountAddress,
-  }) => TaskEither<ExceptionWithStackTrace, bool>(() async {
+  })  =>  TaskEither<ExceptionWithStackTrace, bool>(() async {
     final Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
     account =
         await _accountRepository
@@ -29,7 +29,7 @@ class CheckMnemonicAvailabilityUseCase {
     }
 
     if (account.isRight() && account.getRight().isNone()) {
-      return right(false);
+      throw StateError('Account not found');
     }
 
     final AptosAccountWithMetadata accountWithMetadata =
@@ -58,5 +58,5 @@ class CheckMnemonicAvailabilityUseCase {
         .getHDKeySourceConfig(keyId: config.keyId)
         .map((Option<HDKeySourceConfig> data) => data.isSome())
         .run();
-  });
+  }).run();
 }

@@ -29,7 +29,7 @@ class GetAccountPrivateKeyUseCase {
   final IJwkRepository _jwkRepository;
   final IEntropyRepository _entropyRepository;
 
-  TaskEither<ExceptionWithStackTrace, Uint8List> call({
+  Future<Either<ExceptionWithStackTrace, Uint8List>> call({
     required AccountAddress accountAddress,
   }) => TaskEither<ExceptionWithStackTrace, Uint8List>(() async {
     final Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
@@ -125,5 +125,5 @@ class GetAccountPrivateKeyUseCase {
     final Jwk privateJwk = privateJwkOption.toNullable()!;
 
     return right(privateJwk.getPrivateKeyBytes());
-  });
+  }).run();
 }

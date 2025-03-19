@@ -22,12 +22,6 @@ class AptosAccountWithMetadata with _$AptosAccountWithMetadata {
   const AptosAccountWithMetadata._();
 
   @override
-  String toString() => 'AptosAccountWithMetadata{'
-      '\n label: $label,'
-      '\n iconUri: $iconUri,'
-      '\n backgroundColor:  rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a}),'
-      '\n accountAddress: ${accountAddress.toHex()},'
-      '\n authenticationKey: ${authenticationKey.toHex()},'
-      '\n authenticationKeyScheme: ${authenticationKeyScheme.toHex()}'
-      '\n}';
+  String toString() =>
+      'AptosAccountWithMetadata(label: $label, iconUri: $iconUri, backgroundColor:  rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a}), accountAddress: ${accountAddress.toHex()}, authenticationKey: ${authenticationKey.toHex()}, authenticationKeyScheme: ${authenticationKeyScheme.toHex()}';
 }

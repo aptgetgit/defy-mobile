@@ -7,22 +7,23 @@ import '../repositories/entropy_repository_interface.dart';
 
 class ImportMnemonicUseCase {
   const ImportMnemonicUseCase({required IEntropyRepository repository})
-      : _repository = repository;
+    : _repository = repository;
 
   final IEntropyRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Uint8List> call({
+  Future<Either<ExceptionWithStackTrace, Uint8List>> call({
     required String mnemonic,
-  }) => TaskEither<ExceptionWithStackTrace, Uint8List>(() async {
-    if (mnemonic.trim().isEmpty) {
-      throw ArgumentError('Mnemonic cannot be empty');
-    }
+  }) =>
+      TaskEither<ExceptionWithStackTrace, Uint8List>(() {
+        if (mnemonic.trim().isEmpty) {
+          throw ArgumentError('Mnemonic cannot be empty');
+        }
 
-    if (!isValidMnemonic(mnemonic)) {
-      throw StateError('Invalid mnemonic phrase');
-    }
+        if (!isValidMnemonic(mnemonic)) {
+          throw StateError('Invalid mnemonic phrase');
+        }
 
-    final Uint8List entropy = mnemonicToEntropy(mnemonic);
-    return _repository.store(entropy: entropy).run();
-  });
+        final Uint8List entropy = mnemonicToEntropy(mnemonic);
+        return _repository.store(entropy: entropy).run();
+      }).run();
 }

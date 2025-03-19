@@ -16,10 +16,9 @@ class ActiveAccountLocalDataSource {
   getActiveAccountAddress() =>
       TaskEither<ExceptionWithStackTrace, Option<String>>(() async {
         try {
-          final Either<ExceptionWithStackTrace, Option<String>> result =
-              await _sharedPreferences.getString(key: _activeAccountKey).run();
-
-          return result;
+          return await _sharedPreferences
+              .getString(key: _activeAccountKey)
+              .run();
         } on Exception catch (e, stackTrace) {
           AppLogger.error(
             'Failed to retrieve active account address',
@@ -41,12 +40,9 @@ class ActiveAccountLocalDataSource {
     }
 
     try {
-      final Either<ExceptionWithStackTrace, Unit> result =
-          await _sharedPreferences
-              .set(key: _activeAccountKey, value: accountAddress.trim())
-              .run();
-
-      return result;
+      return await _sharedPreferences
+          .set(key: _activeAccountKey, value: accountAddress.trim())
+          .run();
     } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to set active account address',
@@ -87,12 +83,9 @@ class ActiveAccountLocalDataSource {
   TaskEither<ExceptionWithStackTrace, bool> hasActiveAccount() =>
       TaskEither<ExceptionWithStackTrace, bool>(() async {
         try {
-          final Either<ExceptionWithStackTrace, bool> result =
-              await _sharedPreferences
-                  .containsKey(key: _activeAccountKey)
-                  .run();
-
-          return result;
+          return await _sharedPreferences
+              .containsKey(key: _activeAccountKey)
+              .run();
         } on Exception catch (e, stackTrace) {
           AppLogger.error(
             'Failed to check if active account exists',

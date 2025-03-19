@@ -10,11 +10,11 @@ class UpdateAccountLabelUseCase {
 
   final IAptosAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Unit> call({
+  Future<Either<ExceptionWithStackTrace, Unit>> call({
     required AccountAddress accountAddress,
     required String newLabel,
-  }) => _repository.updateLabel(
-    accountAddress: accountAddress,
-    newLabel: newLabel,
-  );
+  }) =>
+      _repository
+          .updateLabel(accountAddress: accountAddress, newLabel: newLabel)
+          .run();
 }

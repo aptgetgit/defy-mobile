@@ -10,6 +10,6 @@ class GetActiveAccountUseCase {
 
   final IActiveAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
-  call() => _repository.getActiveAccount();
+  Future<Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>>
+  call() => _repository.getActiveAccount().run();
 }

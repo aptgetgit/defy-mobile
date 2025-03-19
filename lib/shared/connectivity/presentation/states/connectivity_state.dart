@@ -8,10 +8,6 @@ enum ConnectivityState {
   bool get isLimited => this == ConnectivityState.limited;
 
   @override
-  String toString() => 'ConnectivityState{'
-      '\n status: $name,'
-      '\n isOnline: $isOnline,'
-      '\n isOffline: $isOffline,'
-      '\n isLimited: $isLimited'
-      '\n}';
+  String toString() =>
+      'ConnectivityState(status: $name, isOnline: $isOnline, isOffline: $isOffline, isLimited: $isLimited)';
 }

@@ -13,25 +13,26 @@ class CreateAptosAccountUseCase {
 
   final IAptosAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, AptosAccountWithMetadata> call({
+  Future<Either<ExceptionWithStackTrace, AptosAccountWithMetadata>> call({
     required String label,
     required Uri iconUri,
     required Color backgroundColor,
     required AuthenticatorConfig authenticatorConfig,
     Option<AccountAddress> accountAddress = const Option<AccountAddress>.none(),
-  }) => TaskEither<ExceptionWithStackTrace, AptosAccountWithMetadata>(() async {
-    if (label.trim().isEmpty) {
-      throw StateError('Label cannot be empty');
-    }
+  }) =>
+      TaskEither<ExceptionWithStackTrace, AptosAccountWithMetadata>(() async {
+        if (label.trim().isEmpty) {
+          throw StateError('Label cannot be empty');
+        }
 
-    return _repository
-        .createAccount(
-          label: label,
-          iconUri: iconUri,
-          backgroundColor: backgroundColor,
-          config: authenticatorConfig,
-          accountAddress: accountAddress,
-        )
-        .run();
-  });
+        return _repository
+            .createAccount(
+              label: label,
+              iconUri: iconUri,
+              backgroundColor: backgroundColor,
+              config: authenticatorConfig,
+              accountAddress: accountAddress,
+            )
+            .run();
+      }).run();
 }

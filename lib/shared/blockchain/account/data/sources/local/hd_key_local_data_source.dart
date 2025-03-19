@@ -347,6 +347,21 @@ class HDKeyDataSource {
     }
 
     try {
+      final List<HDKeyLocalModel?> existingObjects = _box.getMany(
+        localIds.toList(),
+      );
+      final Set<int> existingIds =
+          existingObjects
+              .map((HDKeyLocalModel? obj) => obj?.localId ?? 0)
+              .toSet();
+
+      final Set<int> missingIds = localIds.difference(existingIds);
+
+      if (missingIds.isNotEmpty) {
+        throw StateError(
+          'HD keys not found with the following IDs: $missingIds',
+        );
+      }
       final int deletedCount = _box.removeMany(localIds.toList());
       if (deletedCount != localIds.length) {
         throw StateError(

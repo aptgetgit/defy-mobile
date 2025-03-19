@@ -1,3 +1,4 @@
+// lib/main.dart
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'app/app.dart';
@@ -5,12 +6,13 @@ import 'app/bootstrap.dart';
 import 'core/logging/app_logger.dart';
 import 'core/logging/riverpod_observer.dart';
 
-void main() {
-  bootstrap(
-    builder: () => ProviderScope(
+Future<void> main() async {
+  await bootstrap(
+    appBuilder: () => ProviderScope(
       observers: <ProviderObserver>[
         ProviderLogger(
           logger: AppLogger().logger,
+          reportErrorsToSentry: true,
         ),
       ],
       child: const DefyApp(),

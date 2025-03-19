@@ -70,7 +70,7 @@ import '../repositories/jwk_repository_interface.dart';
  final IJwkRepository _jwkRepository;
  final IEntropyRepository _entropyRepository;
 
- TaskEither<ExceptionWithStackTrace, (String, AptosDerivationPath)> call({
+ Future<Either<ExceptionWithStackTrace, (String, AptosDerivationPath)>> call({
    required AccountAddress accountAddress,
  }) => TaskEither<ExceptionWithStackTrace, (String, AptosDerivationPath)>(() async {
    final Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>> accountResult = 
@@ -136,5 +136,5 @@ import '../repositories/jwk_repository_interface.dart';
    final Uint8List entropy = entropyOption.toNullable()!;
 
    return right((entropyToMnemonic(entropy), hdConfig.derivationPath));
- });
+ }).run();
 }

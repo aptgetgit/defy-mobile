@@ -60,6 +60,7 @@ class AptosAccountRepository implements IAptosAccountRepository {
               byte: account.authenticationKeyScheme,
             ),
           );
+
   @override
   TaskEither<ExceptionWithStackTrace, AptosAccountWithMetadata> createAccount({
     required String label,

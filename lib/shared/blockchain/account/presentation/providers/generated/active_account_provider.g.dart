@@ -6,25 +6,7 @@ part of '../active_account_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentAccountHash() => r'01aedaeaf4909548ba6ffe827dc40d6ff948814c';
-
-/// See also [currentAccount].
-@ProviderFor(currentAccount)
-final currentAccountProvider =
-    AutoDisposeProvider<AptosAccountWithMetadata?>.internal(
-  currentAccount,
-  name: r'currentAccountProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentAccountHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CurrentAccountRef = AutoDisposeProviderRef<AptosAccountWithMetadata?>;
-String _$activeAccountHash() => r'061cc0301070d29a1ccf1256f7287682ac03c7d2';
+String _$activeAccountHash() => r'ae229452f78474218da7868212eb0b4346ba830e';
 
 /// See also [ActiveAccount].
 @ProviderFor(ActiveAccount)

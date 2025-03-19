@@ -11,11 +11,11 @@ class UpdateAccountIconUriUseCase {
 
   final IAptosAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Unit> call({
+  Future<Either<ExceptionWithStackTrace, Unit>> call({
     required AccountAddress accountAddress,
     required Uri newIconUri,
   }) => _repository.updateIconUri(
     accountAddress: accountAddress,
     newIconUri: newIconUri,
-  );
+  ).run();
 }

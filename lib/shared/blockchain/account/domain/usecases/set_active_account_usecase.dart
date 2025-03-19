@@ -10,7 +10,7 @@ class SetActiveAccountUseCase {
 
   final IActiveAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Unit> call({
+  Future<Either<ExceptionWithStackTrace, Unit>> call({
     required AccountAddress accountAddress,
-  }) => _repository.setActiveAccount(accountAddress: accountAddress);
+  }) => _repository.setActiveAccount(accountAddress: accountAddress).run();
 }

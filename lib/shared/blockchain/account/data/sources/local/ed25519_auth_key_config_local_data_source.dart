@@ -194,6 +194,22 @@ class Ed25519AuthKeyConfigLocalDataSource {
     }
 
     try {
+      final List<Ed25519AuthKeyConfigLocalModel?> existingObjects = _box.getMany(
+        localIds.toList(),
+      );
+
+      final Set<int> existingIds =
+          existingObjects
+              .map((Ed25519AuthKeyConfigLocalModel? obj) => obj?.localId ?? 0)
+              .toSet();
+
+      final Set<int> missingIds = localIds.difference(existingIds);
+
+      if (missingIds.isNotEmpty) {
+        throw StateError(
+          'Ed25519 auth key configs not found with the following local IDs: $missingIds',
+        );
+      }
       final int deletedCount = _box.removeMany(localIds.toList());
       if (deletedCount != localIds.length) {
         throw StateError(

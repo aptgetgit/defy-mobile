@@ -13,7 +13,7 @@ class GenerateMnemonicUseCase {
 
   final IEntropyRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Uint8List> call({
+  Future<Either<ExceptionWithStackTrace, Uint8List>> call({
     int strength = 128,
   }) => TaskEither<ExceptionWithStackTrace, Uint8List>(() async {
     if (!isValidEntropyStrength(strength)) {
@@ -28,5 +28,5 @@ class GenerateMnemonicUseCase {
     } on Exception catch (error, stackTrace) {
       return left(ExceptionWithStackTrace(error, stackTrace));
     }
-  });
+  }).run();
 }

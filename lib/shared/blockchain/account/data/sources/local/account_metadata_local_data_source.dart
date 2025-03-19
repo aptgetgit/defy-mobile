@@ -270,6 +270,23 @@ class AccountMetadataLocalDataSource {
     }
 
     try {
+      final List<AccountMetadataLocalModel?> existingObjects = _box.getMany(
+        localIds.toList(),
+      );
+
+      final Set<int> existingIds =
+          existingObjects
+              .map((AccountMetadataLocalModel? obj) => obj?.localId ?? 0)
+              .toSet();
+
+      final Set<int> missingIds = localIds.difference(existingIds);
+
+      if (missingIds.isNotEmpty) {
+        throw StateError(
+          'Accounts not found with the following IDs: $missingIds',
+        );
+      }
+
       final int deletedCount = _box.removeMany(localIds.toList());
       if (deletedCount != localIds.length) {
         throw StateError(
@@ -342,18 +359,15 @@ class AccountMetadataLocalDataSource {
       },
     );
 
-    backgroundColor.fold(
-      () => null,
-      (int bgColor) {
-        if (bgColor < 0 || bgColor > 0xFFFFFFFF) {
-          throw ArgumentError.value(
-            bgColor,
-            'backgroundColor',
-            'Background color must be a valid ARGB color value (0x00000000 to 0xFFFFFFFF)',
-          );
-        }
-      },
-    );
+    backgroundColor.fold(() => null, (int bgColor) {
+      if (bgColor < 0 || bgColor > 0xFFFFFFFF) {
+        throw ArgumentError.value(
+          bgColor,
+          'backgroundColor',
+          'Background color must be a valid ARGB color value (0x00000000 to 0xFFFFFFFF)',
+        );
+      }
+    });
 
     try {
       return get(localId: localId).run().flatMap(

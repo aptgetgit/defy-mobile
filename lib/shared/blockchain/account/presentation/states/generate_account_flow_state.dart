@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/aptos_account_with_metadata.dart';
 
@@ -35,7 +36,7 @@ sealed class GenerateAccountFlowState with _$GenerateAccountFlowState {
 sealed class KeySource with _$KeySource {
   const factory KeySource.mnemonic({
     required Uint8List entropyHash,
-    int? accountIndex,
+    required Option<int> accountIndex 
   }) = KeySourceMnemonic;
 
   const factory KeySource.privateKey({

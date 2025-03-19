@@ -17,13 +17,12 @@ class AccountMetadataLocalModel {
 
   factory AccountMetadataLocalModel.fromDomain(
     AptosAccountWithMetadata domain,
-  ) =>
-      AccountMetadataLocalModel(
-        label: domain.label,
-        iconUri: domain.iconUri.toString(),
-        backgroundColor: colorToInt(domain.backgroundColor),
-        accountAddress: domain.accountAddress.toBytes(),
-      );
+  ) => AccountMetadataLocalModel(
+    label: domain.label,
+    iconUri: domain.iconUri.toString(),
+    backgroundColor: colorToInt(domain.backgroundColor),
+    accountAddress: domain.accountAddress.toBytes(),
+  );
 
   @Id(assignable: true)
   int localId;

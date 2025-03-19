@@ -21,7 +21,7 @@ class GeneratePrivateKeyFromMnemonicUseCase {
   final IEntropyRepository _entropyRepository;
   final IJwkRepository _jwkRepository;
 
-  TaskEither<ExceptionWithStackTrace, Uint8List> call({
+  Future<Either<ExceptionWithStackTrace, Uint8List>> call({
     required Uint8List entropyHash,
     Option<int> accountIndex = const None(),
   }) => TaskEither<ExceptionWithStackTrace, Uint8List>(() async {
@@ -108,7 +108,7 @@ class GeneratePrivateKeyFromMnemonicUseCase {
     } on Exception catch (error, stackTrace) {
       return left(ExceptionWithStackTrace(error, stackTrace));
     }
-  });
+  }).run();
 
   int _getNextAccountIndex(Iterable<int> existingIndexes) {
     if (existingIndexes.isEmpty) {

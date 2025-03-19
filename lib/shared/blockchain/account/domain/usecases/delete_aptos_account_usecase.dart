@@ -12,7 +12,7 @@ class DeleteAptosAccountUseCase {
 
   final IAptosAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Unit> call({
+  Future<Either<ExceptionWithStackTrace, Unit>> call({
     required AccountAddress accountAddress,
-  }) => _repository.deleteByAddress(accountAddress: accountAddress);
+  }) => _repository.deleteByAddress(accountAddress: accountAddress).run();
 }

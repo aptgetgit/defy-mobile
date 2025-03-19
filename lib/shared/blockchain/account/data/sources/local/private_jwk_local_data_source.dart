@@ -105,15 +105,7 @@ class PrivateJwkDataSource {
   TaskEither<ExceptionWithStackTrace, bool> has({required Uint8List keyId}) =>
       TaskEither<ExceptionWithStackTrace, bool>(() async {
         final String key = _makeKey(keyId);
-
-        try {
-          final Either<ExceptionWithStackTrace, bool> containsKeyResult =
-              await _secureStorage.containsKey(key: key).run();
-
-          return await containsKeyResult.fold(left, right);
-        } on Exception catch (e, stackTrace) {
-          return left(ExceptionWithStackTrace(e, stackTrace));
-        }
+        return _secureStorage.containsKey(key: key).run();
       });
 
   TaskEither<ExceptionWithStackTrace, Unit> delete({
@@ -180,6 +172,17 @@ class PrivateJwkDataSource {
         }
       }
 
+      final bool allKeysExist = existenceResults
+          .map(
+            (Either<ExceptionWithStackTrace, bool> result) =>
+                result.getOrElse((_) => false),
+          )
+          .every((bool exists) => exists);
+
+      if (!allKeysExist) {
+        throw StateError('Not all private keys exist');
+      }
+
       final List<Either<ExceptionWithStackTrace, Unit>> deleteResults =
           await Future.wait(
             keys
@@ -239,11 +242,6 @@ class PrivateJwkDataSource {
             return right(count);
           });
         } on Exception catch (e, stackTrace) {
-          AppLogger.error(
-            'Failed to count private keys',
-            error: e,
-            stackTrace: stackTrace,
-          );
           return left(ExceptionWithStackTrace(e, stackTrace));
         }
       });

@@ -2,9 +2,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../../core/database/objectbox/objectbox.g.dart';
-import '../../../../../core/di/providers/services/secure_storage_service_provider.dart';
-import '../../../../../core/di/providers/services/shared_preferences_service_provider.dart';
-import '../../../../../core/di/providers/storage/object_box_store_provider.dart';
+import '../../../../../core/providers/services/secure_storage_service_provider.dart';
+import '../../../../../core/providers/services/shared_preferences_service_provider.dart';
+import '../../../../../core/providers/storage/object_box_store_provider.dart';
 import '../../../../../core/services/secure_storage_service.dart';
 import '../../../../../core/services/shared_preference_service.dart';
 import '../../data/repositories/active_account_repository_implementation.dart';

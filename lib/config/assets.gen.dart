@@ -15,16 +15,16 @@ class $AssetsIconsGen {
   /// File path: assets/icons/app-icon.png
   AssetGenImage get appIcon => const AssetGenImage('assets/icons/app-icon.png');
 
-  /// File path: assets/icons/app-logo-dark.png
-  AssetGenImage get appLogoDark =>
-      const AssetGenImage('assets/icons/app-logo-dark.png');
+  /// File path: assets/icons/branding.png
+  AssetGenImage get branding =>
+      const AssetGenImage('assets/icons/branding.png');
 
-  /// File path: assets/icons/app-logo-light.png
-  AssetGenImage get appLogoLight =>
-      const AssetGenImage('assets/icons/app-logo-light.png');
+  /// File path: assets/icons/splash-app-icon.png
+  AssetGenImage get splashAppIcon =>
+      const AssetGenImage('assets/icons/splash-app-icon.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [appIcon, appLogoDark, appLogoLight];
+  List<AssetGenImage> get values => [appIcon, branding, splashAppIcon];
 }
 
 class $AssetsJsGen {

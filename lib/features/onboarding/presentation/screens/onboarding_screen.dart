@@ -5,17 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../../app/routes/router.dart';
 import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
-
-import '../../../../core/di/providers/locale/locale_provider.dart';
+import '../../../../core/providers/locale/locale_provider.dart';
 import '../../../../core/extensions/button_size_extension.dart';
 import '../../../../core/extensions/context_extensions.dart';
-
+import '../../../../core/navigation/routes/router.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {

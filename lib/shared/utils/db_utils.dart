@@ -13,7 +13,7 @@ ReaderTaskEither<Store, ExceptionWithStackTrace, A> runInsideTransaction<A>(
   try {
     return store.runInTransaction(
       mode,
-      () => computation.run().match(
+      () => computation.run().fold(
         (ExceptionWithStackTrace e) => throw e,
         right,
       ),

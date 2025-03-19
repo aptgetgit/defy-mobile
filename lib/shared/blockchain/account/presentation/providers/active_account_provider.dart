@@ -1,5 +1,4 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../../core/error/exception_with_stack_trace.dart';
@@ -28,7 +27,7 @@ class ActiveAccount extends _$ActiveAccount {
     );
 
     final Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
-    activeAccount = await getActiveAccount.call().run();
+    activeAccount = await getActiveAccount.call();
 
     if (activeAccount.isLeft()) {
       final ExceptionWithStackTrace left =
@@ -44,7 +43,7 @@ class ActiveAccount extends _$ActiveAccount {
     }
 
     final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
-    accounts = await listAccounts.call().run();
+    accounts = await listAccounts.call();
 
     if (accounts.isLeft()) {
       final ExceptionWithStackTrace left = accounts.getLeft().toNullable()!;
@@ -59,8 +58,7 @@ class ActiveAccount extends _$ActiveAccount {
 
     if (accountsSet.isNotEmpty) {
       await setActiveAccount
-          .call(accountAddress: accountsSet.first.accountAddress)
-          .run();
+          .call(accountAddress: accountsSet.first.accountAddress);
       return Option<AptosAccountWithMetadata>.of(accountsSet.first);
     }
 
@@ -73,7 +71,7 @@ class ActiveAccount extends _$ActiveAccount {
     );
     state = const AsyncValue<Option<AptosAccountWithMetadata>>.loading();
     final Either<ExceptionWithStackTrace, Unit> result =
-        await setActiveAccount.call(accountAddress: accountAddress).run();
+        await setActiveAccount.call(accountAddress: accountAddress);
 
     state = result.fold(
       (ExceptionWithStackTrace left) =>
@@ -81,8 +79,8 @@ class ActiveAccount extends _$ActiveAccount {
             left.exception,
             left.stackTrace,
           ),
-      (_) => AsyncValue<Option<AptosAccountWithMetadata>>.data(
-        const Option<AptosAccountWithMetadata>.none(),
+      (_) => const AsyncValue<Option<AptosAccountWithMetadata>>.data(
+        Option<AptosAccountWithMetadata>.none(),
       ),
     );
   }
@@ -93,7 +91,7 @@ class ActiveAccount extends _$ActiveAccount {
     );
     state = const AsyncValue<Option<AptosAccountWithMetadata>>.loading();
     final Either<ExceptionWithStackTrace, Unit> result =
-        await clearActiveAccount.call().run();
+        await clearActiveAccount.call();
 
     state = result.fold(
       (ExceptionWithStackTrace left) =>

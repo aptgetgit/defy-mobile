@@ -114,3 +114,5 @@ env.g.dart
 
 # Don't ignore Podfile.lock
 !**/ios/Podfile.lock
+
+sentry.properties

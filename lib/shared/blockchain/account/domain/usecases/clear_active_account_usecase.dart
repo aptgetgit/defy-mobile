@@ -10,6 +10,6 @@ class ClearActiveAccountUseCase {
 
   final IActiveAccountRepository _repository;
 
-  TaskEither<ExceptionWithStackTrace, Unit> call() =>
-      _repository.clearActiveAccount();
+  Future<Either<ExceptionWithStackTrace, Unit>> call() =>
+      _repository.clearActiveAccount().run();
 }

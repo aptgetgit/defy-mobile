@@ -9,7 +9,7 @@ import '../../models/local/aptos_account_local_model.dart';
 
 class AptosAccountLocalDataSource {
   AptosAccountLocalDataSource({required Box<AptosAccountLocalModel> box})
-      : _box = box;
+    : _box = box;
   final Box<AptosAccountLocalModel> _box;
 
   IOEither<ExceptionWithStackTrace, AptosAccountLocalModel> store({
@@ -40,13 +40,15 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final Either<ExceptionWithStackTrace, Option<AptosAccountLocalModel>> existingAccountResult = 
+      final Either<ExceptionWithStackTrace, Option<AptosAccountLocalModel>>
+      existingAccountResult =
           getByAddress(accountAddress: accountAddress).run();
-      
+
       if (existingAccountResult.isLeft()) {
         return left(existingAccountResult.getLeft().toNullable()!);
       }
-      if (existingAccountResult.isRight() && existingAccountResult.getRight().isSome()) {
+      if (existingAccountResult.isRight() &&
+          existingAccountResult.getRight().isSome()) {
         throw StateError('Account with this address already exists');
       }
 
@@ -64,27 +66,32 @@ class AptosAccountLocalDataSource {
     }
   });
 
-  IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>> getByAddress({
-    required Uint8List accountAddress,
-  }) => IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>>(() {
-    if (accountAddress.length != 32) {
-      throw ArgumentError.value(
-        accountAddress,
-        'accountAddress',
-        'Account address must be exactly 32 bytes in length',
-      );
-    }
+  IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>>
+  getByAddress({required Uint8List accountAddress}) =>
+      IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>>(() {
+        if (accountAddress.length != 32) {
+          throw ArgumentError.value(
+            accountAddress,
+            'accountAddress',
+            'Account address must be exactly 32 bytes in length',
+          );
+        }
 
-    try {
-      final AptosAccountLocalModel? account = _box
-          .query(AptosAccountLocalModel_.accountAddress.equals(accountAddress))
-          .build()
-          .findFirst();
-      return right(optionOf(account));
-    } on Exception catch (e, stackTrace) {
-      return left(ExceptionWithStackTrace(e, stackTrace));
-    }
-  });
+        try {
+          final AptosAccountLocalModel? account =
+              _box
+                  .query(
+                    AptosAccountLocalModel_.accountAddress.equals(
+                      accountAddress,
+                    ),
+                  )
+                  .build()
+                  .findFirst();
+          return right(optionOf(account));
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
   IOEither<ExceptionWithStackTrace, Option<AptosAccountLocalModel>> get({
     required int localId,
@@ -117,13 +124,16 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final Set<AptosAccountLocalModel> accounts = _box
-          .query(
-            AptosAccountLocalModel_.authenticationKey.equals(authenticationKey),
-          )
-          .build()
-          .find()
-          .toSet();
+      final Set<AptosAccountLocalModel> accounts =
+          _box
+              .query(
+                AptosAccountLocalModel_.authenticationKey.equals(
+                  authenticationKey,
+                ),
+              )
+              .build()
+              .find()
+              .toSet();
       return right(accounts);
     } on Exception catch (e, stackTrace) {
       return left(ExceptionWithStackTrace(e, stackTrace));
@@ -142,14 +152,16 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final Set<AptosAccountLocalModel> accounts = _box
-          .query(
-            AptosAccountLocalModel_.authenticationKeyScheme
-                .equals(authenticationKeyScheme),
-          )
-          .build()
-          .find()
-          .toSet();
+      final Set<AptosAccountLocalModel> accounts =
+          _box
+              .query(
+                AptosAccountLocalModel_.authenticationKeyScheme.equals(
+                  authenticationKeyScheme,
+                ),
+              )
+              .build()
+              .find()
+              .toSet();
       return right(accounts);
     } on Exception catch (e, stackTrace) {
       return left(ExceptionWithStackTrace(e, stackTrace));
@@ -157,36 +169,35 @@ class AptosAccountLocalDataSource {
   });
 
   IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>> getAll() =>
-    IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>>(() {
-      try {
-        return right(_box.getAll().toSet());
-      } on Exception catch (e, stackTrace) {
-        return left(ExceptionWithStackTrace(e, stackTrace));
-      }
-    });
+      IOEither<ExceptionWithStackTrace, Set<AptosAccountLocalModel>>(() {
+        try {
+          return right(_box.getAll().toSet());
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
-  IOEither<ExceptionWithStackTrace, Unit> delete({
-    required int localId,
-  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
-    if (localId <= 0) {
-      throw ArgumentError.value(
-        localId,
-        'localId',
-        'Local ID must be a positive integer',
-      );
-    }
+  IOEither<ExceptionWithStackTrace, Unit> delete({required int localId}) =>
+      IOEither<ExceptionWithStackTrace, Unit>(() {
+        if (localId <= 0) {
+          throw ArgumentError.value(
+            localId,
+            'localId',
+            'Local ID must be a positive integer',
+          );
+        }
 
-    try {
-      final bool success = _box.remove(localId);
-      if (!success) {
-        throw StateError('Aptos account with local ID: $localId not found');
-      }
-      AppLogger.debug('Deleted aptos account with local ID: $localId');
-      return right(unit);
-    } on Exception catch (e, stackTrace) {
-      return left(ExceptionWithStackTrace(e, stackTrace));
-    }
-  });
+        try {
+          final bool success = _box.remove(localId);
+          if (!success) {
+            throw StateError('Aptos account with local ID: $localId not found');
+          }
+          AppLogger.debug('Deleted aptos account with local ID: $localId');
+          return right(unit);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
   IOEither<ExceptionWithStackTrace, Unit> deleteMany({
     required Set<int> localIds,
@@ -210,6 +221,22 @@ class AptosAccountLocalDataSource {
     }
 
     try {
+      final List<AptosAccountLocalModel?> existingObjects = _box.getMany(
+        localIds.toList(),
+      );
+
+      final Set<int> existingIds =
+          existingObjects
+              .map((AptosAccountLocalModel? obj) => obj?.localId ?? 0)
+              .toSet();
+
+      final Set<int> missingIds = localIds.difference(existingIds);
+
+      if (missingIds.isNotEmpty) {
+        throw StateError(
+          'Aptos accounts not found with the following IDs: $missingIds',
+        );
+      }
       final int deletedCount = _box.removeMany(localIds.toList());
       if (deletedCount != localIds.length) {
         throw StateError(
@@ -235,14 +262,18 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final Either<ExceptionWithStackTrace, Option<AptosAccountLocalModel>> accountResult =
-          getByAddress(accountAddress: accountAddress).run();
-      
+      final Either<ExceptionWithStackTrace, Option<AptosAccountLocalModel>>
+      accountResult = getByAddress(accountAddress: accountAddress).run();
+
       return accountResult.fold(
         left,
         (Option<AptosAccountLocalModel> accountOption) => accountOption.fold(
-          () => throw StateError('Aptos account not found with the specified address'),
-          (AptosAccountLocalModel account) => delete(localId: account.localId).run(),
+          () =>
+              throw StateError(
+                'Aptos account not found with the specified address',
+              ),
+          (AptosAccountLocalModel account) =>
+              delete(localId: account.localId).run(),
         ),
       );
     } on Exception catch (e, stackTrace) {
@@ -262,23 +293,29 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final Either<ExceptionWithStackTrace, Set<AptosAccountLocalModel>> accountsResult =
-          getByAuthKey(authenticationKey: authenticationKey).run();
-      
-      return accountsResult.fold(
-        left,
-        (Set<AptosAccountLocalModel> accounts) {
-          if (accounts.isEmpty) {
-            throw StateError(
-                'No Aptos accounts found with the specified authentication key',);
-          }
+      final Either<ExceptionWithStackTrace, Set<AptosAccountLocalModel>>
+      accountsResult = getByAuthKey(authenticationKey: authenticationKey).run();
 
-          final Set<int> idsToDelete =
-              accounts.map((AptosAccountLocalModel acc) => acc.localId).toSet();
+      return accountsResult.fold(left, (Set<AptosAccountLocalModel> accounts) {
+        if (accounts.isEmpty) {
+          throw StateError(
+            'No Aptos accounts found with the specified authentication key',
+          );
+        }
 
-          return deleteMany(localIds: idsToDelete).run();
-        },
-      );
+        final Set<int> idsToDelete =
+            accounts.map((AptosAccountLocalModel acc) => acc.localId).toSet();
+
+        final int deletedCount = _box.removeMany(idsToDelete.toList());
+
+        if (deletedCount != idsToDelete.length) {
+          throw StateError(
+            'Failed to delete all specified accounts: only deleted $deletedCount out of ${idsToDelete.length}',
+          );
+        }
+
+        return right(unit);
+      });
     } on Exception catch (e, stackTrace) {
       return left(ExceptionWithStackTrace(e, stackTrace));
     }
@@ -296,45 +333,50 @@ class AptosAccountLocalDataSource {
     }
 
     try {
-      final Either<ExceptionWithStackTrace, Set<AptosAccountLocalModel>> accountsResult =
+      final Either<ExceptionWithStackTrace, Set<AptosAccountLocalModel>>
+      accountsResult =
           getByScheme(authenticationKeyScheme: authenticationKeyScheme).run();
-      
-      return accountsResult.fold(
-        left,
-        (Set<AptosAccountLocalModel> accounts) {
-          if (accounts.isEmpty) {
-            throw StateError(
-                'No Aptos accounts found with the specified authentication key scheme',);
-          }
 
-          final Set<int> idsToDelete =
-              accounts.map((AptosAccountLocalModel acc) => acc.localId).toSet();
+      return accountsResult.fold(left, (Set<AptosAccountLocalModel> accounts) {
+        if (accounts.isEmpty) {
+          throw StateError(
+            'No Aptos accounts found with the specified authentication key scheme',
+          );
+        }
 
-          return deleteMany(localIds: idsToDelete).run();
-        },
-      );
+        final Set<int> idsToDelete =
+            accounts.map((AptosAccountLocalModel acc) => acc.localId).toSet();
+        final int deletedCount = _box.removeMany(idsToDelete.toList());
+
+        if (deletedCount != idsToDelete.length) {
+          throw StateError(
+            'Failed to delete all specified accounts: only deleted $deletedCount out of ${idsToDelete.length}',
+          );
+        }
+        return right(unit);
+      });
     } on Exception catch (e, stackTrace) {
       return left(ExceptionWithStackTrace(e, stackTrace));
     }
   });
 
   IOEither<ExceptionWithStackTrace, Unit> clear() =>
-    IOEither<ExceptionWithStackTrace, Unit>(() {
-      try {
-        _box.removeAll();
-        AppLogger.debug('Cleared all Aptos accounts');
-        return right(unit);
-      } on Exception catch (e, stackTrace) {
-        return left(ExceptionWithStackTrace(e, stackTrace));
-      }
-    });
+      IOEither<ExceptionWithStackTrace, Unit>(() {
+        try {
+          _box.removeAll();
+          AppLogger.debug('Cleared all Aptos accounts');
+          return right(unit);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 
   IOEither<ExceptionWithStackTrace, int> count() =>
-    IOEither<ExceptionWithStackTrace, int>(() {
-      try {
-        return right(_box.count());
-      } on Exception catch (e, stackTrace) {
-        return left(ExceptionWithStackTrace(e, stackTrace));
-      }
-    });
+      IOEither<ExceptionWithStackTrace, int>(() {
+        try {
+          return right(_box.count());
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
 }

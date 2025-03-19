@@ -598,7 +598,7 @@ abstract class _$$KeySourceMnemonicImplCopyWith<$Res> {
           $Res Function(_$KeySourceMnemonicImpl) then) =
       __$$KeySourceMnemonicImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({Uint8List entropyHash, int? accountIndex});
+  $Res call({Uint8List entropyHash, Option<int> accountIndex});
 }
 
 /// @nodoc
@@ -615,17 +615,17 @@ class __$$KeySourceMnemonicImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? entropyHash = null,
-    Object? accountIndex = freezed,
+    Object? accountIndex = null,
   }) {
     return _then(_$KeySourceMnemonicImpl(
       entropyHash: null == entropyHash
           ? _value.entropyHash
           : entropyHash // ignore: cast_nullable_to_non_nullable
               as Uint8List,
-      accountIndex: freezed == accountIndex
+      accountIndex: null == accountIndex
           ? _value.accountIndex
           : accountIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as Option<int>,
     ));
   }
 }
@@ -633,12 +633,13 @@ class __$$KeySourceMnemonicImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$KeySourceMnemonicImpl implements KeySourceMnemonic {
-  const _$KeySourceMnemonicImpl({required this.entropyHash, this.accountIndex});
+  const _$KeySourceMnemonicImpl(
+      {required this.entropyHash, required this.accountIndex});
 
   @override
   final Uint8List entropyHash;
   @override
-  final int? accountIndex;
+  final Option<int> accountIndex;
 
   @override
   String toString() {
@@ -673,10 +674,10 @@ class _$KeySourceMnemonicImpl implements KeySourceMnemonic {
 abstract class KeySourceMnemonic implements KeySource {
   const factory KeySourceMnemonic(
       {required final Uint8List entropyHash,
-      final int? accountIndex}) = _$KeySourceMnemonicImpl;
+      required final Option<int> accountIndex}) = _$KeySourceMnemonicImpl;
 
   Uint8List get entropyHash;
-  int? get accountIndex;
+  Option<int> get accountIndex;
 
   /// Create a copy of KeySource
   /// with the given fields replaced by the non-null parameter values.

@@ -5,14 +5,13 @@ import '../entities/aptos_account_with_metadata.dart';
 import '../repositories/aptos_account_repository_interface.dart';
 
 class ListAptosAccountsUseCase {
- ListAptosAccountsUseCase({required IAptosAccountRepository repository})
-     : _repository = repository;
+  ListAptosAccountsUseCase({required IAptosAccountRepository repository})
+    : _repository = repository;
 
- final IAptosAccountRepository _repository;
+  final IAptosAccountRepository _repository;
 
- TaskEither<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>> call() => 
-     _repository.getAll();
+  Future<Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>>
+  call() => _repository.getAll().run();
 
- IOEither<ExceptionWithStackTrace, int> getCount() => 
-     _repository.count();
+  Either<ExceptionWithStackTrace, int> getCount() => _repository.count().run();
 }

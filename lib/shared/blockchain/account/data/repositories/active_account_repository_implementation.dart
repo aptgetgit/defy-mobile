@@ -168,12 +168,9 @@ class ActiveAccountRepository implements IActiveAccountRepository {
         throw ArgumentError('Account does not exist: $accountAddress');
       }
 
-      final Either<ExceptionWithStackTrace, Unit> setResult =
-          await _activeAccountDataSource
-              .setActiveAccountAddress(accountAddress: accountAddress.toHex())
-              .run();
-
-      return setResult;
+      return await _activeAccountDataSource
+          .setActiveAccountAddress(accountAddress: accountAddress.toHex())
+          .run();
     } on Exception catch (e, stackTrace) {
       return left(ExceptionWithStackTrace(e, stackTrace));
     }
@@ -197,15 +194,10 @@ class ActiveAccountRepository implements IActiveAccountRepository {
         try {
           final Either<ExceptionWithStackTrace, Option<String>> addressResult =
               await _activeAccountDataSource.getActiveAccountAddress().run();
-
-          if (addressResult.isLeft()) {
-            return left(addressResult.getLeft().toNullable()!);
-          }
-
-          final Option<String> addressOption =
-              addressResult.getRight().toNullable()!;
-
-          return right(addressOption.isSome());
+          return addressResult.fold(
+            left,
+            (Option<String> addressOption) => right(addressOption.isSome()),
+          );
         } on Exception catch (e, stackTrace) {
           return left(ExceptionWithStackTrace(e, stackTrace));
         }

@@ -86,22 +86,14 @@ sealed class Jwk with _$Jwk {
         if (y == null) {
           throw const FormatException('Missing y coordinate for EC key');
         }
-        return Jwk.secp256k1(
-          x: xBytes,
-          y: converter.fromJson(y),
-          d: dBytes,
-        );
+        return Jwk.secp256k1(x: xBytes, y: converter.fromJson(y), d: dBytes);
 
       case 'P-256' when kty == 'EC':
         final String? y = json['y'] as String?;
         if (y == null) {
           throw const FormatException('Missing y coordinate for EC key');
         }
-        return Jwk.secp256r1(
-          x: xBytes,
-          y: converter.fromJson(y),
-          d: dBytes,
-        );
+        return Jwk.secp256r1(x: xBytes, y: converter.fromJson(y), d: dBytes);
 
       default:
         throw FormatException('Unsupported key type or curve: $kty, $crv');
@@ -113,37 +105,40 @@ sealed class Jwk with _$Jwk {
 
     return switch (this) {
       Ed25519Jwk(:final Uint8List x, :final Uint8List? d) => <String, String>{
-          'kty': keyType.value,
-          'crv': curve.value,
-          'x': converter.toJson(x),
-          if (d != null) 'd': converter.toJson(d),
-        },
-      Secp256k1Jwk(:final Uint8List x, :final Uint8List y, :final Uint8List? d) ||
+        'kty': keyType.value,
+        'crv': curve.value,
+        'x': converter.toJson(x),
+        if (d != null) 'd': converter.toJson(d),
+      },
+      Secp256k1Jwk(
+        :final Uint8List x,
+        :final Uint8List y,
+        :final Uint8List? d,
+      ) ||
       Secp256r1Jwk(
         :final Uint8List x,
         :final Uint8List y,
-        :final Uint8List? d
-      ) =>
-        <String, String>{
-          'kty': keyType.value,
-          'crv': curve.value,
-          'x': converter.toJson(x),
-          'y': converter.toJson(y),
-          if (d != null) 'd': converter.toJson(d),
-        },
+        :final Uint8List? d,
+      ) => <String, String>{
+        'kty': keyType.value,
+        'crv': curve.value,
+        'x': converter.toJson(x),
+        'y': converter.toJson(y),
+        if (d != null) 'd': converter.toJson(d),
+      },
     };
   }
 
   JwkKeyType get keyType => switch (this) {
-        Ed25519Jwk() => JwkKeyType.okp,
-        Secp256k1Jwk() || Secp256r1Jwk() => JwkKeyType.ec,
-      };
+    Ed25519Jwk() => JwkKeyType.okp,
+    Secp256k1Jwk() || Secp256r1Jwk() => JwkKeyType.ec,
+  };
 
   JwkCurve get curve => switch (this) {
-        Ed25519Jwk() => JwkCurve.ed25519,
-        Secp256k1Jwk() => JwkCurve.secp256k1,
-        Secp256r1Jwk() => JwkCurve.secp256r1,
-      };
+    Ed25519Jwk() => JwkCurve.ed25519,
+    Secp256k1Jwk() => JwkCurve.secp256k1,
+    Secp256r1Jwk() => JwkCurve.secp256r1,
+  };
 
   /// Computes the JWK thumbprint according to RFC 7638
   Uint8List get keyId {
@@ -151,18 +146,17 @@ sealed class Jwk with _$Jwk {
 
     final Map<String, String> thumbprintFields = switch (this) {
       Ed25519Jwk(:final Uint8List x) => <String, String>{
-          'crv': curve.value,
-          'kty': keyType.value,
-          'x': converter.toJson(x),
-        },
+        'crv': curve.value,
+        'kty': keyType.value,
+        'x': converter.toJson(x),
+      },
       Secp256k1Jwk(:final Uint8List x, :final Uint8List y) ||
-      Secp256r1Jwk(:final Uint8List x, :final Uint8List y) =>
-        <String, String>{
-          'crv': curve.value,
-          'kty': keyType.value,
-          'x': converter.toJson(x),
-          'y': converter.toJson(y),
-        },
+      Secp256r1Jwk(:final Uint8List x, :final Uint8List y) => <String, String>{
+        'crv': curve.value,
+        'kty': keyType.value,
+        'x': converter.toJson(x),
+        'y': converter.toJson(y),
+      },
     };
 
     final String jsonStr = json.encode(thumbprintFields);
@@ -172,46 +166,37 @@ sealed class Jwk with _$Jwk {
   }
 
   bool hasPrivateKey() => switch (this) {
-        Ed25519Jwk(:final Uint8List? d) => d != null,
-        Secp256k1Jwk(:final Uint8List? d) => d != null,
-        Secp256r1Jwk(:final Uint8List? d) => d != null,
-      };
+    Ed25519Jwk(:final Uint8List? d) => d != null,
+    Secp256k1Jwk(:final Uint8List? d) => d != null,
+    Secp256r1Jwk(:final Uint8List? d) => d != null,
+  };
 
   Uint8List getPublicKeyBytes() => switch (this) {
-        Ed25519Jwk(:final Uint8List x) => x,
-        Secp256k1Jwk(:final Uint8List x, :final Uint8List y) =>
-          Uint8List.fromList(<int>[...x, ...y]),
-        Secp256r1Jwk(:final Uint8List x, :final Uint8List y) =>
-          Uint8List.fromList(<int>[...x, ...y]),
-      };
+    Ed25519Jwk(:final Uint8List x) => x,
+    Secp256k1Jwk(:final Uint8List x, :final Uint8List y) => Uint8List.fromList(
+      <int>[...x, ...y],
+    ),
+    Secp256r1Jwk(:final Uint8List x, :final Uint8List y) => Uint8List.fromList(
+      <int>[...x, ...y],
+    ),
+  };
 
   Uint8List getPrivateKeyBytes() => switch (this) {
-        Ed25519Jwk(:final Uint8List? d) =>
-          d ?? (throw StateError('No private key available for this JWK')),
-        Secp256k1Jwk(:final Uint8List? d) =>
-          d ?? (throw StateError('No private key available for this JWK')),
-        Secp256r1Jwk(:final Uint8List? d) =>
-          d ?? (throw StateError('No private key available for this JWK')),
-      };
+    Ed25519Jwk(:final Uint8List? d) =>
+      d ?? (throw StateError('No private key available for this JWK')),
+    Secp256k1Jwk(:final Uint8List? d) =>
+      d ?? (throw StateError('No private key available for this JWK')),
+    Secp256r1Jwk(:final Uint8List? d) =>
+      d ?? (throw StateError('No private key available for this JWK')),
+  };
 
   @override
   String toString() => switch (this) {
-        Ed25519Jwk(:final Uint8List x) => 'Ed25519Jwk{'
-            '\n  keyType: ${keyType.value},'
-            '\n  curve: ${curve.value},'
-            '\n  x: ${base64UrlEncode(x)}'
-            '\n}',
-        Secp256k1Jwk(:final Uint8List x, :final Uint8List y) => 'Secp256k1Jwk{'
-            '\n  keyType: ${keyType.value},'
-            '\n  curve: ${curve.value},'
-            '\n  x: ${base64UrlEncode(x)},'
-            '\n  y: ${base64UrlEncode(y)}'
-            '\n}',
-        Secp256r1Jwk(:final Uint8List x, :final Uint8List y) => 'Secp256r1Jwk{'
-            '\n  keyType: ${keyType.value},'
-            '\n  curve: ${curve.value},'
-            '\n  x: ${base64UrlEncode(x)},'
-            '\n  y: ${base64UrlEncode(y)}'
-            '\n}',
-      };
+    Ed25519Jwk(:final Uint8List x) =>
+      'Ed25519Jwk(keyType: ${keyType.value}, curve: ${curve.value}, x: ${base64UrlEncode(x)}',
+    Secp256k1Jwk(:final Uint8List x, :final Uint8List y) =>
+      'Secp256k1Jwk(keyType: ${keyType.value}, curve: ${curve.value}, x: ${base64UrlEncode(x)}, y: ${base64UrlEncode(y)}',
+    Secp256r1Jwk(:final Uint8List x, :final Uint8List y) =>
+      'Secp256r1Jwk(keyType: ${keyType.value}, curve: ${curve.value}, x: ${base64UrlEncode(x)}, y: ${base64UrlEncode(y)}',
+  };
 }

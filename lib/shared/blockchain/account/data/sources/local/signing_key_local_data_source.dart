@@ -165,7 +165,7 @@ class SigningKeyDataSource {
 
   IOEither<ExceptionWithStackTrace, Unit> deleteByKeyId({
     required Uint8List keyId,
-  }) => IOEither<ExceptionWithStackTrace, Unit>(()   {
+  }) => IOEither<ExceptionWithStackTrace, Unit>(() {
     if (keyId.length != 32) {
       throw ArgumentError.value(
         keyId,
@@ -238,6 +238,21 @@ class SigningKeyDataSource {
     }
 
     try {
+      final List<SigningKeyLocalModel?> existingObjects = _box.getMany(
+        localIds.toList(),
+      );
+      final Set<int> existingIds =
+          existingObjects
+              .map((SigningKeyLocalModel? obj) => obj?.localId ?? 0)
+              .toSet();
+      final Set<int> missingIds = localIds.difference(existingIds);
+
+      if (missingIds.isNotEmpty) {
+        throw StateError(
+          'Signing keys not found with the following IDs: $missingIds',
+        );
+      }
+
       final int deletedCount = _box.removeMany(localIds.toList());
       if (deletedCount != localIds.length) {
         throw StateError(

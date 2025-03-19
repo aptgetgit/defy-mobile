@@ -429,34 +429,44 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
         onClick: () async {
           if (state.words.isEmpty) {
             AppLogger.debug(
-                'State words are empty, attempting to paste from clipboard.');
+              'State words are empty, attempting to paste from clipboard.',
+            );
             await _pasteFromClipboard(context, notifier);
-          } 
-
-          if (state.words.isEmpty) {
-            AppLogger.debug(
-                'State words are empty, attempting to paste from clipboard.');
-            await _pasteFromClipboard(context, notifier);
-          } else if (state.showWalletColor || state.showEmojiPicker) {
-            AppLogger.debug(
-                'Navigating to the next section: showWalletColor or showEmojiPicker is true.');
-            await notifier.navigateToNextSection();
-          } else if (state.showWalletName) {
-            AppLogger.debug('Checking for duplicate wallet names.');
-            if (existingWalletNames
-                .contains(nameTextFieldController.text.trim())) {
-              AppLogger.debug(
-                  'Duplicate wallet name found, showing duplicate name dialog.');
-              await _showDuplicateNameDialog(context);
-            } else {
-              AppLogger.debug(
-                  'No duplicate wallet name found, navigating to the next section.');
-              await notifier.navigateToNextSection();
-            }
           } else {
-            AppLogger.debug('Importing mnemonic.');
-            await notifier.importMnemonic();
+            final GenerateAccountFlow generateAccountFlow =
+                ref.read(generateAccountFlowProvider.notifier);
+            await generateAccountFlow.importMnemonic(state.words.join(' '));
+            await generateAccountFlow.completeWithMetadata(
+              label: 'test',
+              iconUri: Uri.parse('test.com'),
+              backgroundColor: AppColors.blue,
+            );
           }
+
+          // if (state.words.isEmpty) {
+          //   AppLogger.debug(
+          //       'State words are empty, attempting to paste from clipboard.');
+          //   await _pasteFromClipboard(context, notifier);
+          // } else if (state.showWalletColor || state.showEmojiPicker) {
+          //   AppLogger.debug(
+          //       'Navigating to the next section: showWalletColor or showEmojiPicker is true.');
+          //   await notifier.navigateToNextSection();
+          // } else if (state.showWalletName) {
+          //   AppLogger.debug('Checking for duplicate wallet names.');
+          //   if (existingWalletNames
+          //       .contains(nameTextFieldController.text.trim())) {
+          //     AppLogger.debug(
+          //         'Duplicate wallet name found, showing duplicate name dialog.');
+          //     await _showDuplicateNameDialog(context);
+          //   } else {
+          //     AppLogger.debug(
+          //         'No duplicate wallet name found, navigating to the next section.');
+          //     await notifier.navigateToNextSection();
+          //   }
+          // } else {
+          //   AppLogger.debug('Importing mnemonic.');
+          //   await notifier.importMnemonic();
+          // }
         },
         title: state.words.isEmpty ? 'Paste from Clipboard' : 'Continue',
       );

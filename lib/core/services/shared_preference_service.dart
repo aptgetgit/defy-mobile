@@ -1,36 +1,224 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../shared/utils/mutex_utils.dart';
+import '../error/exception_with_stack_trace.dart';
+import '../logging/app_logger.dart';
 
 class SharedPreferencesService {
   SharedPreferencesService(this._sharedPreferences);
-  final SharedPreferences _sharedPreferences;
+  final SharedPreferencesAsync _sharedPreferences;
+  final ReadWriteMutex _mutex = ReadWriteMutex();
 
-  T? get<T>(String key) => _sharedPreferences.get(key) as T?;
-
-  Future<bool> set<T>(String key, T value) {
-    if (value is String) {
-      return _sharedPreferences.setString(key, value);
-    } else if (value is int) {
-      return _sharedPreferences.setInt(key, value);
-    } else if (value is bool) {
-      return _sharedPreferences.setBool(key, value);
-    } else if (value is double) {
-      return _sharedPreferences.setDouble(key, value);
-    } else if (value is List<String>) {
-      return _sharedPreferences.setStringList(key, value);
-    } else {
-      throw ArgumentError('Unsupported type: $T');
+  String _validateKey(String key) {
+    if (key.trim().isEmpty) {
+      throw ArgumentError.value(key, 'key', 'Preference key cannot be empty');
     }
+    return key;
   }
 
-  Future<bool> remove(String key) => _sharedPreferences.remove(key);
-  bool containsKey(String key) => _sharedPreferences.containsKey(key);
-  Future<bool> clear() => _sharedPreferences.clear();
-  Set<String> getKeys() => _sharedPreferences.getKeys();
+  TaskEither<ExceptionWithStackTrace, Option<T>> get<T>({
+    required String key,
+  }) => TaskEither<ExceptionWithStackTrace, Option<T>>(() async {
+    try {
+      final String validKey = _validateKey(key);
+      final TaskEither<ExceptionWithStackTrace, Option<T>> getOperation =
+          TaskEither<ExceptionWithStackTrace, Option<T>>(() async {
+            try {
+              Object? value;
 
-  // Convenience methods
-  String? getString(String key) => get<String>(key);
-  int? getInt(String key) => get<int>(key);
-  bool? getBool(String key) => get<bool>(key);
-  double? getDouble(String key) => get<double>(key);
-  List<String>? getStringList(String key) => get<List<String>>(key);
+              if (T == String) {
+                value = await _sharedPreferences.getString(validKey);
+              } else if (T == int) {
+                value = await _sharedPreferences.getInt(validKey);
+              } else if (T == bool) {
+                value = await _sharedPreferences.getBool(validKey);
+              } else if (T == double) {
+                value = await _sharedPreferences.getDouble(validKey);
+              } else if (T == List<String>) {
+                value = await _sharedPreferences.getStringList(validKey);
+              } else {
+                throw ArgumentError('Unsupported type: ${T.runtimeType}');
+              }
+
+              AppLogger.debug('Read value for key: $validKey');
+              return right(Option<T>.fromNullable(value as T?));
+            } on Exception catch (e, stackTrace) {
+              return left(ExceptionWithStackTrace(e, stackTrace));
+            }
+          });
+
+      return protectRead(getOperation).run(_mutex);
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  TaskEither<ExceptionWithStackTrace, Option<String>> getString({
+    required String key,
+  }) => get<String>(key: key);
+
+  TaskEither<ExceptionWithStackTrace, Option<int>> getInt({
+    required String key,
+  }) => get<int>(key: key);
+
+  TaskEither<ExceptionWithStackTrace, Option<bool>> getBool({
+    required String key,
+  }) => get<bool>(key: key);
+
+  TaskEither<ExceptionWithStackTrace, Option<double>> getDouble({
+    required String key,
+  }) => get<double>(key: key);
+
+  TaskEither<ExceptionWithStackTrace, Option<List<String>>> getStringList({
+    required String key,
+  }) => get<List<String>>(key: key);
+
+  TaskEither<ExceptionWithStackTrace, Unit> set<T>({
+    required String key,
+    required T value,
+  }) => TaskEither<ExceptionWithStackTrace, Unit>(() async {
+    if (value == null) {
+      throw ArgumentError.value(
+        value,
+        'value',
+        'Preference value cannot be null',
+      );
+    }
+
+    try {
+      final String validKey = _validateKey(key);
+      final TaskEither<ExceptionWithStackTrace, Unit> setOperation =
+          TaskEither<ExceptionWithStackTrace, Unit>(() async {
+            try {
+
+              if (value is String) {
+                await _sharedPreferences.setString(validKey, value);
+              } else if (value is int) {
+                 await _sharedPreferences.setInt(validKey, value);
+              } else if (value is bool) {
+                 await _sharedPreferences.setBool(validKey, value);
+              } else if (value is double) {
+                 await _sharedPreferences.setDouble(validKey, value);
+              } else if (value is List<String>) {
+                await _sharedPreferences.setStringList(
+                  validKey,
+                  value,
+                );
+              } else {
+                throw ArgumentError('Unsupported type: ${value.runtimeType}');
+              }
+
+
+              AppLogger.debug('Wrote value for key: $validKey');
+              return right(unit);
+            } on Exception catch (e, stackTrace) {
+              return left(ExceptionWithStackTrace(e, stackTrace));
+            }
+          });
+
+      return protectWrite(setOperation).run(_mutex);
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  TaskEither<ExceptionWithStackTrace, Unit> remove({required String key}) =>
+      TaskEither<ExceptionWithStackTrace, Unit>(() async {
+        try {
+          final String validKey = _validateKey(key);
+          final TaskEither<ExceptionWithStackTrace, Unit> removeOperation =
+              TaskEither<ExceptionWithStackTrace, Unit>(() async {
+                try {
+                  await _sharedPreferences.remove(validKey);
+
+                  AppLogger.debug('Removed value for key: $validKey');
+                  return right(unit);
+                } on Exception catch (e, stackTrace) {
+                  return left(ExceptionWithStackTrace(e, stackTrace));
+                }
+              });
+
+          return protectWrite(removeOperation).run(_mutex);
+        } on Exception catch (e, stackTrace) {
+          return left(ExceptionWithStackTrace(e, stackTrace));
+        }
+      });
+
+  TaskEither<ExceptionWithStackTrace, Unit> clear() =>
+      TaskEither<ExceptionWithStackTrace, Unit>(() async {
+        final TaskEither<ExceptionWithStackTrace, Unit> clearOperation =
+            TaskEither<ExceptionWithStackTrace, Unit>(() async {
+              try {
+                await _sharedPreferences.clear();
+
+                AppLogger.debug('Cleared all preferences');
+                return right(unit);
+              } on Exception catch (e, stackTrace) {
+                return left(ExceptionWithStackTrace(e, stackTrace));
+              }
+            });
+
+        return protectWrite(clearOperation).run(_mutex);
+      });
+
+  TaskEither<ExceptionWithStackTrace, bool> containsKey({
+    required String key,
+  }) => TaskEither<ExceptionWithStackTrace, bool>(() async {
+    try {
+      final String validKey = _validateKey(key);
+      final TaskEither<ExceptionWithStackTrace, bool> containsKeyOperation =
+          TaskEither<ExceptionWithStackTrace, bool>(() async {
+            try {
+              final bool exists = await _sharedPreferences.containsKey(validKey);
+              AppLogger.debug(
+                'Checked if key exists: $validKey, result: $exists',
+              );
+              return right(exists);
+            } on Exception catch (e, stackTrace) {
+              return left(ExceptionWithStackTrace(e, stackTrace));
+            }
+          });
+
+      return protectRead(containsKeyOperation).run(_mutex);
+    } on Exception catch (e, stackTrace) {
+      return left(ExceptionWithStackTrace(e, stackTrace));
+    }
+  });
+
+  TaskEither<ExceptionWithStackTrace, Set<String>> getKeys() =>
+      TaskEither<ExceptionWithStackTrace, Set<String>>(() async {
+        final TaskEither<ExceptionWithStackTrace, Set<String>>
+        getKeysOperation = TaskEither<ExceptionWithStackTrace, Set<String>>(
+          () async {
+            try {
+              final Set<String> keys = await _sharedPreferences.getKeys();
+              AppLogger.debug(
+                'Retrieved all preference keys: ${keys.length} items',
+              );
+              return right(keys);
+            } on Exception catch (e, stackTrace) {
+              return left(ExceptionWithStackTrace(e, stackTrace));
+            }
+          },
+        );
+
+        return protectRead(getKeysOperation).run(_mutex);
+      });
+
+  TaskEither<ExceptionWithStackTrace, int> count() =>
+      TaskEither<ExceptionWithStackTrace, int>(() async {
+        final TaskEither<ExceptionWithStackTrace, int> countOperation =
+            TaskEither<ExceptionWithStackTrace, int>(() async {
+              try {
+                final int count = (await _sharedPreferences.getKeys()).length;
+                AppLogger.debug('Preference key count: $count');
+                return right(count);
+              } on Exception catch (e, stackTrace) {
+                return left(ExceptionWithStackTrace(e, stackTrace));
+              }
+            });
+
+        return protectRead(countOperation).run(_mutex);
+      });
 }

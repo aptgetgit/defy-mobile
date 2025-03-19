@@ -25,7 +25,7 @@ targets:
       go_router_builder:
         enabled: true
         generate_for:
-          - lib/app/routes/**.dart
+          - lib/core/navigation/routes/**.dart
 
       # Object Box Generator configuration
       objectbox_generator|resolver:

@@ -14,84 +14,45 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import '../../../shared/account/data/models/local/account_metadata_local_model.dart';
-import '../../../shared/account/data/models/local/aptos_account_local_model.dart';
-import '../../../shared/account/data/models/local/ed25519_auth_key_config_local_model.dart';
-import '../../../shared/account/data/models/local/hd_key_local_model.dart';
-import '../../../shared/account/data/models/local/jwk_local_model.dart';
-import '../../../shared/account/data/models/local/signing_key_local_model.dart';
-import '../../../shared/currency/data/models/local/currency_rate_local_model.dart';
-import '../../../shared/network/data/models/local/network_config_local_model.dart';
-import '../../../shared/transaction/data/models/local/account_data_local_model.dart';
+import '../../../shared/blockchain/account/data/models/local/account_metadata_local_model.dart';
+import '../../../shared/blockchain/account/data/models/local/aptos_account_local_model.dart';
+import '../../../shared/blockchain/account/data/models/local/ed25519_auth_key_config_local_model.dart';
+import '../../../shared/blockchain/account/data/models/local/hd_key_local_model.dart';
+import '../../../shared/blockchain/account/data/models/local/jwk_local_model.dart';
+import '../../../shared/blockchain/account/data/models/local/signing_key_local_model.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 181776473661206660),
-      name: 'AccountDataLocalModel',
-      lastPropertyId: const obx_int.IdUid(5, 5230140165645648311),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 6030055829395977916),
-            name: 'localId',
-            type: 6,
-            flags: 129),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 2654786099852859969),
-            name: 'accountAddress',
-            type: 23,
-            flags: 8192),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 7957616607472491025),
-            name: 'authenticationKey',
-            type: 23,
-            flags: 8192),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 4619609041127720552),
-            name: 'sequenceNumber',
-            type: 9,
-            flags: 2048,
-            indexId: const obx_int.IdUid(1, 6139104230032602666)),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 5230140165645648311),
-            name: 'lastUpdated',
-            type: 10,
-            flags: 8,
-            indexId: const obx_int.IdUid(2, 1377904694072491283))
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
-  obx_int.ModelEntity(
-      id: const obx_int.IdUid(2, 2028963219498044840),
+      id: const obx_int.IdUid(1, 6833247284633911192),
       name: 'AccountMetadataLocalModel',
-      lastPropertyId: const obx_int.IdUid(5, 4825585388264236229),
+      lastPropertyId: const obx_int.IdUid(5, 2276283066145894960),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 875602269021491582),
+            id: const obx_int.IdUid(1, 5494710834044453958),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 5654349539850290815),
+            id: const obx_int.IdUid(2, 4823292405597839225),
             name: 'label',
             type: 9,
             flags: 34848,
-            indexId: const obx_int.IdUid(3, 6234982311123074286)),
+            indexId: const obx_int.IdUid(1, 8199651257260465162)),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 6655604589724325221),
+            id: const obx_int.IdUid(3, 2285429271043300105),
             name: 'iconUri',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 3461729171439700763),
+            id: const obx_int.IdUid(4, 8583835110606554394),
             name: 'backgroundColor',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 4825585388264236229),
+            id: const obx_int.IdUid(5, 2276283066145894960),
             name: 'accountAddress',
             type: 23,
             flags: 8192)
@@ -99,28 +60,28 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(3, 8809332912026397011),
+      id: const obx_int.IdUid(2, 7123597479676521340),
       name: 'AptosAccountLocalModel',
-      lastPropertyId: const obx_int.IdUid(4, 4008296729737279818),
+      lastPropertyId: const obx_int.IdUid(4, 372477275603314238),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5477449055597979030),
+            id: const obx_int.IdUid(1, 5305380279943765633),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 6807058055570149439),
+            id: const obx_int.IdUid(2, 6812606818360715900),
             name: 'accountAddress',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 8934390558245428670),
+            id: const obx_int.IdUid(3, 7177078908516341681),
             name: 'authenticationKey',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 4008296729737279818),
+            id: const obx_int.IdUid(4, 372477275603314238),
             name: 'authenticationKeyScheme',
             type: 2,
             flags: 8192)
@@ -128,59 +89,23 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(4, 8475979138304726644),
-      name: 'CurrencyRateLocalModel',
-      lastPropertyId: const obx_int.IdUid(5, 5608319508545032756),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 3407508353629882356),
-            name: 'localId',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 3628329124197102491),
-            name: 'remoteId',
-            type: 9,
-            flags: 34848,
-            indexId: const obx_int.IdUid(4, 8657649782809073180)),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 8796780825766166835),
-            name: 'code',
-            type: 9,
-            flags: 8,
-            indexId: const obx_int.IdUid(5, 6610329483984568130)),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 133818360633661661),
-            name: 'rate',
-            type: 8,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 5608319508545032756),
-            name: 'lastUpdate',
-            type: 10,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
-  obx_int.ModelEntity(
-      id: const obx_int.IdUid(5, 3294619626341159788),
+      id: const obx_int.IdUid(3, 938782268129496436),
       name: 'Ed25519AuthKeyConfigLocalModel',
-      lastPropertyId: const obx_int.IdUid(3, 9103283646324370714),
+      lastPropertyId: const obx_int.IdUid(3, 7987435844966970018),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 829905408380846470),
+            id: const obx_int.IdUid(1, 4586427271361995857),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 8099111344810025003),
+            id: const obx_int.IdUid(2, 5691162913768759788),
             name: 'authenticationKey',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 9103283646324370714),
+            id: const obx_int.IdUid(3, 7987435844966970018),
             name: 'jwkKeyId',
             type: 23,
             flags: 8192)
@@ -188,28 +113,28 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(6, 5743282911341083480),
+      id: const obx_int.IdUid(4, 5352596666875694318),
       name: 'HDKeyLocalModel',
-      lastPropertyId: const obx_int.IdUid(4, 4257644732870391537),
+      lastPropertyId: const obx_int.IdUid(4, 4263324577103741798),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 8066594619871186487),
+            id: const obx_int.IdUid(1, 603449896773305859),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 3533369167116598651),
+            id: const obx_int.IdUid(2, 8775750880874550420),
             name: 'jwkKeyId',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5756973633855163851),
+            id: const obx_int.IdUid(3, 6116498966619888950),
             name: 'derivationPath',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 4257644732870391537),
+            id: const obx_int.IdUid(4, 4263324577103741798),
             name: 'entropyHash',
             type: 23,
             flags: 8192)
@@ -217,38 +142,38 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(7, 1661604686061169519),
+      id: const obx_int.IdUid(5, 4025131794477937701),
       name: 'JwkLocalModel',
-      lastPropertyId: const obx_int.IdUid(6, 9033154184823640756),
+      lastPropertyId: const obx_int.IdUid(6, 4678826984415015105),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 4222980360040236652),
+            id: const obx_int.IdUid(1, 5648978746400272873),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 809591561588084501),
+            id: const obx_int.IdUid(2, 5391159624435288121),
             name: 'keyId',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5064360784703384015),
+            id: const obx_int.IdUid(3, 2951022233832117464),
             name: 'keyType',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 8653100389057854245),
+            id: const obx_int.IdUid(4, 6812250876920672790),
             name: 'curve',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 8823074195763177758),
+            id: const obx_int.IdUid(5, 4709929091684552978),
             name: 'x',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 9033154184823640756),
+            id: const obx_int.IdUid(6, 4678826984415015105),
             name: 'y',
             type: 23,
             flags: 8192)
@@ -256,48 +181,23 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(8, 9222342492030890696),
-      name: 'NetworkConfigLocalModel',
-      lastPropertyId: const obx_int.IdUid(3, 8905875497473509376),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5017267164834452022),
-            name: 'localId',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 4022744084171880317),
-            name: 'caipChainId',
-            type: 9,
-            flags: 34848,
-            indexId: const obx_int.IdUid(6, 5027462578297764667)),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 8905875497473509376),
-            name: 'rpcUrl',
-            type: 9,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
-  obx_int.ModelEntity(
-      id: const obx_int.IdUid(9, 986045649867551757),
+      id: const obx_int.IdUid(6, 7226678259069313601),
       name: 'SigningKeyLocalModel',
-      lastPropertyId: const obx_int.IdUid(3, 5600149667510810766),
+      lastPropertyId: const obx_int.IdUid(3, 7356950326337992005),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 59440025114425154),
+            id: const obx_int.IdUid(1, 2326503591893554443),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 964580862342578046),
+            id: const obx_int.IdUid(2, 6169925184670262433),
             name: 'jwkKeyId',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5600149667510810766),
+            id: const obx_int.IdUid(3, 7356950326337992005),
             name: 'jwkThumbprint',
             type: 23,
             flags: 8192)
@@ -341,8 +241,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(9, 986045649867551757),
-      lastIndexId: const obx_int.IdUid(6, 5027462578297764667),
+      lastEntityId: const obx_int.IdUid(6, 7226678259069313601),
+      lastIndexId: const obx_int.IdUid(1, 8199651257260465162),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -354,53 +254,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       version: 1);
 
   final bindings = <Type, obx_int.EntityDefinition>{
-    AccountDataLocalModel: obx_int.EntityDefinition<AccountDataLocalModel>(
-        model: _entities[0],
-        toOneRelations: (AccountDataLocalModel object) => [],
-        toManyRelations: (AccountDataLocalModel object) => {},
-        getId: (AccountDataLocalModel object) => object.localId,
-        setId: (AccountDataLocalModel object, int id) {
-          object.localId = id;
-        },
-        objectToFB: (AccountDataLocalModel object, fb.Builder fbb) {
-          final accountAddressOffset = fbb.writeListInt8(object.accountAddress);
-          final authenticationKeyOffset =
-              fbb.writeListInt8(object.authenticationKey);
-          final sequenceNumberOffset = fbb.writeString(object.sequenceNumber);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.localId);
-          fbb.addOffset(1, accountAddressOffset);
-          fbb.addOffset(2, authenticationKeyOffset);
-          fbb.addOffset(3, sequenceNumberOffset);
-          fbb.addInt64(4, object.lastUpdated.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.localId;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final accountAddressParam = const fb.Uint8ListReader(lazy: false)
-              .vTableGet(buffer, rootOffset, 6, Uint8List(0)) as Uint8List;
-          final authenticationKeyParam = const fb.Uint8ListReader(lazy: false)
-              .vTableGet(buffer, rootOffset, 8, Uint8List(0)) as Uint8List;
-          final sequenceNumberParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 10, '');
-          final lastUpdatedParam = DateTime.fromMillisecondsSinceEpoch(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
-          final object = AccountDataLocalModel(
-              accountAddress: accountAddressParam,
-              authenticationKey: authenticationKeyParam,
-              sequenceNumber: sequenceNumberParam,
-              lastUpdated: lastUpdatedParam)
-            ..localId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-
-          return object;
-        }),
     AccountMetadataLocalModel:
         obx_int.EntityDefinition<AccountMetadataLocalModel>(
-            model: _entities[1],
+            model: _entities[0],
             toOneRelations: (AccountMetadataLocalModel object) => [],
             toManyRelations: (AccountMetadataLocalModel object) => {},
             getId: (AccountMetadataLocalModel object) => object.localId,
@@ -444,7 +300,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               return object;
             }),
     AptosAccountLocalModel: obx_int.EntityDefinition<AptosAccountLocalModel>(
-        model: _entities[2],
+        model: _entities[1],
         toOneRelations: (AptosAccountLocalModel object) => [],
         toManyRelations: (AptosAccountLocalModel object) => {},
         getId: (AptosAccountLocalModel object) => object.localId,
@@ -481,50 +337,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
 
           return object;
         }),
-    CurrencyRateLocalModel: obx_int.EntityDefinition<CurrencyRateLocalModel>(
-        model: _entities[3],
-        toOneRelations: (CurrencyRateLocalModel object) => [],
-        toManyRelations: (CurrencyRateLocalModel object) => {},
-        getId: (CurrencyRateLocalModel object) => object.localId,
-        setId: (CurrencyRateLocalModel object, int id) {
-          object.localId = id;
-        },
-        objectToFB: (CurrencyRateLocalModel object, fb.Builder fbb) {
-          final remoteIdOffset = fbb.writeString(object.remoteId);
-          final codeOffset = fbb.writeString(object.code);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.localId);
-          fbb.addOffset(1, remoteIdOffset);
-          fbb.addOffset(2, codeOffset);
-          fbb.addFloat64(3, object.rate);
-          fbb.addInt64(4, object.lastUpdate.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.localId;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final remoteIdParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final codeParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 8, '');
-          final rateParam =
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          final lastUpdateParam = DateTime.fromMillisecondsSinceEpoch(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
-          final object = CurrencyRateLocalModel(
-              remoteId: remoteIdParam,
-              code: codeParam,
-              rate: rateParam,
-              lastUpdate: lastUpdateParam)
-            ..localId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-
-          return object;
-        }),
     Ed25519AuthKeyConfigLocalModel: obx_int.EntityDefinition<
             Ed25519AuthKeyConfigLocalModel>(
-        model: _entities[4],
+        model: _entities[2],
         toOneRelations: (Ed25519AuthKeyConfigLocalModel object) => [],
         toManyRelations: (Ed25519AuthKeyConfigLocalModel object) => {},
         getId: (Ed25519AuthKeyConfigLocalModel object) => object.localId,
@@ -558,7 +373,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           return object;
         }),
     HDKeyLocalModel: obx_int.EntityDefinition<HDKeyLocalModel>(
-        model: _entities[5],
+        model: _entities[3],
         toOneRelations: (HDKeyLocalModel object) => [],
         toManyRelations: (HDKeyLocalModel object) => {},
         getId: (HDKeyLocalModel object) => object.localId,
@@ -596,7 +411,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           return object;
         }),
     JwkLocalModel: obx_int.EntityDefinition<JwkLocalModel>(
-        model: _entities[6],
+        model: _entities[4],
         toOneRelations: (JwkLocalModel object) => [],
         toManyRelations: (JwkLocalModel object) => {},
         getId: (JwkLocalModel object) => object.localId,
@@ -644,41 +459,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
 
           return object;
         }),
-    NetworkConfigLocalModel: obx_int.EntityDefinition<NetworkConfigLocalModel>(
-        model: _entities[7],
-        toOneRelations: (NetworkConfigLocalModel object) => [],
-        toManyRelations: (NetworkConfigLocalModel object) => {},
-        getId: (NetworkConfigLocalModel object) => object.localId,
-        setId: (NetworkConfigLocalModel object, int id) {
-          object.localId = id;
-        },
-        objectToFB: (NetworkConfigLocalModel object, fb.Builder fbb) {
-          final caipChainIdOffset = fbb.writeString(object.caipChainId);
-          final rpcUrlOffset = fbb.writeString(object.rpcUrl);
-          fbb.startTable(4);
-          fbb.addInt64(0, object.localId);
-          fbb.addOffset(1, caipChainIdOffset);
-          fbb.addOffset(2, rpcUrlOffset);
-          fbb.finish(fbb.endTable());
-          return object.localId;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final caipChainIdParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 6, '');
-          final rpcUrlParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 8, '');
-          final object = NetworkConfigLocalModel(
-              caipChainId: caipChainIdParam, rpcUrl: rpcUrlParam)
-            ..localId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-
-          return object;
-        }),
     SigningKeyLocalModel: obx_int.EntityDefinition<SigningKeyLocalModel>(
-        model: _entities[8],
+        model: _entities[5],
         toOneRelations: (SigningKeyLocalModel object) => [],
         toManyRelations: (SigningKeyLocalModel object) => {},
         getId: (SigningKeyLocalModel object) => object.localId,
@@ -714,99 +496,51 @@ obx_int.ModelDefinition getObjectBoxModel() {
   return obx_int.ModelDefinition(model, bindings);
 }
 
-/// [AccountDataLocalModel] entity fields to define ObjectBox queries.
-class AccountDataLocalModel_ {
-  /// See [AccountDataLocalModel.localId].
-  static final localId = obx.QueryIntegerProperty<AccountDataLocalModel>(
-      _entities[0].properties[0]);
-
-  /// See [AccountDataLocalModel.accountAddress].
-  static final accountAddress =
-      obx.QueryByteVectorProperty<AccountDataLocalModel>(
-          _entities[0].properties[1]);
-
-  /// See [AccountDataLocalModel.authenticationKey].
-  static final authenticationKey =
-      obx.QueryByteVectorProperty<AccountDataLocalModel>(
-          _entities[0].properties[2]);
-
-  /// See [AccountDataLocalModel.sequenceNumber].
-  static final sequenceNumber = obx.QueryStringProperty<AccountDataLocalModel>(
-      _entities[0].properties[3]);
-
-  /// See [AccountDataLocalModel.lastUpdated].
-  static final lastUpdated =
-      obx.QueryDateProperty<AccountDataLocalModel>(_entities[0].properties[4]);
-}
-
 /// [AccountMetadataLocalModel] entity fields to define ObjectBox queries.
 class AccountMetadataLocalModel_ {
   /// See [AccountMetadataLocalModel.localId].
   static final localId = obx.QueryIntegerProperty<AccountMetadataLocalModel>(
-      _entities[1].properties[0]);
+      _entities[0].properties[0]);
 
   /// See [AccountMetadataLocalModel.label].
   static final label = obx.QueryStringProperty<AccountMetadataLocalModel>(
-      _entities[1].properties[1]);
+      _entities[0].properties[1]);
 
   /// See [AccountMetadataLocalModel.iconUri].
   static final iconUri = obx.QueryStringProperty<AccountMetadataLocalModel>(
-      _entities[1].properties[2]);
+      _entities[0].properties[2]);
 
   /// See [AccountMetadataLocalModel.backgroundColor].
   static final backgroundColor =
       obx.QueryIntegerProperty<AccountMetadataLocalModel>(
-          _entities[1].properties[3]);
+          _entities[0].properties[3]);
 
   /// See [AccountMetadataLocalModel.accountAddress].
   static final accountAddress =
       obx.QueryByteVectorProperty<AccountMetadataLocalModel>(
-          _entities[1].properties[4]);
+          _entities[0].properties[4]);
 }
 
 /// [AptosAccountLocalModel] entity fields to define ObjectBox queries.
 class AptosAccountLocalModel_ {
   /// See [AptosAccountLocalModel.localId].
   static final localId = obx.QueryIntegerProperty<AptosAccountLocalModel>(
-      _entities[2].properties[0]);
+      _entities[1].properties[0]);
 
   /// See [AptosAccountLocalModel.accountAddress].
   static final accountAddress =
       obx.QueryByteVectorProperty<AptosAccountLocalModel>(
-          _entities[2].properties[1]);
+          _entities[1].properties[1]);
 
   /// See [AptosAccountLocalModel.authenticationKey].
   static final authenticationKey =
       obx.QueryByteVectorProperty<AptosAccountLocalModel>(
-          _entities[2].properties[2]);
+          _entities[1].properties[2]);
 
   /// See [AptosAccountLocalModel.authenticationKeyScheme].
   static final authenticationKeyScheme =
       obx.QueryIntegerProperty<AptosAccountLocalModel>(
-          _entities[2].properties[3]);
-}
-
-/// [CurrencyRateLocalModel] entity fields to define ObjectBox queries.
-class CurrencyRateLocalModel_ {
-  /// See [CurrencyRateLocalModel.localId].
-  static final localId = obx.QueryIntegerProperty<CurrencyRateLocalModel>(
-      _entities[3].properties[0]);
-
-  /// See [CurrencyRateLocalModel.remoteId].
-  static final remoteId = obx.QueryStringProperty<CurrencyRateLocalModel>(
-      _entities[3].properties[1]);
-
-  /// See [CurrencyRateLocalModel.code].
-  static final code = obx.QueryStringProperty<CurrencyRateLocalModel>(
-      _entities[3].properties[2]);
-
-  /// See [CurrencyRateLocalModel.rate].
-  static final rate = obx.QueryDoubleProperty<CurrencyRateLocalModel>(
-      _entities[3].properties[3]);
-
-  /// See [CurrencyRateLocalModel.lastUpdate].
-  static final lastUpdate =
-      obx.QueryDateProperty<CurrencyRateLocalModel>(_entities[3].properties[4]);
+          _entities[1].properties[3]);
 }
 
 /// [Ed25519AuthKeyConfigLocalModel] entity fields to define ObjectBox queries.
@@ -814,92 +548,77 @@ class Ed25519AuthKeyConfigLocalModel_ {
   /// See [Ed25519AuthKeyConfigLocalModel.localId].
   static final localId =
       obx.QueryIntegerProperty<Ed25519AuthKeyConfigLocalModel>(
-          _entities[4].properties[0]);
+          _entities[2].properties[0]);
 
   /// See [Ed25519AuthKeyConfigLocalModel.authenticationKey].
   static final authenticationKey =
       obx.QueryByteVectorProperty<Ed25519AuthKeyConfigLocalModel>(
-          _entities[4].properties[1]);
+          _entities[2].properties[1]);
 
   /// See [Ed25519AuthKeyConfigLocalModel.jwkKeyId].
   static final jwkKeyId =
       obx.QueryByteVectorProperty<Ed25519AuthKeyConfigLocalModel>(
-          _entities[4].properties[2]);
+          _entities[2].properties[2]);
 }
 
 /// [HDKeyLocalModel] entity fields to define ObjectBox queries.
 class HDKeyLocalModel_ {
   /// See [HDKeyLocalModel.localId].
   static final localId =
-      obx.QueryIntegerProperty<HDKeyLocalModel>(_entities[5].properties[0]);
+      obx.QueryIntegerProperty<HDKeyLocalModel>(_entities[3].properties[0]);
 
   /// See [HDKeyLocalModel.jwkKeyId].
   static final jwkKeyId =
-      obx.QueryByteVectorProperty<HDKeyLocalModel>(_entities[5].properties[1]);
+      obx.QueryByteVectorProperty<HDKeyLocalModel>(_entities[3].properties[1]);
 
   /// See [HDKeyLocalModel.derivationPath].
   static final derivationPath =
-      obx.QueryByteVectorProperty<HDKeyLocalModel>(_entities[5].properties[2]);
+      obx.QueryByteVectorProperty<HDKeyLocalModel>(_entities[3].properties[2]);
 
   /// See [HDKeyLocalModel.entropyHash].
   static final entropyHash =
-      obx.QueryByteVectorProperty<HDKeyLocalModel>(_entities[5].properties[3]);
+      obx.QueryByteVectorProperty<HDKeyLocalModel>(_entities[3].properties[3]);
 }
 
 /// [JwkLocalModel] entity fields to define ObjectBox queries.
 class JwkLocalModel_ {
   /// See [JwkLocalModel.localId].
   static final localId =
-      obx.QueryIntegerProperty<JwkLocalModel>(_entities[6].properties[0]);
+      obx.QueryIntegerProperty<JwkLocalModel>(_entities[4].properties[0]);
 
   /// See [JwkLocalModel.keyId].
   static final keyId =
-      obx.QueryByteVectorProperty<JwkLocalModel>(_entities[6].properties[1]);
+      obx.QueryByteVectorProperty<JwkLocalModel>(_entities[4].properties[1]);
 
   /// See [JwkLocalModel.keyType].
   static final keyType =
-      obx.QueryStringProperty<JwkLocalModel>(_entities[6].properties[2]);
+      obx.QueryStringProperty<JwkLocalModel>(_entities[4].properties[2]);
 
   /// See [JwkLocalModel.curve].
   static final curve =
-      obx.QueryStringProperty<JwkLocalModel>(_entities[6].properties[3]);
+      obx.QueryStringProperty<JwkLocalModel>(_entities[4].properties[3]);
 
   /// See [JwkLocalModel.x].
   static final x =
-      obx.QueryByteVectorProperty<JwkLocalModel>(_entities[6].properties[4]);
+      obx.QueryByteVectorProperty<JwkLocalModel>(_entities[4].properties[4]);
 
   /// See [JwkLocalModel.y].
   static final y =
-      obx.QueryByteVectorProperty<JwkLocalModel>(_entities[6].properties[5]);
-}
-
-/// [NetworkConfigLocalModel] entity fields to define ObjectBox queries.
-class NetworkConfigLocalModel_ {
-  /// See [NetworkConfigLocalModel.localId].
-  static final localId = obx.QueryIntegerProperty<NetworkConfigLocalModel>(
-      _entities[7].properties[0]);
-
-  /// See [NetworkConfigLocalModel.caipChainId].
-  static final caipChainId = obx.QueryStringProperty<NetworkConfigLocalModel>(
-      _entities[7].properties[1]);
-
-  /// See [NetworkConfigLocalModel.rpcUrl].
-  static final rpcUrl = obx.QueryStringProperty<NetworkConfigLocalModel>(
-      _entities[7].properties[2]);
+      obx.QueryByteVectorProperty<JwkLocalModel>(_entities[4].properties[5]);
 }
 
 /// [SigningKeyLocalModel] entity fields to define ObjectBox queries.
 class SigningKeyLocalModel_ {
   /// See [SigningKeyLocalModel.localId].
   static final localId = obx.QueryIntegerProperty<SigningKeyLocalModel>(
-      _entities[8].properties[0]);
+      _entities[5].properties[0]);
 
   /// See [SigningKeyLocalModel.jwkKeyId].
   static final jwkKeyId = obx.QueryByteVectorProperty<SigningKeyLocalModel>(
-      _entities[8].properties[1]);
+      _entities[5].properties[1]);
 
   /// See [SigningKeyLocalModel.jwkThumbprint].
   static final jwkThumbprint =
       obx.QueryByteVectorProperty<SigningKeyLocalModel>(
-          _entities[8].properties[2]);
+          _entities[5].properties[2]);
 }

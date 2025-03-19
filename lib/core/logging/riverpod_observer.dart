@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProviderLogger extends ProviderObserver {
   ProviderLogger({
@@ -8,6 +9,7 @@ class ProviderLogger extends ProviderObserver {
     this.logDisposals = true,
     this.logUpdates = true,
     this.logErrors = true,
+    this.reportErrorsToSentry = true,
     this.logOnlySignificantUpdates = true,
     this.updateFrequencyThreshold = const Duration(milliseconds: 500),
     this.maxCollectionLogLength = 5,
@@ -16,6 +18,7 @@ class ProviderLogger extends ProviderObserver {
   final bool logDisposals;
   final bool logUpdates;
   final bool logErrors;
+  final bool reportErrorsToSentry;
   final bool logOnlySignificantUpdates;
   final Duration updateFrequencyThreshold;
   final int maxCollectionLogLength;
@@ -104,12 +107,12 @@ class ProviderLogger extends ProviderObserver {
   }
 
   @override
-  void providerDidFail(
+  Future<void> providerDidFail(
     ProviderBase<Object?> provider,
     Object error,
     StackTrace stackTrace,
     ProviderContainer container,
-  ) {
+  ) async {
     if (logErrors) {
       _logBlock(
         'Provider Error: ${_getProviderName(provider)}',
@@ -120,6 +123,23 @@ class ProviderLogger extends ProviderObserver {
           if (stackTrace.toString().split('\n').length > 10) '...',
         ],
         level: Level.error,
+      );
+    }
+
+    if (reportErrorsToSentry) {
+      final String providerName = _getProviderName(provider);
+      
+      await Sentry.captureException(
+        error,
+        stackTrace: stackTrace,
+        withScope: (Scope scope) async {
+          await scope.setContexts('provider', <String, String>{
+            'provider_name': provider.name ?? 'unnamed',
+            'provider_type': provider.runtimeType.toString(),
+          });
+          await scope.setTag('error_source', 'riverpod');
+          await scope.setTag('provider', providerName);
+        },
       );
     }
   }

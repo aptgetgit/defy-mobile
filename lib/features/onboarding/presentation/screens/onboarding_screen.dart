@@ -5,17 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../../app/routes/router.dart';
 import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
-
-import '../../../../core/di/providers/locale/locale_provider.dart';
 import '../../../../core/extensions/button_size_extension.dart';
 import '../../../../core/extensions/context_extensions.dart';
-
+import '../../../../core/navigation/routes/router.dart';
+import '../../../../core/providers/locale/locale_provider.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -71,10 +68,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final (double width, double height) =
-        (context.screenWidth, context.screenHeight);
+    final (double width, double height) = (
+      context.screenWidth,
+      context.screenHeight,
+    );
     final bool isDark = context.isDarkMode;
-    final AppLocalizations l10n = ref.watch(l10nProvider);
+    final AppLocalizations loc = ref.watch(appLocalizationProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -85,9 +84,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
           child: Column(
             children: <Widget>[
-              _buildHeader(context, isDark, l10n),
-              Expanded(child: _buildPageView(l10n)),
-              _buildFooter(context, height, isDark, l10n),
+              _buildHeader(context, isDark, loc),
+              Expanded(child: _buildPageView(loc)),
+              _buildFooter(context, height, isDark, loc),
             ],
           ),
         ),
@@ -98,57 +97,53 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Widget _buildHeader(
     BuildContext context,
     bool isDark,
-    AppLocalizations l10n,
-  ) =>
-      RepaintBoundary(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () => unawaited(
+    AppLocalizations loc,
+  ) => RepaintBoundary(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        GestureDetector(
+          onTap:
+              () => unawaited(
                 _pageController.animateToPage(
                   0,
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 ),
               ),
-              child: Assets.icons.appIcon.image(
-                width: 50,
-                frameBuilder: (
+          child: Assets.icons.appIcon.image(
+            width: 50,
+            frameBuilder:
+                (
                   BuildContext context,
                   Widget child,
                   int? frame,
                   bool wasSynchronouslyLoaded,
-                ) =>
-                    child,
-                errorBuilder: (
-                  BuildContext context,
-                  Object error,
-                  StackTrace? stackTrace,
-                ) =>
+                ) => child,
+            errorBuilder:
+                (BuildContext context, Object error, StackTrace? stackTrace) =>
                     const SizedBox(width: 50, height: 50),
-              ),
-            ),
-            TextButton.icon(
-              icon:
-                  const Icon(PhosphorIconsRegular.arrowCircleUpRight, size: 30),
-              style: TextButton.styleFrom(
-                foregroundColor: isDark ? AppColors.white : AppColors.black,
-                textStyle: context.titleLarge,
-              ),
-              onPressed: () => _skipOnboarding(context),
-              label: Text(l10n.onboardingSkipButton),
-            ),
-          ],
+          ),
         ),
-      );
+        TextButton.icon(
+          icon: const Icon(PhosphorIconsRegular.arrowCircleUpRight, size: 30),
+          style: TextButton.styleFrom(
+            foregroundColor: isDark ? AppColors.white : AppColors.black,
+            textStyle: context.titleLarge,
+          ),
+          onPressed: () => _skipOnboarding(context),
+          label: Text(loc.onboardingSkipButton),
+        ),
+      ],
+    ),
+  );
 
-  Widget _buildPageView(AppLocalizations l10n) {
+  Widget _buildPageView(AppLocalizations loc) {
     final List<(String, String)> content = <(String, String)>[
-      (l10n.onboardingPage1Title, l10n.onboardingPage1Description),
-      (l10n.onboardingPage2Title, l10n.onboardingPage2Description),
-      (l10n.onboardingPage3Title, l10n.onboardingPage3Description),
-      (l10n.onboardingPage4Title, l10n.onboardingPage4Description),
+      (loc.onboardingPage1Title, loc.onboardingPage1Description),
+      (loc.onboardingPage2Title, loc.onboardingPage2Description),
+      (loc.onboardingPage3Title, loc.onboardingPage3Description),
+      (loc.onboardingPage4Title, loc.onboardingPage4Description),
     ];
 
     return PageView.builder(
@@ -202,49 +197,52 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     BuildContext context,
     double height,
     bool isDark,
-    AppLocalizations l10n,
-  ) =>
-      Column(
-        children: <Widget>[
-          Gap(height * 0.05),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _currentPage < _pageCount - 1
+    AppLocalizations loc,
+  ) => Column(
+    children: <Widget>[
+      Gap(height * 0.05),
+      AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child:
+            _currentPage < _pageCount - 1
                 ? _buildPageIndicator(isDark)
-                : _buildGetStartedButton(context, l10n),
-          ),
-          const Gap(30),
-        ],
-      );
+                : _buildGetStartedButton(context, loc),
+      ),
+      const Gap(30),
+    ],
+  );
 
   Widget _buildPageIndicator(bool isDark) => RepaintBoundary(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List<Widget>.generate(
-              _pageCount,
-              (int index) => Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: _PageDot(
-                  isActive: index == _currentPage,
-                  isDark: isDark,
-                  onTap: () => unawaited(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 18),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List<Widget>.generate(
+          _pageCount,
+          (int index) => Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: _PageDot(
+              isActive: index == _currentPage,
+              isDark: isDark,
+              onTap:
+                  () => unawaited(
                     _pageController.animateToPage(
                       index,
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                     ),
                   ),
-                ),
-              ),
             ),
           ),
         ),
-      );
-  Widget _buildGetStartedButton(BuildContext context, AppLocalizations l10n) =>
-      RepaintBoundary(
-        child: SizedBox(
+      ),
+    ),
+  );
+  Widget _buildGetStartedButton(
+    BuildContext context,
+    AppLocalizations loc,
+  ) => RepaintBoundary(
+    child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () => _finishOnboarding(context),
@@ -253,7 +251,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             child: Text(
-              l10n.onboardingGetStartedButton,
+              loc.onboardingGetStartedButton,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
@@ -303,28 +301,28 @@ class _PageDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(1),
-          height: 18,
-          width: 18,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: isActive
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.all(1),
+      height: 18,
+      width: 18,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color:
+              isActive
                   ? const Color(0XFF646D80)
                   : isDark
-                      ? AppColors.black
-                      : AppColors.white,
-            ),
-            shape: BoxShape.circle,
-          ),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color:
-                  isActive ? const Color(0XFF646D80) : const Color(0xFFEDF0F5),
-              shape: BoxShape.circle,
-            ),
-          ),
+                  ? AppColors.black
+                  : AppColors.white,
         ),
-      );
+        shape: BoxShape.circle,
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0XFF646D80) : const Color(0xFFEDF0F5),
+          shape: BoxShape.circle,
+        ),
+      ),
+    ),
+  );
 }

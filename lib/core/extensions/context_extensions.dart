@@ -48,7 +48,6 @@ extension ResponsiveExtensions on BuildContext {
 
 /// Extensions for text styles
 extension TextStyleExtensions on BuildContext {
-  // TODO: Does nullable affects any thing ?
   /// Access to text theme
   TextTheme get textTheme => theme.textTheme;
 

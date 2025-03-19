@@ -57,10 +57,17 @@
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>com.googleusercontent.apps.618034957136-s94lbfhbbhd376113sbtvce8rgvu2a1f</string>
+					<string>app</string>
 				</array>
+				<key>CFBundleURLName</key>
+				<string>id.avex.defy</string>
 			</dict>
 		</array>
 		<key>UIStatusBarHidden</key>
+		<true/>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false/>
+		<key>FlutterDeepLinkingEnabled</key>
 		<false/>
 	</dict>
 </plist>

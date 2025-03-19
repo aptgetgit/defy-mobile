@@ -250,3 +250,8 @@ linter:
     - use_colored_box
     - use_decorated_box
     - flutter_style_todos
+    - strict_top_level_inference
+    -  unnecessary_underscores
+    - specify_nonobvious_property_types
+    - unnecessary_async
+    - unsafe_variance

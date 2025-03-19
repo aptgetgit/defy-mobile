@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
-import '../../../../shared/account/domain/entities/aptos_account_with_metadata.dart';
+import '../../../../shared/blockchain/account/domain/entities/aptos_account_with_metadata.dart';
 import '../screens/wallet_settings_screen.dart';
 import '../util/helpers.dart';
 import '../provider/choose_wallet_screen_provider.dart';

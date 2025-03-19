@@ -10,11 +10,9 @@ List<RouteBase> get $appRoutes => [
       $welcomeAgainScreenRoute,
       $chooseWalletScreenRoute,
       $chooseWalletUserScreenRoute,
-      $browserRoute,
       $homeRoute,
       $onboardingRoute,
       $diveInPageRoute,
-      $splashRoute,
       $waitlistScreenRoute,
       $walletCreationScreenRoute,
       $walletCreationWalletNameScreenRoute,
@@ -92,28 +90,6 @@ extension $ChooseWalletUserScreenRouteExtension on ChooseWalletUserScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $browserRoute => GoRouteData.$route(
-      path: '/browser',
-      factory: $BrowserRouteExtension._fromState,
-    );
-
-extension $BrowserRouteExtension on BrowserRoute {
-  static BrowserRoute _fromState(GoRouterState state) => const BrowserRoute();
-
-  String get location => GoRouteData.$location(
-        '/browser',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 RouteBase get $homeRoute => GoRouteData.$route(
       path: '/home',
       factory: $HomeRouteExtension._fromState,
@@ -170,28 +146,6 @@ extension $DiveInPageRouteExtension on DiveInPageRoute {
 
   String get location => GoRouteData.$location(
         '/dive-in',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $splashRoute => GoRouteData.$route(
-      path: '/splash',
-      factory: $SplashRouteExtension._fromState,
-    );
-
-extension $SplashRouteExtension on SplashRoute {
-  static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
-
-  String get location => GoRouteData.$location(
-        '/splash',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -349,7 +303,7 @@ extension $CreatedWalletScreenRouteExtension on CreatedWalletScreenRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'f93e02dcabf7e00e5b55dab56ec2311cf586f24a';
+String _$routerHash() => r'87e5912e0f8e10419688dd39359cf4b29be2e9cd';
 
 /// See also [router].
 @ProviderFor(router)

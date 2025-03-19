@@ -19,13 +19,9 @@ class $AssetsIconsGen {
   AssetGenImage get appLogoDark3d =>
       const AssetGenImage('assets/icons/app-logo-dark-3d.png');
 
-  /// File path: assets/icons/app-logo-dark.png
-  AssetGenImage get appLogoDark =>
-      const AssetGenImage('assets/icons/app-logo-dark.png');
-
-  /// File path: assets/icons/app-logo-light.png
-  AssetGenImage get appLogoLight =>
-      const AssetGenImage('assets/icons/app-logo-light.png');
+  /// File path: assets/icons/branding.png
+  AssetGenImage get branding =>
+      const AssetGenImage('assets/icons/branding.png');
 
   /// File path: assets/icons/coin-white.png
   AssetGenImage get coinWhite =>
@@ -35,15 +31,13 @@ class $AssetsIconsGen {
   AssetGenImage get coinYellow =>
       const AssetGenImage('assets/icons/coin-yellow.png');
 
+  /// File path: assets/icons/splash-app-icon.png
+  AssetGenImage get splashAppIcon =>
+      const AssetGenImage('assets/icons/splash-app-icon.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [
-        appIcon,
-        appLogoDark3d,
-        appLogoDark,
-        appLogoLight,
-        coinWhite,
-        coinYellow
-      ];
+  List<AssetGenImage> get values =>
+      [appIcon, appLogoDark3d, branding, coinWhite, coinYellow, splashAppIcon];
 }
 
 class $AssetsImagesGen {

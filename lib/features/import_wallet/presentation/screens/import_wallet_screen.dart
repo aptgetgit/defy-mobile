@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../../app/routes/router.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../../core/logging/app_logger.dart';
-import '../../../../shared/account/presentation/providers/generate_account_flow_provider.dart';
-import '../../../../shared/account/presentation/states/generate_account_flow_state.dart';
+import '../../../../core/navigation/routes/router.dart';
+import '../../../../shared/blockchain/account/presentation/providers/generate_account_flow_provider.dart' show generateAccountFlowProvider;
+import '../../../../shared/blockchain/account/presentation/states/generate_account_flow_state.dart';
 import '../enums/page_type_enum.dart';
 import '../providers/import_wallet_provider.dart';
 import '../state/import_wallet_state.dart';
@@ -195,6 +195,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen> {
         title: Row(
           children: <Widget>[
             GestureDetector(
+              // ignore: unnecessary_async
               onTap: () async => _handleBackNavigation(state, notifier),
               child: const Icon(PhosphorIconsBold.caretLeft),
             ),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../app/routes/router.dart';
 import '../../../../config/theme/colors.dart';
+import '../../../../core/navigation/routes/router.dart';
 
 class DiveInPage extends ConsumerStatefulWidget {
   const DiveInPage({super.key});

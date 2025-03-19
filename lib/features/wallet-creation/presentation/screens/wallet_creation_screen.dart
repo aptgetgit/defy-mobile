@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../app/routes/router.dart';
 import '../../../../config/theme/colors.dart';
+import '../../../../core/navigation/routes/router.dart';
 
 class WalletCreationScreen extends ConsumerStatefulWidget {
   const WalletCreationScreen({super.key});

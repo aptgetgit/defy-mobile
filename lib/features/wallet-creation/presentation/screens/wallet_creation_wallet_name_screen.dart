@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../../config/theme/colors.dart';
-import '../../../../app/routes/router.dart';
 import '../../../../core/logging/app_logger.dart';
+import '../../../../core/navigation/routes/router.dart';
 
 class WalletCreationWalletNameScreen extends ConsumerStatefulWidget {
   const WalletCreationWalletNameScreen({super.key});

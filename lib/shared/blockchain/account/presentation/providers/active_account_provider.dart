@@ -38,7 +38,7 @@ class ActiveAccount extends _$ActiveAccount {
       );
     }
 
-    if (activeAccount.isRight() && activeAccount.getRight().isSome()) {
+    if (activeAccount.isRight() && activeAccount.getRight().isSome() && activeAccount.getRight().toNullable()!.isSome()) {
       return activeAccount.getRight().toNullable()!;
     }
 

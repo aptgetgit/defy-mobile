@@ -28,7 +28,7 @@ class CheckMnemonicAvailabilityUseCase {
       return left(account.getLeft().toNullable()!);
     }
 
-    if (account.isRight() && account.getRight().isNone()) {
+    if (account.isRight() && account.getRight().isNone() && account.getRight().toNullable()!.isNone()) {
       throw StateError('Account not found');
     }
 
@@ -47,7 +47,7 @@ class CheckMnemonicAvailabilityUseCase {
       return left(authConfig.getLeft().toNullable()!);
     }
 
-    if (authConfig.isRight() && authConfig.getRight().isNone()) {
+    if (authConfig.isRight() && authConfig.getRight().isNone() && authConfig.getRight().toNullable()!.isNone()) {
       return right(false);
     }
 

@@ -40,7 +40,7 @@ class Ed25519AuthKeyConfigLocalDataSource {
       if (existingByAuthKeyResult.isLeft()) {
         return left(existingByAuthKeyResult.getLeft().toNullable()!);
       }
-      if (existingByAuthKeyResult.isRight() && existingByAuthKeyResult.getRight().isSome()) {
+      if (existingByAuthKeyResult.isRight() && existingByAuthKeyResult.getRight().isSome() && existingByAuthKeyResult.getRight().toNullable()!.isSome()) {
         throw StateError('Authentication key already exists');
       }
 
@@ -50,7 +50,7 @@ class Ed25519AuthKeyConfigLocalDataSource {
       if (existingByKeyIdResult.isLeft()) {
         return left(existingByKeyIdResult.getLeft().toNullable()!);
       }
-      if (existingByKeyIdResult.isRight() && existingByKeyIdResult.getRight().isSome()) {
+      if (existingByKeyIdResult.isRight() && existingByKeyIdResult.getRight().isSome() && existingByKeyIdResult.getRight().toNullable()!.isSome()) {
         throw StateError('JWK Key ID already exists');
       }
 

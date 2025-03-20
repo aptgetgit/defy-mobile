@@ -23,7 +23,8 @@ class JwkDataSource {
             return left(existingKeyResult.getLeft().toNullable()!);
           }
           if (existingKeyResult.isRight() &&
-              existingKeyResult.getRight().isSome()) {
+              existingKeyResult.getRight().isSome() &&
+              existingKeyResult.getRight().toNullable()!.isSome()) {
             throw StateError('Key ID already exists');
           }
 
@@ -50,7 +51,8 @@ class JwkDataSource {
             return left(existingPropsResult.getLeft().toNullable()!);
           }
           if (existingPropsResult.isRight() &&
-              existingPropsResult.getRight().isSome()) {
+              existingPropsResult.getRight().isSome() &&
+              existingPropsResult.getRight().toNullable()!.isSome()) {
             throw StateError('JWK with same properties already exists');
           }
 

@@ -48,7 +48,8 @@ class AptosAccountLocalDataSource {
         return left(existingAccountResult.getLeft().toNullable()!);
       }
       if (existingAccountResult.isRight() &&
-          existingAccountResult.getRight().isSome()) {
+          existingAccountResult.getRight().isSome() &&
+          existingAccountResult.getRight().toNullable()!.isSome()) {
         throw StateError('Account with this address already exists');
       }
 

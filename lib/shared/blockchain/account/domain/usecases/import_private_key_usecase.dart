@@ -17,9 +17,9 @@ class ImportPrivateKeyUseCase {
   final IPrivateJwkRepository _privateJwkRepository;
   final IJwkRepository _jwkRepository;
 
-  Future<Either<ExceptionWithStackTrace, Uint8List>> call(
-    Uint8List privateKeyBytes,
-  ) =>
+  Future<Either<ExceptionWithStackTrace, Uint8List>> call({
+    required Uint8List privateKeyBytes,
+  }) =>
       TaskEither<ExceptionWithStackTrace, Uint8List>(() async {
         try {
           final Uint8List privateKey = expandSecretKey(privateKeyBytes);

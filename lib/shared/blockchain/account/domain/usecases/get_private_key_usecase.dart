@@ -10,10 +10,10 @@ class GetPrivateKeyUseCase {
     : _repository = repository;
   final IPrivateJwkRepository _repository;
 
-  Future<Either<ExceptionWithStackTrace, Jwk>> call({
+  Future<Either<ExceptionWithStackTrace, Option<Jwk>>> call({
     required Uint8List keyId,
   }) =>
-      TaskEither<ExceptionWithStackTrace, Jwk>(() async {
+      TaskEither<ExceptionWithStackTrace, Option<Jwk>>(() async {
         final Either<ExceptionWithStackTrace, Option<Jwk>> jwkResult =
             await _repository.get(keyId: keyId).run();
 
@@ -21,12 +21,6 @@ class GetPrivateKeyUseCase {
           return left(jwkResult.getLeft().toNullable()!);
         }
 
-        final Option<Jwk> jwkOption = jwkResult.getRight().toNullable()!;
-
-        if (jwkOption.isNone()) {
-          throw StateError('Private key not found');
-        }
-
-        return right(jwkOption.toNullable()!);
+        return jwkResult;
       }).run();
 }

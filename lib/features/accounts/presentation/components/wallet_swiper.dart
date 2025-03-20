@@ -37,9 +37,10 @@ class WalletSwiper extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SizedBox(
-                height: 200,
-                width: double.infinity,
-                child: buildWalletCard(accounts.first)),
+              height: 200,
+              width: double.infinity,
+              child: buildWalletCard(accounts.first),
+            ),
           ),
         ),
       );
@@ -60,8 +61,9 @@ class WalletSwiper extends ConsumerWidget {
         layout: SwiperLayout.STACK,
         allowImplicitScrolling: true,
         scrollDirection: Axis.vertical,
-        onIndexChanged: (int index) =>
-            ref.read(walletNotifierProvider.notifier).updateIndex(index),
+        onIndexChanged: (int index) => ref
+            .read(chooseWalletScreenNotifierProvider.notifier)
+            .updateIndex(index),
       );
     }
   }
@@ -75,8 +77,12 @@ class WalletSwiper extends ConsumerWidget {
         opaque: false,
         pageBuilder: (BuildContext context, _, __) =>
             WalletDialog(account: account),
-        transitionsBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation, Widget child) =>
+        transitionsBuilder: (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+        ) =>
             FadeTransition(opacity: animation, child: child),
       ),
     );
@@ -169,7 +175,7 @@ class WalletDialog extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Container(
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -180,14 +186,18 @@ class WalletDialog extends StatelessWidget {
                         const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () async {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute<void>(
+                            Navigator.of(context).pop();
+                            final bool? result =
+                                await Navigator.of(context).push(
+                              MaterialPageRoute<bool>(
                                 builder: (BuildContext context) =>
                                     WalletSettingsScreen(
                                   account: account,
                                 ),
                               ),
                             );
+
+                            Navigator.of(context).pop(result);
                           },
                           child: _buildDialogOption(
                             icon: PhosphorIconsRegular.appWindow,
@@ -293,4 +303,11 @@ class WalletDialog extends StatelessWidget {
           ),
         ],
       );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(DiagnosticsProperty<AptosAccountWithMetadata>('account', account));
+  }
 }

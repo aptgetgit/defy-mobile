@@ -19,6 +19,7 @@ import '../../../common/presentation/widgets/black_button.dart';
 import '../../../common/presentation/widgets/custom_checkbox.dart';
 // import '../provider/customize_wallet_provider.dart';
 // import '../state/customize_wallet_state.dart';
+import '../provider/choose_wallet_screen_provider.dart';
 import '../util/helpers.dart';
 import 'wallet_settings_customize_wallet_screen.dart';
 import 'wallet_settings_security_screen.dart';
@@ -43,19 +44,23 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Future<AptosAccountWithMetadata?> accountFuture =
-        ref.watch(getAptosAccountUseCaseProvider).call(
-              accountAddress: widget.account.accountAddress,
-            ).then((Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>> either) => either.fold(
-                  (ExceptionWithStackTrace error) {
-                    AppLogger.error('Error fetching account: $error');
-                    return null;
-                  },
-                  (Option<AptosAccountWithMetadata> option) => option.fold(
-                    () => null,
-                    (AptosAccountWithMetadata account) => account,
-                  ),
-                ));
+    final Future<AptosAccountWithMetadata?> accountFuture = ref
+        .watch(getAptosAccountUseCaseProvider)
+        .call(
+          accountAddress: widget.account.accountAddress,
+        )
+        .then((Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
+                either) =>
+            either.fold(
+              (ExceptionWithStackTrace error) {
+                AppLogger.error('Error fetching account: $error');
+                return null;
+              },
+              (Option<AptosAccountWithMetadata> option) => option.fold(
+                () => null,
+                (AptosAccountWithMetadata account) => account,
+              ),
+            ));
 
     return Scaffold(
       appBar: AppBar(
@@ -165,6 +170,9 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
                           setState(() {
                             ref.refresh(getAptosAccountUseCaseProvider);
                           });
+                          ref
+                              .read(chooseWalletScreenNotifierProvider.notifier)
+                              .updateIsUpdated(true);
                         }
                       },
                     ),
@@ -314,8 +322,8 @@ class DeleteWalletDialogState extends ConsumerState<DeleteWalletDialog> {
   @override
   Widget build(BuildContext context) {
     final Future<List<AptosAccountWithMetadata>> accountsFuture = (() async {
-      final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>> either =
-          await ref.watch(listAptosAccountsUseCaseProvider).call();
+      final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
+          either = await ref.watch(listAptosAccountsUseCaseProvider).call();
       return either.fold(
         (ExceptionWithStackTrace error) {
           AppLogger.error('Error loading accounts: $error');

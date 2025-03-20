@@ -108,7 +108,7 @@ class ChooseWalletScreen extends ConsumerWidget {
                             Widget? child,
                           ) {
                             final int currentIndex =
-                                ref.watch(walletNotifierProvider).currentIndex;
+                                ref.watch(chooseWalletScreenNotifierProvider).currentIndex;
 
                             return Text(
                               currentIndex == 0

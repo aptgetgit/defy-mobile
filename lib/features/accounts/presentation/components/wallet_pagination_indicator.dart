@@ -12,7 +12,7 @@ class WalletPaginationIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final int currentIndex = ref.watch(walletNotifierProvider).currentIndex;
+    final int currentIndex = ref.watch(chooseWalletScreenNotifierProvider).currentIndex;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4),

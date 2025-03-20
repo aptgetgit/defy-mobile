@@ -30,6 +30,15 @@ class _ChooseWalletUserScreenState
   Widget build(BuildContext context) {
     final Future<Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>>
         accountsFuture = ref.watch(listAptosAccountsUseCaseProvider).call();
+
+    ref.listen<bool>(
+      chooseWalletScreenNotifierProvider.select((state) => state.isUpdated),
+      (previous, next) {
+        if (next) {
+          ref.invalidate(listAptosAccountsUseCaseProvider);
+        }
+      },
+    );
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -205,8 +214,9 @@ class _ChooseWalletUserScreenState
                             WidgetRef ref,
                             Widget? child,
                           ) {
-                            final int currentIndex =
-                                ref.watch(walletNotifierProvider).currentIndex;
+                            final int currentIndex = ref
+                                .watch(chooseWalletScreenNotifierProvider)
+                                .currentIndex;
 
                             return Text(
                               currentIndex == 0
@@ -227,8 +237,9 @@ class _ChooseWalletUserScreenState
                             WidgetRef ref,
                             Widget? child,
                           ) {
-                            final int currentIndex =
-                                ref.watch(walletNotifierProvider).currentIndex;
+                            final int currentIndex = ref
+                                .watch(chooseWalletScreenNotifierProvider)
+                                .currentIndex;
 
                             return Padding(
                               padding: const EdgeInsets.symmetric(

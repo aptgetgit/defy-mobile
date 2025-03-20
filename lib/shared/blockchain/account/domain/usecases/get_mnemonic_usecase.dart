@@ -39,10 +39,10 @@ class GetMnemonicUseCase {
 
   final IEntropyRepository _repository;
 
-  Future<Either<ExceptionWithStackTrace, String>> call({
+  Future<Either<ExceptionWithStackTrace, Option<String>>> call({
     required Uint8List entropyHash,
   }) =>
-      TaskEither<ExceptionWithStackTrace, String>(() async {
+      TaskEither<ExceptionWithStackTrace, Option<String>>(() async {
         if (entropyHash.isEmpty) {
           throw ArgumentError('Entropy hash cannot be empty');
         }
@@ -58,11 +58,11 @@ class GetMnemonicUseCase {
             entropyResult.getRight().toNullable()!;
 
         if (entropyOption.isNone()) {
-          throw StateError('Mnemonic not found');
+          return right(none());
         }
 
         final Uint8List entropy = entropyOption.toNullable()!;
 
-        return right(entropyToMnemonic(entropy));
+        return right(Option<String>.of(entropyToMnemonic(entropy)));
       }).run();
 }

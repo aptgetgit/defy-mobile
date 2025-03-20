@@ -36,7 +36,7 @@ class SigningKeyDataSource {
       if (existingKey.isLeft()) {
         return left(existingKey.getLeft().toNullable()!);
       }
-      if (existingKey.isRight() && existingKey.getRight().isSome()) {
+      if (existingKey.isRight() && existingKey.getRight().isSome() && existingKey.getRight().toNullable()!.isSome()) {
         throw StateError('Key with this ID already exists');
       }
 
@@ -48,7 +48,8 @@ class SigningKeyDataSource {
       }
 
       if (existingThumbprint.isRight() &&
-          existingThumbprint.getRight().isSome()) {
+          existingThumbprint.getRight().isSome() &&
+          existingThumbprint.getRight().toNullable()!.isSome()) {
         throw StateError('Key with this thumbprint already exists');
       }
 

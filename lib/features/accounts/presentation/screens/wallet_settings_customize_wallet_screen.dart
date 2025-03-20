@@ -355,6 +355,7 @@ class _WalletSettingsCustomizeWalletScreenState
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
+                              onChanged: notifier.updateName,
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,

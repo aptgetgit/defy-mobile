@@ -1,12 +1,15 @@
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:fpdart/fpdart.dart';
-import 'package:fpdart/src/either.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../../core/logging/app_logger.dart';
+import '../../../../utils/crypto_utils.dart';
+import '../../../../utils/ed25519_utils.dart';
+import '../../../../utils/mnemonic_utils.dart';
 import '../../domain/entities/aptos_account_with_metadata.dart';
+import '../../domain/entities/json_web_key.dart';
 import '../../domain/repositories/aptos_account_repository_interface.dart';
 import '../states/generate_account_flow_state.dart';
 import 'usecase_provider.dart';
@@ -22,26 +25,47 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
     state = const GenerateAccountFlowState.importing();
 
     try {
-      final Either<ExceptionWithStackTrace, Uint8List> entropyHashEither =
-          await ref
-              .read(importMnemonicUseCaseProvider)
-              .call(mnemonic: mnemonic);
+      final Uint8List entropy = mnemonicToEntropy(mnemonic);
+      final Uint8List entropyHash = computeSha256Hash(entropy);
 
-      if (entropyHashEither.isLeft()) {
+      final Either<ExceptionWithStackTrace, Option<String>>
+          mnemonicExistEither = await ref
+              .read(getMnemonicUseCaseProvider)
+              .call(entropyHash: entropyHash);
+
+      if (mnemonicExistEither.isLeft()) {
         final ExceptionWithStackTrace exceptionWithStackTrace =
-            entropyHashEither.getLeft().toNullable()!;
+            mnemonicExistEither.getLeft().toNullable()!;
         AppLogger.error(
-          'Failed to import mnemonic',
+          'Failed to check if mnemonic exists',
           error: exceptionWithStackTrace.exception,
           stackTrace: exceptionWithStackTrace.stackTrace,
         );
 
         state = const GenerateAccountFlowState.error(
-          'Failed to import mnemonic',
+          'Failed to check if mnemonic exists',
         );
       }
-      final Uint8List entropyHash = entropyHashEither.getRight().toNullable()!;
 
+      if (mnemonicExistEither.getRight().toNullable()!.isNone()) {
+        final Either<ExceptionWithStackTrace, Uint8List> entropyHashEither =
+            await ref
+                .read(importMnemonicUseCaseProvider)
+                .call(mnemonic: mnemonic);
+        if (entropyHashEither.isLeft()) {
+          final ExceptionWithStackTrace exceptionWithStackTrace =
+              entropyHashEither.getLeft().toNullable()!;
+          AppLogger.error(
+            'Failed to import mnemonic',
+            error: exceptionWithStackTrace.exception,
+            stackTrace: exceptionWithStackTrace.stackTrace,
+          );
+
+          state = const GenerateAccountFlowState.error(
+            'Failed to import mnemonic',
+          );
+        }
+      }
       state = GenerateAccountFlowState.waitingForMetadata(
         keySource: KeySource.mnemonic(
           entropyHash: entropyHash,
@@ -57,28 +81,49 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
     state = const GenerateAccountFlowState.importing();
 
     try {
-      final Either<ExceptionWithStackTrace, Uint8List> jwkThumbprintEither =
-          await ref.read(importPrivateKeyUseCaseProvider).call(privateKey);
+      final Uint8List privateKeyBytes = expandSecretKey(privateKey);
 
-      if (jwkThumbprintEither.isLeft()) {
+      final Jwk jwk = Jwk.fromEd25519PrivateKey(
+        privateKey: Uint8List.fromList(privateKeyBytes.sublist(0, 32)),
+      );
+
+      final Uint8List jwkKeyId = jwk.keyId;
+
+      final Either<ExceptionWithStackTrace, Option<Jwk>> privateKeyExistEither =
+          await ref.read(getPrivateKeyUseCaseProvider).call(keyId: jwkKeyId);
+
+      if (privateKeyExistEither.isLeft()) {
         final ExceptionWithStackTrace exceptionWithStackTrace =
-            jwkThumbprintEither.getLeft().toNullable()!;
+            privateKeyExistEither.getLeft().toNullable()!;
         AppLogger.error(
-          'Failed to import private key',
+          'Failed to check if private key exists',
           error: exceptionWithStackTrace.exception,
           stackTrace: exceptionWithStackTrace.stackTrace,
         );
-
-        state = const GenerateAccountFlowState.error(
-          'Failed to import private key',
-        );
       }
 
-      final Uint8List jwkThumbprint =
-          jwkThumbprintEither.getRight().toNullable()!;
+      if (privateKeyExistEither.getRight().toNullable()!.isNone()) {
+        final Either<ExceptionWithStackTrace, Uint8List>
+            importPrivateKeyEither = await ref
+                .read(importPrivateKeyUseCaseProvider)
+                .call(privateKeyBytes: privateKey);
+
+        if (importPrivateKeyEither.isLeft()) {
+          final ExceptionWithStackTrace exceptionWithStackTrace =
+              importPrivateKeyEither.getLeft().toNullable()!;
+          AppLogger.error(
+            'Failed to import private key',
+            error: exceptionWithStackTrace.exception,
+            stackTrace: exceptionWithStackTrace.stackTrace,
+          );
+          state = const GenerateAccountFlowState.error(
+            'Failed to import private key',
+          );
+        }
+      }
 
       state = GenerateAccountFlowState.waitingForMetadata(
-        keySource: KeySource.privateKey(jwkThumbprint: jwkThumbprint),
+        keySource: KeySource.privateKey(jwkThumbprint: jwkKeyId),
       );
     } on Exception catch (e) {
       state = GenerateAccountFlowState.error(e.toString());
@@ -105,8 +150,8 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
     );
 
     try {
-      final AptosAccountWithMetadata account = await switch (currentState
-          .keySource) {
+      final AptosAccountWithMetadata account =
+          await switch (currentState.keySource) {
         KeySourceMnemonic(
           :final Uint8List entropyHash,
           :final Option<int> accountIndex,
@@ -170,16 +215,15 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
     Uint8List jwkThumbprint,
   ) async {
     final Either<ExceptionWithStackTrace, AptosAccountWithMetadata>
-    accountCreationEither = await ref
-        .read(createAptosAccountUseCaseProvider)
-        .call(
-          label: label,
-          iconUri: iconUri,
-          backgroundColor: backgroundColor,
-          authenticatorConfig: AuthenticatorConfig.ed25519(
-            keyId: jwkThumbprint,
-          ),
-        );
+        accountCreationEither =
+        await ref.read(createAptosAccountUseCaseProvider).call(
+              label: label,
+              iconUri: iconUri,
+              backgroundColor: backgroundColor,
+              authenticatorConfig: AuthenticatorConfig.ed25519(
+                keyId: jwkThumbprint,
+              ),
+            );
 
     if (accountCreationEither.isLeft()) {
       final ExceptionWithStackTrace exceptionWithStackTrace =

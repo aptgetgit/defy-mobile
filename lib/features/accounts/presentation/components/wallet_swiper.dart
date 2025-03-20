@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
@@ -23,26 +24,33 @@ class WalletSwiper extends ConsumerWidget {
   final bool allowLongPress;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Swiper(
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (accounts.length == 1) {
+      return GestureDetector(
+        onLongPress: () async {
+          if (!allowLongPress) {
+            return;
+          }
+          await _showWalletDialog(context, accounts.first);
+        },
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SizedBox(
+                height: 200,
+                width: double.infinity,
+                child: buildWalletCard(accounts.first)),
+          ),
+        ),
+      );
+    } else {
+      return Swiper(
         itemBuilder: (BuildContext context, int index) => GestureDetector(
           onLongPress: () async {
             if (!allowLongPress) {
               return;
             }
-            await showDialog<void>(
-              context: context,
-              barrierColor: Colors.black.withOpacity(0.65),
-              barrierDismissible: false,
-              builder: (BuildContext context) => Dialog(
-                backgroundColor: Colors.transparent,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: WalletDialog(
-                    account: accounts[index],
-                  ),
-                ),
-              ),
-            );
+            await _showWalletDialog(context, accounts[index]);
           },
           child: buildWalletCard(accounts[index]),
         ),
@@ -54,6 +62,166 @@ class WalletSwiper extends ConsumerWidget {
         scrollDirection: Axis.vertical,
         onIndexChanged: (int index) =>
             ref.read(walletNotifierProvider.notifier).updateIndex(index),
+      );
+    }
+  }
+
+  Future<void> _showWalletDialog(
+    BuildContext context,
+    AptosAccountWithMetadata account,
+  ) async {
+    await Navigator.of(context).push(
+      PageRouteBuilder<void>(
+        opaque: false,
+        pageBuilder: (BuildContext context, _, __) =>
+            WalletDialog(account: account),
+        transitionsBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation, Widget child) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
+    );
+  }
+
+  Widget buildWalletCard(AptosAccountWithMetadata account) => Container(
+        height: 200,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: account.backgroundColor,
+          image: const DecorationImage(
+            image: AssetImage(
+              'assets/images/wallet-creation-wallet-background-wallet-component.png',
+            ),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          children: <Widget>[
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              top: 28,
+              left: 38,
+              child: CachedNetworkImage(
+                imageUrl: account.iconUri.toString(),
+                height: 40,
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 110, top: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        account.label,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      Text(
+                        truncateAddress(account.accountAddress.toHex()),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(IterableProperty<AptosAccountWithMetadata>('accounts', accounts))
+      ..add(DiagnosticsProperty<bool>('allowLongPress', allowLongPress));
+  }
+}
+
+class WalletDialog extends StatelessWidget {
+  const WalletDialog({required this.account, super.key});
+
+  final AptosAccountWithMetadata account;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: <Widget>[
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                color: Colors.white38,
+              ),
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        buildWalletCard(account),
+                        const SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () async {
+                            await Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    WalletSettingsScreen(
+                                  account: account,
+                                ),
+                              ),
+                            );
+                          },
+                          child: _buildDialogOption(
+                            icon: PhosphorIconsRegular.appWindow,
+                            text: 'Wallet Settings',
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildDialogOption(
+                          icon: PhosphorIconsRegular.palette,
+                          text: 'Customize Wallet',
+                        ),
+                        const SizedBox(height: 16),
+                        _buildDialogOption(
+                          icon: PhosphorIconsRegular.magnifyingGlass,
+                          text: 'Open Wallet',
+                        ),
+                        const SizedBox(height: 16),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       );
 
   Widget buildWalletCard(AptosAccountWithMetadata account) => Container(
@@ -69,149 +237,45 @@ class WalletSwiper extends ConsumerWidget {
           ),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Row(
+        child: Stack(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 110, top: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    account.label,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
-                  ),
-                  Text(
-                    truncateAddress(account.accountAddress.toHex()),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ],
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              top: 30,
+              left: 34,
+              child: CachedNetworkImage(
+                imageUrl: account.iconUri.toString(),
+                height: 40,
               ),
             ),
-          ],
-        ),
-      );
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(IterableProperty<AptosAccountWithMetadata>('accounts', accounts))
-      ..add(DiagnosticsProperty<bool>('allowLongPress', allowLongPress));
-  }
-}
-
-class WalletDialog extends StatefulWidget {
-  const WalletDialog({required this.account, super.key});
-
-  final AptosAccountWithMetadata account;
-
-  @override
-  WalletDialogState createState() => WalletDialogState();
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-        .add(DiagnosticsProperty<AptosAccountWithMetadata>('account', account));
-  }
-}
-
-class WalletDialogState extends State<WalletDialog> {
-  @override
-  Widget build(BuildContext context) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              buildWalletCard(widget.account),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => WalletSettingsScreen(
-                        account: widget.account,
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 110, top: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        account.label,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: _buildDialogOption(
-                  icon: PhosphorIconsRegular.appWindow,
-                  text: 'Wallet Settings',
-                ),
-              ),
-              const SizedBox(height: 16),
-              _buildDialogOption(
-                icon: PhosphorIconsRegular.palette,
-                text: 'Customize Wallet',
-              ),
-              const SizedBox(height: 16),
-              _buildDialogOption(
-                icon: PhosphorIconsRegular.magnifyingGlass,
-                text: 'Open Wallet',
-              ),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildWalletCard(AptosAccountWithMetadata account) => Container(
-        height: 200,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppColors.blue,
-          image: const DecorationImage(
-            image: AssetImage(
-              'assets/images/wallet-creation-wallet-background-wallet-component.png',
-            ),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 110, top: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    account.label,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
+                      Text(
+                        truncateAddress(account.accountAddress.toHex()),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    truncateAddress(account.accountAddress.toHex()),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

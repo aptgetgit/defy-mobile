@@ -56,7 +56,8 @@ class AccountMetadataLocalDataSource {
         return left(existingAddressResult.getLeft().toNullable()!);
       }
       if (existingAddressResult.isRight() &&
-          existingAddressResult.getRight().isSome()) {
+          existingAddressResult.getRight().isSome() &&
+          existingAddressResult.getRight().toNullable()!.isSome()) {
         throw StateError('Account with this address already exists');
       }
 
@@ -67,7 +68,8 @@ class AccountMetadataLocalDataSource {
         return left(existingLabelResult.getLeft().toNullable()!);
       }
       if (existingLabelResult.isRight() &&
-          existingLabelResult.getRight().isSome()) {
+          existingLabelResult.getRight().isSome() &&
+          existingLabelResult.getRight().toNullable()!.isSome()) {
         throw StateError('Account with label "$label" already exists');
       }
 

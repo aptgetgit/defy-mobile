@@ -27,7 +27,7 @@ class ActiveAccount extends _$ActiveAccount {
     );
 
     final Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
-    activeAccount = await getActiveAccount.call();
+        activeAccount = await getActiveAccount.call();
 
     if (activeAccount.isLeft()) {
       final ExceptionWithStackTrace left =
@@ -38,12 +38,14 @@ class ActiveAccount extends _$ActiveAccount {
       );
     }
 
-    if (activeAccount.isRight() && activeAccount.getRight().isSome()) {
+    if (activeAccount.isRight() &&
+        activeAccount.getRight().isSome() &&
+        activeAccount.getRight().toNullable()!.isSome()) {
       return activeAccount.getRight().toNullable()!;
     }
 
     final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
-    accounts = await listAccounts.call();
+        accounts = await listAccounts.call();
 
     if (accounts.isLeft()) {
       final ExceptionWithStackTrace left = accounts.getLeft().toNullable()!;
@@ -57,8 +59,8 @@ class ActiveAccount extends _$ActiveAccount {
         accounts.getRight().toNullable()!;
 
     if (accountsSet.isNotEmpty) {
-      await setActiveAccount
-          .call(accountAddress: accountsSet.first.accountAddress);
+      await setActiveAccount.call(
+          accountAddress: accountsSet.first.accountAddress);
       return Option<AptosAccountWithMetadata>.of(accountsSet.first);
     }
 
@@ -76,9 +78,9 @@ class ActiveAccount extends _$ActiveAccount {
     state = result.fold(
       (ExceptionWithStackTrace left) =>
           AsyncValue<Option<AptosAccountWithMetadata>>.error(
-            left.exception,
-            left.stackTrace,
-          ),
+        left.exception,
+        left.stackTrace,
+      ),
       (_) => const AsyncValue<Option<AptosAccountWithMetadata>>.data(
         Option<AptosAccountWithMetadata>.none(),
       ),
@@ -96,9 +98,9 @@ class ActiveAccount extends _$ActiveAccount {
     state = result.fold(
       (ExceptionWithStackTrace left) =>
           AsyncValue<Option<AptosAccountWithMetadata>>.error(
-            left.exception,
-            left.stackTrace,
-          ),
+        left.exception,
+        left.stackTrace,
+      ),
       (_) => const AsyncValue<Option<AptosAccountWithMetadata>>.data(
         Option<AptosAccountWithMetadata>.none(),
       ),

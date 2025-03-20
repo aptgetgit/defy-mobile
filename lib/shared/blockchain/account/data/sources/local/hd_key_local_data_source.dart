@@ -46,7 +46,8 @@ class HDKeyDataSource {
         return left(existingKeyResult.getLeft().toNullable()!);
       }
       if (existingKeyResult.isRight() &&
-          existingKeyResult.getRight().isSome()) {
+          existingKeyResult.getRight().isSome() &&
+          existingKeyResult.getRight().toNullable()!.isSome()) {
         throw StateError('Key with this ID already exists');
       }
 

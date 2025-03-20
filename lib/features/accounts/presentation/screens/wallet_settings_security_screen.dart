@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:fpdart/src/either.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -27,7 +27,8 @@ class WalletSettingsSecurityScreen extends ConsumerStatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(
-        DiagnosticsProperty<AccountAddress>('accountAddress', accountAddress),);
+      DiagnosticsProperty<AccountAddress>('accountAddress', accountAddress),
+    );
   }
 }
 
@@ -58,132 +59,126 @@ class _WalletSettingsSecurityScreenState
       ),
     );
 
-    overlay?.insert(overlayEntry);
-    Future.delayed(const Duration(seconds: 2), () {
-      overlayEntry.remove();
-    });
+    overlay.insert(overlayEntry);
+    Future<void>.delayed(const Duration(seconds: 2), overlayEntry.remove);
   }
 
- Future<void> _revealSeedPhrase(BuildContext context, WidgetRef ref) async {
-  try {
-    final GetAccountMnemonicUseCase getAccountMnemonicUseCase =
-        ref.watch(getAccountMnemonicUseCaseProvider);
-    final Either<ExceptionWithStackTrace, (String, AptosDerivationPath)> result = await getAccountMnemonicUseCase.call(
-      accountAddress: widget.accountAddress,
-    );
+  Future<void> _revealSeedPhrase(BuildContext context, WidgetRef ref) async {
+    try {
+      final GetAccountMnemonicUseCase getAccountMnemonicUseCase =
+          ref.watch(getAccountMnemonicUseCaseProvider);
+      final Either<ExceptionWithStackTrace, (String, AptosDerivationPath)>
+          result = await getAccountMnemonicUseCase.call(
+        accountAddress: widget.accountAddress,
+      );
 
-    await result.fold(
-      (ExceptionWithStackTrace exception) async {
-      
-        if (!mounted) {
-          return;
-        }
-        await showDialog<void>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Error'),
-            content: Text(exception.toString()),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-      },
-      ((String, AptosDerivationPath) data) async {
-        // Handle the success case
-        final (String mnemonic, AptosDerivationPath derivationPath) = data;
-
-        if (!mounted) {
-          return;
-        }
-
-        final List<String> words = mnemonic.split(' ');
-
-        await showModalBottomSheet<void>(
-          context: context,
-          builder: (BuildContext context) => Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    const Text(
-                      'Seed Phrase',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(PhosphorIconsBold.x),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Do not share this with anyone',
-                  style: TextStyle(fontSize: 14, color: AppColors.greyLight),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.greyVeryLight,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: words.map(_buildWordChip).toList(),
-                  ),
-                ),
-                const SizedBox(height: 60),
-                BlackButtonXL(
-                  onClick: () {
-                    Clipboard.setData(ClipboardData(text: mnemonic));
-                    _showCustomToast(context);
-                  },
-                  title: 'Copy Seed Phrase',
-                  margin: EdgeInsets.zero,
+      await result.fold(
+        (ExceptionWithStackTrace exception) async {
+          if (!mounted) {
+            return;
+          }
+          await showDialog<void>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Error'),
+              content: Text(exception.toString()),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
                 ),
               ],
             ),
-          ),
-        );
-      },
-    );
-  } on Exception catch (e) {
-    if (!mounted) {
-      return;
+          );
+        },
+        ((String, AptosDerivationPath) data) async {
+          // Handle the success case
+          final (String mnemonic, AptosDerivationPath derivationPath) = data;
+
+          if (!mounted) {
+            return;
+          }
+
+          final List<String> words = mnemonic.split(' ');
+
+          await showModalBottomSheet<void>(
+            context: context,
+            builder: (BuildContext context) => Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Seed Phrase',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: const Icon(PhosphorIconsBold.x),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Do not share this with anyone',
+                    style: TextStyle(fontSize: 14, color: AppColors.greyLight),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.greyVeryLight,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: words.map(_buildWordChip).toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 60),
+                  BlackButtonXL(
+                    onClick: () {
+                      Clipboard.setData(ClipboardData(text: mnemonic));
+                      _showCustomToast(context);
+                    },
+                    title: 'Copy Seed Phrase',
+                    margin: EdgeInsets.zero,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    } on Exception catch (e) {
+      if (!mounted) {
+        return;
+      }
+      await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(e.toString()),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
-    await showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(e.toString()),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
   }
-}
-
-
-
-
 
   Widget _buildWordChip(String word) => Animate(
         effects: <Effect<dynamic>>[
@@ -212,13 +207,14 @@ class _WalletSettingsSecurityScreenState
     try {
       final GetAccountPrivateKeyUseCase getAccountPrivateKeyUseCase =
           ref.watch(getAccountPrivateKeyUseCaseProvider);
-      final Either<ExceptionWithStackTrace, Uint8List> result = await getAccountPrivateKeyUseCase.call(
+      final Either<ExceptionWithStackTrace, Uint8List> result =
+          await getAccountPrivateKeyUseCase.call(
         accountAddress: widget.accountAddress,
       );
 
       final Uint8List privateKeyBytes = await result.fold(
         (ExceptionWithStackTrace exception) async {
-          throw exception; // Handle the exception as needed
+          throw Exception('An error occurred: $exception');
         },
         (Uint8List privateKey) async => privateKey,
       );

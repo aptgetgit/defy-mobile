@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,6 +14,7 @@ import '../components/new_wallet_bottom_sheet.dart';
 import '../components/wallet_pagination_indicator.dart';
 import '../components/wallet_swiper.dart';
 import '../provider/choose_wallet_screen_provider.dart';
+import '../util/helpers.dart';
 
 class ChooseWalletUserScreen extends ConsumerStatefulWidget {
   const ChooseWalletUserScreen({super.key});
@@ -27,9 +29,11 @@ class _ChooseWalletUserScreenState
   @override
   Widget build(BuildContext context) {
     final Future<Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>>
-    accountsFuture = ref.watch(listAptosAccountsUseCaseProvider).call();
+        accountsFuture = ref.watch(listAptosAccountsUseCaseProvider).call();
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Row(
           children: <Widget>[
             CircleAvatar(
@@ -96,7 +100,7 @@ class _ChooseWalletUserScreenState
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               children: <Widget>[
-                Text(
+                const Text(
                   'Choose Wallet',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -147,15 +151,14 @@ class _ChooseWalletUserScreenState
           const SizedBox(height: 16),
           Expanded(
             child: FutureBuilder<
-              Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
-            >(
+                Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>>(
               future: accountsFuture,
               builder: (
                 BuildContext context,
                 AsyncSnapshot<
-                  Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
-                >
-                snapshot,
+                        Either<ExceptionWithStackTrace,
+                            Set<AptosAccountWithMetadata>>>
+                    snapshot,
               ) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -258,9 +261,12 @@ class _ChooseWalletUserScreenState
                                       ),
                                       CircleAvatar(
                                         maxRadius: 16,
-                                        backgroundColor: AppColors.blue,
-                                        child: Image.asset(
-                                          Assets.images.starStruck.path,
+                                        backgroundColor: accounts[currentIndex]
+                                            .backgroundColor,
+                                        child: CachedNetworkImage(
+                                          imageUrl: accounts[currentIndex]
+                                              .iconUri
+                                              .toString(),
                                           height: 20,
                                         ),
                                       ),
@@ -283,4 +289,61 @@ class _ChooseWalletUserScreenState
       ),
     );
   }
+
+  Widget buildWalletCard(AptosAccountWithMetadata account) => Container(
+        height: 200,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: account.backgroundColor,
+          image: const DecorationImage(
+            image: AssetImage(
+              'assets/images/wallet-creation-wallet-background-wallet-component.png',
+            ),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          children: <Widget>[
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              top: 30,
+              left: 34,
+              child: CachedNetworkImage(
+                imageUrl: account.iconUri.toString(),
+                height: 40,
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 110, top: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        account.label,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      Text(
+                        truncateAddress(account.accountAddress.toHex()),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
 }

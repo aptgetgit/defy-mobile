@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/constants/animated_emoji.dart';
+
 import '../../../../core/utils/emoji_utils.dart';
 import '../../../../shared/blockchain/account/presentation/providers/generate_account_flow_provider.dart';
+
 import '../../../../shared/blockchain/account/presentation/states/generate_account_flow_state.dart';
+
 import '../state/import_wallet_state.dart';
 
 part 'generated/import_wallet_provider.g.dart';
@@ -92,10 +95,16 @@ class ImportWalletNotifier extends _$ImportWalletNotifier {
       state = state.copyWith(showWalletName: true, currentStep: 1);
     } else if (state.showWalletName) {
       state = state.copyWith(
-          showWalletName: false, showWalletColor: true, currentStep: 2);
+        showWalletName: false,
+        showWalletColor: true,
+        currentStep: 2,
+      );
     } else if (state.showWalletColor) {
       state = state.copyWith(
-          showWalletColor: false, showEmojiPicker: true, currentStep: 3);
+        showWalletColor: false,
+        showEmojiPicker: true,
+        currentStep: 3,
+      );
     } else if (state.showEmojiPicker) {
       await generateAccount();
     }
@@ -104,10 +113,16 @@ class ImportWalletNotifier extends _$ImportWalletNotifier {
   void navigateToPreviousSection() {
     if (state.showEmojiPicker) {
       state = state.copyWith(
-          showEmojiPicker: false, showWalletColor: true, currentStep: 2);
+        showEmojiPicker: false,
+        showWalletColor: true,
+        currentStep: 2,
+      );
     } else if (state.showWalletColor) {
       state = state.copyWith(
-          showWalletColor: false, showWalletName: true, currentStep: 1);
+        showWalletColor: false,
+        showWalletName: true,
+        currentStep: 1,
+      );
     } else if (state.showWalletName) {
       state = state.copyWith(showWalletName: false, currentStep: 0);
     }

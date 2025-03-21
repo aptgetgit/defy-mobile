@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -69,13 +69,13 @@ class _ExploreMarketScreenState extends State<ExploreMarketScreen> with SingleTi
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(PhosphorIconsBold.caretLeft),
+          child: Icon(PhosphorIconsBold.caretLeft, size: 20.sp),
         ),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Market Explore',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 20.sp,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -86,48 +86,49 @@ class _ExploreMarketScreenState extends State<ExploreMarketScreen> with SingleTi
             children: <Widget>[
               //search bar
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 child: Container(
                   width: double.infinity,
-                  height: 48,
+                  height: 48.h,
                   decoration: BoxDecoration(
                     color: const Color(0xfff4f4f6),
-                    borderRadius: BorderRadius.circular(58),
+                    borderRadius: BorderRadius.circular(58.r),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      const Gap(16),
-                      const Icon(
+                      Gap(16.w),
+                      Icon(
                         PhosphorIconsBold.magnifyingGlass,
                         color: AppColors.greyMedium,
+                        size: 18.sp,
                       ),
-                      const Gap(8),
+                      Gap(8.w),
                       Expanded(
                         child: TextField(
                           controller: _searchController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Search or paste URL',
                             hintStyle: TextStyle(
                               color: AppColors.greyMedium,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
                       ),
-                      const Icon(
+                      Icon(
                         PhosphorIconsBold.cards,
                         color: AppColors.greyMedium,
+                        size: 18.sp,
                       ),
-                      const Gap(16),
+                      Gap(16.w),
                     ],
                   ),
                 ),
               ),
-              const Gap(12),
+              Gap(12.h),
 
               //banners scroll
               _buildTopBanner(context),
@@ -152,14 +153,14 @@ class _ExploreMarketScreenState extends State<ExploreMarketScreen> with SingleTi
     );
 
   Widget _buildCategoryHeader(String title, VoidCallback onTap) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 18,
+            style: TextStyle(
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -168,15 +169,15 @@ class _ExploreMarketScreenState extends State<ExploreMarketScreen> with SingleTi
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Text(
+                Text(
                   'See all',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     color: AppColors.blue,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 16),
+                Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 16.sp),
               ],
             ),
           ),
@@ -192,10 +193,10 @@ Widget _buildTopBanner(BuildContext context) {
       scrollDirection: Axis.horizontal,
       itemCount: 3,
       itemBuilder: (BuildContext ctx, int index) => Container(
-          margin: const EdgeInsets.only(left: 18),
+          margin: EdgeInsets.only(left: 18.w),
           width: width * .55,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(18.r),
             image: const DecorationImage(
               image: AssetImage('assets/images/market-phone.png'), // Replace with your image path
               fit: BoxFit.cover,
@@ -207,7 +208,7 @@ Widget _buildTopBanner(BuildContext context) {
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(18.r),
                     gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
@@ -219,12 +220,12 @@ Widget _buildTopBanner(BuildContext context) {
 
               // Top left container
               Positioned(
-                top: 12,
-                left: 12,
+                top: 12.h,
+                left: 12.w,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(30.r),
                     color: AppColors.white.withValues(alpha: .2),
                   ),
                   child: Row(
@@ -232,12 +233,13 @@ Widget _buildTopBanner(BuildContext context) {
                       Icon(
                         PhosphorIcons.usersThree(),
                         color: AppColors.white,
+                        size: 16.sp,
                       ),
-                      const SizedBox(width: 6),
-                      const Text(
+                      SizedBox(width: 6.w),
+                      Text(
                         '562',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w700,
                           color: AppColors.white,
                         ),
@@ -247,9 +249,9 @@ Widget _buildTopBanner(BuildContext context) {
                 ),
               ),
              
-              const Positioned(
-                bottom: 12,
-                left: 12,
+              Positioned(
+                bottom: 12.h,
+                left: 12.w,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -257,24 +259,24 @@ Widget _buildTopBanner(BuildContext context) {
                     Text(
                       'Basket of Fun',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: AppColors.white,
                       ),
                     ),
-                    SizedBox(height: 4), // Space between text and icon
+                    SizedBox(height: 4.h), // Space between text and icon
                     Row(
                       children: <Widget>[
                         Icon(
                           PhosphorIconsFill.caretUp,
                           color: AppColors.green,
-                          size: 14,
+                          size: 14.sp,
                         ),
-                        SizedBox(width: 4), // Space between icon and text
+                        SizedBox(width: 4.w), // Space between icon and text
                         Text(
                           '22.71%',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColors.green,
                           ),
@@ -291,9 +293,6 @@ Widget _buildTopBanner(BuildContext context) {
   );
 }
 
-
-
-
   Widget _buildVaultTile(BuildContext context) {
     final double width = context.screenWidth;
     final List<String> coinsLogos = <String>[
@@ -307,23 +306,23 @@ Widget _buildTopBanner(BuildContext context) {
       shrinkWrap: true,
       itemCount: 2,
       itemBuilder: (BuildContext ctx, int index) => Container(
-          padding: const EdgeInsets.all(14),
-          margin: const EdgeInsets.only(left: 18, right: 18, bottom: 16),
+          padding: EdgeInsets.all(14.w),
+          margin: EdgeInsets.only(left: 18.w, right: 18.w, bottom: 16.h),
           decoration: BoxDecoration(
             color: AppColors.greyVeryLight2,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(18.r),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text(
+              Text(
                 'Basket of memes',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const Gap(4),
+              Gap(4.h),
               Row(
                 children: <Widget>[
                   SizedBox(
@@ -342,24 +341,24 @@ Widget _buildTopBanner(BuildContext context) {
                       ],
                     ),
                   ),
-                  const Text(
+                  Text(
                     '+2',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.greyLight,
                     ),
                   ),
                 ],
               ),
-              const Gap(14),
-              const Row(
+              Gap(14.h),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
                     'Investors',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.greyLight,
                     ),
@@ -367,28 +366,28 @@ Widget _buildTopBanner(BuildContext context) {
                   Text(
                     'All time Returns',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.greyLight,
                     ),
                   ),
                 ],
               ),
-              const Row(
+              Row(
                 children: <Widget>[
                   Text(
                     '562',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Spacer(),
-                  Icon(PhosphorIconsFill.caretUp, color: AppColors.green),
+                  const Spacer(),
+                  Icon(PhosphorIconsFill.caretUp, color: AppColors.green, size: 18.sp),
                   Text(
                     '22.71%',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.green,
                     ),
@@ -414,39 +413,39 @@ Widget _buildTopBanner(BuildContext context) {
         shrinkWrap: true,
         itemCount: coinsLogos.length,
         itemBuilder: (BuildContext ctx, int index) => ListTile(
-            horizontalTitleGap: 12,
+            horizontalTitleGap: 12.w,
             leading: Image.network(
               coinsLogos[index],
               width: width * .1,
             ),
-            title: const Text(
+            title: Text(
               'APTOS',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            subtitle: const Text(
+            subtitle: Text(
               r'$76.56M TVL',
               style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.greyLight,),
             ),
-            trailing: const Column(
+            trailing: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
                   '56% APR',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   'Variable',
                   style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.greyLight,),
                 ),
@@ -469,7 +468,7 @@ Widget _buildTopBanner(BuildContext context) {
     shrinkWrap: true,
     itemCount: coinsLogos.length,
     itemBuilder: (BuildContext ctx, int index) => ListTile(
-        horizontalTitleGap: 12,
+        horizontalTitleGap: 12.w,
         leading: SizedBox(
           width: width * .08 * 1.5,  // Set width to allow enough space for overlapping logos
           child: Stack(
@@ -491,18 +490,18 @@ Widget _buildTopBanner(BuildContext context) {
             ],
           ),
         ),
-        title: const Text(
+        title: Text(
           'APT/USDC',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
           ),
         ),
         subtitle: RichText(
-          text: const TextSpan(
+          text: TextSpan(
             text: 'VOL ',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w400,
               color: AppColors.greyLight,
             ),
@@ -510,7 +509,7 @@ Widget _buildTopBanner(BuildContext context) {
               TextSpan(
                 text: r'$89M',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
                   color: AppColors.greyDark,
                 ),
@@ -518,20 +517,20 @@ Widget _buildTopBanner(BuildContext context) {
             ],
           ),
         ),
-        trailing: const Column(
+        trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Text(
               r'$14,900.84',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(
               '+0.023%',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
                 color: AppColors.green,
               ),
@@ -541,5 +540,4 @@ Widget _buildTopBanner(BuildContext context) {
       ),
   );
 }
-
 }

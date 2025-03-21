@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -7,7 +8,6 @@ import '../../../../config/theme/colors.dart';
 import '../../../shared/presentation/widgets/custom_check_box.dart';
 
 class TokenWatchlistBottomSheet extends StatefulWidget {
-
   const TokenWatchlistBottomSheet({required this.onAddToWatchlist, super.key});
   final Function(int?) onAddToWatchlist;
 
@@ -30,18 +30,18 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
   Widget _buildMainBottomSheet() => Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(21),
-            topRight: Radius.circular(21),
+            topLeft: Radius.circular(21.r),
+            topRight: Radius.circular(21.r),
           ),
         ),
-        padding: const EdgeInsets.only(
-          top: 12,
-          left: 20,
-          right: 4,
-          bottom: 32,
+        padding: EdgeInsets.only(
+          top: 12.h,
+          left: 20.w,
+          right: 4.w,
+          bottom: 32.h,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -50,21 +50,21 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text(
+                Text(
                   'Choose Collection',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
                 ),
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: const Icon(PhosphorIconsBold.x, color: Colors.black, size: 24),
+                  icon: Icon(PhosphorIconsBold.x, color: Colors.black, size: 24.sp),
                 ),
               ],
             ),
-            const Gap(4),
+            Gap(4.h),
             Padding(
-              padding: const EdgeInsets.only(right: 16),
+              padding: EdgeInsets.only(right: 16.w),
               child: Column(
                 children: <Widget>[
                   _buildCollectionItem(
@@ -97,7 +97,7 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
                       });
                     },
                   ),
-                  const Gap(10),
+                  Gap(10.h),
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -105,23 +105,26 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
                       });
                     },
                     child: Container(
-                      height: 54,
+                      height: 54.h,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: AppColors.greyVeryLight,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: <Widget>[
-                          Gap(10),
-                          Icon(PhosphorIconsFill.plusCircle,size: 28),
-                          Gap(10),
-                          Text('Create new collection', style: TextStyle(fontSize:16,color: AppColors.greyLight)),
+                          Gap(10.w),
+                          Icon(PhosphorIconsFill.plusCircle, size: 28.sp),
+                          Gap(10.w),
+                          Text(
+                            'Create new collection', 
+                            style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   ElevatedButton(
                     onPressed: () {
                       // Implement add to watchlist logic, using _selectedCollectionIndex
@@ -136,10 +139,10 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
                           : AppColors.greyMedium,
                       elevation: 0,
                       foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 54),
-                      textStyle: const TextStyle(fontSize: 16),
+                      minimumSize: Size(double.infinity, 54.h),
+                      textStyle: TextStyle(fontSize: 16.sp),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
+                        borderRadius: BorderRadius.circular(40.r),
                       ),
                     ),
                     child: const Text('Add to Watchlist'),
@@ -159,20 +162,20 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(21),
-            topRight: Radius.circular(21),
+            topLeft: Radius.circular(21.r),
+            topRight: Radius.circular(21.r),
           ),
         ),
-        padding: const EdgeInsets.only(top: 12,bottom: 32),
+        padding: EdgeInsets.only(top: 12.h, bottom: 32.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 4, right: 4),
+              padding: EdgeInsets.only(left: 4.w, right: 4.w),
               child: Row(
                 children: <Widget>[
                   IconButton(
@@ -181,44 +184,46 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
                         _isCreatingCollection = false; // Go back to main sheet
                       });
                     },
-                    icon: const Icon(PhosphorIconsBold.caretLeft, size: 24), // Back button
+                    icon: Icon(PhosphorIconsBold.caretLeft, size: 24.sp), // Back button
                   ),
-                  const Text(
+                  Text(
                     'New Token Collection',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context); // Close the whole sheet
                     },
-                    icon: const Icon(PhosphorIconsBold.x, color: Colors.black, size: 24),
+                    icon: Icon(PhosphorIconsBold.x, color: Colors.black, size: 24.sp),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(left: 20.w, right: 20.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Gap(8),
-                  const Text('Collections helps you to group tokens and keep track on them',
-                    style: TextStyle(fontSize: 16, color: AppColors.greyLight),),
-                  const Gap(20),
-                  const Text('Collection name', style: TextStyle(fontSize: 14,color: AppColors.greyLight)),
-                  const Gap(4),
+                  Gap(8.h),
+                  Text(
+                    'Collections helps you to group tokens and keep track on them',
+                    style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
+                  ),
+                  Gap(20.h),
+                  Text('Collection name', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                  Gap(4.h),
                   Container(
-                    height: 54,
+                    height: 54.h,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: AppColors.greyVeryLight,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
-                    child: const TextField(
+                    child: TextField(
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
                       ),
                     ),
                   ),
@@ -240,15 +245,17 @@ class _TokenWatchlistBottomSheetState extends State<TokenWatchlistBottomSheet> {
       InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8.h),
           child: Row(
             children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(title, style: const TextStyle(fontSize: 18)),
-                  Text('$count Tokens',
-                      style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 100, 109, 128)),),
+                  Text(title, style: TextStyle(fontSize: 18.sp)),
+                  Text(
+                    '$count Tokens',
+                    style: TextStyle(fontSize: 14.sp, color: const Color.fromARGB(255, 100, 109, 128)),
+                  ),
                 ],
               ),
               const Spacer(),

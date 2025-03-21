@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
-import '../../explore/presentation/scrceens/explore_screen.dart';
 import '../../shared/presentation/widgets/custom_bottom_nav_bar_with_holders.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../../token_info/presentation/shared/staking_chart.dart';
@@ -61,60 +61,75 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
     final double scrollProgress = (_scrollOffset / 200).clamp(0.0, 1.0);
-
-    const double startX = 16;
-    const double startY = 190;
-    final double endX = (screenWidth - 100) / 2 - 40;
-    const double endY = 70;
-
+    
+    // Define a safe top position that works across different device sizes
+    // This is the position where elements should end up when scrolled
+    final double safeTopPosition = statusBarHeight;
+    
+    // Calculate positions based on screen proportions rather than fixed values
+    
+    // Aptos text position
+    final double startX = 16.w;
+    final double startY = screenHeight * 0.24; // Use percentage of screen height
+    final double endX = (screenWidth - 100.w) / 2 - 40.w;
+    final double endY = safeTopPosition + 12.h; // Relative to safe top position
+    
     final double animatedX = startX + (endX - startX) * scrollProgress;
     final double animatedY = startY - (startY - endY) * scrollProgress;
-    final double textSize = 24 - (8 * scrollProgress);
+    final double textSize = (24 - (8 * scrollProgress)).sp;
 
-    const double investorsStartX = 16;
-    const double investorsStartY = 226;
-    final double investorsEndX = (screenWidth - 200) / 2 + 60;
-    const double investorsEndY = 73;
+    // APT label position
+    final double investorsStartX = 16.w;
+    final double investorsStartY = screenHeight * 0.28; // Use percentage of screen height
+    final double investorsEndX = (screenWidth - 200.w) / 2 + 60.w;
+    final double investorsEndY = safeTopPosition + 16.h; // Align with main text
 
     final double animatedInvestorsX = investorsStartX + (investorsEndX - investorsStartX) * scrollProgress;
     final double animatedInvestorsY = investorsStartY - (investorsStartY - investorsEndY) * scrollProgress;
-    final double investorsTextSize = 14 - (2 * scrollProgress);
+    final double investorsTextSize = (14 - (2 * scrollProgress)).sp;
 
+    // Measure the width of the "APT" text for accurate positioning
     final TextPainter investorsTextPainter = TextPainter(
       text: TextSpan(
-        text: r'$2,212.21',
+        text: 'APT',
         style: TextStyle(fontSize: investorsTextSize, color: Colors.grey[600]),
       ),
       textDirection: TextDirection.ltr,
     )..layout();
 
-    final double amountStartX = screenWidth - 120;
-    const double amountStartY = 193;
-    final double amountEndX = (screenWidth - 200) / 2 + 11;
-    const double amountEndY = 90;
+    // Amount text position
+    final double amountStartX = screenWidth - 120.w;
+    final double amountStartY = screenHeight * 0.24; // Use percentage of screen height
+    final double amountEndX = (screenWidth - 200.w) / 2 + 11.w;
+    final double amountEndY = safeTopPosition + 33.h; // Position below title
 
     final double animatedAmountX = amountStartX + (amountEndX - amountStartX) * scrollProgress;
     final double animatedAmountY = amountStartY - (amountStartY - amountEndY) * scrollProgress;
-    final double amountTextSize = 24 - (12 * scrollProgress);
+    final double amountTextSize = (24 - (12 * scrollProgress)).sp;
 
-    final double percentageStartX = screenWidth - 67;
-    const double percentageStartY = 226;
-    final double percentageEndX = investorsStartX + investorsTextPainter.width + 98;
-    const double percentageEndY = 90;
+    // Percentage indicator position
+    final double percentageStartX = screenWidth - 67.w;
+    final double percentageStartY = screenHeight * 0.28; // Use percentage of screen height
+    final double percentageEndX = investorsStartX + investorsTextPainter.width + 127.w;
+    final double percentageEndY = safeTopPosition + 33.h; // Align with amount text
 
     final double animatedPercentageX = percentageStartX + (percentageEndX - percentageStartX) * scrollProgress;
     final double animatedPercentageY = percentageStartY - (percentageStartY - percentageEndY) * scrollProgress;
-    final double percentageTextSize = 14 - (2 * scrollProgress);
+    final double percentageTextSize = (14 - (2 * scrollProgress)).sp;
 
-    final double imageStartX = screenWidth / 2 - 180;
-    const double imageStartY = 140;
-    const double imageEndX = 60;
-    const double imageEndY = 75;
+    // Logo image position
+    final double imageStartX = screenWidth / 2 - 180.w;
+    final double imageStartY = screenHeight * 0.18; // Use percentage of screen height
+    final double imageEndX = 60.w;
+    final double imageEndY = safeTopPosition + 15.h; // Relative to safe top position
 
     final double animatedImageX = imageStartX + (imageEndX - imageStartX) * scrollProgress;
     final double animatedImageY = imageStartY - (imageStartY - imageEndY) * scrollProgress;
-    final double imageSize = 40 - (10 * scrollProgress);
+    final double imageSize = (40 - (10 * scrollProgress)).w;
+
 
     return Scaffold(
       body: Stack(
@@ -124,46 +139,44 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
             slivers: <Widget>[
               SliverAppBar(
                 backgroundColor: Colors.white,
-                expandedHeight: 200,
+                expandedHeight: 200.h,
                 leading: IconButton(
-                  icon: const Icon(
-                    PhosphorIconsBold.caretLeft, // Corrected to use PhosphorIconsBold
+                  icon: Icon(
+                    PhosphorIconsBold.caretLeft,
                     color: Colors.black,
+                    size: 24.sp,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ExploreScreen()),
-                    );
+                    Navigator.pop(context);
                   },
                 ),
                 pinned: true,
-               actions: <Widget>[
-                IconButton(
-                  icon: Icon(PhosphorIcons.star()),
-                  onPressed: _showWatchlistBottomSheet,
-                ),
-                IconButton(
-                  icon:  Icon(PhosphorIcons.bell()),
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
-                    );
-                  },
-                ),
-              ],
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(PhosphorIconsRegular.star, size: 24.sp),
+                    onPressed: _showWatchlistBottomSheet,
+                  ),
+                  IconButton(
+                    icon: Icon(PhosphorIconsRegular.bell, size: 24.sp),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
+                      );
+                    },
+                  ),
+                ],
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       const StakingChart(),
-                      const Gap(16),
+                      Gap(16.h),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -172,7 +185,7 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                     ],
                   ),
                 ),
@@ -190,14 +203,17 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                 ),
                 pinned: true,
               ),
-              SliverFillRemaining(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: const <Widget>[
-                    AboutPage(),
-                    ActivityPage(),
-                    AnalyticsPage(),
-                  ],
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height + 275.h,
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: const <Widget>[
+                      AboutPage(),
+                      ActivityPage(),
+                      AnalyticsPage(),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -258,12 +274,12 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const Gap(4),
+                Gap(4.w),
                 Icon(
-  PhosphorIcons.arrowDown(), // Call the function with a style
-  size: 14,
-  color: Colors.green,
-),
+                  PhosphorIconsRegular.arrowDown,
+                  size: 14.sp,
+                  color: Colors.green,
+                ),
               ],
             ),
           ),
@@ -284,27 +300,27 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
   }
 
   Widget _buildInfoContainer(String value, String label) => Container(
-    height: 65,
-    width: 170,
+    height: 65.h,
+    width: 170.w,
     decoration: BoxDecoration(
       color: AppColors.greyVeryLight,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(12.r),
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 18,
+          style: TextStyle(
+            fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
-        const Gap(4),
+        Gap(4.h),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
+          style: TextStyle(
+            fontSize: 12.sp,
             fontWeight: FontWeight.w600,
             color: AppColors.greyLight,
           ),
@@ -318,7 +334,7 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (BuildContext context) =>  TokenWatchlistBottomSheet(
+      builder: (BuildContext context) => TokenWatchlistBottomSheet(
         onAddToWatchlist: (int? collectionIndex) {
             setState(() {
               _watchlistTokens.addAll(_selectedTokens);
@@ -335,18 +351,18 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
 
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) => Positioned(
-        bottom: 120,
-        left: 35,
-        right: 35,
+        bottom: 120.h,
+        left: 35.w,
+        right: 35.w,
         child: Material(
           elevation: 4,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           child: Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            height: 60.h,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
             ),
             child: GestureDetector(
               onTap: () {
@@ -365,13 +381,13 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Image.asset('assets/icons/watchlist-logo2.png', width: 32, height: 32,),
-                  const Text(
+                  Image.asset('assets/icons/watchlist-logo2.png', width: 32.w, height: 32.h),
+                  Text(
                     'Tokens Added to Watchlist',
-                    style: TextStyle(color: AppColors.greyDark, fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(color: AppColors.greyDark, fontWeight: FontWeight.w500, fontSize: 16.sp),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, size: 20, color: AppColors.greyLight,),
+                    icon: Icon(Icons.close, size: 20.sp, color: AppColors.greyLight),
                     onPressed: () {
                       _overlayEntry?.remove();
                       _overlayEntry = null;
@@ -386,7 +402,7 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
     );
     Overlay.of(context).insert(_overlayEntry!);
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future<void>.delayed(const Duration(seconds: 3), () {
       _overlayEntry?.remove();
       _overlayEntry = null;
     });
@@ -394,6 +410,6 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
 
   Widget _buildPoolLogo({bool small = false}) => Image.asset(
       'assets/icons/aptos.png',
-      height: small ? 24 : 32,
+      height: small ? 24.h : 32.h,
     );
 }

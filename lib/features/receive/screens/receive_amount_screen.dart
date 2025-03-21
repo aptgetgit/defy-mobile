@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -18,11 +19,11 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Gap(24),
+            Gap(24.h),
 
             // Amount Display
             Center(
@@ -30,76 +31,76 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
                 children: <Widget>[
                   Text(
                     '\$$_amount', // Display the dynamic amount
-                    style: const TextStyle(fontSize: 54, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 54.sp, fontWeight: FontWeight.w600),
                   ),
-                  const Gap(8),
-                  const Row(
+                  Gap(8.h),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
                         '7.06 APT',
-                        style: TextStyle(fontSize: 14, color: AppColors.greyLight, fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight, fontWeight: FontWeight.w600),
                       ),
-                      Gap(4),
+                      Gap(4.w),
                       Icon(
                         PhosphorIconsBold.arrowsDownUp,
-                        size: 16,
+                        size: 16.sp,
                       ),
                     ],
                   ),
-                  const Gap(85),
+                  Gap(85.h),
 
                   // Asset Selection
                   Container(
-                    height: 66,
+                    height: 66.h,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(15.r),
                       color: AppColors.greyVeryLight,
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.all(10.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          const Row(
+                          Row(
                             children: <Widget>[
                               CircleAvatar(
                                 backgroundColor: Colors.transparent,
-                                backgroundImage: AssetImage('assets/icons/aptos.png'),
-                                radius: 22,
+                                backgroundImage: const AssetImage('assets/icons/aptos.png'),
+                                radius: 22.r,
                               ),
-                              Gap(12),
+                              Gap(12.w),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     'Aptos',
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
                                   ),
                                   Text(
                                     'APT',
-                                    style: TextStyle(fontSize: 14, color: AppColors.greyLight),
+                                    style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight),
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          const Gap(8),
+                          Gap(8.w),
                           TextButton(
                             onPressed: () {
                               // Handle asset change
                               Navigator.pop(context);
                             },
-                            child: const Text(
+                            child: Text(
                               'Change',
-                              style: TextStyle(color: AppColors.blue, fontSize: 16),
+                              style: TextStyle(color: AppColors.blue, fontSize: 16.sp),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const Gap(20),
+                  Gap(20.h),
 
                   // Number Pad
                   Column(
@@ -147,32 +148,37 @@ class _ReceiveAmountScreenState extends State<ReceiveAmountScreen> {
                 });
               }
             : null,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(100.r),
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: icon == null ? 16 : 8,
-            vertical: icon == null ? 12 : 10,
+            horizontal: icon == null ? 16.w : 8.w,
+            vertical: icon == null ? 12.h : 10.h,
           ),
           child: icon == null
               ? Center(
                   child: Text(
                     label,
-                    style: const TextStyle(
-                      fontSize: 22,
+                    style: TextStyle(
+                      fontSize: 22.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 )
-              : Icon(icon),
+              : Icon(icon, size: 22.sp),
         ),
       ),
     );
+    
   // Handle button press
   void _handleSinglePress(String label) {
     setState(() {
       if (label == 'cancel') {
-        // Clear the amount
-        _amount = '0';
+        // Handle backspace logic
+        if (_amount.length > 1) {
+          _amount = _amount.substring(0, _amount.length - 1);
+        } else {
+          _amount = '0';
+        }
       } else if (label == '.') {
         // Add a decimal point if it doesn't already exist
         if (!_amount.contains('.')) {

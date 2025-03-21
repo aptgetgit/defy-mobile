@@ -1,5 +1,5 @@
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -19,7 +19,7 @@ import '../models/audio.dart';
 import '../models/audio_player_provider.dart';
 import '../shared/nft_info_bottom_navbar.dart';
 
-import 'nft_gif_screen.dart';
+
 
 class NftAudioScreen extends ConsumerStatefulWidget {
   const NftAudioScreen({super.key});
@@ -97,239 +97,197 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
 
   @override
   Widget build(BuildContext context) {
-    const double appBarExpandedHeight = 188;
-    const double imageWidth = 353;
-    const double imageHeight = 353;
-    const double appBarImageSize = 32;
-    const double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
+    final double appBarExpandedHeight = 188.h;
+    final double imageWidth = 353.w;
+    final double imageHeight = 353.h;
+    final double appBarImageSize = 32.w;
+    final double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
     final AudioPlayerProvider audioProvider = ref.watch(audioPlayerProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: ColoredBox(
         color: Colors.white,
-        child: Stack(
-          children: [
-            CustomScrollView(
-              controller: _scrollController,
-              slivers: <Widget>[
-                _buildSliverAppBar(context),
-                SliverToBoxAdapter(
-                  child: ColoredBox(
-                    color: Colors.white,
-                    child: Column(
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: <Widget>[
+            _buildSliverAppBar(context),
+            SliverToBoxAdapter(
+              child: ColoredBox(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      alignment: Alignment.topCenter,
                       children: <Widget>[
-                        GestureDetector(
-                          onTap:() {
-                            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const NftGifScreen()));
-                          },
-                          child: Stack(
-                            alignment: Alignment.topCenter,
+                        // Image.asset(
+                        //   'assets/images/cyborg2.png',
+                        //   width: imageWidth,
+                        //   height: imageHeight,
+                        //   fit: BoxFit.cover,
+                        // ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: imageHeight,
+                          child: AnimatedBuilder(
+                            animation: _scrollController,
+                            builder: (BuildContext context, Widget? child) {
+                              final double easeInProgress = _scrollController.hasClients
+                                ? Curves.easeInOut.transform(
+                                    (_scrollController.offset / (maxScrollExtent * 5))
+                                        .clamp(0.0, 1.0),
+                                  )
+                                : 0.0;
+                    
+                              final double animatedWidth =
+                                  imageWidth - (imageWidth - appBarImageSize) * easeInProgress;
+                              final double animatedHeight =
+                                  imageHeight - (imageHeight - appBarImageSize) * easeInProgress;
+                    
+                              final double imageXOffset = (353.w - imageWidth) / 2 + 18.w;
+                              final double targetXOffset = 16.w + 24.w; // Include the horizontal padding
+                    
+                              final double animatedX = imageXOffset +
+                                  (targetXOffset - imageXOffset) * easeInProgress;
+                    
+                              const double imageYOffset = 0;
+                              final double targetYOffset = 16.h;
+                    
+                              final double animatedY = imageYOffset +
+                                  (targetYOffset - imageYOffset) * easeInProgress;
+                    
+                              // Now AnimatedPositioned is a direct child of Stack
+                              return Stack(
+                                children: <Widget>[
+                                  AnimatedPositioned(
+                                    duration: const Duration(milliseconds: 300),
+                                    top: animatedY,
+                                    left: animatedX,
+                                    child: Image.asset(
+                                      'assets/images/cyborg2.png',
+                                      width: animatedWidth,
+                                      height: animatedHeight,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gap(12.h),
+                    Row(
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 20.w),
+                                child: Text('Cyborg 2078 #5623',
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.black,
+                                    ),),
+                              ),
+                            ),
+                            Gap(2.h),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Gap(26.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        children: <Widget>[
+                          //song duration progress
+                          Column(
                             children: <Widget>[
-                              // Image.asset(
-                              //   'assets/images/cyborg2.png',
-                              //   width: imageWidth,
-                              //   height: imageHeight,
-                              //   fit: BoxFit.cover,
-                              // ),
-                              AnimatedBuilder(
-                                animation: _scrollController,
-                                builder: (BuildContext context, Widget? child) {
-                                  final double scrollProgress = _scrollController.hasClients
-                                      ? (_scrollController.offset / maxScrollExtent)
-                                          .clamp(0.0, 1.0)
-                                      : 0.0;
-                          
-                                  final double animatedWidth =
-                                      imageWidth - (imageWidth - appBarImageSize) * scrollProgress;
-                                  final double animatedHeight =
-                                      imageHeight - (imageHeight - appBarImageSize) * scrollProgress;
-                          
-                                  const double imageXOffset = (353 - imageWidth) / 2;
-                                  const double targetXOffset = 16; // Position in the app bar
-                          
-                                  final double animatedX = imageXOffset +
-                                      (targetXOffset - imageXOffset) * scrollProgress;
-                          
-                                  const double imageYOffset = 0;
-                                  const double targetYOffset = 16;
-                          
-                                  final double animatedY = imageYOffset +
-                                      (targetYOffset - imageYOffset) * scrollProgress;
-                          
-                                  return SizedBox(
-                                    
-                                    child: Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                                        child: AnimatedPositioned(
-                                          duration: const Duration(milliseconds: 300),
-                                          top: animatedY,
-                                          left: animatedX,
-                                          child: Image.asset(
-                                            'assets/images/cyborg2.png',
-                                            width: animatedWidth,
-                                            height: animatedHeight,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
+                              //song progress bar
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: SliderTheme(
+                                  data: SliderThemeData(
+                                    overlayShape: SliderComponentShape.noOverlay,
+                                    trackHeight: 4.h,
+                                    trackShape: const RectangularSliderTrackShape(),
+                                    thumbShape:
+                                        RoundSliderThumbShape(enabledThumbRadius: 3.r),
+                                  ),
+                                  child: Slider(
+                                    max: audioProvider.totalDuration.inSeconds.toDouble(),
+                                    value: audioProvider.currentDuration.inSeconds.toDouble(),
+                                    onChanged: (double value) {
+                                      audioProvider.seekTo(Duration(seconds: value.toInt()));
+                                    },
+                                    activeColor: Colors.black,
+                                    inactiveColor: Colors.grey[100],
+                                    thumbColor: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 8.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    //start time
+                                    Text(
+                                      formatTime(audioProvider.currentDuration),
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12.sp,
                                       ),
                                     ),
-                                  );
-                                },
+
+                                    //end time
+                                    Text(
+                                      formatTime(audioProvider.totalDuration),
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                        const Gap(12),
-                        Row(
-                          children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Text('Cyborg 2078 #5623',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.black,
-                                        ),),
-                                  ),
-                                ),
-                                const Gap(2),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 20),
-                                  child: Row(
-                                    children: <Widget>[
-                                      RowSuper(
-                                        innerDistance: -12,
-                                        children: <Widget?>[
-                                          Image.asset('assets/images/avatar-1.png',
-                                              height: 22,),
-                                          Image.asset('assets/images/avatar-2.png',
-                                              height: 22,),
-                                          Image.asset('assets/images/avatar-3.png',
-                                              height: 22,),
-                                        ],
-                                      ),
-                                      const Gap(10),
-                                      Text(
-                                        'James, Jane and 14+ hold',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.greyLight,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 46,
-                                    height: 24,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.greyVeryLight,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Center(child: Text('1x', style: TextStyle(fontSize: 14,color: AppColors.greyLight, fontWeight: FontWeight.w500),)),
-                                  ),
-                                  const Gap(16),
-                                  const Icon(
-                                    PhosphorIconsRegular.shareNetwork,
-                                    color: AppColors.black,
-                                    size: 20,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Gap(26),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
+
+                          Gap(20.h),
+
+                          //playback controls
+                          Row(
                             children: <Widget>[
-                              //song duration progress
-                              Column(
-                                children: <Widget>[
-                                  //song progress bar
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                                    child: SliderTheme(
-                                      data: SliderThemeData(
-                                        overlayShape: SliderComponentShape.noOverlay,
-                                        trackHeight: 14,
-                                        trackShape: const RectangularSliderTrackShape(),
-                                        thumbShape:
-                                            const RoundSliderThumbShape(enabledThumbRadius: 0),
-                                      ),
-                                      child: Slider(
-                                        max: audioProvider.totalDuration.inSeconds.toDouble(),
-                                        value: audioProvider.currentDuration.inSeconds.toDouble(),
-                                        onChanged: (double value) {
-                                          audioProvider.seekTo(Duration(seconds: value.toInt()));
-                                        },
-                                        activeColor: Colors.grey[100],
-                                        inactiveColor: Colors.grey[100],
-                                        thumbColor: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        //start time
-                                        Text(formatTime(audioProvider.currentDuration), style: const TextStyle(color: Colors.grey)),
-
-                                        //shuffe icon
-
-                                        //repeat icon
-
-                                        //end time
-                                        Text(formatTime(audioProvider.totalDuration), style: const TextStyle(color: Colors.grey)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                              Expanded(
+                                child: IconButton(
+                                  iconSize: 40.sp,
+                                  icon: Icon(Icons.replay_10, size: 40.sp),
+                                  onPressed: audioProvider.seekBackward,
+                                ),
                               ),
+                              Gap(20.w),
 
-                              const Gap(20),
-
-                              //playback controls
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
+                              //play/pause button
+                              Expanded(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.white,
+                                  radius: 27.r,
+                                  child: Center(
                                     child: IconButton(
-                                      iconSize: 40,
-                                      icon: const Icon(Icons.replay_10),
-                                      onPressed: audioProvider.seekBackward,
-                                    ),
-                                  ),
-                                  const Gap(20),
-
-                                  //play/pause button
-                                  Expanded(
-                                    child: IconButton(
-                                      iconSize: 50,
-                                      icon: Icon(audioProvider.isPlaying
+                                      iconSize: 30.sp,
+                                      icon: Icon(
+                                        audioProvider.isPlaying
                                           ? PhosphorIconsFill.pause
-                                          :  PhosphorIconsFill.play,),
+                                          : PhosphorIconsFill.play,
+                                        size: 30.sp,
+                                      ),
                                       onPressed: () {
                                         if (!audioProvider.isPlaying) {
                                           audioProvider.playAudio(song.audioPath);
@@ -339,82 +297,65 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
                                       },
                                     ),
                                   ),
-                                  const Gap(20),
+                                ),
+                              ),
+                              Gap(20.w),
 
-                                  //+15 seconds
-                                  Expanded(
-                                    child: IconButton(
-                                      iconSize: 40,
-                                      icon: const Icon(Icons.forward_10),
-                                      onPressed: audioProvider.seekForward,
-                                    ),
-                                  ),
-                                ],
+                              //+15 seconds
+                              Expanded(
+                                child: IconButton(
+                                  iconSize: 32.sp,
+                                  icon: Icon(PhosphorIconsRegular.shareNetwork, size: 32.sp),
+                                  onPressed: () {},
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                        const Gap(30),
-                      ],
-                    ),
-                  ),
-                ),
-                SliverPersistentHeader(
-                  delegate: TabBarDelegate(
-                    CustomTabBar(
-                      tabController: _tabController,
-                      tabs: const <String>[
-                        'About',
-                        'Activity',
-                        'Analytics',
-                      ],
-                    ),
-                  ),
-                  pinned: true,
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 1.3,
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: const <Widget>[
-                        SingleChildScrollView(
-                          physics: NeverScrollableScrollPhysics(),
-                          child: AboutPage(),
-                        ),
-                        ActivityPage(),
-                        AnalyticsPage(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            
-            // Add the slim progress bar that appears when scrolled
-            Positioned(
-              top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
-              left: 0,
-              right: 0,
-              child: AnimatedOpacity(
-                opacity: _showTitle ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 300),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Container(
-                    height: 2,
-                    color: Colors.grey[200], // Background color
-                    child: FractionallySizedBox(
-                      alignment: Alignment.centerLeft,
-                      widthFactor: audioProvider.totalDuration.inMilliseconds > 0
-                          ? audioProvider.currentDuration.inMilliseconds / 
-                            audioProvider.totalDuration.inMilliseconds
-                          : 0.0,
-                      child: Container(
-                        color: Colors.black, // Progress color
+                        ],
                       ),
                     ),
-                  ),
+                    Gap(35.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          _buildInfoContainer('100 APT', 'BOUGHT AT'),
+                          _buildInfoContainer('3', 'ACTIVE BIDS'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                  ],
+                ),
+              ),
+            ),
+            SliverPersistentHeader(
+              delegate: TabBarDelegate(
+                CustomTabBar(
+                  tabController: _tabController,
+                  tabs: const <String>[
+                    'About',
+                    'Activity',
+                    'Analytics',
+                  ],
+                ),
+              ),
+              pinned: true,
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 1.3,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: const <Widget>[
+                    SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: AboutPage(),
+                    ),
+                    ActivityPage(),
+                    AnalyticsPage(),
+                  ],
                 ),
               ),
             ),
@@ -426,27 +367,27 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
   }
 
   Widget _buildInfoContainer(String value, String label) => Container(
-        height: 65,
-        width: 170,
+        height: 65.h,
+        width: 170.w,
         decoration: BoxDecoration(
           color: AppColors.greyVeryLight,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const Gap(4),
+            Gap(4.h),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 12,
+              style: TextStyle(
+                fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.greyLight,
               ),
@@ -466,13 +407,13 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
       backgroundColor: Colors.white,
       leading: GestureDetector(
         onTap: () => Navigator.pop(context),
-        child: const Icon(
+        child: Icon(
           PhosphorIconsBold.caretLeft,
           color: AppColors.black,
-          size: 24,
+          size: 24.sp,
         ),
       ),
-      collapsedHeight: 60,
+      collapsedHeight: 60.h,
       centerTitle: false,
       actions: <Widget>[
         // Conditionally show icons based on scroll position
@@ -509,11 +450,11 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
               ),
               if (_alertCreated)
                 Positioned(
-                  top: 8,
-                  right: 8,
+                  top: 8.h,
+                  right: 8.w,
                   child: Container(
-                    width: 8,
-                    height: 8,
+                    width: 8.w,
+                    height: 8.h,
                     decoration: const BoxDecoration(
                       color: Colors.green,
                       shape: BoxShape.circle,
@@ -533,7 +474,7 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
                   ? PhosphorIconsFill.pause
                   : PhosphorIconsFill.play,
                 color: AppColors.black,
-                size: 20,
+                size: 20.sp,
               ),
               onPressed: () {
                 if (!audioProvider.isPlaying) {
@@ -544,7 +485,7 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
               },
             ),
           ),
-        const Gap(14),
+        Gap(14.w),
       ],
       titleSpacing: 0,
       title: _showTitle
@@ -554,37 +495,37 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
               child: Row(
                 children: <Widget>[
                   _buildPoolLogo(),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           nftName,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.black,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const Gap(4),
+                        Gap(4.h),
                         Row(
                           children: <Widget>[
                             Text(
                               owner,
-                              style: const TextStyle(
-                                fontSize: 12,
+                              style: TextStyle(
+                                fontSize: 12.sp,
                                 color: AppColors.greyLight,
                                 fontWeight: FontWeight.w500,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const Gap(6),
-                            const Icon(
+                            Gap(6.w),
+                            Icon(
                               PhosphorIconsFill.sealCheck,
                               color: AppColors.blue,
-                              size: 16,
+                              size: 16.sp,
                             ),
                           ],
                         ),
@@ -598,22 +539,22 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
               children: <Widget>[
                 Image.asset(
                   'assets/images/Fantasy-Ruins.png',
-                  width: 32,
-                  height: 32,
+                  width: 32.w,
+                  height: 32.h,
                   fit: BoxFit.cover,
                 ),
-                const Gap(8),
-                const Text('Fantasy Ruins',
+                Gap(8.w),
+                Text('Fantasy Ruins',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.black,
                     ),),
-                const Gap(4),
-                const Icon(
+                Gap(4.w),
+                Icon(
                   PhosphorIconsFill.sealCheck,
                   color: AppColors.blue,
-                  size: 20,
+                  size: 20.sp,
                 ),
               ],
             ),
@@ -642,19 +583,19 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
 
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) => Positioned(
-        bottom: 120, // Adjust position as needed
-        left: 35,
-        right: 35,
+        bottom: 120.h, // Adjust position as needed
+        left: 35.w,
+        right: 35.w,
         child: Material(
           // Wrap with Material for shadow
           elevation: 4,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           child: Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            height: 60.h,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
             ),
             child: GestureDetector(
               onTap: () {
@@ -680,20 +621,20 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
                 children: <Widget>[
                   Image.asset(
                     'assets/icons/watchlist-logo2.png',
-                    width: 32,
-                    height: 32,
+                    width: 32.w,
+                    height: 32.h,
                   ),
-                  const Text(
+                  Text(
                     'Tokens Added to Watchlist',
                     style: TextStyle(
                         color: AppColors.greyDark,
                         fontWeight: FontWeight.w500,
-                        fontSize: 16,),
+                        fontSize: 16.sp,),
                   ),
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
-                      size: 20,
+                      size: 20.sp,
                       color: AppColors.greyLight,
                     ),
                     onPressed: () {
@@ -719,6 +660,6 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
 
   Widget _buildPoolLogo({bool small = false}) => Image.asset(
         'assets/images/cyborg2.png',
-        height: small ? 24 : 32,
+        height: small ? 24.h : 32.h,
       );
 }

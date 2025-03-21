@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import '../../shared/presentation/widgets/info_header.dart';
+
 import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_bottom_nav_bar_with_holders.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
+import '../../shared/presentation/widgets/info_header.dart';
 import '../widgets/stake_chart.dart';
 
 class StakeInfoScreen extends StatefulWidget {
@@ -61,7 +63,7 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
     // Calculate percentage text width
     final TextSpan percentageTextSpan = TextSpan(
       text: widget.percentage,
-      style: const TextStyle(fontSize: 24, color: Colors.green, fontWeight: FontWeight.w600),
+      style: TextStyle(fontSize: 24.sp, color: Colors.green, fontWeight: FontWeight.w600),
     );
     final TextPainter percentageTextPainter = TextPainter(
       text: percentageTextSpan,
@@ -76,11 +78,17 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
             slivers: <Widget>[
               SliverAppBar(
                 backgroundColor: Colors.white,
-                expandedHeight: 200,
+                expandedHeight: 200.h,
                 pinned: true,
                 actions: <Widget>[
-                  IconButton(icon: const Icon(PhosphorIconsBold.bell), onPressed: () {}),
-                  IconButton(icon: const Icon(PhosphorIconsBold.shareNetwork), onPressed: () {}),
+                  IconButton(
+                    icon: Icon(PhosphorIconsBold.bell, size: 24.sp), 
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(PhosphorIconsBold.shareNetwork, size: 24.sp), 
+                    onPressed: () {},
+                  ),
                 ],
               ),
               SliverToBoxAdapter(
@@ -88,17 +96,17 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const StakeChart(),
-                    const Gap(40),
+                    Gap(40.h),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            padding: const EdgeInsets.only(left: 16, top: 12, bottom: 12, right: 4),
+                            padding: EdgeInsets.only(left: 16.w, top: 12.h, bottom: 12.h, right: 4.w),
                             decoration: BoxDecoration(
                               color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,8 +114,8 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const Text('100 APT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                                    Text('Invested', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                                    Text('100 APT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                                    Text('Invested', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
                                   ],
                                 ),
                                 Row(
@@ -115,64 +123,64 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: <Widget>[
-                                        const Text(r'+312.21$', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.green)),
-                                        Text('PnL', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                                        Text(r'+312.21$', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: Colors.green)),
+                                        Text('PnL', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
                                       ],
                                     ),
-                                    const Gap(16),
-                                    Icon(PhosphorIconsRegular.caretRight, size: 16, color: Colors.grey[600]),
+                                    Gap(16.w),
+                                    Icon(PhosphorIconsRegular.caretRight, size: 16.sp, color: Colors.grey[600]),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                          const Gap(34),
+                          Gap(34.h),
                           if (!widget.isDelegate)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const Text('Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                const Gap(20),
+                                Text('Details', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                                Gap(20.h),
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 93),
+                                  padding: EdgeInsets.only(right: 93.w),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('Stakers', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                                          const Text('14.28M APT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                          Text('Stakers', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
+                                          Text('14.28M APT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                         ],
                                       ),
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('Total Stakers', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                                          const Text('56.7M', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                          Text('Total Stakers', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
+                                          Text('56.7M', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                         ],
                                       ),
                                     ],
                                   ),
                                 ),
-                                const Gap(18),
+                                Gap(18.h),
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 90),
+                                  padding: EdgeInsets.only(right: 90.w),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('Commission', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                                          const Text('3.02%', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                          Text('Commission', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
+                                          Text('3.02%', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                         ],
                                       ),
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('Rewards', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                                          const Text('652.90 APT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                          Text('Rewards', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
+                                          Text('652.90 APT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                         ],
                                       ),
                                     ],
@@ -183,39 +191,42 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                           if (widget.isDelegate)
                             Column(
                               children: <Widget>[
-                                const Text('Next Unlock in', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                const Gap(20),
+                                Text('Next Unlock in', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                                Gap(20.h),
                                 Row(
                                   children: <Widget>[
-                                    Image.asset('assets/icons/lock.png', width: 38),
-                                    const Gap(4),
-                                    const Text('12 D : 11 H : 21 M', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                                    Image.asset('assets/icons/lock.png', width: 38.w),
+                                    Gap(4.w),
+                                    Text('12 D : 11 H : 21 M', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
                                   ],
                                 ),
                               ],
                             ),
-                          const Gap(32),
-                          const Text('Return Calculator', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                          const Gap(16),
+                          Gap(32.h),
+                          Text('Return Calculator', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                          Gap(16.h),
                           CustomTabBar(tabController: _tabController, tabs: const <String>['Monthly', 'One Time']),
                           SizedBox(
-                            height: 125,
+                            height: 125.h,
                             child: TabBarView(
                               controller: _tabController,
                               children: <Widget>[
                                 Column(
                                   children: <Widget>[
-                                    const Gap(24),
+                                    Gap(24.h),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        const Text('Invested per month', style: TextStyle(fontSize: 14, color: AppColors.greyLight)),
-                                        Text('\$${_investmentAmount.round()}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                        Text('Invested per month', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                                        Text('\$${_investmentAmount.round()}', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600)),
                                       ],
                                     ),
-                                    const Gap(12),
+                                    Gap(12.h),
                                     SliderTheme(
-                                      data: SliderThemeData(trackHeight: 4, overlayShape: SliderComponentShape.noOverlay),
+                                      data: SliderThemeData(
+                                        trackHeight: 4.h, 
+                                        overlayShape: SliderComponentShape.noOverlay,
+                                      ),
                                       child: SizedBox(
                                         width: double.infinity,
                                         child: Slider(
@@ -225,7 +236,7 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                           label: '\$${_investmentAmount.round()}',
                                           onChanged: (double value) => setState(() => _investmentAmount = value),
                                           activeColor: AppColors.blue,
-                                          inactiveColor: AppColors.blue.withValues(alpha: 0.25),
+                                          inactiveColor: AppColors.blue.withOpacity(0.25),
                                         ),
                                       ),
                                     ),
@@ -233,17 +244,20 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                 ),
                                 Column(
                                   children: <Widget>[
-                                    const Gap(24),
+                                    Gap(24.h),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        const Text('Invested per month', style: TextStyle(fontSize: 14, color: AppColors.greyLight)),
-                                        Text('\$${_investmentAmount.round()}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                        Text('Invested per month', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                                        Text('\$${_investmentAmount.round()}', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600)),
                                       ],
                                     ),
-                                    const Gap(12),
+                                    Gap(12.h),
                                     SliderTheme(
-                                      data: SliderThemeData(trackHeight: 4, overlayShape: SliderComponentShape.noOverlay),
+                                      data: SliderThemeData(
+                                        trackHeight: 4.h, 
+                                        overlayShape: SliderComponentShape.noOverlay,
+                                      ),
                                       child: SizedBox(
                                         width: double.infinity,
                                         child: Slider(
@@ -253,7 +267,7 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                           label: '\$${_investmentAmount.round()}',
                                           onChanged: (double value) => setState(() => _investmentAmount = value),
                                           activeColor: AppColors.blue,
-                                          inactiveColor: AppColors.blue.withValues(alpha: 0.25),
+                                          inactiveColor: AppColors.blue.withOpacity(0.25),
                                         ),
                                       ),
                                     ),
@@ -265,19 +279,19 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              const Text('Over the past', style: TextStyle(fontSize: 14, color: AppColors.greyLight)),
-                              const Gap(21),
+                              Text('Over the past', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                              Gap(21.h),
                               Row(
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () => setState(() => _timePeriod = '1M'),
                                     child: Container(
-                                      width: 54,
-                                      height: 32,
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                                      width: 54.w,
+                                      height: 32.h,
+                                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
                                       decoration: BoxDecoration(
                                         border: Border.all(color: _timePeriod == '1M' ? AppColors.blue : AppColors.transparent),
-                                        borderRadius: BorderRadius.circular(40),
+                                        borderRadius: BorderRadius.circular(40.r),
                                         color: AppColors.greyVeryLight,
                                       ),
                                       child: Center(
@@ -286,22 +300,22 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             color: _timePeriod == '1M' ? Colors.blue : AppColors.greyLight,
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const Gap(13),
+                                  Gap(13.w),
                                   GestureDetector(
                                     onTap: () => setState(() => _timePeriod = '3M'),
                                     child: Container(
-                                      width: 54,
-                                      height: 32,
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                                      width: 54.w,
+                                      height: 32.h,
+                                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
                                       decoration: BoxDecoration(
                                         border: Border.all(color: _timePeriod == '3M' ? AppColors.blue : AppColors.transparent),
-                                        borderRadius: BorderRadius.circular(40),
+                                        borderRadius: BorderRadius.circular(40.r),
                                         color: AppColors.greyVeryLight,
                                       ),
                                       child: Center(
@@ -310,22 +324,22 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             color: _timePeriod == '3M' ? Colors.blue : AppColors.greyLight,
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const Gap(13),
+                                  Gap(13.w),
                                   GestureDetector(
                                     onTap: () => setState(() => _timePeriod = '6M'),
                                     child: Container(
-                                      width: 54,
-                                      height: 32,
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                                      width: 54.w,
+                                      height: 32.h,
+                                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
                                       decoration: BoxDecoration(
                                         border: Border.all(color: _timePeriod == '6M' ? AppColors.blue : AppColors.transparent),
-                                        borderRadius: BorderRadius.circular(40),
+                                        borderRadius: BorderRadius.circular(40.r),
                                         color: AppColors.greyVeryLight,
                                       ),
                                       child: Center(
@@ -334,22 +348,22 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             color: _timePeriod == '6M' ? Colors.blue : AppColors.greyLight,
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const Gap(13),
+                                  Gap(13.w),
                                   GestureDetector(
                                     onTap: () => setState(() => _timePeriod = '1Y'),
                                     child: Container(
-                                      width: 54,
-                                      height: 32,
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                                      width: 54.w,
+                                      height: 32.h,
+                                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
                                       decoration: BoxDecoration(
                                         border: Border.all(color: _timePeriod == '1Y' ? AppColors.blue : AppColors.transparent),
-                                        borderRadius: BorderRadius.circular(40),
+                                        borderRadius: BorderRadius.circular(40.r),
                                         color: AppColors.greyVeryLight,
                                       ),
                                       child: Center(
@@ -358,7 +372,7 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             color: _timePeriod == '1Y' ? Colors.blue : AppColors.greyLight,
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                           ),
                                         ),
                                       ),
@@ -368,19 +382,19 @@ class _StakeInfoScreenState extends State<StakeInfoScreen> with SingleTickerProv
                               ),
                             ],
                           ),
-                          const Gap(24),
+                          Gap(24.h),
                           Row(
                             children: <Widget>[
-                              Text('\$${_investmentAmount.round()}', style: const TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.w500)),
-                              const Gap(4),
-                              const Text('would have become', style: TextStyle(fontSize: 14, color: AppColors.greyLight)),
-                              const Gap(4),
-                              const Text(r'$432.23', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black)),
-                              const Gap(4),
-                              const Text('(+2.12%)', style: TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.w500)),
+                              Text('\$${_investmentAmount.round()}', style: TextStyle(fontSize: 14.sp, color: Colors.black, fontWeight: FontWeight.w500)),
+                              Gap(4.w),
+                              Text('would have become', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                              Gap(4.w),
+                              Text(r'$432.23', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600, color: Colors.black)),
+                              Gap(4.w),
+                              Text('(+2.12%)', style: TextStyle(fontSize: 14.sp, color: Colors.green, fontWeight: FontWeight.w500)),
                             ],
                           ),
-                          const Gap(16),
+                          Gap(16.h),
                         ],
                       ),
                     ),

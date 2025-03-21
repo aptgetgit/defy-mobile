@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -6,12 +7,14 @@ import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_check_box.dart';
 
 class CurrencyChooserScreen extends StatefulWidget {
+  const CurrencyChooserScreen({super.key});
+  
   @override
-  _CurrencyChooserScreenState createState() => _CurrencyChooserScreenState();
+  State<CurrencyChooserScreen> createState() => _CurrencyChooserScreenState();
 }
 
 class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
-  List<String> currencies = <String>['Pound', 'INR', 'Dollar']; // Sample currency list
+  List<String> currencies = <String>['Pound', 'INR', 'Dollar', 'Euro', 'Yen', 'Australian Dollar', 'Canadian Dollar', 'Swiss Franc']; // Extended sample currency list
   String searchText = '';
   String? selectedCurrency;
 
@@ -20,18 +23,18 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white, // White AppBar
         leading: IconButton(
-          icon: const Icon(PhosphorIconsBold.caretLeft, color: Colors.black, size: 24,), // Black back arrow
+          icon: Icon(PhosphorIconsBold.caretLeft, color: Colors.black, size: 24.sp), // Black back arrow with responsive size
           onPressed: () {
             Navigator.pop(context); // Handle back button press
           },
         ),
-        title: const Text(
+        title: Text(
           'Choose Currency',
-          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600), // Black title text
+          style: TextStyle(color: Colors.black, fontSize: 18.sp, fontWeight: FontWeight.w600), // Responsive title text
         ),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(PhosphorIconsBold.gear, color: Colors.black, size: 24,), // Black settings icon
+            icon: Icon(PhosphorIconsBold.gear, color: Colors.black, size: 24.sp), // Black settings icon with responsive size
             onPressed: () {
               // Handle settings button press
             },
@@ -39,21 +42,21 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
         child: Column(
           children: <Widget>[
             Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              height: MediaQuery.of(context).size.height * 0.06,
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              height: 48.h, // Fixed height instead of using MediaQuery
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
                 color: const Color(0xFFF4F4F6),
               ),
               child: Row(
                 children: <Widget>[
-                  Icon(PhosphorIconsBold.magnifyingGlass, color: Colors.grey[500], size: 24), // Grey search icon
-                  const Gap(8),
+                  Icon(PhosphorIconsBold.magnifyingGlass, color: Colors.grey[500], size: 24.sp), // Grey search icon with responsive size
+                  Gap(8.w),
                   Expanded(
                     child: TextField(
                       onChanged: (String value) {
@@ -61,11 +64,12 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
                           searchText = value;
                         });
                       },
-                      decoration: const InputDecoration(
+                      style: TextStyle(fontSize: 16.sp),
+                      decoration: InputDecoration(
                         hintText: 'Search currency type',
                         hintStyle: TextStyle(
                           color: AppColors.grey,
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
                         ),
                         border: InputBorder.none,
@@ -75,7 +79,7 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             Expanded(
               child: ListView.builder(
                 itemCount: currencies.length,
@@ -84,15 +88,23 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
                   if (currency.toLowerCase().contains(searchText.toLowerCase())) {
                     return ListTile(
                       dense: true,
-                      contentPadding: EdgeInsets.zero,
+                      contentPadding: EdgeInsets.symmetric(vertical: 4.h),
                       leading: Text(
                         getCurrencySymbol(currency), // Get symbol based on currency
-                        style: const TextStyle(fontSize: 24, color: AppColors.greyLight),
+                        style: TextStyle(fontSize: 24.sp, color: AppColors.greyLight),
                       ),
-                      title: Text(currency, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                      title: Text(
+                        currency, 
+                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                      ),
                       onTap: () {
-                        // Handle currency selection
-                        print('Selected: $currency');
+                        setState(() {
+                          if (selectedCurrency == currency) {
+                            selectedCurrency = null;
+                          } else {
+                            selectedCurrency = currency;
+                          }
+                        });
                       },
                       trailing: CustomCheckbox(
                         isRound: true,
@@ -115,19 +127,22 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 10.h, top: 8.h),
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle apply button press
-                },
+                onPressed: selectedCurrency != null 
+                  ? () {
+                    // Return the selected currency to the previous screen
+                    Navigator.pop(context, selectedCurrency);
+                  }
+                  : null, // Disable if no currency is selected
                 style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(double.maxFinite, 54),
-                  backgroundColor: Colors.black, // Black button
+                  fixedSize: Size(double.maxFinite, 54.h),
+                  backgroundColor: selectedCurrency != null ? Colors.black : Colors.grey, // Black button or grey if disabled
                   foregroundColor: Colors.white, // White text
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  textStyle: const TextStyle(fontSize: 16),
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  textStyle: TextStyle(fontSize: 16.sp),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(56),
+                    borderRadius: BorderRadius.circular(56.r),
                   ),
                 ),
                 child: const Center(child: Text('Apply')),
@@ -142,11 +157,21 @@ class _CurrencyChooserScreenState extends State<CurrencyChooserScreen> {
   String getCurrencySymbol(String currency) {
     switch (currency) {
       case 'Pound':
-        return '€'; // Or '£' if you intend to use British Pound
+        return '£';
       case 'INR':
         return '₹';
       case 'Dollar':
         return r'$';
+      case 'Euro':
+        return '€';
+      case 'Yen':
+        return '¥';
+      case 'Australian Dollar':
+        return r'A$';
+      case 'Canadian Dollar':
+        return r'C$';
+      case 'Swiss Franc':
+        return 'Fr';
       default:
         return '';
     }

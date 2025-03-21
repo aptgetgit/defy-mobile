@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -33,7 +34,7 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -41,29 +42,29 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
             Row(
               children: <Widget>[
                 IconButton(
-                  icon: const Icon(PhosphorIconsBold.caretLeft, size: 24),
+                  icon: Icon(PhosphorIconsBold.caretLeft, size: 24.sp),
                   onPressed: () => Navigator.pop(context),
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(right:22),
+                    padding: EdgeInsets.only(right: 22.w),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      height: 45,
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      height: 45.h,
                       decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 244, 244, 246),
-                        borderRadius: BorderRadius.circular(40),
+                        borderRadius: BorderRadius.circular(40.r),
                       ),
                       child: Center(
                         child: Row(
                           children: <Widget>[
-                            const Gap(12),
-                            const Icon(
+                            Gap(12.w),
+                            Icon(
                               PhosphorIconsBold.magnifyingGlass,
-                              color:  AppColors.greyLight,
-                              size: 20,
+                              color: AppColors.greyLight,
+                              size: 20.sp,
                             ),
-                            const Gap(8),
+                            Gap(8.w),
                             Expanded(
                               child: Center(
                                 child: TextField(
@@ -74,21 +75,20 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
                                       _searchQuery = value;
                                     });
                                   },
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     border: InputBorder.none,
                                     fillColor: AppColors.white,
                                     hintText: 'Search in business wallet',
                                     hintStyle: TextStyle(
                                       color: AppColors.greyLight,
-                                      fontSize: 16,
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
-                                    contentPadding: EdgeInsets.symmetric(vertical: 11),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 11.h),
                                   ),
                                 ),
                               ),
                             ),
-                            
                           ],
                         ),
                       ),
@@ -97,14 +97,14 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
                 ),
               ],
             ),
-            const Gap(4),
+            Gap(4.h),
 
             // Conditionally show TabBar
             if (_searchQuery.isNotEmpty)
               Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(left: 8),
+                    padding: EdgeInsets.only(left: 8.w),
                     child: TabBar(
                       controller: _tabController,
                       isScrollable: true,
@@ -118,10 +118,10 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
                       ),
                       labelColor: Colors.black,
                       unselectedLabelColor: AppColors.greyLight,
-                      labelStyle: const TextStyle(fontWeight: FontWeight.w600,fontSize: 18),
-                      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500,fontSize: 16),
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                      dividerHeight: 1,
+                      labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 18.sp),
+                      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp),
+                      labelPadding: EdgeInsets.symmetric(horizontal: 10.w),
+                      dividerHeight: 1.h,
                       dividerColor: AppColors.white,
                       tabAlignment: TabAlignment.start,
                       tabs: const <Widget>[
@@ -132,7 +132,7 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
                       ],
                     ),
                   ),
-                  const Gap(16),
+                  Gap(16.h),
                 ],
               ),
 
@@ -160,21 +160,21 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Padding(
-        padding: const EdgeInsets.only(left:17, top: 21),
+        padding: EdgeInsets.only(left: 17.w, top: 21.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             if (_searchQuery.isNotEmpty)
-              const Gap(8),
-              const Text(
+              Gap(8.h),
+              Text(
                 'Recent History',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color:AppColors.greyLight),
+                style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
               ),
           ],
         ),
       ),
-      SizedBox(height: 145, child: _buildTokensTab()),
-      SizedBox(height: 150, child: _buildNFTsTab()),
+      SizedBox(height: 145.h, child: _buildTokensTab()),
+      SizedBox(height: 150.h, child: _buildNFTsTab()),
     ],
   );
 
@@ -182,35 +182,34 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Padding(
-        padding: const EdgeInsets.only(left:17),
+        padding: EdgeInsets.only(left: 17.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             if (_searchQuery.isNotEmpty)
-              const Text(
+              Text(
                 'Tokens',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color:AppColors.greyLight),
+                style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
               ),
           ],
         ),
       ),
-      SizedBox(height: 150, child: _buildTokensTab()),
+      SizedBox(height: 150.h, child: _buildTokensTab()),
       Padding(
-        padding: const EdgeInsets.only(left:17),
+        padding: EdgeInsets.only(left: 17.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             if (_searchQuery.isNotEmpty)
-              const Gap(8),
-              const Text(
+              Gap(8.h),
+              Text(
                 'NFTs',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color:AppColors.greyLight),
+                style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
               ),
           ],
         ),
       ),
-      SizedBox(height: 150, child: _buildNFTsTab()),
-
+      SizedBox(height: 150.h, child: _buildNFTsTab()),
     ],
   );
 
@@ -225,24 +224,35 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
       itemBuilder: (BuildContext context, int index) {
         final Map<String, String> token = tokens[index];
         return ListTile(
-          contentPadding: const EdgeInsets.only(left: 16, right: 16),
-          leading: Image.asset(token['imagePath']!, width: 40, height: 40),
+          contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+          leading: Image.asset(token['imagePath']!, width: 40.w, height: 40.h),
           title: Text(
             token['name']!,
-            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: AppColors.black),
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
           ),
-          subtitle: Text(token['value']!,style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Color.fromARGB(255, 151, 157, 170)),),
+          subtitle: Text(
+            token['value']!,
+            style: TextStyle(
+              fontWeight: FontWeight.w500, 
+              fontSize: 14.sp, 
+              color: const Color.fromARGB(255, 151, 157, 170),
+            ),
+          ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
                 token['price']!,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
               ),
               Text(
                 token['change']!,
-                style: const TextStyle(color: Color.fromARGB(255, 151, 157, 170), fontSize: 14, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 151, 157, 170), 
+                  fontSize: 14.sp, 
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -250,6 +260,7 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
       },
     );
   }
+
   Widget _buildNFTsTab() {
     final List<Map<String, String>> tokens = <Map<String, String>>[
       <String, String>{'name': 'Cyberpunk kid...', 'price': r'$142.39', 'value': 'Chum Chums NFT', 'change': '-1.02%', 'imagePath': 'assets/images/Mask group.png'},
@@ -261,24 +272,35 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
       itemBuilder: (BuildContext context, int index) {
         final Map<String, String> token = tokens[index];
         return ListTile(
-          contentPadding: const EdgeInsets.only(left: 16, right: 16),
-          leading: Image.asset(token['imagePath']!, width: 40, height: 40),
+          contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+          leading: Image.asset(token['imagePath']!, width: 40.w, height: 40.h),
           title: Text(
             token['name']!,
-            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: AppColors.black),
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
           ),
-          subtitle: Text(token['value']!,style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Color.fromARGB(255, 151, 157, 170)),),
+          subtitle: Text(
+            token['value']!,
+            style: TextStyle(
+              fontWeight: FontWeight.w500, 
+              fontSize: 14.sp, 
+              color: const Color.fromARGB(255, 151, 157, 170),
+            ),
+          ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
                 token['price']!,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
               ),
               Text(
                 token['change']!,
-                style: const TextStyle(color: Color.fromARGB(255, 151, 157, 170), fontSize: 14, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 151, 157, 170), 
+                  fontSize: 14.sp, 
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -287,10 +309,10 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
     );
   }
 
-  Widget _buildEmptyContent() => const Center(
+  Widget _buildEmptyContent() => Center(
       child: Text(
         'No content available',
-        style: TextStyle(color: Colors.grey, fontSize: 16),
+        style: TextStyle(color: Colors.grey, fontSize: 16.sp),
       ),
     );
 }

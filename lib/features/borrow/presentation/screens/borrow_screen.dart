@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -130,12 +131,12 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, size: 20.sp),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Borrow', style: TextStyle(fontSize: 20)),
+        title: Text('Borrow', style: TextStyle(fontSize: 20.sp)),
         elevation: 0,
       ),
       body: NestedScrollView(
@@ -143,53 +144,52 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // Top card section with gradient
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: <Color>[
-                          Color.fromARGB(255, 65, 64, 64), // Left side (grey)
-                          Colors.black, // Right side (black)
+                          Color.fromARGB(255, 65, 64, 64),
+                          Colors.black,
                         ],
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Column(
                       children: <Widget>[
                         Image.asset(
                           'assets/icons/aptos.png',
-                          width: 40,
-                          height: 40,
+                          width: 40.w,
+                          height: 40.h,
                         ),
-                        const Gap(8),
-                        const Text(
+                        Gap(8.h),
+                        Text(
                           '89% APY',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Gap(4),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 60),
+                        Gap(4.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 60.w),
                           child: Text(
                             'Borrow and Earn on Aptos Token and get rewards',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: AppColors.greyLight,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                             ),
                           ),
                         ),
-                        const Gap(18),
+                        Gap(18.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -197,23 +197,23 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
                               onPressed: () {},
                               style: FilledButton.styleFrom(
                                 padding: EdgeInsets.zero,
-                                side: const BorderSide(color: Colors.white),
+                                side: BorderSide(color: Colors.white, width: 1.w),
                                 backgroundColor: Colors.transparent,
                                 foregroundColor: Colors.white,
-                                maximumSize: const Size(82, 44),
+                                maximumSize: Size(82.w, 44.h),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.r),
                                 ),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
                                     'View',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
                                   ),
-                                  Gap(8),
-                                  Icon(PhosphorIconsBold.arrowCircleUpRight),
+                                  Gap(8.w),
+                                  Icon(PhosphorIconsBold.arrowCircleUpRight, size: 18.sp),
                                 ],
                               ),
                             ),
@@ -223,39 +223,38 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
                                 backgroundColor: Colors.white,
                                 foregroundColor: Colors.black,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.r),
                                 ),
-                                minimumSize: const Size(237, 42),
+                                minimumSize: Size(237.w, 42.h),
                               ),
-                              child: const Text('Borrow APT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                              child: Text('Borrow APT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const Gap(20),
-                  // Stats Section
+                  Gap(20.h),
                   DecoratedBox(
                     decoration: BoxDecoration(
                       color: AppColors.greyVeryLight,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(r'$12121.21', style: TextStyle(fontSize: 18, color: AppColors.black, fontWeight: FontWeight.w600)),
-                              Gap(4),
+                              Text(r'$12121.21', style: TextStyle(fontSize: 18.sp, color: AppColors.black, fontWeight: FontWeight.w600)),
+                              Gap(4.h),
                               Row(
                                 children: <Widget>[
-                                  Text('Net Assets', style: TextStyle(fontSize: 12.6, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
-                                  Gap(2),
-                                  Icon(PhosphorIconsBold.caretRight, size: 10, color: AppColors.greyLight),
+                                  Text('Net Assets', style: TextStyle(fontSize: 12.6.sp, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
+                                  Gap(2.w),
+                                  Icon(PhosphorIconsBold.caretRight, size: 10.sp, color: AppColors.greyLight),
                                 ],
                               ),
                             ],
@@ -263,24 +262,24 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text('107.55%', style: TextStyle(fontSize: 18, color: AppColors.red, fontWeight: FontWeight.w600)),
-                              Gap(4),
-                              Text('Health Factor', style: TextStyle(fontSize: 12.6, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
+                              Text('107.55%', style: TextStyle(fontSize: 18.sp, color: AppColors.red, fontWeight: FontWeight.w600)),
+                              Gap(4.h),
+                              Text('Health Factor', style: TextStyle(fontSize: 12.6.sp, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
                             ],
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text('5.23%', style: TextStyle(fontSize: 18, color: AppColors.black, fontWeight: FontWeight.w600)),
-                              Gap(4),
-                              Text('Net APY', style: TextStyle(fontSize: 12.6, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
+                              Text('5.23%', style: TextStyle(fontSize: 18.sp, color: AppColors.black, fontWeight: FontWeight.w600)),
+                              Gap(4.h),
+                              Text('Net APY', style: TextStyle(fontSize: 12.6.sp, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
                             ],
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const Gap(8),
+                  Gap(8.h),
                 ],
               ),
             ),
@@ -293,15 +292,15 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
                 tabs: const <String>['All', 'Stables', 'Aptos'],
                 trailing: Row(
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'E-Mode', 
                       style: TextStyle(
-                        fontSize: 18, 
+                        fontSize: 18.sp, 
                         fontWeight: FontWeight.w500, 
                         color: AppColors.greyLight,
                       ),
                     ),
-                    const Gap(6),
+                    Gap(6.w),
                     SwitchTheme(
                       data: SwitchThemeData(
                         trackOutlineColor: WidgetStateProperty.all<Color>(AppColors.transparent),
@@ -330,15 +329,15 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
           controller: _tabController,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20.w),
               child: _buildTabViewContent(0),
             ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20.w),
               child: _buildTabViewContent(1),
             ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20.w),
               child: _buildTabViewContent(2),
             ),
           ],
@@ -348,14 +347,13 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
   }
 
   void _showEfficiencyModePopup() {
-    // Calculate the screen size to position the dialog
     final Size screenSize = MediaQuery.of(context).size;
     
     showDialog(
       context: context,
       barrierColor: Colors.black54,
       builder: (BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -363,13 +361,13 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
               width: screenSize.width * 0.95,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.2),
-                    spreadRadius: 1,
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    spreadRadius: 1.r,
+                    blurRadius: 8.r,
+                    offset: Offset(0, 2.h),
                   ),
                 ],
               ),
@@ -387,14 +385,14 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
       ),
     );
   }
-  // Create a separate method for the actual tab content
+
   Widget _buildTabViewContent(int tabIndex) {
     final BorrowState borrowState = ref.watch(borrowNotifierProvider);
     
     List<Map<String, dynamic>> activeItems = <Map<String, dynamic>>[];
     List<Map<String, dynamic>> disabledItems = <Map<String, dynamic>>[];
     
-    if (tabIndex == 0) { // All tab
+    if (tabIndex == 0) {
       for (final String category in _collateralCategories.keys) {
         final List<Map<String, dynamic>> items = _collateralCategories[category] ?? <Map<String, dynamic>>[];
         if (category == borrowState.disabledCategory && borrowState.isEMode) {
@@ -403,13 +401,13 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
           activeItems.addAll(items);
         }
       }
-    } else if (tabIndex == 1) { // Stables tab
+    } else if (tabIndex == 1) {
       activeItems = _collateralCategories['Stable Collateral'] ?? <Map<String, dynamic>>[];
       if (borrowState.disabledCategory == 'Stable Collateral' && borrowState.isEMode) {
         disabledItems = activeItems;
         activeItems = <Map<String, dynamic>>[];
       }
-    } else { // Aptos tab
+    } else {
       activeItems = _collateralCategories['APT Collateral'] ?? <Map<String, dynamic>>[];
       if (borrowState.disabledCategory == 'APT Collateral' && borrowState.isEMode) {
         disabledItems = activeItems;
@@ -421,16 +419,14 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          // Active assets
           ...activeItems.map((Map<String, dynamic> item) => Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.only(bottom: 10.h),
             child: BorrowProviderItem(
               name: item['name'],
               percentage: item['percentage'],
               imagePath: item['imagePath'],
               ltv: item['ltv'],
               onTap: () {
-                // Store the selected asset in Riverpod state
                 ref.read(borrowNotifierProvider.notifier).setSelectedAsset(
                   name: item['name'] as String,
                   iconPath: item['imagePath'] as String,
@@ -438,8 +434,6 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
                   maxAmountUnit: item['unit'] as String? ?? 'APT',
                   apy: item['percentage'] as String,
                 );
-
-// Navigate to the BorrowInfoScreen using a route
 
                 Navigator.push(context,
                   MaterialPageRoute(builder: (BuildContext context) => BorrowInfoScreen(
@@ -454,21 +448,20 @@ class _BorrowScreenState extends ConsumerState<BorrowScreen> with SingleTickerPr
             ),
           ),),
           
-          // Disabled assets section
           if (disabledItems.isNotEmpty) ...<Widget>[
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
               child: Text(
                 'Disabled assets',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.greyLight,
                 ),
               ),
             ),
             ...disabledItems.map((Map<String, dynamic> item) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 10.h),
               child: BorrowProviderItem(
                 name: item['name'],
                 percentage: item['percentage'],

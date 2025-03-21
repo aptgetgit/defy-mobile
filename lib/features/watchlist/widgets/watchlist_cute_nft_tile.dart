@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -19,84 +20,84 @@ class WatchlistCuteTile extends StatelessWidget {
               children: <Widget>[
                 Align(
                   child: Container(
-                    height: 40,
-                    width: 40,
-                    margin: const EdgeInsets.only(right: 30, bottom: 30),
-                    child: const Center(
+                    height: 40.h,
+                    width: 40.w,
+                    margin: EdgeInsets.only(right: 30.w, bottom: 30.h),
+                    child: Center(
                       child: Image(
-                        height: 36,
-                        width: 36,
-                        image: AssetImage('assets/images/watchlist1.png'),
+                        height: 36.h,
+                        width: 36.w,
+                        image: const AssetImage('assets/images/watchlist1.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
                   child: Container(
-                    height: 40,
-                    width: 40,
-                    margin: const EdgeInsets.only(left: 30, bottom: 30),
-                    child: const Center(
+                    height: 40.h,
+                    width: 40.w,
+                    margin: EdgeInsets.only(left: 30.w, bottom: 30.h),
+                    child: Center(
                       child: Image(
-                        height: 36,
-                        width: 36,
-                        image: AssetImage('assets/images/watchlist2.png'),
+                        height: 36.h,
+                        width: 36.w,
+                        image: const AssetImage('assets/images/watchlist2.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
                   child: Container(
-                    height: 40,
-                    width: 40,
-                    margin: const EdgeInsets.only(right: 30, top: 20),
-                    child: const Center(
+                    height: 40.h,
+                    width: 40.w,
+                    margin: EdgeInsets.only(right: 30.w, top: 20.h),
+                    child: Center(
                       child: Image(
-                        height: 36,
-                        width: 36,
-                        image: AssetImage('assets/images/watchlist3.png'),
+                        height: 36.h,
+                        width: 36.w,
+                        image: const AssetImage('assets/images/watchlist3.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
                   child: Container(
-                    height: 40,
-                    width: 40,
-                    margin: const EdgeInsets.only(left: 30, top: 20),
-                    child: const Center(
+                    height: 40.h,
+                    width: 40.w,
+                    margin: EdgeInsets.only(left: 30.w, top: 20.h),
+                    child: Center(
                       child: Image(
-                        height: 36,
-                        width: 36,
-                        image: AssetImage('assets/images/watchlist4.png'),
+                        height: 36.h,
+                        width: 36.w,
+                        image: const AssetImage('assets/images/watchlist4.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
                   child: Container(
-                    height: 40,
-                    width: 40,
-                    margin: const EdgeInsets.only(right: 15, top: 40),
-                    child: const Center(
+                    height: 40.h,
+                    width: 40.w,
+                    margin: EdgeInsets.only(right: 15.w, top: 40.h),
+                    child: Center(
                       child: Image(
-                        height: 36,
-                        width: 36,
-                        image: AssetImage('assets/images/watchlist1.png'),
+                        height: 36.h,
+                        width: 36.w,
+                        image: const AssetImage('assets/images/watchlist1.png'),
                       ),
                     ),
                   ),
                 ),
                 Align(
                   child: Container(
-                    height: 40,
-                    width: 40,
-                    margin: const EdgeInsets.only(left: 15, top: 40),
-                    child: const Center(
+                    height: 40.h,
+                    width: 40.w,
+                    margin: EdgeInsets.only(left: 15.w, top: 40.h),
+                    child: Center(
                       child: Image(
-                        height: 36,
-                        width: 36,
-                        image: AssetImage('assets/images/watchlist3.png'),
+                        height: 36.h,
+                        width: 36.w,
+                        image: const AssetImage('assets/images/watchlist3.png'),
                       ),
                     ),
                   ),
@@ -104,29 +105,29 @@ class WatchlistCuteTile extends StatelessWidget {
               ],
             ),
           ),
-          const Gap(12),
+          Gap(12.h),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Text(
+              Text(
                 'Cute NFTs🐣',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
-              const Gap(6),
+              Gap(6.w),
               Container(
-                width: 16.25,
-                height: 16.25,
+                width: 16.25.w,
+                height: 16.25.h,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.grey,
                 ),
-                child:  Icon(
-                  PhosphorIcons.minus(PhosphorIconsStyle.bold),
+                child: Icon(
+                  PhosphorIconsBold.minus,
                   color: Colors.white,
-                  size: 12,
+                  size: 12.sp,
                 ),
               ),
             ],
@@ -134,16 +135,16 @@ class WatchlistCuteTile extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: '6 NFTs',
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 16,
+                fontSize: 16.sp,
                 color: Colors.grey,
               ),
               children: <InlineSpan>[
                 TextSpan(
                   text: '   Jan 2 2024',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color: Colors.grey[400],
                   ),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomSwipeButton extends StatefulWidget {
-
   const CustomSwipeButton({super.key, required this.onSwipeCompleted});
   final VoidCallback onSwipeCompleted;
 
@@ -16,7 +16,7 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
 
   @override
   Widget build(BuildContext context) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) => GestureDetector(
             onHorizontalDragUpdate: (DragUpdateDetails details) {
@@ -45,17 +45,17 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,
-                  height: 70,
+                  height: 70.h,
                   decoration: BoxDecoration(
                     color: _swiped || _dragPercentage > 0.5
                         ? Colors.green
                         : Colors.black,
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(40.r),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10.r,
+                        offset: Offset(0, 5.h),
                       ),
                     ],
                   ),
@@ -65,9 +65,10 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
                     child: Text(
                       _swiped ? 'Successful' : 'Send',
                       key: ValueKey(_swiped),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
                       ),
                     ),
                   ),
@@ -76,24 +77,24 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                   left: (_dragPercentage * constraints.maxWidth).clamp(
-                      0.0, constraints.maxWidth - 70,), // Clamp within bounds
+                      0.0, constraints.maxWidth - 70.w,), // Clamp within bounds
                   child: Container(
-                    height: 70,
-                    width: 70,
+                    height: 70.h,
+                    width: 70.w,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: _swiped || _dragPercentage > 0.5
                             ? Colors.green
                             : Colors.black,
-                        width: 2,
+                        width: 2.w,
                       ),
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
+                      borderRadius: BorderRadius.circular(40.r),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10.r,
+                          offset: Offset(0, 5.h),
                         ),
                       ],
                     ),
@@ -102,6 +103,7 @@ class _CustomSwipeButtonState extends State<CustomSwipeButton>
                       color: _swiped || _dragPercentage > 0.5
                           ? Colors.green
                           : Colors.black,
+                      size: 24.sp,
                     ),
                   ),
                 ),

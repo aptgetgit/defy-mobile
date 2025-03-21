@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../app/routes/router.dart';
@@ -41,11 +42,11 @@ class NFTItem extends StatelessWidget {
               Opacity(
                 opacity: isSelected ? 0.5 : 1.0,
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
                   child: Image.asset(
                     nft.imageUrl,
                     width: double.infinity,
-                    height: 185,
+                    height: 185.h,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -53,8 +54,8 @@ class NFTItem extends StatelessWidget {
               // Checkbox - only show when in selection mode
               if (showCheckbox)
                 Positioned(
-                  right: 8,
-                  top: 8,
+                  right: 8.w,
+                  top: 8.h,
                   child: CustomCheckbox(
                     isChecked: isSelected,
                     isRound: true,
@@ -77,16 +78,16 @@ class NFTItem extends StatelessWidget {
                 Text(
                   nft.id,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
                     color: isSelected ? Colors.grey : AppColors.greyLight,
                   ),
                 ),
-                const Gap(4),
+                Gap(4.h),
                 Text(
                   nft.price,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     color: isSelected ? Colors.grey : AppColors.black,
                   ),
                 ),

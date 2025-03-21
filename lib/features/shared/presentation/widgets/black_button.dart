@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../config/theme/colors.dart';
 
@@ -9,14 +10,14 @@ class BlackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedBox(
       decoration: BoxDecoration(
-          color: AppColors.black, borderRadius: BorderRadius.circular(45),),
+          color: AppColors.black, borderRadius: BorderRadius.circular(45.r),),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
         child: Center(
           child: Text(
             title,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.white,),
+            style: TextStyle(
+                fontSize: 16.sp, fontWeight: FontWeight.w700, color: AppColors.white,),
           ),
         ),
       ),

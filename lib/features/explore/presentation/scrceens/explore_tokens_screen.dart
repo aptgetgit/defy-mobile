@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -31,10 +32,10 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: const Text(
+            title: Text(
               'Tokens',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -44,52 +45,54 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
               children: <Widget>[
                 // Search bar with toggle button
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                   child: Row(
                     children: <Widget>[
                       // Search Bar
                       Expanded(
                         child: Container(
-                          height: 48,
+                          height: 48.h,
                           decoration: BoxDecoration(
                             color: const Color(0xfff4f4f6),
-                            borderRadius: BorderRadius.circular(58),
+                            borderRadius: BorderRadius.circular(58.r),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              const Gap(16),
-                              const Icon(
+                              Gap(16.w),
+                              Icon(
                                 PhosphorIconsBold.magnifyingGlass,
                                 color: AppColors.greyMedium,
+                                size: 18.sp,
                               ),
-                              const Gap(8),
+                              Gap(8.w),
                               Expanded(
                                 child: TextField(
                                   controller: _searchController,
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'Search or paste URL',
                                     hintStyle: TextStyle(
                                       color: AppColors.greyMedium,
-                                      fontSize: 14,
+                                      fontSize: 14.sp,
                                     ),
                                   ),
                                 ),
                               ),
-                              const Icon(
+                              Icon(
                                 PhosphorIconsBold.cards,
                                 color: AppColors.greyMedium,
+                                size: 18.sp,
                               ),
-                              const Gap(16),
+                              Gap(16.w),
                             ],
                           ),
                         ),
                       ),
 
                       // Custom Toggle Button with Label
-                      const Gap(8),
+                      Gap(8.w),
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -100,25 +103,25 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
                           children: <Widget>[
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
-                              width: 46,
-                              height: 26,
+                              width: 46.w,
+                              height: 26.h,
                               decoration: BoxDecoration(
                                 color: _isToggled ? Colors.orange : AppColors.greyMedium,
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(50.r),
                                 boxShadow: <BoxShadow>[
                                   BoxShadow(
                                     color: Colors.grey.withValues(alpha: 0.2),
-                                    spreadRadius: -2,
-                                    offset: const Offset(0, 2),
+                                    spreadRadius: -2.r,
+                                    offset: Offset(0, 2.h),
                                   ),
                                 ],
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: Align(
                                 alignment: _isToggled ? Alignment.centerRight : Alignment.centerLeft,
                                 child: Container(
-                                  width: 22,
-                                  height: 22,
+                                  width: 22.w,
+                                  height: 22.h,
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
@@ -126,11 +129,11 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
                                 ),
                               ),
                             ),
-                            const Gap(2),
-                            const Text(
+                            Gap(2.h),
+                            Text(
                               '🚀 mode',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.orangeAccent,
                               ),
@@ -142,16 +145,16 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
                   ),
                 ),
 
-                const Gap(12),
+                Gap(12.h),
 
                 // Trending Cards with conditional title
                 TrendingCards(isToggled: _isToggled),
 
-                const Gap(12),
+                Gap(12.h),
 
                 // Tab Bar with Sort Icon
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -163,8 +166,8 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
                           unselectedLabelColor: Colors.grey,
                           indicatorColor: Colors.black,
                           dividerColor: AppColors.greyVeryLight,
-                          labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                          unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                          labelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+                          unselectedLabelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
                           tabs: _isToggled
                               ? const <Widget>[
                                   Tab(text: 'Emoji'),
@@ -179,10 +182,10 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           PhosphorIconsBold.sortAscending,
                           color: AppColors.greyMedium,
-                          size: 24,
+                          size: 24.sp,
                         ),
                         onPressed: () {
                           _showSortOptions(context);
@@ -215,7 +218,7 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
       );
 
   Widget _buildCryptoList() => ListView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.w),
       children: <Widget>[
         _buildCryptoTile(
           name: 'Globe With Meridian',
@@ -302,21 +305,22 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
   }) => ListTile(
       leading: CircleAvatar(
         backgroundImage: AssetImage(logoPath),
+        radius: 22.r,
       ),
       title: Text(
         name,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
         subtitle,
-        style: const TextStyle(color: AppColors.grey),
+        style: TextStyle(color: AppColors.grey, fontSize: 14.sp),
       ),
       trailing: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(price, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-          Text(percentage, style: TextStyle(color: percentageColor, fontSize: 14, fontWeight: FontWeight.w500)),
+          Text(price, style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+          Text(percentage, style: TextStyle(color: percentageColor, fontSize: 14.sp, fontWeight: FontWeight.w500)),
         ],
       ),
       onTap: () {
@@ -339,24 +343,24 @@ class _ExploreTokensScreenState extends State<ExploreTokensScreen>
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) => Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                title: const Text('Sort by Price (High to Low)'),
+                title: Text('Sort by Price (High to Low)', style: TextStyle(fontSize: 16.sp)),
                 onTap: () {
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('Sort by Price (Low to High)'),
+                title: Text('Sort by Price (Low to High)', style: TextStyle(fontSize: 16.sp)),
                 onTap: () {
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('Sort by Change (24h)'),
+                title: Text('Sort by Change (24h)', style: TextStyle(fontSize: 16.sp)),
                 onTap: () {
                   Navigator.pop(context);
                 },

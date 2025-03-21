@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -98,49 +99,50 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              //search bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 child: Row(
                   children: <Widget>[
-                    const Icon(PhosphorIconsBold.caretLeft),
-                    const Gap(12),
+                    Icon(PhosphorIconsBold.caretLeft, size: 20.sp),
+                    Gap(12.w),
                     Expanded(
                       child: Container(
                         width: double.infinity,
-                        height: 48,
+                        height: 48.h,
                         decoration: BoxDecoration(
                           color: AppColors.white,
-                          borderRadius: BorderRadius.circular(58),
+                          borderRadius: BorderRadius.circular(58.r),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            const Gap(16),
-                            const Icon(
+                            Gap(16.w),
+                            Icon(
                               PhosphorIconsBold.magnifyingGlass,
                               color: AppColors.greyMedium,
+                              size: 18.sp,
                             ),
-                            const Gap(8),
+                            Gap(8.w),
                             Expanded(
                               child: TextField(
                                 controller: _searchConroller,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: 'Search or paste URL',
                                   hintStyle: TextStyle(
                                     color: AppColors.greyMedium,
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
                               ),
                             ),
-                            const Icon(
+                            Icon(
                               PhosphorIconsBold.cards,
                               color: AppColors.greyMedium,
+                              size: 18.sp,
                             ),
-                            const Gap(16),
+                            Gap(16.w),
                           ],
                         ),
                       ),
@@ -148,16 +150,14 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                   ],
                 ),
               ),
-              const Gap(12),
+              Gap(12.h),
 
-              //banners scroll
               _buildTopBanner(context),
 
               SlideTransition(
                 position: _slideAnimation2,
                 child: Column(
                   children: <Widget>[
-                    //pump.uptos.fun
                     CategoryHeader('Uptos Pump', () => const ExplorePumpFunScreenRoute().push(context)),
                     _buildPumpFunTile(context),
                   ],
@@ -168,24 +168,20 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                 position: _slideAnimation,
                 child: Column(
                   children: <Widget>[
-                    //mcap coins
                     CategoryHeader('Top MCAP Coins', () {}),
                     _buildCoinsList(context, CoinListType.mcap),
                   ],
                 ),
               ),
 
-              //top meme coins
               CategoryHeader('Top Meme Coins', () {}),
               _buildCoinsList(context, CoinListType.meme),
 
-              //top volume
               CategoryHeader('Top Volume', () {}),
               _buildCoinsList(context, CoinListType.volume),
 
-              //highest gainers
               CategoryHeader('Highest Gainers', () {}),
-              _buildCoinsList(context, CoinListType.gainers, bottomPadding: 16),
+              _buildCoinsList(context, CoinListType.gainers, bottomPadding: 16.h),
             ],
           ),
         ),
@@ -193,25 +189,22 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
     );
 
   Widget _buildTopBanner(BuildContext context) => Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       elevation: 0,
-      margin: const EdgeInsets.all(16),
+      margin: EdgeInsets.all(16.w),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-           
-            // Tab Buttons
             Row(
               children: <Widget>[
-                _buildTabButton('Meme coins 🔥', isActive: true, width: 126),
-                const SizedBox(width: 8),
-                _buildTabButton('MCAP Coins', isActive: false, width: 109),
+                _buildTabButton('Meme coins 🔥', isActive: true, width: 126.w),
+                SizedBox(width: 8.w),
+                _buildTabButton('MCAP Coins', isActive: false, width: 109.w),
               ],
             ),
-            const SizedBox(height: 16),
-            // List Items
+            SizedBox(height: 16.h),
             _buildListItem(
               context,
               iconUrl: 'https://via.placeholder.com/40',
@@ -238,15 +231,15 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
       ),
     );
 
-  Widget _buildTabButton(String label, {required bool isActive, double? width, double height = 34}) => Container(
-      constraints: const BoxConstraints(
-        minWidth: 126,
+  Widget _buildTabButton(String label, {required bool isActive, double? width, double? height}) => Container(
+      constraints: BoxConstraints(
+        minWidth: 126.w,
       ),
-      height: height,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: height ?? 34.h,
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
         color: isActive ? Colors.orange.shade100 : Colors.white,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(32.r),
         border: isActive
             ? Border.all(color: Colors.transparent)
             : Border.all(color: Colors.grey.shade400),
@@ -260,7 +253,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
               style: TextStyle(
                 color: isActive ? Colors.orange : Colors.grey,
                 fontWeight: FontWeight.w500,
-                fontSize: 16,
+                fontSize: 16.sp,
               ),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
@@ -278,48 +271,45 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
     required String subtitle,
     required String change,
   }) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
         children: <Widget>[
-          // Icon
           CircleAvatar(
             backgroundImage: NetworkImage(iconUrl),
-            radius: 20,
+            radius: 20.r,
           ),
-          const SizedBox(width: 12),
-          // Texts
+          SizedBox(width: 12.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
               Text(
                 subtitle,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.grey,
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
                 ),
               ),
             ],
           ),
           const Spacer(),
-          // Change Value
           Row(
             children: <Widget>[
-              const Icon(PhosphorIconsFill.caretUp, color: Colors.green, size: 16),
-              const SizedBox(width: 4),
+              Icon(PhosphorIconsFill.caretUp, color: Colors.green, size: 16.sp),
+              SizedBox(width: 4.w),
               Text(
                 change,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.green,
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ],
@@ -340,17 +330,17 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
       shrinkWrap: true,
       itemCount: 2,
       itemBuilder: (BuildContext ctx, int index) => Container(
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.all(10.w),
+          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(18.r),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 child: CachedNetworkImage(
                   fit: BoxFit.cover,
                   width: width * .28,
@@ -358,34 +348,34 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                   imageUrl: nftImages[index],
                   errorWidget: (BuildContext ctx, String str, Object obj) => Container(color: Colors.amber),
                   progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                      const CircularProgressIndicator(),
+                      CircularProgressIndicator(strokeWidth: 2.w),
                 ),
               ),
-              const Gap(8),
+              Gap(8.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'APTMAN (APTMAN)',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const Text(
+                    Text(
                       'Are you APTMAN?',
                       style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.greyLight,),
                     ),
-                    const Gap(10),
+                    Gap(10.h),
                     RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         text: 'Created by ',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.greyLight,
                         ),
@@ -393,7 +383,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                           TextSpan(
                             text: 'TheWeimals',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
                               color: AppColors.black,
                             ),
@@ -401,15 +391,15 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                         ],
                       ),
                     ),
-                    const Gap(12),
+                    Gap(12.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         RichText(
-                          text: const TextSpan(
+                          text: TextSpan(
                             text: 'MCAP:',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w500,
                               color: AppColors.greyLight,
                             ),
@@ -417,7 +407,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                               TextSpan(
                                 text: '313',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.black,
                                 ),
@@ -426,10 +416,10 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                           ),
                         ),
                         RichText(
-                          text: const TextSpan(
+                          text: TextSpan(
                             text: 'Replies:',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                               color: AppColors.greyLight,
                             ),
@@ -437,7 +427,7 @@ class _ExploreCoinsScreenState extends State<ExploreCoinsScreen> with SingleTick
                               TextSpan(
                                 text: '1,322',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.black,
                                 ),

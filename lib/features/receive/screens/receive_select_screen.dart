@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -60,7 +61,7 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(PhosphorIconsBold.caretLeft),
+            icon: Icon(PhosphorIconsBold.caretLeft, size: 24.sp),
             onPressed: () {
               if (currentPage > 0) {
                 pageNotifier.previousPage();
@@ -78,12 +79,12 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
               final bool isVisited = (index + 1) <= currentPage + 1;
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                height: isActive ? 6 : 4,
-                width: isActive ? 69 : 42,
+                margin: EdgeInsets.symmetric(horizontal: 3.w),
+                height: isActive ? 6.h : 4.h,
+                width: isActive ? 69.w : 42.w,
                 decoration: BoxDecoration(
                   color: isVisited ? AppColors.green : AppColors.greyVeryLight,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
               );
             }),
@@ -95,25 +96,25 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
           children: <Widget>[
             // Fixed Section (Title, Subtitle, Search Bar)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Gap(10),
+                  Gap(10.h),
                   // Dynamic Title and Subtitle
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         _pageTitles[currentPage]['title']!,
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w600),
                       ),
                       if (currentPage == 0)
                         AnimatedOpacity(
                           opacity: _showSearchIcon ? 1.0 : 0.0,
                           duration: const Duration(milliseconds: 300),
                           child: IconButton(
-                            icon: const Icon(PhosphorIconsBold.magnifyingGlass, size: 24),
+                            icon: Icon(PhosphorIconsBold.magnifyingGlass, size: 24.sp),
                             onPressed: () {
                               // Handle search icon press
                             },
@@ -121,12 +122,12 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
                         ),
                     ],
                   ),
-                  const Gap(8),
+                  Gap(8.h),
                   Text(
                     _pageTitles[currentPage]['subtitle']!,
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                   ),
-                  const Gap(20),
+                  Gap(20.h),
                 ],
               ),
             ),
@@ -135,14 +136,14 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
                 opacity: _showSearchIcon ? 0.0 : 1.0,
                 duration: const Duration(milliseconds: 300),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    padding: EdgeInsets.symmetric(horizontal: 6.w),
                     decoration: BoxDecoration(
                       color: AppColors.greyVeryLight,
-                      borderRadius: BorderRadius.circular(40),
+                      borderRadius: BorderRadius.circular(40.r),
                     ),
-                    child: const Stack(
+                    child: Stack(
                       alignment: Alignment.center,
                       children: <Widget>[
                         TextField(
@@ -151,19 +152,19 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
                             hintText: 'Search Assets',
                             hintStyle: TextStyle(
                               color: AppColors.greyLight,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w500,
                             ),
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(vertical: 12),
+                            contentPadding: EdgeInsets.symmetric(vertical: 12.h),
                           ),
                         ),
                         Positioned(
-                          left: 100,
+                          left: 100.w,
                           child: Icon(
                             PhosphorIconsBold.magnifyingGlass,
                             color: AppColors.greyLight,
-                            size: 16,
+                            size: 16.sp,
                           ),
                         ),
                       ],
@@ -171,7 +172,7 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
                   ),
                 ),
               ),
-            const Gap(20),
+            Gap(20.h),
 
             // Scrollable Section (PageView)
             Expanded(
@@ -191,7 +192,7 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
                     key: const ValueKey('assetListPage'),
                     child: ListView.builder(
                       controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
                       itemCount: _assets.length,
                       itemBuilder: (BuildContext context, int index) {
                         final Map<String, String> asset = _assets[index];
@@ -228,19 +229,22 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
             // Next Button (Only shown on pages other than the first page)
             if (currentPage != 0)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: ElevatedButton(
                   onPressed: currentPage == 2 ? () {
                     _showShareBottomSheet(context);
                   } : pageNotifier.nextPage,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: currentPage == 2 ? AppColors.blue : AppColors.black,
-                    minimumSize: const Size(double.infinity, 56),
+                    minimumSize: Size(double.infinity, 56.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                      borderRadius: BorderRadius.circular(40.r),
                     ),
                   ),
-                  child: Text(currentPage == 2 ? 'Share Link' : 'Continue'),
+                  child: Text(
+                    currentPage == 2 ? 'Share Link' : 'Continue',
+                    style: TextStyle(fontSize: 16.sp),
+                  ),
                 ),
               ),
           ],
@@ -268,9 +272,9 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) => DecoratedBox(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(14.r)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -278,35 +282,39 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
             children: <Widget>[
               // Title
               Padding(
-                padding: const EdgeInsets.only(left:20, top: 24, right: 20),
+                padding: EdgeInsets.only(left: 20.w, top: 24.h, right: 20.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'Share this page',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.start,
                     ),
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Icon(PhosphorIconsRegular.x, size: 24),
+                      child: Icon(PhosphorIconsRegular.x, size: 24.sp),
                     ),
                   ],
                 ),
               ),
-              const Gap(16),
+              Gap(16.h),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: Image.asset('assets/images/share-qr.png', width: 380, height: 502,),
+                padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                child: Image.asset(
+                  'assets/images/share-qr.png',
+                  width: 380.w,
+                  height: 502.h,
+                ),
               ),
-              const Gap(24),
+              Gap(24.h),
               // Share Options
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 30),
+                  padding: EdgeInsets.only(left: 30.w),
                   child: Row(
                     children: <Widget>[
                       _buildShareOption(
@@ -314,31 +322,31 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
                         label:'Save',
                         onPressed: () {},
                       ),
-                      const Gap(30),
+                      Gap(30.w),
                       _buildShareOption(
                         icon: PhosphorIconsRegular.clipboard, 
                         label:'Copy',
                         onPressed: () {},
                       ),
-                      const Gap(30),
+                      Gap(30.w),
                       _buildShareOption(
                         imagePath: 'assets/icons/whatsapp.png',
                         label:'Whatsapp',
                         onPressed: () {},
                       ),
-                      const Gap(30),
+                      Gap(30.w),
                       _buildShareOption(
                         imagePath: 'assets/icons/telegram.png', 
                         label:'Telegram',
                         onPressed: () {},
                       ),
-                      const Gap(30),
+                      Gap(30.w),
                       _buildShareOption(
                         imagePath: 'assets/icons/x.png', 
                         label:'X',
                         onPressed: () {},
                       ),
-                      const Gap(30),
+                      Gap(30.w),
                       _buildShareOption(
                         icon: PhosphorIconsFill.dotsThreeOutline, 
                         label:'More',
@@ -348,7 +356,7 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
                   ),
                 ),
               ),
-              const Gap(24),
+              Gap(24.h),
             ],
           ),
         ),
@@ -364,27 +372,27 @@ class _ReceiveSelectScreenState extends ConsumerState<ReceiveSelectScreen> {
   }) => Column(
       children: <Widget>[
         CircleAvatar(
-          radius: 24, // Adjust the size of the circle
+          radius: 24.r, // Adjust the size of the circle
           backgroundColor: Colors.grey.shade200, // Background color of the circle
           child: ClipOval(
             child: imagePath != null
                 ? Image.asset(
                     imagePath,
-                    width: 48, // Adjust the size of the image
-                    height: 48,
+                    width: 48.w, // Adjust the size of the image
+                    height: 48.h,
                     fit: BoxFit.cover, // Fill the circle with the image
                   )
                 : Icon(
                     icon,
-                    size: 24, // Adjust the size of the icon
+                    size: 24.sp, // Adjust the size of the icon
                     color: Colors.black, // Icon color
                   ),
           ),
         ),
-        const Gap(8), // Space between the circle and the label
+        Gap(8.h), // Space between the circle and the label
         Text(
           label,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16.sp),
         ),
       ],
     );
@@ -412,15 +420,15 @@ class AssetItem extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: Colors.transparent,
         backgroundImage: AssetImage(imagePath!),
-        radius: 22,
+        radius: 22.r,
       ),
       title: Text(
         name!,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         symbol!,
-        style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 151, 157, 170)),
+        style: TextStyle(fontSize: 14.sp, color: const Color.fromARGB(255, 151, 157, 170)),
       ),
     ),
   );

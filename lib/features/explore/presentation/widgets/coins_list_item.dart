@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -13,7 +14,6 @@ enum CoinListType {
 }
 
 class CoinListItem extends StatelessWidget {
-
   const CoinListItem({
     required this.type,
     required this.logoUrl,
@@ -26,11 +26,11 @@ class CoinListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(8),
-    margin: const EdgeInsets.only(left: 16),
+    padding: EdgeInsets.all(8.w),
+    margin: EdgeInsets.only(left: 16.w),
     width: width * .45,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(18.r),
       color: AppColors.white,
     ),
     child: _buildContentByType(),
@@ -52,7 +52,7 @@ class CoinListItem extends StatelessWidget {
   Widget _buildCoinHeader({String name = 'Aptos', String symbol = 'APT'}) => Row(
     children: <Widget>[
       ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         child: CachedNetworkImage(
           fit: BoxFit.cover,
           width: width * .4 * .23,
@@ -61,25 +61,25 @@ class CoinListItem extends StatelessWidget {
           errorWidget: (BuildContext ctx, String str, Object obj) =>
               Container(color: Colors.amber),
           progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-              const CircularProgressIndicator(),
+              CircularProgressIndicator(strokeWidth: 2.w),
         ),
       ),
-      const Gap(6),
+      Gap(6.w),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             name,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
           if (type != CoinListType.volume)
             Text(
               symbol,
-              style: const TextStyle(
-                fontSize: 14,
+              style: TextStyle(
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.greyLight,
               ),
@@ -95,24 +95,24 @@ class CoinListItem extends StatelessWidget {
     children: <Widget>[
       _buildCoinHeader(),
       Container(
-        padding: const EdgeInsets.all(4),
-        child: const Column(
+        padding: EdgeInsets.all(4.w),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               r'$3.15M',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Row(
               children: <Widget>[
-                Icon(PhosphorIconsFill.caretUp, color: AppColors.green, size: 18),
+                Icon(PhosphorIconsFill.caretUp, color: AppColors.green, size: 18.sp),
                 Text(
                   '2.5%',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                     color: AppColors.green,
                   ),
@@ -131,24 +131,24 @@ class CoinListItem extends StatelessWidget {
     children: <Widget>[
       _buildCoinHeader(name: 'Bonk', symbol: 'BONK'),
       Container(
-        padding: const EdgeInsets.all(4),
-        child: const Column(
+        padding: EdgeInsets.all(4.w),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               r'$0.00002348',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Row(
               children: <Widget>[
-                Icon(PhosphorIconsFill.caretUp, color: AppColors.green, size: 18),
+                Icon(PhosphorIconsFill.caretUp, color: AppColors.green, size: 18.sp),
                 Text(
                   '2.5%',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                     color: AppColors.green,
                   ),
@@ -167,19 +167,19 @@ class CoinListItem extends StatelessWidget {
     children: <Widget>[
       _buildCoinHeader(),
       Container(
-        padding: const EdgeInsets.all(4),
-        child: const Row(
+        padding: EdgeInsets.all(4.w),
+        child: Row(
           children: <Widget>[
             Text(
               r'$32M',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 24.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.black,
               ),
             ),
-            Spacer(),
-            Icon(PhosphorIconsBold.arrowCircleUpRight, color: AppColors.grey, size: 19.5),
+            const Spacer(),
+            Icon(PhosphorIconsBold.arrowCircleUpRight, color: AppColors.grey, size: 19.5.sp),
           ],
         ),
       ),
@@ -192,18 +192,18 @@ class CoinListItem extends StatelessWidget {
     children: <Widget>[
       _buildCoinHeader(),
       Container(
-        padding: const EdgeInsets.all(4),
+        padding: EdgeInsets.all(4.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(9),
+          borderRadius: BorderRadius.circular(9.r),
           color: AppColors.white,
         ),
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               'MCAP',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.greyLight,
               ),
@@ -213,16 +213,16 @@ class CoinListItem extends StatelessWidget {
                 Text(
                   r'$3.15M',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Spacer(),
-                Icon(PhosphorIconsFill.caretUp, color: AppColors.green, size: 18),
+                const Spacer(),
+                Icon(PhosphorIconsFill.caretUp, color: AppColors.green, size: 18.sp),
                 Text(
                   '2.5%',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                     color: AppColors.green,
                   ),

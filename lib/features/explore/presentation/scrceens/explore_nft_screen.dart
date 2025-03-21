@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -24,65 +25,65 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
     super.initState();
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 600), // Total animation duration
+      duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    // Define a combined slide + bounce animation
+    
     _slideAnimation2 = TweenSequence<Offset>(<TweenSequenceItem<Offset>>[
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: const Offset(0, -1), // Start off-screen
-          end: Offset.zero, // Slide into position
+          begin: const Offset(0, -1),
+          end: Offset.zero,
         ).chain(CurveTween(curve: Curves.easeInOut)),
-        weight: 60, // Slide takes up 80% of the duration
+        weight: 60,
       ),
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: Offset.zero, // From resting position
-          end: const Offset(0, 0.03), // Slight bounce up
+          begin: Offset.zero,
+          end: const Offset(0, 0.03),
         ).chain(CurveTween(curve: Curves.easeOut)),
-        weight: 20, // Bounce up takes 10%
+        weight: 20,
       ),
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: const Offset(0, 0.03), // From bounce peak
-          end: Offset.zero, // Settle back to resting
+          begin: const Offset(0, 0.03),
+          end: Offset.zero,
         ).chain(CurveTween(curve: Curves.bounceOut)),
-        weight: 20, // Settle back takes 10%
+        weight: 20,
       ),
     ]).animate(_animationController);
 
-    // Define a combined slide + bounce animation
     _slideAnimation = TweenSequence<Offset>(<TweenSequenceItem<Offset>>[
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: const Offset(0, 1), // Start off-screen
-          end: Offset.zero, // Slide into position
+          begin: const Offset(0, 1),
+          end: Offset.zero,
         ).chain(CurveTween(curve: Curves.easeInOut)),
-        weight: 60, // Slide takes up 80% of the duration
+        weight: 60,
       ),
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: Offset.zero, // From resting position
-          end: const Offset(0, -0.03), // Slight bounce up
+          begin: Offset.zero,
+          end: const Offset(0, -0.03),
         ).chain(CurveTween(curve: Curves.easeOut)),
-        weight: 20, // Bounce up takes 10%
+        weight: 20,
       ),
       TweenSequenceItem(
         tween: Tween<Offset>(
-          begin: const Offset(0, -0.03), // From bounce peak
-          end: Offset.zero, // Settle back to resting
+          begin: const Offset(0, -0.03),
+          end: Offset.zero,
         ).chain(CurveTween(curve: Curves.bounceOut)),
-        weight: 20, // Settle back takes 10%
+        weight: 20,
       ),
     ]).animate(_animationController);
-    // Start the animation
+    
     _animationController.forward();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _searchConroller.dispose();
     super.dispose();
   }
 
@@ -91,10 +92,10 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
       backgroundColor: const Color(0xfff4f4f6),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'NFT Explore',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 20.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -102,56 +103,56 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                //search bar
                 Container(
                   width: double.infinity,
-                  height: 48,
+                  height: 48.h,
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(58),
+                    borderRadius: BorderRadius.circular(58.r),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      const Gap(16),
-                      const Icon(
+                      Gap(16.w),
+                      Icon(
                         PhosphorIconsBold.magnifyingGlass,
                         color: AppColors.greyMedium,
+                        size: 18.sp,
                       ),
-                      const Gap(8),
+                      Gap(8.w),
                       Expanded(
                         child: TextField(
                           controller: _searchConroller,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Search or paste URL',
                             hintStyle: TextStyle(
                               color: AppColors.greyMedium,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
                       ),
-                      const Icon(
+                      Icon(
                         PhosphorIconsBold.cards,
                         color: AppColors.greyMedium,
+                        size: 18.sp,
                       ),
-                      const Gap(16),
+                      Gap(16.w),
                     ],
                   ),
                 ),
-                const Gap(16),
+                Gap(16.h),
 
-                //minting now banner
-                const Text(
+                Text(
                   'Minting now',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -163,24 +164,21 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                   position: _slideAnimation,
                   child: Column(
                     children: <Widget>[
-                      //top nfts
                       _buildCategoryHeader('Top NFTs', (){}),
-                      const Gap(4),
+                      Gap(4.h),
                       _buildNFTSGrid(context),
                     ],
                   ),
                 ),
                 
-                //top volume
-                const Gap(8),
+                Gap(8.h),
                 _buildCategoryHeader('Top Volume', (){}),
-                const Gap(4),
+                Gap(4.h),
                 _buildNFTSGrid(context),
 
-                //highest gainers
-                const Gap(8),
+                Gap(8.h),
                 _buildCategoryHeader('Highest gainers', (){}),
-                const Gap(4),
+                Gap(4.h),
                 _buildNFTSGrid(context),
               ],
             ),
@@ -193,31 +191,31 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
     final double height = context.screenHeight;
     final double width = context.screenWidth;
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12),
+      margin: EdgeInsets.symmetric(vertical: 12.h),
       height: height * .28,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
         color: Colors.grey,
       ),
       child: Stack(
         children: <Widget>[
           Positioned(
-            right: 16,
-            top: 22,
+            right: 16.w,
+            top: 22.h,
             child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(30.r),
                   color: AppColors.white.withValues(alpha: .2),
                 ),
-                child: const Row(
+                child: Row(
                   children: <Widget>[
-                    Icon(PhosphorIconsFill.sparkle, color: AppColors.green,size: 18),
-                    Gap(2),
+                    Icon(PhosphorIconsFill.sparkle, color: AppColors.green, size: 18.sp),
+                    Gap(2.w),
                     Text(
                       'Minting',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.white,
                       ),
@@ -226,39 +224,39 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                 ),),
           ),
           Positioned(
-            bottom : 22,
-            left: 22,
-            child : Column(
-              mainAxisSize : MainAxisSize.min,
-              crossAxisAlignment : CrossAxisAlignment.start,
-              children : <Widget>[
+            bottom: 22.h,
+            left: 22.w,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
                 Container(
-                  width : width * .11,
-                  height : width * .11,
-                  decoration : BoxDecoration(borderRadius : BorderRadius.circular(12),color : AppColors.white),
+                  width: width * .11,
+                  height: width * .11,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.r), color: AppColors.white),
                 ),
-                const Gap(4),
-                const Text('Get Minecrafts',style: TextStyle(
-                  fontSize : 24,
+                Gap(4.h),
+                Text('Get Minecrafts', style: TextStyle(
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),),
-                const Gap(6),
-                const Row(
-                  mainAxisSize : MainAxisSize.min,
+                Gap(6.h),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text('By Jerrold',style: TextStyle(
-                      fontSize : 16,
+                    Text('By Jerrold', style: TextStyle(
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.white,
                     ),
                     ),
-                    Gap(3),
-                    Icon(PhosphorIconsFill.sealCheck,color : AppColors.white, size: 24),
+                    Gap(3.w),
+                    Icon(PhosphorIconsFill.sealCheck, color: AppColors.white, size: 24.sp),
                   ],
                 ), 
-                const Text('Open edition 0.22APT',style: TextStyle(
-                      fontSize : 16,
+                Text('Open edition 0.22APT', style: TextStyle(
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.white,
                     ),),
@@ -267,18 +265,18 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
             ),
           ),
           Positioned(
-            right: 16,
-            bottom: 22,
+            right: 16.w,
+            bottom: 22.h,
             child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 12),
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(30.r),
                   color: AppColors.black,
                 ),
-                child: const Text(
+                child: Text(
                       'View Drop',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: AppColors.white,
                       ),
@@ -290,14 +288,14 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
   }
 
   Widget _buildCategoryHeader(String title, VoidCallback onTap) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 18,
+            style: TextStyle(
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -306,15 +304,15 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Text(
+                Text(
                   'See all',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     color: AppColors.blue,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 18),
+                Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 18.sp),
               ],
             ),
           ),
@@ -332,19 +330,19 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
     final double width = context.screenWidth;
     final double height = context.screenHeight;
     return SizedBox(
-      height: height *.285 * 2,
+      height: height * .285 * 2,
       child: GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 4,
-                crossAxisSpacing: 4,
-                mainAxisExtent: height* .285,
+                mainAxisSpacing: 4.h,
+                crossAxisSpacing: 4.w,
+                mainAxisExtent: height * .285,
               ),
               itemCount: nftImages.length,
               itemBuilder: (BuildContext context, int index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical:4),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -353,22 +351,22 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
                           context: context,
                           imageUrl: nftImages[index],
                           ),
-                      const Gap(6),
+                      Gap(6.h),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: width / 3),
-                        child: const Text(
+                        child: Text(
                           'Cyberpunk kid #6823',
                           style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                               color: AppColors.greyDark,),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const Gap(3),
-                     const Text('0.0APT',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500,),),
+                      Gap(3.h),
+                      Text('0.0APT',
+                          style: TextStyle(
+                              fontSize: 16.sp, fontWeight: FontWeight.w500,),),
                     ],
                   ),
                 ),
@@ -381,19 +379,18 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
       required String? imageUrl,}) {
     final double width = context.screenWidth;
     if (imageUrl == null) {
-      return const CircleAvatar(radius: 22, backgroundColor: Colors.amber);
+      return CircleAvatar(radius: 22.r, backgroundColor: Colors.amber);
     } else {
-      //two cases - ipfs and url to call
       return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         child: CachedNetworkImage(
           fit: BoxFit.cover,
           width: width * .5,
           height: width * .45,
           imageUrl: imageUrl,
-          errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
+          errorWidget: (BuildContext ctx, String str, Object obj) => Container(color: Colors.amber),
           progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-              const CircularProgressIndicator(),
+              CircularProgressIndicator(strokeWidth: 2.w),
         ),
       );
     }

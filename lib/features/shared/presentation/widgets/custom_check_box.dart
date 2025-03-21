@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -24,15 +25,15 @@ class CustomCheckboxState extends State<CustomCheckbox> {
       onTap: widget.onTap,
       child: Container(
         alignment: Alignment.center,
-        width: 20,
-        height: 20,
+        width: 20.w,
+        height: 20.h,
         decoration: !widget.isChecked
             ? BoxDecoration(
                 borderRadius: widget.isRound
-                    ? BorderRadius.circular(30)
-                    : BorderRadius.circular(6),
+                    ? BorderRadius.circular(30.r)
+                    : BorderRadius.circular(6.r),
                 border: Border.all(
-                  width: 1.5,
+                  width: 1.5.w,
                   color: AppColors.grey,
                 ),
                 color: Colors.transparent,

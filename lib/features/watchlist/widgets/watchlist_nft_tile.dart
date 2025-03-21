@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -90,20 +91,20 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
         Visibility(
           visible: !isDeleted,
           child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 70,
+            width: 1.sw,
+            height: 70.h,
             child: Stack(
               children: <Widget>[
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
-                  right: clickDelete ? MediaQuery.of(context).size.width : 0,
+                  right: clickDelete ? 1.sw : 0,
                   top: 0,
                   bottom: 0,
                   child: SizedBox(
-                    height: 55,
-                    width: MediaQuery.of(context).size.width,
+                    height: 55.h,
+                    width: 1.sw,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Row(
                         children: <Widget>[
                           Column(
@@ -111,14 +112,14 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Image(
-                                height: 55,
-                                width: 55,
+                                height: 55.h,
+                                width: 55.w,
                                 fit: BoxFit.cover,
                                 image: AssetImage(imagePath),
                               ),
                             ],
                           ),
-                          const Gap(12),
+                          Gap(12.w),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -129,8 +130,8 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                     Text.rich(
                                       TextSpan(
                                         text: name,
-                                        style: const TextStyle(
-                                          fontSize: 16,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -138,30 +139,30 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                     if(widget.deleteNft)
                                       Text(
                                         nativeValue.split(' ')[0], // First part of native value (e.g., "32" from "32 APT")
-                                        style: const TextStyle(
-                                          fontSize: 16,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.5, end: 0),
                                     if(!widget.deleteNft)
                                       Text(
                                         nativeValue.split(' ')[0],
-                                        style: const TextStyle(
-                                          fontSize: 16,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
                                   ],
                                 ),
-                                const Gap(4),
+                                Gap(4.h),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text.rich(
                                       TextSpan(
                                         text: usdValue,
-                                        style: const TextStyle(
-                                          fontSize: 14,
+                                        style: TextStyle(
+                                          fontSize: 14.sp,
                                           fontWeight: FontWeight.w500,
                                           color: Colors.grey,
                                         ),
@@ -171,8 +172,8 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                       Text.rich(
                                         TextSpan(
                                           text: nativeValue,
-                                          style: const TextStyle(
-                                            fontSize: 14,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.grey,
                                           ),
@@ -182,8 +183,8 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                       Text.rich(
                                         TextSpan(
                                           text: nativeValue,
-                                          style: const TextStyle(
-                                            fontSize: 14,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.grey,
                                           ),
@@ -194,7 +195,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                               ],
                             ),
                           ),
-                          const Gap(12),
+                          Gap(12.w),
                           Visibility(
                             visible: widget.deleteNft,
                             child: GestureDetector(
@@ -202,7 +203,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                               child: Icon(
                                 PhosphorIcons.minusCircle(PhosphorIconsStyle.bold),
                                 color: Colors.red,
-                                size: 20,
+                                size: 20.sp,
                               ),
                             ),
                           ),
@@ -213,16 +214,16 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                 ),
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
-                  left: clickDelete ? 0 : MediaQuery.of(context).size.width,
+                  left: clickDelete ? 0 : 1.sw,
                   child: AnimatedContainer(
                     duration: const Duration(seconds: 6),
-                    height: clickDelete ? 45 : 65,
-                    width: MediaQuery.of(context).size.width,
+                    height: clickDelete ? 45.h : 65.h,
+                    width: 1.sw,
                     child: Container(
                       color: Colors.grey[200],
                       child: Center(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -241,7 +242,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                         style: TextStyle(
                                           color: AppColors.greyLight.withValues(alpha: 0.6),
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 16,
+                                          fontSize: 16.sp,
                                         ),
                                       ),
                                     ),
@@ -251,15 +252,15 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 onTap: delete,
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
+                                    borderRadius: BorderRadius.circular(100.r),
                                     border: Border.all(),
                                   ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 4.h),
                                     child: Text(
                                       'undo',
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 16.sp,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),

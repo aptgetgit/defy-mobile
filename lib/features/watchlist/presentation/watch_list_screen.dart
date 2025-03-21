@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -74,38 +75,38 @@ class _WatchListScreenState extends ConsumerState<WatchListScreen>
               Navigator.pop(context);
             },
             icon: Icon(
-              PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
+              PhosphorIconsBold.caretLeft,
               color: Colors.black,
-              size: 24,
+              size: 24.sp,
             ),
           ),
-          title: const Text(
+          title: Text(
             'Watchlist',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 18,
+              fontSize: 18.sp,
             ),
           ),
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(right: 18),
+              padding: EdgeInsets.only(right: 18.w),
               child: IconButton(
                 onPressed: () {
                   // This could show favorite collections or perform other actions
                   // using the provider state
                 },
                 icon: Icon(
-                  PhosphorIcons.star(),
+                  PhosphorIconsRegular.star,
                   color: Colors.black,
-                  size: 24,
+                  size: 24.sp,
                 ),
               ),
             ),
           ],
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight - 8),
+            preferredSize: Size.fromHeight(kToolbarHeight - 8.h),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
               child: CustomTabBar(
                 tabController: _tabController,
                 tabs: const <String>[
@@ -118,10 +119,10 @@ class _WatchListScreenState extends ConsumerState<WatchListScreen>
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
               children: <Widget>[
-                const Gap(32),
+                Gap(32.h),
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,

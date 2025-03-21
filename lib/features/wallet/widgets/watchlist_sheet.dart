@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
-import '../../shared/presentation/widgets/custom_check_box.dart';
 
 class WatchlistBottomSheet extends StatefulWidget {
   final Function(int?) onAddToWatchlist;
@@ -28,125 +28,134 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
 
   Widget _buildMainBottomSheet() => Align(
       alignment: Alignment.bottomCenter,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(21),
-            topRight: Radius.circular(21),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 40.h),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(21.r)),
           ),
-        ),
-        padding: const EdgeInsets.only(
-          top: 12,
-          left: 20,
-          right: 4,
-          bottom: 32,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text(
-                  'Choose Collection',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(PhosphorIconsBold.x, color: Colors.black, size: 24),
-                ),
-              ],
-            ),
-            const Gap(4),
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Column(
+          padding: EdgeInsets.only(
+            top: 12.h,
+            left: 20.w,
+            right: 4.w,
+            bottom: 32.h,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  _buildCollectionItem(
-                    title: 'Safety Tokens 🤩',
-                    count: 4,
-                    index: 0, // Add an index for each collection
-                    onTap: () {
-                      setState(() {
-                        _selectedCollectionIndex = 0;
-                      });
-                    },
+                  Text(
+                    'Choose Collection',
+                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
                   ),
-                  _buildCollectionItem(
-                    title: 'Avatar NFT',
-                    count: 8,
-                    index: 1,
-                    onTap: () {
-                      setState(() {
-                        _selectedCollectionIndex = 1;
-                      });
-                    },
-                  ),
-                  _buildCollectionItem(
-                    title: 'Cute NFTs 🐣',
-                    count: 8,
-                    index: 2,
-                    onTap: () {
-                      setState(() {
-                        _selectedCollectionIndex = 2;
-                      });
-                    },
-                  ),
-                  const Gap(10),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isCreatingCollection = true; // Navigate to create screen
-                      });
-                    },
-                    child: Container(
-                      height: 54,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.greyVeryLight,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Row(
-                        children: <Widget>[
-                          Gap(10),
-                          Icon(PhosphorIconsFill.plusCircle,size: 28),
-                          Gap(10),
-                          Text('Create new collection', style: TextStyle(fontSize:16,color: AppColors.greyLight)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
+                  IconButton(
                     onPressed: () {
-                      // Implement add to watchlist logic, using _selectedCollectionIndex
-                      if (_selectedCollectionIndex != null) {
-                        widget.onAddToWatchlist(_selectedCollectionIndex);
-                        Navigator.pop(context);
-                      }
+                      Navigator.pop(context);
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _selectedCollectionIndex != null
-                          ? AppColors.black
-                          : AppColors.greyMedium,
-                      elevation: 0,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 54),
-                      textStyle: const TextStyle(fontSize: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                    ),
-                    child: const Text('Add to Watchlist'),
+                    icon: Icon(PhosphorIconsBold.x, color: Colors.black, size: 24.sp),
                   ),
                 ],
               ),
-            ),
-          ],
+              Gap(4.h),
+              Padding(
+                padding: EdgeInsets.only(right: 4.w),
+                child: Column(
+                  children: <Widget>[
+                    _buildCollectionItem(
+                      title: 'Safety Tokens 🤩',
+                      count: 4,
+                      index: 0, // Add an index for each collection
+                      onTap: () {
+                        setState(() {
+                          _selectedCollectionIndex = 0;
+                        });
+                      },
+                    ),
+                    _buildCollectionItem(
+                      title: 'Avatar NFT',
+                      count: 8,
+                      index: 1,
+                      onTap: () {
+                        setState(() {
+                          _selectedCollectionIndex = 1;
+                        });
+                      },
+                    ),
+                    _buildCollectionItem(
+                      title: 'Cute NFTs 🐣',
+                      count: 8,
+                      index: 2,
+                      onTap: () {
+                        setState(() {
+                          _selectedCollectionIndex = 2;
+                        });
+                      },
+                    ),
+                    Gap(10.h),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isCreatingCollection = true; // Navigate to create screen
+                          });
+                        },
+                        child: Container(
+                          height: 54.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppColors.greyVeryLight,
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Gap(10.w),
+                              Icon(PhosphorIconsFill.plusCircle, size: 28.sp),
+                              Gap(10.w),
+                              Text(
+                                'Create new collection', 
+                                style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Implement add to watchlist logic, using _selectedCollectionIndex
+                          if (_selectedCollectionIndex != null) {
+                            widget.onAddToWatchlist(_selectedCollectionIndex);
+                            Navigator.pop(context);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _selectedCollectionIndex != null
+                              ? AppColors.black
+                              : AppColors.greyMedium,
+                          elevation: 0,
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(double.infinity, 54.h),
+                          textStyle: TextStyle(fontSize: 16.sp),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40.r),
+                          ),
+                        ),
+                        child: const Text('Add to Watchlist'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -158,20 +167,20 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(21),
-            topRight: Radius.circular(21),
+            topLeft: Radius.circular(21.r),
+            topRight: Radius.circular(21.r),
           ),
         ),
-        padding: const EdgeInsets.only(top: 12,bottom: 32),
+        padding: EdgeInsets.only(top: 12.h, bottom: 32.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 4, right: 4),
+              padding: EdgeInsets.only(left: 4.w, right: 4.w),
               child: Row(
                 children: <Widget>[
                   IconButton(
@@ -180,44 +189,50 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                         _isCreatingCollection = false; // Go back to main sheet
                       });
                     },
-                    icon: const Icon(PhosphorIconsBold.caretLeft, size: 24), // Back button
+                    icon: Icon(PhosphorIconsBold.caretLeft, size: 24.sp), // Back button
                   ),
-                  const Text(
+                  Text(
                     'New Token Collection',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context); // Close the whole sheet
                     },
-                    icon: const Icon(PhosphorIconsBold.x, color: Colors.black, size: 24),
+                    icon: Icon(PhosphorIconsBold.x, color: Colors.black, size: 24.sp),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(left: 20.w, right: 20.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Gap(8),
-                  const Text('Collections helps you to group tokens and keep track on them',
-                    style: TextStyle(fontSize: 16, color: AppColors.greyLight),),
-                  const Gap(20),
-                  const Text('Collection name', style: TextStyle(fontSize: 14,color: AppColors.greyLight)),
-                  const Gap(4),
+                  Gap(8.h),
+                  Text(
+                    'Collections helps you to group tokens and keep track on them',
+                    style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
+                  ),
+                  Gap(20.h),
+                  Text(
+                    'Collection name', 
+                    style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight),
+                  ),
+                  Gap(4.h),
                   Container(
-                    height: 54,
+                    height: 54.h,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: AppColors.greyVeryLight,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      style: TextStyle(fontSize: 16.sp),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
                       ),
                     ),
                   ),
@@ -239,26 +254,51 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
       InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8.h),
           child: Row(
             children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(title, style: const TextStyle(fontSize: 18)),
-                  Text('$count Tokens',
-                      style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 100, 109, 128)),),
+                  Text(
+                    title, 
+                    style: TextStyle(fontSize: 18.sp),
+                  ),
+                  Text(
+                    '$count Tokens',
+                    style: TextStyle(
+                      fontSize: 14.sp, 
+                      color: const Color.fromARGB(255, 100, 109, 128),
+                    ),
+                  ),
                 ],
               ),
               const Spacer(),
-              CustomCheckbox(
-                isChecked: _selectedCollectionIndex == index,
-                isRound: true,
-                onTap: () {
-                  setState(() {
-                    _selectedCollectionIndex = index;
-                  });
-                },
+              Theme(
+                data: Theme.of(context).copyWith(
+                  unselectedWidgetColor: AppColors.greyLight, // Set inactive color to grey
+                  radioTheme: RadioThemeData(
+                    fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return AppColors.blue; // Active color
+                      }
+                      return AppColors.greyLight; // Inactive color
+                    }),
+                  ),
+                ),
+                child: Radio<int>(
+                  activeColor: AppColors.blue,
+                  visualDensity: VisualDensity.compact,
+                  value: index,
+                  groupValue: _selectedCollectionIndex,
+                  onChanged: (int? value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedCollectionIndex = value;
+                      });
+                    }
+                  },
+                ),
               ),
             ],
           ),

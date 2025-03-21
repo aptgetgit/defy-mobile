@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/theme/colors.dart';
 
@@ -7,17 +8,17 @@ class NftInfoBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 26, top: 20),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 26.h, top: 20.h),
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+          topLeft: Radius.circular(24.r),
+          topRight: Radius.circular(24.r),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 20,
-            offset: Offset(0, -4),
+            blurRadius: 20.r,
+            offset: Offset(0, -4.h),
           ),
         ],
         color: Colors.white,
@@ -27,21 +28,21 @@ class NftInfoBottomNavBar extends StatelessWidget {
         children: <Widget>[
           Image.asset(
             'assets/icons/aptos.png',
-            width: 32,
-            height: 32,
+            width: 32.w,
+            height: 32.h,
           ),
-          const SizedBox(width: 10),
-          const Column(
+          SizedBox(width: 10.w),
+          Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 '89.02 APT',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
               ),
               Text(
                 '+ 2.98',
-                style: TextStyle(fontSize: 14, color: AppColors.green),
+                style: TextStyle(fontSize: 14.sp, color: AppColors.green),
               ),
             ],
           ),
@@ -54,31 +55,31 @@ class NftInfoBottomNavBar extends StatelessWidget {
                     // Handle Bid action
                   },
                   style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(95, 45), // Explicit minimum size
-                    maximumSize: const Size(150, 48), // Explicit maximum size
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    minimumSize: Size(95.w, 45.h), // Explicit minimum size
+                    maximumSize: Size(150.w, 48.h), // Explicit maximum size
+                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(24.r),
                     ),
-                    side: const BorderSide(),
+                    side: BorderSide(width: 1.w),
                   ),
-                  child: const Text('Bid', style: TextStyle(color: Colors.black, fontSize: 18)),
+                  child: Text('Bid', style: TextStyle(color: Colors.black, fontSize: 18.sp)),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
                 ElevatedButton(
                   onPressed: () {
                     // Handle Buy action
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(95, 45), // Explicit minimum size
-                    maximumSize: const Size(150, 48), // Explicit maximum size
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    minimumSize: Size(95.w, 45.h), // Explicit minimum size
+                    maximumSize: Size(150.w, 48.h), // Explicit maximum size
+                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(24.r),
                     ),
                     backgroundColor: Colors.black,
                   ),
-                  child: const Text('Buy', style: TextStyle(color: Colors.white,fontSize: 18)),
+                  child: Text('Buy', style: TextStyle(color: Colors.white, fontSize: 18.sp)),
                 ),
               ],
             ),

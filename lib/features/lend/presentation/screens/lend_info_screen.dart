@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -59,8 +60,8 @@ class _LendInfoScreenState extends ConsumerState<LendInfoScreen> with SingleTick
     // Calculate percentage text width
     final TextSpan percentageTextSpan = TextSpan(
       text: widget.percentage,
-      style: const TextStyle(
-        fontSize: 24,
+      style: TextStyle(
+        fontSize: 24.sp,
         color: Colors.green,
         fontWeight: FontWeight.w600,
       ),
@@ -78,15 +79,15 @@ class _LendInfoScreenState extends ConsumerState<LendInfoScreen> with SingleTick
             slivers: <Widget>[
               SliverAppBar(
                 backgroundColor: Colors.white,
-                expandedHeight: 200,
+                expandedHeight: 200.h,
                 pinned: true,
                 actions: <Widget>[
                   IconButton(
-                    icon: const Icon(PhosphorIconsBold.bell),
+                    icon: Icon(PhosphorIconsBold.bell, size: 24.sp),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: const Icon(PhosphorIconsBold.shareNetwork),
+                    icon: Icon(PhosphorIconsBold.shareNetwork, size: 24.sp),
                     onPressed: () {},
                   ),
                 ],
@@ -96,17 +97,17 @@ class _LendInfoScreenState extends ConsumerState<LendInfoScreen> with SingleTick
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const StakeChart(),
-                    const Gap(40),
+                    Gap(40.h),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            padding: const EdgeInsets.only(left: 16, top: 12, bottom: 12, right: 4),
+                            padding: EdgeInsets.only(left: 16.w, top: 12.h, bottom: 12.h, right: 4.w),
                             decoration: BoxDecoration(
                               color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,8 +115,8 @@ class _LendInfoScreenState extends ConsumerState<LendInfoScreen> with SingleTick
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const Text('100 USDT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                                    Text('Lent', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                                    Text('100 USDT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                                    Text('Lent', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
                                   ],
                                 ),
                                 Row(
@@ -123,63 +124,63 @@ class _LendInfoScreenState extends ConsumerState<LendInfoScreen> with SingleTick
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: <Widget>[
-                                        const Text(r'+312.21$', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.green)),
-                                        Text('Earned', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                                        Text(r'+312.21$', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: Colors.green)),
+                                        Text('Earned', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
                                       ],
                                     ),
-                                    const Gap(16),
-                                    Icon(PhosphorIconsRegular.caretRight, size: 16, color: Colors.grey[600]),
+                                    Gap(16.w),
+                                    Icon(PhosphorIconsRegular.caretRight, size: 16.sp, color: Colors.grey[600]),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                          const Gap(34),
+                          Gap(34.h),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              const Text('Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                              const Gap(20),
+                              Text('Details', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                              Gap(20.h),
                               Padding(
-                                padding: const EdgeInsets.only(right: 93),
+                                padding: EdgeInsets.only(right: 93.w),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('Total Reserve', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                                        const Text('14.28M APT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                        Text('Total Reserve', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
+                                        Text('14.28M APT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                       ],
                                     ),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('Max LTV', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                                        const Text('56.7M', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                        Text('Max LTV', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
+                                        Text('56.7M', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
-                              const Gap(18),
+                              Gap(18.h),
                               Padding(
-                                padding: const EdgeInsets.only(right: 62),
+                                padding: EdgeInsets.only(right: 62.w),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('Liq. Threshold', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                                        const Text('3.02%', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                        Text('Liq. Threshold', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
+                                        Text('3.02%', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                       ],
                                     ),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('Liq. Penalty', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                                        const Text('652.90 APT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                        Text('Liq. Penalty', style: TextStyle(fontSize: 14.sp, color: Colors.grey[600])),
+                                        Text('652.90 APT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                       ],
                                     ),
                                   ],
@@ -187,133 +188,133 @@ class _LendInfoScreenState extends ConsumerState<LendInfoScreen> with SingleTick
                               ),
                             ],
                           ),
-                          const Gap(32),
+                          Gap(32.h),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              const Row(
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text('E-Mode', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                  Gap(28),
+                                  Text('E-Mode', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                                  Gap(28.w),
                                   Row(
                                     children: <Widget>[
-                                      Icon(PhosphorIconsFill.checkCircle, size: 20, color: Colors.green),
-                                      Gap(4),
-                                      Text('Available', style: TextStyle(fontSize: 14, color: Colors.green)),
+                                      Icon(PhosphorIconsFill.checkCircle, size: 20.sp, color: Colors.green),
+                                      Gap(4.w),
+                                      Text('Available', style: TextStyle(fontSize: 14.sp, color: Colors.green)),
                                     ],
                                   ),
                                 ],
                               ),
-                              const Gap(16),
+                              Gap(16.h),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 18.h),
                                 decoration: BoxDecoration(
                                   color: Colors.grey[100],
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.r),
                                 ),
-                                child: const Row(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Column(
                                       children: <Widget>[
-                                        Text('75.68%', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                        Gap(7),
-                                        Text('Max LTV', style: TextStyle(fontSize: 12.6, color: AppColors.greyLight)),
+                                        Text('75.68%', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                                        Gap(7.h),
+                                        Text('Max LTV', style: TextStyle(fontSize: 12.6.sp, color: AppColors.greyLight)),
                                       ],
                                     ),
                                     Column(
                                       children: <Widget>[
-                                        Text('90.5%', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                        Gap(7),
-                                        Text('Liq. Threshold', style: TextStyle(fontSize: 12.6, color: AppColors.greyLight)),
+                                        Text('90.5%', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                                        Gap(7.h),
+                                        Text('Liq. Threshold', style: TextStyle(fontSize: 12.6.sp, color: AppColors.greyLight)),
                                       ],
                                     ),
                                     Column(
                                       children: <Widget>[
-                                        Text('5.23%', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                        Gap(7),
-                                        Text('Liq. Penalty', style: TextStyle(fontSize: 12.6, color: AppColors.greyLight)),
+                                        Text('5.23%', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                                        Gap(7.h),
+                                        Text('Liq. Penalty', style: TextStyle(fontSize: 12.6.sp, color: AppColors.greyLight)),
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
-                              const Gap(32),
-                              const Text('Utilization Rate', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                              const Gap(20),
-                              const Padding(
-                                padding: EdgeInsets.only(right: 65),
+                              Gap(32.h),
+                              Text('Utilization Rate', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                              Gap(20.h),
+                              Padding(
+                                padding: EdgeInsets.only(right: 65.w),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('Current Rate', style: TextStyle(fontSize: 14, color: AppColors.greyLight)),
-                                        Text('85%', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                                        Text('Current Rate', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                                        Text('85%', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
                                       ],
                                     ),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('Optimal Rate', style: TextStyle(fontSize: 14, color: AppColors.greyLight)),
-                                        Text('90%', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.green)),
+                                        Text('Optimal Rate', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                                        Text('90%', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: Colors.green)),
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
-                              const Gap(35),
-                              const Text('More Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                              const Gap(17),
+                              Gap(35.h),
+                              Text('More Details', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                              Gap(17.h),
                               Column(
                                 children: <Widget>[
-                                  const Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text('USDT Price', style: TextStyle(fontSize: 16, color: AppColors.greyLight)),
-                                      Text(r'$1.01', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                                    ],
-                                  ),
-                                  const Gap(14),
-                                  const Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text('Contract Address', style: TextStyle(fontSize: 16, color: AppColors.greyLight)),
-                                      Text('0x12...bxju', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                                    ],
-                                  ),
-                                  const Gap(14),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      const Text('Platform', style: TextStyle(fontSize: 16, color: AppColors.greyLight)),
+                                      Text('USDT Price', style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight)),
+                                      Text(r'$1.01', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                                    ],
+                                  ),
+                                  Gap(14.h),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text('Contract Address', style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight)),
+                                      Text('0x12...bxju', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                                    ],
+                                  ),
+                                  Gap(14.h),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text('Platform', style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight)),
                                       Row(
                                         children: <Widget>[
-                                          Image.asset('assets/icons/aries.png', width: 20),
-                                          const Gap(8),
-                                          const Text('Aries', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                          Image.asset('assets/icons/aries.png', width: 20.w),
+                                          Gap(8.w),
+                                          Text('Aries', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                         ],
                                       ),
                                     ],
                                   ),
-                                  const Gap(14),
-                                  const Row(
+                                  Gap(14.h),
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
-                                      Text('Rank', style: TextStyle(fontSize: 16, color: AppColors.greyLight)),
-                                      Text('#4', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                      Text('Rank', style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight)),
+                                      Text('#4', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                                     ],
                                   ),
                                 ],
                               ),
-                              const Gap(16),
+                              Gap(16.h),
                             ],
                           ),
-                          const Gap(16),
+                          Gap(16.h),
                         ],
                       ),
                     ),

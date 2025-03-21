@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/dashboard-floating-action-button.dart';
 
 class CustomNavBar extends ConsumerWidget {
-
   const CustomNavBar({
     super.key,
     required this.pageIndex,
@@ -27,72 +28,54 @@ class CustomNavBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => Container(
       color: Colors.transparent,
-      height: 97,
-      width: MediaQuery.of(context).size.width * 0.85,
+      height: 97.h,
+     
       child: AnimatedSize(
         curve: Curves.easeIn,
         duration: const Duration(milliseconds: 800),
         child: Center(
           child: FractionallySizedBox(
-            widthFactor: !isMoreOptionsSelected ? 1 : 0.8,
+            widthFactor: !isMoreOptionsSelected ? 0.7 : 0.8,
             child: Stack(
               children: <Widget>[
                 Container(
-                  height: 90,
+                  height: 90.h,
                   alignment: Alignment.bottomCenter,
                   decoration: BoxDecoration(
-                    color: Colors.black, // Replace with your color
-                    borderRadius: isMoreOptionsSelected ? BorderRadius.circular(24) : BorderRadius.circular(64),
+                    color: Colors.black,
+                    borderRadius: isMoreOptionsSelected 
+                        ? BorderRadius.circular(24.r) 
+                        : BorderRadius.circular(64.r),
                   ),
-                  margin: const EdgeInsets.only(top: 18, bottom: 18),
+                  margin: EdgeInsets.only(top: 18.h, bottom: 18.h),
                   child: Center(
                     child: !isMoreOptionsSelected
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               IconButton(
-                                onPressed: () => onTabChange(0),
+                                onPressed: () {
+                                  const ExploreScreenRoute().go(context);
+                                },
                                 icon: Icon(
-                                  color: AppColors.greyDark, // Replace with your color
-                                  PhosphorIcons.shootingStar(
-                                    pageIndex == 0
-                                        ? PhosphorIconsStyle.fill
-                                        : PhosphorIconsStyle.bold,
-                                  ),
+                                  pageIndex == 1
+                                      ? PhosphorIconsFill.magnifyingGlass
+                                      : PhosphorIconsBold.magnifyingGlass,
+                                  color: AppColors.greyDark,
+                                  size: 24.sp,
                                 ),
                               ),
+                              Gap(20.w),
                               IconButton(
-                                onPressed: () => onTabChange(1),
+                                onPressed: () {
+                                  const WalletScreenRoute().go(context);
+                                },
                                 icon: Icon(
-                                  color: AppColors.greyDark, // Replace with your color
-                                  PhosphorIcons.magnifyingGlass(
-                                    pageIndex == 1
-                                        ? PhosphorIconsStyle.fill
-                                        : PhosphorIconsStyle.bold,
-                                  ),
-                                ),
-                              ),
-                              const Gap(20),
-                              IconButton(
-                                onPressed: () => onTabChange(2),
-                                icon: Icon(
-                                  color: AppColors.greyDark, // Replace with your color
-                                  PhosphorIcons.storefront(
-                                    pageIndex == 2
-                                        ? PhosphorIconsStyle.fill
-                                        : PhosphorIconsStyle.bold,
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () => onTabChange(3),
-                                icon: Icon(
-                                  color: AppColors.greyDark, // Replace with your color
-                                  PhosphorIcons.clock(
-                                    pageIndex == 3
-                                        ? PhosphorIconsStyle.fill
-                                        : PhosphorIconsStyle.bold,
-                                  ),
+                                  pageIndex == 2
+                                      ? PhosphorIconsFill.storefront
+                                      : PhosphorIconsBold.storefront,
+                                  color: AppColors.greyDark,
+                                  size: 24.sp,
                                 ),
                               ),
                             ],
@@ -103,17 +86,18 @@ class CustomNavBar extends ConsumerWidget {
                               IconButton(
                                 onPressed: onSortPressed,
                                 icon: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Icon(
-                                      color: AppColors.greyLight, // Replace with your color
-                                      PhosphorIcons.arrowBendDoubleUpLeft(
-                                        
-                                      ),
+                                      PhosphorIconsRegular.arrowBendDoubleUpLeft,
+                                      color: AppColors.greyLight,
+                                      size: 22.sp,
                                     ),
-                                    const Text(
-                                      'Sort',
+                                    Text(
+                                      'Filter',
                                       style: TextStyle(
-                                        color: AppColors.greyLight, // Replace with your color
+                                        color: AppColors.greyLight,
+                                        fontSize: 12.sp,
                                       ),
                                     ),
                                   ],
@@ -122,17 +106,18 @@ class CustomNavBar extends ConsumerWidget {
                               IconButton(
                                 onPressed: onWatchlistPressed,
                                 icon: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Icon(
-                                      color: AppColors.greyLight, // Replace with your color
-                                      PhosphorIcons.star(
-                                        
-                                      ),
+                                      PhosphorIconsRegular.star,
+                                      color: AppColors.greyLight,
+                                      size: 22.sp,
                                     ),
-                                    const Text(
+                                    Text(
                                       'Watchlist',
                                       style: TextStyle(
-                                        color: AppColors.greyLight, // Replace with your color
+                                        color: AppColors.greyLight,
+                                        fontSize: 12.sp,
                                       ),
                                     ),
                                   ],
@@ -141,17 +126,18 @@ class CustomNavBar extends ConsumerWidget {
                               IconButton(
                                 onPressed: onHidePressed,
                                 icon: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Icon(
-                                      color: AppColors.greyLight, // Replace with your color
-                                      PhosphorIcons.eye(
-                                        
-                                      ),
+                                      PhosphorIconsRegular.eye,
+                                      color: AppColors.greyLight,
+                                      size: 22.sp,
                                     ),
-                                    const Text(
+                                    Text(
                                       'Hide',
                                       style: TextStyle(
-                                        color: AppColors.greyLight, // Replace with your color
+                                        color: AppColors.greyLight,
+                                        fontSize: 12.sp,
                                       ),
                                     ),
                                   ],
@@ -167,7 +153,7 @@ class CustomNavBar extends ConsumerWidget {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                     child: Container(
-                      height: 95,
+                      height: 95.h,
                       alignment: Alignment.topCenter,
                       child: DashboardFloatingActionButton(
                         show: pageIndex == 0,

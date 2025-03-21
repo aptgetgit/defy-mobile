@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // Add ScreenUtil
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart'; // Add Riverpod
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -120,7 +121,7 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
     showDialog(
       context: context,
       builder: (BuildContext context) => SimpleDialog(
-        title: const Text('Sort by'),
+        title: Text('Sort by', style: TextStyle(fontSize: 18.sp)),
         children: <Widget>[
           SimpleDialogOption(
             onPressed: () {
@@ -128,7 +129,7 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                   .setSortOption(SortOption.nameAsc);
               Navigator.pop(context);
             },
-            child: const Text('Name (A-Z)'),
+            child: Text('Name (A-Z)', style: TextStyle(fontSize: 16.sp)),
           ),
           SimpleDialogOption(
             onPressed: () {
@@ -136,7 +137,7 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                   .setSortOption(SortOption.nameDesc);
               Navigator.pop(context);
             },
-            child: const Text('Name (Z-A)'),
+            child: Text('Name (Z-A)', style: TextStyle(fontSize: 16.sp)),
           ),
           SimpleDialogOption(
             onPressed: () {
@@ -144,7 +145,7 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                   .setSortOption(SortOption.priceAsc);
               Navigator.pop(context);
             },
-            child: const Text('Price (Low to High)'),
+            child: Text('Price (Low to High)', style: TextStyle(fontSize: 16.sp)),
           ),
           SimpleDialogOption(
             onPressed: () {
@@ -152,7 +153,7 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                   .setSortOption(SortOption.priceDesc);
               Navigator.pop(context);
             },
-            child: const Text('Price (High to Low)'),
+            child: Text('Price (High to Low)', style: TextStyle(fontSize: 16.sp)),
           ),
         ],
       ),
@@ -167,12 +168,12 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Delete Collection'),
-        content: const Text('Are you sure? This action cannot be undone.'),
+        title: Text('Delete Collection', style: TextStyle(fontSize: 18.sp)),
+        content: Text('Are you sure? This action cannot be undone.', style: TextStyle(fontSize: 16.sp)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel', style: TextStyle(fontSize: 16.sp)),
           ),
           TextButton(
             onPressed: () {
@@ -181,7 +182,7 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
               Navigator.pop(context); // Close dialog
               Navigator.pop(context); // Go back
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text('Delete', style: TextStyle(color: Colors.red, fontSize: 16.sp)),
           ),
         ],
       ),
@@ -229,9 +230,9 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
-            PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
+            PhosphorIconsBold.caretLeft,
             color: Colors.black,
-            size: 18,
+            size: 18.sp,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -239,9 +240,9 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
         ),
         title: Text(
           collection.name, // Use collection name from provider
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: 20,
+            fontSize: 20.sp,
             color: Colors.black,
           ),
         ),
@@ -250,12 +251,12 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
         elevation: 0,
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 50),
+            padding: EdgeInsets.only(right: 50.w),
             child: IconButton(
               icon: Icon(
-                PhosphorIcons.pencilSimple(PhosphorIconsStyle.bold),
+                PhosphorIconsBold.pencilSimple,
                 color: Colors.black,
-                size: 21,
+                size: 21.sp,
               ),
               onPressed: _editCollection, // Added edit functionality
             ),
@@ -266,23 +267,23 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'Tokens',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       color: Colors.black,
                     ),
                   ),
                   Row(
                     children: <Widget>[
                       Container(
-                        width: 32,
-                        height: 32,
+                        width: 32.w,
+                        height: 32.h,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.grey[300],
@@ -290,17 +291,17 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            PhosphorIcons.arrowUpRight(PhosphorIconsStyle.bold),
+                            PhosphorIconsBold.arrowUpRight,
                             color: Colors.black,
-                            size: 18,
+                            size: 18.sp,
                           ),
                           onPressed: _handleSort, // Added sort functionality
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Container(
-                        height: 32,
-                        width: 32,
+                        height: 32.h,
+                        width: 32.w,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.grey[300],
@@ -308,9 +309,9 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            PhosphorIcons.dotsThreeVertical(PhosphorIconsStyle.bold),
+                            PhosphorIconsBold.dotsThreeVertical,
                             color: Colors.black,
-                            size: 18,
+                            size: 18.sp,
                           ),
                           onPressed: _toggleDeleteButton,
                         ),
@@ -322,7 +323,7 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
             ),
             Expanded(
               child: collection.items.isEmpty
-                ? const Center(child: Text('No tokens in this collection'))
+                ? Center(child: Text('No tokens in this collection', style: TextStyle(fontSize: 16.sp)))
                 : ListView.builder(
                   itemCount: sortedItems.length, // Use actual items count
                   itemBuilder: (BuildContext context, int index) {
@@ -346,21 +347,21 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                   },
                 ),
             ),
-            const Gap(50),
+            Gap(50.h),
             if(showDeleteButton)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: ElevatedButton(
                   onPressed: _deleteCollection, // Added delete collection functionality
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.red,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                      borderRadius: BorderRadius.circular(40.r),
                     ),
-                    minimumSize: const Size(double.infinity, 54),
+                    minimumSize: Size(double.infinity, 54.h),
                   ),
-                  child: const Text('Delete Collection'),
+                  child: Text('Delete Collection', style: TextStyle(fontSize: 16.sp)),
                 ),
               ),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -31,30 +32,30 @@ class _AboutPageState extends State<AboutPage> {
     };
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SizedBox(height: 20),
-          const Text('DESCRIPTION', style: TextStyle(
-            fontSize: 14,
+          SizedBox(height: 20.h),
+          Text('DESCRIPTION', style: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Text(
             coin['coin_description']! as String,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: 16.sp,
               color: AppColors.greyDark,
             ),
           ),
-          const SizedBox(height: 30),
-          const Text('SOCIALS', style: TextStyle(
-            fontSize: 14,
+          SizedBox(height: 30.h),
+          Text('SOCIALS', style: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -64,19 +65,19 @@ class _AboutPageState extends State<AboutPage> {
                     icon: PhosphorIconsBold.globe,
                     label: 'Website',
                   ),
-                const Gap(8),
+                Gap(8.w),
                 if ((coin['coin_link']! as Map<String, String>)['twitter'] != null)
                   const SocialTile(
                     icon: PhosphorIconsBold.twitterLogo,
                     label: 'Twitter',
                   ),
-                const Gap(8),
+                Gap(8.w),
                 if ((coin['coin_link']! as Map<String, String>)['discord'] != null)
                   const SocialTile(
                     icon: PhosphorIconsBold.discordLogo,
                     label: 'Discord',
                   ),
-                const Gap(8),
+                Gap(8.w),
                 if ((coin['coin_link']! as Map<String, String>)['whitepaper'] != null)
                   const SocialTile(
                     icon: PhosphorIconsBold.scroll,
@@ -85,12 +86,12 @@ class _AboutPageState extends State<AboutPage> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          const Text('PERKS (1)', style: TextStyle(
-            fontSize: 14,
+          SizedBox(height: 20.h),
+          Text('PERKS (1)', style: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          const Gap(10),
+          Gap(10.h),
           Row(
             children: <Widget>[
               Text(
@@ -102,11 +103,11 @@ class _AboutPageState extends State<AboutPage> {
               Icon(
                 PhosphorIconsFill.info,
                 color: Colors.black.withValues(alpha: 0.5),
-                size: 16,
+                size: 16.sp,
               ),
             ],
           ),
-          const Gap(20),
+          Gap(20.h),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(
@@ -115,7 +116,7 @@ class _AboutPageState extends State<AboutPage> {
             child: Row(
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.all(15),
+                  padding: EdgeInsets.all(15.w),
                   width: context.screenWidth * 0.55,
                   height: context.screenWidth * 0.35,
                   decoration: BoxDecoration(
@@ -124,7 +125,7 @@ class _AboutPageState extends State<AboutPage> {
                       fit: BoxFit.fill,
                     ),
                     color: const Color(0xffF4F4F6),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,23 +152,23 @@ class _AboutPageState extends State<AboutPage> {
                     ],
                   ),
                 ),
-                const SizedBox(width: 20),
+                SizedBox(width: 20.w),
               ],
             ),
           ),
-          const Gap(20),
-          const Text('SIMILAR NFTS', style: TextStyle(
-            fontSize: 14,
+          Gap(20.h),
+          Text('SIMILAR NFTS', style: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          const Gap(10),
+          Gap(10.h),
           Container(
-            padding: const EdgeInsets.all(15),
+            padding: EdgeInsets.all(15.w),
             height: context.screenWidth * 0.3,
             width: context.screenWidth * 0.45,
             decoration: BoxDecoration(
               color: const Color(0xffF4F4F6),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,20 +204,20 @@ class _AboutPageState extends State<AboutPage> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          const Text('PRICE SIMULATION', style: TextStyle(
-            fontSize: 14,
+          SizedBox(height: 20.h),
+          Text('PRICE SIMULATION', style: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          const Gap(6),
-          const Text(
+          Gap(6.h),
+          Text(
             'The Price of APT with the market cap of another assets',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: AppColors.greyLight,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           Column(
             children: <Widget>[
               Row(
@@ -227,23 +228,23 @@ class _AboutPageState extends State<AboutPage> {
                     children: <Widget>[
                       Image.asset(
                         'assets/icons/gui-inu.png',
-                        height: 40,
+                        height: 40.h,
                       ),
-                      const Gap(12),
-                      const Column(
+                      Gap(12.w),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             'Gui Inu',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
                             'GUI',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               color: Colors.grey,
                             ),
                           ),
@@ -276,14 +277,14 @@ class _AboutPageState extends State<AboutPage> {
               ),
             ],
           ),
-          const Gap(35),
-          const Text('CALCULATOR', style: TextStyle(
-            fontSize: 14,
+          Gap(35.h),
+          Text('CALCULATOR', style: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          const Gap(12),
+          Gap(12.h),
           Padding(
-            padding: const EdgeInsets.only(left: 12),
+            padding: EdgeInsets.only(left: 12.w),
             child: Column(
               children: <Widget>[
                 Row(
@@ -291,22 +292,22 @@ class _AboutPageState extends State<AboutPage> {
                     Row(
                       children: <Widget>[
                         Image.asset('assets/icons/aptos-logo.png',
-                            height: 24,),
-                        const SizedBox(width: 10),
+                            height: 24.h,),
+                        SizedBox(width: 10.w),
                         Text(
                           (coin['coin_defyapp_symbol'] as String?)?.toUpperCase() ?? '',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.all(10.w),
                       width: context.screenWidth * 0.45,
                       height: context.screenWidth * 0.125,
                       decoration: BoxDecoration(
                         color: const Color(0xffF4F4F6),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -324,25 +325,25 @@ class _AboutPageState extends State<AboutPage> {
                     ),
                   ],
                 ),
-                const Gap(10),
+                Gap(10.h),
                 Row(
                   children: <Widget>[
                     Row(
                       children: <Widget>[
                         Image.asset('assets/icons/usdc.png',
-                            height: 24,),
-                        const SizedBox(width: 10),
-                        const Text('USDC', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                            height: 24.h,),
+                        SizedBox(width: 10.w),
+                        Text('USDC', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
                       ],
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.all(10.w),
                       width: context.screenWidth * 0.45,
                       height: context.screenWidth * 0.125,
                       decoration: BoxDecoration(
                         color: const Color(0xffF4F4F6),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -363,17 +364,17 @@ class _AboutPageState extends State<AboutPage> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          const Text('ADDITIONAL INFO', style: TextStyle(
-            fontSize: 14,
+          SizedBox(height: 20.h),
+          Text('ADDITIONAL INFO', style: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.w),
             decoration: BoxDecoration(
               color: const Color(0xffF4F4F6),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -383,8 +384,9 @@ class _AboutPageState extends State<AboutPage> {
                     Icon(
                       PhosphorIconsRegular.scroll,
                       color: Colors.black.withValues(alpha: 0.5),
+                      size: 24.sp,
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5.w),
                     Text(
                       'Contract',
                       style: context.titleMedium?.copyWith(
@@ -407,8 +409,9 @@ class _AboutPageState extends State<AboutPage> {
                     Icon(
                       PhosphorIconsRegular.link,
                       color: Colors.black.withValues(alpha: 0.5),
+                      size: 24.sp,
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5.w),
                     Text(
                       'Chain',
                       style: context.titleMedium?.copyWith(
@@ -431,8 +434,9 @@ class _AboutPageState extends State<AboutPage> {
                     Icon(
                       PhosphorIconsRegular.asterisk,
                       color: Colors.black.withValues(alpha: 0.5),
+                      size: 24.sp,
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5.w),
                     Text(
                       'Token Standard',
                       style: context.titleMedium?.copyWith(
@@ -453,7 +457,7 @@ class _AboutPageState extends State<AboutPage> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -31,7 +32,7 @@ class ExploreTokenInfoScreen extends StatefulWidget {
   final bool isDelegate;
 
   @override
-  _ExploreTokenInfoScreenState createState() => _ExploreTokenInfoScreenState();
+  State<ExploreTokenInfoScreen> createState() => _ExploreTokenInfoScreenState();
 }
 
 class _ExploreTokenInfoScreenState extends State<ExploreTokenInfoScreen> with SingleTickerProviderStateMixin {
@@ -62,38 +63,38 @@ class _ExploreTokenInfoScreenState extends State<ExploreTokenInfoScreen> with Si
     final double screenWidth = MediaQuery.of(context).size.width;
     final double scrollProgress = (_scrollOffset / 200).clamp(0.0, 1.0);
 
-    const double startX = 16;
-    const double startY = 190;
-    final double endX = (screenWidth - 100) / 2 - 40;
-    const double endY = 70;
+    final double startX = 16.w;
+    final double startY = 190.h;
+    final double endX = (screenWidth - 100.w) / 2 - 40.w;
+    final double endY = 70.h;
 
     final double animatedX = startX + (endX - startX) * scrollProgress;
     final double animatedY = startY - (startY - endY) * scrollProgress;
-    final double textSize = 24 - (8 * scrollProgress);
+    final double textSize = 24.sp - (8.sp * scrollProgress);
 
-    const double investorsStartX = 16;
-    const double investorsStartY = 235;
+    final double investorsStartX = 16.w;
+    final double investorsStartY = 235.h;
 
-    final double percentageStartX = screenWidth - 80;
-    const double percentageStartY = 193;
-    final double percentageEndX = (screenWidth - 200) / 2 + 10;
-    const double percentageEndY = 90;
+    final double percentageStartX = screenWidth - 80.w;
+    final double percentageStartY = 193.h;
+    final double percentageEndX = (screenWidth - 200.w) / 2 + 10.w;
+    final double percentageEndY = 90.h;
 
     final double animatedPercentageX = percentageStartX + (percentageEndX - percentageStartX) * scrollProgress;
     final double animatedPercentageY = percentageStartY - (percentageStartY - percentageEndY) * scrollProgress;
-    final double percentageTextSize = 24 - (12 * scrollProgress);
+    final double percentageTextSize = 24.sp - (12.sp * scrollProgress);
 
-    final double imageStartX = screenWidth / 2 - 180;
-    const double imageStartY = 140;
-    const double imageEndX = 60;
-    const double imageEndY = 75;
+    final double imageStartX = screenWidth / 2 - 180.w;
+    final double imageStartY = 140.h;
+    final double imageEndX = 60.w;
+    final double imageEndY = 75.h;
 
     final double animatedImageX = imageStartX + (imageEndX - imageStartX) * scrollProgress;
     final double animatedImageY = imageStartY - (imageStartY - imageEndY) * scrollProgress;
-    final double imageSize = 40 - (10 * scrollProgress);
+    final double imageSize = 40.w - (10.w * scrollProgress);
 
-    final double returnsStartX = screenWidth / 2 + 108;
-    const double returnsStartY = 235;
+    final double returnsStartX = screenWidth / 2 + 108.w;
+    final double returnsStartY = 235.h;
 
     final double investorsOpacity = 1.0 - scrollProgress;
     final double returnsOpacity = 1.0 - scrollProgress;
@@ -104,44 +105,40 @@ class _ExploreTokenInfoScreenState extends State<ExploreTokenInfoScreen> with Si
           CustomScrollView(
             controller: _scrollController,
             slivers: <Widget>[
-             SliverAppBar(
-  backgroundColor: Colors.white,
-  expandedHeight: 200,
-  pinned: true,
-  leading: IconButton(
-    icon: const Icon(
-      PhosphorIconsBold.caretLeft, // Corrected to PhosphorIconsBold
-      color: Colors.black,
-    ),
-    onPressed: () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => const ExploreTokensScreen()),
-      );
-    },
-  ),
-  actions: <Widget>[
-    IconButton(
-      icon: const Icon(PhosphorIconsBold.bell), // Corrected and removed const
-      onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
-        // );
-      },
-    ),
-    IconButton(
-      icon: const Icon(PhosphorIconsBold.shareNetwork), // Corrected and removed const
-      onPressed: () {},
-    ),
-  ],
-),
-              const SliverToBoxAdapter(
+              SliverAppBar(
+                backgroundColor: Colors.white,
+                expandedHeight: 200.h,
+                pinned: true,
+                leading: IconButton(
+                  icon: Icon(
+                    PhosphorIconsBold.caretLeft,
+                    color: Colors.black,
+                    size: 20.sp,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context) => const ExploreTokensScreen()),
+                    );
+                  },
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(PhosphorIconsBold.bell, size: 24.sp),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(PhosphorIconsBold.shareNetwork, size: 24.sp),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+              SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    StakeChart(),
-                    Gap(40),
+                    const StakeChart(),
+                    Gap(40.h),
                   ],
                 ),
               ),
@@ -188,17 +185,16 @@ class _ExploreTokenInfoScreenState extends State<ExploreTokenInfoScreen> with Si
               opacity: investorsOpacity,
               child: Row(
                 children: <Widget>[
-                  // Icon(PhosphorIcons.usersBold, size: 16, color: AppColors.greyLight,),
-                  const Icon(
+                  Icon(
                     PhosphorIconsBold.users,
-                    size: 16,
+                    size: 16.sp,
                     color: AppColors.greyLight,
                   ),
-                  const Gap(4),
+                  Gap(4.w),
                   Text(
                     widget.investors,
-                    style: const TextStyle(
-                      fontSize: 14,
+                    style: TextStyle(
+                      fontSize: 14.sp,
                       color: AppColors.greyLight,
                     ),
                   ),
@@ -232,18 +228,21 @@ class _ExploreTokenInfoScreenState extends State<ExploreTokenInfoScreen> with Si
             top: returnsStartY,
             child: Opacity(
               opacity: returnsOpacity,
-              child: const Text('1Y Returns', style: TextStyle(color: AppColors.greyLight, fontSize: 14,),),),
+              child: Text(
+                '1Y Returns', 
+                style: TextStyle(
+                  color: AppColors.greyLight, 
+                  fontSize: 14.sp,
+                ),
+              ),
+            ),
           ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavBarWithHolders(
         buttonText1: 'Stake Now',
         buttonColor1: AppColors.black,
-        onTap1: () {
-          // widget.isDelegate
-          //     ? const StakeAmountDelegateRoute().push(context)
-          //     : const StakeAmountRoute().push(context);
-        },
+        onTap1: () {},
         image1: 'avatar-1.png',
         image2: 'avatar-2.png',
         image3: 'avatar-3.png',

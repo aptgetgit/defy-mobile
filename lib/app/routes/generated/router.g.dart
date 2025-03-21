@@ -18,6 +18,7 @@ List<RouteBase> get $appRoutes => [
       $pumpFunTokenPreviewScreenRoute,
       $exploreLeaderboardScreenRoute,
       $exploreCoinsScreenRoute,
+      $exploreTokensScreenRoute,
       $homeRoute,
       $nftInfoRoute,
       $nftInfoAudioRoute,
@@ -37,11 +38,13 @@ List<RouteBase> get $appRoutes => [
       $walletMoreScreenRoute,
       $walletSearchScreenRoute,
       $walletWatchListScreenRoute,
+      $walletQRScannerRoute,
       $lendRoute,
       $lendAmountRoute,
       $borrowRoute,
       $borrowAmountRoute,
       $swapRoute,
+      $swapAmountRoute,
     ];
 
 RouteBase get $exploreScreenRoute => GoRouteData.$route(
@@ -289,6 +292,29 @@ extension $ExploreCoinsScreenRouteExtension on ExploreCoinsScreenRoute {
 
   String get location => GoRouteData.$location(
         '/explore-coins',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $exploreTokensScreenRoute => GoRouteData.$route(
+      path: '/explore-tokens',
+      factory: $ExploreTokensScreenRouteExtension._fromState,
+    );
+
+extension $ExploreTokensScreenRouteExtension on ExploreTokensScreenRoute {
+  static ExploreTokensScreenRoute _fromState(GoRouterState state) =>
+      const ExploreTokensScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/explore-tokens',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -734,6 +760,29 @@ extension $WalletWatchListScreenRouteExtension on WalletWatchListScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $walletQRScannerRoute => GoRouteData.$route(
+      path: '/wallet-qr-scanner',
+      factory: $WalletQRScannerRouteExtension._fromState,
+    );
+
+extension $WalletQRScannerRouteExtension on WalletQRScannerRoute {
+  static WalletQRScannerRoute _fromState(GoRouterState state) =>
+      const WalletQRScannerRoute();
+
+  String get location => GoRouteData.$location(
+        '/wallet-qr-scanner',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $lendRoute => GoRouteData.$route(
       path: '/lend',
       factory: $LendRouteExtension._fromState,
@@ -846,11 +895,34 @@ extension $SwapRouteExtension on SwapRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $swapAmountRoute => GoRouteData.$route(
+      path: '/swap-amount',
+      factory: $SwapAmountRouteExtension._fromState,
+    );
+
+extension $SwapAmountRouteExtension on SwapAmountRoute {
+  static SwapAmountRoute _fromState(GoRouterState state) =>
+      const SwapAmountRoute();
+
+  String get location => GoRouteData.$location(
+        '/swap-amount',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'3d06c19edab6a4e6660f76f0475dbd7d200ee189';
+String _$routerHash() => r'90bfb70b632ecf65ea2219744dad31624394b1cd';
 
 /// See also [router].
 @ProviderFor(router)

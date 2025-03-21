@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -11,14 +12,14 @@ class CategoryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-      padding: const EdgeInsets.only(left: 18, right: 18, bottom: 14, top: 22),
+      padding: EdgeInsets.only(left: 18.w, right: 18.w, bottom: 14.h, top: 22.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -27,15 +28,15 @@ class CategoryHeader extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Text(
+                Text(
                   'See all',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     color: AppColors.blue,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 18),
+                Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 18.sp),
               ],
             ),
           ),

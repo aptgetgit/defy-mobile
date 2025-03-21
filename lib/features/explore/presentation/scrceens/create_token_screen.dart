@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -22,19 +23,19 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Create Token',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
         ),
       ),
       body: Stack(
         children: <Widget>[
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(18),
+              padding: EdgeInsets.all(18.w),
               child: Column(
                 children: <Widget>[
-                  const Gap(8),
+                  Gap(8.h),
                   Row(
                     children: <Widget>[
                       Container(
@@ -42,27 +43,30 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
                         width: width * .3,
                         height: width * .3,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.r),
                             color: AppColors.greyVeryLight2,),
-                        child: const Icon(PhosphorIconsFill.image,
-                            color: AppColors.greyLight, size: 38,),
+                        child: Icon(
+                          PhosphorIconsFill.image,
+                          color: AppColors.greyLight,
+                          size: 38.sp,
+                        ),
                       ),
-                      const Gap(12),
-                      const Column(
+                      Gap(12.w),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             'Token image',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Gap(6),
+                          Gap(6.h),
                           Text(
                             'Formats: PNGs, JPGs',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
                               color: AppColors.greyLight,
                             ),
@@ -70,7 +74,7 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
                           Text(
                             '1024px X 1024px',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
                               color: AppColors.greyLight,
                             ),
@@ -78,7 +82,7 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
                           Text(
                             'Max file size 5mb',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
                               color: AppColors.greyLight,
                             ),
@@ -88,10 +92,10 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
                       const Spacer(),
                       TextButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           'Upload',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.blue,
                           ),
@@ -99,7 +103,7 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
                       ),
                     ],
                   ),
-                  const Gap(22),
+                  Gap(22.h),
                   _buildTextInput(context, 'Token Name', 'Enter Token Name'),
                   _buildTextInput(context, 'Symbol', 'Enter Symbol'),
                   _buildTextInput(context, 'Description', 'Enter Description',
@@ -117,7 +121,7 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               child: ActiveButton(
                 label: 'Continue',
                 onTap: () {
@@ -137,36 +141,37 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
       {bool isDescription = false,}) {
     final double height = context.screenHeight;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             headerTitle,
-            style: const TextStyle(
-              fontSize: 14,
+            style: TextStyle(
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.greyDark,
             ),
           ),
-          const Gap(3),
+          Gap(3.h),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
             height: isDescription ? height * .1 : height * .055,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               color: AppColors.greyVeryLight2,
             ),
             child: TextField(
-                decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: hintText,
-              hintStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.greyMedium,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: hintText,
+                hintStyle: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.greyMedium,
+                ),
               ),
-            ),),
+            ),
           ),
         ],
       ),

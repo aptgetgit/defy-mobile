@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -29,13 +30,13 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           ),
           enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.transparent, width: 0),
-              borderRadius: BorderRadius.circular(8),),
+              borderRadius: BorderRadius.circular(8.r),),
           border: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.transparent, width: 0),
-              borderRadius: BorderRadius.circular(8),),
+              borderRadius: BorderRadius.circular(8.r),),
           focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.transparent, width: 0),
-              borderRadius: BorderRadius.circular(8),),
+              borderRadius: BorderRadius.circular(8.r),),
           prefixIcon: const Icon(
             PhosphorIconsBold.magnifyingGlass,
             size: 20,

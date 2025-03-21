@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -22,51 +23,51 @@ class _StakeAmountDelegateScreenState extends State<StakeAmountDelegateScreen> {
       title: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Text('Stake', style: TextStyle(fontSize: 18, color: AppColors.black),),
-          const Gap(4),
+          Text('Stake', style: TextStyle(fontSize: 18.sp, color: AppColors.black)),
+          Gap(4.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/icons/unkown.png', width: 20),
-              const Gap(4),
-              const Text('Everstake', style: TextStyle(fontSize: 14,color: AppColors.greyLight),),
+              Image.asset('assets/icons/unkown.png', width: 20.w),
+              Gap(4.w),
+              Text('Everstake', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
             ],
           ),
         ],
       ),
       actions: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(right: 8),
+          padding: EdgeInsets.only(right: 8.w),
           child: Container(
-            padding: const EdgeInsets.all(4),
+            padding: EdgeInsets.all(4.w),
             decoration: BoxDecoration(
-              color: AppColors.green.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(30),
+              color: AppColors.green.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(30.r),
             ), 
-            child: const Text('100% APY', style: TextStyle(color: AppColors.green),),
+            child: Text('100% APY', style: TextStyle(color: AppColors.green, fontSize: 12.sp)),
           ),
         ),
       ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Gap(24),
-            const Row(
+            Gap(24.h),
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('You receive', style: TextStyle(color: AppColors.greyLight, fontSize: 14),),
-                Gap(4),
-                Text('1021.82 stAPT', style: TextStyle(color: AppColors.green, fontSize: 14, fontWeight: FontWeight.w600),),
-                Gap(4),
-                Text('Learn about', style: TextStyle(color: AppColors.greyLight, fontSize: 14),),
-                Gap(4),
-                Text('atAPT', style: TextStyle(color: AppColors.blue, fontSize: 14,decoration: TextDecoration.underline),),
+                Text('You receive', style: TextStyle(color: AppColors.greyLight, fontSize: 14.sp)),
+                Gap(4.w),
+                Text('1021.82 stAPT', style: TextStyle(color: AppColors.green, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+                Gap(4.w),
+                Text('Learn about', style: TextStyle(color: AppColors.greyLight, fontSize: 14.sp)),
+                Gap(4.w),
+                Text('atAPT', style: TextStyle(color: AppColors.blue, fontSize: 14.sp, decoration: TextDecoration.underline)),
               ],
             ),
-            const Gap(90),
+            Gap(90.h),
 
             // Amount Display
             Center(
@@ -74,96 +75,97 @@ class _StakeAmountDelegateScreenState extends State<StakeAmountDelegateScreen> {
                 children: <Widget>[
                   Text(
                     '\$$_amount', // Display the dynamic amount
-                    style: TextStyle(fontSize: 54, fontWeight: FontWeight.w600, color: _amount == '0' ? AppColors.greyLight : AppColors.black),
+                    style: TextStyle(fontSize: 54.sp, fontWeight: FontWeight.w600, color: _amount == '0' ? AppColors.greyLight : AppColors.black),
                   ),
-                  const Gap(8),
+                  Gap(8.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Image.asset('assets/icons/aptos.png', width: 18),
-                      const Gap(4),
-                      const Text(
+                      Image.asset('assets/icons/aptos.png', width: 18.w),
+                      Gap(4.w),
+                      Text(
                         '0 APT',
-                        style: TextStyle(fontSize: 14, color: AppColors.greyLight, fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight, fontWeight: FontWeight.w600),
                       ),
-                      const Gap(4),
-                      const Icon(
+                      Gap(4.w),
+                      Icon(
                         PhosphorIconsBold.caretUpDown,
-                        size: 16,
+                        size: 16.sp,
                         color: AppColors.greyLight,
                       ),
                     ],
                   ),
-                  const Gap(85),
+                  Gap(85.h),
 
                   // Asset Selection
                   Container(
-                    height: 66,
+                    height: 66.h,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                       color: AppColors.white,
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: AppColors.greyLight.withValues(alpha: 0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
+                          color: AppColors.greyLight.withOpacity(0.2),
+                          blurRadius: 10.r,
+                          offset: Offset(0, 2.h),
                         ),
                       ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.all(10.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          const Row(
+                          Row(
                             children: <Widget>[
                               CircleAvatar(
                                 backgroundColor: Colors.transparent,
-                                backgroundImage: AssetImage('assets/icons/aptos.png'),
-                                radius: 22,
+                                backgroundImage: const AssetImage('assets/icons/aptos.png'),
+                                radius: 22.r,
                               ),
-                              Gap(12),
+                              Gap(12.w),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     'Aptos',
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
                                   ),
                                   Text(
                                     '100.21 APT',
-                                    style: TextStyle(fontSize: 14, color: AppColors.greyLight),
+                                    style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight),
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          const Gap(8),
+                          Gap(8.w),
                           FilledButton(
                             onPressed: () {
                             },
                             style: FilledButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              fixedSize: const Size(80, 36),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                              fixedSize: Size(80.w, 36.h),
                               backgroundColor: AppColors.transparent,
                               foregroundColor: AppColors.blue,
-                              side: const BorderSide(
+                              side: BorderSide(
                                 color: AppColors.blue,
+                                width: 1.w,
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(30.r),
                               ),
                             ),
-                            child: const Text(
+                            child: Text(
                               'Max',
-                              style: TextStyle(color: AppColors.blue, fontSize: 16),
+                              style: TextStyle(color: AppColors.blue, fontSize: 16.sp),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const Gap(20),
+                  Gap(20.h),
 
                   // Number Pad
                   Column(
@@ -184,19 +186,19 @@ class _StakeAmountDelegateScreenState extends State<StakeAmountDelegateScreen> {
                 ],
               ),
             ),
-            const Gap(24),
+            Gap(24.h),
             FilledButton(
               onPressed: () {},
               style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                fixedSize: const Size(double.maxFinite, 56),
+                padding: EdgeInsets.symmetric(vertical: 16.h),
+                fixedSize: Size(double.maxFinite, 56.h),
                 backgroundColor: Colors.black,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(100.r),
                 ),
               ), 
-              child: const Text('Continue'),
+              child: Text('Continue', style: TextStyle(fontSize: 16.sp)),
             ),
           ],
         ),
@@ -224,26 +226,27 @@ class _StakeAmountDelegateScreenState extends State<StakeAmountDelegateScreen> {
                 });
               }
             : null,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(100.r),
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: icon == null ? 16 : 8,
-            vertical: icon == null ? 12 : 10,
+            horizontal: icon == null ? 16.w : 8.w,
+            vertical: icon == null ? 12.h : 10.h,
           ),
           child: icon == null
               ? Center(
                   child: Text(
                     label,
-                    style: const TextStyle(
-                      fontSize: 22,
+                    style: TextStyle(
+                      fontSize: 22.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 )
-              : Icon(icon),
+              : Icon(icon, size: 22.sp),
         ),
       ),
     );
+    
   // Handle button press
   void _handleSinglePress(String label) {
     setState(() {

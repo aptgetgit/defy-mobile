@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../widgets/watchlist_grid_tile.dart';
 import '../widgets/watchlist_newList_tile.dart';
@@ -15,7 +16,7 @@ class WatchlistTokensTab extends StatelessWidget {
           children: <Widget>[
             const WatchlistGridTile(),
             Padding(
-                padding: const EdgeInsets.only(bottom: 38),
+                padding: EdgeInsets.only(bottom: 38.h),
                 child: GestureDetector(
                   onTap: () {
                     print('Gesture tapped on WatchlistNewListTile!');

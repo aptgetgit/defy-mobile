@@ -1,5 +1,6 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -43,7 +44,7 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
   final Set<int> _selectedTokens = <int>{};
 
   final Map<int, Widget> _collectionScreens = <int, Widget>{
-    0: const WatchlistSafetyTokensScreen(), // Replace with your actual screen widgets
+    0: const WatchlistSafetyTokensScreen(),
     1: const WatchlistAvatarNFTScreen(),
     2: const WatchlistCuteNFTScreen(),
   };
@@ -78,14 +79,7 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
-    // final double appBarExpandedHeight = 188;
-    const double imageWidth = 353;
-    const double imageHeight = 353;
-    // final double appBarImageSize = 32;
-    // final double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
-
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       backgroundColor: Colors.white,
       body: ColoredBox(
         color: Colors.white,
@@ -106,53 +100,52 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
                         alignment: Alignment.topCenter,
                         children: <Widget>[
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             child: Image.asset(
-                              'assets/images/nft.gif', // Replace with your GIF asset path
-                              width: imageWidth,
-                              height: imageHeight,
+                              'assets/images/nft.gif',
+                              width: 353.w,
+                              height: 353.h,
                               fit: BoxFit.cover,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const Gap(12),
+                    Gap(12.h),
                     Row(
                       children: <Widget>[
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            const Align(
+                            Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
-                                padding: EdgeInsets.only(left: 20),
+                                padding: EdgeInsets.only(left: 20.w),
                                 child: Text('Cyborg 2078 #5623',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 20.sp,
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.black,
                                     ),),
                               ),
                             ),
-                            const Gap(2),
+                            Gap(2.h),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
                               child: Row(
                                 children: <Widget>[
                                   RowSuper(
                                     innerDistance: -12,
                                     children: <Widget?>[
                                       Image.asset('assets/images/avatar-1.png',
-                                          height: 22,),
+                                          height: 22.h),
                                       Image.asset('assets/images/avatar-2.png',
-                                          height: 22,),
+                                          height: 22.h),
                                       Image.asset('assets/images/avatar-3.png',
-                                          height: 22,),
+                                          height: 22.h),
                                     ],
                                   ),
-                                  const Gap(10),
+                                  Gap(10.w),
                                   Text(
                                     'James, Jane and 14+ hold',
                                     style: Theme.of(context)
@@ -169,19 +162,19 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
                           ],
                         ),
                         const Spacer(),
-                        const Padding(
-                          padding: EdgeInsets.only(right: 20),
+                        Padding(
+                          padding: EdgeInsets.only(right: 20.w),
                           child: Icon(
                             PhosphorIconsRegular.shareNetwork,
                             color: AppColors.black,
-                            size: 20,
+                            size: 20.sp,
                           ),
                         ),
                       ],
                     ),
-                    const Gap(26),
+                    Gap(26.h),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -190,7 +183,7 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),
@@ -223,30 +216,29 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
       ),
       bottomNavigationBar: const NftInfoBottomNavBar(),
     );
-  }
 
   Widget _buildInfoContainer(String value, String label) => Container(
-        height: 65,
-        width: 170,
+        height: 65.h,
+        width: 170.w,
         decoration: BoxDecoration(
           color: AppColors.greyVeryLight,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const Gap(4),
+            Gap(4.h),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 12,
+              style: TextStyle(
+                fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.greyLight,
               ),
@@ -263,13 +255,13 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
       backgroundColor: Colors.white,
       leading: GestureDetector(
         onTap: () => Navigator.pop(context),
-        child: const Icon(
+        child: Icon(
           PhosphorIconsBold.caretLeft,
           color: AppColors.black,
-          size: 24,
+          size: 24.sp,
         ),
       ),
-      collapsedHeight: 60,
+      collapsedHeight: 60.h,
       centerTitle: false,
       actions: <Widget>[
         IconButton(
@@ -303,11 +295,11 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
             ),
             if (_alertCreated)
               Positioned(
-                top: 8,
-                right: 8,
+                top: 8.h,
+                right: 8.w,
                 child: Container(
-                  width: 8,
-                  height: 8,
+                  width: 8.w,
+                  height: 8.h,
                   decoration: const BoxDecoration(
                     color: Colors.green,
                     shape: BoxShape.circle,
@@ -316,7 +308,7 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
               ),
           ],
         ),
-        const Gap(8),
+        Gap(8.w),
       ],
       titleSpacing: 0,
       title: _showTitle
@@ -326,37 +318,37 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
               child: Row(
                 children: <Widget>[
                   _buildPoolLogo(),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           nftName,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.black,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const Gap(4),
+                        Gap(4.h),
                         Row(
                           children: <Widget>[
                             Text(
                               owner,
-                              style: const TextStyle(
-                                fontSize: 12,
+                              style: TextStyle(
+                                fontSize: 12.sp,
                                 color: AppColors.greyLight,
                                 fontWeight: FontWeight.w500,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const Gap(6),
-                            const Icon(
+                            Gap(6.w),
+                            Icon(
                               PhosphorIconsFill.sealCheck,
                               color: AppColors.blue,
-                              size: 16,
+                              size: 16.sp,
                             ),
                           ],
                         ),
@@ -370,22 +362,22 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
               children: <Widget>[
                 Image.asset(
                   'assets/images/Fantasy-Ruins.png',
-                  width: 32,
-                  height: 32,
+                  width: 32.w,
+                  height: 32.h,
                   fit: BoxFit.cover,
                 ),
-                const Gap(8),
-                const Text('Fantasy Ruins',
+                Gap(8.w),
+                Text('Fantasy Ruins',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.black,
                     ),),
-                const Gap(4),
-                const Icon(
+                Gap(4.w),
+                Icon(
                   PhosphorIconsFill.sealCheck,
                   color: AppColors.blue,
-                  size: 20,
+                  size: 20.sp,
                 ),
               ],
             ),);
@@ -412,26 +404,24 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
 
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) => Positioned(
-        bottom: 120, // Adjust position as needed
-        left: 35,
-        right: 35,
+        bottom: 120.h,
+        left: 35.w,
+        right: 35.w,
         child: Material(
-          // Wrap with Material for shadow
           elevation: 4,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           child: Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            height: 60.h,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
             ),
             child: GestureDetector(
               onTap: () {
-                _overlayEntry?.remove(); // Remove the overlay
+                _overlayEntry?.remove();
                 _overlayEntry = null;
 
-                // Navigate to the appropriate screen based on the collection index
                 if (collectionIndex != null &&
                     _collectionScreens.containsKey(collectionIndex)) {
                   Navigator.push(
@@ -441,7 +431,6 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
                             _collectionScreens[collectionIndex]!,),
                   );
                 } else {
-                  // Handle the case where the collection index is null or not found in the map
                   print('Invalid collection index or screen not found.');
                 }
               },
@@ -450,20 +439,20 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
                 children: <Widget>[
                   Image.asset(
                     'assets/icons/watchlist-logo2.png',
-                    width: 32,
-                    height: 32,
+                    width: 32.w,
+                    height: 32.h,
                   ),
-                  const Text(
+                  Text(
                     'Tokens Added to Watchlist',
                     style: TextStyle(
                         color: AppColors.greyDark,
                         fontWeight: FontWeight.w500,
-                        fontSize: 16,),
+                        fontSize: 16.sp),
                   ),
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
-                      size: 20,
+                      size: 20.sp,
                       color: AppColors.greyLight,
                     ),
                     onPressed: () {
@@ -489,6 +478,6 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
 
   Widget _buildPoolLogo({bool small = false}) => Image.asset(
         'assets/images/cyborg2.png',
-        height: small ? 24 : 32,
+        height: small ? 24.h : 32.h,
       );
 }

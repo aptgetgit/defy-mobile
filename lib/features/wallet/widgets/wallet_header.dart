@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 import '../../../../config/theme/colors.dart';
 
 class WalletHeader extends StatelessWidget {
-
   const WalletHeader({
     super.key,
     required this.opacity,
@@ -22,7 +23,7 @@ class WalletHeader extends StatelessWidget {
     child: Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 26),
+          padding: EdgeInsets.only(top: 26.h),
           child: GestureDetector(
             onTap: onBalanceTap,
             child: Row(
@@ -30,39 +31,57 @@ class WalletHeader extends StatelessWidget {
               children: <Widget>[
                 Text(
                   balanceOption,
-                  style: const TextStyle(fontSize: 16, color: AppColors.greyLight, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    fontSize: 16.sp, 
+                    color: AppColors.greyLight, 
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                const Gap(4),
-                const Icon(PhosphorIconsBold.caretDown, color: AppColors.greyLight, size: 10),
+                Gap(4.w),
+                Icon(
+                  PhosphorIconsBold.caretDown, 
+                  color: AppColors.greyLight, 
+                  size: 10.sp,
+                ),
               ],
             ),
           ),
         ),
-        const Gap(5),
-        const Text(
+        Gap(5.h),
+        Text(
           r'$1,038.56',
-          style: TextStyle(fontSize: 38, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            fontSize: 38.sp, 
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        const Gap(16),
+        Gap(16.h),
         Container(
           decoration: BoxDecoration(
             color: const Color.fromARGB(255, 233, 243, 236),
-            borderRadius: BorderRadius.circular(33),
+            borderRadius: BorderRadius.circular(33.r),
           ),
-          width: 79,
-          height: 28,
-          child: const Row(
+          width: 79.w,
+          height: 28.h,
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(PhosphorIconsBold.arrowUp, color: Colors.green, size: 14),
+              Icon(
+                PhosphorIconsBold.arrowUp, 
+                color: Colors.green, 
+                size: 14.sp,
+              ),
               Text(
                 '18.73%',
-                style: TextStyle(color: Colors.green, fontSize: 14),
+                style: TextStyle(
+                  color: Colors.green, 
+                  fontSize: 14.sp,
+                ),
               ),
             ],
           ),
         ),
-        const Gap(35),
+        Gap(35.h),
       ],
     ),
   );

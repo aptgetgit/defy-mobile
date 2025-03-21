@@ -172,6 +172,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/polygon.png
   AssetGenImage get polygon => const AssetGenImage('assets/icons/polygon.png');
 
+  /// File path: assets/icons/qr-logo.png
+  AssetGenImage get qrLogo => const AssetGenImage('assets/icons/qr-logo.png');
+
   /// File path: assets/icons/rainbow-dapp-logo.png
   AssetGenImage get rainbowDappLogo =>
       const AssetGenImage('assets/icons/rainbow-dapp-logo.png');
@@ -291,6 +294,7 @@ class $AssetsIconsGen {
         petraDappLogo,
         petraWalletLogo,
         polygon,
+        qrLogo,
         rainbowDappLogo,
         rainbowWalletLogo,
         receiveLogo,

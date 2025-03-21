@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -119,9 +120,9 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
-            PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
+            PhosphorIconsBold.caretLeft,
             color: Colors.black,
-            size: 20,
+            size: 20.sp,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -132,13 +133,13 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
           children: <Widget>[
             Text(
               collection.name,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 16,
+                fontSize: 16.sp,
                 color: Colors.black,
               ),
             ),
-            const Gap(40),
+            Gap(40.w),
             GestureDetector(
               onTap: () async {
                 await Navigator.push(
@@ -154,9 +155,9 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                 // Collection name is now updated via provider - no need to setState
               },
               child: Icon(
-                PhosphorIcons.pencilSimpleLine(PhosphorIconsStyle.bold),
+                PhosphorIconsBold.pencilSimpleLine,
                 color: AppColors.greyLight,
-                size: 18,
+                size: 18.sp,
               ),
             ),
           ],
@@ -169,23 +170,23 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'NFT',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       color: Colors.black,
                     ),
                   ),
                   Row(
                     children: <Widget>[
                       Container(
-                        width: 32,
-                        height: 32,
+                        width: 32.w,
+                        height: 32.h,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.greyVeryLight,
@@ -193,16 +194,16 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            PhosphorIcons.trendUp(PhosphorIconsStyle.bold),
+                            PhosphorIconsBold.trendUp,
                             color: AppColors.grey,
-                            size: 18,
+                            size: 18.sp,
                           ),
                           onPressed: () {
                             // Show sort options dialog
                             showDialog(
                               context: context,
                               builder: (BuildContext context) => SimpleDialog(
-                                title: const Text('Sort by'),
+                                title: Text('Sort by', style: TextStyle(fontSize: 18.sp)),
                                 children: <Widget>[
                                   SimpleDialogOption(
                                     onPressed: () {
@@ -210,7 +211,7 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                                           .setSortOption(SortOption.nameAsc);
                                       Navigator.pop(context);
                                     },
-                                    child: const Text('Name (A-Z)'),
+                                    child: Text('Name (A-Z)', style: TextStyle(fontSize: 16.sp)),
                                   ),
                                   SimpleDialogOption(
                                     onPressed: () {
@@ -218,7 +219,7 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                                           .setSortOption(SortOption.nameDesc);
                                       Navigator.pop(context);
                                     },
-                                    child: const Text('Name (Z-A)'),
+                                    child: Text('Name (Z-A)', style: TextStyle(fontSize: 16.sp)),
                                   ),
                                   SimpleDialogOption(
                                     onPressed: () {
@@ -226,7 +227,7 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                                           .setSortOption(SortOption.priceAsc);
                                       Navigator.pop(context);
                                     },
-                                    child: const Text('Price (Low to High)'),
+                                    child: Text('Price (Low to High)', style: TextStyle(fontSize: 16.sp)),
                                   ),
                                   SimpleDialogOption(
                                     onPressed: () {
@@ -234,7 +235,7 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                                           .setSortOption(SortOption.priceDesc);
                                       Navigator.pop(context);
                                     },
-                                    child: const Text('Price (High to Low)'),
+                                    child: Text('Price (High to Low)', style: TextStyle(fontSize: 16.sp)),
                                   ),
                                 ],
                               ),
@@ -242,10 +243,10 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                           },
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Container(
-                        height: 32,
-                        width: 32,
+                        height: 32.h,
+                        width: 32.w,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.greyVeryLight,
@@ -253,9 +254,9 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            PhosphorIcons.dotsThreeVertical(PhosphorIconsStyle.bold),
+                            PhosphorIconsBold.dotsThreeVertical,
                             color: AppColors.grey,
-                            size: 18,
+                            size: 18.sp,
                           ),
                           onPressed: _toggleDeleteButton,
                         ),
@@ -267,7 +268,7 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
             ),
             Expanded(
               child: collection.items.isEmpty
-                ? const Center(child: Text('No NFTs in this collection'))
+                ? Center(child: Text('No NFTs in this collection', style: TextStyle(fontSize: 16.sp)))
                 : ListView.builder(
                   itemCount: collection.items.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -290,22 +291,22 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                   },
                 ),
             ),
-            const Gap(50),
+            Gap(50.h),
             if(showDeleteButton)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: ElevatedButton(
                   onPressed: () {
                     // Confirmation dialog
                     showDialog(
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Delete Collection'),
-                        content: const Text('Are you sure? This action cannot be undone.'),
+                        title: Text('Delete Collection', style: TextStyle(fontSize: 18.sp)),
+                        content: Text('Are you sure? This action cannot be undone.', style: TextStyle(fontSize: 16.sp)),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text('Cancel'),
+                            child: Text('Cancel', style: TextStyle(fontSize: 16.sp)),
                           ),
                           TextButton(
                             onPressed: () {
@@ -314,7 +315,7 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                               Navigator.pop(context); // close dialog
                               Navigator.pop(context); // go back to previous screen
                             },
-                            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                            child: Text('Delete', style: TextStyle(color: Colors.red, fontSize: 16.sp)),
                           ),
                         ],
                       ),
@@ -324,11 +325,11 @@ class _WatchlistAvatarNFTScreenState extends ConsumerState<WatchlistAvatarNFTScr
                     backgroundColor: AppColors.red,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                      borderRadius: BorderRadius.circular(40.r),
                     ),
-                    minimumSize: const Size(double.infinity, 54),
+                    minimumSize: Size(double.infinity, 54.h),
                   ),
-                  child: const Text('Delete Collection'),
+                  child: Text('Delete Collection', style: TextStyle(fontSize: 16.sp)),
                 ),
               ),
           ],

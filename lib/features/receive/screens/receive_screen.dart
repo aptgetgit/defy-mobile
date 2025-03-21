@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -14,124 +15,153 @@ class ReceiveScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
-        title: const Text('Receive'),
+        title: Text('Receive', style: TextStyle(fontSize: 18.sp)),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(PhosphorIconsBold.caretLeft),
-          onPressed: () {},
+          icon: Icon(PhosphorIconsBold.caretLeft, size: 24.sp),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: <Widget>[
-              const Gap(30),
-              const Text(
-                'Allan Jerrold',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              const Text(
-                '@allan_j',
-                style: TextStyle(fontSize: 14, color: AppColors.greyLight),
-              ),
-              const Gap(20),
+              Gap(100.h),
               Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
                   QrImageView( 
                     data: walletAddress,
-                    size: 245,
-                    embeddedImageStyle: const QrEmbeddedImageStyle(
-                      size: Size(99, 99),
+                    size: 245.w,
+                    embeddedImageStyle: QrEmbeddedImageStyle(
+                      size: Size(99.w, 99.h),
                     ),
                     embeddedImage:
-                        const AssetImage('assets/images/avatar-7.png'),
+                        const AssetImage('assets/icons/qr-logo.png'),
                   ),
                 ],
               ),
-              const Gap(15),
+              Gap(15.h),
               GestureDetector(
                 onTap: () {
                   _showWalletBottomSheet(context);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                    //  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Image.asset(
                       'assets/icons/star-struck.png',
-                      width: 24,
-                      height: 24,
+                      width: 24.w,
+                      height: 24.h,
                     ),
-                    const Gap(7),
-                    const Text(
+                    Gap(7.w),
+                    Text(
                       'Business',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: AppColors.greyDark,
                       ),
                     ),
-                    const Gap(5),
-                    const Icon(
-                      PhosphorIconsRegular.caretDown,
-                      size: 16,
-                      color: AppColors.greyDark,
+                    Gap(5.w),
+                    Center(
+                      // padding:  EdgeInsets.only(top: 20.h),
+                      child: Icon(
+                        PhosphorIconsRegular.caretDown,
+                        size: 16.sp,
+                        color: AppColors.greyDark,
+                      ),
                     ),
                   ],
                 ),
               ),
+              Spacer(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(14.w, 15.h, 12.w, 15.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '0x121271218..................2817218281',
+                        style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
+                        textAlign: TextAlign.start,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _copyAddressToClipboard(context);
+                        },
+                        child: CircleAvatar(
+                          radius: 12.r,
+                          backgroundColor: AppColors.black,
+                          child: Center(
+                            child: Icon(
+                              PhosphorIconsBold.copySimple,
+                              color: AppColors.white,
+                              size: 12.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               const Spacer(),
               // Bottom Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // Left Icon (Copy)
-                  IconButton(
-                    icon: const Icon(
-                      PhosphorIconsRegular.copy,
-                      size: 32,
-                      color: AppColors.greyLight,
-                    ),
-                    onPressed: () {
-                      _copyAddressToClipboard(context);
-                    },
-                  ),
-                  // Center Button (Request)
-                  FilledButton(
-                    onPressed: () => const ReceiveSelectScreenRoute().push(context),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
+              Padding(
+                padding: EdgeInsets.only(bottom: 16.h, left: 12.w, right: 12.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    FilledButton(
+                      onPressed: () => const ReceiveSelectScreenRoute().push(context),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.r),
+                        ),
+                        fixedSize: Size(150.w, 56.h)
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      minimumSize: const Size(239, 56),
-                    ),
-                    child: const Text(
-                      'Request',
-                      style: TextStyle(
-                        color: AppColors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                      child: Text(
+                        'Request',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                  // Right Icon (Export)
-                  GestureDetector(
-                    onTap: () {
-                      _showShareBottomSheet(context);
-                    },
-                    child: const Icon(
-                      PhosphorIconsRegular.export,
-                      size: 32,
-                      color: AppColors.greyLight,
+                    FilledButton(
+                      onPressed: () => _showShareBottomSheet(context),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.r),
+                        ),
+                        fixedSize: Size(150.w, 56.h)
+                      ),
+                      child: Text(
+                        'Share',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -145,17 +175,17 @@ class ReceiveScreen extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
         child: Stack(
           children: <Widget>[
             Align(
               alignment: Alignment.bottomCenter,
               child: Material(
                 elevation: 8,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 color: Colors.white,
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: EdgeInsets.all(24.w),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,23 +194,23 @@ class ReceiveScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          const Text(
+                          Text(
                             'Choose wallet',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
                           ),
                           GestureDetector(
                             onTap: () {
                               Navigator.pop(context);
                             },
-                            child: const Icon(
+                            child: Icon(
                               PhosphorIconsBold.x,
-                              size: 24,
+                              size: 24.sp,
                               color: AppColors.greyLight,
                             ),
                           ),
                         ],
                       ),
-                      const Gap(12),
+                      Gap(12.h),
 
                       // Wallet Options
                       _buildWalletOption(
@@ -221,22 +251,22 @@ class ReceiveScreen extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(
         title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         balance,
-        style: const TextStyle(
-          fontSize: 14,
+        style: TextStyle(
+          fontSize: 14.sp,
           color: AppColors.greyLight,
           fontWeight: FontWeight.w500,
         ),
       ),
-      leading: Image.asset(imagePath, width: 32, height: 32),
+      leading: Image.asset(imagePath, width: 32.w, height: 32.h),
       trailing: isDefault
-          ? const Text(
+          ? Text(
               'Default',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 color: AppColors.greyLight,
                 fontWeight: FontWeight.w500,
               ),
@@ -253,7 +283,7 @@ class ReceiveScreen extends StatelessWidget {
     Clipboard.setData(const ClipboardData(text: walletAddress));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Row(
+        content: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -261,13 +291,13 @@ class ReceiveScreen extends StatelessWidget {
               'Address copied to clipboard',
               style: TextStyle(
                 color: AppColors.greyDark,
-                fontSize: 16,
+                fontSize: 16.sp,
               ),
             ),
-            Gap(6),
+            Gap(6.w),
             Icon(
               PhosphorIconsFill.checkCircle,
-              size: 20,
+              size: 20.sp,
               color: AppColors.green,
             ),
           ],
@@ -276,10 +306,10 @@ class ReceiveScreen extends StatelessWidget {
         duration: const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         elevation: 0,
-        margin: const EdgeInsets.only(bottom: 80, left: 72, right: 72),
-        padding: const EdgeInsets.fromLTRB(16, 8,  10, 8),
+        margin: EdgeInsets.only(bottom: 100.h, left: 72.w, right: 72.w),
+        padding: EdgeInsets.fromLTRB(12.w, 8.h, 6.w, 8.h),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
       ),
     );
@@ -292,9 +322,9 @@ class ReceiveScreen extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) => DecoratedBox(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(14.r)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -302,39 +332,39 @@ class ReceiveScreen extends StatelessWidget {
           children: <Widget>[
             // Title
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 24, right: 20),
+              padding: EdgeInsets.only(left: 20.w, top: 24.h, right: 20.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'Share this page',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.start,
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: const Icon(PhosphorIconsRegular.x, size: 24),
+                    child: Icon(PhosphorIconsRegular.x, size: 24.sp),
                   ),
                 ],
               ),
             ),
-            const Gap(16),
+            Gap(16.h),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
               child: Image.asset(
                 'assets/images/share-qr.png',
-                width: 380,
-                height: 502,
+                width: 380.w,
+                height: 502.h,
               ),
             ),
-            const Gap(24),
+            Gap(24.h),
             // Share Options
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Padding(
-                padding: const EdgeInsets.only(left: 30),
+                padding: EdgeInsets.only(left: 30.w),
                 child: Row(
                   children: <Widget>[
                     _buildShareOption(
@@ -342,31 +372,31 @@ class ReceiveScreen extends StatelessWidget {
                       label: 'Save',
                       onPressed: () {},
                     ),
-                    const Gap(30),
+                    Gap(30.w),
                     _buildShareOption(
                       icon: PhosphorIconsRegular.clipboard,
                       label: 'Copy',
                       onPressed: () {},
                     ),
-                    const Gap(30),
+                    Gap(30.w),
                     _buildShareOption(
                       imagePath: 'assets/icons/whatsapp.png',
                       label: 'Whatsapp',
                       onPressed: () {},
                     ),
-                    const Gap(30),
+                    Gap(30.w),
                     _buildShareOption(
                       imagePath: 'assets/icons/telegram.png',
                       label: 'Telegram',
                       onPressed: () {},
                     ),
-                    const Gap(30),
+                    Gap(30.w),
                     _buildShareOption(
                       imagePath: 'assets/icons/x.png',
                       label: 'X',
                       onPressed: () {},
                     ),
-                    const Gap(30),
+                    Gap(30.w),
                     _buildShareOption(
                       icon: PhosphorIconsFill.dotsThreeOutline,
                       label: 'More',
@@ -376,7 +406,7 @@ class ReceiveScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const Gap(24),
+            Gap(24.h),
           ],
         ),
       ),
@@ -392,27 +422,27 @@ class ReceiveScreen extends StatelessWidget {
   }) => Column(
       children: <Widget>[
         CircleAvatar(
-          radius: 24,
+          radius: 24.r,
           backgroundColor: Colors.grey.shade200,
           child: ClipOval(
             child: imagePath != null
                 ? Image.asset(
                     imagePath,
-                    width: 48,
-                    height: 48,
+                    width: 48.w,
+                    height: 48.h,
                     fit: BoxFit.cover,
                   )
                 : Icon(
                     icon,
-                    size: 24,
+                    size: 24.sp,
                     color: Colors.black,
                   ),
           ),
         ),
-        const Gap(8),
+        Gap(8.h),
         Text(
           label,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16.sp),
         ),
       ],
     );

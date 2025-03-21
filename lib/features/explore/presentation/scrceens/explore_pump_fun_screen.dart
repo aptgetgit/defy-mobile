@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -16,70 +17,77 @@ class ExplorePumpFunScreen extends StatefulWidget {
 
 class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
   final TextEditingController _searchConroller = TextEditingController();
+  
+  @override
+  void dispose() {
+    _searchConroller.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Pump Fun',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 20.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
-              actions : <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: 14),
-          child: IconButton(
-            icon: const Icon(PhosphorIconsFill.plusCircle,size: 36,),
-            onPressed: () => const CreateTokenScreenRoute().push(context),
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 14.w),
+            child: IconButton(
+              icon: Icon(PhosphorIconsFill.plusCircle, size: 36.sp),
+              onPressed: () => const CreateTokenScreenRoute().push(context),
+            ),
           ),
-        ),
-      ],
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              //search bar
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 child: Container(
                   width: double.infinity,
-                  height: 48,
+                  height: 48.h,
                   decoration: BoxDecoration(
                     color: const Color(0xfff4f4f6),
-                    borderRadius: BorderRadius.circular(58),
+                    borderRadius: BorderRadius.circular(58.r),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      const Gap(16),
-                      const Icon(
+                      Gap(16.w),
+                      Icon(
                         PhosphorIconsBold.magnifyingGlass,
                         color: AppColors.greyMedium,
+                        size: 18.sp,
                       ),
-                      const Gap(8),
+                      Gap(8.w),
                       Expanded(
                         child: TextField(
                           controller: _searchConroller,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Search or paste URL',
                             hintStyle: TextStyle(
                               color: AppColors.greyMedium,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
                       ),
-                      const Icon(
+                      Icon(
                         PhosphorIconsBold.cards,
                         color: AppColors.greyMedium,
+                        size: 18.sp,
                       ),
-                      const Gap(16),
+                      Gap(16.w),
                     ],
                   ),
                 ),
@@ -109,116 +117,120 @@ class _ExplorePumpFunScreenState extends State<ExplorePumpFunScreen> {
       shrinkWrap: true,
       itemCount: nftImages.length,
       itemBuilder: (BuildContext ctx, int index) => GestureDetector(
-          onTap : () {
+          onTap: () {
             const ExplorePumpFunTokenTransactionsScreenRoute().push(context);
           },
           child: Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: EdgeInsets.all(10.w),
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             decoration: BoxDecoration(
               color: AppColors.greyVeryLight2,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(18.r),
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   child: CachedNetworkImage(
                     fit: BoxFit.cover,
                     width: width * .28,
                     height: width * .28,
                     imageUrl: nftImages[index],
-                    errorWidget: (BuildContext ctx, String str, Object obg) =>
-                        Container(color: Colors.amber),
+                    errorWidget: (BuildContext ctx, String str, Object obj) => Container(color: Colors.amber),
                     progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                        const CircularProgressIndicator(),
+                        CircularProgressIndicator(strokeWidth: 2.w),
                   ),
                 ),
-                const Gap(8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text(
-                      'APTMAN (APTMAN)',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const Text(
-                      'Are you APTMAN?',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.greyLight,),
-                    ),
-                    const Gap(6),
-                    RichText(
-                      text: const TextSpan(
-                        text: 'Created by ',
+                Gap(8.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'APTMAN (APTMAN)',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        'Are you APTMAN?',
+                        style: TextStyle(
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.greyLight,
                         ),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: 'TheWeimals',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.black,
+                      ),
+                      Gap(6.h),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Created by ',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.greyLight,
+                          ),
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: 'TheWeimals',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Gap(12.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          RichText(
+                            text: TextSpan(
+                              text: 'MCAP: ',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.greyLight,
+                              ),
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text: '313',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Replies: ',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.greyLight,
+                              ),
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text: '1,322',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.black,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        RichText(
-                          text: const TextSpan(
-                            text: 'MCAP:',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.greyLight,
-                            ),
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: '313',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: const TextSpan(
-                            text: 'Replies:',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.greyLight,
-                            ),
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: '1,322',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

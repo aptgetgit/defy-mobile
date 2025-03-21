@@ -4,12 +4,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
+import '../../shared/presentation/widgets/base_screen_nav.dart';
 import '../../shared/presentation/widgets/custom_check_box.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../../shared/presentation/widgets/nft_item.dart';
@@ -20,6 +22,7 @@ import '../data/models/nft_model.dart';
 import '../data/models/token_model.dart';
 import '../presentation/providers/wallet_provider.dart';
 import '../widgets/balance_sheet.dart';
+import '../widgets/filter_sheet.dart';
 
 import '../widgets/sort_sheet.dart';
 import '../widgets/token_item.dart';
@@ -27,6 +30,7 @@ import '../widgets/wallet_header.dart';
 import '../widgets/watchlist_sheet.dart';
 import 'custom_nav_bar.dart';
 import 'providers/wallet_state.dart';
+import 'qr_scanner_screen.dart';
 
 class WalletScreen extends ConsumerStatefulWidget {
   const WalletScreen({super.key});
@@ -44,6 +48,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
   OverlayEntry? _overlayEntry;
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
+  final double _scrollDownOffset = 180;
+  bool? _previousMoreButtonState;
+  bool _hideSmallBalances = false;
+  bool _filterSpamTokens = false;
 
   final Map<int, Widget> _collectionScreens = <int, Widget>{
     0: const WatchlistSafetyTokensScreen(),
@@ -56,8 +64,46 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     super.initState();
     _initControllers();
     _setupScrollListeners();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _previousMoreButtonState = ref.read(walletNotifierProvider).isMoreButtonSelected;
+    });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    
+    // Check if the more button state changed
+    final bool currentMoreButtonState = ref.read(walletNotifierProvider).isMoreButtonSelected;
+    if (_previousMoreButtonState != null && _previousMoreButtonState != currentMoreButtonState) {
+      _handleMoreButtonStateChange(currentMoreButtonState);
+    }
+    _previousMoreButtonState = currentMoreButtonState;
+  }
+
+  // Add this method to handle scrolling when more button state changes
+ void _handleMoreButtonStateChange(bool isMoreSelected) {
+  if (isMoreSelected) {
+    // Only scroll down if we're not already scrolled down
+    if (_scrollController.hasClients && _scrollController.offset < _scrollDownOffset) {
+      _scrollController.animateTo(
+        _scrollDownOffset,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  } else {
+    // Only scroll up if we're not at the top already
+    if (_scrollController.hasClients && _scrollController.offset > 0) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+}
   void _initControllers() {
     _tabController = TabController(length: 2, vsync: this);
     _scrollController2 = ScrollController();
@@ -115,26 +161,51 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     super.dispose();
   }
 
-  void _toggleQrScanner() {
-    ref.read(walletNotifierProvider.notifier).toggleQrScanner();
+  // void _toggleQrScanner() {
+  //   ref.read(walletNotifierProvider.notifier).toggleQrScanner();
     
-    if (ref.read(walletNotifierProvider).isQrScannerOpen) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-  }
+  //   if (ref.read(walletNotifierProvider).isQrScannerOpen) {
+  //     _animationController.forward();
+  //   } else {
+  //     _animationController.reverse();
+  //   }
+  // }
+
+  void _toggleQrScanner() {
+  Navigator.push(
+    context,
+    PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) => const QrScannerScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final tween = Tween(begin: const Offset(0, 1), end: Offset.zero);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeInOut,
+        );
+        
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      },
+    ),
+  );
+}
 
   void _showBalanceSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (BuildContext context) => BalanceSheet(
-        selectedOption: ref.read(walletNotifierProvider).selectedBalanceOption,
-        onOptionSelected: (String option) {
-          ref.read(walletNotifierProvider.notifier).setBalanceOption(option);
-        },
+      builder: (BuildContext context) => Padding(
+        padding:  EdgeInsets.only(bottom: 2.h),
+        child: BalanceSheet(
+          selectedOption: ref.read(walletNotifierProvider).selectedBalanceOption,
+          onOptionSelected: (String option) {
+            ref.read(walletNotifierProvider.notifier).setBalanceOption(option);
+          },
+        ),
       ),
     );
   }
@@ -149,6 +220,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) => SortSheet(
+        
         isSortPriceButtonSelected: walletState.isSortPriceButtonSelected,
         isSortBalanceButtonSelected: walletState.isSortBalanceButtonSelected,
         isSortAlphabetButtonSelected: walletState.isSortAlphabetButtonSelected,
@@ -173,6 +245,28 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
       }
     });
   }
+  void _showFilterSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) => FilterSheet(
+        hideSmallBalances: _hideSmallBalances,
+        filterSpamTokens: _filterSpamTokens,
+        onHideSmallBalancesChanged: (bool value) {
+          setState(() {
+            _hideSmallBalances = value;
+          });
+        },
+        onFilterSpamTokensChanged: (bool value) {
+          setState(() {
+            _filterSpamTokens = value;
+          });
+        },
+        onDismiss: () => Navigator.pop(context),
+      ),
+    );
+  }
   
   void _hideSortSheet() {
     Navigator.pop(context);
@@ -192,23 +286,23 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     );
   }
   
-  void _showWatchlistAddedMessage(int? collectionIndex) {
+    void _showWatchlistAddedMessage(int? collectionIndex) {
     _overlayEntry?.remove();
 
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) => Positioned(
-        bottom: 120,
-        left: 35,
-        right: 35,
+        bottom: 120.h,
+        left: 35.w,
+        right: 35.w,
         child: Material(
           elevation: 4,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           child: Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            height: 60.h,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
             ),
             child: GestureDetector(
               onTap: () {
@@ -225,13 +319,13 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Image.asset('assets/icons/watchlist-logo2.png', width: 32, height: 32),
-                  const Text(
+                  Image.asset('assets/icons/watchlist-logo2.png', width: 32.w, height: 32.h),
+                  Text(
                     'Tokens Added to Watchlist',
-                    style: TextStyle(color: AppColors.greyDark, fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(color: AppColors.greyDark, fontWeight: FontWeight.w500, fontSize: 16.sp),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, size: 20, color: AppColors.greyLight),
+                    icon: Icon(Icons.close, size: 20.sp, color: AppColors.greyLight),
                     onPressed: () {
                       _overlayEntry?.remove();
                       _overlayEntry = null;
@@ -246,7 +340,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     );
     
     Overlay.of(context).insert(_overlayEntry!);
-    Future.delayed(const Duration(seconds: 3), () {
+    Future<void>.delayed(const Duration(seconds: 3), () {
       _overlayEntry?.remove();
       _overlayEntry = null;
     });
@@ -257,53 +351,68 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     const double appBarHeight = kToolbarHeight;
     final Size screenSize = MediaQuery.of(context).size;
     final WalletState walletState = ref.watch(walletNotifierProvider);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final bool currentMoreButtonState = walletState.isMoreButtonSelected;
+      if (_previousMoreButtonState != currentMoreButtonState) {
+        _handleMoreButtonStateChange(currentMoreButtonState);
+        _previousMoreButtonState = currentMoreButtonState;
+      }
+    });
     
-    return Stack(
-      children: <Widget>[
-        Scaffold(
-          appBar: _buildAppBar(),
-          body: Stack(
-            children: <Widget>[
-              _buildMainContent(screenSize, appBarHeight),
-              // _buildQrScannerOverlay(screenSize, appBarHeight),
-            ],
-          ),
-          bottomNavigationBar: _buildBottomNavBar(),
-        ),
-        if (walletState.isSortSheetVisible)
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: GestureDetector(
-              onTap: _hideSortSheet,
-              child: Container(
-                color: Colors.transparent,
-                height: double.infinity,
-                width: double.infinity,
-              ),
+    return BaseScreenWithNav(
+      currentIndex: 2,
+      onHidePressed: () {
+        ref.read(walletNotifierProvider.notifier).activateHiding();
+      },
+      onSortPressed: _showFilterSheet,
+      onWatchlistPressed: _showWatchlistBottomSheet,
+      isMoreOptionsSelected: walletState.isMoreButtonSelected,
+      onMoreOptionsChanged: (bool value) {
+        if (value) {
+          ref.read(walletNotifierProvider.notifier).toggleMoreButton();
+        } else {
+          ref.read(walletNotifierProvider.notifier).applyChanges();
+        }
+      },
+      child: Stack(
+        children: <Widget>[
+          Scaffold(
+            appBar: _buildAppBar(),
+            body: Stack(
+              children: <Widget>[
+                _buildMainContent(screenSize, appBarHeight),
+                // _buildQrScannerOverlay(screenSize, appBarHeight),
+              ],
             ),
           ),
-      ],
+        ],
+      ),
     );
   }
 
   AppBar _buildAppBar() => AppBar(
     title: Padding(
-      padding: const EdgeInsets.only(left: 8),
+      padding: EdgeInsets.only(left: 8.w, top: 4.h),
       child: Row(
         children: <Widget>[
-          Image.asset('assets/icons/star-struck.png', width: 44),
-          const Gap(12),
-          const Column(
+          Image.asset('assets/icons/star-struck.png', width: 44.w),
+          Gap(12.w),
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Allan Jerrold', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+              Text('Allan Jerrold', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
                     'Business',
-                    style: TextStyle(fontSize: 14, color: AppColors.greyLight),
+                    style: TextStyle(fontSize: 14.sp, color: AppColors.blue,fontWeight: FontWeight.w600),
                   ),
-                  Icon(PhosphorIconsRegular.caretRight, size: 8),
+                  Padding(
+                    padding:  EdgeInsets.only(top: 3.h),
+                    child: Icon(PhosphorIconsBold.caretRight, size: 11.sp, color: AppColors.blue),
+                  ),
                 ],
               ),
             ],
@@ -313,136 +422,278 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     ),
     actions: <Widget>[
       IconButton(
-        icon: const Icon(PhosphorIconsBold.magnifyingGlass),
+        icon: Icon(PhosphorIconsBold.magnifyingGlass, size: 24.sp),
         onPressed: () {
           const WalletSearchScreenRoute().push(context);
         },
       ),
       IconButton(
-        icon: const Icon(PhosphorIconsBold.clockCounterClockwise),
+        icon: Icon(PhosphorIconsBold.clockCounterClockwise, size: 24.sp),
         onPressed: () {},
       ),
       IconButton(
-        icon: const Icon(PhosphorIconsBold.qrCode),
+        icon: Icon(PhosphorIconsBold.qrCode, size: 24.sp),
         onPressed: _toggleQrScanner,
       ),
-      const Gap(12),
+      Gap(12.w),
     ],
   );
 
-  Widget _buildMainContent(Size screenSize, double appBarHeight) {
-    final WalletState walletState = ref.watch(walletNotifierProvider);
+  // Widget _buildMainContent(Size screenSize, double appBarHeight) {
+  //   final WalletState walletState = ref.watch(walletNotifierProvider);
     
-    return NestedScrollView(
-      controller: _scrollController,
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
-        SliverToBoxAdapter(
-          child: WalletHeader(
-            opacity: _opacity,
-            balanceOption: walletState.selectedBalanceOption,
-            onBalanceTap: _showBalanceSheet,
-          ),
+  //   return NestedScrollView(
+  //     controller: _scrollController,
+  //     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
+  //       SliverToBoxAdapter(
+  //         child: WalletHeader(
+  //           opacity: _opacity,
+  //           balanceOption: walletState.selectedBalanceOption,
+  //           onBalanceTap: _showBalanceSheet,
+  //         ),
+  //       ),
+  //       SliverPersistentHeader(
+  //         pinned: true,
+  //         delegate: TabBarDelegate(
+  //           Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 4.w),
+  //             child: DecoratedBox(
+  //               decoration: const BoxDecoration(
+  //                 border: Border(
+  //                   bottom: BorderSide(
+  //                     color: AppColors.greyVeryLight,
+  //                   ),
+  //                 ),
+  //               ),
+  //               child: Row(
+  //                 children: <Widget>[
+  //                   Expanded(
+  //                     child: CustomTabBar(   
+  //                       tabController: _tabController,
+  //                       tabs: const <String>[
+  //                         'Token',
+  //                         'NFT',
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   if(!walletState.isMoreButtonSelected)
+  //                     AnimatedOpacity(
+  //                       opacity: walletState.isBalanceHidden && _isUserScrolling ? 1 : 0,
+  //                       duration: const Duration(milliseconds: 450),
+  //                       child: Padding(
+  //                         padding: EdgeInsets.only(left: 10.w),
+  //                         child: Text(
+  //                           r'$1,038.56',
+  //                           style: TextStyle(
+  //                             fontSize: 18.sp,
+  //                             fontWeight: FontWeight.w600,
+  //                             color: AppColors.black,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Gap(9.w),
+  //                   if (walletState.isMoreButtonSelected)
+  //                     Row(
+  //                       children: [
+  //                         GestureDetector(
+  //                           onTap: _showFilterSheet,
+  //                           child: const Icon(
+  //                             PhosphorIconsBold.funnelSimple,
+  //                             color: AppColors.greyLight,
+  //                           ),
+  //                         ),
+  //                         TextButton(
+  //                           onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
+  //                           child: Text(
+  //                             'Done',
+  //                             style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+  //                           ),
+  //                         )
+  //                       ],
+  //                     )
+  //                   else
+  //                     GestureDetector(
+  //                       onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
+  //                       child: const Icon(
+  //                         PhosphorIconsBold.dotsThreeVertical,
+  //                         color: AppColors.greyLight,
+  //                       ),
+  //                     ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //     body: TabBarView(
+  //       controller: _tabController,
+  //       children: <Widget>[
+  //         Padding(
+  //           padding: EdgeInsets.only(top: 13.h),
+  //           child: _buildTokensTab(),
+  //         ),
+  //         _buildNFTsTab(),
+  //       ],
+  //     ),
+  //   );
+  // }
+Widget _buildMainContent(Size screenSize, double appBarHeight) {
+  final WalletState walletState = ref.watch(walletNotifierProvider);
+  
+  return NestedScrollView(
+    controller: _scrollController,
+    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
+      SliverToBoxAdapter(
+        child: WalletHeader(
+          opacity: _opacity,
+          balanceOption: walletState.selectedBalanceOption,
+          onBalanceTap: _showBalanceSheet,
         ),
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: TabBarDelegate(
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: DecoratedBox(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: AppColors.greyVeryLight,
-                    ),
+      ),
+      SliverPersistentHeader(
+        pinned: true,
+        delegate: TabBarDelegate(
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4.w),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  bottom: BorderSide(
+                    color: walletState.isMoreButtonSelected 
+                        ? Colors.transparent  // Remove border when in "Sort" mode
+                        : AppColors.greyVeryLight,
                   ),
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: CustomTabBar(   
-                        tabController: _tabController,
-                        tabs: const <String>[
-                          'Token',
-                          'NFT',
-                        ],
-                      ),
-                    ),
-                    if(!walletState.isMoreButtonSelected)
-                      AnimatedOpacity(
-                        opacity: walletState.isBalanceHidden && _isUserScrolling ? 1 : 0,
-                        duration: const Duration(milliseconds: 250),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            r'$1,038.56',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.black,
-                            ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: walletState.isMoreButtonSelected
+                      // Show "Sort" text and icon when more button is selected
+                      ? Container(
+                          height: 48.h, // Match the height of the TabBar
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                PhosphorIconsBold.arrowsDownUp,
+                                size: 20.sp,
+                                color: AppColors.greyDark,
+                              ),
+                              Gap(8.w),
+                              GestureDetector(
+                                onTap: _showSortSheet,
+                                child: Text(
+                                  'Sort',
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.greyDark,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      // Show normal tab bar when more button is not selected
+                      : CustomTabBar(   
+                          tabController: _tabController,
+                          tabs: const <String>[
+                            'Token',
+                            'NFT',
+                          ],
+                        ),
+                  ),
+                  if(!walletState.isMoreButtonSelected)
+                    AnimatedOpacity(
+                      opacity: walletState.isBalanceHidden && _isUserScrolling ? 1 : 0,
+                      duration: const Duration(milliseconds: 450),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 10.w),
+                        child: Text(
+                          r'$1,038.56',
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.black,
                           ),
                         ),
                       ),
-                      const Gap(9),
-                    if (walletState.isMoreButtonSelected)
-                      TextButton(
-                        onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
-                        child: const Text(
-                          'Done',
-                          style: TextStyle(color: AppColors.blue, fontSize: 18),
-                        ),
-                      )
-                    else
-                      GestureDetector(
-                        onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
-                        child: const Icon(
-                          PhosphorIconsBold.dotsThreeVertical,
-                          color: AppColors.greyLight,
-                        ),
+                    ),
+                  Gap(9.w),
+                  if (walletState.isMoreButtonSelected)
+                    Row(
+                      children: [
+                       
+                        TextButton(
+                          onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
+                          child: Text(
+                            'Done',
+                            style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+                          ),
+                        )
+                      ],
+                    )
+                  else
+                    GestureDetector(
+                      onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
+                      child: Icon(
+                        PhosphorIconsBold.dotsThreeVertical,
+                        color: AppColors.greyLight,
+                        size: 22.sp,
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
           ),
         ),
+      ),
+    ],
+    body: TabBarView(
+      controller: _tabController,
+      children: <Widget>[
+        Padding(
+          padding:  EdgeInsets.only(top: 13.h),
+          child: _buildTokensTab(),
+        ),
+        _buildNFTsTab(),
       ],
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          _buildTokensTab(),
-          _buildNFTsTab(),
-        ],
+    ),
+  );
+}
+
+  Widget _buildQrScannerOverlay(Size screenSize, double appBarHeight) {
+    ref.watch(walletNotifierProvider);
+    
+    return Positioned(
+      top: screenSize.height - appBarHeight,
+      left: 0,
+      right: 0,
+      height: screenSize.height,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: const QrScannerScreen(),
       ),
     );
   }
-
-  // Widget _buildQrScannerOverlay(Size screenSize, double appBarHeight) {
-  //   ref.watch(walletNotifierProvider);
-    
-  //   return Positioned(
-  //     top: screenSize.height - appBarHeight,
-  //     left: 0,
-  //     right: 0,
-  //     height: screenSize.height,
-  //     child: SlideTransition(
-  //       position: _slideAnimation,
-  //       child: const QrScannerScreen(),
-  //     ),
-  //   );
-  // }
 
   Widget _buildBottomNavBar() {
     final WalletState walletState = ref.watch(walletNotifierProvider);
     
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
       child: CustomNavBar(
         pageIndex: walletState.currentTabIndex,
         onTabChange: (int index) => ref.read(walletNotifierProvider.notifier).setCurrentTab(index),
         isMoreOptionsSelected: walletState.isMoreButtonSelected,
         onHidePressed: () => ref.read(walletNotifierProvider.notifier).activateHiding(),
-        onSortPressed: _showSortSheet,
+        onSortPressed: _showFilterSheet,
         onWatchlistPressed: _showWatchlistBottomSheet,
       ),
     );
@@ -472,9 +723,11 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
           isSelected: isSelected,
           isInWatchlist: isInWatchlist,
           showSelection: walletState.isMoreButtonSelected,
+          isHiding: walletState.isHidingActive,
           onCheckboxTap: () {
             ref.read(walletNotifierProvider.notifier).toggleTokenSelection(actualIndex);
           },
+          onTap: () => TokensInfoRoute().push(context),
         );
       },
     );
@@ -508,26 +761,26 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     final WalletState walletState = ref.watch(walletNotifierProvider);
     
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Gap(8),
+          Gap(8.h),
           // Collection Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/nft1.png'),
-                    radius: 14,
+                  CircleAvatar(
+                    backgroundImage: const AssetImage('assets/images/nft1.png'),
+                    radius: 14.r,
                   ),
-                  const Gap(8),
+                  Gap(8.w),
                   Text(
                     collection.name,
-                    style: const TextStyle(
-                      fontSize: 18, 
+                    style: TextStyle(
+                      fontSize: 18.sp, 
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -540,12 +793,12 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
                     children: <Widget>[
                       Text(
                         collection.count.toString(),
-                        style: const TextStyle(
-                          fontSize: 18, 
+                        style: TextStyle(
+                          fontSize: 18.sp, 
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const Gap(28),
+                      Gap(28.w),
                       CustomCheckbox(
                         isChecked: isCollectionSelected,
                         isRound: true,
@@ -559,8 +812,8 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
                       children: <Widget>[
                         Text(
                           collection.count.toString(),
-                          style: const TextStyle(
-                            fontSize: 18, 
+                          style: TextStyle(
+                            fontSize: 18.sp, 
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -572,7 +825,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
                           },
                           icon: Icon(
                             isExpanded ? PhosphorIconsBold.caretDown : PhosphorIconsBold.caretUp,
-                            size: 16,
+                            size: 16.sp,
                           ),
                         ),
                       ],
@@ -581,7 +834,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
               ),
             ],
           ),
-          if(walletState.isMoreButtonSelected) const Gap(12),
+          if(walletState.isMoreButtonSelected) Gap(12.h),
 
           _buildNFTGrid(collectionIndex, collection, isExpanded),
         ],
@@ -595,7 +848,9 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      height: isExpanded || walletState.isMoreButtonSelected ? (collection.nfts.length / 2).ceil() * 240 : 0,
+      height: isExpanded || walletState.isMoreButtonSelected 
+          ? (collection.nfts.length / 2).ceil() * 240.h 
+          : 0,
       child: ClipRect(
         child: AnimatedOpacity(
           opacity: isExpanded ? 1.0 : 0.0,
@@ -604,11 +859,11 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
             width: double.infinity,
             child: GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                mainAxisExtent: 250,
+                crossAxisSpacing: 16.w,
+                mainAxisSpacing: 16.h,
+                mainAxisExtent: 250.h,
               ),
               itemCount: collection.nfts.length,
               itemBuilder: (BuildContext context, int nftIndex) {

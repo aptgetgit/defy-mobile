@@ -144,3 +144,15 @@ class ExploreCoinsScreenRoute extends GoRouteData {
   );
 }
 
+@TypedGoRoute<ExploreTokensScreenRoute>(path: '/explore-tokens')
+class ExploreTokensScreenRoute extends GoRouteData {
+  const ExploreTokensScreenRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => ExploreTokensScreen();
+
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
+    builder: (context, state) => ExploreTokensScreen(),
+  );
+}

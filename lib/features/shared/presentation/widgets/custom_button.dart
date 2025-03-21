@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/extensions/button_size_extension.dart';
@@ -41,7 +42,7 @@ class ActiveButton extends StatelessWidget {
     return Visibility(
       visible: darkMode,
       replacement: SizedBox(
-        width: width,
+        width: width?.w,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             minimumSize: Size.fromHeight(size!.height),
@@ -53,11 +54,11 @@ class ActiveButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               icon ?? const SizedBox(),
-              SizedBox(width: icon == null ? 0 : 10),
+              SizedBox(width: icon == null ? 0.w : 10.w),
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: size!.textSize,
+                  fontSize: size!.textSize.sp,
                   fontWeight: FontWeight.w600,
 
                 ),
@@ -78,11 +79,11 @@ class ActiveButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               icon ?? const SizedBox(),
-              SizedBox(width: icon == null ? 0 : 10),
+              SizedBox(width: icon == null ? 0.w : 10.w),
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: size!.textSize,
+                  fontSize: size!.textSize.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.white,
                 ),
@@ -114,12 +115,12 @@ class OutlineButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool darkMode = isDarkMode ?? context.isDarkMode;
     return SizedBox(
-      width: width,
+      width: width?.w,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          minimumSize: Size.fromHeight(size.height),
+          minimumSize: Size.fromHeight(size.height.h),
           side: BorderSide(
-            width: 1,
+            width: 1.w,
             color: darkMode ? AppColors.white : AppColors.black,
           ),
         ),
@@ -127,7 +128,7 @@ class OutlineButton extends ConsumerWidget {
         child: Text(
           label,
           style: TextStyle(
-            fontSize: size.textSize,
+            fontSize: size.textSize.sp,
             fontWeight: FontWeight.w500,
             color: darkMode ? AppColors.white : AppColors.black,
           ),

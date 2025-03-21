@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -24,19 +25,24 @@ class CustomTabBar extends StatelessWidget {
             controller: tabController,
             isScrollable: isScrollable,
             indicatorColor: Colors.black,
-            indicator: const UnderlineTabIndicator(
-              borderSide: BorderSide(width: 2),
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(width: 2.w),
+              // insets: EdgeInsets.symmetric(horizontal: 10.w),
             ),
             tabAlignment: TabAlignment.start,
             labelColor: Colors.black,
             unselectedLabelColor: AppColors.greyLight,
-            labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-            unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-            labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-            padding: EdgeInsets.zero,
-            indicatorWeight: 1,
-            dividerHeight: 1,
+            labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+            labelPadding: EdgeInsets.symmetric(horizontal: 10.w),
+            padding: EdgeInsets.symmetric(horizontal: 0.w),
+            indicatorWeight: 1.w,
+            dividerHeight: 1.h,
             dividerColor: AppColors.greyVeryLight,
+            // indicatorPadding: EdgeInsets.zero,
+            // indicatorSize: TabBarIndicatorSize.label,
+            splashFactory: NoSplash.splashFactory,
+
             tabs: tabs.map((String text) => Tab(text: text)).toList(),
           ),
         ),
@@ -51,10 +57,10 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget tabBar;
 
   @override
-  double get minExtent => kToolbarHeight - 10; // Minimum height for tab bar
+  double get minExtent => kToolbarHeight; // Minimum height for tab bar
 
   @override
-  double get maxExtent => kToolbarHeight - 10; // Maximum height remains same
+  double get maxExtent => kToolbarHeight ; // Maximum height remains same
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => Material(
@@ -62,7 +68,7 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
     elevation: overlapsContent ? 4 : 0, // Add elevation when overlapping
     shadowColor: Colors.black.withValues(alpha: 0.1),
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.only(top: 10.h, left: 12.w, right: 12.w), // Add padding to top
       child: tabBar, // The entire row containing tabs + trailing widget
     ),
   );

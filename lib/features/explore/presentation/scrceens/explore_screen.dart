@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -11,6 +12,7 @@ import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../../config/theme/font.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../shared/presentation/widgets/base_screen_nav.dart';
 import '../providers/explore_ui_provider.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -49,88 +51,96 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
   }
 
   @override
-  Widget build(BuildContext context) {
-    final double height = context.screenHeight;
-    return Scaffold(
+Widget build(BuildContext context) {
+  final double height = context.screenHeight;
+  return BaseScreenWithNav(
+    currentIndex: 1, 
+    child: Scaffold(
       backgroundColor: const Color(0xfff4f4f6),
+      extendBody: true,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: Column(
-            children: <Widget>[
-              //search bar
-              Container(
-                width: double.infinity,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(58),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    const ExploreSearchScreenRoute().push(context);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Gap(16),
-                      const Icon(
-                        PhosphorIconsBold.magnifyingGlass,
-                        color: AppColors.greyMedium,
-                      ),
-                      const Gap(8),
-                      Expanded(
-                        child: TextField(
-                          enabled: false,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Search browser or in-app',
-                            hintStyle: TextStyle(
-                              fontWeight: AppFont.medium,
-                              color: AppColors.greyMedium,
-                              fontSize: 14,
+        bottom: false,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            child: Column(
+              children: <Widget>[
+                //search bar
+                Container(
+                  width: double.infinity,
+                  height: 48.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(58.r),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      const ExploreSearchScreenRoute().push(context);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Gap(16.w),
+                        Icon(
+                          PhosphorIconsBold.magnifyingGlass,
+                          color: AppColors.greyMedium,
+                          size: 18.sp,
+                        ),
+                        Gap(8.w),
+                        Expanded(
+                          child: TextField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Search browser or in-app',
+                              hintStyle: TextStyle(
+                                fontWeight: AppFont.medium,
+                                color: AppColors.greyMedium,
+                                fontSize: 14.sp,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const Icon(
-                        PhosphorIconsBold.cards,
-                        color: AppColors.greyMedium,
-                      ),
-                      const Gap(16),
-                    ],
+                        Icon(
+                          PhosphorIconsBold.cards,
+                          color: AppColors.greyMedium,
+                          size: 18.sp,
+                        ),
+                        Gap(16.w),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const Gap(16),
-              SizedBox(
-                height: height / 4 * 2,
-                child: Expanded(
+                Gap(16.h),
+                SizedBox(
+                  height: height / 4 * 2,
                   child: GridView(
+                    shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
+                      mainAxisSpacing: 4.h,
+                      crossAxisSpacing: 4.w,
                       mainAxisExtent: height / 4,
                     ),
                     children: <Widget>[
                       _buildMarket(context),
                       _buildDapps(context),
                       _buildCoins(context),
-                      _buildNFTs(context,),
+                      _buildNFTs(context),
                     ],
                   ),
                 ),
-              ),
-              _buildRankings(context),
-            ],
+                _buildRankings(context),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildMarket(BuildContext context) {
     final Animation<Offset> slideAnimation1 = slideAnimation(begin: Offset.zero, end: const Offset(-1, -0.3));
@@ -139,7 +149,7 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
       onTap : (){
         _controller..reset() // Reset the animation
         ..forward(); // Start the animation
-        Future.delayed(_controller.duration!, () {
+        Future<void>.delayed(_controller.duration!, () {
           const ExploreMarketScreenRoute().push(context);
         });
       },
@@ -147,7 +157,7 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
         position: slideAnimation1,
         child: Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
+          padding: EdgeInsets.all(8.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -156,9 +166,9 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
               ),
               Transform.rotate(
                 angle: -math.pi / 38,
-                child: const Text('Invest',
+                child: Text('Invest',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.greyLight,
                     ),),
@@ -205,9 +215,9 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
               ],
             ),
           ),
-          const Text('Dapps',
+          Text('Dapps',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
                 color: AppColors.greyLight,
               ),),
@@ -229,7 +239,7 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
       final int index = ref.watch(coinsAnimationIndexProvider);
       return GestureDetector(
         onTap : () {
-          const ExploreCoinsScreenRoute().push(context);
+          const ExploreTokensScreenRoute().push(context);
         },
         child: SlideTransition(
           position: slideAnimation1,
@@ -243,10 +253,10 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
                   width: width * .15,
                 ),
               ),
-              const Gap(6),
-              const Text('Coins',
+              Gap(6.h),
+              Text('Coins',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
                     color: AppColors.greyLight,
                   ),),
@@ -281,20 +291,20 @@ Widget _buildNFTs(BuildContext context) {
               Transform.rotate(
                 angle: -math.pi / 14,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                   child: CachedNetworkImage(
                     width: width * 0.3,
                     height: width * 0.45,
                     imageUrl: nftImages[0],
                     errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
                     progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                        const CircularProgressIndicator(),
+                        CircularProgressIndicator(strokeWidth: 2.w),
                   ),
                 ),
               ),
               // Second NFT image
               ClipRRect(
-                borderRadius: BorderRadius.circular(16), // Rounded corners
+                borderRadius: BorderRadius.circular(16.r), // Rounded corners
                 child: CachedNetworkImage(
                   width: width * 0.35,
                   height: width * 0.4,
@@ -302,14 +312,14 @@ Widget _buildNFTs(BuildContext context) {
                   fit: BoxFit.cover, // Ensures proper scaling of the image
                   errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
                   progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                      const CircularProgressIndicator(),
+                      CircularProgressIndicator(strokeWidth: 2.w),
                 ),
               ),
               // Third NFT image with a slight rotation
               Transform.rotate(
                 angle: math.pi / 14,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16), // Rounded corners
+                  borderRadius: BorderRadius.circular(16.r), // Rounded corners
                   child: CachedNetworkImage(
                     width: width * 0.35,
                     height: width * 0.4,
@@ -317,18 +327,18 @@ Widget _buildNFTs(BuildContext context) {
                     fit: BoxFit.cover, 
                     errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
                     progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                        const CircularProgressIndicator(),
+                        CircularProgressIndicator(strokeWidth: 2.w),
                   ),
                 ),
               ),
             ],
           ),
           
-          const SizedBox(height: 8), 
-          const Text(
+          Gap(8.h),
+          Text(
             'NFTs',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.greyLight,
             ),
@@ -338,89 +348,6 @@ Widget _buildNFTs(BuildContext context) {
     ),
   );
 }
-
-
-
-// Widget _buildNFTs(BuildContext context) {
-//   final width = MediaQuery.of(context).size.width; // Dynamically get screen width
-//   final nftImages = [
-//     "https://i.seadn.io/s/raw/files/10ccabdfb75f075c6a86e80c2c8ab33b.png?auto=format&dpr=1&w=1000",
-//     "https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000",
-//     "https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000",
-//   ];
-
-//   return GestureDetector(
-//     onTap: () {
-//       // Navigate to ExploreNFTScreen
-//     },
-//     child: Column(
-//       children: [
-//         Stack(
-//           alignment: Alignment.center,
-//           children: [
-//             Transform.rotate(
-//               angle: -math.pi / 14,
-//               child: ClipRRect(
-//                 borderRadius: BorderRadius.circular(16), // Rounded corners
-//                 child: CachedNetworkImage(
-//                   width: width * .35,
-//                   height: width * .4,
-//                   imageUrl: nftImages[0],
-//                   fit: BoxFit.cover, // Ensures proper scaling of the image
-//                   errorWidget: (ctx, str, obg) =>
-//                       Container(color: Colors.amber),
-//                   progressIndicatorBuilder: (ctx, str, download) =>
-//                       const CircularProgressIndicator(),
-//                 ),
-//               ),
-//             ),
-//             ClipRRect(
-//               borderRadius: BorderRadius.circular(16), // Rounded corners
-//               child: CachedNetworkImage(
-//                 width: width * .35,
-//                 height: width * .4,
-//                 imageUrl: nftImages[1],
-//                 fit: BoxFit.cover, // Ensures proper scaling of the image
-//                 errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-//                 progressIndicatorBuilder: (ctx, str, download) =>
-//                     const CircularProgressIndicator(),
-//               ),
-//             ),
-//             Transform.rotate(
-//               angle: math.pi / 14,
-//               child: ClipRRect(
-//                 borderRadius: BorderRadius.circular(16), // Rounded corners
-//                 child: CachedNetworkImage(
-//                   width: width * .35,
-//                   height: width * .4,
-//                   imageUrl: nftImages[2],
-//                   fit: BoxFit.cover, // Ensures proper scaling of the image
-//                   errorWidget: (ctx, str, obg) => Container(color: Colors.amber),
-//                   progressIndicatorBuilder: (ctx, str, download) =>
-//                       const CircularProgressIndicator(),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-
-//         //a 4 pixel space here
-//         const SizedBox(height: 16),
-
-//         Text(
-//           'NFTs',
-//           style: TextStyle(
-//             fontSize: 16,
-//             fontWeight: FontWeight.w500,
-//             color: Colors.grey,
-//           ),
-//         ),
-        
-//       ],
-//     ),
-//   );
-// }
-
 
   Widget _buildRankings(BuildContext context) {
     final double width = context.screenWidth;
@@ -438,9 +365,9 @@ Widget _buildNFTs(BuildContext context) {
                 ),
               ],
             ),
-            const Text('Rankings',
+            Text('Rankings',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.greyLight,
                 ),),

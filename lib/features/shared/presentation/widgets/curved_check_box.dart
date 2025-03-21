@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../config/theme/colors.dart';
 
@@ -23,27 +24,27 @@ class CurvedCheckboxState extends State<CurvedCheckbox> {
       onTap: widget.onTap,
       child: Container(
         alignment: Alignment.center,
-        width: 20,
-        height: 20,
+        width: 20.w,
+        height: 20.h,
         decoration: BoxDecoration(
           borderRadius: widget.isRound
-              ? BorderRadius.circular(30)
-              : BorderRadius.circular(6),
+              ? BorderRadius.circular(30.r)
+              : BorderRadius.circular(6.r),
           border: Border.all(
-            width: 1.5,
+            width: 1.5.w,
             color: AppColors.grey,
           ),
           color: Colors.transparent,
         ),
         child: widget.isChecked
             ? Container(
-                height: 12,
-                width: 12,
+                height: 12.h,
+                width: 12.w,
                 decoration: BoxDecoration(
                   color: AppColors.black,
                   borderRadius: widget.isRound
-                      ? BorderRadius.circular(30)
-                      : BorderRadius.circular(4),
+                      ? BorderRadius.circular(30.r)
+                      : BorderRadius.circular(4.r),
                 ),
               )
             : null,

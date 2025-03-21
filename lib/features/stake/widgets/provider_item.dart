@@ -1,5 +1,6 @@
 // provider_item.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class ProviderItem extends StatelessWidget {
@@ -24,39 +25,39 @@ class ProviderItem extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
     onTap: onTap,
     child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
+        margin: EdgeInsets.only(bottom: 8.h),
         child: Row(
           children: <Widget>[
             Container(
-              width: 44,
-              height: 44,
+              width: 44.w,
+              height: 44.h,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.r),
                 image: DecorationImage(
                   image: Image.asset(imagePath).image,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            const Gap(12),
+            Gap(12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
                     name,
-                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18.sp),
                   ),
                   if (isLocked) ...<Widget>[
-                    const Text(
+                    Text(
                       'Locked',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                     ),
                   ],
                   if (isLiquid) ...<Widget>[
-                    const Text(
+                    Text(
                       'Liquid',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                     ),
                   ],
                 ],
@@ -64,7 +65,7 @@ class ProviderItem extends StatelessWidget {
             ),
             Text(
               percentage,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18.sp),
             ),
           ],
         ),

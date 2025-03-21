@@ -1,0 +1,2 @@
+/Users/user91/Downloads/defy-mobile-main/android/app/.cxx/RelWithDebInfo/p73393z4/x86_64/CMakeFiles/edit_cache.dir
+/Users/user91/Downloads/defy-mobile-main/android/app/.cxx/RelWithDebInfo/p73393z4/x86_64/CMakeFiles/rebuild_cache.dir

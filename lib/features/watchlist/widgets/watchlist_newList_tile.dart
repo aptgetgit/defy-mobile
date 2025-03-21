@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -7,8 +8,8 @@ class WatchlistNewListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-      width: 164,
-      height: 164,
+      width: 164.w,
+      height: 164.h,
       child: CustomPaint(
         painter: DashedCirclePainter(),
         child: Column(
@@ -16,14 +17,14 @@ class WatchlistNewListTile extends StatelessWidget {
           children: <Widget>[
             Icon(
               PhosphorIcons.listPlus(),
-              size: 48,
+              size: 48.sp,
               color: Colors.grey,
             ),
-            const SizedBox(height: 2),
-            const Text(
+            SizedBox(height: 2.h),
+            Text(
               'New List',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
                 color: Colors.grey,
               ),

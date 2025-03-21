@@ -1,5 +1,6 @@
 // provider_item.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -26,12 +27,12 @@ class LendProviderItem extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
     onTap: onTap,
     child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
+        margin: EdgeInsets.only(bottom: 8.h),
         child: Row(
           children: <Widget>[
             Container(
-              width: 44,
-              height: 44,
+              width: 44.w,
+              height: 44.h,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: Image.asset(imagePath.toString()).image,
@@ -40,7 +41,7 @@ class LendProviderItem extends StatelessWidget {
                 ),
               ),
             ),
-            const Gap(12),
+            Gap(12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +50,7 @@ class LendProviderItem extends StatelessWidget {
                     name.toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.w500, 
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       color: isDisabled ? Colors.grey[700] : Colors.black,
                     ),
                   ),
@@ -57,7 +58,7 @@ class LendProviderItem extends StatelessWidget {
                     ltv.toString(),
                     style: TextStyle(
                       color: isDisabled ? Colors.grey[400] : Colors.grey, 
-                      fontSize: 14,
+                      fontSize: 14.sp,
                     ),
                   ),
                 ],
@@ -67,7 +68,7 @@ class LendProviderItem extends StatelessWidget {
               percentage.toString(),
               style: TextStyle(
                 fontWeight: FontWeight.w600, 
-                fontSize: 18,
+                fontSize: 18.sp,
                 color: isDisabled ? AppColors.greyLight : Colors.black,
               ),
             ),

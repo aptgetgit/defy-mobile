@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -21,25 +22,25 @@ class _PumpFunTokenPreviewScreenState extends State<PumpFunTokenPreviewScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Preview your Token',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
         ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children : <Widget>[
           Container(
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
+          padding: EdgeInsets.all(10.w),
+          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 22.h),
           decoration: BoxDecoration(
             color: AppColors.greyVeryLight2,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(18.r),
           ),
           child: Row(
             children: <Widget>[
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 child: CachedNetworkImage(
                   fit: BoxFit.cover,
                   width: width * .28,
@@ -48,94 +49,97 @@ class _PumpFunTokenPreviewScreenState extends State<PumpFunTokenPreviewScreen> {
                   errorWidget: (BuildContext ctx, String str, Object obg) =>
                       Container(color: Colors.amber),
                   progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                      const CircularProgressIndicator(),
+                      CircularProgressIndicator(strokeWidth: 2.w),
                 ),
               ),
-              const Gap(8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'APTMAN (APTMAN)',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const Text(
-                    'Are you APTMAN?',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.greyLight,),
-                  ),
-                  const Gap(6),
-                  RichText(
-                    text: const TextSpan(
-                      text: 'Created by ',
+              Gap(8.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'APTMAN (APTMAN)',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.greyLight,
                       ),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: 'TheWeimals',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.black,
+                    ),
+                    Text(
+                      'Are you APTMAN?',
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.greyLight,),
+                    ),
+                    Gap(6.h),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Created by ',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.greyLight,
+                        ),
+                        children: <InlineSpan>[
+                          TextSpan(
+                            text: 'TheWeimals',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Gap(12.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        RichText(
+                          text: TextSpan(
+                            text: 'MCAP: ',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.greyLight,
+                            ),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: '313',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Replies: ',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.greyLight,
+                            ),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: '1,322',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RichText(
-                        text: const TextSpan(
-                          text: 'MCAP:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.greyLight,
-                          ),
-                          children: <InlineSpan>[
-                            TextSpan(
-                              text: '313',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          text: 'Replies:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.greyLight,
-                          ),
-                          children: <InlineSpan>[
-                            TextSpan(
-                              text: '1,322',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -143,18 +147,31 @@ class _PumpFunTokenPreviewScreenState extends State<PumpFunTokenPreviewScreen> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children : <Widget>[
-                    Text('Deployment fee',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.greyLight),),
-                    Text('~0.005 APTOS',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,),),
+                    Text(
+                      'Deployment fee',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.greyLight,
+                      ),
+                    ),
+                    Text(
+                      '~0.005 APTOS',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ],
                 ),
-                const Gap(16),
+                Gap(16.h),
                 ActiveButton(
                   label: 'Create Token',
                   onTap: () {

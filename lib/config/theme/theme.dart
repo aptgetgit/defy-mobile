@@ -5,7 +5,6 @@ import 'colors.dart';
 
 class AppTheme {
   const AppTheme._();
-
   static String get _primaryFont => FontFamily.sFCompactRounded;
   static ThemeData get lightTheme => _buildTheme(isDark: false);
   static ThemeData get darkTheme => _buildTheme(isDark: true);
@@ -20,12 +19,27 @@ class AppTheme {
         appBarTheme: AppBarTheme(
           elevation: 0,
           scrolledUnderElevation: 0,
-          color: AppColors.transparent,
+          backgroundColor: AppColors.transparent,
           iconTheme:
               IconThemeData(color: isDark ? AppColors.white : AppColors.black),
           titleTextStyle: TextStyle(
             color: isDark ? AppColors.white : AppColors.black,
             fontSize: 20,
+            fontWeight: FontWeight.w600,
+            fontFamily: _primaryFont,
+          ),
+        ),
+        tabBarTheme: TabBarTheme(
+          labelColor: isDark ? AppColors.white : AppColors.black,
+          unselectedLabelColor: AppColors.grey,
+          labelStyle: TextStyle(
+            fontFamily: _primaryFont,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontFamily: _primaryFont,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -39,7 +53,7 @@ class AppTheme {
           onError: AppColors.white,
           surface: isDark ? const Color(0xFF121212) : AppColors.white,
           onSurface: isDark ? AppColors.white : AppColors.black,
-          surfaceContainerHighest: AppColors.transparent,
+          surfaceContainerHighest: AppColors.white,
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           backgroundColor: AppColors.transparent,
@@ -94,7 +108,6 @@ class AppTheme {
 
   static TextStyle _baseTextStyle(
     bool isDark,
-    
     double fontSize,
     FontWeight fontWeight,
   ) =>

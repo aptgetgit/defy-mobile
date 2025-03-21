@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -6,9 +7,9 @@ import '../../../../config/theme/colors.dart';
 import 'category_selection_popup.dart';
 
 class EfficiencyModePopup extends StatefulWidget {
-  final Function(String) onEnableCategory;
 
-  const EfficiencyModePopup({super.key, required this.onEnableCategory,});
+  const EfficiencyModePopup({required this.onEnableCategory, super.key,});
+  final Function(String) onEnableCategory;
 
   @override
   _EfficiencyModePopupState createState() => _EfficiencyModePopupState();
@@ -30,16 +31,16 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
 
   @override
   Widget build(BuildContext context) => Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(20.r)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.grey.withValues(alpha: 0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3), // Changes position of shadow
+            spreadRadius: 5.r,
+            blurRadius: 7.r,
+            offset: Offset(0, 3.h), // Changes position of shadow
           ),
         ],
       ),
@@ -48,32 +49,32 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // Title
-          const Text(
+          Text(
             'Efficiency Mode',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const Gap(16), // Spacing
+          Gap(16.h), // Spacing
 
           // Description
-          const Text(
+          Text(
             'Enabling E-Mode increases the LTV for a selected category of assets.',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               color: AppColors.greyDark,
             ),
           ),
-          const Gap(16), // Spacing
+          Gap(16.h), // Spacing
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              const Text(
+              Text(
                 'Select Category',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   color: AppColors.greyLight,
                 ),
               ),
@@ -82,11 +83,11 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
               GestureDetector(
                 onTap: _showCategorySelection,
                 child: Container(
-                  width: 130,
-                  height: 32,
+                  width: 130.w,
+                  height: 32.h,
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(40.r),
                   ),
                   child: Center(
                     child: Row(
@@ -94,14 +95,14 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
                       children: <Widget>[
                         Text(
                           selectedCategory,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: Colors.black,
                           ),
                         ),
-                        const Gap(2),
-                        const Icon(PhosphorIconsBold.caretDown, color: Colors.black, size: 12),
+                        Gap(2.w),
+                        Icon(PhosphorIconsBold.caretDown, color: Colors.black, size: 12.sp),
                       ],
                     ),
                   ),
@@ -109,7 +110,7 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
               ),
             ],
           ),
-          const Gap(24), // Spacing
+          Gap(24.h), // Spacing
 
           // Enable Now Button
           SizedBox(
@@ -124,20 +125,20 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
                 backgroundColor: AppColors.blue,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(24.r),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 16.h),
               ),
-              child: const Text(
+              child: Text(
                 'Enable Now',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
           ),
-          const Gap(16), // Spacing (for bottom padding)
+          Gap(16.h), // Spacing (for bottom padding)
         ],
       ),
     );
@@ -152,7 +153,7 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
       context: context,
       barrierColor: Colors.black54,
       builder: (BuildContext context) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -160,13 +161,13 @@ class _EfficiencyModePopupState extends State<EfficiencyModePopup> {
                 width: screenSize.width * 0.95, // Make it slightly less than screen width
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.2),
-                      spreadRadius: 1,
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
+                      spreadRadius: 1.r,
+                      blurRadius: 8.r,
+                      offset: Offset(0, 2.h),
                     ),
                   ],
                 ),

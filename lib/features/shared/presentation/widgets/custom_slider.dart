@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomSlider extends StatefulWidget {
 
@@ -121,7 +122,7 @@ class _CustomSliderState extends State<CustomSlider>
             }
           },
           child: SizedBox(
-            height: math.max(widget.trackHeight, widget.thumbSize),
+            height: math.max(widget.trackHeight.h, widget.thumbSize.h),
             width: double.infinity,
             child: CustomPaint(
               painter: _SliderPainter(
@@ -131,8 +132,8 @@ class _CustomSliderState extends State<CustomSlider>
                 activeColor: widget.activeColor,
                 inactiveColor: widget.inactiveColor,
                 thumbColor: widget.thumbColor,
-                trackHeight: widget.trackHeight,
-                thumbSize: widget.thumbSize,
+                trackHeight: widget.trackHeight.h,
+                thumbSize: widget.thumbSize.w,
                 showLabel: widget.showLabel,
                 label: widget.label,
                 value: _animatedValue,
@@ -250,7 +251,7 @@ class _SliderPainter extends CustomPainter {
       final TextPainter textPainter = TextPainter(
         text: TextSpan(
           text: label ?? value.toStringAsFixed(1),
-          style: TextStyle(color: activeColor, fontSize: 12),
+          style: TextStyle(color: activeColor, fontSize: 12.sp),
         ),
         textDirection: TextDirection.ltr,
       )
@@ -265,7 +266,7 @@ class _SliderPainter extends CustomPainter {
         final TextPainter secondaryTextPainter = TextPainter(
           text: TextSpan(
             text: secondaryValue.toStringAsFixed(1),
-            style: TextStyle(color: activeColor, fontSize: 12),
+            style: TextStyle(color: activeColor, fontSize: 12.sp),
           ),
           textDirection: TextDirection.ltr,
         )
@@ -294,7 +295,7 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
     bool isEnabled = false,
     bool isDiscrete = false,
   }) {
-    final double trackHeight = sliderTheme.trackHeight ?? 4;
+    final double trackHeight = (sliderTheme.trackHeight ?? 4).h;
     final double trackLeft = offset.dx;
     final double trackTop =
         offset.dy + (parentBox.size.height - trackHeight) / 2;
@@ -315,7 +316,7 @@ class CustomThumbShape extends SliderComponentShape {
   final double dotRadius;
 
   @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.fromRadius(thumbRadius);
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.fromRadius(thumbRadius.r);
 
   @override
   void paint(
@@ -337,7 +338,7 @@ class CustomThumbShape extends SliderComponentShape {
     final Paint borderPaint = Paint()
       ..color = const Color(0xff2071EE)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidth;
+      ..strokeWidth = borderWidth.w;
 
     final Paint innerCirclePaint = Paint()
       ..color = Colors.white
@@ -348,12 +349,12 @@ class CustomThumbShape extends SliderComponentShape {
       ..style = PaintingStyle.fill;
 
     // Draw the blue border
-    canvas..drawCircle(center, thumbRadius, borderPaint)
+    canvas..drawCircle(center, thumbRadius.r, borderPaint)
 
     // Draw the white inner circle
-    ..drawCircle(center, thumbRadius - borderWidth / 2, innerCirclePaint)
+    ..drawCircle(center, thumbRadius.r - borderWidth.w / 2, innerCirclePaint)
 
     // Draw the blue dot
-    ..drawCircle(center, dotRadius, dotPaint);
+    ..drawCircle(center, dotRadius.r, dotPaint);
   }
 }

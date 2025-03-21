@@ -1,19 +1,17 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
-import '../../wallet/presentation/wallet_more_screen.dart';
+import '../../../app/routes/router.dart';
 
 class DashboardFloatingActionButton extends StatefulWidget {
-  final bool show;
   const DashboardFloatingActionButton({
     super.key,
     required this.show,
   });
+  final bool show;
 
   @override
   State<DashboardFloatingActionButton> createState() =>
@@ -25,18 +23,13 @@ class _DashboardFloatingActionButtonState
     with SingleTickerProviderStateMixin {
   bool dialogOpen = false;
   late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 100), // Adjust duration
-    );
-    _scaleAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
+      duration: const Duration(milliseconds: 100),
     );
   }
 
@@ -50,29 +43,31 @@ class _DashboardFloatingActionButtonState
   Widget build(BuildContext context) => Align(
         child: GestureDetector(
           onTap: () async {
-            _controller.forward(); // Start scale animation
+            await _controller.forward();
             setState(() {
               dialogOpen = true;
             });
             await showDialog(
               context: context,
               useSafeArea: false,
-              builder: (BuildContext context) => const DashboardActionButtonDialog(),
+              builder: (BuildContext dialogContext) => DashboardActionButtonDialog(
+                parentContext: context, // Pass the parent context that has GoRouter
+              ),
             );
-            _controller.reverse();
+            await _controller.reverse();
             setState(() {
               dialogOpen = false;
             });
           },
           child: CircleAvatar(
             backgroundColor: AppColors.blue,
-            radius: 50 / 2,
+            radius: (50 / 2).r,
             child: AnimatedRotation(
               turns: dialogOpen ? 0.5 : 0,
               duration: const Duration(milliseconds: 200),
               curve: Curves.fastOutSlowIn,
               child: Icon(
-                size: 26,
+                size: 26.sp,
                 PhosphorIcons.caretDoubleUp(PhosphorIconsStyle.bold),
                 color: AppColors.white,
               ),
@@ -85,7 +80,9 @@ class _DashboardFloatingActionButtonState
 class DashboardActionButtonDialog extends StatefulWidget {
   const DashboardActionButtonDialog({
     super.key,
+    required this.parentContext, 
   });
+  final BuildContext parentContext; 
 
   @override
   State<DashboardActionButtonDialog> createState() =>
@@ -98,7 +95,9 @@ class _DashboardActionButtonDialogState
   final ScrollController _scrollController = ScrollController();
 
   late AnimationController _controller;
-  late Animation<double> _animation;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _exitAnimation;
+  bool _isExiting = false;
 
   @override
   void initState() {
@@ -107,10 +106,19 @@ class _DashboardActionButtonDialogState
       vsync: this,
       duration: const Duration(milliseconds: 700),
     );
-    _animation = CurvedAnimation(
+    _fadeAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     );
+    
+    // New animation for exiting buttons
+    _exitAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+    
     _controller.forward();
   }
 
@@ -118,52 +126,57 @@ class _DashboardActionButtonDialogState
   void dispose() {
     _scrollController.dispose();
     _controller.dispose();
-
     super.dispose();
   }
 
-  void _scrollToEnd() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeOutCubic,
-    );
-  }
-
-  void _scrollToTop() {
-    _scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeOutCubic,
-    );
+  void _exitWithAnimation(Function() navigationCallback) {
+    setState(() {
+      _isExiting = true;
+    });
+    
+    _controller
+      ..duration = const Duration(milliseconds: 400)
+      ..reset()
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed || 
+            (_controller.value > 0.9 && status == AnimationStatus.forward)) {
+          _controller.removeStatusListener((AnimationStatus status) {});
+          
+          // Pop the dialog first
+          Navigator.of(context).pop();
+          
+          // Then execute the navigation
+          navigationCallback();
+        }
+      })
+      ..forward();
   }
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
-        animation: _animation,
+        animation: _fadeAnimation,
         builder: (BuildContext context, Widget? child) => Opacity(
-          opacity: _animation.value,
+          opacity: _isExiting ? 1 - _exitAnimation.value : _fadeAnimation.value,
           child: Center(
             child: GestureDetector(
               onTap: () {
-                _controller.animateBack(0);
                 Navigator.of(context).pop();
               },
               child: Container(
                 alignment: Alignment.bottomLeft,
                 constraints: const BoxConstraints.tightFor(),
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.w),
                 width: double.maxFinite,
                 height: double.maxFinite,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.bottomLeft, // Start from the bottom left
-                    end: Alignment.topRight, // End at the top right
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
                     colors: <Color>[
-                      Colors.white, // More white at the bottom
-                      Color.fromARGB(182, 255, 255, 255), // Less white at the top
+                      Colors.white,
+                      Color.fromARGB(182, 255, 255, 255),
                     ],
-                    stops: <double>[0.1, 0.9], // 10% of the screen is solid white, then it starts fading
+                    stops: <double>[0.1, 0.9],
                   ),
                 ),
                 child: Material(
@@ -176,47 +189,117 @@ class _DashboardActionButtonDialogState
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.87,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 20),
+                            padding: EdgeInsets.only(left: 20.w),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                _IconButton(
-                                  onTap: () {},
-                                  backgroundColor: AppColors.green, //*Green
-                                  label: 'Buy', //*Green
-                                  child: Icon(PhosphorIcons.plus()),
+                                AnimatedBuilder(
+                                  animation: _exitAnimation,
+                                  builder: (BuildContext context, Widget? child) {
+                                    final double offset = _isExiting 
+                                        ? -MediaQuery.of(context).size.height * _exitAnimation.value 
+                                        : 0.0;
+                                    return Transform.translate(
+                                      offset: Offset(0, offset),
+                                      child: _IconButton(
+                                        onTap: () {
+                                          _exitWithAnimation(() {
+                                            // Your buy navigation logic here
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                        backgroundColor: AppColors.green,
+                                        label: 'Buy',
+                                        child: Icon(PhosphorIcons.plus(), size: 24.sp),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                const _IconButton(
-                                  // onTap: (){
-                                  //   SendScreenRoute().push(context);
-                                  // },
-                                  backgroundColor: AppColors.blue, //*Blue
-                                  label: 'Send',
-                                  child: Icon(PhosphorIconsFill.paperPlaneTilt),
+                                AnimatedBuilder(
+                                  animation: _exitAnimation,
+                                  builder: (BuildContext context, Widget? child) {
+                                    final double offset = _isExiting 
+                                        ? -MediaQuery.of(context).size.height * _exitAnimation.value * 1.05
+                                        : 0.0;
+                                    return Transform.translate(
+                                      offset: Offset(0, offset),
+                                      child: _IconButton(
+                                        onTap: () {
+                                          _exitWithAnimation(() {
+                                            // Your send navigation logic here
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                        backgroundColor: AppColors.blue,
+                                        label: 'Send',
+                                        child: Icon(PhosphorIconsFill.paperPlaneTilt, size: 24.sp),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                _IconButton(
-                                  onTap: () {},
-                                  backgroundColor: const Color.fromARGB(255, 249, 34, 112), //*Pink
-                                  label: 'Receive',
-                                  child: Icon(PhosphorIcons.arrowDown()),
+                                AnimatedBuilder(
+                                  animation: _exitAnimation,
+                                  builder: (BuildContext context, Widget? child) {
+                                    final double offset = _isExiting 
+                                        ? -MediaQuery.of(context).size.height * _exitAnimation.value * 1.1
+                                        : 0.0;
+                                    return Transform.translate(
+                                      offset: Offset(0, offset),
+                                      child: _IconButton(
+                                        onTap: () {
+                                          _exitWithAnimation(() async {
+                                            await const ReceiveScreenRoute().push(widget.parentContext);
+                                          });
+                                        },
+                                        backgroundColor: const Color.fromARGB(255, 249, 34, 112),
+                                        label: 'Receive',
+                                        child: Icon(PhosphorIcons.arrowDown(), size: 24.sp),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                _IconButton(
-                                  // onTap: () =>
-                                  //     const SwapScreenRoute().push(context),
-                                  backgroundColor: AppColors.yellow,
-                                  //*Yellow
-                                  label: 'Swap',
-                                  child: Icon(PhosphorIcons.arrowsCounterClockwise()),
+                                AnimatedBuilder(
+                                  animation: _exitAnimation,
+                                  builder: (BuildContext context, Widget? child) {
+                                    final double offset = _isExiting 
+                                        ? -MediaQuery.of(context).size.height * _exitAnimation.value * 1.15
+                                        : 0.0;
+                                    return Transform.translate(
+                                      offset: Offset(0, offset),
+                                      child: _IconButton(
+                                        onTap: () {
+                                          _exitWithAnimation(() async {
+                                            await const SwapRoute().push(widget.parentContext);
+                                          });
+                                        },
+                                        backgroundColor: AppColors.yellow,
+                                        label: 'Swap',
+                                        child: Icon(PhosphorIcons.arrowsCounterClockwise(), size: 24.sp),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                _IconButton(
-                                  onTap: () => Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (BuildContext context) => const WalletMoreScreen()),
-                                  ),
-                                  backgroundColor: AppColors.red, //*Yellow
-                                  label: 'More',
-                                  child: Icon(PhosphorIcons.caretDown()),
+                                AnimatedBuilder(
+                                  animation: _exitAnimation,
+                                  builder: (BuildContext context, Widget? child) {
+                                    final double offset = _isExiting 
+                                        ? -MediaQuery.of(context).size.height * _exitAnimation.value * 1.2
+                                        : 0.0;
+                                    return Transform.translate(
+                                      offset: Offset(0, offset),
+                                      child: _IconButton(
+                                        onTap: () {
+                                          _exitWithAnimation(() async {
+                                            await const WalletMoreScreenRoute().push(widget.parentContext);
+                                          });
+                                        },
+                                        backgroundColor: AppColors.red,
+                                        label: 'More',
+                                        child: Icon(PhosphorIcons.caretDown(), size: 24.sp),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -234,42 +317,43 @@ class _DashboardActionButtonDialogState
 }
 
 class _IconButton extends StatelessWidget {
-  final String? label;
-  final VoidCallback? onTap;
-  final Color backgroundColor;
-  final Widget child;
   const _IconButton({
     this.label,
     this.onTap,
     required this.backgroundColor,
     required this.child,
   });
+  final String? label;
+  final VoidCallback? onTap;
+  final Color backgroundColor;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) => Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              GestureDetector(
-                onTap: onTap,
-                child: CircleAvatar(
-                  radius: 20,
+          GestureDetector(
+            onTap: onTap,
+            child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 20.r,
                   backgroundColor: backgroundColor,
                   child: child,
                 ),
-              ),
-              if (label != null) const Gap(5),
-              if (label != null) const Gap(10),
-              Text(
-                label!,
-                style: const TextStyle(
-                    fontSize: 24,
+                if (label != null) Gap(5.w),
+                if (label != null) Gap(10.w),
+                Text(
+                  label!,
+                  style: TextStyle(
+                    fontSize: 24.sp,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,),
-              ),
-            ],
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const Gap(20),
+          Gap(20.h),
         ],
       );
 }

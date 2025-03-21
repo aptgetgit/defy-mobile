@@ -1,5 +1,5 @@
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -34,8 +34,8 @@ class NftVideoScreen extends ConsumerStatefulWidget {
 class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
     with TickerProviderStateMixin {
   bool _showMiniPlayer = false;
-  final double _miniPlayerHeight = 180;
-  final double _miniPlayerWidth = 180;
+  final double _miniPlayerHeight = 180.h;
+  final double _miniPlayerWidth = 180.w;
   String coinLogoUrl = '';
   String nftName = 'Cyborg 2078 #5623';
   String owner = 'Fantasy Ruins';
@@ -82,7 +82,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
 
   void _onScroll() {
     // Threshold should be around where the video player disappears from view
-    const double miniPlayerThreshold = 370; // Adjust based on your layout
+    final double miniPlayerThreshold = 370.h; // Adjust based on your layout
     
     if (_scrollController.offset > 100 && !_showTitle) {
       setState(() {
@@ -108,8 +108,8 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
 
   @override
   Widget build(BuildContext context) {
-    const double imageWidth = 353;
-    const double imageHeight = 353;
+    final double imageWidth = 353.w;
+    final double imageHeight = 353.h;
     final VideoPlayerProvider videoProvider = ref.watch(videoPlayerProvider(_videoPath));
 
     return Stack(
@@ -132,7 +132,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                           onTap:() {
                             Navigator.push(context, MaterialPageRoute(
                               builder: (BuildContext context) => FullScreenVideoScreen(videoPath: _videoPath),
-                            ));
+                            ),);
                           },
                           child: Stack(
                             alignment: Alignment.topCenter,
@@ -143,17 +143,19 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                                 height: imageHeight,
                                 decoration: BoxDecoration(
                                   color: Colors.black,
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(8.r),
                                   child: videoProvider.isInitialized
                                     ? AspectRatio(
                                         aspectRatio: videoProvider.videoPlayerController.value.aspectRatio,
                                         child: VideoPlayer(videoProvider.videoPlayerController),
                                       )
-                                    : const Center(
-                                        child: CircularProgressIndicator(),
+                                    : Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.w,
+                                        ),
                                       ),
                                 ),
                               ),
@@ -167,8 +169,8 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                                         shape: BoxShape.circle,
                                       ),
                                       child: IconButton(
-                                        iconSize: 50,
-                                        icon: const Icon(PhosphorIconsFill.play),
+                                        iconSize: 50.sp,
+                                        icon: Icon(PhosphorIconsFill.play, size: 50.sp),
                                         onPressed: videoProvider.pauseOrResume,
                                       ),
                                     ),
@@ -177,97 +179,44 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                             ],
                           ),
                         ),
-                        const Gap(12),
+                        Gap(12.h),
                         Row(
                           children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const Align(
+                                Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: 20),
+                                    padding: EdgeInsets.only(left: 20.w),
                                     child: Text('Cyborg 2078 #5623',
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 20.sp,
                                           fontWeight: FontWeight.w600,
                                           color: AppColors.black,
                                         ),),
                                   ),
                                 ),
-                                const Gap(2),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 20),
-                                  child: Row(
-                                    children: <Widget>[
-                                      RowSuper(
-                                        innerDistance: -12,
-                                        children: <Widget?>[
-                                          Image.asset('assets/images/avatar-1.png',
-                                              height: 22,),
-                                          Image.asset('assets/images/avatar-2.png',
-                                              height: 22,),
-                                          Image.asset('assets/images/avatar-3.png',
-                                              height: 22,),
-                                        ],
-                                      ),
-                                      const Gap(10),
-                                      Text(
-                                        'James, Jane and 14+ hold',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.greyLight,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                Gap(2.h),
                               ],
-                            ),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 46,
-                                    height: 24,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.greyVeryLight,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Center(child: Text('1x', style: TextStyle(fontSize: 14,color: AppColors.greyLight, fontWeight: FontWeight.w500),)),
-                                  ),
-                                  const Gap(16),
-                                  const Icon(
-                                    PhosphorIconsRegular.shareNetwork,
-                                    color: AppColors.black,
-                                    size: 20,
-                                  ),
-                                ],
-                              ),
                             ),
                           ],
                         ),
-                        const Gap(26),
+                        Gap(26.h),
                         
                         // Replace info containers with video controls
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
                           child: Column(
                             children: <Widget>[
                               // Video duration progress bar
                               SliderTheme(
                                 data: SliderThemeData(
                                   overlayShape: SliderComponentShape.noOverlay,
-                                  trackHeight: 14,
+                                  trackHeight: 4.h,
                                   trackShape: const RectangularSliderTrackShape(),
                                   thumbShape:
-                                      const RoundSliderThumbShape(enabledThumbRadius: 0),
+                                      RoundSliderThumbShape(enabledThumbRadius: 3.r),
                                 ),
                                 child: Slider(
                                   max: videoProvider.totalDuration.inSeconds.toDouble(),
@@ -277,34 +226,35 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                                   },
                                   activeColor: Colors.black,
                                   inactiveColor: Colors.grey[100],
+                                  thumbColor: Colors.black,
                                 ),
                               ),
-                              const Gap(8),
+                              Gap(8.h),
                               
                               // Time indicators
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(horizontal: 5.w),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
                                       _formatTime(videoProvider.currentDuration),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: AppColors.greyLight,
-                                        fontSize: 12,
+                                        fontSize: 12.sp,
                                       ),
                                     ),
                                     Text(
                                       _formatTime(videoProvider.totalDuration),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: AppColors.greyLight,
-                                        fontSize: 12,
+                                        fontSize: 12.sp,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const Gap(16),
+                              Gap(16.h),
                               
                               // Playback controls
                               Row(
@@ -312,30 +262,46 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                                   // Rewind button
                                   Expanded(
                                     child: IconButton(
-                                      iconSize: 40,
-                                      icon: const Icon(Icons.replay_10),
+                                      iconSize: 40.sp,
+                                      icon: Icon(Icons.replay_10, size: 40.sp),
                                       onPressed: videoProvider.seekBackward,
                                     ),
                                   ),
-                                  const Gap(20),
+                                  Gap(20.w),
                                   
                                   // Play/pause button
                                   Expanded(
-                                    child: IconButton(
-                                      iconSize: 50,
-                                      icon: Icon(videoProvider.isPlaying
-                                          ? PhosphorIconsFill.pause
-                                          : PhosphorIconsFill.play,),
-                                      onPressed: videoProvider.pauseOrResume,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                      radius: 27.r,
+                                      child: Center(
+                                        child: IconButton(
+                                          iconSize: 30.sp,
+                                          icon: Icon(
+                                            videoProvider.isPlaying
+                                              ? PhosphorIconsFill.pause
+                                              : PhosphorIconsFill.play,
+                                            size: 30.sp,
+                                          ),
+                                          onPressed: () {
+                                            if (!videoProvider.isPlaying) {
+                                              videoProvider.playVideo();
+                                            } else {
+                                              videoProvider.pauseOrResume();
+                                            }
+                                          },
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  const Gap(20),
+                                  Gap(20.w),
                                   
                                   Expanded(
                                     child: IconButton(
-                                      iconSize: 40,
-                                      icon: const Icon(Icons.forward_10),
-                                      onPressed: videoProvider.seekForward,
+                                      iconSize: 32.sp,
+                                      icon: Icon(PhosphorIconsRegular.shareNetwork, size: 32.sp),
+                                      onPressed: () {},
                                     ),
                                   ),
                                 ],
@@ -343,7 +309,18 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                             ],
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        SizedBox(height: 35.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              _buildInfoContainer('100 APT', 'BOUGHT AT'),
+                              _buildInfoContainer('3', 'ACTIVE BIDS'),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
                       ],
                     ),
                   ),
@@ -384,13 +361,43 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
         ),
         if (_showMiniPlayer)
           Positioned(
-            right: 16,
-            bottom: 16 + (_miniPlayerHeight / 2), // Adjust based on your bottom nav height
+            right: 16.w,
+            bottom: 16.h + (_miniPlayerHeight / 2), // Adjust based on your bottom nav height
             child: _buildMiniPlayer(context, videoProvider),
           ),
       ],
     );
   }
+
+  Widget _buildInfoContainer(String value, String label) => Container(
+    height: 65.h,
+    width: 170.w,
+    decoration: BoxDecoration(
+      color: AppColors.greyVeryLight,
+      borderRadius: BorderRadius.circular(12.r),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Gap(4.h),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.greyLight,
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildMiniPlayer(BuildContext context, VideoPlayerProvider videoProvider) => AnimatedOpacity(
       opacity: _showMiniPlayer ? 1.0 : 0.0,
@@ -409,12 +416,12 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
           height: _miniPlayerHeight,
           decoration: BoxDecoration(
             color: Colors.black,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.3),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
+                blurRadius: 10.r,
+                offset: Offset(0, 5.h),
               ),
             ],
           ),
@@ -422,7 +429,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
             children: <Widget>[
               // Mini video player
               ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.r),
                 child: videoProvider.isInitialized
                   ? SizedBox.expand(
                       child: FittedBox(
@@ -434,10 +441,10 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                         ),
                         ),
                     )
-                  : const Center(
+                  : Center(
                       child: CircularProgressIndicator(
                         color: Colors.white,
-                        strokeWidth: 2,
+                        strokeWidth: 2.w,
                       ),
                     ),
               ),
@@ -449,7 +456,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                     opacity: videoProvider.isPlaying ? 0.0 : 1.0,
                     duration: const Duration(milliseconds: 300),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8.w),
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.5),
                         shape: BoxShape.circle,
@@ -457,7 +464,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                       child: Icon(
                         videoProvider.isPlaying ? Icons.pause : Icons.play_arrow,
                         color: Colors.white,
-                        size: 20,
+                        size: 20.sp,
                       ),
                     ),
                   ),
@@ -470,7 +477,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                 right: 0,
                 bottom: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -480,25 +487,25 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                         Colors.black.withOpacity(0.7),
                       ],
                     ),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8.r),
+                      bottomRight: Radius.circular(8.r),
                     ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Text(
+                      Text(
                         'Cyborg 2078',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       // Video progress bar
                       LinearProgressIndicator(
                         value: videoProvider.isInitialized
@@ -507,7 +514,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                             : 0,
                         backgroundColor: Colors.grey[700],
                         valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                        minHeight: 2,
+                        minHeight: 2.h,
                       ),
                     ],
                   ),
@@ -536,13 +543,13 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
       backgroundColor: Colors.white,
       leading: GestureDetector(
         onTap: () => Navigator.pop(context),
-        child: const Icon(
+        child: Icon(
           PhosphorIconsBold.caretLeft,
           color: AppColors.black,
-          size: 24,
+          size: 24.sp,
         ),
       ),
-      collapsedHeight: 60,
+      collapsedHeight: 60.h,
       centerTitle: false,
       actions: <Widget>[
         IconButton(
@@ -576,11 +583,11 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
             ),
             if (_alertCreated)
               Positioned(
-                top: 8,
-                right: 8,
+                top: 8.h,
+                right: 8.w,
                 child: Container(
-                  width: 8,
-                  height: 8,
+                  width: 8.w,
+                  height: 8.h,
                   decoration: const BoxDecoration(
                     color: Colors.green,
                     shape: BoxShape.circle,
@@ -589,7 +596,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
               ),
           ],
         ),
-        const Gap(8),
+        Gap(8.w),
       ],
       titleSpacing: 0,
       title: _showTitle
@@ -599,37 +606,37 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
               child: Row(
                 children: <Widget>[
                   _buildPoolLogo(),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           nftName,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.black,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const Gap(4),
+                        Gap(4.h),
                         Row(
                           children: <Widget>[
                             Text(
                               owner,
-                              style: const TextStyle(
-                                fontSize: 12,
+                              style: TextStyle(
+                                fontSize: 12.sp,
                                 color: AppColors.greyLight,
                                 fontWeight: FontWeight.w500,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const Gap(6),
-                            const Icon(
+                            Gap(6.w),
+                            Icon(
                               PhosphorIconsFill.sealCheck,
                               color: AppColors.blue,
-                              size: 16,
+                              size: 16.sp,
                             ),
                           ],
                         ),
@@ -643,22 +650,22 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
               children: <Widget>[
                 Image.asset(
                   'assets/images/Fantasy-Ruins.png',
-                  width: 32,
-                  height: 32,
+                  width: 32.w,
+                  height: 32.h,
                   fit: BoxFit.cover,
                 ),
-                const Gap(8),
-                const Text('Fantasy Ruins',
+                Gap(8.w),
+                Text('Fantasy Ruins',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.black,
                     ),),
-                const Gap(4),
-                const Icon(
+                Gap(4.w),
+                Icon(
                   PhosphorIconsFill.sealCheck,
                   color: AppColors.blue,
-                  size: 20,
+                  size: 20.sp,
                 ),
               ],
             ),);
@@ -685,18 +692,18 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
 
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) => Positioned(
-        bottom: 120,
-        left: 35,
-        right: 35,
+        bottom: 120.h,
+        left: 35.w,
+        right: 35.w,
         child: Material(
           elevation: 4,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           child: Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            height: 60.h,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
             ),
             child: GestureDetector(
               onTap: () {
@@ -720,20 +727,20 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                 children: <Widget>[
                   Image.asset(
                     'assets/icons/watchlist-logo2.png',
-                    width: 32,
-                    height: 32,
+                    width: 32.w,
+                    height: 32.h,
                   ),
-                  const Text(
+                  Text(
                     'Tokens Added to Watchlist',
                     style: TextStyle(
                         color: AppColors.greyDark,
                         fontWeight: FontWeight.w500,
-                        fontSize: 16,),
+                        fontSize: 16.sp,),
                   ),
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
-                      size: 20,
+                      size: 20.sp,
                       color: AppColors.greyLight,
                     ),
                     onPressed: () {
@@ -757,10 +764,10 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
   }
 
   Widget _buildPoolLogo({bool small = false}) => Container(
-    width: small ? 24 : 32,
-    height: small ? 24 : 32,
+    width: small ? 24.w : 32.w,
+    height: small ? 24.h : 32.h,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: BorderRadius.circular(4.r),
       image: const DecorationImage(
         image: AssetImage('assets/images/cyborg2.png'),
         fit: BoxFit.cover,
@@ -792,13 +799,13 @@ class FullScreenVideoScreen extends ConsumerWidget {
                       child: VideoPlayer(videoProvider.videoPlayerController),
                     ),
                   )
-                : const CircularProgressIndicator(color: Colors.white),
+                : CircularProgressIndicator(color: Colors.white, strokeWidth: 2.w),
           ),
           Positioned(
-            top: 52,
-            left: 12,
+            top: 52.h,
+            left: 12.w,
             child: IconButton(
-              icon: const Icon(PhosphorIconsBold.caretLeft, color: Colors.white),
+              icon: Icon(PhosphorIconsBold.caretLeft, color: Colors.white, size: 24.sp),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -814,9 +821,9 @@ class FullScreenVideoScreen extends ConsumerWidget {
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    iconSize: 60,
+                    iconSize: 60.sp,
                     color: Colors.white,
-                    icon: const Icon(PhosphorIconsFill.play),
+                    icon: Icon(PhosphorIconsFill.play, size: 60.sp),
                     onPressed: videoProvider.pauseOrResume,
                   ),
                 ),
@@ -826,13 +833,4 @@ class FullScreenVideoScreen extends ConsumerWidget {
       ),
     );
   }
-}
-void main() {
-  runApp(
-    const ProviderScope(
-      child: MaterialApp(
-        home: NftVideoScreen(),
-      ),
-    ),
-  );
 }

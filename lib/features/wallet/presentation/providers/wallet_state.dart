@@ -20,6 +20,7 @@ class WalletState with _$WalletState {
     @Default({}) Set<int> selectedTokens,
     @Default({}) Set<int> watchlistTokens,
     @Default(false) bool hideSelected,
+    @Default(false) bool isWatchlistActionTriggered,
     
     // NFT management
     @Default([]) List<NFTCollection> allNFTCollections,

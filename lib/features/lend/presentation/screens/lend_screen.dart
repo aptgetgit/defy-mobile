@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -131,12 +132,12 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, size: 20.sp),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Lend', style: TextStyle(fontSize: 20)),
+        title: Text('Lend', style: TextStyle(fontSize: 20.sp)),
         elevation: 0,
       ),
       body: NestedScrollView(
@@ -144,13 +145,13 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   // Top card section with gradient
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
@@ -160,37 +161,37 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
                           Colors.black,
                         ],
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Column(
                       children: <Widget>[
                         Image.asset(
                           'assets/icons/aptos.png',
-                          width: 40,
-                          height: 40,
+                          width: 40.w,
+                          height: 40.h,
                         ),
-                        const Gap(8),
-                        const Text(
+                        Gap(8.h),
+                        Text(
                           '89% APY',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Gap(4),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 60),
+                        Gap(4.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 60.w),
                           child: Text(
                             'Lend and Earn on Aptos Token and get rewards',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: AppColors.greyLight,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                             ),
                           ),
                         ),
-                        const Gap(18),
+                        Gap(18.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -198,23 +199,23 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
                               onPressed: () {},
                               style: FilledButton.styleFrom(
                                 padding: EdgeInsets.zero,
-                                side: const BorderSide(color: Colors.white),
+                                side: BorderSide(color: Colors.white, width: 1.w),
                                 backgroundColor: Colors.transparent,
                                 foregroundColor: Colors.white,
-                                maximumSize: const Size(82, 44),
+                                maximumSize: Size(82.w, 44.h),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.r),
                                 ),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
                                     'View',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
                                   ),
-                                  Gap(8),
-                                  Icon(PhosphorIconsBold.arrowCircleUpRight),
+                                  Gap(8.w),
+                                  Icon(PhosphorIconsBold.arrowCircleUpRight, size: 20.sp),
                                 ],
                               ),
                             ),
@@ -246,42 +247,42 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
                                 backgroundColor: Colors.white,
                                 foregroundColor: Colors.black,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.r),
                                 ),
-                                minimumSize: const Size(237, 42),
+                                minimumSize: Size(237.w, 42.h),
                               ),
-                              child: const Text('Lend APT', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                              child: Text('Lend APT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const Gap(20),
+                  Gap(20.h),
                   // Stats Section
                   DecoratedBox(
                     decoration: BoxDecoration(
                       color: AppColors.greyVeryLight,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          const Column(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                r'$${lendState.netAssets.toStringAsFixed(2)}', 
-                                style: TextStyle(fontSize: 18, color: AppColors.black, fontWeight: FontWeight.w600),
+                                lendState.netAssets.toStringAsFixed(2), 
+                                style: TextStyle(fontSize: 18.sp, color: AppColors.black, fontWeight: FontWeight.w600),
                               ),
-                              Gap(4),
+                              Gap(4.h),
                               Row(
                                 children: <Widget>[
-                                  Text('Net Assets', style: TextStyle(fontSize: 12.6, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
-                                  Gap(2),
-                                  Icon(PhosphorIconsBold.caretRight, size: 10, color: AppColors.greyLight),
+                                  Text('Net Assets', style: TextStyle(fontSize: 12.6.sp, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
+                                  Gap(2.w),
+                                  Icon(PhosphorIconsBold.caretRight, size: 10.sp, color: AppColors.greyLight),
                                 ],
                               ),
                             ],
@@ -291,10 +292,10 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
                             children: <Widget>[
                               Text(
                                 '${lendState.healthFactor.toStringAsFixed(2)}%', 
-                                style: const TextStyle(fontSize: 18, color: AppColors.red, fontWeight: FontWeight.w600),
+                                style: TextStyle(fontSize: 18.sp, color: AppColors.red, fontWeight: FontWeight.w600),
                               ),
-                              const Gap(4),
-                              const Text('Health Factor', style: TextStyle(fontSize: 12.6, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
+                              Gap(4.h),
+                              Text('Health Factor', style: TextStyle(fontSize: 12.6.sp, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
                             ],
                           ),
                           Column(
@@ -302,17 +303,17 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
                             children: <Widget>[
                               Text(
                                 '${lendState.netApy.toStringAsFixed(2)}%', 
-                                style: const TextStyle(fontSize: 18, color: AppColors.black, fontWeight: FontWeight.w600),
+                                style: TextStyle(fontSize: 18.sp, color: AppColors.black, fontWeight: FontWeight.w600),
                               ),
-                              const Gap(4),
-                              const Text('Net APY', style: TextStyle(fontSize: 12.6, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
+                              Gap(4.h),
+                              Text('Net APY', style: TextStyle(fontSize: 12.6.sp, fontWeight: FontWeight.w400, color: AppColors.greyLight)),
                             ],
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const Gap(8),
+                  Gap(8.h),
                 ],
               ),
             ),
@@ -325,15 +326,15 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
                 tabs: const <String>['All', 'Stables', 'Aptos'],
                 trailing: Row(
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'E-Mode', 
                       style: TextStyle(
-                        fontSize: 18, 
+                        fontSize: 18.sp, 
                         fontWeight: FontWeight.w500, 
                         color: AppColors.greyLight,
                       ),
                     ),
-                    const Gap(6),
+                    Gap(6.w),
                     SwitchTheme(
                       data: SwitchThemeData(
                         trackOutlineColor: WidgetStateProperty.all<Color>(AppColors.transparent),
@@ -362,15 +363,15 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
           controller: _tabController,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20.w),
               child: _buildTabViewContent(0),
             ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20.w),
               child: _buildTabViewContent(1),
             ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20.w),
               child: _buildTabViewContent(2),
             ),
           ],
@@ -387,7 +388,7 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
       context: context,
       barrierColor: Colors.black54,
       builder: (BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -395,13 +396,13 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
               width: screenSize.width * 0.95, // Make it slightly less than screen width
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.2),
-                    spreadRadius: 1,
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    spreadRadius: 1.r,
+                    blurRadius: 8.r,
+                    offset: Offset(0, 2.h),
                   ),
                 ],
               ),
@@ -455,7 +456,7 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
         children: <Widget>[
           // Active assets
           ...activeItems.map((Map<String, dynamic> item) => Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.only(bottom: 10.h),
             child: LendProviderItem(
               name: item['name'] as String,
               percentage: item['percentage'] as String,
@@ -486,19 +487,19 @@ class _LendScreenState extends ConsumerState<LendScreen> with SingleTickerProvid
           
           // Disabled assets section
           if (disabledItems.isNotEmpty) ...<Widget>[
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
               child: Text(
                 'Disabled assets',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.greyLight,
                 ),
               ),
             ),
             ...disabledItems.map((Map<String, dynamic> item) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 10.h),
               child: LendProviderItem(
                 name: item['name'] as String,
                 percentage: item['percentage'] as String,

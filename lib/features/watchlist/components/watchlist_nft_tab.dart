@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../presentation/watchlist_cute_nft_screen.dart';
@@ -43,12 +44,12 @@ class _WatchlistNFTTabState extends State<WatchlistNFTTab> {
               const WatchlistGridTile(),
             ],
           ),
-          const Gap(40),
+          Gap(40.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(right: 60),
+                padding: EdgeInsets.only(right: 60.w),
                 child: GestureDetector(
                   onTap: () {
                     print('Gesture tapped on WatchlistNewListTile!');

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -26,7 +27,7 @@ class _TrendingCardsState extends State<TrendingCards> {
     _autoScrollTimer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
       if (_scrollController.hasClients) {
         final double maxScroll = _scrollController.position.maxScrollExtent;
-        final double newOffset = _scrollController.offset + 338;
+        final double newOffset = _scrollController.offset + 338.w;
 
         if (newOffset >= maxScroll) {
           _scrollController.animateTo(
@@ -53,7 +54,7 @@ class _TrendingCardsState extends State<TrendingCards> {
   }
 
   void _scrollTrending(int direction) {
-    final double offset = _scrollController.offset + (direction * 338);
+    final double offset = _scrollController.offset + (direction * 338.w);
     _scrollController.animateTo(
       offset,
       duration: const Duration(milliseconds: 500),
@@ -63,12 +64,12 @@ class _TrendingCardsState extends State<TrendingCards> {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: 361,
-        height: 168,
-        padding: const EdgeInsets.all(10),
+        width: 361.w,
+        height: 168.h,
+        padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
           color: const Color(0xFFF5F5F5),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,8 +78,8 @@ class _TrendingCardsState extends State<TrendingCards> {
               children: <Widget>[
                 Text(
                   widget.isToggled ? 'Launching' : 'Trending',
-                  style: const TextStyle(
-                    fontSize: 18,
+                  style: TextStyle(
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -87,14 +88,14 @@ class _TrendingCardsState extends State<TrendingCards> {
                   icon: PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
                   onTap: () => _scrollTrending(-1),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 _buildScrollButton(
                   icon: PhosphorIcons.caretRight(PhosphorIconsStyle.bold),
                   onTap: () => _scrollTrending(1),
                 ),
               ],
             ),
-            const Gap(12),
+            Gap(12.h),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               controller: _scrollController,
@@ -107,7 +108,7 @@ class _TrendingCardsState extends State<TrendingCards> {
                     percentage: '+2.5%',
                     percentageColor: Colors.green,
                   ),
-                  const Gap(12),
+                  Gap(12.w),
                   _buildTrendingCard(
                     emoji: '🌍',
                     title: 'Earth',
@@ -115,7 +116,7 @@ class _TrendingCardsState extends State<TrendingCards> {
                     percentage: '-3.1%',
                     percentageColor: Colors.red,
                   ),
-                  const Gap(12),
+                  Gap(12.w),
                   _buildTrendingCard(
                     emoji: '🚀',
                     title: 'Space',
@@ -123,7 +124,7 @@ class _TrendingCardsState extends State<TrendingCards> {
                     percentage: '+4.7%',
                     percentageColor: Colors.green,
                   ),
-                  const Gap(12),
+                  Gap(12.w),
                   _buildTrendingCard(
                     emoji: '🎮',
                     title: 'Gaming',
@@ -141,8 +142,8 @@ class _TrendingCardsState extends State<TrendingCards> {
   Widget _buildScrollButton({required IconData icon, required VoidCallback onTap}) => GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 32,
-        width: 32,
+        height: 32.h,
+        width: 32.w,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: Color(0xFFE0E0E0),
@@ -150,7 +151,7 @@ class _TrendingCardsState extends State<TrendingCards> {
         child: Center(
           child: Icon(
             icon,
-            size: 18,
+            size: 18.sp,
             color: Colors.black54,
           ),
         ),
@@ -165,12 +166,12 @@ class _TrendingCardsState extends State<TrendingCards> {
     required Color percentageColor,
   }) =>
       Container(
-        width: 163,
-        height: 103,
-        padding: const EdgeInsets.all(12),
+        width: 163.w,
+        height: 103.h,
+        padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,37 +179,37 @@ class _TrendingCardsState extends State<TrendingCards> {
             Row(
               children: <Widget>[
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 32.w,
+                  height: 32.h,
                   decoration: BoxDecoration(
                     color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Center(
                     child: Text(
                       emoji,
-                      style: const TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20.sp),
                     ),
                   ),
                 ),
-                const Gap(8),
+                Gap(8.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         subtitle,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.orange,
-                          fontSize: 12,
+                          fontSize: 12.sp,
                         ),
                       ),
                     ],
@@ -216,7 +217,7 @@ class _TrendingCardsState extends State<TrendingCards> {
                 ),
               ],
             ),
-            const Gap(10),
+            Gap(10.h),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -228,27 +229,28 @@ class _TrendingCardsState extends State<TrendingCards> {
                             ? Icons.arrow_drop_up
                             : Icons.arrow_drop_down,
                         color: percentageColor,
+                        size: 20.sp,
                       ),
                       Text(
                         percentage,
                         style: TextStyle(
                           color: percentageColor,
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
                   Container(
-                    width: 28,
-                    height: 28,
+                    width: 28.w,
+                    height: 28.h,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.blue, width: 2),
+                      border: Border.all(color: Colors.blue, width: 2.w),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_outward,
-                      size: 16,
+                      size: 16.sp,
                       color: Colors.blue,
                     ),
                   ),

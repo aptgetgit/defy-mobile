@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -18,64 +19,76 @@ class _ExplorePumpFunTokenTransactionsScreenState
   Widget build(BuildContext context) {
     final double width = context.screenWidth;
     return Scaffold(
-      appBar : AppBar(
+      appBar: AppBar(
         centerTitle: true,
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Image.network(
-                      'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
-                      width: width * .08,
-                    ),
-                    const Gap(4),
-                    const Text('APTMAN (APTMAN)',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+              'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+              width: width * .08,
+            ),
+            Gap(4.w),
+            Text(
+              'APTMAN (APTMAN)',
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+            ),
           ],
         ),
       ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            const Gap(8),
+            Gap(8.h),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
               child: Row(
                 children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    margin: EdgeInsets.only(right: 8.w),
+                    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
                     decoration: BoxDecoration(
-                        color: AppColors.black,
-                        borderRadius: BorderRadius.circular(30),),
-                    child: const Text(
+                      color: AppColors.black,
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                    child: Text(
                       'All',
                       style: TextStyle(
                         color: AppColors.white,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    margin: EdgeInsets.only(right: 8.w),
+                    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
                     decoration: BoxDecoration(
-                        color: AppColors.greyVeryLight2,
-                        borderRadius: BorderRadius.circular(30),),
-                    child: const Text(
+                      color: AppColors.greyVeryLight2,
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                    child: Text(
                       'Sell',
                       style: TextStyle(
                         color: AppColors.greyLight,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    margin: EdgeInsets.only(right: 8.w),
+                    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
                     decoration: BoxDecoration(
-                        color: AppColors.greyVeryLight2,
-                        borderRadius: BorderRadius.circular(30),),
-                    child: const Text(
+                      color: AppColors.greyVeryLight2,
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                    child: Text(
                       'Buy',
                       style: TextStyle(
                         color: AppColors.greyLight,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -83,8 +96,7 @@ class _ExplorePumpFunTokenTransactionsScreenState
               ),
             ),
 
-            //transactions
-
+            // Transactions
             Expanded(
               child: ListView.builder(
                 itemCount: 7,
@@ -99,53 +111,54 @@ class _ExplorePumpFunTokenTransactionsScreenState
                     'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
                   ];
                   return ListTile(
-                    horizontalTitleGap: 12,
+                    horizontalTitleGap: 12.w,
                     leading: Image.network(
                       coinsLogos[index],
                       width: width * .08,
                     ),
-                    title: const Row(
+                    title: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(
                           '0x1a2b3c',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        Gap(12),
+                        Gap(12.w),
                         Text(
                           'SELL',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.red,
                           ),
                         ),
                       ],
                     ),
-                    subtitle: const Text(
+                    subtitle: Text(
                       '2 mins ago',
                       style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.greyLight,),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.greyLight,
+                      ),
                     ),
-                    trailing: const Column(
+                    trailing: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Text(
                           '4.55 APT',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
                           '1832272860',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.greyLight,
                           ),

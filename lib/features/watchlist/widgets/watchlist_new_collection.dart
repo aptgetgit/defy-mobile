@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -63,36 +64,36 @@ class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScr
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(PhosphorIconsBold.caretLeft, size: 24),
+          icon: Icon(PhosphorIconsBold.caretLeft, size: 24.sp),
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 6),
+            padding: EdgeInsets.only(right: 6.w),
             child: IconButton(
-              icon: const Icon(PhosphorIconsRegular.star, size: 24,),
+              icon: Icon(PhosphorIconsRegular.star, size: 24.sp,),
               onPressed: () {},
             ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           children: <Widget>[
-            const Text(
+            Text(
               'Name Your Collection',
-              style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 21.sp, fontWeight: FontWeight.w600),
             ),
-            const Gap(20),
+            Gap(20.h),
             const Hero(
               tag: 'new_list',
               child: WatchlistNewListTile(),
             ),
-            const Gap(30),
+            Gap(30.h),
             TextField(
               controller: _controller,
-              style: const TextStyle(fontSize: 24),
+              style: TextStyle(fontSize: 24.sp),
               decoration: const InputDecoration(
                 hintText: 'List Name',
                 hintStyle: TextStyle(color: AppColors.greyMedium, fontWeight: FontWeight.w600),
@@ -103,7 +104,7 @@ class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScr
             const Spacer(),
             AnimatedPadding(
               duration: const Duration(milliseconds: 300),
-              padding: EdgeInsets.only(bottom: _isKeyboardOpen ? keyboardPadding : 24),
+              padding: EdgeInsets.only(bottom: _isKeyboardOpen ? keyboardPadding : 24.h),
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
@@ -115,11 +116,11 @@ class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScr
                       ? Colors.black
                       : AppColors.greyMedium,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(40.r),
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 60.w, vertical: 15.h),
                   child: Text('Create', style: TextStyle(color: _isButtonEnabled // Change text color too
                             ? Colors.white // White when enabled
                             : AppColors.greyLight,),),

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -48,11 +49,11 @@ class _StakeChartState extends State<StakeChart> {
     final TextStyle style = TextStyle(
       color: AppColors.white,
       fontWeight: FontWeight.bold,
-      fontSize: min(18, 18 * chartWidth / 300),
+      fontSize: min(18, 18 * chartWidth / 300).sp,
     );
     return SideTitleWidget(
       fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
-      space: 16,
+      space: 16.h,
       meta: meta,
       child: Text(meta.formattedValue, style: style),
     );
@@ -62,11 +63,11 @@ class _StakeChartState extends State<StakeChart> {
     final TextStyle style = TextStyle(
       color: AppColors.red,
       fontWeight: FontWeight.bold,
-      fontSize: min(18, 18 * chartWidth / 300),
+      fontSize: min(18, 18 * chartWidth / 300).sp,
     );
     return SideTitleWidget(
       fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
-      space: 16,
+      space: 16.w,
       meta: meta,
       child: Text(meta.formattedValue, style: style),
     );
@@ -89,9 +90,9 @@ class _StakeChartState extends State<StakeChart> {
         Stack(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                bottom: 24,
-                top: 8,
+              padding: EdgeInsets.only(
+                bottom: 24.h,
+                top: 8.h,
               ),
               child: AspectRatio(
                 aspectRatio: 2,
@@ -117,14 +118,14 @@ class _StakeChartState extends State<StakeChart> {
                           }
                         },
                         touchTooltipData: LineTouchTooltipData(
-                          maxContentWidth: 100,
+                          maxContentWidth: 100.w,
                           getTooltipColor: (LineBarSpot touchedSpot) => Colors.white,
                           getTooltipItems: (List<LineBarSpot> touchedSpots) => touchedSpots
                               .map((LineBarSpot touchedSpot) {
                             final TextStyle textStyle = TextStyle(
                               color: touchedSpot.bar.gradient?.colors[0] ?? touchedSpot.bar.color!,
                               fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             );
                             return LineTooltipItem(
                               '${touchedSpot.x}, ${touchedSpot.y.toStringAsFixed(2)}',
@@ -133,13 +134,13 @@ class _StakeChartState extends State<StakeChart> {
                           }).toList(),
                         ),
                         getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) => spotIndexes.map((int spotIndex) => TouchedSpotIndicatorData(
-                              const FlLine(
+                              FlLine(
                                 color: Colors.black,
-                                strokeWidth: 1.5,
+                                strokeWidth: 1.5.w,
                               ),
                               FlDotData(
                                 getDotPainter: (FlSpot spot, double percent, LineChartBarData barData, int index) => FlDotCirclePainter(
-                                    radius: 6,
+                                    radius: 6.r,
                                     color: Colors.black,
                                     strokeColor: Colors.black,
                                   ),
@@ -152,7 +153,7 @@ class _StakeChartState extends State<StakeChart> {
                           spots: index == '3M' ? spots : index == '6M' ? spots2 : spots3,
                           isCurved: true,
                           isStrokeCapRound: true,
-                          barWidth: 3,
+                          barWidth: 3.w,
                           belowBarData: BarAreaData(
                             
                           ),
@@ -166,7 +167,7 @@ class _StakeChartState extends State<StakeChart> {
                                 .toList(),
                             isCurved: true,
                             isStrokeCapRound: true,
-                            barWidth: 3,
+                            barWidth: 3.w,
                             belowBarData: BarAreaData(
                               
                             ),
@@ -179,7 +180,7 @@ class _StakeChartState extends State<StakeChart> {
                         leftTitles: AxisTitles(
                           sideTitles: SideTitles(
                             getTitlesWidget: (double value, TitleMeta meta) => leftTitleWidgets(value, meta, constraints.maxWidth),
-                            reservedSize: 56,
+                            reservedSize: 56.w,
                           ),
                         ),
                         rightTitles: const AxisTitles(
@@ -188,7 +189,7 @@ class _StakeChartState extends State<StakeChart> {
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
                             getTitlesWidget: (double value, TitleMeta meta) => bottomTitleWidgets(value, meta, constraints.maxWidth),
-                            reservedSize: 36,
+                            reservedSize: 36.h,
                             interval: 1,
                           ),
                         ),
@@ -200,20 +201,20 @@ class _StakeChartState extends State<StakeChart> {
                         horizontalInterval: 1.5,
                         verticalInterval: 5,
                         checkToShowHorizontalLine: (double value) => value.toInt() == 0,
-                        getDrawingHorizontalLine: (_) => const FlLine(
+                        getDrawingHorizontalLine: (_) => FlLine(
                           color: Colors.transparent,
-                          strokeWidth: 0.8,
+                          strokeWidth: 0.8.w,
                         ),
                         getDrawingVerticalLine: (double value) {
                           if (touchedSpots.any((FlSpot spot) => spot.x == value)) {
-                            return const FlLine(
+                            return FlLine(
                               color: Colors.black,
-                              strokeWidth: 1.5,
+                              strokeWidth: 1.5.w,
                             );
                           }
-                          return const FlLine(
+                          return FlLine(
                             color: Colors.transparent,
-                            strokeWidth: 0.8,
+                            strokeWidth: 0.8.w,
                           );
                         },
                         checkToShowVerticalLine: (double value) => true,
@@ -227,7 +228,7 @@ class _StakeChartState extends State<StakeChart> {
             ),
           ],
         ),
-        const Gap(35),
+        Gap(35.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -240,22 +241,24 @@ class _StakeChartState extends State<StakeChart> {
                       changeChartTime(item);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 9),
+                      padding: EdgeInsets.symmetric(horizontal: 9.w),
                       child: Container(
-                        height: 32,
-                        width: 54,
+                        height: 32.h,
+                        width: 54.w,
                         decoration: BoxDecoration(
                           border: Border.all(
-                              color: index == item ? AppColors.blue : AppColors.transparent,),
+                              color: index == item ? AppColors.blue : AppColors.transparent,
+                              width: 1.w,
+                            ),
                           color: AppColors.greyVeryLight,
-                          borderRadius: BorderRadius.circular(40),),
+                          borderRadius: BorderRadius.circular(40.r),),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                           child: Center(
                             child: Text(
                               item,
                               style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w600,
                                   color: index == item ? AppColors.blue : AppColors.greyLight,),
                             ),

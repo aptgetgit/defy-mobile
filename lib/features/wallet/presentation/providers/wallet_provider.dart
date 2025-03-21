@@ -238,6 +238,34 @@ class WalletNotifier extends _$WalletNotifier {
     }
   }
 
+  // Handler methods for BaseScreenWithNav
+  void handleHidePressed() {
+    activateHiding();
+  }
+  
+  void handleSortPressed() {
+    showSortSheet();
+  }
+  
+  void handleWatchlistPressed() {
+    // This should trigger the watchlist functionality
+    // It would typically show the watchlist bottom sheet via a callback
+    // Since we can't directly show the bottom sheet from here, we'll set a flag
+    // that can be observed by the UI to show the sheet
+    state = state.copyWith(
+      isWatchlistActionTriggered: true,
+    );
+    
+    // Reset the trigger flag after a short delay
+    Future<void>.delayed(const Duration(milliseconds: 100), () {
+      if (state.isWatchlistActionTriggered) {
+        state = state.copyWith(
+          isWatchlistActionTriggered: false,
+        );
+      }
+    });
+  }
+
   // Helper methods for sorting
   void _sortTokensByPrice() {
     final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
@@ -296,6 +324,26 @@ class WalletNotifier extends _$WalletNotifier {
   void toggleBalanceVisibility(bool isHidden) {
     state = state.copyWith(
       isBalanceHidden: isHidden,
+    );
+  }
+
+  // Helper method to update displayed items
+  void _updateDisplayedItems() {
+    final List<Token> newDisplayedTokens = [];
+    
+    for (int i = 0; i < state.allTokens.length; i++) {
+      // Only add to displayed tokens if NOT (selected AND hideSelected)
+      if (!(state.selectedTokens.contains(i) && state.hideSelected)) {
+        newDisplayedTokens.add(state.allTokens[i]);
+      }
+    }
+    
+    // Similar logic for NFTs
+    // ...
+
+    state = state.copyWith(
+      displayedTokens: newDisplayedTokens,
+      // Update displayed NFTs too
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../providers/token_info_controller.dart';
 
@@ -51,6 +52,7 @@ class TabButton extends StatelessWidget {
 
   const TabButton({
     super.key,
+
     required this.title,
     required this.isSelected,
     required this.onTap,
@@ -63,11 +65,12 @@ class TabButton extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.h),
         child: Text(
           title,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 18.sp,
+            fontFamily: 'SFCompactRounded',
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             color: isSelected ? Colors.black : Colors.grey,
           ),

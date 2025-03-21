@@ -19,6 +19,7 @@ import '../../features/explore/presentation/scrceens/explore_pump_fun_screen.dar
 import '../../features/explore/presentation/scrceens/explore_pump_fun_token_transactions_screen.dart';
 import '../../features/explore/presentation/scrceens/explore_screen.dart';
 
+import '../../features/explore/presentation/scrceens/explore_tokens_screen.dart';
 import '../../features/explore/presentation/scrceens/pump_fun_token_preview_screen.dart';
 import '../../features/explore/presentation/scrceens/search_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
@@ -39,11 +40,13 @@ import '../../features/stake/presentation/stake_amount_screen.dart';
 import '../../features/stake/presentation/stake_amount_delegate_screen.dart';
 
 import '../../features/stake/presentation/stake_screen.dart';
+import '../../features/swap/presentation/screens/swap_amount_screen.dart';
 import '../../features/swap/presentation/screens/swap_screen.dart';
 import '../../features/token_info/presentation/tokens_info_screen.dart';
 import '../../features/wallet/presentation/wallet_more_screen.dart';
 import '../../features/wallet/presentation/wallet_screen.dart';
 import '../../features/wallet/presentation/wallet_search_screen.dart';
+import '../../features/wallet/presentation/qr_scanner_screen.dart';
 import '../../features/watchlist/presentation/watch_list_screen.dart';
 
 part 'explore_route.dart';
@@ -74,7 +77,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const ExploreScreenRoute().location,
+      initialLocation: const WalletScreenRoute().location,
       routes: $appRoutes,
       errorBuilder: (BuildContext context, GoRouterState state) =>
           const Scaffold(

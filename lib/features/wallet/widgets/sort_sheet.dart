@@ -1,11 +1,13 @@
+// Remove the filter section and related methods
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
 
-class SortSheet extends StatelessWidget {
-  
+class SortSheet extends StatefulWidget {
   const SortSheet({
     super.key,
     required this.isSortPriceButtonSelected,
@@ -29,16 +31,43 @@ class SortSheet extends StatelessWidget {
   final VoidCallback onDismiss;
 
   @override
+  State<SortSheet> createState() => _SortSheetState();
+}
+
+enum SortOption { price, balance, alphabet, change24hr }
+
+class _SortSheetState extends State<SortSheet> {
+  // Define enum for sort options
+  
+  // Selected sort option
+  SortOption? _selectedSortOption;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with the values provided - set only one as selected
+    if (widget.isSortPriceButtonSelected) {
+      _selectedSortOption = SortOption.price;
+    } else if (widget.isSortBalanceButtonSelected) {
+      _selectedSortOption = SortOption.balance;
+    } else if (widget.isSortAlphabetButtonSelected) {
+      _selectedSortOption = SortOption.alphabet;
+    } else if (widget.isSort24hrButtonSelected) {
+      _selectedSortOption = SortOption.change24hr;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) => Align(
     alignment: Alignment.bottomCenter,
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(32)),
+          borderRadius: BorderRadius.all(Radius.circular(32.r)),
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.only(left: 24.w, top: 12.h, bottom: 20.h),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom,
         ), // Adjust for safe area
@@ -49,28 +78,32 @@ class SortSheet extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text(
+                Text(
                   'Sort', 
                   style: TextStyle(
-                    fontSize: 18, 
+                    fontSize: 18.sp, 
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                IconButton(
-                  onPressed: onDismiss, 
-                  icon: const Icon(
-                    PhosphorIconsBold.x, 
-                    color: AppColors.greyLight, 
-                    size: 24,
+                Padding(
+                  padding: EdgeInsets.only(right: 6.w),
+                  child: IconButton(
+                    onPressed: widget.onDismiss, 
+                    icon: Icon(
+                      PhosphorIconsBold.x, 
+                      color: AppColors.greyLight, 
+                      size: 24.sp,
+                    ),
                   ),
                 ),
               ],
             ),
             _buildSortButtons(),
-            const Gap(16),
-            _buildFilterSection(),
-            const Gap(20),
-            _buildApplyButton(context),
+            Gap(24.h),
+            Padding(
+              padding: EdgeInsets.only(right: 24.w),
+              child: _buildApplyButton(context),
+            ),
           ],
         ),
       ),
@@ -79,42 +112,61 @@ class SortSheet extends StatelessWidget {
 
   Widget _buildSortButtons() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
+    children: <Widget>[
       Row(
         children: <Widget>[
           _buildSortButton(
             'Price',
-            isSortPriceButtonSelected,
-            onPriceToggled,
-            const Icon(
+            _selectedSortOption == SortOption.price,
+            () {
+              _selectSortOption(SortOption.price);
+              widget.onPriceToggled();
+            },
+            Icon(
               PhosphorIconsBold.trendUp,
-              size: 16,
+              size: 16.sp,
             ),
           ),
-          const Gap(12),
+          Gap(12.w),
           _buildSortButton(
             'Balance',
-            isSortBalanceButtonSelected,
-            onBalanceToggled,
+            _selectedSortOption == SortOption.balance,
+            () {
+              _selectSortOption(SortOption.balance);
+              widget.onBalanceToggled();
+            },
           ),
-          const Gap(12),
+          Gap(12.w),
           _buildSortButton(
             'Alphabet Order',
-            isSortAlphabetButtonSelected,
-            onAlphabetToggled,
+            _selectedSortOption == SortOption.alphabet,
+            () {
+              _selectSortOption(SortOption.alphabet);
+              widget.onAlphabetToggled();
+            },
           ),
         ],
       ),
-      const Gap(10),
+      Gap(6.h),
       _buildSortButton(
         '24 hr price change',
-        isSort24hrButtonSelected,
-        on24hrToggled,
+        _selectedSortOption == SortOption.change24hr,
+        () {
+          _selectSortOption(SortOption.change24hr);
+          widget.on24hrToggled();
+        },
         null,
-        150,
+        150.w,
       ),
     ],
   );
+  
+  // Helper method to select only one option
+  void _selectSortOption(SortOption option) {
+    setState(() {
+      _selectedSortOption = option;
+    });
+  }
 
   Widget _buildSortButton(
     String label,
@@ -125,8 +177,8 @@ class SortSheet extends StatelessWidget {
   ]) => FilledButton(
     style: FilledButton.styleFrom(
       backgroundColor: isSelected ? AppColors.blue : AppColors.greyVeryLight,
-      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 7),
-      fixedSize: fixedWidth != null ? Size(fixedWidth, 36) : null,
+      padding: EdgeInsets.symmetric(horizontal: 17.w, vertical: 7.h),
+      fixedSize: fixedWidth != null ? Size(fixedWidth, 36.h) : null,
     ),
     onPressed: onToggled,
     child: Row(
@@ -135,16 +187,17 @@ class SortSheet extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
             color: isSelected ? AppColors.white : AppColors.greyLight,
           ),
         ),
-        if (icon != null) ...[
-          const Gap(4),
+        if (icon != null) ...<Widget>[
+          Gap(4.w),
           IconTheme(
             data: IconThemeData(
               color: isSelected ? AppColors.white : AppColors.greyLight,
+              size: 16.sp,
             ),
             child: icon,
           ),
@@ -153,42 +206,21 @@ class SortSheet extends StatelessWidget {
     ),
   );
 
-  Widget _buildFilterSection() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text(
-        'Filter',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-      ),
-      _buildFilterOption(r'Hide small balances (0.1$)'),
-      _buildFilterOption('Filter spam tokens'),
-    ],
-  );
-
-  Widget _buildFilterOption(String label) => Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: <Widget>[
-      Text(
-        label, 
-        style: const TextStyle(color: AppColors.greyLight),
-      ),
-      Checkbox(
-        value: false,
-        side: const BorderSide(color: AppColors.greyLight, width: 2),
-        onChanged: (bool? value) {},
-      ),
-    ],
-  );
-
   Widget _buildApplyButton(BuildContext context) => ElevatedButton(
-    onPressed: onDismiss,
+    onPressed: () {
+      // Apply changes and dismiss
+      widget.onDismiss();
+    },
     style: ElevatedButton.styleFrom(
       backgroundColor: Colors.black,
-      minimumSize: const Size(double.infinity, 54),
+      minimumSize: Size(double.infinity, 54.h),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40.r),
+      ),
     ),
-    child: const Text(
+    child: Text(
       'Apply',
-      style: TextStyle(color: Colors.white, fontSize: 16),
+      style: TextStyle(color: Colors.white, fontSize: 16.sp),
     ),
   );
 }

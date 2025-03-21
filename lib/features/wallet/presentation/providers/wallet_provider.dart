@@ -198,46 +198,51 @@ class WalletNotifier extends _$WalletNotifier {
     );
   }
 
-  void toggleSortPrice() {
-    state = state.copyWith(
-      isSortPriceButtonSelected: !state.isSortPriceButtonSelected,
-    );
-    
-    if (state.isSortPriceButtonSelected) {
-      _sortTokensByPrice();
-    }
-  }
-  
-  void toggleSortBalance() {
-    state = state.copyWith(
-      isSortBalanceButtonSelected: !state.isSortBalanceButtonSelected,
-    );
-    
-    if (state.isSortBalanceButtonSelected) {
-      _sortTokensByBalance();
-    }
-  }
-  
-  void toggleSortAlphabet() {
-    state = state.copyWith(
-      isSortAlphabetButtonSelected: !state.isSortAlphabetButtonSelected,
-    );
-    
-    if (state.isSortAlphabetButtonSelected) {
-      _sortTokensAlphabetically();
-    }
-  }
-  
-  void toggleSort24hr() {
-    state = state.copyWith(
-      isSort24hrButtonSelected: !state.isSort24hrButtonSelected,
-    );
-    
-    if (state.isSort24hrButtonSelected) {
-      _sortTokensBy24hrChange();
-    }
-  }
+  // Replace these methods:
 
+void toggleSortPrice() {
+  state = state.copyWith(
+    isSortPriceButtonSelected: true,
+    isSortBalanceButtonSelected: false,
+    isSortAlphabetButtonSelected: false,
+    isSort24hrButtonSelected: false,
+  );
+  
+  _sortTokensByPrice();
+}
+
+void toggleSortBalance() {
+  state = state.copyWith(
+    isSortPriceButtonSelected: false,
+    isSortBalanceButtonSelected: true,
+    isSortAlphabetButtonSelected: false,
+    isSort24hrButtonSelected: false,
+  );
+  
+  _sortTokensByBalance();
+}
+
+void toggleSortAlphabet() {
+  state = state.copyWith(
+    isSortPriceButtonSelected: false,
+    isSortBalanceButtonSelected: false,
+    isSortAlphabetButtonSelected: true,
+    isSort24hrButtonSelected: false,
+  );
+  
+  _sortTokensAlphabetically();
+}
+
+void toggleSort24hr() {
+  state = state.copyWith(
+    isSortPriceButtonSelected: false,
+    isSortBalanceButtonSelected: false,
+    isSortAlphabetButtonSelected: false,
+    isSort24hrButtonSelected: true,
+  );
+  
+  _sortTokensBy24hrChange();
+}
   // Handler methods for BaseScreenWithNav
   void handleHidePressed() {
     activateHiding();

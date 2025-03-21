@@ -1,5 +1,3 @@
-// Remove the filter section and related methods
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -37,190 +35,180 @@ class SortSheet extends StatefulWidget {
 enum SortOption { price, balance, alphabet, change24hr }
 
 class _SortSheetState extends State<SortSheet> {
-  // Define enum for sort options
-  
-  // Selected sort option
-  SortOption? _selectedSortOption;
+  late SortOption _selectedSortOption;
 
   @override
   void initState() {
     super.initState();
-    // Initialize with the values provided - set only one as selected
+    // Initialize with the proper selected option
+    _selectedSortOption = _getCurrentSortOption();
+  }
+
+  // Get the current sort option based on props
+  SortOption _getCurrentSortOption() {
     if (widget.isSortPriceButtonSelected) {
-      _selectedSortOption = SortOption.price;
+      return SortOption.price;
     } else if (widget.isSortBalanceButtonSelected) {
-      _selectedSortOption = SortOption.balance;
+      return SortOption.balance;
     } else if (widget.isSortAlphabetButtonSelected) {
-      _selectedSortOption = SortOption.alphabet;
+      return SortOption.alphabet;
     } else if (widget.isSort24hrButtonSelected) {
-      _selectedSortOption = SortOption.change24hr;
+      return SortOption.change24hr;
     }
+    return SortOption.balance; // Default to balance
   }
 
   @override
-  Widget build(BuildContext context) => Align(
-    alignment: Alignment.bottomCenter,
-    child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(32.r)),
-        ),
-        padding: EdgeInsets.only(left: 24.w, top: 12.h, bottom: 20.h),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom,
-        ), // Adjust for safe area
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Sort', 
-                  style: TextStyle(
-                    fontSize: 18.sp, 
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 6.w),
-                  child: IconButton(
-                    onPressed: widget.onDismiss, 
-                    icon: Icon(
-                      PhosphorIconsBold.x, 
-                      color: AppColors.greyLight, 
-                      size: 24.sp,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            _buildSortButtons(),
-            Gap(24.h),
-            Padding(
-              padding: EdgeInsets.only(right: 24.w),
-              child: _buildApplyButton(context),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
+  void didUpdateWidget(SortSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update the selected option if props change
+    _selectedSortOption = _getCurrentSortOption();
+  }
 
-  Widget _buildSortButtons() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          _buildSortButton(
-            'Price',
-            _selectedSortOption == SortOption.price,
-            () {
-              _selectSortOption(SortOption.price);
-              widget.onPriceToggled();
-            },
-            Icon(
-              PhosphorIconsBold.trendUp,
-              size: 16.sp,
-            ),
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(32.r)),
           ),
-          Gap(12.w),
-          _buildSortButton(
-            'Balance',
-            _selectedSortOption == SortOption.balance,
-            () {
-              _selectSortOption(SortOption.balance);
-              widget.onBalanceToggled();
-            },
+          padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 14.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Sort',
+                      style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
+                    ),
+                    IconButton(
+                      onPressed: widget.onDismiss,
+                      icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
+                    ),
+                  ],
+                ),
+              ),
+              Gap(16.h),
+              _buildSortOptions(),
+              Gap(22.h),
+              Padding(
+                padding: EdgeInsets.only(right: 24.w),
+                child: ElevatedButton(
+                  onPressed: widget.onDismiss,
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(44.w),
+                    ),
+                    backgroundColor: AppColors.blue,
+                    minimumSize: Size(double.infinity, 54.h),
+                  ),
+                  child: Text(
+                    'Apply',
+                    style: TextStyle(color: AppColors.white, fontSize: 16.sp),
+                  ),
+                ),
+              ),
+            ],
           ),
-          Gap(12.w),
-          _buildSortButton(
-            'Alphabet Order',
-            _selectedSortOption == SortOption.alphabet,
-            () {
-              _selectSortOption(SortOption.alphabet);
-              widget.onAlphabetToggled();
-            },
-          ),
-        ],
+        ),
       ),
-      Gap(6.h),
-      _buildSortButton(
-        '24 hr price change',
-        _selectedSortOption == SortOption.change24hr,
-        () {
-          _selectSortOption(SortOption.change24hr);
-          widget.on24hrToggled();
-        },
-        null,
-        150.w,
+    );
+  }
+
+  Widget _buildSortOptions() => Column(
+    children: <Widget>[
+      Padding(
+        padding: EdgeInsets.only(right: 6.w),
+        child: _buildSortOptionRow(
+          'Price',
+          _selectedSortOption == SortOption.price,
+          () {
+            setState(() {
+              _selectedSortOption = SortOption.price;
+            });
+            widget.onPriceToggled();
+          },
+        ),
+      ),
+      Gap(16.h),
+      Padding(
+        padding: EdgeInsets.only(right: 6.w),
+        child: _buildSortOptionRow(
+          'Balance',
+          _selectedSortOption == SortOption.balance,
+          () {
+            setState(() {
+              _selectedSortOption = SortOption.balance;
+            });
+            widget.onBalanceToggled();
+          },
+        ),
+      ),
+      Gap(16.h),
+      Padding(
+        padding: EdgeInsets.only(right: 6.w),
+        child: _buildSortOptionRow(
+          'Alphabet Order',
+          _selectedSortOption == SortOption.alphabet,
+          () {
+            setState(() {
+              _selectedSortOption = SortOption.alphabet;
+            });
+            widget.onAlphabetToggled();
+          },
+        ),
+      ),
+      Gap(16.h),
+      Padding(
+        padding: EdgeInsets.only(right: 6.w),
+        child: _buildSortOptionRow(
+          '24 hr price change',
+          _selectedSortOption == SortOption.change24hr,
+          () {
+            setState(() {
+              _selectedSortOption = SortOption.change24hr;
+            });
+            widget.on24hrToggled();
+          },
+        ),
       ),
     ],
   );
-  
-  // Helper method to select only one option
-  void _selectSortOption(SortOption option) {
-    setState(() {
-      _selectedSortOption = option;
-    });
-  }
 
-  Widget _buildSortButton(
+  Widget _buildSortOptionRow(
     String label,
     bool isSelected,
-    VoidCallback onToggled, [
-    Widget? icon,
-    double? fixedWidth,
-  ]) => FilledButton(
-    style: FilledButton.styleFrom(
-      backgroundColor: isSelected ? AppColors.blue : AppColors.greyVeryLight,
-      padding: EdgeInsets.symmetric(horizontal: 17.w, vertical: 7.h),
-      fixedSize: fixedWidth != null ? Size(fixedWidth, 36.h) : null,
-    ),
-    onPressed: onToggled,
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: isSelected ? AppColors.white : AppColors.greyLight,
-          ),
+    VoidCallback onTap,
+  ) => Row(
+    children: <Widget>[
+      Text(
+        label,
+        style: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w500,
+          color: isSelected ? AppColors.blue : AppColors.black,
         ),
-        if (icon != null) ...<Widget>[
-          Gap(4.w),
-          IconTheme(
-            data: IconThemeData(
-              color: isSelected ? AppColors.white : AppColors.greyLight,
-              size: 16.sp,
-            ),
-            child: icon,
-          ),
-        ],
-      ],
-    ),
-  );
-
-  Widget _buildApplyButton(BuildContext context) => ElevatedButton(
-    onPressed: () {
-      // Apply changes and dismiss
-      widget.onDismiss();
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.black,
-      minimumSize: Size(double.infinity, 54.h),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(40.r),
       ),
-    ),
-    child: Text(
-      'Apply',
-      style: TextStyle(color: Colors.white, fontSize: 16.sp),
-    ),
+      const Spacer(),
+      Transform.scale(
+        scale: 1.25,
+        child: Radio<bool>(
+          value: true,
+          groupValue: isSelected,
+          activeColor: AppColors.blue,
+          onChanged: (_) => onTap(),
+        ),
+      ),
+      Gap(12.w),
+    ],
   );
 }

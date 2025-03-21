@@ -38,7 +38,7 @@ class WalletState with _$WalletState {
     // Sort options
     @Default(false) bool isSortSheetVisible,
     @Default(false) bool isSortPriceButtonSelected,
-    @Default(false) bool isSortBalanceButtonSelected,
+    @Default(true) bool isSortBalanceButtonSelected,
     @Default(false) bool isSortAlphabetButtonSelected,
     @Default(false) bool isSort24hrButtonSelected,
   }) = _WalletState;

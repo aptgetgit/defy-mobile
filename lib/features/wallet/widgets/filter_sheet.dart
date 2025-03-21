@@ -42,48 +42,54 @@ class _FilterSheetState extends State<FilterSheet> {
   Widget build(BuildContext context) => Align(
     alignment: Alignment.bottomCenter,
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(32.r)),
         ),
-        padding: EdgeInsets.only(left: 24.w, top: 12.h, bottom: 20.h),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom,
-        ), // Adjust for safe area
+        padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Filter', 
-                  style: TextStyle(
-                    fontSize: 18.sp, 
-                    fontWeight: FontWeight.w600,
+            Padding(
+              padding: EdgeInsets.only(right: 14.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Filter',
+                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 6.w),
-                  child: IconButton(
-                    onPressed: widget.onDismiss, 
-                    icon: Icon(
-                      PhosphorIconsBold.x, 
-                      color: AppColors.greyLight, 
-                      size: 24.sp,
-                    ),
+                  IconButton(
+                    onPressed: widget.onDismiss,
+                    icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
+            Gap(16.h),
             _buildFilterSection(),
-            Gap(24.h),
+            Gap(22.h),
             Padding(
               padding: EdgeInsets.only(right: 24.w),
-              child: _buildApplyButton(context),
+              child: ElevatedButton(
+                onPressed: () {
+                  widget.onDismiss();
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(44.w),
+                  ),
+                  backgroundColor: AppColors.blue, // Changed to blue to match balance sheet
+                  minimumSize: Size(double.infinity, 54.h),
+                ),
+                child: Text(
+                  'Apply',
+                  style: TextStyle(color: AppColors.white, fontSize: 16.sp),
+                ),
+              ),
             ),
           ],
         ),
@@ -100,6 +106,7 @@ class _FilterSheetState extends State<FilterSheet> {
           widget.onHideSmallBalancesChanged(_hideSmallBalances);
         });
       }),
+      Gap(16.h),
       _buildFilterOption('Filter spam tokens', _filterSpamTokens, (bool? value) {
         setState(() {
           _filterSpamTokens = !_filterSpamTokens;
@@ -110,20 +117,20 @@ class _FilterSheetState extends State<FilterSheet> {
   );
 
   Widget _buildFilterOption(String label, bool isChecked, ValueChanged<bool?> onChanged) => Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: <Widget>[
       Text(
         label, 
-        style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight),
+        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500, color: AppColors.black),
       ),
+      const Spacer(),
       Padding(
         padding: EdgeInsets.only(right: 12.w),
         child: Transform.scale(
-          scale: 0.9,
+          scale: 1.25,
           child: Checkbox(
             value: isChecked,
             activeColor: AppColors.blue,
-            side: BorderSide(color: AppColors.greyLight, width: 2.w),
+            side: BorderSide(color: AppColors.greyLight, width: 1.5.w),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.r),
             ),
@@ -132,23 +139,5 @@ class _FilterSheetState extends State<FilterSheet> {
         ),
       ),
     ],
-  );
-
-  Widget _buildApplyButton(BuildContext context) => ElevatedButton(
-    onPressed: () {
-      // Apply changes and dismiss
-      widget.onDismiss();
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.black,
-      minimumSize: Size(double.infinity, 54.h),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(40.r),
-      ),
-    ),
-    child: Text(
-      'Apply',
-      style: TextStyle(color: Colors.white, fontSize: 16.sp),
-    ),
   );
 }

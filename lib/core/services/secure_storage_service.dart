@@ -1,11 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mutex/mutex.dart';
 
-import '../../shared/utils/crypto_utils.dart';
 import '../../shared/utils/hex_utils.dart';
 import '../../shared/utils/mutex_utils.dart';
 import '../error/exception_with_stack_trace.dart';
@@ -20,10 +18,7 @@ class SecureStorageService {
     if (key.trim().isEmpty) {
       throw ArgumentError.value(key, 'key', 'Storage key cannot be empty');
     }
-
-    final Uint8List encodedBytes = utf8.encode(key);
-    final Uint8List hash = computeSha256Hash(encodedBytes);
-    return bytesToHex(hash);
+    return bytesToHex(utf8.encode(key));
   }
 
   TaskEither<ExceptionWithStackTrace, Option<String>> read({
@@ -121,8 +116,11 @@ class SecureStorageService {
         readAllOperation = TaskEither<ExceptionWithStackTrace, Set<String>>(
           () async {
             try {
-              final Set<String> allValues =
-                  (await _storage.readAll()).keys.toSet();
+              final Set<String> allValues = (await _storage.readAll())
+                  .keys
+                  .map(hexToBytes)
+                  .map(utf8.decode)
+                  .toSet();
               AppLogger.debug(
                 'Read all stored values: ${allValues.length} items',
               );

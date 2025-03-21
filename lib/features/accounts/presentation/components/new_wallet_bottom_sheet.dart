@@ -62,7 +62,8 @@ class NewWalletBottomSheetState extends ConsumerState<NewWalletBottomSheet> {
                   const SizedBox(height: 20),
                   GestureDetector(
                     onTap: () async {
-                      await const CreateWalletScreenRoute().push<void>(context);
+                      await const CreateWalletSelectSeedPhraseScreenRoute()
+                          .push<void>(context);
                     },
                     child: const NewWalletTile(
                       color: AppColors.blue,

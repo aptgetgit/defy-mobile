@@ -92,14 +92,14 @@ help:
 # Clean targets with proper directory handling
 clean-flutter:
 	@echo "📱 Cleaning Flutter build..."
-	@cd $(PROJECT_ROOT) && $(FLUTTER_CMD) clean || \
+	@cd "$(PROJECT_ROOT)" && $(FLUTTER_CMD) clean || \
 		(echo "$(COLOR_RED)❌ Flutter clean failed$(COLOR_RESET)" && exit 1)
 
 clean-builder:
 	@echo "🗑️  Cleaning build_runner generated files..."
-	@cd $(PROJECT_ROOT) && $(BUILD_RUNNER_CMD) clean || \
+	@cd "$(PROJECT_ROOT)" && $(BUILD_RUNNER_CMD) clean || \
 		(echo "$(COLOR_RED)❌ Build runner clean failed$(COLOR_RESET)" && exit 1)
-	@cd $(PROJECT_ROOT) && for pattern in $(GENERATED_FILE_PATTERNS); do \
+	@cd "$(PROJECT_ROOT)" && for pattern in $(GENERATED_FILE_PATTERNS); do \
 		find . -type f -name "$$pattern" ! -path "*/packages/*" -delete; \
 	done
 
@@ -127,9 +127,9 @@ clean-dart-tool:
 
 clean-objectbox:
 	@echo "🗑️  Cleaning ObjectBox files..."
-	@find $(LIB_DIR) -type f -name "objectbox-model.json" ! -path "*/packages/*" -delete
-	@find $(LIB_DIR) -type f -name "*.objectbox.g.dart" ! -path "*/packages/*" -delete
-	@rm -rf $(DART_TOOL_DIR)/objectbox
+	@find "$(LIB_DIR)" -type f -name "objectbox-model.json" ! -path "*/packages/*" -delete
+	@find "$(LIB_DIR)" -type f -name "*.objectbox.g.dart" ! -path "*/packages/*" -delete
+	@rm -rf "$(DART_TOOL_DIR)"/objectbox
 
 clean-l10n:
 	@echo "🗑️  Cleaning l10n files..."
@@ -183,7 +183,7 @@ generate: check-environment generate-icons generate-splash generate-l10n generat
 # Dependencies management
 deps-get:
 	@echo "📦 Getting dependencies..."
-	@cd $(PROJECT_ROOT) && $(FLUTTER_CMD) pub get || \
+	@cd "$(PROJECT_ROOT)" && $(FLUTTER_CMD) pub get || \
 		(echo "$(COLOR_RED)❌ Failed to get dependencies$(COLOR_RESET)" && exit 1)
 
 deps-upgrade:

@@ -25,34 +25,34 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 6966188268737251984),
+      id: const obx_int.IdUid(1, 5389984351430869127),
       name: 'AccountMetadataLocalModel',
-      lastPropertyId: const obx_int.IdUid(5, 362116722799863774),
+      lastPropertyId: const obx_int.IdUid(5, 6080641819850069397),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 8591651327165137245),
+            id: const obx_int.IdUid(1, 4944524196790501538),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 124525059975567445),
+            id: const obx_int.IdUid(2, 708379554492586968),
             name: 'label',
             type: 9,
             flags: 34848,
-            indexId: const obx_int.IdUid(1, 285699786043246574)),
+            indexId: const obx_int.IdUid(1, 7354845611337212334)),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 3909809432722967656),
+            id: const obx_int.IdUid(3, 827368855708821529),
             name: 'iconUri',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 2864185970077729649),
+            id: const obx_int.IdUid(4, 2001464875347443132),
             name: 'backgroundColor',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 362116722799863774),
+            id: const obx_int.IdUid(5, 6080641819850069397),
             name: 'accountAddress',
             type: 23,
             flags: 8192)
@@ -60,28 +60,28 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(2, 504030744805057534),
+      id: const obx_int.IdUid(2, 7061652221514951747),
       name: 'AptosAccountLocalModel',
-      lastPropertyId: const obx_int.IdUid(4, 1857897372357528645),
+      lastPropertyId: const obx_int.IdUid(4, 7883628465527445621),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 2376533172152653193),
+            id: const obx_int.IdUid(1, 2775525329132178033),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 2542105273405527080),
+            id: const obx_int.IdUid(2, 7449119186579272697),
             name: 'accountAddress',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 926102608804988351),
+            id: const obx_int.IdUid(3, 4398984153884096714),
             name: 'authenticationKey',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 1857897372357528645),
+            id: const obx_int.IdUid(4, 7883628465527445621),
             name: 'authenticationKeyScheme',
             type: 2,
             flags: 8192)
@@ -89,23 +89,23 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(3, 2971142519272508036),
+      id: const obx_int.IdUid(3, 1971551992524266107),
       name: 'Ed25519AuthKeyConfigLocalModel',
-      lastPropertyId: const obx_int.IdUid(3, 2504328720109427177),
+      lastPropertyId: const obx_int.IdUid(3, 1101378516693535392),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 7172960098558308990),
+            id: const obx_int.IdUid(1, 9200201084146837484),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 2955377821842540541),
+            id: const obx_int.IdUid(2, 5559565794871153179),
             name: 'authenticationKey',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 2504328720109427177),
+            id: const obx_int.IdUid(3, 1101378516693535392),
             name: 'jwkKeyId',
             type: 23,
             flags: 8192)
@@ -113,28 +113,28 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(4, 6791309456809860269),
+      id: const obx_int.IdUid(4, 731290764586702093),
       name: 'HDKeyLocalModel',
-      lastPropertyId: const obx_int.IdUid(4, 724882980917699865),
+      lastPropertyId: const obx_int.IdUid(4, 220615489999696671),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 619363726769511584),
+            id: const obx_int.IdUid(1, 7502040918733076854),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 1372600578267188696),
+            id: const obx_int.IdUid(2, 5321134215521694388),
             name: 'jwkKeyId',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5843541119093908947),
+            id: const obx_int.IdUid(3, 5318107701513500138),
             name: 'derivationPath',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 724882980917699865),
+            id: const obx_int.IdUid(4, 220615489999696671),
             name: 'entropyHash',
             type: 23,
             flags: 8192)
@@ -142,38 +142,38 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(5, 1330081113639627975),
+      id: const obx_int.IdUid(5, 2916363506101525519),
       name: 'JwkLocalModel',
-      lastPropertyId: const obx_int.IdUid(6, 1620044070906219087),
+      lastPropertyId: const obx_int.IdUid(6, 7043996794608995363),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 8221602537891136574),
+            id: const obx_int.IdUid(1, 1344651106398700483),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 1554948419623347903),
+            id: const obx_int.IdUid(2, 1093561718755637911),
             name: 'keyId',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 388321986835863811),
+            id: const obx_int.IdUid(3, 2152974921005412218),
             name: 'keyType',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 6000826812002759786),
+            id: const obx_int.IdUid(4, 2060278619721004911),
             name: 'curve',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 201633575046201068),
+            id: const obx_int.IdUid(5, 7905337843069991042),
             name: 'x',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 1620044070906219087),
+            id: const obx_int.IdUid(6, 7043996794608995363),
             name: 'y',
             type: 23,
             flags: 8192)
@@ -181,23 +181,23 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(6, 459487950172663232),
+      id: const obx_int.IdUid(6, 539282946733881614),
       name: 'SigningKeyLocalModel',
-      lastPropertyId: const obx_int.IdUid(3, 2754091042586808594),
+      lastPropertyId: const obx_int.IdUid(3, 7065044289001386399),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 2684321657433352982),
+            id: const obx_int.IdUid(1, 8324608966242344455),
             name: 'localId',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 661408263443863708),
+            id: const obx_int.IdUid(2, 1834867772378708053),
             name: 'jwkKeyId',
             type: 23,
             flags: 8192),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 2754091042586808594),
+            id: const obx_int.IdUid(3, 7065044289001386399),
             name: 'jwkThumbprint',
             type: 23,
             flags: 8192)
@@ -241,8 +241,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(6, 459487950172663232),
-      lastIndexId: const obx_int.IdUid(1, 285699786043246574),
+      lastEntityId: const obx_int.IdUid(6, 539282946733881614),
+      lastIndexId: const obx_int.IdUid(1, 7354845611337212334),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],

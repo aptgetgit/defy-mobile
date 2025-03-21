@@ -53,13 +53,37 @@ class _CreateWalletSelectSeedPhraseScreenState
             return <String>[];
           }
 
-          final List<String> mnemonics =
-              entropySet.map(entropyToMnemonic).toList();
+          try {
+            final List<String> mnemonics = entropySet
+                .map((Uint8List entropy) {
+                  try {
+                    AppLogger.debug('Processing entropy: $entropy');
 
-          AppLogger.debug(
-            '✅ Successfully retrieved ${mnemonics.length} mnemonics',
-          );
-          return mnemonics;
+                    // Ensure entropy data is valid
+                    if (entropy.isEmpty) {
+                      throw const FormatException('Entropy is empty');
+                    }
+
+                    // Convert entropy to mnemonic safely
+                    return entropyToMnemonic(entropy);
+                  } on Exception catch (e, stackTrace) {
+                    AppLogger.error('🔴 Error decoding entropy: $e');
+                    AppLogger.error('🔴 Stack trace: $stackTrace');
+                    return ''; // Return empty string to maintain list integrity
+                  }
+                })
+                .where((String mnemonic) => mnemonic.isNotEmpty)
+                .toList(); // Remove empty entries
+
+            AppLogger.debug(
+              '✅ Successfully retrieved ${mnemonics.length} mnemonics',
+            );
+            return mnemonics;
+          } on Exception catch (e, stackTrace) {
+            AppLogger.error('🔴 Error processing mnemonics: $e');
+            AppLogger.error('🔴 Stack trace: $stackTrace');
+            return <String>[];
+          }
         },
       );
     } on Exception catch (e, stackTrace) {
@@ -176,6 +200,7 @@ class _CreateWalletSelectSeedPhraseScreenState
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<Future<List<String>>>('mnemonicsFuture', mnemonicsFuture));
+    properties.add(DiagnosticsProperty<Future<List<String>>>(
+        'mnemonicsFuture', mnemonicsFuture));
   }
 }

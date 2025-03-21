@@ -38,7 +38,9 @@ class ActiveAccount extends _$ActiveAccount {
       );
     }
 
-    if (activeAccount.isRight() && activeAccount.getRight().isSome() && activeAccount.getRight().toNullable()!.isSome()) {
+    if (activeAccount.isRight() &&
+        activeAccount.getRight().isSome() &&
+        activeAccount.getRight().toNullable()!.isSome()) {
       return activeAccount.getRight().toNullable()!;
     }
 
@@ -57,21 +59,22 @@ class ActiveAccount extends _$ActiveAccount {
         accounts.getRight().toNullable()!;
 
     if (accountsSet.isNotEmpty) {
-      await setActiveAccount
-          .call(accountAddress: accountsSet.first.accountAddress);
+      await setActiveAccount.call(
+        accountAddress: accountsSet.first.accountAddress,
+      );
       return Option<AptosAccountWithMetadata>.of(accountsSet.first);
     }
 
     return const Option<AptosAccountWithMetadata>.none();
   }
 
-  Future<void> setActiveAccount(AccountAddress accountAddress) async {
+  Future<void> setActiveAccount({required AccountAddress accountAddress}) async {
     final SetActiveAccountUseCase setActiveAccount = ref.read(
       setActiveAccountUseCaseProvider,
     );
     state = const AsyncValue<Option<AptosAccountWithMetadata>>.loading();
-    final Either<ExceptionWithStackTrace, Unit> result =
-        await setActiveAccount.call(accountAddress: accountAddress);
+    final Either<ExceptionWithStackTrace, Unit> result = await setActiveAccount
+        .call(accountAddress: accountAddress);
 
     state = result.fold(
       (ExceptionWithStackTrace left) =>

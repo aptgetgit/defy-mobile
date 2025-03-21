@@ -93,7 +93,7 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
           widget.token.name, 
           style: TextStyle(
             fontSize: 18.sp, 
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
             color: widget.isSelected && widget.isHiding ? Colors.grey : Colors.black,
           ),
         ),
@@ -101,7 +101,7 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
           '${widget.token.amount} ${widget.token.currency}', 
           style: TextStyle(
             fontSize: 14.sp, 
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
             color: widget.isSelected && widget.isHiding ? Colors.grey : AppColors.greyLight,
           ),
         ),

@@ -407,7 +407,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
                 children: <Widget>[
                   Text(
                     'Business',
-                    style: TextStyle(fontSize: 14.sp, color: AppColors.blue,fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 14.sp, color: AppColors.blue,fontWeight: FontWeight.w500),
                   ),
                   Padding(
                     padding:  EdgeInsets.only(top: 3.h),

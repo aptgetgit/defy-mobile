@@ -32,44 +32,51 @@ class _BalanceSheetState extends State<BalanceSheet> {
   Widget build(BuildContext context) => Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h), // Reduced vertical padding
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(28.r)),
+              borderRadius: BorderRadius.all(Radius.circular(32.r)),
             ),
-            padding: EdgeInsets.only(bottom: 20.h, top: 10.h, left: 20.w),
-            margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom,
-            ),
+            padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w), // Reduced bottom padding
+            
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(right: 8.w),
+                  padding: EdgeInsets.only(right: 14.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         'Balances',
-                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
                       ),
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 20.sp),
+                        icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
                       ),
                     ],
                   ),
                 ),
-                Gap(12.h),
-                _buildOptionRow('🚀', 'Total Balance', _currentSelection, _handleOptionSelected),
-                Gap(18.h),
-                _buildOptionRow('🏋', 'NFT Only', _currentSelection, _handleOptionSelected),
-                Gap(18.h),
-                _buildOptionRow('🚀', 'Token Only', _currentSelection, _handleOptionSelected),
-                Gap(20.h),
+                Gap(16.h),
                 Padding(
-                  padding: EdgeInsets.only(right: 20.w),//
+                  padding:  EdgeInsets.only(right: 6.w),
+                  child: _buildOptionRow('🚀', 'Total Balance', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
+                ),
+                Gap(16.h),
+                Padding(
+                  padding:  EdgeInsets.only(right: 6.w),
+                  child: _buildOptionRow('🏋', 'NFT Only', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
+                ),
+                Gap(16.h),
+                Padding(
+                  padding:  EdgeInsets.only(right: 6.w),
+                  child: _buildOptionRow('🚀', 'Token Only', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
+                ),
+                Gap(22.h), // Reduced gap
+                Padding(
+                  padding: EdgeInsets.only(right: 24.w),
                   child: ElevatedButton(
                     onPressed: () {
                       // Call the parent's callback with the selected option
@@ -79,7 +86,7 @@ class _BalanceSheetState extends State<BalanceSheet> {
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40.r),
+                        borderRadius: BorderRadius.circular(44.w),
                       ),
                       backgroundColor: AppColors.blue,
                       minimumSize: Size(double.infinity, 54.h),
@@ -103,33 +110,48 @@ class _BalanceSheetState extends State<BalanceSheet> {
     });
   }
 
-  Widget _buildOptionRow(String emoji, String title, String selectedOption, Function(String) onTap) => Row(
+  Widget _buildOptionRow(
+    String emoji, 
+    String title, 
+    String selectedOption, 
+    Function(String) onTap, 
+    {double? fontSize}
+  ) => Row(
     children: <Widget>[
-      Text(title, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500)),
+      Text(
+        title, 
+        style: TextStyle(
+          fontSize: fontSize ?? 16.sp, 
+          fontWeight: FontWeight.w500
+        )
+      ),
       const Spacer(),
       // Custom radio button that updates immediately
-      Theme(
-        data: Theme.of(context).copyWith(
-          unselectedWidgetColor: AppColors.greyLight, // Set inactive color to grey
-          radioTheme: RadioThemeData(
-            fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
-              if (states.contains(WidgetState.selected)) {
-                return AppColors.blue; // Active color
-              }
-              return AppColors.greyLight; // Inactive color
-            }),
+      Transform.scale(
+        scale: 1.25,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            unselectedWidgetColor: AppColors.greyLight, // Set inactive color to grey
+            radioTheme: RadioThemeData(
+              fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppColors.blue; // Active color
+                }
+                return AppColors.greyLight; // Inactive color
+              }),
+            ),
           ),
-        ),
-        child: Radio<String>(
-          activeColor: AppColors.blue,
-          visualDensity: VisualDensity.compact,
-          value: title,
-          groupValue: selectedOption,
-          onChanged: (String? value) {
-            if (value != null) {
-              onTap(value);
-            }
-          },
+          child: Radio<String>(
+            activeColor: AppColors.blue,
+            visualDensity: VisualDensity.compact,
+            value: title,
+            groupValue: selectedOption,
+            onChanged: (String? value) {
+              if (value != null) {
+                onTap(value);
+              }
+            },
+          ),
         ),
       ),
       Gap(12.w),

@@ -47,7 +47,7 @@ class WalletNameSection extends StatelessWidget {
                   style: TextStyle(
                     color: AppColors.blue,
                     fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

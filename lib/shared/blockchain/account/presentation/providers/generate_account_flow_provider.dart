@@ -21,6 +21,41 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
   @override
   GenerateAccountFlowState build() => const GenerateAccountFlowState.idle();
 
+  Future<void> generateMnemonic({int strength = 128}) async {
+    state = const GenerateAccountFlowState.importing();
+
+    try {
+      final Either<ExceptionWithStackTrace, Uint8List> entropyEither = await ref
+          .read(generateMnemonicUseCaseProvider)
+          .call(strength: strength);
+
+      if (entropyEither.isLeft()) {
+        final ExceptionWithStackTrace exceptionWithStackTrace =
+            entropyEither.getLeft().toNullable()!;
+        AppLogger.error(
+          'Failed to generate mnemonic',
+          error: exceptionWithStackTrace.exception,
+          stackTrace: exceptionWithStackTrace.stackTrace,
+        );
+
+        state = const GenerateAccountFlowState.error(
+          'Failed to generate mnemonic',
+        );
+      }
+
+      final Uint8List entropyHash = entropyEither.getRight().toNullable()!;
+
+      state = GenerateAccountFlowState.waitingForMetadata(
+        keySource: KeySource.mnemonic(
+          entropyHash: entropyHash,
+          accountIndex: const Option<int>.none(),
+        ),
+      );
+    } on Exception catch (e) {
+      state = GenerateAccountFlowState.error(e.toString());
+    }
+  }
+
   Future<void> importMnemonic(String mnemonic) async {
     state = const GenerateAccountFlowState.importing();
 

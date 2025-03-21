@@ -13,10 +13,10 @@ class CreateWalletNotifier extends _$CreateWalletNotifier {
   @override
   CreateWalletState build() => const CreateWalletState();
 
-  Future<void> importMnemonic(String mnemonic) async {
+  Future<void> generateMnemonic() async {
     state = state.copyWith(error: null);
     try {
-      await ref.read(generateAccountFlowProvider.notifier).importMnemonic(mnemonic);
+      await ref.read(generateAccountFlowProvider.notifier).generateMnemonic();
     } on Exception catch (e) {
       state = state.copyWith(error: e.toString());
     }

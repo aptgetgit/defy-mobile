@@ -12,12 +12,10 @@ import '../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/navigation/routes/router.dart';
 import '../../../../shared/blockchain/account/domain/entities/aptos_account_with_metadata.dart';
-import '../../../../shared/blockchain/account/domain/usecases/generate_mnemonic_usecase.dart';
 import '../../../../shared/blockchain/account/domain/usecases/list_aptos_account_usecase.dart';
 import '../../../../shared/blockchain/account/presentation/providers/generate_account_flow_provider.dart';
 import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
 import '../../../../shared/blockchain/account/presentation/states/generate_account_flow_state.dart';
-import '../../../../shared/utils/mnemonic_utils.dart';
 import '../../../common/presentation/widgets/black_button.dart';
 import '../../constants/create_wallet_ui_constants.dart';
 import '../components/create_wallet_color_section.dart';
@@ -199,31 +197,7 @@ class CreateWalletScreenState extends ConsumerState<CreateWalletScreen>
   }
 
   Future<void> _generateMnemonic() async {
-    final GenerateMnemonicUseCase generateMnemonicUseCase =
-        ref.read(generateMnemonicUseCaseProvider);
-
-    final Either<ExceptionWithStackTrace, Uint8List> result =
-        await generateMnemonicUseCase.call(
-      strength: 128,
-    );
-
-    await result.fold(
-      (ExceptionWithStackTrace failure) {
-        AppLogger.error('Failed to generate mnemonic: ${failure.exception}');
-      },
-      (Uint8List entropy) async {
-        final String mnemonic = entropyToMnemonic(entropy);
-        AppLogger.debug('Generated Mnemonic: $mnemonic');
-        // await _importMnemonic(mnemonic);
-      },
-    );
-  }
-
-  Future<void> _importMnemonic(String mnemonic) async {
-    final CreateWalletNotifier createWalletNotifier =
-        ref.read(createWalletNotifierProvider.notifier);
-
-    await createWalletNotifier.importMnemonic(mnemonic);
+    await ref.watch(generateAccountFlowProvider.notifier).generateMnemonic();
   }
 
   @override

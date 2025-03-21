@@ -38,7 +38,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       width: 72,
                       height: 72,
                     ).animate().slideY(
-                        duration: 600.ms, begin: -1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: -1,
+                          curve: Curves.easeOutBack,
+                        ),
                     _buildAnimatedImage(
                       asset: 'assets/images/dive-in-2.png',
                       top: 80,
@@ -46,7 +49,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       width: 64,
                       height: 64,
                     ).animate().slideX(
-                        duration: 600.ms, begin: 1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: 1,
+                          curve: Curves.easeOutBack,
+                        ),
                     _buildAnimatedImage(
                       asset: 'assets/images/dive-in-3.png',
                       top: 220,
@@ -54,7 +60,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       width: 76,
                       height: 76,
                     ).animate().slideX(
-                        duration: 600.ms, begin: 1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: 1,
+                          curve: Curves.easeOutBack,
+                        ),
                     _buildAnimatedImage(
                       asset: 'assets/images/dive-in-4.png',
                       bottom: 400,
@@ -62,7 +71,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       width: 62,
                       height: 62,
                     ).animate().slideX(
-                        duration: 600.ms, begin: 1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: 1,
+                          curve: Curves.easeOutBack,
+                        ),
                     _buildAnimatedImage(
                       asset: 'assets/images/dive-in-5.png',
                       bottom: 40,
@@ -70,7 +82,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       width: 92,
                       height: 92,
                     ).animate().slideX(
-                        duration: 600.ms, begin: 1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: 1,
+                          curve: Curves.easeOutBack,
+                        ),
                     _buildAnimatedImage(
                       asset: 'assets/images/dive-in-6.png',
                       bottom: 0,
@@ -78,7 +93,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       width: 94,
                       height: 94,
                     ).animate().slideX(
-                        duration: 600.ms, begin: -1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: -1,
+                          curve: Curves.easeOutBack,
+                        ),
                     _buildAnimatedImage(
                       asset: 'assets/images/dive-in-7.png',
                       bottom: 260,
@@ -86,7 +104,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       width: 102,
                       height: 102,
                     ).animate().slideX(
-                        duration: 600.ms, begin: -1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: -1,
+                          curve: Curves.easeOutBack,
+                        ),
                     _buildAnimatedImage(
                       asset: 'assets/images/dive-in-8.png',
                       top: 300,
@@ -94,7 +115,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       width: 80,
                       height: 80,
                     ).animate().slideX(
-                        duration: 600.ms, begin: -1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: -1,
+                          curve: Curves.easeOutBack,
+                        ),
                     Positioned(
                       bottom: 260,
                       right: -20,
@@ -112,7 +136,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                         ),
                       ),
                     ).animate().slideX(
-                        duration: 600.ms, begin: 1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: 1,
+                          curve: Curves.easeOutBack,
+                        ),
                     Positioned(
                       top: 160,
                       left: 10,
@@ -130,7 +157,10 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                         ),
                       ),
                     ).animate().slideX(
-                        duration: 600.ms, begin: -1, curve: Curves.easeOutBack,),
+                          duration: 600.ms,
+                          begin: -1,
+                          curve: Curves.easeOutBack,
+                        ),
                     Positioned(
                       top: 60,
                       left: 40,
@@ -184,7 +214,7 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                           style: TextStyle(
                             color: AppColors.greyLight,
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ).animate().slideY(
                               duration: 600.ms,
@@ -202,14 +232,16 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                         const Text(
                           'By continuing, you agree to our User \nAgreement and Privacy Policy ',
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.greyLight,),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.greyLight,
+                          ),
                           textAlign: TextAlign.center,
                         ).animate().fade(
-                            duration: 300.ms,
-                            delay: 300.ms,
-                            curve: Curves.easeInOut,),
+                              duration: 300.ms,
+                              delay: 300.ms,
+                              curve: Curves.easeInOut,
+                            ),
                         const SizedBox(height: 64),
                       ],
                     ),
@@ -251,8 +283,11 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/icons/app-logo-dark-3d.png',
-                width: 36, height: 36,),
+            Image.asset(
+              'assets/icons/app-logo-dark-3d.png',
+              width: 36,
+              height: 36,
+            ),
             const SizedBox(width: 12),
             Text(
               text,

@@ -203,11 +203,17 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                     keyboardType: TextInputType.text,
                     focusNode: _focusNode,
                     textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                     decoration: const InputDecoration(
                       hintText: 'Enter waitlist code',
                       hintStyle: TextStyle(
-                        color: AppColors.greyDark,
+                        color: AppColors.greyLight,
                         fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),

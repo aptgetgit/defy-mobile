@@ -8,6 +8,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/error/exception_with_stack_trace.dart';
+import '../../../../core/logging/app_logger.dart';
 import '../../../../shared/blockchain/account/domain/entities/account_address.dart';
 import '../../../../shared/blockchain/account/domain/entities/aptos_derivation_path.dart';
 import '../../../../shared/blockchain/account/domain/usecases/get_account_mnemonic_usecase.dart';
@@ -65,6 +66,10 @@ class _WalletSettingsSecurityScreenState
 
   Future<void> _revealSeedPhrase(BuildContext context, WidgetRef ref) async {
     try {
+      AppLogger.debug(
+        '🔹 Starting to reveal seed phrase for account: ${widget.accountAddress}',
+      );
+
       final GetAccountMnemonicUseCase getAccountMnemonicUseCase =
           ref.watch(getAccountMnemonicUseCaseProvider);
       final Either<ExceptionWithStackTrace, (String, AptosDerivationPath)>
@@ -74,6 +79,9 @@ class _WalletSettingsSecurityScreenState
 
       await result.fold(
         (ExceptionWithStackTrace exception) async {
+          AppLogger.error(
+            '🔴 Failed to retrieve mnemonic: ${exception.exception}',
+          );
           if (!mounted) {
             return;
           }
@@ -92,7 +100,9 @@ class _WalletSettingsSecurityScreenState
           );
         },
         ((String, AptosDerivationPath) data) async {
-          // Handle the success case
+          AppLogger.debug(
+            '✅ Successfully retrieved mnemonic and derivation path',
+          );
           final (String mnemonic, AptosDerivationPath derivationPath) = data;
 
           if (!mounted) {
@@ -100,67 +110,81 @@ class _WalletSettingsSecurityScreenState
           }
 
           final List<String> words = mnemonic.split(' ');
+          AppLogger.debug('Mnemonic split into words: ${words.join(', ')}');
 
           await showModalBottomSheet<void>(
             context: context,
-            builder: (BuildContext context) => Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      const Text(
-                        'Seed Phrase',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              const double baseHeight = 240;
+              const double wordHeight = 40;
+              final double calculatedHeight =
+                  baseHeight + (words.length / 3).ceil() * wordHeight;
+
+              return Container(
+                height:
+                    calculatedHeight > MediaQuery.of(context).size.height * 0.9
+                        ? MediaQuery.of(context).size.height * 0.9
+                        : calculatedHeight,
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Row(
+                      children: <Widget>[
+                        Text(
+                          'Seed Phrase',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: const Icon(PhosphorIconsBold.x),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Do not share this with anyone',
-                    style: TextStyle(fontSize: 14, color: AppColors.greyLight),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.greyVeryLight,
-                      borderRadius: BorderRadius.circular(10),
+                        Spacer(),
+                        // Add a close button if needed
+                      ],
                     ),
-                    child: Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: words.map(_buildWordChip).toList(),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Do not share this with anyone',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.greyLight,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 60),
-                  BlackButtonXL(
-                    onClick: () {
-                      Clipboard.setData(ClipboardData(text: mnemonic));
-                      _showCustomToast(context);
-                    },
-                    title: 'Copy Seed Phrase',
-                    margin: EdgeInsets.zero,
-                  ),
-                ],
-              ),
-            ),
+                    const SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.greyVeryLight,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: words.map(_buildWordChip).toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 60),
+                    BlackButtonXL(
+                      onClick: () {
+                        Clipboard.setData(ClipboardData(text: mnemonic));
+                        AppLogger.debug('Mnemonic copied to clipboard');
+                        _showCustomToast(context);
+                      },
+                      title: 'Copy Seed Phrase',
+                      margin: EdgeInsets.zero,
+                    ),
+                  ],
+                ),
+              );
+            },
           );
         },
       );
     } on Exception catch (e) {
+      AppLogger.error('🔴 Unexpected error in _revealSeedPhrase: $e');
       if (!mounted) {
         return;
       }
@@ -284,7 +308,7 @@ class _WalletSettingsSecurityScreenState
           ),
         ),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       if (!mounted) {
         return;
       }

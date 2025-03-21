@@ -37,6 +37,7 @@ import '../../domain/usecases/get_account_private_key_usecase.dart';
 import '../../domain/usecases/get_account_public_key_usecase.dart';
 import '../../domain/usecases/get_accounts_from_mnemonic_usecase.dart';
 import '../../domain/usecases/get_active_account_usecase.dart';
+import '../../domain/usecases/get_all_entropy_usecase.dart';
 import '../../domain/usecases/get_aptos_account_usecase.dart';
 import '../../domain/usecases/get_mnemonic_usecase.dart';
 import '../../domain/usecases/get_private_key_usecase.dart';
@@ -201,10 +202,11 @@ GetPrivateKeyUseCase getPrivateKeyUseCase(Ref ref) =>
 @riverpod
 GeneratePrivateKeyFromMnemonicUseCase generatePrivateKeyFromMnemonicUseCase(
   Ref ref,
-) => GeneratePrivateKeyFromMnemonicUseCase(
-  entropyRepository: ref.read(entropyRepositoryProvider),
-  jwkRepository: ref.read(jwkRepositoryProvider),
-);
+) =>
+    GeneratePrivateKeyFromMnemonicUseCase(
+      entropyRepository: ref.read(entropyRepositoryProvider),
+      jwkRepository: ref.read(jwkRepositoryProvider),
+    );
 
 @riverpod
 CreateAptosAccountUseCase createAptosAccountUseCase(Ref ref) =>
@@ -263,11 +265,11 @@ CheckMnemonicAvailabilityUseCase checkMnemonicAvailabilityUseCase(Ref ref) =>
 
 @riverpod
 SignBufferUseCase signBufferUseCase(Ref ref) => SignBufferUseCase(
-  accountRepository: ref.read(aptosAccountRepositoryProvider),
-  jwkRepository: ref.read(jwkRepositoryProvider),
-  entropyRepository: ref.read(entropyRepositoryProvider),
-  privateJwkRepository: ref.read(privateJwkRepositoryProvider),
-);
+      accountRepository: ref.read(aptosAccountRepositoryProvider),
+      jwkRepository: ref.read(jwkRepositoryProvider),
+      entropyRepository: ref.read(entropyRepositoryProvider),
+      privateJwkRepository: ref.read(privateJwkRepositoryProvider),
+    );
 
 @riverpod
 GetActiveAccountUseCase getActiveAccountUseCase(Ref ref) =>
@@ -296,9 +298,10 @@ HasActiveAccountUseCase hasActiveAccountUseCase(Ref ref) =>
 @riverpod
 UpdateAccountBackgroundColorUseCase updateAccountBackgroundColorUseCase(
   Ref ref,
-) => UpdateAccountBackgroundColorUseCase(
-  repository: ref.read(aptosAccountRepositoryProvider),
-);
+) =>
+    UpdateAccountBackgroundColorUseCase(
+      repository: ref.read(aptosAccountRepositoryProvider),
+    );
 
 @riverpod
 UpdateAccountIconUriUseCase updateAccountIconUriUseCase(Ref ref) =>
@@ -311,3 +314,7 @@ UpdateAccountLabelUseCase updateAccountLabelUseCase(Ref ref) =>
     UpdateAccountLabelUseCase(
       repository: ref.read(aptosAccountRepositoryProvider),
     );
+
+@riverpod
+GetAllEntropyUseCase getAllEntropyUseCase(Ref ref) =>
+    GetAllEntropyUseCase(repository: ref.read(entropyRepositoryProvider));

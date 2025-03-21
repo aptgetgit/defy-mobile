@@ -205,7 +205,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                // Icon section
                 const Padding(
                   padding: EdgeInsets.only(top: 24),
                   child: Icon(
@@ -219,8 +218,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
                       duration: 400.ms,
                       curve: Curves.easeOutExpo,
                     ),
-
-                // Title section
                 const Padding(
                   padding: EdgeInsets.fromLTRB(24, 16, 24, 8),
                   child: Text(
@@ -235,8 +232,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
                     textAlign: TextAlign.center,
                   ),
                 ).animate().fadeIn(delay: 200.ms, duration: 300.ms),
-
-                // Content section
                 Padding(
                   padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
                   child: Text(
@@ -251,7 +246,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
                   ),
                 ).animate().fadeIn(delay: 350.ms, duration: 300.ms),
 
-                // Button section
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),

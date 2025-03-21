@@ -556,5 +556,24 @@ final updateAccountLabelUseCaseProvider =
 // ignore: unused_element
 typedef UpdateAccountLabelUseCaseRef
     = AutoDisposeProviderRef<UpdateAccountLabelUseCase>;
+String _$getAllEntropyUseCaseHash() =>
+    r'585336c9f231ed4dbc48320e5f4b2dbd5dd6dab2';
+
+/// See also [getAllEntropyUseCase].
+@ProviderFor(getAllEntropyUseCase)
+final getAllEntropyUseCaseProvider =
+    AutoDisposeProvider<GetAllEntropyUseCase>.internal(
+  getAllEntropyUseCase,
+  name: r'getAllEntropyUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getAllEntropyUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetAllEntropyUseCaseRef = AutoDisposeProviderRef<GetAllEntropyUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

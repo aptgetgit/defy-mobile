@@ -10,12 +10,10 @@ class ImportWalletImportSeedPhraseScreen extends StatefulWidget {
   const ImportWalletImportSeedPhraseScreen({
     required this.words,
     required this.onWordsUpdated,
-    
     super.key,
   });
   final List<String> words;
   final void Function(List<String>) onWordsUpdated;
-  
 
   @override
   State<ImportWalletImportSeedPhraseScreen> createState() =>
@@ -56,13 +54,37 @@ class _ImportWalletImportSeedPhraseScreenState
   }
 
   void _onTextChanged() {
-    final String text = _controller.text;
-    if (text.endsWith(' ')) {
-      final String word = text.trim().toLowerCase();
-      if (word.isNotEmpty) {
-        _addWord(word);
+    final String text = _controller.text.trim();
+    _processInput(text);
+  }
+
+  void _processInput(String input) {
+    final List<String> words =
+        input.split(RegExp(r'\s+')).map((word) => word.toLowerCase()).toList();
+    final List<String> validWords = [];
+
+    for (final String word in words) {
+      final String trimmedWord = word.trim();
+      if (trimmedWord.isNotEmpty && bip39Wordlist.contains(trimmedWord)) {
+        if (!widget.words.contains(trimmedWord) && validWords.length < 24) {
+          validWords.add(trimmedWord);
+        }
+      } else if (trimmedWord.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid word: $trimmedWord')),
+        );
+        return;
       }
+    }
+
+    if (validWords.isNotEmpty) {
+      final List<String> updatedWords = List<String>.from(widget.words)
+        ..addAll(validWords);
+      widget.onWordsUpdated(updatedWords);
       _controller.clear();
+      if (updatedWords.length < 24) {
+        _focusNode.requestFocus();
+      }
     }
   }
 
@@ -114,20 +136,20 @@ class _ImportWalletImportSeedPhraseScreenState
         baseHeight + (widget.words.length / 3).ceil() * 40;
 
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const Text(
             'Import Seed Phrase 🤫',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 16),
           const Text(
             'Enter your 12 or 24-word seed phrase.',
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
               color: AppColors.greyLight,
             ),
           ),
@@ -151,14 +173,15 @@ class _ImportWalletImportSeedPhraseScreenState
                   runSpacing: 8,
                   children: <Widget>[
                     ...widget.words.map(_buildWordChip),
-                    _buildTextField(),
+                    _buildTextField(
+                      widget.words,
+                    ),
                   ],
                 ),
               ),
             ),
           ),
           const Spacer(),
-      
         ],
       ),
     );
@@ -207,20 +230,25 @@ class _ImportWalletImportSeedPhraseScreenState
         ),
       );
 
-  Widget _buildTextField() => SizedBox(
-        width: 100,
+  Widget _buildTextField(List<String> words) => SizedBox(
+        width: words.isEmpty ? 220 : 100,
         child: TextField(
           controller: _controller,
           focusNode: _focusNode,
           decoration: InputDecoration(
+            hintText: words.isEmpty ? 'Enter Seed Phrase here ...' : '',
+            hintStyle: const TextStyle(
+              fontSize: 16,
+              color: AppColors.greyLight,
+              fontWeight: FontWeight.w500,
+            ),
             filled: true,
             fillColor: AppColors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
             ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            contentPadding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
             isDense: true,
           ),
           style: const TextStyle(fontSize: 14),
@@ -231,6 +259,4 @@ class _ImportWalletImportSeedPhraseScreenState
           onSubmitted: _addWord,
         ).animate().fadeIn(),
       );
-
-  
 }

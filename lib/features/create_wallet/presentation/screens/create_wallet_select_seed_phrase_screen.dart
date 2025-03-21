@@ -1,11 +1,17 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
-// import '../../../../core/logging/app_logger.dart';
-// import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
+import '../../../../core/error/exception_with_stack_trace.dart';
+import '../../../../core/logging/app_logger.dart';
+import '../../../../shared/blockchain/account/domain/usecases/get_all_entropy_usecase.dart';
+import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
+import '../../../../shared/utils/mnemonic_utils.dart';
 
 class CreateWalletSelectSeedPhraseScreen extends StatefulHookConsumerWidget {
   const CreateWalletSelectSeedPhraseScreen({super.key});
@@ -22,25 +28,57 @@ class _CreateWalletSelectSeedPhraseScreenState
   @override
   void initState() {
     super.initState();
-    // mnemonicsFuture = _getAllMnemonics();
+    mnemonicsFuture = _getAllMnemonics();
   }
 
-  // Future<List<String>> _getAllMnemonics() async {
-  //   final GetAllMnemonicsUseCase getAllMnemonicsUseCase =
-  //       ref.read(getAllMnemonicsUseCaseProvider);
-  //   final List<String> mnemonics = await getAllMnemonicsUseCase.call();
-  //   AppLogger.debug(
-  //       'Fetched mnemonics: ${mnemonics.length}'); // Debug statement
-  //   return mnemonics;
-  // }
+  Future<List<String>> _getAllMnemonics() async {
+    try {
+      AppLogger.debug('🔹 Starting mnemonic retrieval process');
+
+      final GetAllEntropyUseCase getAllEntropyUseCase =
+          ref.read(getAllEntropyUseCaseProvider);
+
+      final Either<ExceptionWithStackTrace, Set<Uint8List>> result =
+          await getAllEntropyUseCase.call();
+
+      return result.fold(
+        (ExceptionWithStackTrace failure) {
+          AppLogger.error('🔴 Failed to fetch mnemonics: ${failure.exception}');
+          AppLogger.error('🔴 Stack trace: ${failure.stackTrace}');
+          return <String>[];
+        },
+        (Set<Uint8List> entropySet) {
+          if (entropySet.isEmpty) {
+            AppLogger.info('ℹ️ No seed phrases found in storage');
+            return <String>[];
+          }
+
+          final List<String> mnemonics =
+              entropySet.map(entropyToMnemonic).toList();
+
+          AppLogger.debug(
+            '✅ Successfully retrieved ${mnemonics.length} mnemonics',
+          );
+          return mnemonics;
+        },
+      );
+    } on Exception catch (e, stackTrace) {
+      AppLogger.error('🔴 Unexpected error in _getAllMnemonics: $e');
+      AppLogger.error('🔴 Stack trace: $stackTrace');
+      return <String>[];
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Choose Seed Phrase'),
           centerTitle: true,
-          leading: const Icon(
-            PhosphorIconsBold.caretLeft,
+          leading: GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: const Icon(
+              PhosphorIconsBold.caretLeft,
+            ),
           ),
         ),
         body: Padding(
@@ -62,11 +100,14 @@ class _CreateWalletSelectSeedPhraseScreenState
               Expanded(
                 child: FutureBuilder<List<String>>(
                   future: mnemonicsFuture,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<String>> snapshot) {
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<List<String>> snapshot,
+                  ) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
+                      AppLogger.error('Error: ${snapshot.error}');
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return const Center(child: Text('No mnemonics found.'));
@@ -131,4 +172,10 @@ class _CreateWalletSelectSeedPhraseScreenState
           ],
         ),
       );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Future<List<String>>>('mnemonicsFuture', mnemonicsFuture));
+  }
 }

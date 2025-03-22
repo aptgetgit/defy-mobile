@@ -29,77 +29,93 @@ class _BalanceSheetState extends State<BalanceSheet> {
   }
 
   @override
-  Widget build(BuildContext context) => Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h), // Reduced vertical padding
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(32.r)),
+  Widget build(BuildContext context) => Material(
+        color: Colors.transparent,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // This ensures clicking outside dismisses the sheet
+            Expanded(
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
             ),
-            padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w), // Reduced bottom padding
-            
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 14.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(32.r)),
+                  ),
+                  padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text(
-                        'Balances',
-                        style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
+                      Padding(
+                        padding: EdgeInsets.only(right: 14.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Balances',
+                              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
+                            ),
+                            IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
+                            ),
+                          ],
+                        ),
                       ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
+                      Gap(16.h),
+                      Padding(
+                        padding: EdgeInsets.only(right: 6.w),
+                        child: _buildOptionRow('🚀', 'Total Balance', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
+                      ),
+                      Gap(16.h),
+                      Padding(
+                        padding: EdgeInsets.only(right: 6.w),
+                        child: _buildOptionRow('🏋', 'NFT Only', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
+                      ),
+                      Gap(16.h),
+                      Padding(
+                        padding: EdgeInsets.only(right: 6.w),
+                        child: _buildOptionRow('🚀', 'Token Only', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
+                      ),
+                      Gap(22.h),
+                      Padding(
+                        padding: EdgeInsets.only(right: 24.w),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Call the parent's callback with the selected option
+                            widget.onOptionSelected(_currentSelection);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(44.w),
+                            ),
+                            backgroundColor: AppColors.blue,
+                            minimumSize: Size(double.infinity, 54.h),
+                          ),
+                          child: Text(
+                            'Confirm',
+                            style: TextStyle(color: AppColors.white, fontSize: 16.sp),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                Gap(16.h),
-                Padding(
-                  padding:  EdgeInsets.only(right: 6.w),
-                  child: _buildOptionRow('🚀', 'Total Balance', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
-                ),
-                Gap(16.h),
-                Padding(
-                  padding:  EdgeInsets.only(right: 6.w),
-                  child: _buildOptionRow('🏋', 'NFT Only', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
-                ),
-                Gap(16.h),
-                Padding(
-                  padding:  EdgeInsets.only(right: 6.w),
-                  child: _buildOptionRow('🚀', 'Token Only', _currentSelection, _handleOptionSelected, fontSize: 18.sp),
-                ),
-                Gap(22.h), // Reduced gap
-                Padding(
-                  padding: EdgeInsets.only(right: 24.w),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Call the parent's callback with the selected option
-                      widget.onOptionSelected(_currentSelection);
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(44.w),
-                      ),
-                      backgroundColor: AppColors.blue,
-                      minimumSize: Size(double.infinity, 54.h),
-                    ),
-                    child: Text(
-                      'Confirm',
-                      style: TextStyle(color: AppColors.white, fontSize: 16.sp),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       );
 
@@ -133,8 +149,8 @@ class _BalanceSheetState extends State<BalanceSheet> {
           data: Theme.of(context).copyWith(
             unselectedWidgetColor: AppColors.greyLight, // Set inactive color to grey
             radioTheme: RadioThemeData(
-              fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
-                if (states.contains(WidgetState.selected)) {
+              fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
                   return AppColors.blue; // Active color
                 }
                 return AppColors.greyLight; // Inactive color

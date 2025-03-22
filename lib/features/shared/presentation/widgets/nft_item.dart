@@ -10,35 +10,29 @@ import 'custom_check_box.dart';
 
 class NFTItem extends StatelessWidget {
   const NFTItem({
-    required this.nft,
-    required this.isSelected,
-    required this.showCheckbox,
-    required this.onCheckboxChanged,
     super.key,
+    required this.nft,
+    this.isSelected = false,
+    this.showCheckbox = false,
+    this.onCheckboxChanged,
+    this.onTap,
   });
 
   final NFT nft;
   final bool isSelected;
   final bool showCheckbox;
-  final ValueChanged<bool>? onCheckboxChanged;
+  final Function(bool)? onCheckboxChanged;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-    onTap: () {
-      if (nft.onTap != null) {
-        nft.onTap!();
-      } else {
-        // Default navigation based on NFT type
-        _navigateToNFTInfo(context);
-      }
-    },
+    onTap: onTap,
     child: Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Stack(
             children: <Widget>[
-              // NFT Image with opacity based on selection
               Opacity(
                 opacity: isSelected ? 0.5 : 1.0,
                 child: ClipRRect(
@@ -51,7 +45,6 @@ class NFTItem extends StatelessWidget {
                   ),
                 ),
               ),
-              // Checkbox - only show when in selection mode
               if (showCheckbox)
                 Positioned(
                   right: 8.w,
@@ -72,7 +65,8 @@ class NFTItem extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(6),
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
@@ -84,12 +78,21 @@ class NFTItem extends StatelessWidget {
                   ),
                 ),
                 Gap(4.h),
-                Text(
-                  nft.price,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    color: isSelected ? Colors.grey : AppColors.black,
-                  ),
+                Row(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/icons/aptos.png',
+                      width: 16.w,
+                    ),
+                    Gap(6.w),
+                    Text(
+                      nft.price,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: isSelected ? Colors.grey : AppColors.black,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -18,6 +18,7 @@ class CustomNavBar extends ConsumerWidget {
     required this.onSortPressed,
     required this.onWatchlistPressed,
   });
+
   final int pageIndex;
   final Function(int) onTabChange;
   final bool isMoreOptionsSelected;
@@ -29,140 +30,161 @@ class CustomNavBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => Container(
       color: Colors.transparent,
       height: 97.h,
-     
-      child: AnimatedSize(
-        curve: Curves.easeIn,
-        duration: const Duration(milliseconds: 800),
-        child: Center(
-          child: FractionallySizedBox(
-            widthFactor: !isMoreOptionsSelected ? 0.7 : 0.8,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  height: 90.h,
-                  alignment: Alignment.bottomCenter,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: isMoreOptionsSelected 
-                        ? BorderRadius.circular(24.r) 
-                        : BorderRadius.circular(64.r),
-                  ),
-                  margin: EdgeInsets.only(top: 18.h, bottom: 18.h),
-                  child: Center(
-                    child: !isMoreOptionsSelected
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              IconButton(
-                                onPressed: () {
-                                  const ExploreScreenRoute().go(context);
-                                },
-                                icon: Icon(
-                                  pageIndex == 1
-                                      ? PhosphorIconsFill.magnifyingGlass
-                                      : PhosphorIconsBold.magnifyingGlass,
-                                  color: AppColors.greyDark,
-                                  size: 24.sp,
-                                ),
+      child: Center(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          width: !isMoreOptionsSelected ? 0.6.sw : 0.7.sw,
+          child: Stack(
+            children: <Widget>[
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                height: isMoreOptionsSelected ? 100.h : 90.h,
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: isMoreOptionsSelected
+                      ? BorderRadius.circular(24.r)
+                      : BorderRadius.circular(64.r),
+                ),
+                margin: EdgeInsets.only(top: 18.h, bottom: 18.h),
+                child: Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      // Default navigation buttons (fade out when more options selected)
+                      AnimatedOpacity(
+                        opacity: !isMoreOptionsSelected ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            IconButton(
+                              onPressed: () {
+                                const ExploreScreenRoute().go(context);
+                              },
+                              icon: Icon(
+                                pageIndex == 1
+                                    ? PhosphorIconsFill.magnifyingGlass
+                                    : PhosphorIconsBold.magnifyingGlass,
+                                color: AppColors.greyDark,
+                                size: 24.sp,
                               ),
-                              Gap(20.w),
-                              IconButton(
-                                onPressed: () {
-                                  const WalletScreenRoute().go(context);
-                                },
-                                icon: Icon(
-                                  pageIndex == 2
-                                      ? PhosphorIconsFill.storefront
-                                      : PhosphorIconsBold.storefront,
-                                  color: AppColors.greyDark,
-                                  size: 24.sp,
-                                ),
+                            ),
+                            Gap(20.w),
+                            IconButton(
+                              onPressed: () {
+                                const WalletScreenRoute().go(context);
+                              },
+                              icon: Icon(
+                                pageIndex == 2
+                                    ? PhosphorIconsFill.storefront
+                                    : PhosphorIconsBold.storefront,
+                                color: AppColors.greyDark,
+                                size: 24.sp,
                               ),
-                            ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              IconButton(
-                                onPressed: onSortPressed,
-                                icon: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Icon(
-                                      PhosphorIconsRegular.arrowBendDoubleUpLeft,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // More options buttons (fade in when more options selected)
+                      AnimatedOpacity(
+                        opacity: isMoreOptionsSelected ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            IconButton(
+                              onPressed: onSortPressed,
+                              icon: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Icon(
+                                    PhosphorIconsRegular.arrowBendDoubleUpLeft,
+                                    color: AppColors.greyLight,
+                                    size: 22.sp,
+                                  ),
+                                  Text(
+                                    'Sort',
+                                    style: TextStyle(
                                       color: AppColors.greyLight,
-                                      size: 22.sp,
+                                      fontSize: 12.sp,
                                     ),
-                                    Text(
-                                      'Filter',
-                                      style: TextStyle(
-                                        color: AppColors.greyLight,
-                                        fontSize: 12.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              IconButton(
-                                onPressed: onWatchlistPressed,
-                                icon: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Icon(
-                                      PhosphorIconsRegular.star,
+                            ),
+                            IconButton(
+                              onPressed: onWatchlistPressed,
+                              icon: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Icon(
+                                    PhosphorIconsRegular.star,
+                                    color: AppColors.greyLight,
+                                    size: 22.sp,
+                                  ),
+                                  Text(
+                                    'Watchlist',
+                                    style: TextStyle(
                                       color: AppColors.greyLight,
-                                      size: 22.sp,
+                                      fontSize: 12.sp,
                                     ),
-                                    Text(
-                                      'Watchlist',
-                                      style: TextStyle(
-                                        color: AppColors.greyLight,
-                                        fontSize: 12.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              IconButton(
-                                onPressed: onHidePressed,
-                                icon: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Icon(
-                                      PhosphorIconsRegular.eye,
+                            ),
+                            IconButton(
+                              onPressed: onHidePressed,
+                              icon: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Icon(
+                                    PhosphorIconsRegular.eye,
+                                    color: AppColors.greyLight,
+                                    size: 22.sp,
+                                  ),
+                                  Text(
+                                    'Hide',
+                                    style: TextStyle(
                                       color: AppColors.greyLight,
-                                      size: 22.sp,
+                                      fontSize: 12.sp,
                                     ),
-                                    Text(
-                                      'Hide',
-                                      style: TextStyle(
-                                        color: AppColors.greyLight,
-                                        fontSize: 12.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Visibility(
-                  visible: !isMoreOptionsSelected,
-                  child: AnimatedPositioned(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: Container(
-                      height: 95.h,
-                      alignment: Alignment.topCenter,
-                      child: DashboardFloatingActionButton(
-                        show: pageIndex == 0,
-                      ),
+              ),
+              // Use AnimatedOpacity instead of Visibility for the floating action button
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                top: 0,
+                left: 0,
+                right: 0,
+                child: AnimatedOpacity(
+                  opacity: !isMoreOptionsSelected ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  child: Container(
+                    height: 95.h,
+                    alignment: Alignment.topCenter,
+                    child: DashboardFloatingActionButton(
+                      show: pageIndex == 0,
                     ),
                   ),
-                ),            
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

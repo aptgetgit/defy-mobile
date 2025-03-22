@@ -21,9 +21,30 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return _isCreatingCollection // Show create collection screen if true
-        ? _buildCreateCollectionScreen()
-        : _buildMainBottomSheet(); // Otherwise, show the main bottom sheet
+    return Material(
+      color: Colors.transparent,
+      child: GestureDetector(
+        onTap: () {},
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // This ensures clicking outside dismisses the sheet
+            Expanded(
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            // Your existing content
+            _isCreatingCollection // Show create collection screen if true
+                ? _buildCreateCollectionScreen()
+                : _buildMainBottomSheet(), // Otherwise, show the main bottom sheet
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildMainBottomSheet() => Align(

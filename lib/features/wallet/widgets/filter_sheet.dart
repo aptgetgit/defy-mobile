@@ -39,63 +39,86 @@ class _FilterSheetState extends State<FilterSheet> {
   }
 
   @override
-  Widget build(BuildContext context) => Align(
-    alignment: Alignment.bottomCenter,
-    child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(32.r)),
-        ),
-        padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w),
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: GestureDetector(
+        onTap: () {},
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(right: 14.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Filter',
-                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
-                  ),
-                  IconButton(
-                    onPressed: widget.onDismiss,
-                    icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
-                  ),
-                ],
+          children: [
+            // This ensures clicking outside dismisses the sheet
+            Expanded(
+              child: GestureDetector(
+                onTap: widget.onDismiss,
+                child: Container(
+                  color: Colors.transparent,
+                ),
               ),
             ),
-            Gap(16.h),
-            _buildFilterSection(),
-            Gap(22.h),
-            Padding(
-              padding: EdgeInsets.only(right: 24.w),
-              child: ElevatedButton(
-                onPressed: () {
-                  widget.onDismiss();
-                },
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(44.w),
+            // Your existing FilterSheet content
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(32.r)),
                   ),
-                  backgroundColor: AppColors.blue, // Changed to blue to match balance sheet
-                  minimumSize: Size(double.infinity, 54.h),
-                ),
-                child: Text(
-                  'Apply',
-                  style: TextStyle(color: AppColors.white, fontSize: 16.sp),
+                  padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(right: 14.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Filter',
+                              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
+                            ),
+                            IconButton(
+                              onPressed: widget.onDismiss,
+                              icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Gap(16.h),
+                      _buildFilterSection(),
+                      Gap(22.h),
+                      Padding(
+                        padding: EdgeInsets.only(right: 24.w),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            widget.onDismiss();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(44.w),
+                            ),
+                            backgroundColor: AppColors.blue, // Changed to blue to match balance sheet
+                            minimumSize: Size(double.infinity, 54.h),
+                          ),
+                          child: Text(
+                            'Apply',
+                            style: TextStyle(color: AppColors.white, fontSize: 16.sp),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
 
   Widget _buildFilterSection() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,

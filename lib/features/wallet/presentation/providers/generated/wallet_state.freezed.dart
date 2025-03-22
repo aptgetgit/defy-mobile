@@ -414,7 +414,7 @@ class _$WalletStateImpl implements _WalletState {
       this.isQrScannerOpen = false,
       this.isSortSheetVisible = false,
       this.isSortPriceButtonSelected = false,
-      this.isSortBalanceButtonSelected = false,
+      this.isSortBalanceButtonSelected = true,
       this.isSortAlphabetButtonSelected = false,
       this.isSort24hrButtonSelected = false})
       : _allTokens = allTokens,

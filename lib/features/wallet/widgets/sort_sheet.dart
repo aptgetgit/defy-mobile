@@ -32,8 +32,6 @@ class SortSheet extends StatefulWidget {
   State<SortSheet> createState() => _SortSheetState();
 }
 
-enum SortOption { price, balance, alphabet, change24hr }
-
 class _SortSheetState extends State<SortSheet> {
   late SortOption _selectedSortOption;
 
@@ -67,58 +65,79 @@ class _SortSheetState extends State<SortSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(32.r)),
-          ),
-          padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 14.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Sort',
-                      style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
-                    ),
-                    IconButton(
-                      onPressed: widget.onDismiss,
-                      icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
-                    ),
-                  ],
+    return Material(
+      color: Colors.transparent,
+      child: GestureDetector(
+        // This ensures taps on the sheet don't dismiss the modal
+        onTap: () {},
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // This ensures clicking outside dismisses the sheet
+            Expanded(
+              child: GestureDetector(
+                onTap: widget.onDismiss,
+                child: Container(
+                  color: Colors.transparent,
                 ),
               ),
-              Gap(16.h),
-              _buildSortOptions(),
-              Gap(22.h),
-              Padding(
-                padding: EdgeInsets.only(right: 24.w),
-                child: ElevatedButton(
-                  onPressed: widget.onDismiss,
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(44.w),
-                    ),
-                    backgroundColor: AppColors.blue,
-                    minimumSize: Size(double.infinity, 54.h),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(32.r)),
                   ),
-                  child: Text(
-                    'Apply',
-                    style: TextStyle(color: AppColors.white, fontSize: 16.sp),
+                  padding: EdgeInsets.only(bottom: 22.h, top: 22.h, left: 26.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(right: 14.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Sort',
+                              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
+                            ),
+                            IconButton(
+                              onPressed: widget.onDismiss,
+                              icon: Icon(PhosphorIconsBold.x, color: AppColors.black, size: 22.sp),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Gap(16.h),
+                      _buildSortOptions(),
+                      Gap(22.h),
+                      Padding(
+                        padding: EdgeInsets.only(right: 24.w),
+                        child: ElevatedButton(
+                          onPressed: widget.onDismiss,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(44.w),
+                            ),
+                            backgroundColor: AppColors.blue,
+                            minimumSize: Size(double.infinity, 54.h),
+                          ),
+                          child: Text(
+                            'Apply',
+                            style: TextStyle(color: AppColors.white, fontSize: 16.sp),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -212,3 +231,5 @@ class _SortSheetState extends State<SortSheet> {
     ],
   );
 }
+
+enum SortOption { price, balance, alphabet, change24hr }

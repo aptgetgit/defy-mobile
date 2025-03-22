@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fpdart/src/either.dart';
-import 'package:fpdart/src/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -27,6 +27,12 @@ class WalletSettingsScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       WalletSettingsScreenState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<AptosAccountWithMetadata>('account', account));
+  }
 }
 
 class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
@@ -64,7 +70,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
           accountAddress: widget.account.accountAddress,
         )
         .then((Either<ExceptionWithStackTrace, Option<AptosAccountWithMetadata>>
-                either) =>
+                either,) =>
             either.fold(
               (ExceptionWithStackTrace error) {
                 AppLogger.error('Error fetching account: $error');
@@ -74,7 +80,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
                 () => null,
                 (AptosAccountWithMetadata account) => account,
               ),
-            ));
+            ),);
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +100,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
       body: FutureBuilder<AptosAccountWithMetadata?>(
         future: accountFuture,
         builder: (BuildContext context,
-            AsyncSnapshot<AptosAccountWithMetadata?> snapshot) {
+            AsyncSnapshot<AptosAccountWithMetadata?> snapshot,) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }

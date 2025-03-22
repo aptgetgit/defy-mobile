@@ -26,7 +26,9 @@ import '../state/create_wallet_state.dart';
 import '../widgets/create_wallet_card.dart';
 
 class CreateWalletScreen extends StatefulHookConsumerWidget {
-  const CreateWalletScreen({super.key});
+  const CreateWalletScreen({super.key, this.entropy});
+
+  final Uint8List? entropy;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -196,9 +198,15 @@ class CreateWalletScreenState extends ConsumerState<CreateWalletScreen>
     );
   }
 
-  Future<void> _generateMnemonic() async {
+Future<void> _generateMnemonic() async {
+  if (widget.entropy != null) {
+    // Use the provided entropy
+    await ref.watch(generateAccountFlowProvider.notifier).importMnemonic(widget.entropy!);
+  } else {
+    // Generate a new mnemonic
     await ref.watch(generateAccountFlowProvider.notifier).generateMnemonic();
   }
+}
 
   @override
   Widget build(BuildContext context) {

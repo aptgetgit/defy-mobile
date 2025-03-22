@@ -191,6 +191,14 @@ class $AssetsIconsGen {
   AssetGenImage get sendLogo =>
       const AssetGenImage('assets/icons/send-logo.png');
 
+  /// File path: assets/icons/sort-ascending.png
+  AssetGenImage get sortAscending =>
+      const AssetGenImage('assets/icons/sort-ascending.png');
+
+  /// File path: assets/icons/sort-descending.png
+  AssetGenImage get sortDescending =>
+      const AssetGenImage('assets/icons/sort-descending.png');
+
   /// File path: assets/icons/staking-default.png
   AssetGenImage get stakingDefault =>
       const AssetGenImage('assets/icons/staking-default.png');
@@ -299,6 +307,8 @@ class $AssetsIconsGen {
         rainbowWalletLogo,
         receiveLogo,
         sendLogo,
+        sortAscending,
+        sortDescending,
         stakingDefault,
         starStruckGif,
         starStruckPng,

@@ -3,12 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
-import 'dart:math' as math; // For pi
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
-
-import '../../../config/theme/colors.dart';
 
 class CustomSortIcon extends StatelessWidget {
   const CustomSortIcon({
@@ -40,32 +34,27 @@ class CustomSortIcon extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Rotated left arrow to point down (top)
-        Transform.rotate(
-          angle: math.pi / 2, // 90 degrees clockwise
-          child: Icon(
-            PhosphorIconsBold.arrowLeft,
-            size: iconSize,
-            color: downArrowColor ?? AppColors.greyLight, // Match image color
-          ),
+        // Up arrow in black
+        Icon(
+          PhosphorIconsBold.caretUp,
+          size: iconSize,
+          color: upArrowColor ?? AppColors.black,
         ),
         SizedBox(height: gapSize),
-        // Rotated right arrow to point up (bottom)
+        // Down arrow in grey
         Transform.translate(
           offset: const Offset(0, -3), // Adjust to make arrows appear closer
-          child: Transform.rotate(
-            angle: -math.pi / 2, // 90 degrees counterclockwise
-            child: Icon(
-              PhosphorIconsBold.arrowRight,
-              size: iconSize,
-              color: upArrowColor ?? AppColors.black, // Match image color
-            ),
+          child: Icon(
+            PhosphorIconsBold.caretDown,
+            size: iconSize,
+            color: downArrowColor ?? AppColors.greyLight,
           ),
         ),
       ],
     );
   }
 }
+
 /// Variant that places arrows side by side horizontally
 class CustomSortIconHorizontal extends StatelessWidget {
   const CustomSortIconHorizontal({

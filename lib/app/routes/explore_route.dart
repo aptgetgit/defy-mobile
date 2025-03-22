@@ -13,6 +13,8 @@ class ExploreScreenRoute extends GoRouteData {
   );
 }
 
+
+
 @TypedGoRoute<ExploreSearchScreenRoute>(path: '/explore-search')
 class ExploreSearchScreenRoute extends GoRouteData {
   const ExploreSearchScreenRoute();

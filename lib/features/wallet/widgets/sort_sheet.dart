@@ -32,14 +32,26 @@ class SortSheet extends StatefulWidget {
   State<SortSheet> createState() => _SortSheetState();
 }
 
-class _SortSheetState extends State<SortSheet> {
-  late SortOption _selectedSortOption;
+enum SortOption { price, balance, alphabet, change24hr }
 
+class _SortSheetState extends State<SortSheet> with SingleTickerProviderStateMixin {
+  late SortOption _selectedSortOption;
+  late AnimationController _animationController;
+  
   @override
   void initState() {
     super.initState();
     // Initialize with the proper selected option
     _selectedSortOption = _getCurrentSortOption();
+    
+    // Initialize animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    
+    // Ensure the animation controller starts in the forward state
+    _animationController.value = 1.0;
   }
 
   // Get the current sort option based on props
@@ -64,16 +76,36 @@ class _SortSheetState extends State<SortSheet> {
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  // Switch to new sort option with animation
+  void _selectSortOption(SortOption option, VoidCallback callback) {
+    if (_selectedSortOption != option) {
+      _animationController.reverse().then((_) {
+        setState(() {
+          _selectedSortOption = option;
+        });
+        
+        _animationController.forward();
+        callback();
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: GestureDetector(
-        // This ensures taps on the sheet don't dismiss the modal
+        // This prevents taps from bubbling through
         onTap: () {},
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // This ensures clicking outside dismisses the sheet
+            // Area that can be tapped to dismiss the sheet
             Expanded(
               child: GestureDetector(
                 onTap: widget.onDismiss,
@@ -145,91 +177,77 @@ class _SortSheetState extends State<SortSheet> {
 
   Widget _buildSortOptions() => Column(
     children: <Widget>[
-      Padding(
-        padding: EdgeInsets.only(right: 6.w),
-        child: _buildSortOptionRow(
-          'Price',
-          _selectedSortOption == SortOption.price,
-          () {
-            setState(() {
-              _selectedSortOption = SortOption.price;
-            });
-            widget.onPriceToggled();
-          },
-        ),
+      _buildTappableOptionRow(
+        'Price',
+        SortOption.price,
+        () => widget.onPriceToggled(),
       ),
       Gap(16.h),
-      Padding(
-        padding: EdgeInsets.only(right: 6.w),
-        child: _buildSortOptionRow(
-          'Balance',
-          _selectedSortOption == SortOption.balance,
-          () {
-            setState(() {
-              _selectedSortOption = SortOption.balance;
-            });
-            widget.onBalanceToggled();
-          },
-        ),
+      _buildTappableOptionRow(
+        'Balance',
+        SortOption.balance,
+        () => widget.onBalanceToggled(),
       ),
       Gap(16.h),
-      Padding(
-        padding: EdgeInsets.only(right: 6.w),
-        child: _buildSortOptionRow(
-          'Alphabet Order',
-          _selectedSortOption == SortOption.alphabet,
-          () {
-            setState(() {
-              _selectedSortOption = SortOption.alphabet;
-            });
-            widget.onAlphabetToggled();
-          },
-        ),
+      _buildTappableOptionRow(
+        'Alphabet Order',
+        SortOption.alphabet,
+        () => widget.onAlphabetToggled(),
       ),
       Gap(16.h),
-      Padding(
-        padding: EdgeInsets.only(right: 6.w),
-        child: _buildSortOptionRow(
-          '24 hr price change',
-          _selectedSortOption == SortOption.change24hr,
-          () {
-            setState(() {
-              _selectedSortOption = SortOption.change24hr;
-            });
-            widget.on24hrToggled();
-          },
-        ),
+      _buildTappableOptionRow(
+        '24 hr price change',
+        SortOption.change24hr,
+        () => widget.on24hrToggled(),
       ),
     ],
   );
 
-  Widget _buildSortOptionRow(
+  Widget _buildTappableOptionRow(
     String label,
-    bool isSelected,
+    SortOption option,
     VoidCallback onTap,
-  ) => Row(
-    children: <Widget>[
-      Text(
-        label,
-        style: TextStyle(
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w500,
-          color: isSelected ? AppColors.blue : AppColors.black,
+  ) {
+    final bool isSelected = _selectedSortOption == option;
+    
+    // Make the entire row tappable
+    return InkWell(
+      onTap: () => _selectSortOption(option, onTap),
+      child: Padding(
+        padding: EdgeInsets.only(right: 6.w),
+        child: Container(
+          height: 44.h,
+          color: Colors.transparent, // Needed for the gesture detector to work
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w500,
+                  color: isSelected ? AppColors.blue : AppColors.black,
+                ),
+              ),
+              // Icon with fade animation
+              if (isSelected)
+                Padding(
+                  padding:  EdgeInsets.only(right: 18.w),
+                  child: FadeTransition(
+                    opacity: _animationController,
+                    child: Image.asset(
+                      'assets/icons/sort-ascending.png',
+                      width: 24.sp,
+                      height: 24.sp,
+                    ),
+                  ),
+                )
+              else
+                SizedBox(width: 24.sp, height: 24.sp),
+            ],
+          ),
         ),
       ),
-      const Spacer(),
-      Transform.scale(
-        scale: 1.25,
-        child: Radio<bool>(
-          value: true,
-          groupValue: isSelected,
-          activeColor: AppColors.blue,
-          onChanged: (_) => onTap(),
-        ),
-      ),
-      Gap(12.w),
-    ],
-  );
+    );
+  }
 }
-
-enum SortOption { price, balance, alphabet, change24hr }

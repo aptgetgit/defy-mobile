@@ -25,6 +25,7 @@ import '../widgets/balance_sheet.dart';
 import '../widgets/filter_sheet.dart';
 
 
+
 import '../widgets/sort_sheet.dart';
 import '../widgets/token_item.dart';
 import '../widgets/wallet_header.dart';
@@ -725,11 +726,17 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(
-                                    PhosphorIconsBold.arrowsDownUp,
-                                    size: 20.sp,
-                                    color: AppColors.greyDark,
-                                  ),
+
+                                    Image.asset(
+                                      'assets/icons/sort-ascending.png',
+                                      width: 20.sp,
+                                      height: 20.sp,
+                                    ),
+                                // CustomSortIcon(
+                                //   size: 22.sp,
+                                //   upArrowColor: AppColors.black,
+                                //   downArrowColor: AppColors.greyLight,
+                                // ),
 
                                   // CustomSortIcon(
                                   //   size: 20.sp,

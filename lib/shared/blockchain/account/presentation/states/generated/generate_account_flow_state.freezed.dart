@@ -767,3 +767,500 @@ abstract class KeySourcePrivateKey implements KeySource {
   _$$KeySourcePrivateKeyImplCopyWith<_$KeySourcePrivateKeyImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$AccountGenerationParams {}
+
+/// @nodoc
+abstract class $AccountGenerationParamsCopyWith<$Res> {
+  factory $AccountGenerationParamsCopyWith(AccountGenerationParams value,
+          $Res Function(AccountGenerationParams) then) =
+      _$AccountGenerationParamsCopyWithImpl<$Res, AccountGenerationParams>;
+}
+
+/// @nodoc
+class _$AccountGenerationParamsCopyWithImpl<$Res,
+        $Val extends AccountGenerationParams>
+    implements $AccountGenerationParamsCopyWith<$Res> {
+  _$AccountGenerationParamsCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$AccountGenerationParamsImportMnemonicImplCopyWith<$Res> {
+  factory _$$AccountGenerationParamsImportMnemonicImplCopyWith(
+          _$AccountGenerationParamsImportMnemonicImpl value,
+          $Res Function(_$AccountGenerationParamsImportMnemonicImpl) then) =
+      __$$AccountGenerationParamsImportMnemonicImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String mnemonic});
+}
+
+/// @nodoc
+class __$$AccountGenerationParamsImportMnemonicImplCopyWithImpl<$Res>
+    extends _$AccountGenerationParamsCopyWithImpl<$Res,
+        _$AccountGenerationParamsImportMnemonicImpl>
+    implements _$$AccountGenerationParamsImportMnemonicImplCopyWith<$Res> {
+  __$$AccountGenerationParamsImportMnemonicImplCopyWithImpl(
+      _$AccountGenerationParamsImportMnemonicImpl _value,
+      $Res Function(_$AccountGenerationParamsImportMnemonicImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? mnemonic = null,
+  }) {
+    return _then(_$AccountGenerationParamsImportMnemonicImpl(
+      mnemonic: null == mnemonic
+          ? _value.mnemonic
+          : mnemonic // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AccountGenerationParamsImportMnemonicImpl
+    implements AccountGenerationParamsImportMnemonic {
+  const _$AccountGenerationParamsImportMnemonicImpl({required this.mnemonic});
+
+  @override
+  final String mnemonic;
+
+  @override
+  String toString() {
+    return 'AccountGenerationParams.importMnemonic(mnemonic: $mnemonic)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AccountGenerationParamsImportMnemonicImpl &&
+            (identical(other.mnemonic, mnemonic) ||
+                other.mnemonic == mnemonic));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, mnemonic);
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AccountGenerationParamsImportMnemonicImplCopyWith<
+          _$AccountGenerationParamsImportMnemonicImpl>
+      get copyWith => __$$AccountGenerationParamsImportMnemonicImplCopyWithImpl<
+          _$AccountGenerationParamsImportMnemonicImpl>(this, _$identity);
+}
+
+abstract class AccountGenerationParamsImportMnemonic
+    implements AccountGenerationParams {
+  const factory AccountGenerationParamsImportMnemonic(
+          {required final String mnemonic}) =
+      _$AccountGenerationParamsImportMnemonicImpl;
+
+  String get mnemonic;
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AccountGenerationParamsImportMnemonicImplCopyWith<
+          _$AccountGenerationParamsImportMnemonicImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AccountGenerationParamsGenerateMnemonicImplCopyWith<$Res> {
+  factory _$$AccountGenerationParamsGenerateMnemonicImplCopyWith(
+          _$AccountGenerationParamsGenerateMnemonicImpl value,
+          $Res Function(_$AccountGenerationParamsGenerateMnemonicImpl) then) =
+      __$$AccountGenerationParamsGenerateMnemonicImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int strength});
+}
+
+/// @nodoc
+class __$$AccountGenerationParamsGenerateMnemonicImplCopyWithImpl<$Res>
+    extends _$AccountGenerationParamsCopyWithImpl<$Res,
+        _$AccountGenerationParamsGenerateMnemonicImpl>
+    implements _$$AccountGenerationParamsGenerateMnemonicImplCopyWith<$Res> {
+  __$$AccountGenerationParamsGenerateMnemonicImplCopyWithImpl(
+      _$AccountGenerationParamsGenerateMnemonicImpl _value,
+      $Res Function(_$AccountGenerationParamsGenerateMnemonicImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? strength = null,
+  }) {
+    return _then(_$AccountGenerationParamsGenerateMnemonicImpl(
+      strength: null == strength
+          ? _value.strength
+          : strength // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AccountGenerationParamsGenerateMnemonicImpl
+    implements AccountGenerationParamsGenerateMnemonic {
+  const _$AccountGenerationParamsGenerateMnemonicImpl({required this.strength});
+
+  @override
+  final int strength;
+
+  @override
+  String toString() {
+    return 'AccountGenerationParams.generateMnemonic(strength: $strength)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AccountGenerationParamsGenerateMnemonicImpl &&
+            (identical(other.strength, strength) ||
+                other.strength == strength));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, strength);
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AccountGenerationParamsGenerateMnemonicImplCopyWith<
+          _$AccountGenerationParamsGenerateMnemonicImpl>
+      get copyWith =>
+          __$$AccountGenerationParamsGenerateMnemonicImplCopyWithImpl<
+              _$AccountGenerationParamsGenerateMnemonicImpl>(this, _$identity);
+}
+
+abstract class AccountGenerationParamsGenerateMnemonic
+    implements AccountGenerationParams {
+  const factory AccountGenerationParamsGenerateMnemonic(
+          {required final int strength}) =
+      _$AccountGenerationParamsGenerateMnemonicImpl;
+
+  int get strength;
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AccountGenerationParamsGenerateMnemonicImplCopyWith<
+          _$AccountGenerationParamsGenerateMnemonicImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AccountGenerationParamsGenerateFromEntropyImplCopyWith<$Res> {
+  factory _$$AccountGenerationParamsGenerateFromEntropyImplCopyWith(
+          _$AccountGenerationParamsGenerateFromEntropyImpl value,
+          $Res Function(_$AccountGenerationParamsGenerateFromEntropyImpl)
+              then) =
+      __$$AccountGenerationParamsGenerateFromEntropyImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Uint8List entropyHash, Option<int> accountIndex});
+}
+
+/// @nodoc
+class __$$AccountGenerationParamsGenerateFromEntropyImplCopyWithImpl<$Res>
+    extends _$AccountGenerationParamsCopyWithImpl<$Res,
+        _$AccountGenerationParamsGenerateFromEntropyImpl>
+    implements _$$AccountGenerationParamsGenerateFromEntropyImplCopyWith<$Res> {
+  __$$AccountGenerationParamsGenerateFromEntropyImplCopyWithImpl(
+      _$AccountGenerationParamsGenerateFromEntropyImpl _value,
+      $Res Function(_$AccountGenerationParamsGenerateFromEntropyImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? entropyHash = null,
+    Object? accountIndex = null,
+  }) {
+    return _then(_$AccountGenerationParamsGenerateFromEntropyImpl(
+      entropyHash: null == entropyHash
+          ? _value.entropyHash
+          : entropyHash // ignore: cast_nullable_to_non_nullable
+              as Uint8List,
+      accountIndex: null == accountIndex
+          ? _value.accountIndex
+          : accountIndex // ignore: cast_nullable_to_non_nullable
+              as Option<int>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AccountGenerationParamsGenerateFromEntropyImpl
+    implements AccountGenerationParamsGenerateFromEntropy {
+  const _$AccountGenerationParamsGenerateFromEntropyImpl(
+      {required this.entropyHash, required this.accountIndex});
+
+  @override
+  final Uint8List entropyHash;
+  @override
+  final Option<int> accountIndex;
+
+  @override
+  String toString() {
+    return 'AccountGenerationParams.generateFromEntropy(entropyHash: $entropyHash, accountIndex: $accountIndex)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AccountGenerationParamsGenerateFromEntropyImpl &&
+            const DeepCollectionEquality()
+                .equals(other.entropyHash, entropyHash) &&
+            (identical(other.accountIndex, accountIndex) ||
+                other.accountIndex == accountIndex));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(entropyHash), accountIndex);
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AccountGenerationParamsGenerateFromEntropyImplCopyWith<
+          _$AccountGenerationParamsGenerateFromEntropyImpl>
+      get copyWith =>
+          __$$AccountGenerationParamsGenerateFromEntropyImplCopyWithImpl<
+                  _$AccountGenerationParamsGenerateFromEntropyImpl>(
+              this, _$identity);
+}
+
+abstract class AccountGenerationParamsGenerateFromEntropy
+    implements AccountGenerationParams {
+  const factory AccountGenerationParamsGenerateFromEntropy(
+          {required final Uint8List entropyHash,
+          required final Option<int> accountIndex}) =
+      _$AccountGenerationParamsGenerateFromEntropyImpl;
+
+  Uint8List get entropyHash;
+  Option<int> get accountIndex;
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AccountGenerationParamsGenerateFromEntropyImplCopyWith<
+          _$AccountGenerationParamsGenerateFromEntropyImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AccountGenerationParamsImportPrivateKeyImplCopyWith<$Res> {
+  factory _$$AccountGenerationParamsImportPrivateKeyImplCopyWith(
+          _$AccountGenerationParamsImportPrivateKeyImpl value,
+          $Res Function(_$AccountGenerationParamsImportPrivateKeyImpl) then) =
+      __$$AccountGenerationParamsImportPrivateKeyImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Uint8List privateKey});
+}
+
+/// @nodoc
+class __$$AccountGenerationParamsImportPrivateKeyImplCopyWithImpl<$Res>
+    extends _$AccountGenerationParamsCopyWithImpl<$Res,
+        _$AccountGenerationParamsImportPrivateKeyImpl>
+    implements _$$AccountGenerationParamsImportPrivateKeyImplCopyWith<$Res> {
+  __$$AccountGenerationParamsImportPrivateKeyImplCopyWithImpl(
+      _$AccountGenerationParamsImportPrivateKeyImpl _value,
+      $Res Function(_$AccountGenerationParamsImportPrivateKeyImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? privateKey = null,
+  }) {
+    return _then(_$AccountGenerationParamsImportPrivateKeyImpl(
+      privateKey: null == privateKey
+          ? _value.privateKey
+          : privateKey // ignore: cast_nullable_to_non_nullable
+              as Uint8List,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AccountGenerationParamsImportPrivateKeyImpl
+    implements AccountGenerationParamsImportPrivateKey {
+  const _$AccountGenerationParamsImportPrivateKeyImpl(
+      {required this.privateKey});
+
+  @override
+  final Uint8List privateKey;
+
+  @override
+  String toString() {
+    return 'AccountGenerationParams.importPrivateKey(privateKey: $privateKey)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AccountGenerationParamsImportPrivateKeyImpl &&
+            const DeepCollectionEquality()
+                .equals(other.privateKey, privateKey));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(privateKey));
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AccountGenerationParamsImportPrivateKeyImplCopyWith<
+          _$AccountGenerationParamsImportPrivateKeyImpl>
+      get copyWith =>
+          __$$AccountGenerationParamsImportPrivateKeyImplCopyWithImpl<
+              _$AccountGenerationParamsImportPrivateKeyImpl>(this, _$identity);
+}
+
+abstract class AccountGenerationParamsImportPrivateKey
+    implements AccountGenerationParams {
+  const factory AccountGenerationParamsImportPrivateKey(
+          {required final Uint8List privateKey}) =
+      _$AccountGenerationParamsImportPrivateKeyImpl;
+
+  Uint8List get privateKey;
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AccountGenerationParamsImportPrivateKeyImplCopyWith<
+          _$AccountGenerationParamsImportPrivateKeyImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWith<
+    $Res> {
+  factory _$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWith(
+          _$AccountGenerationParamsGenerateFromPrivateKeyImpl value,
+          $Res Function(_$AccountGenerationParamsGenerateFromPrivateKeyImpl)
+              then) =
+      __$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Uint8List jwkThumbprint});
+}
+
+/// @nodoc
+class __$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWithImpl<$Res>
+    extends _$AccountGenerationParamsCopyWithImpl<$Res,
+        _$AccountGenerationParamsGenerateFromPrivateKeyImpl>
+    implements
+        _$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWith<$Res> {
+  __$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWithImpl(
+      _$AccountGenerationParamsGenerateFromPrivateKeyImpl _value,
+      $Res Function(_$AccountGenerationParamsGenerateFromPrivateKeyImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? jwkThumbprint = null,
+  }) {
+    return _then(_$AccountGenerationParamsGenerateFromPrivateKeyImpl(
+      jwkThumbprint: null == jwkThumbprint
+          ? _value.jwkThumbprint
+          : jwkThumbprint // ignore: cast_nullable_to_non_nullable
+              as Uint8List,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AccountGenerationParamsGenerateFromPrivateKeyImpl
+    implements AccountGenerationParamsGenerateFromPrivateKey {
+  const _$AccountGenerationParamsGenerateFromPrivateKeyImpl(
+      {required this.jwkThumbprint});
+
+  @override
+  final Uint8List jwkThumbprint;
+
+  @override
+  String toString() {
+    return 'AccountGenerationParams.generateFromPrivateKey(jwkThumbprint: $jwkThumbprint)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AccountGenerationParamsGenerateFromPrivateKeyImpl &&
+            const DeepCollectionEquality()
+                .equals(other.jwkThumbprint, jwkThumbprint));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(jwkThumbprint));
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWith<
+          _$AccountGenerationParamsGenerateFromPrivateKeyImpl>
+      get copyWith =>
+          __$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWithImpl<
+                  _$AccountGenerationParamsGenerateFromPrivateKeyImpl>(
+              this, _$identity);
+}
+
+abstract class AccountGenerationParamsGenerateFromPrivateKey
+    implements AccountGenerationParams {
+  const factory AccountGenerationParamsGenerateFromPrivateKey(
+          {required final Uint8List jwkThumbprint}) =
+      _$AccountGenerationParamsGenerateFromPrivateKeyImpl;
+
+  Uint8List get jwkThumbprint;
+
+  /// Create a copy of AccountGenerationParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AccountGenerationParamsGenerateFromPrivateKeyImplCopyWith<
+          _$AccountGenerationParamsGenerateFromPrivateKeyImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}

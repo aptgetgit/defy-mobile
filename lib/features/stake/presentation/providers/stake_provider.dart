@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../providers/stake_state.dart';
+import 'stake_state.dart';
 
 part 'generated/stake_provider.g.dart';
 

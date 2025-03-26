@@ -22,6 +22,15 @@ class WalletNotifier extends _$WalletNotifier {
     );
   }
 
+   void toggleSortDirection() {
+    state = state.copyWith(
+      isSortAscending: !state.isSortAscending,
+    );
+    
+   
+  }
+
+
   // Tab navigation
   void setCurrentTab(int index) {
     state = state.copyWith(
@@ -32,9 +41,24 @@ class WalletNotifier extends _$WalletNotifier {
 
   // More button actions
   void toggleMoreButton() {
-    state = state.copyWith(
-      isMoreButtonSelected: !state.isMoreButtonSelected,
-    );
+    if (!state.isMoreButtonSelected) {
+      // Entering More mode - restore selections for hidden items
+      state = state.copyWith(
+        isMoreButtonSelected: true,
+        selectedTokens: state.hideSelected ? state.hiddenTokens : {},
+        selectedNFTs: state.hideSelected ? state.hiddenNFTs : {},
+        isBalanceHidden: !state.isMoreButtonSelected ? true : state.isBalanceHidden,
+        isHidingActive: state.isMoreButtonSelected ? false : state.isHidingActive,
+      );
+    } else {
+      // Exiting More mode
+      state = state.copyWith(
+        isMoreButtonSelected: false,
+        selectedTokens: {},
+        selectedNFTs: {},
+        isBalanceHidden: false,
+      );
+    }
   }
 
   // Balance actions
@@ -139,6 +163,10 @@ class WalletNotifier extends _$WalletNotifier {
 
   // Apply hide/unhide
   void applyChanges() {
+    // Store the current selections
+    final Set<int> hiddenTokens = Set<int>.from(state.selectedTokens);
+    final Map<int, Set<int>> hiddenNFTs = Map<int, Set<int>>.from(state.selectedNFTs);
+    
     if (state.isHidingActive) {
       // Filter tokens
       final List<Token> updatedDisplayedTokens = state.allTokens
@@ -147,24 +175,12 @@ class WalletNotifier extends _$WalletNotifier {
           .toList();
       
       // Filter NFT collections
-      final List<NFTCollection> updatedDisplayedNFTCollections = state.allNFTCollections
-          .asMap()
-          .entries
-          .map((MapEntry<int, NFTCollection> entry) {
-            final int collectionIndex = entry.key;
-            final NFTCollection collection = entry.value;
-            
-            return NFTCollection(
-              name: collection.name,
-              count: collection.count,
-              nfts: collection.nfts.where((NFT nft) {
-                final int nftIndex = collection.nfts.indexOf(nft);
-                return !state.selectedNFTs.containsKey(collectionIndex) || 
-                      !state.selectedNFTs[collectionIndex]!.contains(nftIndex);
-              }).toList(),
-            );
-          })
-          .toList();
+      final List<NFTCollection> updatedDisplayedNFTCollections = [];
+      for (int i = 0; i < state.allNFTCollections.length; i++) {
+        if (!(state.allCollectionNFTsSelected[i] ?? false)) {
+          updatedDisplayedNFTCollections.add(state.allNFTCollections[i]);
+        }
+      }
       
       state = state.copyWith(
         isMoreButtonSelected: false,
@@ -172,15 +188,17 @@ class WalletNotifier extends _$WalletNotifier {
         displayedNFTCollections: updatedDisplayedNFTCollections,
         hideSelected: true,
         isHidingActive: false,
-        selectedTokens: {},
-        selectedNFTs: {},
+        // Don't clear selections - we need to remember what's hidden
+        hiddenTokens: hiddenTokens, // Store hidden tokens
+        hiddenNFTs: hiddenNFTs,   // Store hidden NFTs
       );
     } else {
-      // Just close more options panel
+      // Just close more options panel without changing what's hidden
       state = state.copyWith(
         isMoreButtonSelected: false,
-        selectedTokens: {},
-        selectedNFTs: {},
+        // Keep track of what's hidden separately from what's selected
+        selectedTokens: {},  // Clear current selections
+        selectedNFTs: {},   // Clear current selections
       );
     }
   }
@@ -273,36 +291,60 @@ void toggleSort24hr() {
 
   // Helper methods for sorting
   void _sortTokensByPrice() {
-    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
-      ..sort((Token a, Token b) => _extractNumber(b.price).compareTo(_extractNumber(a.price)));
-      
+    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens);
+    
+    // Sort based on the direction flag
+    if (state.isSortAscending) {
+      sortedTokens.sort((Token a, Token b) => _extractNumber(a.price).compareTo(_extractNumber(b.price)));
+    } else {
+      sortedTokens.sort((Token a, Token b) => _extractNumber(b.price).compareTo(_extractNumber(a.price)));
+    }
+        
     state = state.copyWith(
       displayedTokens: sortedTokens,
     );
   }
   
   void _sortTokensByBalance() {
-    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
-      ..sort((Token a, Token b) => _extractNumber(b.balance as String).compareTo(_extractNumber(a.balance as String)));
-      
+    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens);
+    
+    // Sort based on the direction flag
+    if (state.isSortAscending) {
+      sortedTokens.sort((Token a, Token b) => _extractNumber(a.balance as String).compareTo(_extractNumber(b.balance as String)));
+    } else {
+      sortedTokens.sort((Token a, Token b) => _extractNumber(b.balance as String).compareTo(_extractNumber(a.balance as String)));
+    }
+        
     state = state.copyWith(
       displayedTokens: sortedTokens,
     );
   }
   
   void _sortTokensAlphabetically() {
-    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
-      ..sort((Token a, Token b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-      
+    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens);
+    
+    // Sort based on the direction flag
+    if (state.isSortAscending) {
+      sortedTokens.sort((Token a, Token b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    } else {
+      sortedTokens.sort((Token a, Token b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
+    }
+        
     state = state.copyWith(
       displayedTokens: sortedTokens,
     );
   }
   
   void _sortTokensBy24hrChange() {
-    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens)
-      ..sort((Token a, Token b) => _extractPercentage(b.change).compareTo(_extractPercentage(a.change)));
-      
+    final List<Token> sortedTokens = List<Token>.from(state.displayedTokens);
+    
+    // Sort based on the direction flag
+    if (state.isSortAscending) {
+      sortedTokens.sort((Token a, Token b) => _extractPercentage(a.change).compareTo(_extractPercentage(b.change)));
+    } else {
+      sortedTokens.sort((Token a, Token b) => _extractPercentage(b.change).compareTo(_extractPercentage(a.change)));
+    }
+        
     state = state.copyWith(
       displayedTokens: sortedTokens,
     );
@@ -370,12 +412,12 @@ void toggleSort24hr() {
       nfts: <NFT>[
         NFT(
           id: '#4147', 
-          price: '0.02 APT', 
+          price: '0.02', 
           imageUrl: 'assets/images/Mask group.png',
         ),
         NFT(
           id: '#4148', 
-          price: '0.02 APT', 
+          price: '0.02', 
           imageUrl: 'assets/images/Mask group (1).png',
           type: NFTType.audio,
         ),
@@ -387,13 +429,13 @@ void toggleSort24hr() {
       nfts: <NFT>[
         NFT(
           id: '#4149', 
-          price: '0.02 APT', 
+          price: '0.02', 
           imageUrl: 'assets/images/Mask group (2).png',
           type: NFTType.video,
         ),
         NFT(
           id: '#4150', 
-          price: '0.02 APT', 
+          price: '0.02', 
           imageUrl: 'assets/images/Mask group (3).png',
         ),
       ],

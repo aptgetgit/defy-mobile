@@ -29,7 +29,11 @@ class WalletSearchScreenRoute extends GoRouteData {
   const WalletSearchScreenRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const WalletSearchScreen();
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return FadeSlideTransition(
+      child: const WalletSearchScreen(),
+    );
+  }
 
   static final AppRoute route = AppRoute.public(
     redirectIfAuthenticated: const HomeRoute().location,

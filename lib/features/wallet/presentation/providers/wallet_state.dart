@@ -21,6 +21,7 @@ class WalletState with _$WalletState {
     @Default({}) Set<int> watchlistTokens,
     @Default(false) bool hideSelected,
     @Default(false) bool isWatchlistActionTriggered,
+    @Default({}) Set<int> hiddenTokens,
     
     // NFT management
     @Default([]) List<NFTCollection> allNFTCollections,
@@ -28,6 +29,7 @@ class WalletState with _$WalletState {
     @Default({}) Map<int, Set<int>> selectedNFTs,
     @Default({}) Map<int, bool> expandedStates,
     @Default({}) Map<int, bool> allCollectionNFTsSelected,
+    @Default({}) Map<int, Set<int>> hiddenNFTs,
     
     // UI state
     @Default(0) int currentTabIndex,
@@ -41,5 +43,6 @@ class WalletState with _$WalletState {
     @Default(true) bool isSortBalanceButtonSelected,
     @Default(false) bool isSortAlphabetButtonSelected,
     @Default(false) bool isSort24hrButtonSelected,
+    @Default(true) bool isSortAscending, // Added sort direction tracking
   }) = _WalletState;
 }

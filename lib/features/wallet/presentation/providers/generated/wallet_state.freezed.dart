@@ -26,7 +26,8 @@ mixin _$WalletState {
   Set<int> get selectedTokens => throw _privateConstructorUsedError;
   Set<int> get watchlistTokens => throw _privateConstructorUsedError;
   bool get hideSelected => throw _privateConstructorUsedError;
-  bool get isWatchlistActionTriggered =>
+  bool get isWatchlistActionTriggered => throw _privateConstructorUsedError;
+  Set<int> get hiddenTokens =>
       throw _privateConstructorUsedError; // NFT management
   List<NFTCollection> get allNFTCollections =>
       throw _privateConstructorUsedError;
@@ -35,6 +36,8 @@ mixin _$WalletState {
   Map<int, Set<int>> get selectedNFTs => throw _privateConstructorUsedError;
   Map<int, bool> get expandedStates => throw _privateConstructorUsedError;
   Map<int, bool> get allCollectionNFTsSelected =>
+      throw _privateConstructorUsedError;
+  Map<int, Set<int>> get hiddenNFTs =>
       throw _privateConstructorUsedError; // UI state
   int get currentTabIndex => throw _privateConstructorUsedError;
   bool get isMoreButtonSelected => throw _privateConstructorUsedError;
@@ -46,6 +49,7 @@ mixin _$WalletState {
   bool get isSortBalanceButtonSelected => throw _privateConstructorUsedError;
   bool get isSortAlphabetButtonSelected => throw _privateConstructorUsedError;
   bool get isSort24hrButtonSelected => throw _privateConstructorUsedError;
+  bool get isSortAscending => throw _privateConstructorUsedError;
 
   /// Create a copy of WalletState
   /// with the given fields replaced by the non-null parameter values.
@@ -70,11 +74,13 @@ abstract class $WalletStateCopyWith<$Res> {
       Set<int> watchlistTokens,
       bool hideSelected,
       bool isWatchlistActionTriggered,
+      Set<int> hiddenTokens,
       List<NFTCollection> allNFTCollections,
       List<NFTCollection> displayedNFTCollections,
       Map<int, Set<int>> selectedNFTs,
       Map<int, bool> expandedStates,
       Map<int, bool> allCollectionNFTsSelected,
+      Map<int, Set<int>> hiddenNFTs,
       int currentTabIndex,
       bool isMoreButtonSelected,
       bool isHidingActive,
@@ -83,7 +89,8 @@ abstract class $WalletStateCopyWith<$Res> {
       bool isSortPriceButtonSelected,
       bool isSortBalanceButtonSelected,
       bool isSortAlphabetButtonSelected,
-      bool isSort24hrButtonSelected});
+      bool isSort24hrButtonSelected,
+      bool isSortAscending});
 }
 
 /// @nodoc
@@ -110,11 +117,13 @@ class _$WalletStateCopyWithImpl<$Res, $Val extends WalletState>
     Object? watchlistTokens = null,
     Object? hideSelected = null,
     Object? isWatchlistActionTriggered = null,
+    Object? hiddenTokens = null,
     Object? allNFTCollections = null,
     Object? displayedNFTCollections = null,
     Object? selectedNFTs = null,
     Object? expandedStates = null,
     Object? allCollectionNFTsSelected = null,
+    Object? hiddenNFTs = null,
     Object? currentTabIndex = null,
     Object? isMoreButtonSelected = null,
     Object? isHidingActive = null,
@@ -124,6 +133,7 @@ class _$WalletStateCopyWithImpl<$Res, $Val extends WalletState>
     Object? isSortBalanceButtonSelected = null,
     Object? isSortAlphabetButtonSelected = null,
     Object? isSort24hrButtonSelected = null,
+    Object? isSortAscending = null,
   }) {
     return _then(_value.copyWith(
       selectedBalanceOption: null == selectedBalanceOption
@@ -162,6 +172,10 @@ class _$WalletStateCopyWithImpl<$Res, $Val extends WalletState>
           ? _value.isWatchlistActionTriggered
           : isWatchlistActionTriggered // ignore: cast_nullable_to_non_nullable
               as bool,
+      hiddenTokens: null == hiddenTokens
+          ? _value.hiddenTokens
+          : hiddenTokens // ignore: cast_nullable_to_non_nullable
+              as Set<int>,
       allNFTCollections: null == allNFTCollections
           ? _value.allNFTCollections
           : allNFTCollections // ignore: cast_nullable_to_non_nullable
@@ -182,6 +196,10 @@ class _$WalletStateCopyWithImpl<$Res, $Val extends WalletState>
           ? _value.allCollectionNFTsSelected
           : allCollectionNFTsSelected // ignore: cast_nullable_to_non_nullable
               as Map<int, bool>,
+      hiddenNFTs: null == hiddenNFTs
+          ? _value.hiddenNFTs
+          : hiddenNFTs // ignore: cast_nullable_to_non_nullable
+              as Map<int, Set<int>>,
       currentTabIndex: null == currentTabIndex
           ? _value.currentTabIndex
           : currentTabIndex // ignore: cast_nullable_to_non_nullable
@@ -218,6 +236,10 @@ class _$WalletStateCopyWithImpl<$Res, $Val extends WalletState>
           ? _value.isSort24hrButtonSelected
           : isSort24hrButtonSelected // ignore: cast_nullable_to_non_nullable
               as bool,
+      isSortAscending: null == isSortAscending
+          ? _value.isSortAscending
+          : isSortAscending // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -240,11 +262,13 @@ abstract class _$$WalletStateImplCopyWith<$Res>
       Set<int> watchlistTokens,
       bool hideSelected,
       bool isWatchlistActionTriggered,
+      Set<int> hiddenTokens,
       List<NFTCollection> allNFTCollections,
       List<NFTCollection> displayedNFTCollections,
       Map<int, Set<int>> selectedNFTs,
       Map<int, bool> expandedStates,
       Map<int, bool> allCollectionNFTsSelected,
+      Map<int, Set<int>> hiddenNFTs,
       int currentTabIndex,
       bool isMoreButtonSelected,
       bool isHidingActive,
@@ -253,7 +277,8 @@ abstract class _$$WalletStateImplCopyWith<$Res>
       bool isSortPriceButtonSelected,
       bool isSortBalanceButtonSelected,
       bool isSortAlphabetButtonSelected,
-      bool isSort24hrButtonSelected});
+      bool isSort24hrButtonSelected,
+      bool isSortAscending});
 }
 
 /// @nodoc
@@ -278,11 +303,13 @@ class __$$WalletStateImplCopyWithImpl<$Res>
     Object? watchlistTokens = null,
     Object? hideSelected = null,
     Object? isWatchlistActionTriggered = null,
+    Object? hiddenTokens = null,
     Object? allNFTCollections = null,
     Object? displayedNFTCollections = null,
     Object? selectedNFTs = null,
     Object? expandedStates = null,
     Object? allCollectionNFTsSelected = null,
+    Object? hiddenNFTs = null,
     Object? currentTabIndex = null,
     Object? isMoreButtonSelected = null,
     Object? isHidingActive = null,
@@ -292,6 +319,7 @@ class __$$WalletStateImplCopyWithImpl<$Res>
     Object? isSortBalanceButtonSelected = null,
     Object? isSortAlphabetButtonSelected = null,
     Object? isSort24hrButtonSelected = null,
+    Object? isSortAscending = null,
   }) {
     return _then(_$WalletStateImpl(
       selectedBalanceOption: null == selectedBalanceOption
@@ -330,6 +358,10 @@ class __$$WalletStateImplCopyWithImpl<$Res>
           ? _value.isWatchlistActionTriggered
           : isWatchlistActionTriggered // ignore: cast_nullable_to_non_nullable
               as bool,
+      hiddenTokens: null == hiddenTokens
+          ? _value._hiddenTokens
+          : hiddenTokens // ignore: cast_nullable_to_non_nullable
+              as Set<int>,
       allNFTCollections: null == allNFTCollections
           ? _value._allNFTCollections
           : allNFTCollections // ignore: cast_nullable_to_non_nullable
@@ -350,6 +382,10 @@ class __$$WalletStateImplCopyWithImpl<$Res>
           ? _value._allCollectionNFTsSelected
           : allCollectionNFTsSelected // ignore: cast_nullable_to_non_nullable
               as Map<int, bool>,
+      hiddenNFTs: null == hiddenNFTs
+          ? _value._hiddenNFTs
+          : hiddenNFTs // ignore: cast_nullable_to_non_nullable
+              as Map<int, Set<int>>,
       currentTabIndex: null == currentTabIndex
           ? _value.currentTabIndex
           : currentTabIndex // ignore: cast_nullable_to_non_nullable
@@ -386,6 +422,10 @@ class __$$WalletStateImplCopyWithImpl<$Res>
           ? _value.isSort24hrButtonSelected
           : isSort24hrButtonSelected // ignore: cast_nullable_to_non_nullable
               as bool,
+      isSortAscending: null == isSortAscending
+          ? _value.isSortAscending
+          : isSortAscending // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -403,11 +443,13 @@ class _$WalletStateImpl implements _WalletState {
       final Set<int> watchlistTokens = const {},
       this.hideSelected = false,
       this.isWatchlistActionTriggered = false,
+      final Set<int> hiddenTokens = const {},
       final List<NFTCollection> allNFTCollections = const [],
       final List<NFTCollection> displayedNFTCollections = const [],
       final Map<int, Set<int>> selectedNFTs = const {},
       final Map<int, bool> expandedStates = const {},
       final Map<int, bool> allCollectionNFTsSelected = const {},
+      final Map<int, Set<int>> hiddenNFTs = const {},
       this.currentTabIndex = 0,
       this.isMoreButtonSelected = false,
       this.isHidingActive = false,
@@ -416,16 +458,19 @@ class _$WalletStateImpl implements _WalletState {
       this.isSortPriceButtonSelected = false,
       this.isSortBalanceButtonSelected = true,
       this.isSortAlphabetButtonSelected = false,
-      this.isSort24hrButtonSelected = false})
+      this.isSort24hrButtonSelected = false,
+      this.isSortAscending = true})
       : _allTokens = allTokens,
         _displayedTokens = displayedTokens,
         _selectedTokens = selectedTokens,
         _watchlistTokens = watchlistTokens,
+        _hiddenTokens = hiddenTokens,
         _allNFTCollections = allNFTCollections,
         _displayedNFTCollections = displayedNFTCollections,
         _selectedNFTs = selectedNFTs,
         _expandedStates = expandedStates,
-        _allCollectionNFTsSelected = allCollectionNFTsSelected;
+        _allCollectionNFTsSelected = allCollectionNFTsSelected,
+        _hiddenNFTs = hiddenNFTs;
 
 // Balance information
   @override
@@ -481,6 +526,15 @@ class _$WalletStateImpl implements _WalletState {
   @override
   @JsonKey()
   final bool isWatchlistActionTriggered;
+  final Set<int> _hiddenTokens;
+  @override
+  @JsonKey()
+  Set<int> get hiddenTokens {
+    if (_hiddenTokens is EqualUnmodifiableSetView) return _hiddenTokens;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableSetView(_hiddenTokens);
+  }
+
 // NFT management
   final List<NFTCollection> _allNFTCollections;
 // NFT management
@@ -531,6 +585,15 @@ class _$WalletStateImpl implements _WalletState {
     return EqualUnmodifiableMapView(_allCollectionNFTsSelected);
   }
 
+  final Map<int, Set<int>> _hiddenNFTs;
+  @override
+  @JsonKey()
+  Map<int, Set<int>> get hiddenNFTs {
+    if (_hiddenNFTs is EqualUnmodifiableMapView) return _hiddenNFTs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_hiddenNFTs);
+  }
+
 // UI state
   @override
   @JsonKey()
@@ -560,10 +623,13 @@ class _$WalletStateImpl implements _WalletState {
   @override
   @JsonKey()
   final bool isSort24hrButtonSelected;
+  @override
+  @JsonKey()
+  final bool isSortAscending;
 
   @override
   String toString() {
-    return 'WalletState(selectedBalanceOption: $selectedBalanceOption, totalBalance: $totalBalance, isBalanceHidden: $isBalanceHidden, allTokens: $allTokens, displayedTokens: $displayedTokens, selectedTokens: $selectedTokens, watchlistTokens: $watchlistTokens, hideSelected: $hideSelected, isWatchlistActionTriggered: $isWatchlistActionTriggered, allNFTCollections: $allNFTCollections, displayedNFTCollections: $displayedNFTCollections, selectedNFTs: $selectedNFTs, expandedStates: $expandedStates, allCollectionNFTsSelected: $allCollectionNFTsSelected, currentTabIndex: $currentTabIndex, isMoreButtonSelected: $isMoreButtonSelected, isHidingActive: $isHidingActive, isQrScannerOpen: $isQrScannerOpen, isSortSheetVisible: $isSortSheetVisible, isSortPriceButtonSelected: $isSortPriceButtonSelected, isSortBalanceButtonSelected: $isSortBalanceButtonSelected, isSortAlphabetButtonSelected: $isSortAlphabetButtonSelected, isSort24hrButtonSelected: $isSort24hrButtonSelected)';
+    return 'WalletState(selectedBalanceOption: $selectedBalanceOption, totalBalance: $totalBalance, isBalanceHidden: $isBalanceHidden, allTokens: $allTokens, displayedTokens: $displayedTokens, selectedTokens: $selectedTokens, watchlistTokens: $watchlistTokens, hideSelected: $hideSelected, isWatchlistActionTriggered: $isWatchlistActionTriggered, hiddenTokens: $hiddenTokens, allNFTCollections: $allNFTCollections, displayedNFTCollections: $displayedNFTCollections, selectedNFTs: $selectedNFTs, expandedStates: $expandedStates, allCollectionNFTsSelected: $allCollectionNFTsSelected, hiddenNFTs: $hiddenNFTs, currentTabIndex: $currentTabIndex, isMoreButtonSelected: $isMoreButtonSelected, isHidingActive: $isHidingActive, isQrScannerOpen: $isQrScannerOpen, isSortSheetVisible: $isSortSheetVisible, isSortPriceButtonSelected: $isSortPriceButtonSelected, isSortBalanceButtonSelected: $isSortBalanceButtonSelected, isSortAlphabetButtonSelected: $isSortAlphabetButtonSelected, isSort24hrButtonSelected: $isSort24hrButtonSelected, isSortAscending: $isSortAscending)';
   }
 
   @override
@@ -587,10 +653,11 @@ class _$WalletStateImpl implements _WalletState {
                 .equals(other._watchlistTokens, _watchlistTokens) &&
             (identical(other.hideSelected, hideSelected) ||
                 other.hideSelected == hideSelected) &&
-            (identical(other.isWatchlistActionTriggered,
-                    isWatchlistActionTriggered) ||
+            (identical(other.isWatchlistActionTriggered, isWatchlistActionTriggered) ||
                 other.isWatchlistActionTriggered ==
                     isWatchlistActionTriggered) &&
+            const DeepCollectionEquality()
+                .equals(other._hiddenTokens, _hiddenTokens) &&
             const DeepCollectionEquality()
                 .equals(other._allNFTCollections, _allNFTCollections) &&
             const DeepCollectionEquality().equals(
@@ -601,6 +668,8 @@ class _$WalletStateImpl implements _WalletState {
                 .equals(other._expandedStates, _expandedStates) &&
             const DeepCollectionEquality().equals(
                 other._allCollectionNFTsSelected, _allCollectionNFTsSelected) &&
+            const DeepCollectionEquality()
+                .equals(other._hiddenNFTs, _hiddenNFTs) &&
             (identical(other.currentTabIndex, currentTabIndex) ||
                 other.currentTabIndex == currentTabIndex) &&
             (identical(other.isMoreButtonSelected, isMoreButtonSelected) ||
@@ -622,7 +691,9 @@ class _$WalletStateImpl implements _WalletState {
                 other.isSortAlphabetButtonSelected ==
                     isSortAlphabetButtonSelected) &&
             (identical(other.isSort24hrButtonSelected, isSort24hrButtonSelected) ||
-                other.isSort24hrButtonSelected == isSort24hrButtonSelected));
+                other.isSort24hrButtonSelected == isSort24hrButtonSelected) &&
+            (identical(other.isSortAscending, isSortAscending) ||
+                other.isSortAscending == isSortAscending));
   }
 
   @override
@@ -637,11 +708,13 @@ class _$WalletStateImpl implements _WalletState {
         const DeepCollectionEquality().hash(_watchlistTokens),
         hideSelected,
         isWatchlistActionTriggered,
+        const DeepCollectionEquality().hash(_hiddenTokens),
         const DeepCollectionEquality().hash(_allNFTCollections),
         const DeepCollectionEquality().hash(_displayedNFTCollections),
         const DeepCollectionEquality().hash(_selectedNFTs),
         const DeepCollectionEquality().hash(_expandedStates),
         const DeepCollectionEquality().hash(_allCollectionNFTsSelected),
+        const DeepCollectionEquality().hash(_hiddenNFTs),
         currentTabIndex,
         isMoreButtonSelected,
         isHidingActive,
@@ -650,7 +723,8 @@ class _$WalletStateImpl implements _WalletState {
         isSortPriceButtonSelected,
         isSortBalanceButtonSelected,
         isSortAlphabetButtonSelected,
-        isSort24hrButtonSelected
+        isSort24hrButtonSelected,
+        isSortAscending
       ]);
 
   /// Create a copy of WalletState
@@ -673,11 +747,13 @@ abstract class _WalletState implements WalletState {
       final Set<int> watchlistTokens,
       final bool hideSelected,
       final bool isWatchlistActionTriggered,
+      final Set<int> hiddenTokens,
       final List<NFTCollection> allNFTCollections,
       final List<NFTCollection> displayedNFTCollections,
       final Map<int, Set<int>> selectedNFTs,
       final Map<int, bool> expandedStates,
       final Map<int, bool> allCollectionNFTsSelected,
+      final Map<int, Set<int>> hiddenNFTs,
       final int currentTabIndex,
       final bool isMoreButtonSelected,
       final bool isHidingActive,
@@ -686,7 +762,8 @@ abstract class _WalletState implements WalletState {
       final bool isSortPriceButtonSelected,
       final bool isSortBalanceButtonSelected,
       final bool isSortAlphabetButtonSelected,
-      final bool isSort24hrButtonSelected}) = _$WalletStateImpl;
+      final bool isSort24hrButtonSelected,
+      final bool isSortAscending}) = _$WalletStateImpl;
 
 // Balance information
   @override
@@ -706,7 +783,9 @@ abstract class _WalletState implements WalletState {
   @override
   bool get hideSelected;
   @override
-  bool get isWatchlistActionTriggered; // NFT management
+  bool get isWatchlistActionTriggered;
+  @override
+  Set<int> get hiddenTokens; // NFT management
   @override
   List<NFTCollection> get allNFTCollections;
   @override
@@ -716,7 +795,9 @@ abstract class _WalletState implements WalletState {
   @override
   Map<int, bool> get expandedStates;
   @override
-  Map<int, bool> get allCollectionNFTsSelected; // UI state
+  Map<int, bool> get allCollectionNFTsSelected;
+  @override
+  Map<int, Set<int>> get hiddenNFTs; // UI state
   @override
   int get currentTabIndex;
   @override
@@ -735,6 +816,8 @@ abstract class _WalletState implements WalletState {
   bool get isSortAlphabetButtonSelected;
   @override
   bool get isSort24hrButtonSelected;
+  @override
+  bool get isSortAscending;
 
   /// Create a copy of WalletState
   /// with the given fields replaced by the non-null parameter values.

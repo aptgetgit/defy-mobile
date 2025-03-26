@@ -37,6 +37,7 @@ class CustomNavBar extends ConsumerWidget {
           width: !isMoreOptionsSelected ? 0.6.sw : 0.7.sw,
           child: Stack(
             children: <Widget>[
+              // Nav bar container
               AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
@@ -62,9 +63,9 @@ class CustomNavBar extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             IconButton(
-                              onPressed: () {
+                              onPressed: !isMoreOptionsSelected ? () {
                                 const ExploreScreenRoute().go(context);
-                              },
+                              } : null,
                               icon: Icon(
                                 pageIndex == 1
                                     ? PhosphorIconsFill.magnifyingGlass
@@ -75,9 +76,9 @@ class CustomNavBar extends ConsumerWidget {
                             ),
                             Gap(20.w),
                             IconButton(
-                              onPressed: () {
+                              onPressed: !isMoreOptionsSelected ? () {
                                 const WalletScreenRoute().go(context);
-                              },
+                              } : null,
                               icon: Icon(
                                 pageIndex == 2
                                     ? PhosphorIconsFill.storefront
@@ -94,87 +95,86 @@ class CustomNavBar extends ConsumerWidget {
                         opacity: isMoreOptionsSelected ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            IconButton(
-                              onPressed: onSortPressed,
-                              icon: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Icon(
-                                    PhosphorIconsRegular.arrowBendDoubleUpLeft,
-                                    color: AppColors.greyLight,
-                                    size: 22.sp,
-                                  ),
-                                  Text(
-                                    'Sort',
-                                    style: TextStyle(
+                        child: AbsorbPointer(
+                          absorbing: !isMoreOptionsSelected,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              IconButton(
+                                onPressed: onSortPressed,
+                                icon: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      PhosphorIconsRegular.arrowBendDoubleUpLeft,
                                       color: AppColors.greyLight,
-                                      fontSize: 12.sp,
+                                      size: 22.sp,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      'Sort',
+                                      style: TextStyle(
+                                        color: AppColors.greyLight,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              onPressed: onWatchlistPressed,
-                              icon: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Icon(
-                                    PhosphorIconsRegular.star,
-                                    color: AppColors.greyLight,
-                                    size: 22.sp,
-                                  ),
-                                  Text(
-                                    'Watchlist',
-                                    style: TextStyle(
+                              IconButton(
+                                onPressed: onWatchlistPressed,
+                                icon: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      PhosphorIconsRegular.star,
                                       color: AppColors.greyLight,
-                                      fontSize: 12.sp,
+                                      size: 22.sp,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      'Watchlist',
+                                      style: TextStyle(
+                                        color: AppColors.greyLight,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              onPressed: onHidePressed,
-                              icon: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Icon(
-                                    PhosphorIconsRegular.eye,
-                                    color: AppColors.greyLight,
-                                    size: 22.sp,
-                                  ),
-                                  Text(
-                                    'Hide',
-                                    style: TextStyle(
+                              IconButton(
+                                onPressed: onHidePressed,
+                                icon: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      PhosphorIconsRegular.eye,
                                       color: AppColors.greyLight,
-                                      fontSize: 12.sp,
+                                      size: 22.sp,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      'Hide',
+                                      style: TextStyle(
+                                        color: AppColors.greyLight,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              // Use AnimatedOpacity instead of Visibility for the floating action button
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                top: 0,
-                left: 0,
-                right: 0,
-                child: AnimatedOpacity(
-                  opacity: !isMoreOptionsSelected ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
+              
+              // Dashboard floating action button - only add it when more options are not selected
+              if (!isMoreOptionsSelected)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
                   child: Container(
                     height: 95.h,
                     alignment: Alignment.topCenter,
@@ -183,10 +183,9 @@ class CustomNavBar extends ConsumerWidget {
                     ),
                   ),
                 ),
-              ),
             ],
           ),
-        ),
+        ), 
       ),
     );
 }

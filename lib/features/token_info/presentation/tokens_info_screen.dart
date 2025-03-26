@@ -7,7 +7,7 @@ import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_bottom_nav_bar_with_holders.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
-import '../../token_info/presentation/shared/staking_chart.dart';
+import 'shared/staking_chart.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';

@@ -10,31 +10,42 @@ import 'custom_check_box.dart';
 
 class NFTItem extends StatelessWidget {
   const NFTItem({
-    super.key,
     required this.nft,
-    this.isSelected = false,
-    this.showCheckbox = false,
-    this.onCheckboxChanged,
-    this.onTap,
+    required this.isSelected,
+    required this.showCheckbox,
+    required this.onCheckboxChanged,
+    this.isHiding = false, // Add isHiding parameter
+    super.key,
   });
 
   final NFT nft;
   final bool isSelected;
   final bool showCheckbox;
-  final Function(bool)? onCheckboxChanged;
-  final VoidCallback? onTap;
+  final ValueChanged<bool>? onCheckboxChanged;
+  final bool isHiding; // New parameter to track if we're in hiding mode
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
+    onTap: () {
+      if (nft.onTap != null) {
+        nft.onTap!();
+      } else {
+        // Default navigation based on NFT type
+        _navigateToNFTInfo(context);
+      }
+    },
     child: Container(
+     
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Stack(
             children: <Widget>[
+              // NFT Image with opacity based on selection and hiding mode
               Opacity(
-                opacity: isSelected ? 0.5 : 1.0,
+                // Only apply opacity when both selected AND in hiding mode
+                opacity: isSelected && isHiding ? 0.5 : 1.0,
                 child: ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
                   child: Image.asset(
@@ -45,6 +56,9 @@ class NFTItem extends StatelessWidget {
                   ),
                 ),
               ),
+          
+              
+              // Checkbox - only show when in selection mode
               if (showCheckbox)
                 Positioned(
                   right: 8.w,
@@ -63,8 +77,11 @@ class NFTItem extends StatelessWidget {
                 ),
             ],
           ),
+
+          
+          
           Padding(
-            padding: const EdgeInsets.all(6),
+            padding:  EdgeInsets.all(10.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +91,8 @@ class NFTItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    color: isSelected ? Colors.grey : AppColors.greyLight,
+                    // Only apply grey color when both selected AND in hiding mode
+                    color: isSelected && isHiding ? Colors.grey : AppColors.greyLight,
                   ),
                 ),
                 Gap(4.h),
@@ -89,7 +107,8 @@ class NFTItem extends StatelessWidget {
                       nft.price,
                       style: TextStyle(
                         fontSize: 16.sp,
-                        color: isSelected ? Colors.grey : AppColors.black,
+                        // Only apply grey color when both selected AND in hiding mode
+                        color: isSelected && isHiding ? Colors.grey : AppColors.black,
                       ),
                     ),
                   ],

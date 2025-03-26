@@ -26,9 +26,6 @@ List<RouteBase> get $appRoutes => [
       $onboardingRoute,
       $receiveScreenRoute,
       $receiveSelectScreenRoute,
-      $receiveAmountScreenRoute,
-      $receiveShareScreenRoute,
-      $receiveMethodScreenRoute,
       $splashRoute,
       $stakeRoute,
       $stakeAmountRoute,
@@ -474,75 +471,6 @@ extension $ReceiveSelectScreenRouteExtension on ReceiveSelectScreenRoute {
 
   String get location => GoRouteData.$location(
         '/receive-select',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $receiveAmountScreenRoute => GoRouteData.$route(
-      path: '/receive-amount',
-      factory: $ReceiveAmountScreenRouteExtension._fromState,
-    );
-
-extension $ReceiveAmountScreenRouteExtension on ReceiveAmountScreenRoute {
-  static ReceiveAmountScreenRoute _fromState(GoRouterState state) =>
-      const ReceiveAmountScreenRoute();
-
-  String get location => GoRouteData.$location(
-        '/receive-amount',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $receiveShareScreenRoute => GoRouteData.$route(
-      path: '/receive-share',
-      factory: $ReceiveShareScreenRouteExtension._fromState,
-    );
-
-extension $ReceiveShareScreenRouteExtension on ReceiveShareScreenRoute {
-  static ReceiveShareScreenRoute _fromState(GoRouterState state) =>
-      const ReceiveShareScreenRoute();
-
-  String get location => GoRouteData.$location(
-        '/receive-share',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $receiveMethodScreenRoute => GoRouteData.$route(
-      path: '/receive-method',
-      factory: $ReceiveMethodScreenRouteExtension._fromState,
-    );
-
-extension $ReceiveMethodScreenRouteExtension on ReceiveMethodScreenRoute {
-  static ReceiveMethodScreenRoute _fromState(GoRouterState state) =>
-      const ReceiveMethodScreenRoute();
-
-  String get location => GoRouteData.$location(
-        '/receive-method',
       );
 
   void go(BuildContext context) => context.go(location);

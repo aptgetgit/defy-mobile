@@ -17,7 +17,11 @@ class SortSheet extends StatefulWidget {
     required this.onAlphabetToggled,
     required this.on24hrToggled,
     required this.onDismiss,
+    // Add ascending parameters
+    required this.isSortAscending,
+    required this.onDirectionToggled,
   });
+  
   final bool isSortPriceButtonSelected;
   final bool isSortBalanceButtonSelected;
   final bool isSortAlphabetButtonSelected;
@@ -27,6 +31,8 @@ class SortSheet extends StatefulWidget {
   final VoidCallback onAlphabetToggled;
   final VoidCallback on24hrToggled;
   final VoidCallback onDismiss;
+  final bool isSortAscending; // New parameter
+  final VoidCallback onDirectionToggled; // New parameter to toggle direction
 
   @override
   State<SortSheet> createState() => _SortSheetState();
@@ -37,12 +43,14 @@ enum SortOption { price, balance, alphabet, change24hr }
 class _SortSheetState extends State<SortSheet> with SingleTickerProviderStateMixin {
   late SortOption _selectedSortOption;
   late AnimationController _animationController;
+  late bool _isAscending;
   
   @override
   void initState() {
     super.initState();
     // Initialize with the proper selected option
     _selectedSortOption = _getCurrentSortOption();
+    _isAscending = widget.isSortAscending;
     
     // Initialize animation controller
     _animationController = AnimationController(
@@ -73,6 +81,7 @@ class _SortSheetState extends State<SortSheet> with SingleTickerProviderStateMix
     super.didUpdateWidget(oldWidget);
     // Update the selected option if props change
     _selectedSortOption = _getCurrentSortOption();
+    _isAscending = widget.isSortAscending;
   }
 
   @override
@@ -83,15 +92,19 @@ class _SortSheetState extends State<SortSheet> with SingleTickerProviderStateMix
 
   // Switch to new sort option with animation
   void _selectSortOption(SortOption option, VoidCallback callback) {
-    if (_selectedSortOption != option) {
-      _animationController.reverse().then((_) {
-        setState(() {
-          _selectedSortOption = option;
-        });
-        
-        _animationController.forward();
-        callback();
+    if (_selectedSortOption == option) {
+      // Same option selected again - toggle direction only
+      setState(() {
+        // Update the local state immediately for UI feedback
+        _isAscending = !_isAscending;
       });
+      widget.onDirectionToggled();
+    } else {
+      // Different option selected - change option 
+      setState(() {
+        _selectedSortOption = option;
+      });
+      callback();
     }
   }
 
@@ -143,7 +156,7 @@ class _SortSheetState extends State<SortSheet> with SingleTickerProviderStateMix
                           ],
                         ),
                       ),
-                      Gap(16.h),
+                      Gap(12.h),
                       _buildSortOptions(),
                       Gap(22.h),
                       Padding(
@@ -182,19 +195,19 @@ class _SortSheetState extends State<SortSheet> with SingleTickerProviderStateMix
         SortOption.price,
         () => widget.onPriceToggled(),
       ),
-      Gap(16.h),
+      Gap(7.h),
       _buildTappableOptionRow(
         'Balance',
         SortOption.balance,
         () => widget.onBalanceToggled(),
       ),
-      Gap(16.h),
+       Gap(7.h),
       _buildTappableOptionRow(
         'Alphabet Order',
         SortOption.alphabet,
         () => widget.onAlphabetToggled(),
       ),
-      Gap(16.h),
+      Gap(7.h),
       _buildTappableOptionRow(
         '24 hr price change',
         SortOption.change24hr,
@@ -232,14 +245,14 @@ class _SortSheetState extends State<SortSheet> with SingleTickerProviderStateMix
               // Icon with fade animation
               if (isSelected)
                 Padding(
-                  padding:  EdgeInsets.only(right: 18.w),
-                  child: FadeTransition(
-                    opacity: _animationController,
-                    child: Image.asset(
-                      'assets/icons/sort-ascending.png',
-                      width: 24.sp,
-                      height: 24.sp,
-                    ),
+                  padding: EdgeInsets.only(right: 18.w),
+                  child: Image.asset(
+                    // USE LOCAL STATE for immediate feedback
+                    _isAscending
+                        ? 'assets/icons/sort-ascending.png'
+                        : 'assets/icons/sort-descending.png',
+                    width: 18.sp,
+                    height: 18.sp,
                   ),
                 )
               else
@@ -251,3 +264,4 @@ class _SortSheetState extends State<SortSheet> with SingleTickerProviderStateMix
     );
   }
 }
+

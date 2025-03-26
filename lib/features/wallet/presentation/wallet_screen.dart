@@ -20,7 +20,7 @@ import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
 import '../data/models/nft_model.dart';
 import '../data/models/token_model.dart';
-import '../presentation/providers/wallet_provider.dart';
+import 'providers/wallet_provider.dart';
 import '../widgets/balance_sheet.dart';
 import '../widgets/filter_sheet.dart';
 
@@ -151,7 +151,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
-    ));
+    ),);
   }
   
   void _setupScrollListeners() {
@@ -209,6 +209,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     await Navigator.push(
       context,
       PageRouteBuilder(
+        opaque: false, // Make the page route transparent
         pageBuilder: (context, animation, secondaryAnimation) => const QrScannerScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0, -1);
@@ -230,69 +231,91 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
   }
 
   void _showBalanceSheet() {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    barrierColor: Colors.black54,
-    isDismissible: true,
-    enableDrag: true,
-    builder: (BuildContext context) => Padding(
-      padding: EdgeInsets.only(bottom: 2.h),
-      child: BalanceSheet(
-        selectedOption: ref.read(walletNotifierProvider).selectedBalanceOption,
-        onOptionSelected: (String option) {
-          ref.read(walletNotifierProvider.notifier).setBalanceOption(option);
-        },
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) => Padding(
+        padding: EdgeInsets.only(bottom: 2.h),
+        child: BalanceSheet(
+          selectedOption: ref.read(walletNotifierProvider).selectedBalanceOption,
+          onOptionSelected: (String option) {
+            ref.read(walletNotifierProvider.notifier).setBalanceOption(option);
+          },
+        ),
       ),
-    ),
-  );
-}
- void _showSortSheet() {
-  final WalletState walletState = ref.read(walletNotifierProvider);
-  
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    isDismissible: true,
-    enableDrag: true,
-    barrierColor: Colors.black54,
-    builder: (BuildContext context) => SortSheet(
-      isSortPriceButtonSelected: walletState.isSortPriceButtonSelected,
-      isSortBalanceButtonSelected: walletState.isSortBalanceButtonSelected,
-      isSortAlphabetButtonSelected: walletState.isSortAlphabetButtonSelected,
-      isSort24hrButtonSelected: walletState.isSort24hrButtonSelected,
-      onPriceToggled: () {
-        ref.read(walletNotifierProvider.notifier).toggleSortPrice();
+    );
+  }
+  // Update the _showSortSheet method to handle sort changes with animation
+  void _showSortSheet() {
+    final WalletState walletState = ref.read(walletNotifierProvider);
+    
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) => SortSheet(
+        isSortPriceButtonSelected: walletState.isSortPriceButtonSelected,
+        isSortBalanceButtonSelected: walletState.isSortBalanceButtonSelected,
+        isSortAlphabetButtonSelected: walletState.isSortAlphabetButtonSelected,
+        isSort24hrButtonSelected: walletState.isSort24hrButtonSelected,
+        isSortAscending: walletState.isSortAscending,
+        onPriceToggled: () {
+          setState(() {
+            // Add a small delay to allow animation to show
+            Future.delayed(const Duration(milliseconds: 100), () {
+              ref.read(walletNotifierProvider.notifier).toggleSortPrice();
+              setState(() {});
+            });
+          });
+        },
+        onBalanceToggled: () {
+          setState(() {
+            Future.delayed(const Duration(milliseconds: 100), () {
+              ref.read(walletNotifierProvider.notifier).toggleSortBalance();
+              setState(() {});
+            });
+          });
+        },
+        onAlphabetToggled: () {
+          setState(() {
+            Future.delayed(const Duration(milliseconds: 100), () {
+              ref.read(walletNotifierProvider.notifier).toggleSortAlphabet();
+              setState(() {});
+            });
+          });
+        },
+        on24hrToggled: () {
+          setState(() {
+            Future.delayed(const Duration(milliseconds: 100), () {
+              ref.read(walletNotifierProvider.notifier).toggleSort24hr();
+              setState(() {});
+            });
+          });
+        },
+        onDirectionToggled: () {
+          setState(() {
+            Future.delayed(const Duration(milliseconds: 100), () {
+              ref.read(walletNotifierProvider.notifier).toggleSortDirection();
+              setState(() {});
+            });
+          });
+        },
+        onDismiss: () => Navigator.pop(context),
+      ),
+    ).then((_) {
+      if (mounted) {
         setState(() {});
-      },
-      onBalanceToggled: () {
-        ref.read(walletNotifierProvider.notifier).toggleSortBalance();
-        setState(() {});
-      },
-      onAlphabetToggled: () {
-        ref.read(walletNotifierProvider.notifier).toggleSortAlphabet();
-        setState(() {});
-      },
-      on24hrToggled: () {
-        ref.read(walletNotifierProvider.notifier).toggleSort24hr();
-        setState(() {});
-      },
-      onDismiss: () => Navigator.pop(context),
-    ),
-  ).then((_) {
-    if (mounted) {
-      setState(() {});
-    }
-  });
-}
+      }
+    });
+  }
   void _showFilterSheet() {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      isDismissible: true,
       barrierColor: Colors.black54,
       builder: (BuildContext context) => FilterSheet(
         hideSmallBalances: _hideSmallBalances,
@@ -321,7 +344,6 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      isDismissible: true,
       barrierColor: Colors.black54,
       builder: (BuildContext context) => WatchlistBottomSheet(
         onAddToWatchlist: (int? collectionIndex) {
@@ -470,11 +492,18 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
       ),
     ),
     actions: <Widget>[
-      IconButton(
-        icon: Icon(PhosphorIconsBold.magnifyingGlass, size: 24.sp),
-        onPressed: () {
-          const WalletSearchScreenRoute().push(context);
-        },
+      Hero(
+        tag: 'searchIconHero',
+        transitionOnUserGestures: true,
+        child: Material(
+          color: Colors.transparent,
+          child: IconButton(
+            icon: Icon(PhosphorIconsBold.magnifyingGlass, size: 24.sp),
+            onPressed: () {
+              const WalletSearchScreenRoute().push(context);
+            },
+          ),
+        ),
       ),
       IconButton(
         icon: Icon(PhosphorIconsBold.clockCounterClockwise, size: 24.sp),
@@ -488,173 +517,9 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     ],
   );
 
-//   Widget _buildMainContent(Size screenSize, double appBarHeight) {
-//   final WalletState walletState = ref.watch(walletNotifierProvider);
-  
-//   // Sort text logic remains the same
-//   String sortTypeText = 'Balance';
-//   if (walletState.isSortPriceButtonSelected) {
-//     sortTypeText = 'Price';
-//   } else if (walletState.isSortBalanceButtonSelected) {
-//     sortTypeText = 'Balance';
-//   } else if (walletState.isSortAlphabetButtonSelected) {
-//     sortTypeText = 'Alphabet Order';
-//   } else if (walletState.isSort24hrButtonSelected) {
-//     sortTypeText = '24 hr price change';
-//   }
-  
-//   return NestedScrollView(
-//     controller: _scrollController,
-//     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
-//       SliverToBoxAdapter(
-//         child: AnimatedContainer(
-//           duration: Duration(milliseconds: _isAnimatingHeader ? 300 : 0),
-//           height: 190.h,
-//           padding: EdgeInsets.only(
-//             // Reduce bottom padding when the more button is selected
-//             top:0,
-//             bottom: 0,
-//           ),
-//           child: WalletHeader(
-//             opacity: _opacity,
-//             balanceOption: walletState.selectedBalanceOption,
-//             onBalanceTap: _showBalanceSheet,
-//           ),
-//         ),
-//       ),
-//       SliverPersistentHeader(
-//         pinned: true,
-//         delegate: TabBarDelegate(
-//           Material(
-//             color: Colors.white,
-//             child: AnimatedContainer(
-//               duration: Duration(milliseconds: _isAnimatingHeader ? 300 : 0),
-//               decoration: BoxDecoration(
-//                 border: Border(
-//                   bottom: BorderSide(
-//                     color: AppColors.greyVeryLight,
-//                   ),
-//                 ),
-//               ),
-            
-//               padding: EdgeInsets.only(
-//                 // Reduce top padding when more button is selected
-//                 top: 0,
-//               ),
-//               child: Row(
-//                 children: <Widget>[
-//                   Expanded(
-//                     child: walletState.isMoreButtonSelected
-//                       // Show dynamic sort text and icon when more button is selected
-//                       ? Container(
-//                           height: 48.h,
-//                           alignment: Alignment.centerLeft,
-//                           padding: EdgeInsets.symmetric(horizontal: 12.w),
-//                           decoration: BoxDecoration(
-//                             border: Border(
-//                               bottom: BorderSide(
-//                                 color: AppColors.greyVeryLight,
-//                                 width: 1.0,
-//                               ),
-//                             ),
-//                           ),
-//                           child: GestureDetector(
-//                             onTap: _showSortSheet,
-//                             child: Row(
-//                               mainAxisSize: MainAxisSize.min,
-//                               children: [
-//                                 Icon(
-//                                   PhosphorIconsBold.arrowsDownUp,
-//                                   size: 20.sp,
-//                                   color: AppColors.greyDark,
-//                                 ),
-//                                 Gap(8.w),
-//                                 Text(
-//                                   sortTypeText, // Always shows specific sort option
-//                                   style: TextStyle(
-//                                     fontSize: 16.sp,
-//                                     fontWeight: FontWeight.w500,
-//                                     color: AppColors.greyDark,
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         )
-//                       // Show normal tab bar when more button is not selected
-//                       : CustomTabBar(   
-//                           tabController: _tabController,
-//                           tabs: const <String>[
-//                             'Token',
-//                             'NFT',
-//                           ],
-//                         ),
-//                   ),
-//                   // Rest of your code remains the same
-//                   if(!walletState.isMoreButtonSelected)
-//                     AnimatedOpacity(
-//                       opacity: walletState.isBalanceHidden && _isUserScrolling ? 1 : 0,
-//                       duration: const Duration(milliseconds: 450),
-//                       child: Padding(
-//                         padding: EdgeInsets.only(left: 10.w),
-//                         child: Text(
-//                           r'$1,038.56',
-//                           style: TextStyle(
-//                             fontSize: 18.sp,
-//                             fontWeight: FontWeight.w600,
-//                             color: AppColors.black,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   Gap(9.w),
-//                   if (walletState.isMoreButtonSelected)
-//                     Row(
-//                       children: [
-//                         TextButton(
-//                           onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
-//                           child: Text(
-//                             'Done',
-//                             style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
-//                           ),
-//                         )
-//                       ],
-//                     )
-//                   else
-//                     Padding(
-//                       padding:  EdgeInsets.only(right: 3.w),
-//                       child: GestureDetector(
-//                         onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
-//                         child: Icon(
-//                           PhosphorIconsBold.dotsThreeVertical,
-//                           color: AppColors.greyLight,
-//                           size: 22.sp,
-//                         ),
-//                       ),
-//                     ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     ],
-//     body: TabBarView(
-//       controller: _tabController,
-//       children: <Widget>[
-//         Padding(
-//           padding: EdgeInsets.only(top: 13.h),
-//           child: _buildTokensTab(),
-//         ),
-//         _buildNFTsTab(),
-//       ],
-//     ),
-//   );
-// }
-
 Widget _buildMainContent(Size screenSize, double appBarHeight) {
   final WalletState walletState = ref.watch(walletNotifierProvider);
-  
+
   String sortTypeText = 'Balance';
   if (walletState.isSortPriceButtonSelected) {
     sortTypeText = 'Price';
@@ -665,7 +530,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
   } else if (walletState.isSort24hrButtonSelected) {
     sortTypeText = '24 hr price change';
   }
-  
+
   return NestedScrollView(
     controller: _scrollController,
     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
@@ -673,10 +538,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
         child: AnimatedContainer(
           duration: Duration(milliseconds: _isAnimatingHeader ? 300 : 0),
           height: 190.h,
-          padding: EdgeInsets.only(
-            top: 0,
-            bottom: 0,
-          ),
+          padding: EdgeInsets.zero,
           child: WalletHeader(
             opacity: _opacity,
             balanceOption: walletState.selectedBalanceOption,
@@ -691,83 +553,87 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
             color: Colors.white,
             child: AnimatedContainer(
               duration: Duration(milliseconds: _isAnimatingHeader ? 300 : 0),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
                     color: AppColors.greyVeryLight,
                   ),
                 ),
               ),
-              padding: EdgeInsets.only(top: 0),
+              padding: const EdgeInsets.only(),
               child: Row(
                 children: <Widget>[
                   Expanded(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 400),
-                      transitionBuilder: (Widget child, Animation<double> animation) {
-                        return FadeTransition(opacity: animation, child: child);
-                      },
+                      transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
                       child: walletState.isMoreButtonSelected
-                        ? Container(
-                            key: const ValueKey('sort'),
-                            height: 48.h,
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: AppColors.greyVeryLight,
-                                  width: 1.0,
+                          ? Container(
+                              key: const ValueKey('sort'),
+                              height: 48.h,
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: AppColors.greyVeryLight,
+                                  ),
                                 ),
                               ),
-                            ),
-                            child: GestureDetector(
-                              onTap: _showSortSheet,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-
-                                    Image.asset(
-                                      'assets/icons/sort-ascending.png',
-                                      width: 20.sp,
-                                      height: 20.sp,
+                              child: GestureDetector(
+                                onTap: _showSortSheet,
+                                child: TweenAnimationBuilder<double>(
+                                  // Add a fade animation for sort type changes
+                                  tween: Tween<double>(begin: 0, end: 1),
+                                  duration: const Duration(milliseconds: 350),
+                                  key: ValueKey(sortTypeText), // Change key when sort type changes
+                                  builder: (context, value, child) => Opacity(
+                                      opacity: value,
+                                      child: child,
                                     ),
-                                // CustomSortIcon(
-                                //   size: 22.sp,
-                                //   upArrowColor: AppColors.black,
-                                //   downArrowColor: AppColors.greyLight,
-                                // ),
-
-                                  // CustomSortIcon(
-                                  //   size: 20.sp,
-                                  //   upArrowColor: AppColors.black,
-                                  //   downArrowColor: AppColors.grey,
-                                  // ),
-                                  
-                                  Gap(8.w),
-                                  Text(
-                                    sortTypeText,
-                                    style: TextStyle(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.greyDark,
-                                    ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Image.asset(
+                                        (walletState.isSortAscending
+                                            ? 'assets/icons/sort-ascending.png'
+                                            : 'assets/icons/sort-descending.png'),
+                                        width: 18.sp,
+                                        height: 18.sp,
+                                      ),
+                                      Gap(8.w),
+                                      Text(
+                                        sortTypeText,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.greyDark,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
+                            )
+                          : CustomTabBar(
+                              key: const ValueKey('tabs'),
+                              tabController: _tabController,
+                              tabs: const <String>['Token', 'NFT'],
                             ),
-                          )
-                        : CustomTabBar(
-                            key: const ValueKey('tabs'),
-                            tabController: _tabController,
-                            tabs: const <String>['Token', 'NFT'],
-                          ),
                     ),
                   ),
                   if (!walletState.isMoreButtonSelected)
-                    AnimatedOpacity(
-                      opacity: walletState.isBalanceHidden && _isUserScrolling ? 1 : 0,
-                      duration: const Duration(milliseconds: 400),
+                    TweenAnimationBuilder<double>(
+                      // This will run whenever isBalanceHidden changes
+                      tween: Tween<double>(
+                        begin: 0.0, 
+                        end: walletState.isBalanceHidden ? 1.0 : 0.0
+                      ),
+                      duration: const Duration(milliseconds: 900),
+                      builder: (context, value, child) => Opacity(
+                        opacity: value,
+                        child: child,
+                      ),
                       child: Padding(
                         padding: EdgeInsets.only(left: 10.w),
                         child: Text(
@@ -782,35 +648,42 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                     ),
                   Gap(9.w),
                   AnimatedSwitcher(
-                    duration: const Duration(milliseconds:250 ),
-                    transitionBuilder: (Widget child, Animation<double> animation) {
-                      return FadeTransition(opacity: animation, child: child);
-                    },
+                    duration: const Duration(milliseconds: 250),
+                    transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
                     child: walletState.isMoreButtonSelected
-                      ? Row(
-                          key: const ValueKey('done'),
-                          children: [
-                            TextButton(
-                              onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
-                              child: Text(
-                                'Done',
-                                style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+                        ? Row(
+                            key: const ValueKey('done'),
+                            children: [
+                              TextButton(
+                                onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
+                                child: TweenAnimationBuilder<double>(
+                                  // Add fade animation for the Done button
+                                  tween: Tween<double>(begin: 0, end: 1),
+                                  duration: const Duration(milliseconds: 350),
+                                  builder: (context, value, child) => Opacity(
+                                      opacity: value,
+                                      child: child,
+                                    ),
+                                  child: Text(
+                                    'Done',
+                                    style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+                                  ),
+                                ),
                               ),
-                            )
-                          ],
-                        )
-                      : Padding(
-                          key: const ValueKey('more'),
-                          padding: EdgeInsets.only(right: 3.w),
-                          child: GestureDetector(
-                            onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
-                            child: Icon(
-                              PhosphorIconsBold.dotsThreeVertical,
-                              color: AppColors.greyLight,
-                              size: 22.sp,
+                            ],
+                          )
+                        : Padding(
+                            key: const ValueKey('more'),
+                            padding: EdgeInsets.only(right: 3.w),
+                            child: GestureDetector(
+                              onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
+                              child: Icon(
+                                PhosphorIconsBold.dotsThreeVertical,
+                                color: AppColors.greyLight,
+                                size: 22.sp,
+                              ),
                             ),
                           ),
-                        ),
                   ),
                 ],
               ),
@@ -863,45 +736,51 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
   }
 
   // Update the _buildTokensTab method
-Widget _buildTokensTab() {
-  final WalletState walletState = ref.watch(walletNotifierProvider);
-  final List<Token> tokensToShow = walletState.isMoreButtonSelected 
-      ? walletState.allTokens 
-      : walletState.displayedTokens;
-  
-  return ListView.builder(
-    itemCount: tokensToShow.length,
-    itemBuilder: (BuildContext context, int index) {
-      final Token token = tokensToShow[index];
-      final int actualIndex = walletState.allTokens.indexOf(token);
-      final bool isSelected = walletState.selectedTokens.contains(actualIndex);
-      final bool isHidden = walletState.hideSelected && isSelected;
-      final bool isInWatchlist = walletState.watchlistTokens.contains(actualIndex);
+  Widget _buildTokensTab() {
+    final WalletState walletState = ref.watch(walletNotifierProvider);
+    final List<Token> tokensToShow = walletState.isMoreButtonSelected 
+        ? walletState.allTokens 
+        : walletState.displayedTokens;
+    
+    return ListView.builder(
+      itemCount: tokensToShow.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Token token = tokensToShow[index];
+        final int actualIndex = walletState.allTokens.indexOf(token);
+        
+        // Check if this token is in the hidden selection list
+        final bool isSelected = walletState.selectedTokens.contains(actualIndex);
+        
+        // Determine if this token should be hidden in normal mode
+        final bool isHidden = walletState.hideSelected && isSelected;
+        
+        final bool isInWatchlist = walletState.watchlistTokens.contains(actualIndex);
 
-      if (isHidden && !walletState.isMoreButtonSelected) {
-        return const SizedBox.shrink();
-      }
+        // Only hide tokens in normal mode, show all tokens in "More" mode
+        if (isHidden && !walletState.isMoreButtonSelected) {
+          return const SizedBox.shrink();
+        }
 
-      return TokenItem(
-        token: token,
-        isSelected: isSelected,
-        isInWatchlist: isInWatchlist,
-        showSelection: walletState.isMoreButtonSelected,
-        isHiding: walletState.isHidingActive,
-        onCheckboxTap: () {
-          ref.read(walletNotifierProvider.notifier).toggleTokenSelection(actualIndex);
-        },
-        // Conditionally handle tap based on more button state
-        onTap: walletState.isMoreButtonSelected
-            ? () {
-                // When more button is selected, just toggle selection instead of navigating
-                ref.read(walletNotifierProvider.notifier).toggleTokenSelection(actualIndex);
-              }
-            : () => TokensInfoRoute().push(context),
-      );
-    },
-  );
-}
+        return TokenItem(
+          token: token,
+          // Mark as selected if it's in the selection list
+          isSelected: isSelected,
+          isInWatchlist: isInWatchlist,
+          showSelection: walletState.isMoreButtonSelected,
+          // Pass isHiding based on whether hiding is active OR if this is a hidden item in "More" mode
+          isHiding: walletState.isHidingActive || (walletState.isMoreButtonSelected && isHidden),
+          onCheckboxTap: () {
+            ref.read(walletNotifierProvider.notifier).toggleTokenSelection(actualIndex);
+          },
+          onTap: walletState.isMoreButtonSelected
+              ? () {
+                  ref.read(walletNotifierProvider.notifier).toggleTokenSelection(actualIndex);
+                }
+              : () => const TokensInfoRoute().push(context),
+        );
+      },
+    );
+  }
   Widget _buildNFTsTab() {
     final WalletState walletState = ref.watch(walletNotifierProvider);
     final List<NFTCollection> collectionsToShow = walletState.isMoreButtonSelected 
@@ -963,7 +842,7 @@ Widget _buildTokensTab() {
                       Text(
                         collection.count.toString(),
                         style: TextStyle(
-                          fontSize: 18.sp, 
+                          fontSize: 16.sp, 
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -982,13 +861,15 @@ Widget _buildTokensTab() {
                         Text(
                           collection.count.toString(),
                           style: TextStyle(
-                            fontSize: 18.sp, 
+                            fontSize: 16.sp, 
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         IconButton( 
                           padding: EdgeInsets.zero,
                           alignment:  Alignment.centerRight,
+
+                          highlightColor: Colors.transparent,
                           onPressed: () {
                             ref.read(walletNotifierProvider.notifier).toggleCollectionExpanded(collectionIndex);
                           },
@@ -1005,70 +886,63 @@ Widget _buildTokensTab() {
           ),
           if(walletState.isMoreButtonSelected) Gap(walletState.isMoreButtonSelected ? 8.h : 14.h),
 
+          Gap(6.h),
           _buildNFTGrid(collectionIndex, collection, isExpanded),
         ],
       ),
     );
   }
-// Update the _buildNFTGrid method
-Widget _buildNFTGrid(int collectionIndex, NFTCollection collection, bool isExpanded) {
-  final WalletState walletState = ref.watch(walletNotifierProvider);
-  
-  return AnimatedContainer(
-    duration: const Duration(milliseconds: 300),
-    curve: Curves.easeInOut,
-    height: isExpanded || walletState.isMoreButtonSelected 
-        ? (collection.nfts.length / 2).ceil() * 210.h 
-        : 0,
-    child: ClipRect(
-      child: AnimatedOpacity(
-        opacity: isExpanded ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 300),
-        child: SizedBox(
-          width: double.infinity,
-          child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16.w,
-              mainAxisSpacing: 16.h,
-              mainAxisExtent: 250.h,
+  Widget _buildNFTGrid(int collectionIndex, NFTCollection collection, bool isExpanded) {
+    final WalletState walletState = ref.watch(walletNotifierProvider);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      height: isExpanded || walletState.isMoreButtonSelected
+          ? (collection.nfts.length / 2).ceil() * 215.h
+          : 0,
+      child: ClipRect(
+        child: AnimatedOpacity(
+          opacity: isExpanded ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 300),
+          child: SizedBox(
+            width: double.infinity,
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16.w,
+                mainAxisSpacing: 16.h,
+                mainAxisExtent: 250.h,
+              ),
+              itemCount: collection.nfts.length,
+              itemBuilder: (BuildContext context, int nftIndex) {
+                final NFT nft = collection.nfts[nftIndex];
+                final bool isSelected = walletState.selectedNFTs.containsKey(collectionIndex) &&
+                    walletState.selectedNFTs[collectionIndex]!.contains(nftIndex);
+                final bool isHidden = walletState.hideSelected && isSelected;
+
+                if (isHidden && !walletState.isMoreButtonSelected) {
+                  return const SizedBox.shrink();
+                }
+
+                return NFTItem(
+                  nft: nft,
+                  isSelected: isSelected || isHidden, // Important change: also select if hidden
+                  showCheckbox: walletState.isMoreButtonSelected,
+                  // The important fix: pass isHiding as true when item is hidden, even in More mode
+                  isHiding: walletState.isHidingActive || (walletState.isMoreButtonSelected && isHidden),
+                  onCheckboxChanged: walletState.isMoreButtonSelected
+                      ? (bool newValue) {
+                          ref.read(walletNotifierProvider.notifier).toggleNFTSelection(collectionIndex, nftIndex);
+                        }
+                      : null,
+                );
+              },
             ),
-            itemCount: collection.nfts.length,
-            itemBuilder: (BuildContext context, int nftIndex) {
-              final NFT nft = collection.nfts[nftIndex];
-              final bool isSelected = walletState.selectedNFTs.containsKey(collectionIndex) && 
-                                  walletState.selectedNFTs[collectionIndex]!.contains(nftIndex);
-              final bool isHidden = walletState.hideSelected && isSelected;
-        
-              if (isHidden && !walletState.isMoreButtonSelected) {
-                return const SizedBox.shrink();
-              }
-        
-              return NFTItem(
-                nft: nft,
-                isSelected: isSelected,
-                showCheckbox: walletState.isMoreButtonSelected,
-                // Conditionally handle tap based on more button state
-                onTap: walletState.isMoreButtonSelected
-                    ? () {
-                        // When more button is selected, just toggle selection instead of navigating
-                        ref.read(walletNotifierProvider.notifier).toggleNFTSelection(collectionIndex, nftIndex);
-                      }
-                    : () {
-                        // Normal navigation when more button is not selected
-                        // Add your navigation code here, such as:
-                        // Navigator.push(context, MaterialPageRoute(builder: (_) => NFTDetailScreen(nft: nft)));
-                      },
-                onCheckboxChanged: walletState.isMoreButtonSelected ? (bool newValue) {
-                  ref.read(walletNotifierProvider.notifier).toggleNFTSelection(collectionIndex, nftIndex);
-                } : null,
-              );
-            },
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

@@ -104,7 +104,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                     height: 55.h,
                     width: 1.sw,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      padding: EdgeInsets.only(left: 20.w, right: 10.w),
                       child: Row(
                         children: <Widget>[
                           Column(
@@ -121,6 +121,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                           ),
                           Gap(12.w),
                           Expanded(
+                           
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -201,8 +202,8 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                             child: GestureDetector(
                               onTap: delete,
                               child: Icon(
-                                PhosphorIcons.minusCircle(PhosphorIconsStyle.bold),
-                                color: Colors.red,
+                                PhosphorIconsFill.minusCircle,
+                                color: AppColors.red,
                                 size: 20.sp,
                               ),
                             ),

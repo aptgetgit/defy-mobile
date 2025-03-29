@@ -22,12 +22,12 @@ class ProgressBar extends StatelessWidget {
           (int index) => AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            width: (index + 1) == currentPage ? 69.w : 42.w,
+            width: (index + 1) == currentPage ? 64.w : 42.w,
             height: (index + 1) == currentPage ? 6.w : 4.w,
-            margin: EdgeInsets.symmetric(horizontal: 2.w),
+            margin: EdgeInsets.symmetric(horizontal: 1.w),
             decoration: BoxDecoration(
               color: index < currentPage ? AppColors.green : AppColors.greyVeryLight,
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(40.r),
             ),
           ),
         ),

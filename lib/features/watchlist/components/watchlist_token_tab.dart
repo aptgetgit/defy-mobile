@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../widgets/watchlist_grid_tile.dart';
 import '../widgets/watchlist_newList_tile.dart';
-import '../widgets/watchlist_new_collection.dart';
+import '../widgets/watchlist_new_collection_home.dart';
 
 class WatchlistTokensTab extends StatelessWidget {
   const WatchlistTokensTab({super.key});
@@ -24,7 +24,7 @@ class WatchlistTokensTab extends StatelessWidget {
                       context,
                       PageRouteBuilder(
                         transitionDuration: const Duration(milliseconds: 500),
-                        pageBuilder: (_, __, ___) => const WatchListNewCollectionScreen(),
+                        pageBuilder: (_, __, ___) => const WatchListNewCollectionHomeScreen(),
                         transitionsBuilder: (_, Animation<double> animation, __, Widget child) => FadeTransition(
                             opacity: animation,
                             child: child,

@@ -92,7 +92,7 @@ class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
   @override
   Widget build(BuildContext context) {
     // Watch the provider's currentPage and sync the local _currentPage
-    final providerPage = ref.watch(receiveProvider).currentPage;
+    final int providerPage = ref.watch(receiveProvider).currentPage;
     if (providerPage != _currentPage) {
       setState(() {
         _currentPage = providerPage;
@@ -130,9 +130,32 @@ class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Gap(10.h),
-                      Text(
-                        _headerText,
-                        style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w600),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            _headerText,
+                            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w600),
+                          ),
+                          if (_currentPage == 1)
+                            AnimatedOpacity(
+                              opacity: showSearchIcon ? 1.0 : 0.0,
+                              duration: const Duration(milliseconds: 300),
+                              child: IconButton(
+                                icon: Icon(
+                                  PhosphorIconsBold.magnifyingGlass,
+                                  size: 24.sp, 
+                                  color: Colors.black,
+                                ),
+                                onPressed: showSearchIcon 
+                                    ? () {
+                                        // Scroll to top when pressed
+                                        ref.read(scrollToTopProvider.notifier).scrollToTop();
+                                      }
+                                    : null,
+                              ),
+                            ),
+                        ],
                       ),
                       Gap(8.h),
                       Text(
@@ -143,25 +166,6 @@ class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
                     ],
                   ),
                 ),
-                // Animated search icon - only show on select screen
-                if (_currentPage == 1)
-                  AnimatedOpacity(
-                    opacity: showSearchIcon ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 300),
-                    child: IconButton(
-                      icon: Icon(
-                        PhosphorIconsBold.magnifyingGlass,
-                        size: 24.sp, 
-                        color: Colors.black,
-                      ),
-                      onPressed: showSearchIcon 
-                          ? () {
-                              // Scroll to top when pressed
-                              ref.read(scrollToTopProvider.notifier).scrollToTop();
-                            }
-                          : null,
-                    ),
-                  ),
               ],
             ),
           ),

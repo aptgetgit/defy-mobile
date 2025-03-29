@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
+import '../../watchlist/widgets/watchlist_new_collection.dart';
 
 class WatchlistBottomSheet extends StatefulWidget {
   final Function(int?) onAddToWatchlist;
@@ -20,14 +21,13 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
   bool _isCreatingCollection = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Material(
+  Widget build(BuildContext context) => Material(
       color: Colors.transparent,
       child: GestureDetector(
         onTap: () {},
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             // This ensures clicking outside dismisses the sheet
             Expanded(
               child: GestureDetector(
@@ -38,29 +38,29 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
               ),
             ),
             // Your existing content
-            _isCreatingCollection // Show create collection screen if true
-                ? _buildCreateCollectionScreen()
-                : _buildMainBottomSheet(), // Otherwise, show the main bottom sheet
+            _buildMainBottomSheet(),
           ],
         ),
       ),
     );
-  }
 
   Widget _buildMainBottomSheet() => Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 40.h),
+        // Updated padding to match balance sheet
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(21.r)),
+            // Updated border radius to match balance sheet
+            borderRadius: BorderRadius.all(Radius.circular(32.r)),
           ),
+          // Updated padding to match balance sheet
           padding: EdgeInsets.only(
-            top: 12.h,
-            left: 20.w,
-            right: 4.w,
-            bottom: 32.h,
+            bottom: 22.h,
+            top: 22.h,
+            left: 26.w,
+            right: 8.w,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -71,17 +71,26 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                 children: <Widget>[
                   Text(
                     'Choose Collection',
+                    // Updated font style to match balance sheet
                     style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
                   ),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: Icon(PhosphorIconsBold.x, color: Colors.black, size: 24.sp),
+                    padding: EdgeInsets.only(right: 22.w),
+                    visualDensity: VisualDensity.compact,
+                    icon: Icon(
+                      PhosphorIconsBold.x,
+                      color: AppColors.black,
+                      // Updated icon size to match balance sheet
+                      size: 22.sp,
+                    ),
                   ),
                 ],
               ),
-              Gap(4.h),
+              // Updated gap to match balance sheet
+              Gap(16.h),
               Padding(
                 padding: EdgeInsets.only(right: 4.w),
                 child: Column(
@@ -125,28 +134,41 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                             _isCreatingCollection = true; // Navigate to create screen
                           });
                         },
-                        child: Container(
-                          height: 54.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: AppColors.greyVeryLight,
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Gap(10.w),
-                              Icon(PhosphorIconsFill.plusCircle, size: 28.sp),
-                              Gap(10.w),
-                              Text(
-                                'Create new collection', 
-                                style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
-                              ),
-                            ],
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (BuildContext context) => const WatchListNewCollectionScreen()),
+                            );
+                          },
+                          child: Container(
+                            height: 54.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: AppColors.greyVeryLight,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Gap(16.w), // Updated gap
+                                Icon(PhosphorIconsFill.plusCircle, size: 28.sp),
+                                Gap(12.w), // Updated gap
+                                Text(
+                                  'Create new collection', 
+                                  // Updated font style
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.greyLight,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    Gap(22.h), // Updated gap before button
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: ElevatedButton(
@@ -159,17 +181,23 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _selectedCollectionIndex != null
-                              ? AppColors.black
+                              ? AppColors.blue // Updated to match balance sheet
                               : AppColors.greyMedium,
                           elevation: 0,
-                          foregroundColor: Colors.white,
-                          minimumSize: Size(double.infinity, 54.h),
-                          textStyle: TextStyle(fontSize: 16.sp),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40.r),
+                            borderRadius: BorderRadius.circular(44.r), // Updated radius
+                          ),
+                          minimumSize: Size(double.infinity, 54.h),
+                        ),
+                        child: Text(
+                          'Add to Watchlist',
+                          // Updated font style
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        child: const Text('Add to Watchlist'),
                       ),
                     ),
                   ],
@@ -275,6 +303,7 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
       InkWell(
         onTap: onTap,
         child: Padding(
+          // Updated vertical padding to match balance sheet
           padding: EdgeInsets.symmetric(vertical: 8.h),
           child: Row(
             children: <Widget>[
@@ -283,13 +312,16 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                 children: <Widget>[
                   Text(
                     title, 
-                    style: TextStyle(fontSize: 18.sp),
+                    // Updated font style to match balance sheet
+                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
                   ),
                   Text(
                     '$count Tokens',
+                    // Updated font style to match balance sheet
                     style: TextStyle(
-                      fontSize: 14.sp, 
-                      color: const Color.fromARGB(255, 100, 109, 128),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyDark,
                     ),
                   ),
                 ],
@@ -321,6 +353,7 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                   },
                 ),
               ),
+              Gap(12.w), // Added consistent gap at the end
             ],
           ),
         ),

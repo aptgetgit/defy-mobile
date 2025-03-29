@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
+import '../../wallet/presentation/providers/wallet_provider.dart';
+import '../presentation/watch_list_screen.dart';
 import 'watchlist_newList_tile.dart';
 
-class WatchListNewCollectionScreen extends StatefulWidget {
+class WatchListNewCollectionScreen extends ConsumerStatefulWidget {
   const WatchListNewCollectionScreen({super.key});
 
   @override
-  State<WatchListNewCollectionScreen> createState() => _WatchListNewCollectionScreenState();
+  ConsumerState<WatchListNewCollectionScreen> createState() => _WatchListNewCollectionScreenState();
 }
 
-class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScreen> {
+class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewCollectionScreen> {
   final TextEditingController _controller = TextEditingController();
   bool _isKeyboardOpen = false;
   bool _isButtonEnabled = false;
@@ -60,6 +63,13 @@ class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScr
   @override
   Widget build(BuildContext context) {
     final double keyboardPadding = MediaQuery.of(context).viewInsets.bottom;
+    final walletState = ref.watch(walletNotifierProvider);
+    
+    // Calculate total selected items
+    final int selectedTokensCount = walletState.selectedTokens.length;
+    final int selectedNFTsCount = walletState.selectedNFTs.values
+        .fold(0, (sum, list) => sum + list.length);
+    final int totalSelectedItems = selectedTokensCount + selectedNFTsCount;
 
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +100,21 @@ class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScr
               tag: 'new_list',
               child: WatchlistNewListTile(),
             ),
-            Gap(30.h),
+            if (totalSelectedItems > 0) 
+              Padding(
+                padding: EdgeInsets.only(top: 8.h),
+                child: Text(
+                  totalSelectedItems == 1
+                      ? '1 item selected'
+                      : '$totalSelectedItems items selected',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ),
+            Gap(20.h),
             TextField(
               controller: _controller,
               style: TextStyle(fontSize: 24.sp),
@@ -108,7 +132,7 @@ class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScr
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                        // Handle create action
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const WatchListScreen()));
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
@@ -118,13 +142,19 @@ class _WatchListNewCollectionScreenState extends State<WatchListNewCollectionScr
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40.r),
                   ),
+                  fixedSize: Size(double.infinity, 56.w),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 60.w, vertical: 15.h),
-                  child: Text('Create', style: TextStyle(color: _isButtonEnabled // Change text color too
-                            ? Colors.white // White when enabled
-                            : AppColors.greyLight,),),
-                            ),
+                  child: Text(
+                    'Create', 
+                    style: TextStyle(
+                      color: _isButtonEnabled 
+                          ? Colors.white 
+                          : AppColors.greyLight,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

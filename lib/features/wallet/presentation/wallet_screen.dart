@@ -203,19 +203,25 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
   //   }
   // }
 
- void _toggleQrScanner() async {
-    await _walletSlideController.forward();
-
-    await Navigator.push(
+  // Update the _toggleQrScanner method to use a full-screen approach
+  void _toggleQrScanner() {
+    // Create a full-screen page route that completely covers the entire screen
+    Navigator.push(
       context,
       PageRouteBuilder(
-        opaque: false, // Make the page route transparent
-        pageBuilder: (context, animation, secondaryAnimation) => const QrScannerScreen(),
+        opaque: true, // Make the route opaque to completely cover the screen
+        pageBuilder: (context, animation, secondaryAnimation) {
+          // Start the wallet slide animation when push begins
+          _walletSlideController.forward();
+          
+          return const QrScannerScreen();
+        },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0, -1);
+          const begin = Offset(0, 1); // Start from bottom
           const Offset end = Offset.zero;
           const Cubic curve = Curves.easeInOut;
 
+          // Create a tween for the slide transition
           final Animatable<Offset> tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           final Animation<Offset> offsetAnimation = animation.drive(tween);
 
@@ -224,8 +230,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
             child: child,
           );
         },
+        transitionDuration: const Duration(milliseconds: 250),
       ),
     ).then((_) {
+      // Reverse wallet slide animation when returning
       _walletSlideController.reverse();
     });
   }
@@ -565,7 +573,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                 children: <Widget>[
                   Expanded(
                     child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
+                      duration: const Duration(milliseconds: 200),
                       transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
                       child: walletState.isMoreButtonSelected
                           ? Container(
@@ -585,7 +593,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                                 child: TweenAnimationBuilder<double>(
                                   // Add a fade animation for sort type changes
                                   tween: Tween<double>(begin: 0, end: 1),
-                                  duration: const Duration(milliseconds: 350),
+                                  duration: const Duration(milliseconds: 150),
                                   key: ValueKey(sortTypeText), // Change key when sort type changes
                                   builder: (context, value, child) => Opacity(
                                       opacity: value,

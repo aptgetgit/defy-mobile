@@ -1,7 +1,6 @@
 // screens/receive_select_content.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -98,111 +97,181 @@ class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
         curve: Curves.easeOut,
       );
     }
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        AnimatedOpacity(
-          opacity: _showSearchIcon ? 0.0 : 1.0,
-          duration: const Duration(milliseconds: 300),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 28.w),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 4.w),
-              height: 45.h,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 244, 244, 246),
-                borderRadius: BorderRadius.circular(40.r),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  // Centered icon and hint text when _searchQuery is empty
-                  if (!_isTextFieldFocused && _searchQuery.isEmpty)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Gap(8.w), // Control the gap here
-                        Text(
-                          'Search Assets',
-                          style: TextStyle(
-                            color: AppColors.greyLight,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  // TextField and animated icon
-                  Stack(
-                    children: <Widget>[
-                      Row(
+        // Wrap both the search bar and the gap in a single AnimatedContainer
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 250), // Slightly faster animation
+          height: _showSearchIcon ? 0 : 65.h,  // Include both search bar (45.h) and gap (20.h)
+          curve: Curves.easeInOut,
+          child: SingleChildScrollView( // This prevents overflow during animation
+            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+            child: Column(
+              children: [
+                // Search bar
+                SizedBox(
+                  height: 45.h,
+                  child: AnimatedOpacity(
+                    opacity: _showSearchIcon ? 0.0 : 1.0,
+                    duration: const Duration(milliseconds: 200), // Slightly faster fade
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 28.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SizedBox(width: 40.w), // Reserve space for the icon
-                          Expanded(
-                            child: TextField(
-                              focusNode: _searchFocusNode, // Use the focus node
-                              autofocus: false, // Don't autofocus
-                              showCursor: _isTextFieldFocused || _searchQuery.isNotEmpty, // Only show cursor when focused or has text
-                              controller: _searchController,
-                              onChanged: (String value) {
-                                setState(() {
-                                  _searchQuery = value;
-                                });
-                              },
-                              style: TextStyle(
-                                color: AppColors.black,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: _searchQuery.isNotEmpty ? TextAlign.left : TextAlign.center,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '', // Empty hint since we show it manually
-                                contentPadding: EdgeInsets.symmetric(vertical: 11.h),
-                                suffixIcon: _searchQuery.isNotEmpty
-                                    ? IconButton(
-                                        icon: CircleAvatar(
-                                          backgroundColor: const Color.fromARGB(255, 189, 189, 189),
-                                          radius: 10.r,
-                                          child: Center(
-                                            child: Icon(
-                                              PhosphorIconsBold.x,
-                                              color: AppColors.white,
-                                              size: 12.sp,
+                          // Search bar row
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: _searchFocusNode.requestFocus,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                    height: 45.h,
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(255, 244, 244, 246),
+                                      borderRadius: BorderRadius.circular(40.r),
+                                    ),
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: <Widget>[
+                                        // Centered hint text when text field is not focused and empty
+                                        // if (!_isTextFieldFocused && _searchQuery.isEmpty)
+                                        //   Row(
+                                        //     mainAxisSize: MainAxisSize.min,
+                                        //     children: <Widget>[
+                                        //       Gap(8.w), // Control the gap here
+                                        //       Text(
+                                        //         'Search for assets',
+                                        //         style: TextStyle(
+                                        //           color: AppColors.greyLight,
+                                        //           fontSize: 16.sp,
+                                        //           fontWeight: FontWeight.w500,
+                                        //         ),
+                                        //       ),
+                                        //     ],
+                                        //   ),
+                                        // TextField and animated icon
+                                        Stack(
+                                          children: <Widget>[
+                                            Stack(
+                                              alignment: Alignment.center,
+                                              children: <Widget>[
+                                                // Animated Positioned for Search Icon
+                                                AnimatedPositioned(
+                                                  duration: const Duration(milliseconds: 600),
+                                                  curve: Curves.easeInOut,
+                                                  left: (_isTextFieldFocused || _searchQuery.isNotEmpty)
+                                                      ? 12.w
+                                                      : (MediaQuery.of(context).size.width - 44.w - 22.w - 8.w - 150.w) / 2 - 20.w,
+                                                  top: 12.5.h,
+                                                  child: Hero(
+                                                    tag: 'searchIconHero',
+                                                    child: Material(
+                                                      color: Colors.transparent,
+                                                      child: Icon(
+                                                        PhosphorIconsBold.magnifyingGlass,
+                                                        color: AppColors.greyLight,
+                                                        size: 20.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                // Animated Positioned for "Search for assets" Text
+                                                AnimatedPositioned(
+                                                  duration: const Duration(milliseconds: 600),
+                                                  curve: Curves.easeInOut,
+                                                  left: (_isTextFieldFocused || _searchQuery.isNotEmpty)
+                                                      ? 40.w // Adjust this value to align with the search icon
+                                                      : (MediaQuery.of(context).size.width - 44.w - 22.w - 8.w - 150.w) / 2 + 25.w,
+                                                  top: 12.5.h,
+                                                  child: AnimatedOpacity(
+                                                    duration: const Duration(milliseconds: 1500),
+                                                    opacity: (!_isTextFieldFocused && _searchQuery.isEmpty) ? 1.0 : 0.0,
+                                                    child: Text(
+                                                      'Search for assets',
+                                                      style: TextStyle(
+                                                        color: AppColors.greyLight,
+                                                        fontSize: 16.sp,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                // TextField and animated icon
+                                                Row(
+                                                  children: <Widget>[
+                                                    SizedBox(width: 40.w), // Reserve space for the icon
+                                                    Expanded(
+                                                      child: TextField(
+                                                        focusNode: _searchFocusNode, // Use the focus node
+                                                        autofocus: false, // Don't autofocus
+                                                        showCursor: _isTextFieldFocused || _searchQuery.isNotEmpty, // Only show cursor when focused or has text
+                                                        controller: _searchController,
+                                                        onChanged: (String value) {
+                                                          setState(() {
+                                                            _searchQuery = value;
+                                                          });
+                                                        },
+                                                        style: TextStyle(
+                                                          color: AppColors.black,
+                                                          fontSize: 16.sp,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                        textAlign: _searchQuery.isNotEmpty ? TextAlign.left : TextAlign.center,
+                                                        decoration: InputDecoration(
+                                                          border: InputBorder.none,
+                                                          hintText: '', // Empty hint since we show it manually
+                                                          contentPadding: EdgeInsets.symmetric(vertical: 11.h),
+                                                          suffixIcon: _searchQuery.isNotEmpty
+                                                              ? IconButton(
+                                                                  icon: CircleAvatar(
+                                                                    backgroundColor: const Color.fromARGB(255, 189, 189, 189),
+                                                                    radius: 10.r,
+                                                                    child: Center(
+                                                                      child: Icon(
+                                                                        PhosphorIconsBold.x,
+                                                                        color: AppColors.white,
+                                                                        size: 12.sp,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  onPressed: _clearText,
+                                                                )
+                                                              : null,
+                                                          suffixIconConstraints: const BoxConstraints(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                        onPressed: _clearText,
-                                      )
-                                    : null,
-                                suffixIconConstraints: const BoxConstraints(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
+                            
                           ),
                         ],
                       ),
-                      AnimatedPositioned(
-                        duration: const Duration(milliseconds: 600),
-                        curve: Curves.easeInOut,
-                        // Use _isTextFieldFocused as part of the condition
-                        left: (_isTextFieldFocused || _searchQuery.isNotEmpty) 
-                            ? 12.w 
-                            : (MediaQuery.of(context).size.width - 44.w - 22.w - 8.w - 150.w) / 2 - 20.w,
-                        top: 12.5.h,
-                        child: Icon(
-                          PhosphorIconsBold.magnifyingGlass,
-                          color: AppColors.greyLight,
-                          size: 20.sp,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+                
+                // Gap as part of the same container
+                SizedBox(height: 20.h),
+              ],
             ),
           ),
         ),
-        Gap(20.h),
+        
         Expanded(
           child: ListView.builder(
             controller: _scrollController,

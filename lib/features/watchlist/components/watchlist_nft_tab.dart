@@ -6,7 +6,7 @@ import '../presentation/watchlist_cute_nft_screen.dart';
 import '../widgets/watchlist_cute_nft_tile.dart';
 import '../widgets/watchlist_grid_tile.dart';
 import '../widgets/watchlist_newList_tile.dart';
-import '../widgets/watchlist_new_collection.dart';
+import '../widgets/watchlist_new_collection_home.dart';
 
 
 class WatchlistNFTTab extends StatefulWidget {
@@ -57,7 +57,7 @@ class _WatchlistNFTTabState extends State<WatchlistNFTTab> {
                       context,
                       PageRouteBuilder(
                         transitionDuration: const Duration(milliseconds: 500),
-                        pageBuilder: (_, __, ___) => const WatchListNewCollectionScreen(),
+                        pageBuilder: (_, __, ___) => const WatchListNewCollectionHomeScreen(),
                         transitionsBuilder: (_, Animation<double> animation, __, Widget child) => FadeTransition(
                             opacity: animation,
                             child: child,

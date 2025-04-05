@@ -217,7 +217,8 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
           return const QrScannerScreen();
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0, 1); // Start from bottom
+          // QR scanner comes from top (negative offset)
+          const begin = Offset(0, -1); // Start from top (changed from bottom)
           const Offset end = Offset.zero;
           const Cubic curve = Curves.easeInOut;
 

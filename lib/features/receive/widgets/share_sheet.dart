@@ -56,14 +56,33 @@ class CustomQrShareWidget extends ConsumerWidget {
               foregroundColor: AppColors.black,
               padding: EdgeInsets.all(10.w),
               data: qrData,
-              size: 240.w,
+              size: 200.w,
               embeddedImageStyle: QrEmbeddedImageStyle(
                 size: Size(99.w, 99.h),
               ),
               embeddedImage: const AssetImage('assets/icons/qr-logo.png'),
             ),
           ),
-          Gap(90.h),
+          Gap(12.h), // Added gap after QR code
+          Text(
+            'Scan to send',
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.white,
+            ),
+          ),
+          Gap(6.h),
+          Text(
+            '75.00 GUI',
+            style: TextStyle(
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w600,
+              color: AppColors.white,
+              
+            ),
+          ),
+          Gap(54.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Row(

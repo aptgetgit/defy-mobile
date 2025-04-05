@@ -6,6 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart'; // Add this for provider su
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
+import '../../wallet/data/models/nft_model.dart';
+import '../presentation/providers/watchlist_collection_details_provider.dart';
+import '../presentation/providers/watchlist_collection_model.dart';
+import '../presentation/providers/watchlist_item_model.dart';
 import '../presentation/providers/watchlist_provider.dart'; // Add provider import
 import 'watchlist_newList_tile.dart';
 
@@ -27,13 +31,22 @@ class _WatchListUpdateCollectionScreenState extends ConsumerState<WatchListUpdat
   late TextEditingController _controller;
   bool _isKeyboardOpen = false;
   bool _isButtonEnabled = false;
+  late WatchlistCollection _collection; // Add this to store the collection details
 
   @override
   void initState() {
     super.initState();
     // Initialize controller with the initial name
     _controller = TextEditingController(text: widget.initialName);
-    _isButtonEnabled = _controller.text.isNotEmpty; // Initialize button state
+    _isButtonEnabled = _controller.text.isNotEmpty;
+    
+    // Fetch collection details
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final collection = ref.read(watchlistCollectionDetailsProvider(widget.collectionId)).collection;
+      setState(() {
+        _collection = collection;
+      });
+    });
     
     // Listen for keyboard visibility changes
     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -73,7 +86,15 @@ class _WatchListUpdateCollectionScreenState extends ConsumerState<WatchListUpdat
   @override
   Widget build(BuildContext context) {
     final double keyboardPadding = MediaQuery.of(context).viewInsets.bottom;
-
+    
+    // Fetch collection data for display
+    final WatchlistCollection? collection = 
+        ref.watch(watchlistCollectionDetailsProvider(widget.collectionId)).collection;
+    
+    // Get first 4 NFTs from collection or empty list if not available
+    final List<WatchlistItem> items = collection?.items ?? [];
+    final List<dynamic> collectionItems = items.take(4).toList();
+    
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -99,10 +120,28 @@ class _WatchListUpdateCollectionScreenState extends ConsumerState<WatchListUpdat
               style: TextStyle(fontSize: 21.sp, fontWeight: FontWeight.w600),
             ),
             Gap(20.h),
-            const Hero(
-              tag: 'new_list',
-              child: WatchlistNewListTile(),
+            
+            // Replace the empty Hero with one that shows collection items
+            Hero(
+              tag: 'update_collection_${widget.collectionId}', // Use unique tag
+              child: WatchlistNewListTile(
+                // Pass the collection items as NFTs
+                selectedNFTs: collectionItems.map((item) {
+                  if (item is WatchlistItem) {
+                    // Convert WatchlistItem to NFT
+                    return NFT(
+                      id: item.id,
+                      price: '',
+                      imageUrl: item.imagePath,
+                    );
+                  }
+                  return null;
+                }).whereType<NFT>().toList(),
+                // No tokens for NFT collection
+                selectedTokens: const [],
+              ),
             ),
+            
             Gap(30.h),
             TextField(
               controller: _controller,

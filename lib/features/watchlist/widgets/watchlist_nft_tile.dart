@@ -12,7 +12,7 @@ class WatchlistNFTTile extends StatefulWidget { // Add this parameter
     required this.nftData, // Make it required
     required this.deleteNft, 
     this.onDelete,  // Make it optional
-    super.key
+    super.key,
   });
   final Map<String, String> nftData; // Add this parameter
   final bool deleteNft;
@@ -28,20 +28,32 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
 
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
+  late Animation<double> _opacityAnimation; // Add opacity animation
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 700),
       vsync: this,
     );
+    
     _offsetAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(-0.2, 0),
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
+    ),);
+    
+    // Add opacity animation for the minus button
+    _opacityAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      // Use a slightly different curve for opacity to create a pleasing effect
+      curve: const Interval(0.3, 1, curve: Curves.easeOut),
     ),);
   }
 
@@ -142,7 +154,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                         nativeValue.split(' ')[0], // First part of native value (e.g., "32" from "32 APT")
                                         style: TextStyle(
                                           fontSize: 16.sp,
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.5, end: 0),
                                     if(!widget.deleteNft)
@@ -150,7 +162,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                         nativeValue.split(' ')[0],
                                         style: TextStyle(
                                           fontSize: 16.sp,
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                   ],
@@ -197,16 +209,40 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                             ),
                           ),
                           Gap(12.w),
-                          Visibility(
-                            visible: widget.deleteNft,
-                            child: GestureDetector(
-                              onTap: delete,
-                              child: Icon(
-                                PhosphorIconsFill.minusCircle,
-                                color: AppColors.red,
-                                size: 20.sp,
-                              ),
-                            ),
+                          // Replace Visibility with AnimatedBuilder to use opacity animation
+                          AnimatedBuilder(
+                            animation: _controller,
+                            builder: (BuildContext context, Widget? child) {
+                              final bool isFadingOut = !widget.deleteNft && _controller.value > 0;
+                              return Opacity(
+                                opacity: isFadingOut 
+                                    ? _controller.value
+                                    : _opacityAnimation.value,
+                                child: Visibility(
+                                  visible: widget.deleteNft || isFadingOut,
+                                  child: TweenAnimationBuilder<double>(
+                                    duration: const Duration(milliseconds: 500),
+                                    tween: Tween<double>(
+                                      begin: 0.8, 
+                                      end: 1,
+                                    ),
+                                    curve: Curves.elasticOut,
+                                    builder: (BuildContext context, double value, Widget? child) => Transform.scale(
+                                        scale: value,
+                                        child: child,
+                                      ),
+                                    child: GestureDetector(
+                                      onTap: delete,
+                                      child: Icon(
+                                        PhosphorIconsFill.minusCircle,
+                                        color: AppColors.red,
+                                        size: 20.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),

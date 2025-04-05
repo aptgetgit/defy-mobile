@@ -129,7 +129,7 @@ class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Gap(10.h),
+                      Gap(_headerText == 'Select Asset' ? 2.h : 10.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[

@@ -14,13 +14,21 @@ class WalletSearchScreen extends StatefulWidget {
   State<WalletSearchScreen> createState() => _WalletSearchScreenState();
 }
 
-class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTickerProviderStateMixin {
+class _WalletSearchScreenState extends State<WalletSearchScreen> with TickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   late TabController _tabController;
   String _searchQuery = '';
   bool _isLoading = true;
   bool _isTextFieldFocused = false; // Add this to track focus state
   final FocusNode _searchFocusNode = FocusNode(); // Add focus node
+
+  // Add these animation controllers to _WalletSearchScreenState
+  late AnimationController _tokenSectionController;
+  late AnimationController _nftSectionController;
+  late Animation<double> _tokenSectionAnimation;
+  late Animation<double> _nftSectionAnimation;
+  bool _shouldShowTokenSection = true;
+  bool _shouldShowNFTSection = true;
 
   // Define token data
   final List<Token> _tokens = [
@@ -151,8 +159,45 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    
+    // Add listener to tab controller to handle tab changes
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        setState(() {
+          // Update UI when tab changes
+        });
+      }
+    });
+    
     _searchController.addListener(_onTextChange);
-    _searchFocusNode.addListener(_onFocusChange); // Add focus listener
+    _searchFocusNode.addListener(_onFocusChange);
+
+    // Initialize animation controllers
+    _tokenSectionController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300), // Shorter duration for collapsing
+    );
+    
+    _nftSectionController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300), // Shorter duration for collapsing
+    );
+    
+    _tokenSectionAnimation = CurvedAnimation(
+      parent: _tokenSectionController,
+      curve: Curves.easeInOut, // Smoother curve for both expansion and collapse
+      reverseCurve: Curves.easeIn, // Specific curve for collapsing
+    );
+    
+    _nftSectionAnimation = CurvedAnimation(
+      parent: _nftSectionController,
+      curve: Curves.easeInOut, // Smoother curve for both expansion and collapse
+      reverseCurve: Curves.easeIn, // Specific curve for collapsing
+    );
+    
+    // Start with fully expanded sections
+    _tokenSectionController.value = 1.0;
+    _nftSectionController.value = 1.0;
 
     // Simulate loading for 1-2 seconds
     Future.delayed(const Duration(seconds: 1), () {
@@ -170,7 +215,10 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
     ..dispose();
     _searchFocusNode.removeListener(_onFocusChange); // Remove focus listener
     _searchFocusNode.dispose(); // Dispose focus node
+    _tabController.removeListener(() {});
     _tabController.dispose();
+    _tokenSectionController.dispose();
+    _nftSectionController.dispose();
     super.dispose();
   }
 
@@ -181,11 +229,73 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
     });
   }
 
-  void _onTextChange() {
-    setState(() {
-      _searchQuery = _searchController.text;
-    });
+  // Update the _onTextChange method for better animation control
+
+void _onTextChange() {
+  final String query = _searchController.text;
+  
+  // Pre-calculate filtered lists
+  final List<Token> matchingTokens = _tokens.where((token) => 
+    token.name.toLowerCase().contains(query.toLowerCase()) ||
+    token.currency.toLowerCase().contains(query.toLowerCase())
+  ).toList();
+  
+  final List<Map<String, dynamic>> matchingNFTs = _allNFTsWithCollections.where((item) => 
+    (item['collectionName']?.toString() ?? '').toLowerCase().contains(query.toLowerCase()) ||
+    (item['nft'].id?.toString() ?? '').toLowerCase().contains(query.toLowerCase())
+  ).toList();
+  
+  final bool hasTokenResults = matchingTokens.isNotEmpty;
+  final bool hasNFTResults = matchingNFTs.isNotEmpty;
+  
+  // If starting a search and sections need to collapse, pre-animate before updating state
+  if (query.isNotEmpty && _searchQuery.isEmpty) {
+    // Starting a new search from empty state
+    if (!hasTokenResults) {
+      // Begin token section collapse animation immediately
+      _tokenSectionController.duration = const Duration(milliseconds: 200);
+      _tokenSectionController.animateTo(0.0, curve: Curves.easeOut);
+    }
+    
+    if (!hasNFTResults) {
+      // Begin NFT section collapse animation immediately
+      _nftSectionController.duration = const Duration(milliseconds: 200);
+      _nftSectionController.animateTo(0.0, curve: Curves.easeOut);
+    }
   }
+  
+  setState(() {
+    _searchQuery = query;
+    
+    // Handle token section visibility
+    if (hasTokenResults && !_shouldShowTokenSection) {
+      _shouldShowTokenSection = true;
+      _tokenSectionController.duration = const Duration(milliseconds: 400);
+      _tokenSectionController.forward();
+    } else if (!hasTokenResults && _shouldShowTokenSection && query.isNotEmpty) {
+      _shouldShowTokenSection = false;
+      // Already handled the animation start before setState if starting from empty
+      if (_searchQuery.isNotEmpty) {
+        _tokenSectionController.duration = const Duration(milliseconds: 200);
+        _tokenSectionController.animateTo(0.0, curve: Curves.easeOut);
+      }
+    }
+    
+    // Handle NFT section visibility
+    if (hasNFTResults && !_shouldShowNFTSection) {
+      _shouldShowNFTSection = true;
+      _nftSectionController.duration = const Duration(milliseconds: 400);
+      _nftSectionController.forward();
+    } else if (!hasNFTResults && _shouldShowNFTSection && query.isNotEmpty) {
+      _shouldShowNFTSection = false;
+      // Already handled the animation start before setState if starting from empty
+      if (_searchQuery.isNotEmpty) {
+        _nftSectionController.duration = const Duration(milliseconds: 200);
+        _nftSectionController.animateTo(0.0, curve: Curves.easeOut);
+      }
+    }
+  });
+}
 
   void _clearText() {
     setState(() {
@@ -294,6 +404,7 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
                                             Expanded(
                                               child: TextField(
                                                 focusNode: _searchFocusNode, // Use the focus node
+                                                // ignore: avoid_redundant_argument_values
                                                 autofocus: false, // Don't autofocus
                                                 showCursor: _isTextFieldFocused || _searchQuery.isNotEmpty, // Only show cursor when focused or has text
                                                 controller: _searchController,
@@ -365,16 +476,175 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
                 ),
                 // TabBar Views
                 Expanded(
-                  child: _searchQuery.isNotEmpty
-                      ? TabBarView(
-                          controller: _tabController,
-                          children: <Widget>[
-                            _buildAllTab(),
-                            _buildTokensTab(),
-                            _buildNFTsTab(),
-                          ],
-                        )
-                      : _buildAllTab(),
+                  child: TabBarView(
+                    controller: _tabController,
+                    physics: const BouncingScrollPhysics(), // Enable smooth swiping
+                    children: <Widget>[
+                      // All Tab - shows both tokens and NFTs
+                      _buildAllTab(),
+                      
+                      // Tokens Tab - shows only tokens
+                      if (_isLoading) const Center(child: CircularProgressIndicator()) else _filteredTokens.isEmpty && _searchQuery.isNotEmpty
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      PhosphorIconsBold.coins,
+                                      size: 48.sp,
+                                      color: Colors.grey[300],
+                                    ),
+                                    Gap(12.h),
+                                    Text(
+                                      'No tokens found',
+                                      style: TextStyle(color: Colors.grey, fontSize: 16.sp),
+                                    ),
+                                    if (_searchQuery.isNotEmpty)
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 8.h),
+                                        child: Text(
+                                          'for "$_searchQuery"',
+                                          style: TextStyle(color: Colors.grey, fontSize: 14.sp),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              )
+                            : SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: _filteredTokens.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        final Token token = _filteredTokens[index];
+                                        return ListTile(
+                                          dense: true,
+                                          contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+                                          leading: Image.asset(token.imagePath, width: 40.w, height: 40.h),
+                                          title: Text(
+                                            token.name,
+                                            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+                                          ),
+                                          subtitle: Text(
+                                            '${token.amount} ${token.currency}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14.sp,
+                                              color: const Color.fromARGB(255, 151, 157, 170),
+                                            ),
+                                          ),
+                                          trailing: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: <Widget>[
+                                              Text(
+                                                token.price,
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+                                              ),
+                                              Text(
+                                                token.change,
+                                                style: TextStyle(
+                                                  color: AppColors.green,
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              
+                      // NFTs Tab - shows only NFTs
+                      if (_isLoading) const Center(child: CircularProgressIndicator()) else _filteredNFTs.isEmpty && _searchQuery.isNotEmpty
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      PhosphorIconsBold.image,
+                                      size: 48.sp,
+                                      color: Colors.grey[300],
+                                    ),
+                                    Gap(12.h),
+                                    Text(
+                                      'No NFTs found',
+                                      style: TextStyle(color: Colors.grey, fontSize: 16.sp),
+                                    ),
+                                    if (_searchQuery.isNotEmpty)
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 8.h),
+                                        child: Text(
+                                          'for "$_searchQuery"',
+                                          style: TextStyle(color: Colors.grey, fontSize: 14.sp),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              )
+                            : SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: _filteredNFTs.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        final Map<String, dynamic> nft = _filteredNFTs[index];
+                                        return ListTile(
+                                          dense: true,
+                                          contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+                                          leading: Image.asset(nft['imagePath'] as String, width: 40.w, height: 40.h),
+                                          title: Text(
+                                            nft['name'] as String,
+                                            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+                                          ),
+                                          subtitle: Text(
+                                            // ignore: use_if_null_to_convert_nulls_to_bools
+                                            (nft['isCollection'] as bool?) == true 
+                                                ? (nft['value'] as String) 
+                                                : 'Collection: ${nft['collectionName'] as String}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14.sp,
+                                              color: const Color.fromARGB(255, 151, 157, 170),
+                                            ),
+                                          ),
+                                          trailing: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: <Widget>[
+                                              Text(
+                                                nft['price'] as String,
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+                                              ),
+                                              Text(
+                                                nft['change'] as String,
+                                                style: TextStyle(
+                                                  color: AppColors.green,
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -403,351 +673,715 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with SingleTick
         ],
       );
 
-  Widget _buildAllTab() {
-    if (_searchQuery.isEmpty) {
-      // Show regular categorized view when not searching
-      return Column(
+  // Update the _buildAllTab method to include "See All" buttons
+
+Widget _buildAllTab() {
+  if (_searchQuery.isEmpty) {
+    // Show regular categorized view when not searching
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 17.w, top: 6.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
+          // Tokens section with "See All" in the header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 17.w, top: 6.h),
+                child: Text(
                   'Tokens',
                   style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
                 ),
-              ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 17.w, top: 6.h),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () {
+                    _tabController.animateTo(1);
+                  },
+                  child: Text(
+                    'See All(${_tokens.length})',
+                    style: TextStyle(
+                      color: AppColors.blue,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 195.h, 
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: _tokens.length,
+              itemBuilder: (context, index) {
+                final Token token = _tokens[index];
+                return ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+                  leading: Image.asset(token.imagePath, width: 40.w, height: 40.h),
+                  title: Text(
+                    token.name,
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+                  ),
+                  subtitle: Text(
+                    '${token.amount} ${token.currency}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: const Color.fromARGB(255, 151, 157, 170),
+                    ),
+                  ),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        token.price,
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+                      ),
+                      Text(
+                        token.change,
+                        style: TextStyle(
+                          color: AppColors.green,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
-          SizedBox(height: 195.h, child: _buildTokensTab()),
-          Padding(
-            padding: EdgeInsets.only(left: 17.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
+          
+          // NFTs section with "See All" in the header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 17.w, top: 6.h),
+                child: Text(
                   'NFTs',
                   style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 17.w, top: 6.h),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () {
+                    _tabController.animateTo(2);
+                  },
+                  child: Text(
+                    'See All(${_nftCollections.length})',
+                    style: TextStyle(
+                      color: AppColors.blue,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 195.h, child: _buildNFTsTab()),
+          ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: _nftCollections.length,
+            itemBuilder: (context, index) {
+              final NFTCollection collection = _nftCollections[index];
+              final Map<String, dynamic> nft = {
+                'name': collection.name,
+                'price': collection.nfts.isNotEmpty ? collection.nfts.first.price : r'$0.00',
+                'value': '${collection.count} Items',
+                'change': '+1.02%',
+                'imagePath': collection.nfts.isNotEmpty ? collection.nfts.first.imageUrl : 'assets/images/Mask group.png',
+                'isCollection': true,
+              };
+              
+              return ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+                leading: Image.asset(nft['imagePath'] as String, width: 40.w, height: 40.h),
+                title: Text(
+                  nft['name'] as String,
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+                ),
+                subtitle: Text(
+                  nft['value'] as String,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                    color: const Color.fromARGB(255, 151, 157, 170),
+                  ),
+                ),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      nft['price'] as String,
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+                    ),
+                    Text(
+                      nft['change'] as String,
+                      style: TextStyle(
+                        color: AppColors.green,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          
+          // Add some bottom padding
+          SizedBox(height: 16.h),
         ],
-      );
-    } else {
-      // Show search results with sections when searching
-      final bool hasTokenResults = _filteredTokens.isNotEmpty;
-      final bool hasNFTResults = _filteredNFTs.isNotEmpty;
-      
-      if (!hasTokenResults && !hasNFTResults) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                PhosphorIconsBold.magnifyingGlass,
-                size: 48.sp,
-                color: Colors.grey[300],
-              ),
-              Gap(12.h),
-              Text(
-                'No results found for "$_searchQuery"',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        );
-      }
-      
-      return SingleChildScrollView(
+      ),
+    );
+  } else {
+    // For search results also add "See All" buttons
+    final bool hasTokenResults = _filteredTokens.isNotEmpty;
+    final bool hasNFTResults = _filteredNFTs.isNotEmpty;
+    
+    if (!hasTokenResults && !hasNFTResults) {
+      return Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (hasTokenResults) ...[
-              Padding(
-                padding: EdgeInsets.only(left: 17.w, top: 6.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Tokens (${_filteredTokens.length})',
-                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
-                    ),
-                  ],
-                ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              PhosphorIconsBold.magnifyingGlass,
+              size: 48.sp,
+              color: Colors.grey[300],
+            ),
+            Gap(12.h),
+            Text(
+              'No results found for "$_searchQuery"',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
               ),
-              SizedBox(
-                height: _filteredTokens.length * 80.h, // Dynamic height based on results
-                child: _buildTokensTab(),
-              ),
-            ],
-            
-            if (hasNFTResults) ...[
-              Padding(
-                padding: EdgeInsets.only(left: 17.w, top: hasTokenResults ? 20.h : 6.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'NFTs (${_filteredNFTs.length})',
-                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: _filteredNFTs.length * 80.h, // Dynamic height based on results
-                child: _buildNFTsTab(),
-              ),
-            ],
+            ),
           ],
         ),
       );
     }
-  }
-
-  Widget _buildTokensTab() {
-    if (_isLoading) {
-      // Keep your existing shimmer code
-      return ListView.builder(
-        itemCount: 3,
-        itemBuilder: (BuildContext context, int index) => Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
-            leading: Container(
-              width: 40.w,
-              height: 40.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(22.r),
-              ),
-            ),
-            title: Container(
-              width: 100.w,
-              height: 16.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4.r),
-              ),
-            ),
-            subtitle: Container(
-              width: 80.w,
-              height: 14.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4.r),
-              ),
-            ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  width: 60.w,
-                  height: 16.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Container(
-                  width: 40.w,
-                  height: 14.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    final List<Token> tokens = _filteredTokens;
     
-    // Show empty state if no results
-    if (tokens.isEmpty && _searchQuery.isNotEmpty) {
-      return Center(
-        child: Text(
-          'No tokens found',
-          style: TextStyle(color: Colors.grey, fontSize: 16.sp),
-        ),
-      );
-    }
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // Tokens Section - Only show if we have tokens
+          if (_filteredTokens.isNotEmpty)
+            AnimatedBuilder(
+              animation: _tokenSectionAnimation,
+              builder: (context, child) {
+                if (_tokenSectionController.isDismissed) return const SizedBox.shrink();
+                
+                return SizeTransition(
+                  sizeFactor: _tokenSectionAnimation,
+                  axisAlignment: -1.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      // Header with "See All" button
+                      Padding(
+                        padding: EdgeInsets.only(top: 6.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 17.w),
+                              child: Text(
+                                'Tokens (${_filteredTokens.length})',
+                                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 17.w),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {
+                                  _tabController.animateTo(1);
+                                },
+                                child: Text(
+                                  'See All(${_filteredTokens.length})',
+                                  style: TextStyle(
+                                    color: AppColors.blue,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Token list
+                      ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _filteredTokens.length,
+                        itemBuilder: (context, index) {
+                          final Token token = _filteredTokens[index];
+                          return ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+                            leading: Image.asset(token.imagePath, width: 40.w, height: 40.h),
+                            title: Text(
+                              token.name,
+                              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+                            ),
+                            subtitle: Text(
+                              '${token.amount} ${token.currency}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: const Color.fromARGB(255, 151, 157, 170),
+                              ),
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  token.price,
+                                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+                                ),
+                                Text(
+                                  token.change,
+                                  style: TextStyle(
+                                    color: AppColors.green,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+            ),
+          
+          // NFTs Section - Only show if we have NFTs
+          if (_filteredNFTs.isNotEmpty)
+            AnimatedBuilder(
+              animation: _nftSectionAnimation,
+              builder: (context, child) {
+                if (_nftSectionController.isDismissed) return const SizedBox.shrink();
+                
+                return SizeTransition(
+                  sizeFactor: _nftSectionAnimation,
+                  axisAlignment: -1.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      // Header with "See All" button
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: hasTokenResults ? 20.h : 6.h,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 17.w),
+                              child: Text(
+                                'NFTs (${_filteredNFTs.length})',
+                                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 17.w),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {
+                                  _tabController.animateTo(2);
+                                },
+                                child: Text(
+                                  'See All(${_filteredNFTs.length})',
+                                  style: TextStyle(
+                                    color: AppColors.blue,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // NFT list
+                      ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _filteredNFTs.length,
+                        itemBuilder: (context, index) {
+                          final Map<String, dynamic> nft = _filteredNFTs[index];
+                          return ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+                            leading: Image.asset(nft['imagePath'] as String, width: 40.w, height: 40.h),
+                            title: Text(
+                              nft['name'] as String,
+                              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+                            ),
+                            subtitle: Text(
+                              (nft['isCollection'] as bool?) == true ? (nft['value'] as String) : 'Collection: ${nft['collectionName'] as String}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: const Color.fromARGB(255, 151, 157, 170),
+                              ),
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  nft['price'] as String,
+                                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+                                ),
+                                Text(
+                                  nft['change'] as String,
+                                  style: TextStyle(
+                                    color: AppColors.green,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+            ),
+            
+          // Add some bottom padding
+         Gap(8.h),
+        ],
+      ),
+    );
+  }
+}
 
+// Update the _buildTokensTab method to ensure it only shows tokens
+
+Widget _buildTokensTab() {
+  if (_isLoading) {
+    // Keep your existing shimmer code for token tab
     return ListView.builder(
-      itemCount: tokens.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Token token = tokens[index];
-        return ListTile(
+      itemCount: 3,
+      itemBuilder: (BuildContext context, int index) => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: ListTile(
           dense: true,
           contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
-          leading: Image.asset(token.imagePath, width: 40.w, height: 40.h),
-          title: Text(
-            token.name,
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+          leading: Container(
+            width: 40.w,
+            height: 40.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(22.r),
+            ),
           ),
-          subtitle: Text(
-            '${token.amount} ${token.currency}',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14.sp,
-              color: const Color.fromARGB(255, 151, 157, 170),
+          title: Container(
+            width: 100.w,
+            height: 16.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(4.r),
+            ),
+          ),
+          subtitle: Container(
+            width: 80.w,
+            height: 14.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(4.r),
             ),
           ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Text(
-                token.price,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+              Container(
+                width: 60.w,
+                height: 16.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4.r),
+                ),
               ),
-              Text(
-                token.change,
-                style: TextStyle(
-                  color: AppColors.green,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
+              SizedBox(height: 4.h),
+              Container(
+                width: 40.w,
+                height: 14.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
-  Widget _buildNFTsTab() {
-    if (_isLoading) {
-      // Keep your existing shimmer code
-      return ListView.builder(
-        itemCount: 3,
-        itemBuilder: (BuildContext context, int index) => Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
-            leading: Container(
-              width: 40.w,
-              height: 40.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.r),
+  final List<Token> tokens = _filteredTokens;
+  
+  // Show empty state if no results
+  if (tokens.isEmpty && _searchQuery.isNotEmpty) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            PhosphorIconsBold.coins,
+            size: 48.sp,
+            color: Colors.grey[300],
+          ),
+          Gap(12.h),
+          Text(
+            'No tokens found',
+            style: TextStyle(color: Colors.grey, fontSize: 16.sp),
+          ),
+          if (_searchQuery.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.only(top: 8.h),
+              child: Text(
+                'for "$_searchQuery"',
+                style: TextStyle(color: Colors.grey, fontSize: 14.sp),
               ),
             ),
-            title: Container(
-              width: 100.w,
-              height: 16.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4.r),
-              ),
-            ),
-            subtitle: Container(
-              width: 80.w,
-              height: 14.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4.r),
-              ),
-            ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  width: 60.w,
-                  height: 16.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Container(
-                  width: 40.w,
-                  height: 14.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                ),
-              ],
-            ),
+        ],
+      ),
+    );
+  }
+
+  // Full-page scrollable list of tokens
+  return ListView.builder(
+    physics: const BouncingScrollPhysics(),
+    itemCount: tokens.length,
+    itemBuilder: (BuildContext context, int index) {
+      final Token token = tokens[index];
+      return ListTile(
+        dense: true,
+        contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+        leading: Image.asset(token.imagePath, width: 40.w, height: 40.h),
+        title: Text(
+          token.name,
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+        ),
+        subtitle: Text(
+          '${token.amount} ${token.currency}',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 14.sp,
+            color: const Color.fromARGB(255, 151, 157, 170),
           ),
         ),
-      );
-    }
-
-    final List<Map<String, dynamic>> nfts = _filteredNFTs;
-    
-    // Show empty state if no results
-    if (nfts.isEmpty && _searchQuery.isNotEmpty) {
-      return Center(
-        child: Text(
-          'No NFTs found',
-          style: TextStyle(color: Colors.grey, fontSize: 16.sp),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Text(
+              token.price,
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+            ),
+            Text(
+              token.change,
+              style: TextStyle(
+                color: AppColors.green,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       );
-    }
+    },
+  );
+}
 
+// Similarly update the _buildNFTsTab method
+Widget _buildNFTsTab() {
+  if (_isLoading) {
+    // Keep your existing shimmer code for NFT tab
     return ListView.builder(
-      itemCount: nfts.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Map<String, dynamic> nft = nfts[index];
-        return ListTile(
+      itemCount: 3,
+      itemBuilder: (BuildContext context, int index) => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: ListTile(
           dense: true,
           contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
-          leading: Image.asset(nft['imagePath'] as String, width: 40.w, height: 40.h),
-          title: Text(
-            nft['name'] as String,
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+          leading: Container(
+            width: 40.w,
+            height: 40.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
           ),
-          subtitle: Text(
-            (nft['isCollection'] as bool?) == true ? (nft['value'] as String) : 'Collection: ${nft['collectionName'] as String}',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14.sp,
-              color: const Color.fromARGB(255, 151, 157, 170),
+          title: Container(
+            width: 100.w,
+            height: 16.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(4.r),
+            ),
+          ),
+          subtitle: Container(
+            width: 80.w,
+            height: 14.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(4.r),
             ),
           ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Text(
-                nft['price'] as String,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+              Container(
+                width: 60.w,
+                height: 16.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4.r),
+                ),
               ),
-              Text(
-                nft['change'] as String,
-                style: TextStyle(
-                  color: AppColors.green,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
+              SizedBox(height: 4.h),
+              Container(
+                width: 40.w,
+                height: 14.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
+
+  final List<Map<String, dynamic>> nfts = _filteredNFTs;
+  
+  // Show empty state if no results
+  if (nfts.isEmpty && _searchQuery.isNotEmpty) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            PhosphorIconsBold.image,
+            size: 48.sp,
+            color: Colors.grey[300],
+          ),
+          Gap(12.h),
+          Text(
+            'No NFTs found',
+            style: TextStyle(color: Colors.grey, fontSize: 16.sp),
+          ),
+          if (_searchQuery.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.only(top: 8.h),
+              child: Text(
+                'for "$_searchQuery"',
+                style: TextStyle(color: Colors.grey, fontSize: 14.sp),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Full-page scrollable list of NFTs
+  return ListView.builder(
+    physics: const BouncingScrollPhysics(),
+    itemCount: nfts.length,
+    itemBuilder: (BuildContext context, int index) {
+      final Map<String, dynamic> nft = nfts[index];
+      return ListTile(
+        dense: true,
+        contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
+        leading: Image.asset(nft['imagePath'] as String, width: 40.w, height: 40.h),
+        title: Text(
+          nft['name'] as String,
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
+        ),
+        subtitle: Text(
+          (nft['isCollection'] as bool?) == true ? (nft['value'] as String) : 'Collection: ${nft['collectionName'] as String}',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 14.sp,
+            color: const Color.fromARGB(255, 151, 157, 170),
+          ),
+        ),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Text(
+              nft['price'] as String,
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+            ),
+            Text(
+              nft['change'] as String,
+              style: TextStyle(
+                color: AppColors.green,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
   Widget _buildEmptyContent() => Center(
         child: Text(

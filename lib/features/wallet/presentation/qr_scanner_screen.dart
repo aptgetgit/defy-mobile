@@ -99,7 +99,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -107,7 +107,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                           icon: Icon(
                             Icons.arrow_back_ios,
                             color: Colors.white,
-                            size: 24.sp,
+                            size: 22.sp,
                           ),
                           onPressed: () => Navigator.pop(context),
                         ),

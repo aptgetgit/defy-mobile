@@ -46,7 +46,8 @@ import '../../features/wallet/presentation/wallet_more_screen.dart';
 import '../../features/wallet/presentation/wallet_screen.dart';
 import '../../features/wallet/presentation/wallet_search_screen.dart';
 import '../../features/wallet/presentation/qr_scanner_screen.dart';
-import '../../features/watchlist/presentation/watch_list_screen.dart';
+import '../../features/watchlist/presentation/watchlist_screen.dart';
+
 
 part 'explore_route.dart';
 part 'generated/router.freezed.dart';

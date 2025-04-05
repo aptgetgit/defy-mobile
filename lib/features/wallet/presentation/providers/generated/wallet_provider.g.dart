@@ -6,7 +6,7 @@ part of '../wallet_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$walletNotifierHash() => r'5be614fc6e9dabae1abf8e17c866c1196bdbd24d';
+String _$walletNotifierHash() => r'39b4ae2303f6b424ac1b63dc9a48e7bbd62a41be';
 
 /// See also [WalletNotifier].
 @ProviderFor(WalletNotifier)

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +21,7 @@ class ReceiveScreen extends ConsumerStatefulWidget {
 }
 
 class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
-  final String walletAddress = '0xWalletAddress';
+  final String walletAddress = '0x31ff....9212dh';
   bool _showCopiedMessage = false;
   
   @override
@@ -36,10 +38,10 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text('Receive', style: TextStyle(fontSize: 18.sp)),
+        title: Text('Receive', style: TextStyle(fontSize: 20.sp)),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(PhosphorIconsBold.caretLeft, size: 24.sp),
+          icon: Icon(PhosphorIconsBold.caretLeft, size: 22.sp),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -50,7 +52,7 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: <Widget>[
-              Gap(90.h),
+              Gap(60.h),
               Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
@@ -67,7 +69,7 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
                       foregroundColor: AppColors.white,
                       padding: EdgeInsets.all(10.w),
                       data: walletAddress,
-                      size: 280.w,
+                      size: 300.w,
                       embeddedImageStyle: QrEmbeddedImageStyle(
                         size: Size(99.w, 99.h),
                       ),
@@ -77,55 +79,17 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
                   ),
                 ],
               ),
-              Gap(21.h),
-              //Wallet Option Container
-              GestureDetector(
-                onTap: () {
-                  _showWalletBottomSheet(context);
-                },
-                child: Container(
-                  width: 131.w,
-                  padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 5.h),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 217, 217, 217),
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset(
-                        selectedWallet.imagePath, // Use selected wallet from provider
-                        width: 24.w,
-                        height: 24.h,
-                      ),
-                      Gap(7.w),
-                      Text(
-                        selectedWallet.name, // Use selected wallet from provider
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.white,
-                        ),
-                      ),
-                      Gap(5.w),
-                      Center(
-                        child: Icon(
-                          PhosphorIconsRegular.caretDown,
-                          size: 16.sp,
-                          color: AppColors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               Gap(48.h),
               //Address Container
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.fromLTRB(14.w, 12.h, 10.w, 12.h),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  // Use a calculated fixed width instead of double.infinity
+                  width: _showCopiedMessage ? 300.w : MediaQuery.of(context).size.width - 16.w,
+                  height: _showCopiedMessage ? 50.h : 66.h, // Smaller height in copied state
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(16.r),
@@ -133,38 +97,123 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      if (_showCopiedMessage) Text(
-                        'Address copied to clipboard',
-                        style: TextStyle(
-                          fontSize: 16.sp, 
-                          color: AppColors.greyDark,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        textAlign: TextAlign.start,
-                      ) else Text(
-                        'Address : 0x31ff....9212dh',
-                        style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
-                        textAlign: TextAlign.start,
-                      ),
-                      if (_showCopiedMessage) Center(
-                        child: Icon(
-                          PhosphorIconsFill.checkCircle,
-                          color: AppColors.green,
-                          size: 30.sp,
-                        ),
-                      ) else GestureDetector(
-                        onTap: _copyAddressToClipboard,
-                        child: CircleAvatar(
-                          radius: 15.r,
-                          backgroundColor: AppColors.black,
-                          child: Center(
-                            child: Icon(
-                              PhosphorIconsBold.copySimple,
-                              color: AppColors.white,
-                              size: 18.sp,
+                      Row(
+                        children: <Widget>[
+                          // Wallet icon with size animation
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            width: _showCopiedMessage ? 36.w : 44.w,
+                            height: _showCopiedMessage ? 36.h : 44.h,
+                            padding: EdgeInsets.only(left: _showCopiedMessage ? 0 : 7.w),
+                            child: Image.asset(
+                              selectedWallet.imagePath,
+                              width: _showCopiedMessage ? 36.w : 44.w,
+                              height: _showCopiedMessage ? 36.h : 44.h,
                             ),
                           ),
-                        ),
+                          Gap(12.w),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // AnimatedSwitcher for text content
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 250),
+                                transitionBuilder: (Widget child, Animation<double> animation) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: SlideTransition(
+                                      position: Tween<Offset>(
+                                        begin: const Offset(0.1, 0.0),
+                                        end: Offset.zero,
+                                      ).animate(animation),
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                                child: _showCopiedMessage
+                                  ? Row(
+                                      key: const ValueKey('copied'),
+                                      children: [
+                                        Text(
+                                          "Address copied",
+                                          style: TextStyle(
+                                            fontSize: 16.sp, // Smaller text in copied state
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Row(
+                                      key: const ValueKey('normal'),
+                                      children: [
+                                        Text(
+                                          selectedWallet.name,
+                                          style: TextStyle(
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.black,
+                                          ),
+                                        ),
+                                        Gap(4.w),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _showWalletBottomSheet(context);
+                                          },
+                                          child: Icon(
+                                            PhosphorIconsBold.caretDown,
+                                            color: AppColors.black,
+                                            size: 14.sp,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                              ),
+                              // Address text with animated size and opacity
+                              AnimatedSize(
+                                duration: const Duration(milliseconds: 250),
+                                curve: Curves.easeInOut,
+                                child: _showCopiedMessage
+                                  ? const SizedBox.shrink() // Completely hide when copied
+                                  : Padding(
+                                      padding: EdgeInsets.only(top: 2.h),
+                                      child: Text(
+                                        walletAddress,
+                                        style: TextStyle(
+                                          fontSize: 14.sp,
+                                          color: AppColors.greyLight,
+                                        ),
+                                      ),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      // Right icon with animated switch
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        transitionBuilder: (Widget child, Animation<double> animation) {
+                          return FadeTransition(opacity: animation, child: child);
+                        },
+                        child: _showCopiedMessage
+                          ? Icon(
+                              key: const ValueKey('check'),
+                              PhosphorIconsFill.checkCircle,
+                              color: AppColors.green,
+                              size: 22.sp,
+                            )
+                          : GestureDetector(
+                              key: const ValueKey('copy'),
+                              onTap: _copyAddressToClipboard,
+                              child: Icon(
+                                PhosphorIconsBold.copySimple,
+                                color: AppColors.black,
+                                size: 22.sp,
+                              ),
+                            ),
                       ),
                     ],
                   ),
@@ -289,7 +338,7 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
                           if (index > 0) {
                             return Column(
                               children: [
-                                Gap(16.h), // Added consistent spacing
+                                Gap(12.h), // Added consistent spacing
                                 _buildWalletOption(
                                   wallet: wallets[index],
                                   isSelected: selectedWallet.name == wallets[index].name,
@@ -314,24 +363,24 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
                       ),
                       
                       // Add confirm button with updated styling
-                      Gap(22.h), // Updated spacing before button
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(44.r),
-                          ),
-                          backgroundColor: AppColors.blue,
-                          minimumSize: Size(double.infinity, 54.h),
-                        ),
-                        child: Text(
-                          'Confirm',
-                          style: TextStyle(color: AppColors.white, fontSize: 16.sp),
-                        ),
-                      ),
+                      
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      //   style: ElevatedButton.styleFrom(
+                      //     elevation: 0,
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(44.r),
+                      //     ),
+                      //     backgroundColor: AppColors.blue,
+                      //     minimumSize: Size(double.infinity, 54.h),
+                      //   ),
+                      //   child: Text(
+                      //     'Confirm',
+                      //     style: TextStyle(color: AppColors.white, fontSize: 16.sp),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -386,7 +435,7 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
 
   // Function to copy address to clipboard
   void _copyAddressToClipboard() {
-    const String walletAddress = '0x0'; // Or get the actual address
+    const String walletAddress = '0x31ff....9212dh'; // Or get the actual address
     Clipboard.setData(const ClipboardData(text: walletAddress));
     
     // Set state to show copied confirmation
@@ -394,8 +443,8 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
       _showCopiedMessage = true;
     });
     
-    // Reset after 3 seconds
-    Future.delayed(const Duration(seconds: 3), () {
+    // Reset after 2 seconds (changed from 3 seconds)
+    Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         setState(() {
           _showCopiedMessage = false;
@@ -407,7 +456,7 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
   // Function to show the share bottom sheet
   void _showShareBottomSheet(BuildContext context) {
     ref.watch(receiveProvider);
-    const String qrData = '0xWalletAddress';
+    const String qrData = '0x31ff....9212dh';
 
     showModalBottomSheet(
       context: context,
@@ -448,50 +497,51 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
               child: CustomQrShareWidget(qrData: qrData),
             ),
             Gap(24.h),
-            // Share Options
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: EdgeInsets.only(left: 30.w),
-                child: Row(
-                  children: <Widget>[
-                    _buildShareOption(
-                      icon: PhosphorIconsRegular.downloadSimple,
-                      label: 'Save',
-                      onPressed: () {},
-                    ),
-                    Gap(30.w),
-                    _buildShareOption(
-                      icon: PhosphorIconsRegular.clipboard,
-                      label: 'Copy',
-                      onPressed: () {},
-                    ),
-                    Gap(30.w),
-                    _buildShareOption(
-                      imagePath: 'assets/icons/whatsapp.png',
-                      label: 'Whatsapp',
-                      onPressed: () {},
-                    ),
-                    Gap(30.w),
-                    _buildShareOption(
-                      imagePath: 'assets/icons/telegram.png',
-                      label: 'Telegram',
-                      onPressed: () {},
-                    ),
-                    Gap(30.w),
-                    _buildShareOption(
-                      imagePath: 'assets/icons/x.png',
-                      label: 'X',
-                      onPressed: () {},
-                    ),
-                    Gap(30.w),
-                    _buildShareOption(
-                      icon: PhosphorIconsFill.dotsThreeOutline,
-                      label: 'More',
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
+            SizedBox(
+              height: 110.h,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                // Add explicit padding to the ListView
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                children: <Widget>[
+                  _buildShareOption(
+                    icon: PhosphorIconsRegular.downloadSimple,
+                    label: 'Save',
+                    onPressed: () {},
+                  ),
+                  SizedBox(width: 24.w), // Explicit spacing between items
+                  _buildShareOption(
+                    icon: PhosphorIconsRegular.clipboard,
+                    label: 'Copy',
+                    onPressed: () {},
+                  ),
+                  SizedBox(width: 24.w),
+                  _buildShareOption(
+                    imagePath: 'assets/icons/whatsapp.png',
+                    label: 'Whatsapp',
+                    onPressed: () {},
+                  ),
+                  SizedBox(width: 24.w),
+                  _buildShareOption(
+                    imagePath: 'assets/icons/telegram.png',
+                    label: 'Telegram',
+                    onPressed: () {},
+                  ),
+                  SizedBox(width: 24.w),
+                  _buildShareOption(
+                    imagePath: 'assets/icons/x.png',
+                    label: 'X',
+                    onPressed: () {},
+                  ),
+                  SizedBox(width: 24.w),
+                  _buildShareOption(
+                    icon: PhosphorIconsFill.dotsThreeOutline,
+                    label: 'More',
+                    onPressed: () {},
+                  ),
+                  // No need for extra padding, ListView.padding handles it
+                ],
               ),
             ),
             Gap(24.h),
@@ -535,4 +585,53 @@ class _ReceiveScreenState extends ConsumerState<ReceiveScreen> {
           ),
         ],
       );
+}
+
+// Add this class at the bottom of the file, outside the ReceiveScreen class
+class _DashedLinePainter extends CustomPainter {
+  final Color color;
+  final double dashHeight;
+  final double dashSpace;
+
+  _DashedLinePainter({
+    required this.color,
+    required this.dashHeight,
+    required this.dashSpace,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double startY = 0;
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = size.width
+      ..strokeCap = StrokeCap.round;
+
+    // Calculate total dashes that will fit
+    final dashCount = size.height / (dashHeight + dashSpace);
+    
+    // Distribute dashes evenly
+    for (int i = 0; i < dashCount.floor(); i++) {
+      // Draw each dash
+      canvas.drawLine(
+        Offset(0, startY),
+        Offset(0, startY + dashHeight),
+        paint,
+      );
+      // Move to next dash position
+      startY += dashHeight + dashSpace;
+    }
+    
+    // Add a final dash if there's space
+    if (startY < size.height) {
+      canvas.drawLine(
+        Offset(0, startY),
+        Offset(0, min(startY + dashHeight, size.height)),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -42,96 +42,97 @@ class _ReceiveShareContentState extends ConsumerState<ReceiveShareContent> {
     final String qrData = 'defy.app/request?asset=${selectedAsset?.symbol}&address=$walletAddress';
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      padding: EdgeInsets.symmetric(horizontal: 26.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Align(
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.transparent,
-                    border: Border.all(
-                      width: 10.w,
+            
+            child: Padding(
+              padding:  EdgeInsets.only(top:24.h),
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.transparent,
+                      border: Border.all(
+                        width: 10.w,
+                      ),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: QrImageView(
-                    backgroundColor: AppColors.black,
-                    foregroundColor: AppColors.white,
-                    padding: EdgeInsets.all(10.w),
-                    data: qrData,
-                    size: 280.w,
-                    embeddedImageStyle: QrEmbeddedImageStyle(
-                      size: Size(99.w, 99.h),
+                    child: QrImageView(
+                      backgroundColor: AppColors.black,
+                      foregroundColor: AppColors.white,
+                      padding: EdgeInsets.all(10.w),
+                      data: qrData,
+                      size: 320.w,
+                      embeddedImageStyle: QrEmbeddedImageStyle(
+                        size: Size(99.w, 99.h),
+                      ),
+                      embeddedImage: const AssetImage('assets/icons/qr-logo.png'),
                     ),
-                    embeddedImage: const AssetImage('assets/icons/qr-logo.png'),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          Gap(32.h),
+          Gap(28.h),
           Text(
             'Expires in 24 hours.',
-            style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+            style: TextStyle(fontSize: 16.sp, color: Colors.grey, fontWeight: FontWeight.w500),
           ),
           Gap(14.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(14.w, 12.h, 10.w, 12.h),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  if (_showCopiedMessage)
-                    Text(
-                      'Address copied to clipboard',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: AppColors.greyDark,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.start,
-                    )
-                  else
-                    Text(
-                      'Address : 0x31ff....9212dh',
-                      style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
-                      textAlign: TextAlign.start,
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.fromLTRB(14.w, 12.h, 10.w, 12.h),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                if (_showCopiedMessage)
+                  Text(
+                    'Address copied to clipboard',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: AppColors.greyDark,
+                      fontWeight: FontWeight.w500,
                     ),
-                  if (_showCopiedMessage)
-                    Center(
-                      child: Icon(
-                        PhosphorIconsFill.checkCircle,
-                        color: AppColors.green,
-                        size: 30.sp,
-                      ),
-                    )
-                  else
-                    GestureDetector(
-                      onTap: _copyAddressToClipboard,
-                      child: CircleAvatar(
-                        radius: 15.r,
-                        backgroundColor: AppColors.black,
-                        child: Center(
-                          child: Icon(
-                            PhosphorIconsBold.copySimple,
-                            color: AppColors.white,
-                            size: 18.sp,
-                          ),
+                    textAlign: TextAlign.start,
+                  )
+                else
+                  Text(
+                    'Address : 0x31ff....9212dh',
+                    style: TextStyle(fontSize: 16.sp, color: AppColors.greyLight),
+                    textAlign: TextAlign.start,
+                  ),
+                if (_showCopiedMessage)
+                  Center(
+                    child: Icon(
+                      PhosphorIconsFill.checkCircle,
+                      color: AppColors.green,
+                      size: 30.sp,
+                    ),
+                  )
+                else
+                  GestureDetector(
+                    onTap: _copyAddressToClipboard,
+                    child: CircleAvatar(
+                      radius: 15.r,
+                      backgroundColor: AppColors.black,
+                      child: Center(
+                        child: Icon(
+                          PhosphorIconsBold.copySimple,
+                          color: AppColors.white,
+                          size: 18.sp,
                         ),
                       ),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
           const Spacer(),
@@ -227,66 +228,54 @@ class _ReceiveShareContentState extends ConsumerState<ReceiveShareContent> {
               ),
             ),
             Gap(24.h),
-            // Share Options with loading indicator
-            Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                // Show loading indicator during processing
-                if (_isProcessing)
-                  Container(
-                    color: Colors.white.withOpacity(0.7),
-                    child: const Center(
-                      child: CircularProgressIndicator(color: AppColors.blue),
-                    ),
-                  ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 30.w),
-                    child: Row(
-                      children: <Widget>[
-                        _buildShareOption(
-                          icon: PhosphorIconsRegular.downloadSimple,
-                          label: 'Save',
-                          onPressed: () => _handleSave(context, qrData),
-                        ),
-                        Gap(30.w),
-                        _buildShareOption(
-                          icon: PhosphorIconsRegular.clipboard,
-                          label: 'Copy',
-                          onPressed: () => _handleCopy(context, qrData),
-                        ),
-                        Gap(30.w),
-                        _buildShareOption(
-                          imagePath: 'assets/icons/whatsapp.png',
-                          label: 'Whatsapp',
-                          onPressed: () => _handleShare(context, qrData, 'whatsapp'),
-                        ),
-                        Gap(30.w),
-                        _buildShareOption(
-                          imagePath: 'assets/icons/telegram.png',
-                          label: 'Telegram',
-                          onPressed: () => _handleShare(context, qrData, 'telegram'),
-                        ),
-                        Gap(30.w),
-                        _buildShareOption(
-                          imagePath: 'assets/icons/x.png',
-                          label: 'X',
-                          onPressed: () => _handleShare(context, qrData, 'twitter'),
-                        ),
-                        Gap(30.w),
-                        _buildShareOption(
-                          icon: PhosphorIconsFill.dotsThreeOutline,
-                          label: 'More',
-                          onPressed: () => _handleShare(context, qrData, 'more'),
-                        ),
-                      ],
-                    ),
+            Container(
+              width: double.infinity,
+              height: 110.h,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: BouncingScrollPhysics(),
+                child: Container(
+                  // Force a fixed width that's wider than the screen to ensure scrolling
+                  width: MediaQuery.of(context).size.width + 60.w,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _buildShareOption(
+                        icon: PhosphorIconsRegular.downloadSimple,
+                        label: 'Save',
+                        onPressed: () => _handleCopy(context, qrData),
+                      ),
+                      _buildShareOption(
+                        icon: PhosphorIconsRegular.clipboard,
+                        label: 'Copy',
+                        onPressed: () => _handleCopy(context, qrData),
+                      ),
+                      _buildShareOption(
+                        imagePath: 'assets/icons/whatsapp.png',
+                        label: 'Whatsapp',
+                        onPressed: () => _handleShare(context, qrData, 'whatsapp'),
+                      ),
+                      _buildShareOption(
+                        imagePath: 'assets/icons/telegram.png',
+                        label: 'Telegram',
+                        onPressed: () => _handleShare(context, qrData, 'telegram'),
+                      ),
+                      _buildShareOption(
+                        imagePath: 'assets/icons/x.png',
+                        label: 'X',
+                        onPressed: () => _handleShare(context, qrData, 'twitter'),
+                      ),
+                      _buildShareOption(
+                        icon: PhosphorIconsFill.dotsThreeOutline,
+                        label: 'More',
+                        onPressed: () => _handleShare(context, qrData, 'more'),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-            Gap(24.h),
+            Gap(8.h),
           ],
         ),
       ),
@@ -316,36 +305,36 @@ class _ReceiveShareContentState extends ConsumerState<ReceiveShareContent> {
   }
 
   // Handle save to gallery
-  Future<void> _handleSave(BuildContext context, String qrData) async {
-    setState(() {
-      _isProcessing = true;
-    });
+  // Future<void> _handleSave(BuildContext context, String qrData) async {
+  //   setState(() {
+  //     _isProcessing = true;
+  //   });
     
-    try {
-      final Uint8List? imageBytes = await _captureQrWidget();
-      if (imageBytes != null) {
-        // Save to gallery
-        final result = await ImageGallerySaver.saveImage(
-          imageBytes,
-          quality: 100,
-          name: 'defy_qr_${DateTime.now().millisecondsSinceEpoch}',
-        );
+  //   try {
+  //     final Uint8List? imageBytes = await _captureQrWidget();
+  //     if (imageBytes != null) {
+  //       // Save to gallery
+  //       final result = await ImageGallerySaver.saveImage(
+  //         imageBytes,
+  //         quality: 100,
+  //         name: 'defy_qr_${DateTime.now().millisecondsSinceEpoch}',
+  //       );
         
-        // Show success message
-        if (result != null && result is Map && result['isSuccess'] == true) {
-          _showSnackBar(context, 'QR Code saved to gallery');
-        } else {
-          _showSnackBar(context, 'Failed to save QR Code');
-        }
-      }
-    } catch (e) {
-      _showSnackBar(context, 'Error saving image: $e');
-    } finally {
-      setState(() {
-        _isProcessing = false;
-      });
-    }
-  }
+  //       // Show success message
+  //       if (result != null && result is Map && result['isSuccess'] == true) {
+  //         _showSnackBar(context, 'QR Code saved to gallery');
+  //       } else {
+  //         _showSnackBar(context, 'Failed to save QR Code');
+  //       }
+  //     }
+  //   } catch (e) {
+  //     _showSnackBar(context, 'Error saving image: $e');
+  //   } finally {
+  //     setState(() {
+  //       _isProcessing = false;
+  //     });
+  //   }
+  // }
 
   // Handle copy to clipboard
   Future<void> _handleCopy(BuildContext context, String qrData) async {
@@ -465,4 +454,5 @@ class _ReceiveShareContentState extends ConsumerState<ReceiveShareContent> {
           ),
         ],
       );
+      
 }

@@ -21,10 +21,13 @@ class ReceiveSelectContent extends ConsumerStatefulWidget {
 class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-  bool _showSearchIcon = false;
+  double _scrollProgress = 0.0; // Replace _showSearchIcon with a progress value
   String _searchQuery = '';
-  bool _isTextFieldFocused = false; // Add this to track focus state
+  bool _isTextFieldFocused = false;
   final FocusNode _searchFocusNode = FocusNode();
+  
+  // Constants for animation
+  final double _scrollThreshold = 60.0;  // Point at which animation completes
 
   @override
   void initState() {
@@ -48,20 +51,31 @@ class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
     super.dispose();
   }
 
+  // Updated scroll handler to calculate progress percentage
   void _onScroll() {
-    if (_scrollController.offset > 100 && !_showSearchIcon) {
-      setState(() {
-        _showSearchIcon = true;
-      });
-    } else if (_scrollController.offset <= 100 && _showSearchIcon) {
-      setState(() {
-        _showSearchIcon = false;
-      });
-    }
-    if (_scrollController.offset > 100 && !ref.read(searchIconVisibilityProvider)) {
-      ref.read(searchIconVisibilityProvider.notifier).state = true;
-    } else if (_scrollController.offset <= 100 && ref.read(searchIconVisibilityProvider)) {
-      ref.read(searchIconVisibilityProvider.notifier).state = false;
+    if (_scrollController.hasClients) {
+      // Calculate scrolling progress as a value between 0.0 and 1.0
+      final double progress = (_scrollController.offset / _scrollThreshold).clamp(0.0, 1.0);
+      
+      if (progress != _scrollProgress) {
+        setState(() {
+          _scrollProgress = progress;
+        });
+        
+        // If user is scrolling and search field is focused and search bar is collapsing beyond 50%,
+        // unfocus the search field to ensure proper interaction
+        if (progress > 0.01 && _searchFocusNode.hasFocus) {
+          _searchFocusNode.unfocus();
+        }
+        
+        // Update provider based on threshold crossing
+        final bool isVisible = progress < .75;
+        if (!isVisible && !ref.read(searchIconVisibilityProvider)) {
+          ref.read(searchIconVisibilityProvider.notifier).state = true;
+        } else if (isVisible && ref.read(searchIconVisibilityProvider)) {
+          ref.read(searchIconVisibilityProvider.notifier).state = false;
+        }
+      }
     }
   }
 
@@ -87,7 +101,7 @@ class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
 
   @override
   Widget build(BuildContext context) {
-    final shouldScrollToTop = ref.watch(scrollToTopProvider);
+    final bool shouldScrollToTop = ref.watch(scrollToTopProvider);
     
     // Scroll to top when signaled
     if (shouldScrollToTop) {
@@ -98,24 +112,30 @@ class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
       );
     }
     
+    // Calculate height and opacity based on scroll progress
+    final double maxHeight = 65.h; // Max height (search bar + gap)
+    final double currentHeight = maxHeight * (1 - _scrollProgress);
+    final double currentOpacity = 1 - _scrollProgress;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        // Wrap both the search bar and the gap in a single AnimatedContainer
+        // Container that scales based on scroll progress
         AnimatedContainer(
-          duration: const Duration(milliseconds: 250), // Slightly faster animation
-          height: _showSearchIcon ? 0 : 65.h,  // Include both search bar (45.h) and gap (20.h)
-          curve: Curves.easeInOut,
-          child: SingleChildScrollView( // This prevents overflow during animation
-            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-            child: Column(
-              children: [
-                // Search bar
-                SizedBox(
-                  height: 45.h,
-                  child: AnimatedOpacity(
-                    opacity: _showSearchIcon ? 0.0 : 1.0,
-                    duration: const Duration(milliseconds: 200), // Slightly faster fade
+          duration: const Duration(milliseconds: 150), // Faster animation to feel responsive
+          curve: Curves.easeOutCubic, // Smoother curve
+          height: currentHeight, // Progressive height change
+          child: AnimatedOpacity(
+            opacity: currentOpacity, // Progressive opacity change
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOutCubic,
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                children: <Widget>[
+                  // Search bar
+                  SizedBox(
+                    height: 45.h,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 28.w),
                       child: Column(
@@ -126,10 +146,26 @@ class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
                             children: <Widget>[
                               Expanded(
                                 child: GestureDetector(
-                                  onTap: _searchFocusNode.requestFocus,
+                                  onTap: () {
+                                    // If search bar is partially collapsed, scroll back to top first
+                                    if (_scrollProgress > 0.01) {
+                                      _scrollController.animateTo(
+                                        0,
+                                        duration: const Duration(milliseconds: 300),
+                                        curve: Curves.easeOut,
+                                      );
+                                      // Wait for animation to complete before focusing
+                                      Future.delayed(const Duration(milliseconds: 300), () {
+                                        _searchFocusNode.requestFocus();
+                                      });
+                                    } else {
+                                      // Otherwise, focus immediately
+                                      _searchFocusNode.requestFocus();
+                                    }
+                                  },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                    height: 45.h,
+                                    height: 45.h * (1 - _scrollProgress * 0.3), // Small height reduction for effect
                                     decoration: BoxDecoration(
                                       color: const Color.fromARGB(255, 244, 244, 246),
                                       borderRadius: BorderRadius.circular(40.r),
@@ -207,9 +243,9 @@ class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
                                                     Expanded(
                                                       child: TextField(
                                                         focusNode: _searchFocusNode, // Use the focus node
-                                                        autofocus: false, // Don't autofocus
                                                         showCursor: _isTextFieldFocused || _searchQuery.isNotEmpty, // Only show cursor when focused or has text
                                                         controller: _searchController,
+                                                        enabled: _scrollProgress < 0.01, // Disable text field when significantly collapsed
                                                         onChanged: (String value) {
                                                           setState(() {
                                                             _searchQuery = value;
@@ -263,11 +299,11 @@ class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
                       ),
                     ),
                   ),
-                ),
-                
-                // Gap as part of the same container
-                SizedBox(height: 20.h),
-              ],
+                  
+                  // Gap scales with the animation
+                  SizedBox(height: 12.h * (1 - _scrollProgress)), // Reduced from 20.h to 12.h // Reduced from 20.h to 12.h
+                ],
+              ),
             ),
           ),
         ),
@@ -276,8 +312,12 @@ class _ReceiveSelectContentState extends ConsumerState<ReceiveSelectContent> {
           child: ListView.builder(
             controller: _scrollController,
             padding: EdgeInsets.symmetric(horizontal: 4.w),
+            // Add top padding to compensate for search bar disappearing
+            // This makes the list appear to "take over" the space
+            physics: const BouncingScrollPhysics(), // Better scrolling feel
             itemCount: _assets.length,
             itemBuilder: (BuildContext context, int index) {
+              // Asset item building remains the same...
               final Map<String, String> assetData = _assets[index];
               final Asset asset = Asset(
                 name: assetData['name']!,

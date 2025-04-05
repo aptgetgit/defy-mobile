@@ -24,59 +24,82 @@ class TokenItem extends StatefulWidget {
   final VoidCallback onCheckboxTap;
   final VoidCallback? onTap;
   final bool isHiding;
-
+  
   @override
   State<TokenItem> createState() => _TokenItemState();
 }
 
 class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _fadeAnimation;
+  late Animation<double> _heightAnimation;
+  bool _shouldAnimateOut = false;
 
   @override
   void initState() {
     super.initState();
+    
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 300),
     );
     
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.4, 0),
-      end: const Offset(-0.2, 0),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-    
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _heightAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Curves.easeOut,
+        curve: Curves.easeInOut,
       ),
     );
-    
-    // If selection mode is already active, show animation immediately
-    if (widget.showSelection) {
-      _animationController.value = 1.0;
-    }
   }
 
   @override
   void didUpdateWidget(TokenItem oldWidget) {
     super.didUpdateWidget(oldWidget);
     
-    // Animate when showSelection changes
-    if (oldWidget.showSelection != widget.showSelection) {
-      if (widget.showSelection) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
+    // CRITICAL CHANGE: Check if we're exiting selection mode AND this token was selected and marked for hiding
+    // Use oldWidget values as they tell us the state BEFORE the change
+    if (oldWidget.showSelection && !widget.showSelection && oldWidget.isSelected && oldWidget.isHiding) {
+      print('${widget.token.name}: Exiting selection mode with token selected and hiding=true, will animate out');
+      _triggerHideAnimation();
+    }
+    
+    // When entering selection mode, reset any animations
+    if (!oldWidget.showSelection && widget.showSelection) {
+      print('${widget.token.name}: Entering selection mode, resetting animation');
+      _resetAnimation();
     }
   }
-  
+
+  void _triggerHideAnimation() {
+    if (_shouldAnimateOut) {
+      return;
+    }
+    
+    setState(() {
+      _shouldAnimateOut = true;
+    });
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _animationController.forward().then((_) {
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      }
+    });
+  }
+
+  void _resetAnimation() {
+    if (!_shouldAnimateOut) {
+      return;
+    }
+    
+    setState(() {
+      _shouldAnimateOut = false;
+    });
+    _animationController.reset();
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -84,96 +107,110 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: EdgeInsets.only(left: 8.w, bottom: 2.h),
-    child: GestureDetector(
-      onTap: widget.onTap,
-      child: ListTile(
-        title: Text(
-          widget.token.name, 
-          style: TextStyle(
-            fontSize: 18.sp, 
-            fontWeight: FontWeight.w500,
-            color: widget.isSelected && widget.isHiding ? Colors.grey : Colors.black,
-          ),
-        ),
-        subtitle: Text(
-          '${widget.token.amount} ${widget.token.currency}', 
-          style: TextStyle(
-            fontSize: 14.sp, 
-            fontWeight: FontWeight.w500,
-            color: widget.isSelected && widget.isHiding ? Colors.grey : AppColors.greyLight,
-          ),
-        ),
-        leading: Stack(
+  Widget build(BuildContext context) {
+    if (_shouldAnimateOut && _animationController.isCompleted) {
+      return const SizedBox.shrink();
+    }
+    
+    return SizeTransition(
+      sizeFactor: _shouldAnimateOut ? _heightAnimation : const AlwaysStoppedAnimation(1.0),
+      axisAlignment: -1.0,
+      child: _buildContent(),
+    );
+  }
+
+  // Rest of the class remains the same...
+  Widget _buildContent() =>
+    // Existing implementation
+    Card(
+      margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 0.h),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(12.r),
+        child: Row(
           children: <Widget>[
-            Opacity(
-              opacity: widget.isSelected && widget.isHiding ? 0.5 : 1,
-              child: ClipOval(
-                child: Image.asset(widget.token.imagePath, width: 44.w, height: 44.h),
-              ),
+            Row(
+              children: <Widget>[
+                Stack(
+                  children: <Widget>[
+                    Opacity(
+                      opacity: widget.isSelected && widget.isHiding ? 0.5 : 1,
+                      child: ClipOval(
+                        child: Image.asset(widget.token.imagePath, width: 44.w, height: 44.h),
+                      ),
+                    ),
+                    if (widget.isInWatchlist && widget.showSelection)
+                      Positioned(
+                        top: -4.h,
+                        left: -4.w,
+                        child: Image.asset('assets/icons/watchlist-logo2.png', width: 21.w, height: 21.h),
+                      ),
+                  ],
+                ),
+                SizedBox(width: 16.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.token.name,
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                        color: widget.isSelected && widget.isHiding ? Colors.grey : Colors.black,
+                      ),
+                    ),
+                    Text(
+                      '${widget.token.amount} ${widget.token.currency}',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: widget.isSelected && widget.isHiding ? Colors.grey : AppColors.greyLight,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            if (widget.isInWatchlist && widget.showSelection)
-              Positioned(
-                top: -4.h,
-                left: -4.w,
-                child: Image.asset('assets/icons/watchlist-logo2.png', width: 21.w, height: 21.h),
-              ),
+            const Spacer(),
+            if (widget.showSelection) _buildSelectionTrailing() else _buildNormalTrailing(),
           ],
         ),
-        trailing: widget.showSelection
-            ? _buildSelectionTrailing()
-            : _buildNormalTrailing(),
       ),
-    ),
-  );
+    );
 
   Widget _buildSelectionTrailing() => Row(
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
-      // Slide animation for the text column
-      SlideTransition(
-        position: _slideAnimation,
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                '\$${widget.token.balance}', 
-                style: TextStyle(
-                  fontSize: 18.sp, 
-                  fontWeight: FontWeight.w600, 
-                  color: widget.isSelected && widget.isHiding ? Colors.grey : Colors.black,
-                ),
-              ),
-              Text(
-                '${widget.token.percentageChange}%',
-                style: TextStyle(
-                  color: widget.token.percentageChange >= 0 ? Colors.green : Colors.red,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Text(
+            '\$${widget.token.balance}',
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+              color: widget.isSelected && widget.isHiding ? Colors.grey : Colors.black,
+            ),
           ),
-        ),
+          Text(
+            '${widget.token.percentageChange}%',
+            style: TextStyle(
+              color: widget.token.percentageChange >= 0 ? Colors.green : Colors.red,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
-      // Animated gap that changes with the animation progress
-      SizeTransition(
-        sizeFactor: _animationController,
-        axis: Axis.horizontal,
-        child: Gap(16.w),
-      ),
-      // Fade in for checkbox
-      FadeTransition(
-        opacity: _fadeAnimation,
-        child: CustomCheckbox(
-          isChecked: widget.isSelected,
-          isRound: true,
-          onTap: widget.onCheckboxTap,
-        ),
+      Gap(16.w),
+      CustomCheckbox(
+        isChecked: widget.isSelected,
+        isRound: true,
+        onTap: widget.onCheckboxTap,
       ),
     ],
   );
@@ -183,9 +220,9 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
     crossAxisAlignment: CrossAxisAlignment.end,
     children: <Widget>[
       Text(
-        '\$${widget.token.balance}', 
+        '\$${widget.token.balance}',
         style: TextStyle(
-          fontSize: 18.sp, 
+          fontSize: 18.sp,
           fontWeight: FontWeight.w600,
         ),
       ),

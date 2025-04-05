@@ -8,7 +8,8 @@ import '../../borrow/presentation/screens/borrow_screen.dart';
 import '../../explore/presentation/scrceens/explore_screen.dart';
 import '../../lend/presentation/screens/lend_screen.dart';
 import '../../stake/presentation/stake_screen.dart';
-import '../../watchlist/presentation/watch_list_screen.dart';
+import '../../watchlist/presentation/watchlist_screen.dart';
+
 
 class WalletMoreScreen extends StatefulWidget {
   const WalletMoreScreen({super.key});

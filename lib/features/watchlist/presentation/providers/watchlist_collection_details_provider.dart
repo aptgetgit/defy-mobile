@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'watchlist_collection_model.dart';
+import 'watchlist_item_model.dart';
 import 'watchlist_provider.dart';
 
 part 'generated/watchlist_collection_details_provider.g.dart';
@@ -53,6 +54,11 @@ class WatchlistCollectionDetails extends _$WatchlistCollectionDetails {
   
   void markItemAsDeleting(String itemId, bool isDeleting) {
     ref.read(watchlistProvider.notifier).setItemDeletingState(state.collection.id, itemId, isDeleting);
+  }
+
+  void reorderItems(List<WatchlistItem> newOrder) {
+    final updatedCollection = state.collection.copyWith(items: newOrder);
+    state = state.copyWith(collection: updatedCollection);
   }
 }
 

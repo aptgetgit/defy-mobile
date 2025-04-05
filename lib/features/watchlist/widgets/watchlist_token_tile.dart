@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
 
-class WatchlistTokenTile extends StatefulWidget { // Add onDelete parameter
-  
+class WatchlistTokenTile extends StatefulWidget {
   const WatchlistTokenTile({
-    required this.tokenData, // Make it required
+    required this.tokenData,
     required this.deleteNft, 
-    this.onDelete, // Optional callback
+    this.onDelete,
     super.key,
   });
-  final Map<String, String> tokenData; // Add tokenData parameter
+  final Map<String, String> tokenData;
   final bool deleteNft;
   final VoidCallback? onDelete;
 
@@ -27,20 +27,30 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
 
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 700),
       vsync: this,
     );
+    
     _offsetAnimation = Tween<Offset>(
-      begin: const Offset(1, 0),
-      end: Offset.zero,
+      begin: Offset.zero,
+      end: const Offset(-0.2, 0),
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
+    ));
+    
+    _opacityAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.3, 1, curve: Curves.easeOut),
     ));
   }
 
@@ -63,7 +73,6 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
           isDeleted = true;
         });
         
-        // Call the onDelete callback provided by parent
         if (widget.onDelete != null) {
           widget.onDelete!();
         }
@@ -79,7 +88,6 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
       _controller.reverse();
     }
     
-    // Extract values from tokenData with fallbacks
     final String name = widget.tokenData['name'] ?? 'Funky Monkey';
     final String imagePath = widget.tokenData['imagePath'] ?? 'assets/images/watchlist2.png';
     final String usdValue = widget.tokenData['usdValue'] ?? r'$123.39';
@@ -136,13 +144,22 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      displayValue,
-                                      style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w700,
+                                    if(widget.deleteNft)
+                                      Text(
+                                        displayValue,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.5, end: 0),
+                                    if(!widget.deleteNft)
+                                      Text(
+                                        displayValue,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 ),
                                 Gap(4.h),
@@ -159,35 +176,68 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                         ),
                                       ),
                                     ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: nativeValue,
-                                        style: TextStyle(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.grey,
+                                    if(widget.deleteNft)
+                                      Text.rich(
+                                        TextSpan(
+                                          text: nativeValue,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.3, end: 0),
+                                    if(!widget.deleteNft)
+                                      Text.rich(
+                                        TextSpan(
+                                          text: nativeValue,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey,
+                                          ),
                                         ),
                                       ),
-                                    ),
                                   ],
                                 ),
                               ],
                             ),
                           ),
                           Gap(12.w),
-                          SlideTransition(
-                            position: _offsetAnimation,
-                            child: Visibility(
-                              visible: widget.deleteNft,
-                              child: GestureDetector(
-                                onTap: delete,
-                                child: Icon(
-                                  PhosphorIcons.minusCircle(PhosphorIconsStyle.bold),
-                                  color: Colors.red,
-                                  size: 20.sp,
+                          AnimatedBuilder(
+                            animation: _controller,
+                            builder: (BuildContext context, Widget? child) {
+                              final bool isFadingOut = !widget.deleteNft && _controller.value > 0;
+                              
+                              return Opacity(
+                                opacity: isFadingOut 
+                                    ? _controller.value
+                                    : _opacityAnimation.value,
+                                child: Visibility(
+                                  visible: widget.deleteNft || isFadingOut,
+                                  child: TweenAnimationBuilder<double>(
+                                    duration: const Duration(milliseconds: 500),
+                                    tween: Tween<double>(
+                                      begin: 0.8,
+                                      end: 1,
+                                    ),
+                                    curve: Curves.elasticOut,
+                                    builder: (BuildContext context, double value, Widget? child) => Transform.scale(
+                                      scale: value,
+                                      child: child,
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: delete,
+                                      child: Icon(
+                                        PhosphorIconsFill.minusCircle,
+                                        color: AppColors.red,
+                                        size: 20.sp,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -214,19 +264,19 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                 child: AnimatedBuilder(
                                   animation: _controller,
                                   builder: (BuildContext context, Widget? child) => ShaderMask(
-                                      shaderCallback: (Rect bounds) => LinearGradient(
-                                        colors: <Color>[AppColors.greyDark, AppColors.greyLight.withValues(alpha: 0.6)],
-                                        stops: <double>[_controller.value, _controller.value],
-                                      ).createShader(bounds),
-                                      child: Text(
-                                        'Removing from collection',
-                                        style: TextStyle(
-                                          color: AppColors.greyLight.withValues(alpha: 0.6),
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16.sp,
-                                        ),
+                                    shaderCallback: (Rect bounds) => LinearGradient(
+                                      colors: <Color>[AppColors.greyDark, AppColors.greyLight.withValues(alpha: 0.6)],
+                                      stops: <double>[_controller.value, _controller.value],
+                                    ).createShader(bounds),
+                                    child: Text(
+                                      'Removing from collection',
+                                      style: TextStyle(
+                                        color: AppColors.greyLight.withValues(alpha: 0.6),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.sp,
                                       ),
                                     ),
+                                  ),
                                 ),
                               ),
                               GestureDetector(

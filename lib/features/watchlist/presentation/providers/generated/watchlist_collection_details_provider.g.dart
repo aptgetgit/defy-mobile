@@ -7,7 +7,7 @@ part of '../watchlist_collection_details_provider.dart';
 // **************************************************************************
 
 String _$watchlistCollectionDetailsHash() =>
-    r'03b79bf8cf8722638d6af5e60fe935d95af43a69';
+    r'80a54991ba83d2f3531e0bc61b361ad5aa6646b4';
 
 /// Copied from Dart SDK
 class _SystemHash {

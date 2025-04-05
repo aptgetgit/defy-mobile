@@ -45,8 +45,8 @@ class WalletNotifier extends _$WalletNotifier {
       // Entering More mode - restore selections for hidden items
       state = state.copyWith(
         isMoreButtonSelected: true,
-        selectedTokens: state.hideSelected ? state.hiddenTokens : {},
-        selectedNFTs: state.hideSelected ? state.hiddenNFTs : {},
+        selectedTokens: state.hideSelected ? state.hiddenTokens : <int>{},
+        selectedNFTs: state.hideSelected ? state.hiddenNFTs : <int, Set<int>>{},
         isBalanceHidden: !state.isMoreButtonSelected ? true : state.isBalanceHidden,
         isHidingActive: state.isMoreButtonSelected ? false : state.isHidingActive,
       );
@@ -54,8 +54,8 @@ class WalletNotifier extends _$WalletNotifier {
       // Exiting More mode
       state = state.copyWith(
         isMoreButtonSelected: false,
-        selectedTokens: {},
-        selectedNFTs: {},
+        selectedTokens: <int>{},
+        selectedNFTs: <int, Set<int>>{},
         isBalanceHidden: false,
       );
     }
@@ -113,6 +113,13 @@ class WalletNotifier extends _$WalletNotifier {
     state = state.copyWith(
       selectedNFTs: updatedSelection,
       allCollectionNFTsSelected: updatedAllSelected,
+    );
+  }
+  
+  void clearSelectedTokens() {
+    state = state.copyWith(
+      selectedTokens: <int>{},
+      selectedNFTs: <int, Set<int>>{},
     );
   }
 
@@ -175,7 +182,7 @@ class WalletNotifier extends _$WalletNotifier {
           .toList();
       
       // Filter NFT collections
-      final List<NFTCollection> updatedDisplayedNFTCollections = [];
+      final List<NFTCollection> updatedDisplayedNFTCollections = <NFTCollection>[];
       for (int i = 0; i < state.allNFTCollections.length; i++) {
         if (!(state.allCollectionNFTsSelected[i] ?? false)) {
           updatedDisplayedNFTCollections.add(state.allNFTCollections[i]);
@@ -197,8 +204,8 @@ class WalletNotifier extends _$WalletNotifier {
       state = state.copyWith(
         isMoreButtonSelected: false,
         // Keep track of what's hidden separately from what's selected
-        selectedTokens: {},  // Clear current selections
-        selectedNFTs: {},   // Clear current selections
+        selectedTokens: <int>{},  // Clear current selections
+        selectedNFTs: <int, Set<int>>{},   // Clear current selections
       );
     }
   }
@@ -357,7 +364,7 @@ void toggleSort24hr() {
       
     state = state.copyWith(
       watchlistTokens: updatedWatchlist,
-      selectedTokens: {},
+      selectedTokens: <int>{},
     );
   }
 
@@ -376,7 +383,7 @@ void toggleSort24hr() {
 
   // Helper method to update displayed items
   void _updateDisplayedItems() {
-    final List<Token> newDisplayedTokens = [];
+    final List<Token> newDisplayedTokens = <Token>[];
     
     for (int i = 0; i < state.allTokens.length; i++) {
       // Only add to displayed tokens if NOT (selected AND hideSelected)

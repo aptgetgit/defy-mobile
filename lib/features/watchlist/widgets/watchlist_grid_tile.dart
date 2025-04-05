@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
+import '../../../config/theme/colors.dart';
+
 class WatchlistGridTile extends StatelessWidget {
   const WatchlistGridTile({super.key});
 
@@ -16,7 +18,7 @@ class WatchlistGridTile extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.4,
             height: MediaQuery.of(context).size.width * 0.4,
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: AppColors.greyVeryLight,
               borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.4),
             ),
             child: Stack(
@@ -26,10 +28,6 @@ class WatchlistGridTile extends StatelessWidget {
                     height: 40.h,
                     width: 40.w,
                     margin: EdgeInsets.only(right: 30.w, bottom: 30.h),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40.r),
-                    ),
                     child: const Center(
                       child: Image(
                         height: 36,
@@ -44,10 +42,6 @@ class WatchlistGridTile extends StatelessWidget {
                     height: 40.h,
                     width: 40.w,
                     margin: EdgeInsets.only(left: 30.w, bottom: 30.h),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40.r),
-                    ),
                     child: const Center(
                       child: Image(
                         height: 36,
@@ -62,10 +56,6 @@ class WatchlistGridTile extends StatelessWidget {
                     height: 40.h,
                     width: 40.w,
                     margin: EdgeInsets.only(right: 30.w, top: 20.h),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40.r),
-                    ),
                     child: const Center(
                       child: Image(
                         height: 36,
@@ -80,10 +70,6 @@ class WatchlistGridTile extends StatelessWidget {
                     height: 40.h,
                     width: 40.w,
                     margin: EdgeInsets.only(left: 30.w, top: 20.h),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40.r),
-                    ),
                     child: const Center(
                       child: Image(
                         height: 36,
@@ -109,18 +95,9 @@ class WatchlistGridTile extends StatelessWidget {
               text: '6 NFTs',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 16.sp,
+                fontSize: 14.sp,
                 color: Colors.grey,
               ),
-              children: <InlineSpan>[
-                TextSpan(
-                  text: '   Jan 2 2024',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.grey[400],
-                  ),
-                ),
-              ],
             ),
           ),
         ],

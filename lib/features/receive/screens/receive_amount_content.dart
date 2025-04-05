@@ -59,103 +59,104 @@ class _ReceiveAmountContentState extends State<ReceiveAmountContent> with Single
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Amount Display
-              Gap(32.h),
-              Center(
-                child: Column(
-                  children: <Widget>[
-                    // New animated amount display
-                    _buildAnimatedAmount(),
-                    Gap(8.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          '7.06 ${selectedAsset?.symbol ?? "APT"}',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: AppColors.greyLight,
-                            fontWeight: FontWeight.w600,
+              Padding(
+                padding:  EdgeInsets.only(top: 4.h),
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      // New animated amount display
+                      _buildAnimatedAmount(),
+                      Gap(8.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            '7.06 ${selectedAsset?.symbol ?? "APT"}',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: AppColors.greyLight,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Gap(4.w),
+                          Icon(
+                            PhosphorIconsBold.arrowsDownUp,
+                            size: 16.sp,
+                          ),
+                        ],
+                      ),
+                      Gap(96.h),
+                      // Asset Selection
+                      Container(
+                        height: 66.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.r),
+                          color: AppColors.greyVeryLight,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(9.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    backgroundImage: selectedAsset != null
+                                        ? AssetImage(selectedAsset.imagePath)
+                                        : const AssetImage('assets/icons/aptos.png'),
+                                    radius: 22.r,
+                                  ),
+                                  Gap(12.w),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        selectedAsset?.name ?? 'Aptos',
+                                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+                                      ),
+                                      Text(
+                                        selectedAsset?.symbol ?? 'APT',
+                                        style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Gap(8.w),
+                              TextButton(
+                                onPressed: () {
+                                  // Pass ref to _navigateToPage
+                                  _navigateToPage(1, ref);
+                                },
+                                child: Text(
+                                  'Change',
+                                  style: TextStyle(color: AppColors.blue, fontSize: 16.sp),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Gap(4.w),
-                        Icon(
-                          PhosphorIconsBold.arrowsDownUp,
-                          size: 16.sp,
-                        ),
-                      ],
-                    ),
-                    Gap(96.h),
-                    // Asset Selection
-                    Container(
-                      height: 66.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: AppColors.greyVeryLight,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(9.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage: selectedAsset != null
-                                      ? AssetImage(selectedAsset.imagePath)
-                                      : const AssetImage('assets/icons/aptos.png'),
-                                  radius: 22.r,
-                                ),
-                                Gap(12.w),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      selectedAsset?.name ?? 'Aptos',
-                                      style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
-                                    ),
-                                    Text(
-                                      selectedAsset?.symbol ?? 'APT',
-                                      style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Gap(8.w),
-                            TextButton(
-                              onPressed: () {
-                                // Pass ref to _navigateToPage
-                                _navigateToPage(1, ref);
-                              },
-                              child: Text(
-                                'Change',
-                                style: TextStyle(color: AppColors.blue, fontSize: 16.sp),
-                              ),
-                            ),
-                          ],
-                        ),
+                      Gap(20.h),
+                      // Number Pad
+                      Column(
+                        children: <Widget>[
+                          _buildRowButtons(<String>['1', '2', '3']),
+                          _buildRowButtons(<String>['4', '5', '6']),
+                          _buildRowButtons(<String>['7', '8', '9']),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              _buildButton('.'),
+                              _buildButton('0'),
+                              _buildButton('cancel', PhosphorIconsBold.backspace),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                    Gap(20.h),
-                    // Number Pad
-                    Column(
-                      children: <Widget>[
-                        _buildRowButtons(<String>['1', '2', '3']),
-                        _buildRowButtons(<String>['4', '5', '6']),
-                        _buildRowButtons(<String>['7', '8', '9']),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            _buildButton('.'),
-                            _buildButton('0'),
-                            _buildButton('cancel', PhosphorIconsBold.backspace),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const Spacer(),

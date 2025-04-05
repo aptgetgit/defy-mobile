@@ -4,25 +4,11 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../components/watchlist_nft_tab.dart';
 import '../components/watchlist_token_tab.dart';
 import 'providers/watchlist_provider.dart';
-
-// Remove standalone app code for integrated version
-// void main() {
-//   runApp(const ProviderScope(child: MyApp()));
-// }
-// 
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-// 
-//   @override
-//   Widget build(BuildContext context) => const MaterialApp(
-//         home: WatchListScreen(),
-//         debugShowCheckedModeBanner: false,
-//       );
-// }
 
 class WatchListScreen extends ConsumerStatefulWidget {
   const WatchListScreen({super.key});
@@ -103,37 +89,46 @@ class _WatchListScreenState extends ConsumerState<WatchListScreen>
               ),
             ),
           ],
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(kToolbarHeight - 8.h),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: CustomTabBar(
-                tabController: _tabController,
-                tabs: const <String>[
-                  'NFTs',
-                  'Tokens',
-                ],
-              ),
-            ),
-          ),
         ),
         body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              children: <Widget>[
-                Gap(32.h),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: const <Widget>[
-                      WatchlistNFTTab(),
-                      WatchlistTokensTab(),
+          child: Column(
+            children: <Widget>[
+              // Add the tab bar here with full-width bottom line
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: AppColors.greyVeryLight,
+                        width: 1.h,
+                      ),
+                    ),
+                  ),
+                  child: CustomTabBar(
+                    tabController: _tabController,
+                    tabs: const <String>[
+                      'NFTs',
+                      'Tokens',
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Gap(32.h),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: <Widget>[
+                      const WatchlistNFTTab(),
+                      const WatchlistTokensTab(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       );

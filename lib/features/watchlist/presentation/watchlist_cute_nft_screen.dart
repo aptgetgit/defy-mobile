@@ -15,7 +15,6 @@ import 'providers/watchlist_provider.dart';
 class WatchlistCuteNFTScreen extends ConsumerStatefulWidget {
   const WatchlistCuteNFTScreen({this.collectionId, super.key});
   
-  // Add optional collection ID parameter
   final String? collectionId;
 
   @override
@@ -27,22 +26,19 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
   late Animation<Offset> _offsetAnimation;
   late Animation<Offset> _deleteButtonAnimation;
   String? collectionId;
-  bool _showBottomNavBar = false; // Add this state variable
-  bool _showDeleteMode = false; // Controls whether to show delete button in bottom nav
-  bool _navBarExpanded = false; // Controls nav bar width/shape
-  bool _showCancelButton = false; // Add a new state variable to track if the cancel button should be shown
-  bool _isSortDescending = false; // Track sort order
-  bool _isSorting = false; // Track sorting animation state
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>(); // For animated list
+  bool _showBottomNavBar = false;
+  bool _showDeleteMode = false;
+  bool _navBarExpanded = false;
+  bool _showCancelButton = false;
+  bool _isSortDescending = false;
+  bool _isSorting = false;
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
-  // Add this variable to store the sorted items separately
   List<WatchlistItem> _sortedItems = <WatchlistItem>[];
-
-  // Add this new variable to manage displayed items
-  List<WatchlistItem> _displayedItems = <WatchlistItem>[];
-
-  // Add these new variables for the animation
   bool _isAnimatingSorting = false;
+  Map<String, Offset> _itemPositions = <String, Offset>{};
+  Map<String, GlobalKey> _itemKeys = <String, GlobalKey<State<StatefulWidget>>>{};
+  List<WatchlistItem> _currentItems = <WatchlistItem>[];
 
   @override
   void initState() {
@@ -52,7 +48,6 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
       vsync: this,
     );
     
-    // Existing animation for delete mode
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(1, 0),
       end: Offset.zero,
@@ -61,20 +56,17 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
       curve: Curves.easeInOut,
     ),);
 
-    // New animation for delete button
     _deleteButtonAnimation = Tween<Offset>(
-      begin: const Offset(0, 1), // Start from bottom
+      begin: const Offset(0, 1),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeOutCubic, // Smoother animation curve
+      curve: Curves.easeOutCubic,
     ),);
 
-    // If collection ID is passed directly, use it
     if (widget.collectionId != null) {
       collectionId = widget.collectionId;
     } else {
-      // Otherwise find Cute NFTs collection
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final List<WatchlistCollection> cuteCollections = ref.read(watchlistProvider.notifier)
             .getCollectionsByType(CollectionType.nft)
@@ -85,7 +77,6 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
           setState(() {
             collectionId = cuteCollections.first.id;
             
-            // Add varied data after finding collection ID
             Future.delayed(const Duration(milliseconds: 300), _addDummyDataVariation);
           });
         }
@@ -99,7 +90,6 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
     super.dispose();
   }
 
-  // Update the _toggleDeleteButton method
   void _toggleDeleteButton() {
     if (collectionId == null) {
       return;
@@ -108,22 +98,19 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
     final bool currentDeleteMode = ref.read(watchlistCollectionDetailsProvider(collectionId!)).isDeleteMode;
     
     setState(() {
-      // Update local state first
       _showDeleteMode = !_showDeleteMode;
       
-      // If turning on delete mode, expand the nav bar
       if (!currentDeleteMode) {
         _navBarExpanded = true;
       } else {
-        // If turning off delete mode, also hide the bottom bar
         _showBottomNavBar = false;
       }
     });
     
-    // Update provider state after local state
+    // Toggle delete mode in provider
     ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier).toggleDeleteMode();
     
-    // Animation control
+    // Animation controller for showing/hiding UI elements
     if (!currentDeleteMode) {
       _controller.forward();
     } else {
@@ -134,83 +121,99 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
   void _toggleBottomNavBar() {
     setState(() {
       _showBottomNavBar = !_showBottomNavBar;
-      _navBarExpanded = _showBottomNavBar; // Expand when showing
-      
-      // If showing nav bar, show cancel button; otherwise show three dots
+      _navBarExpanded = _showBottomNavBar;
       _showCancelButton = _showBottomNavBar;
       
-      // If hiding the nav bar, also turn off delete mode
       if (!_showBottomNavBar && _showDeleteMode) {
         _toggleDeleteButton();
       }
     });
   }
 
-  // First, add this helper method outside of the sort method
-  double _extractNumericValue(String? nativeValue) {
-    if (nativeValue == null || nativeValue.isEmpty) return 0;
-    try {
-      final String numericPart = nativeValue.split(' ')[0].replaceAll(',', '');
-      return double.tryParse(numericPart) ?? 0.0;
-    } catch (e) {
-      return 0;
-    }
+  void _captureItemPositions() {
+    _itemPositions.clear();
+    
+    _itemKeys.forEach((String id, GlobalKey<State<StatefulWidget>> key) {
+      final RenderBox? renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+      if (renderBox != null) {
+        final Offset position = renderBox.localToGlobal(Offset.zero);
+        final RenderObject? scrollableParent = context.findRenderObject();
+        final Offset parentPosition = scrollableParent != null 
+            ? (scrollableParent as RenderBox).localToGlobal(Offset.zero) 
+            : Offset.zero;
+            
+        _itemPositions[id] = Offset(
+          position.dx - parentPosition.dx,
+          position.dy - parentPosition.dy
+        );
+      }
+    });
   }
 
-  // Then replace the sort method with this improved version
   void _sortItemsByNativeValue() {
-    if (collectionId == null) return;
-
-    // Don't start a new animation if one is already in progress
-    if (_isAnimatingSorting) return;
-
+    if (collectionId == null) {
+      return;
+    }
+    
     final WatchlistCollection collection = ref.read(watchlistCollectionDetailsProvider(collectionId!)).collection;
-    _sortedItems = List<WatchlistItem>.from(collection.items);
-
-    // Sort the items
+    
+    _currentItems = List<WatchlistItem>.from(collection.items);
+    _sortedItems = List<WatchlistItem>.from(_currentItems);
+    
+    _captureItemPositions();
+    
+    double _extractNumericValue(String? nativeValue) {
+      if (nativeValue == null || nativeValue.isEmpty) {
+        return 0;
+      }
+      
+      try {
+        final String numericPart = nativeValue.split(' ')[0].replaceAll(',', '');
+        return double.tryParse(numericPart) ?? 0.0;
+      } catch (e) {
+        return 0;
+      }
+    }
+    
     _sortedItems.sort((WatchlistItem a, WatchlistItem b) {
       final double valueA = _extractNumericValue(a.nativeValue);
       final double valueB = _extractNumericValue(b.nativeValue);
-      return _isSortDescending ? valueB.compareTo(valueA) : valueA.compareTo(valueB);
+      
+      return _isSortDescending 
+          ? valueB.compareTo(valueA) 
+          : valueA.compareTo(valueB);
     });
-
-    // Toggle sort direction for next time
+    
     _isSortDescending = !_isSortDescending;
-
-    // Start animation
+    
     setState(() {
       _isAnimatingSorting = true;
+      _isSorting = true;
     });
-
-    // Update the list after animation, but don't animate again
-    Future<void>.delayed(const Duration(milliseconds: 500), () {
+    
+    Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) {
-        // First update the provider without rebuilding
         ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
            .reorderItems(_sortedItems);
-        
-        // Then turn off animation flag
+           
         setState(() {
           _isAnimatingSorting = false;
+          _isSorting = false;
         });
       }
     });
   }
 
-  // Add this method to _WatchlistCuteNFTScreenState class to create varied dummy NFT data
   void _addDummyDataVariation() {
     if (collectionId == null) {
       return;
     }
     
-    // Get the collection details provider
     final WatchlistCollectionDetails collectionDetailsNotifier = ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier);
     
-    // Get current items
     final List<WatchlistItem> currentItems = List<WatchlistItem>.from(
         ref.read(watchlistCollectionDetailsProvider(collectionId!)).collection.items,);
     
-    // Only update if all values are the same
     bool allSameValue = true;
     String firstValue = '';
     
@@ -224,9 +227,7 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
       }
     }
     
-    // If all values are the same, update with varied values
     if (allSameValue) {
-      // Create a list of varied native values
       final List<String> variedValues = <String>[
         '245 APT',
         '32 APT',
@@ -240,7 +241,6 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
         '150 APT',
       ];
       
-      // Create a list of varied USD values
       final List<String> variedUsdValues = <String>[
         r'$24,500',
         r'$3,200',
@@ -254,7 +254,6 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
         r'$15,000',
       ];
       
-      // Assign different values to each item
       final List<WatchlistItem> updatedItems = <WatchlistItem>[];
       for (int i = 0; i < currentItems.length; i++) {
         final int valueIndex = i % variedValues.length;
@@ -266,14 +265,12 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
         );
       }
       
-      // Update the collection with varied values
       collectionDetailsNotifier.reorderItems(updatedItems);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Show loading while finding collection
     if (collectionId == null) {
       return const Scaffold(
         body: Center(
@@ -282,14 +279,19 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
       );
     }
     
-    // Get collection data from provider
     final CollectionDetailsState collectionDetails = ref.watch(watchlistCollectionDetailsProvider(collectionId!));
     final WatchlistCollection collection = collectionDetails.collection;
     final bool showDeleteButton = collectionDetails.isDeleteMode;
     
+    if (_itemKeys.length != collection.items.length) {
+      _itemKeys = <String, GlobalKey<State<StatefulWidget>>>{
+        for (WatchlistItem item in collection.items)
+          item.id: GlobalKey(),
+      };
+    }
+    
     return Scaffold(
       appBar: AppBar(
-
         toolbarHeight: kToolbarHeight + 12.h,
         leading: IconButton(
           icon: Icon(
@@ -312,19 +314,17 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
               ),
             ),
             Row(
-              mainAxisSize: MainAxisSize.min, // Keep row centered
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // Horizontal stack of NFT images with reduced spacing
                 SizedBox(
-                  width: 45.w, // Reduced from 60.w to make it more compact
-                  height: 20.h, // Keep the same height
+                  width: 45.w,
+                  height: 20.h,
                   child: Stack(
                     children: <Widget>[
-                      // Display up to 3 NFT images as a preview
                       for (int i = 0; i < (collection.items.length > 3 ? 3 : collection.items.length); i++)
                         Positioned(
-                          right: i * 5.w, // Reduced from 15.w to 10.w for tighter stacking
+                          right: i * 5.w,
                           child: Container(
                             width: 20.w,
                             height: 20.h,
@@ -341,9 +341,9 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
                     ],
                   ),
                 ),
-                Gap(4.w), // Small gap between images and text
+                Gap(4.w),
                 Text(
-                  '${collection.items.length} items', // Item count text
+                  '${collection.items.length} items',
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: AppColors.greyLight,
@@ -356,293 +356,343 @@ class _WatchlistCuteNFTScreenState extends ConsumerState<WatchlistCuteNFTScreen>
           ],
         ),
         actions: <Widget>[
-          // Show either three dots or Cancel button with color based on delete mode
-          if (_showCancelButton) Padding(
-                padding: EdgeInsets.only(right: 16.w),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    // Change color based on delete mode
-                    color: showDeleteButton 
-                      ? AppColors.red.withValues(alpha: 0.2) // Red with opacity when in delete mode
-                      : AppColors.blue.withValues(alpha: 0.2), // Blue with opacity otherwise
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      // If in delete mode, also toggle delete mode when canceling
-                      if (showDeleteButton) {
-                        _toggleDeleteButton();
-                      }
-                      _toggleBottomNavBar(); // Always toggle bottom nav bar
-                    },
-                    child: Text(
-                      showDeleteButton ? 'Done' : 'Cancel', // Change text based on mode
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        // Change text color based on delete mode
-                        color: showDeleteButton 
-                          ? AppColors.red 
-                          : AppColors.blue,
-                        fontWeight: FontWeight.w600,
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            margin: EdgeInsets.only(right: 8.w),
+            padding: EdgeInsets.symmetric(
+              horizontal: 12.w, 
+              vertical: 6.h
+            ),
+            decoration: BoxDecoration(
+              color: showDeleteButton ? AppColors.red.withValues(alpha: 0.2) : AppColors.greyVeryLight,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: GestureDetector(
+              onTap: showDeleteButton 
+                ? () {
+                    // New functionality: Remove All (moved from bottom button)
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: Text('Remove All', style: TextStyle(fontSize: 22.sp)),
+                        content: Text('Are you sure? This action cannot be undone.', style: TextStyle(fontSize: 16.sp)),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Cancel', style: TextStyle(fontSize: 16.sp)),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              ref.read(watchlistProvider.notifier).deleteCollection(collectionId!);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            child: Text('Remove', style: TextStyle(color: AppColors.red, fontSize: 16.sp)),
+                          ),
+                        ],
                       ),
+                    );
+                  }
+                : () async {
+                    // Keep this as is - Edit functionality remains unchanged
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => WatchListUpdateCollectionScreen(
+                          initialName: collection.name,
+                          collectionId: collectionId!,
+                        ),
+                      ),
+                    );
+                  },
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.3, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
                     ),
                   ),
-                ),
-              ) else Padding(  // Show three dots icon when _showCancelButton is false
-                padding: EdgeInsets.only(right: 6.w),
-                child: IconButton(
-                  icon: Icon(
-                    PhosphorIconsBold.dotsThreeVertical,
-                    color: Colors.black,
-                    size: 22.sp,
+                child: Text(
+                  showDeleteButton ? 'Remove All' : 'Edit',
+                  key: ValueKey<String>(showDeleteButton ? 'remove_all' : 'edit'),
+                  style: TextStyle(
+                    color: showDeleteButton ? AppColors.red : AppColors.grey,
+                    fontSize: 14.sp,
+                    fontWeight: showDeleteButton ? FontWeight.w600 : FontWeight.w500,
                   ),
-                  onPressed: _toggleBottomNavBar,
                 ),
               ),
+            ),
+          ),
         ],
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.h),
- child: Column(
-          children: <Widget>[
-            // Add padding above line
-            Gap(8.h), 
-            // The line
-            Container(
-              color: AppColors.greyVeryLight,
-              height: 1.h,
-              width: double.infinity,
-            ),
-            // No need for padding below since we'll add it in the body
-          ],
-        ),
+          child: Column(
+            children: <Widget>[
+              Gap(8.h), 
+              Container(
+                color: AppColors.greyVeryLight,
+                height: 1.h,
+                width: double.infinity,
+              ),
+            ],
+          ),
         ),
       ),
-
-     
 
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            // Removed NFT text and icons row
             Gap(12.h),
             Expanded(
               child: collection.items.isEmpty
                 ? Center(child: Text('No NFTs in this collection', style: TextStyle(fontSize: 16.sp)))
-                : ListView.builder(
-                    itemCount: collection.items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final WatchlistItem item = collection.items[index];
-                      
-                      // Only calculate target position if we're actually animating
-                      final int targetIndex = _isAnimatingSorting 
-                          ? _sortedItems.indexWhere((WatchlistItem i) => i.id == item.id)
-                          : index;
-                      
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                        transform: Matrix4.translationValues(
-                          0,
-                          _isAnimatingSorting ? (targetIndex - index) * 70.h : 0,
-                          0,
-                        ),
-                        child: WatchlistNFTTile(
-                          nftData: <String, String>{
-                            'id': item.id,
-                            'name': item.name,
-                            'imagePath': item.imagePath,
-                            'usdValue': item.usdValue ?? '',
-                            'nativeValue': item.nativeValue ?? '',
-                          },
-                          deleteNft: showDeleteButton,
-                          onDelete: () {
-                            ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
-                                .deleteItem(item.id);
-                          },
-                        ),
-                      );
-                    },
-                  ),
-            ),
-            Gap(50.h),
-          ],
-        ),
-      ),
-      
-      // Update the bottomNavigationBar section
-      bottomNavigationBar: (_showBottomNavBar || _showDeleteMode) 
-        ? Padding(
-            padding: EdgeInsets.only(bottom: 24.h),
-            child: Container(
-              color: Colors.transparent,
-              height: 97.h,
-              child: Center(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  width: _showDeleteMode ? 0.9.sw - 48.w : (_navBarExpanded ? 0.7.sw : 0.6.sw), 
-                  child: Stack(
+                : Stack(
+                  alignment: Alignment.topLeft,
                     children: <Widget>[
-                      // Nav bar container 
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        height: _showDeleteMode ? 62.h : (_navBarExpanded ? 100.h : 90.h),
-                        alignment: Alignment.bottomCenter,
-                        decoration: BoxDecoration(
-                          color: _showDeleteMode ? AppColors.red : Colors.black,
-                          borderRadius: _showDeleteMode
-                              ? BorderRadius.circular(40.r)
-                              : (_navBarExpanded
-                                  ? BorderRadius.circular(24.r)
-                                  : BorderRadius.circular(64.r)),
-                        ),
-                        margin: EdgeInsets.only(
-                          top: _showDeleteMode ? 24.h : 18.h,
-                          bottom: _showDeleteMode ? 24.h : 18.h,
-                        ),
-                        child: _showDeleteMode 
-                          // Delete confirmation button when in delete mode
-                          ? TextButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => AlertDialog(
-                                    title: Text('Delete Collection', style: TextStyle(fontSize: 22.sp)),
-                                    content: Text('Are you sure? This action cannot be undone.', style: TextStyle(fontSize: 16.sp)),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text('Cancel', style: TextStyle(fontSize: 16.sp)),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          ref.read(watchlistProvider.notifier).deleteCollection(collectionId!);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text('Delete', style: TextStyle(color: AppColors.red, fontSize: 16.sp)),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                      ListView.builder(
+                        itemCount: collection.items.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final WatchlistItem item = collection.items[index];
+                          return SortableItemWrapper(
+                            key: _itemKeys[item.id],
+                            itemId: item.id,
+                            isAnimating: _isAnimatingSorting,
+                            sortedItems: _sortedItems,
+                            currentItems: _currentItems,
+                            child: WatchlistNFTTile(
+                              nftData: <String, String>{
+                                'id': item.id,
+                                'name': item.name,
+                                'imagePath': item.imagePath,
+                                'usdValue': item.usdValue ?? '',
+                                'nativeValue': item.nativeValue ?? '',
                               },
-                              child: Text(
-                                'Delete Collection',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            )
-                          // Navigation buttons when not in delete mode
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                // Sort button - Updated to call the sort function
-                                IconButton(
-                                  onPressed: () {
-                                    _toggleBottomNavBar();
-                                    _sortItemsByNativeValue(); // Call our sort function
-                                  },
-                                  icon: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Icon(
-                                        // Change icon based on sort direction
-                                        PhosphorIconsRegular.arrowBendDoubleUpLeft,
-                                        color: AppColors.greyLight,
-                                        size: 22.sp,
-                                      ),
-                                      Text(
-                                        'Sort',
-                                        style: TextStyle(
-                                          color: AppColors.greyLight,
-                                          fontSize: 12.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              deleteNft: showDeleteButton,
+                              onDelete: () {
+                                // Create a local copy of the item before deletion
+                                final itemToDelete = item;
                                 
-                                // Edit button
-                                IconButton(
-                                  onPressed: () async {
-                                    _toggleBottomNavBar();
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) => WatchListUpdateCollectionScreen(
-                                          initialName: collection.name,
-                                          collectionId: collectionId!,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  icon: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Icon(
-                                        PhosphorIconsRegular.pencilSimple,
-                                        color: AppColors.greyLight,
-                                        size: 22.sp,
-                                      ),
-                                      Text(
-                                        'Edit',
-                                        style: TextStyle(
-                                          color: AppColors.greyLight,
-                                          fontSize: 12.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                
-                                // Delete button - SIMPLIFIED TO MAKE IT MORE CLICKABLE
-                                Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-                                      print("Delete button pressed"); // Add logging
-                                      _toggleDeleteButton();
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.w),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Icon(
-                                            PhosphorIconsRegular.trash,
-                                            color: AppColors.greyLight,
-                                            size: 22.sp,
-                                          ),
-                                          Text(
-                                            'Delete',
-                                            style: TextStyle(
-                                              color: AppColors.greyLight,
-                                              fontSize: 12.sp,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                // Use a direct, synchronous update instead of post-frame callback
+                                // This prevents unnecessary rebuilds that could trigger animations
+                                ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
+                                    .deleteItem(itemToDelete.id);
+                                    
+                                // Explicitly maintain delete mode
+                                ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier).preserveDeleteMode();
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      
+                      if (_isAnimatingSorting)
+                        ...collection.items.map((WatchlistItem item) {
+                          final int currentIndex = _currentItems.indexWhere((WatchlistItem i) => i.id == item.id);
+                          final int targetIndex = _sortedItems.indexWhere((WatchlistItem i) => i.id == item.id);
+                          
+                          if (currentIndex == targetIndex) {
+                            return const SizedBox.shrink();
+                          }
+                          
+                          final Offset startPosition = _itemPositions[item.id] ?? Offset(0, currentIndex * 70.h);
+                          final double verticalOffset = (targetIndex - currentIndex) * 70.h;
+                          
+                          return Positioned(
+                            key: ValueKey('animated_${item.id}'),
+                            top: startPosition.dy,
+                            left: 0,
+                            right: 0,
+                            height: 70.h,
+                            child: TweenAnimationBuilder<double>(
+                              tween: Tween<double>(begin: 0, end: 1),
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                              builder: (BuildContext context, double value, Widget? child) => Transform.translate(
+                                  offset: Offset(0, verticalOffset * value),
+                                  child: Opacity(
+                                    opacity: 1.0 - (value * 0.2),
+                                    child: WatchlistNFTTile(
+                                      nftData: <String, String>{
+                                        'id': item.id,
+                                        'name': item.name,
+                                        'imagePath': item.imagePath,
+                                        'usdValue': item.usdValue ?? '',
+                                        'nativeValue': item.nativeValue ?? '',
+                                      },
+                                      deleteNft: showDeleteButton,
+                                      onDelete: () {},
                                     ),
                                   ),
                                 ),
-                              ],
                             ),
-                      ),
+                          );
+                        }).toList(),
                     ],
                   ),
-                ),
+            ),
+            
+            Padding(
+              padding: EdgeInsets.fromLTRB(26.w, 16.h, 26.w, 12.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Sort Button - Only show when not in delete mode
+                  // Use AnimatedOpacity & AnimatedSize to avoid constraint issues
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: showDeleteButton ? 0.0 : 1.0,
+                    child: AnimatedSize(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      child: SizedBox(
+                        width: showDeleteButton ? 0 : 160.w,
+                        height: 56.h,
+                        child: showDeleteButton 
+                          ? null 
+                          : FilledButton(
+                              onPressed: _sortItemsByNativeValue,
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32.r),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 16.h),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    _isSortDescending 
+                                      ? PhosphorIconsRegular.arrowDown 
+                                      : PhosphorIconsRegular.arrowUp,
+                                    color: Colors.white,
+                                    size: 22.sp,
+                                  ),
+                                  Gap(8.w),
+                                  Text(
+                                    'Sort',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                      ),
+                    ),
+                  ),
+                  
+                  // Remove/Delete Button - Uses AnimatedContainer with fixed max width
+                  Expanded(
+                    child: AnimatedPadding(
+                      duration: const Duration(milliseconds: 300),
+                      padding: EdgeInsets.only(left: showDeleteButton ? 0 : 12.w),
+                      child: FilledButton(
+                        onPressed: showDeleteButton 
+                          ? _toggleDeleteButton // New functionality: Done (was previously at the top)
+                          : _toggleDeleteButton,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: showDeleteButton ? AppColors.black : Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.r),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Icon(
+                            //   PhosphorIconsRegular.trash,
+                            //   color: Colors.white,
+                            //   size: 22.sp,
+                            // ),
+                            // Gap(8.w),
+                            Text(
+                              showDeleteButton ? 'Cancel' : 'Remove',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          )
-        : null,
+          ],
+        ),
+      ),
     );
+  }
+}
+
+class AnimatedListItem extends StatelessWidget {
+  const AnimatedListItem({
+    Key? key, 
+    required this.child,
+    required this.isSorting,
+  }) : super(key: key);
+
+  final Widget child;
+  final bool isSorting;
+
+  @override
+  Widget build(BuildContext context) => AnimatedOpacity(
+      opacity: isSorting ? 0.7 : 1.0,
+      duration: const Duration(milliseconds: 300),
+      child: AnimatedPadding(
+        padding: EdgeInsets.only(
+          left: isSorting ? 8.w : 0, 
+          right: isSorting ? 8.w : 0,
+        ),
+        duration: const Duration(milliseconds: 400),
+        child: child,
+      ),
+    );
+}
+
+class SortableItemWrapper extends StatelessWidget {
+  const SortableItemWrapper({
+    Key? key,
+    required this.itemId,
+    required this.isAnimating,
+    required this.sortedItems,
+    required this.currentItems,
+    required this.child,
+  }) : super(key: key);
+
+  final String itemId;
+  final bool isAnimating;
+  final List<WatchlistItem> sortedItems;
+  final List<WatchlistItem> currentItems;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isAnimating) {
+      return SizedBox(
+        height: 70.h,
+        child: Opacity(
+          opacity: 0,
+          child: child,
+        ),
+      );
+    }
+
+    return child;
   }
 }

@@ -6,15 +6,14 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
 
-class WatchlistNFTTile extends StatefulWidget { // Add this parameter
-  
+class WatchlistNFTTile extends StatefulWidget {
   const WatchlistNFTTile({
-    required this.nftData, // Make it required
-    required this.deleteNft, 
-    this.onDelete,  // Make it optional
+    required this.nftData,
+    required this.deleteNft,
+    this.onDelete,
     super.key,
   });
-  final Map<String, String> nftData; // Add this parameter
+  final Map<String, String> nftData;
   final bool deleteNft;
   final VoidCallback? onDelete;
 
@@ -25,10 +24,12 @@ class WatchlistNFTTile extends StatefulWidget { // Add this parameter
 class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerProviderStateMixin {
   bool clickDelete = false;
   bool isDeleted = false;
+  bool _previousDeleteState = false;
+  static bool _globalDeleteMode = false; // Track global delete mode state
 
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
-  late Animation<double> _opacityAnimation; // Add opacity animation
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
@@ -37,24 +38,53 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
       duration: const Duration(milliseconds: 700),
       vsync: this,
     );
-    
+
     _offsetAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(-0.2, 0),
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
-    ),);
-    
-    // Add opacity animation for the minus button
+    ));
+
     _opacityAnimation = Tween<double>(
       begin: 0,
       end: 1,
     ).animate(CurvedAnimation(
       parent: _controller,
-      // Use a slightly different curve for opacity to create a pleasing effect
-      curve: const Interval(0.3, 1, curve: Curves.easeOut),
-    ),);
+      curve: Curves.easeInOut,
+    ));
+    
+    // Initialize state
+    _previousDeleteState = widget.deleteNft;
+    
+    // Track global delete mode - only trigger animations on initial toggle
+    if (widget.deleteNft && !_globalDeleteMode) {
+      _globalDeleteMode = true;
+      // Only forward animation when we first enter delete mode
+      _controller.forward();
+    }
+  }
+
+  @override
+  void didUpdateWidget(WatchlistNFTTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    
+    // Important: Only handle animation when the MODE changes, not individual tile changes
+    if (oldWidget.deleteNft != widget.deleteNft) {
+      _previousDeleteState = oldWidget.deleteNft;
+      
+      // Update global state
+      _globalDeleteMode = widget.deleteNft;
+      
+      if (widget.deleteNft) {
+        // Entering delete mode - all tiles show delete icon without animation
+        _controller.value = 1.0; // Skip animation, just set the end value
+      } else {
+        // Exiting delete mode - all tiles hide delete icon without animation
+        _controller.value = 0.0; // Skip animation, just set the start value
+      }
+    }
   }
 
   @override
@@ -63,20 +93,21 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
     super.dispose();
   }
 
+  // Modify delete function
   void delete() {
-    _controller.forward(from: 0);
-
+    // No animation trigger here, just handle state
     setState(() {
       clickDelete = !clickDelete;
     });
 
-    Future.delayed(const Duration(seconds: 6), () {
-      if (clickDelete) {
+    // Reduced to 2 seconds for faster response
+    Future.delayed(const Duration(seconds: 2), () {
+      if (clickDelete && mounted) {
         setState(() {
           isDeleted = true;
         });
-        
-        // Call the onDelete callback if provided
+
+        // Call onDelete callback
         if (widget.onDelete != null) {
           widget.onDelete!();
         }
@@ -86,13 +117,6 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    if (widget.deleteNft) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
-
-    // Get values from nftData map with fallbacks
     final String name = widget.nftData['name'] ?? 'Funky Monkey';
     final String imagePath = widget.nftData['imagePath'] ?? 'assets/images/onboarding-nft-6.png';
     final String usdValue = widget.nftData['usdValue'] ?? r'$123.39';
@@ -133,7 +157,6 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                           ),
                           Gap(12.w),
                           Expanded(
-                           
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -149,15 +172,15 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                         ),
                                       ),
                                     ),
-                                    if(widget.deleteNft)
+                                    if (widget.deleteNft)
                                       Text(
-                                        nativeValue.split(' ')[0], // First part of native value (e.g., "32" from "32 APT")
+                                        nativeValue.split(' ')[0],
                                         style: TextStyle(
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.5, end: 0),
-                                    if(!widget.deleteNft)
+                                    if (!widget.deleteNft)
                                       Text(
                                         nativeValue.split(' ')[0],
                                         style: TextStyle(
@@ -181,7 +204,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                         ),
                                       ),
                                     ),
-                                    if(widget.deleteNft)
+                                    if (widget.deleteNft)
                                       Text.rich(
                                         TextSpan(
                                           text: nativeValue,
@@ -192,7 +215,7 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                           ),
                                         ),
                                       ).animate().slideX(duration: const Duration(milliseconds: 300), begin: 0.3, end: 0),
-                                    if(!widget.deleteNft)
+                                    if (!widget.deleteNft)
                                       Text.rich(
                                         TextSpan(
                                           text: nativeValue,
@@ -209,41 +232,16 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                             ),
                           ),
                           Gap(12.w),
-                          // Replace Visibility with AnimatedBuilder to use opacity animation
-                          AnimatedBuilder(
-                            animation: _controller,
-                            builder: (BuildContext context, Widget? child) {
-                              final bool isFadingOut = !widget.deleteNft && _controller.value > 0;
-                              return Opacity(
-                                opacity: isFadingOut 
-                                    ? _controller.value
-                                    : _opacityAnimation.value,
-                                child: Visibility(
-                                  visible: widget.deleteNft || isFadingOut,
-                                  child: TweenAnimationBuilder<double>(
-                                    duration: const Duration(milliseconds: 500),
-                                    tween: Tween<double>(
-                                      begin: 0.8, 
-                                      end: 1,
-                                    ),
-                                    curve: Curves.elasticOut,
-                                    builder: (BuildContext context, double value, Widget? child) => Transform.scale(
-                                        scale: value,
-                                        child: child,
-                                      ),
-                                    child: GestureDetector(
-                                      onTap: delete,
-                                      child: Icon(
-                                        PhosphorIconsFill.minusCircle,
-                                        color: AppColors.red,
-                                        size: 20.sp,
-                                      ),
-                                    ),
+                          widget.deleteNft
+                              ? GestureDetector(
+                                  onTap: delete,
+                                  child: Icon(
+                                    PhosphorIconsFill.minusCircle,
+                                    color: AppColors.red,
+                                    size: 20.sp,
                                   ),
-                                ),
-                              );
-                            },
-                          ),
+                                )
+                              : SizedBox(width: 0),
                         ],
                       ),
                     ),
@@ -269,20 +267,19 @@ class _WatchlistNFTTileState extends State<WatchlistNFTTile> with SingleTickerPr
                                 child: AnimatedBuilder(
                                   animation: _controller,
                                   builder: (BuildContext context, Widget? child) => ShaderMask(
-                                      shaderCallback: (Rect bounds) => LinearGradient(
-                                        // colors: <Color>[Colors.grey, Colors.grey.withOpacity(0.6)],
-                                           colors: <Color>[AppColors.greyDark, AppColors.greyLight.withValues(alpha: 0.6),],
-                                        stops: <double>[_controller.value, _controller.value],
-                                      ).createShader(bounds),
-                                      child: Text(
-                                        'Removing from collection',
-                                        style: TextStyle(
-                                          color: AppColors.greyLight.withValues(alpha: 0.6),
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16.sp,
-                                        ),
+                                    shaderCallback: (Rect bounds) => LinearGradient(
+                                      colors: <Color>[AppColors.greyDark, AppColors.greyLight.withOpacity(0.6)],
+                                      stops: <double>[_controller.value, _controller.value],
+                                    ).createShader(bounds),
+                                    child: Text(
+                                      'Removing from collection',
+                                      style: TextStyle(
+                                        color: AppColors.greyLight.withOpacity(0.6),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.sp,
                                       ),
                                     ),
+                                  ),
                                 ),
                               ),
                               GestureDetector(

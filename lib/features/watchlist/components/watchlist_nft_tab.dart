@@ -8,6 +8,7 @@ import '../../wallet/presentation/providers/wallet_provider.dart';
 import '../presentation/providers/watchlist_new_collection_model.dart';
 import '../presentation/providers/watchlist_new_collection_provider.dart';
 import '../presentation/watchlist_cute_nft_screen.dart';
+import '../utils/custom_route.dart';
 import '../widgets/watchlist_collection_tile.dart';
 import '../widgets/watchlist_cute_nft_tile.dart';
 import '../widgets/watchlist_grid_tile.dart';
@@ -15,7 +16,8 @@ import '../widgets/watchlist_newList_tile.dart';
 import '../widgets/watchlist_new_collection.dart';
 
 class WatchlistNFTTab extends ConsumerWidget {
-  const WatchlistNFTTab({Key? key}) : super(key: key);
+  final String? newCollectionHeroTag;
+  const WatchlistNFTTab({super.key, this.newCollectionHeroTag});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -92,10 +94,10 @@ class WatchlistNFTTab extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 // First column: Show collection
-                WatchlistCollectionTile(collection: collections[firstItemIndex]),
+                WatchlistCollectionTile(collection: collections[firstItemIndex], heroTag: newCollectionHeroTag ?? null),
                 
                 // Second column: Show collection
-                WatchlistCollectionTile(collection: collections[secondItemIndex]),
+                WatchlistCollectionTile(collection: collections[secondItemIndex], heroTag: newCollectionHeroTag ?? null),
               ],
             ),
           );
@@ -139,23 +141,47 @@ class WatchlistNFTTab extends ConsumerWidget {
     );
   }
   
-  // Update in watchlist_nft_tab.dart _buildNewListTile method
-  Widget _buildNewListTile(BuildContext context, WidgetRef ref) => 
-    GestureDetector(
-      onTap: () {
-        // Clear any existing selections
-        ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
-        
-        // Navigate to create screen specifically for NFTs
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const WatchListNewCollectionScreen(
-              source: CollectionSource.nft,
+  // Update the _buildNewListTile method
+  Widget _buildNewListTile(BuildContext context, WidgetRef ref) {
+    // Create keys to track positions
+    final GlobalKey tileKey = GlobalKey();
+    final GlobalKey destinationKey = GlobalKey();
+    
+    return KeyedSubtree(
+      key: tileKey,
+      child: GestureDetector(
+        onTap: () {
+          // Clear any existing selections
+          ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
+          
+          // Get the current position of the tile
+          final RenderBox renderBox = tileKey.currentContext!.findRenderObject() as RenderBox;
+          final Offset position = renderBox.localToGlobal(Offset.zero);
+          final Size size = renderBox.size;
+          
+          // Calculate source rectangle
+          final Rect sourceRect = Rect.fromLTWH(
+            position.dx,
+            position.dy,
+            size.width,
+            size.height,
+          );
+          
+          // Use custom route
+          Navigator.push(
+            context,
+            NewListTilePageRoute(
+              sourceRect: sourceRect,
+              destinationKey: destinationKey,
+              page: WatchListNewCollectionScreen(
+                source: CollectionSource.nft,
+                newListTileKey: destinationKey,
+              ),
             ),
-          ),
-        );
-      },
-      child: const WatchlistNewListTile(forceEmptyState: true),
+          );
+        },
+        child: const WatchlistNewListTile(forceEmptyState: true),
+      ),
     );
+  }
 }

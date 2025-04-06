@@ -7,6 +7,7 @@ import '../../wallet/presentation/providers/wallet_provider.dart';
 import '../presentation/providers/watchlist_new_collection_model.dart';
 import '../presentation/providers/watchlist_new_collection_provider.dart';
 import '../presentation/watchlist_safety_tokens_screen.dart';
+import '../utils/custom_route.dart';
 import '../widgets/watchlist_collection_tile.dart';
 import '../widgets/watchlist_newList_tile.dart';
 import '../widgets/watchlist_new_collection.dart';
@@ -136,23 +137,46 @@ class WatchlistTokensTab extends ConsumerWidget {
   }
   
   // Extract the New List tile creation into a separate method
-  Widget _buildNewListTile(BuildContext context, WidgetRef ref) => 
-    GestureDetector(
-      onTap: () {
-        // Clear any existing selections
-        ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
-        
-        // Navigate to create screen for tokens - remove animation
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const WatchListNewCollectionScreen(
-              source: CollectionSource.token,
+  Widget _buildNewListTile(BuildContext context, WidgetRef ref) {
+    // Create keys to track positions
+    final GlobalKey tileKey = GlobalKey();
+    final GlobalKey destinationKey = GlobalKey();
+    
+    return KeyedSubtree(
+      key: tileKey,
+      child: GestureDetector(
+        onTap: () {
+          // Clear any existing selections
+          ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
+          
+          // Get the current position of the tile
+          final RenderBox renderBox = tileKey.currentContext!.findRenderObject() as RenderBox;
+          final Offset position = renderBox.localToGlobal(Offset.zero);
+          final Size size = renderBox.size;
+          
+          // Calculate source rectangle
+          final Rect sourceRect = Rect.fromLTWH(
+            position.dx,
+            position.dy,
+            size.width,
+            size.height,
+          );
+          
+          // Use custom route
+          Navigator.push(
+            context,
+            NewListTilePageRoute(
+              sourceRect: sourceRect,
+              destinationKey: destinationKey,
+              page: WatchListNewCollectionScreen(
+                source: CollectionSource.token,
+                newListTileKey: destinationKey,
+              ),
             ),
-          ),
-        );
-      },
-      // Remove Hero widget and directly use the tile
-      child: const WatchlistNewListTile(),
+          );
+        },
+        child: const WatchlistNewListTile(),
+      ),
     );
+  }
 }

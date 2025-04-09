@@ -62,7 +62,7 @@ class WalletSwiper extends ConsumerWidget {
     BuildContext context,
   ) =>
       Hero(
-       tag: getWalletCardHeroTag(account.accountAddress.toHex()),
+        tag: getWalletCardHeroTag(account.accountAddress.toHex()),
         flightShuttleBuilder: (
           BuildContext flightContext,
           Animation<double> animation,
@@ -190,7 +190,7 @@ class WalletSwiper extends ConsumerWidget {
                     child: const Icon(
                       PhosphorIconsRegular.gear,
                       color: AppColors.white,
-                      size: 32,
+                      size: 24,
                     ),
                   ),
                 ),
@@ -297,4 +297,5 @@ Widget walletCardHeroFlightShuttleBuilder(
       ),
     );
 
-String getWalletCardHeroTag(String accountAddress) => 'wallet_card_$accountAddress';
+String getWalletCardHeroTag(String accountAddress) =>
+    'wallet_card_$accountAddress';

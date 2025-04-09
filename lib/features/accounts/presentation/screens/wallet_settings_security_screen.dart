@@ -39,7 +39,7 @@ class _WalletSettingsSecurityScreenState
     final OverlayState overlay = Overlay.of(context);
     final OverlayEntry overlayEntry = OverlayEntry(
       builder: (BuildContext context) => Positioned(
-        bottom: 84,
+        bottom: 124,
         left: MediaQuery.of(context).size.width * 0.2,
         right: MediaQuery.of(context).size.width * 0.2,
         child: Material(
@@ -112,73 +112,84 @@ class _WalletSettingsSecurityScreenState
           final List<String> words = mnemonic.split(' ');
           AppLogger.debug('Mnemonic split into words: ${words.join(', ')}');
 
-          await showModalBottomSheet<void>(
+          await showDialog<void>(
             context: context,
-            isScrollControlled: true,
             builder: (BuildContext context) {
-              const double baseHeight = 240;
+              const double baseHeight = 380;
               const double wordHeight = 40;
               final double calculatedHeight =
                   baseHeight + (words.length / 3).ceil() * wordHeight;
 
-              return Container(
-                height:
-                    calculatedHeight > MediaQuery.of(context).size.height * 0.9
+              return Dialog(
+                  insetPadding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height - calculatedHeight,
+                    left: 20,
+                    right: 20,
+                    bottom: 0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Container(
+                    height: calculatedHeight >
+                            MediaQuery.of(context).size.height * 0.9
                         ? MediaQuery.of(context).size.height * 0.9
                         : calculatedHeight,
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Row(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          'Seed Phrase',
+                        Row(
+                          children: <Widget>[
+                            const Text(
+                              'Seed Phrase',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Do not share this with anyone',
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: AppColors.greyLight,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: AppColors.greyVeryLight,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: words.map(_buildWordChip).toList(),
                           ),
                         ),
-                        Spacer(),
-                        // Add a close button if needed
+                        const SizedBox(height: 40),
+                        BlackButtonXL(
+                          onClick: () {
+                            Clipboard.setData(ClipboardData(text: mnemonic));
+                            AppLogger.debug('Mnemonic copied to clipboard');
+                            _showCustomToast(context);
+                          },
+                          title: 'Copy Seed Phrase',
+                          margin: EdgeInsets.zero,
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Do not share this with anyone',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.greyLight,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.greyVeryLight,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        children: words.map(_buildWordChip).toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 60),
-                    BlackButtonXL(
-                      onClick: () {
-                        Clipboard.setData(ClipboardData(text: mnemonic));
-                        AppLogger.debug('Mnemonic copied to clipboard');
-                        _showCustomToast(context);
-                      },
-                      title: 'Copy Seed Phrase',
-                      margin: EdgeInsets.zero,
-                    ),
-                  ],
-                ),
-              );
+                  ));
             },
           );
         },
@@ -249,53 +260,72 @@ class _WalletSettingsSecurityScreenState
       final String privateKeyHex =
           '0x${privateKeyBytes.map((int byte) => byte.toRadixString(16).padLeft(2, '0')).join()}';
 
-      await showModalBottomSheet<void>(
+      await showDialog<void>(
         context: context,
-        builder: (BuildContext context) => Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Text(
-                'Private Key',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+        builder: (BuildContext context) => Dialog(
+          insetPadding: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height - 420,
+            left: 20,
+            right: 20,
+            bottom: 0,
+          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    const Text(
+                      'Private Key',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Do not share this with anyone',
-                style: TextStyle(fontSize: 14, color: AppColors.greyLight),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.greyVeryLight,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  privateKeyHex,
-                  style: const TextStyle(fontSize: 16),
+                const SizedBox(height: 12),
+                const Text(
+                  'Do not share this with anyone',
+                  style: TextStyle(fontSize: 14, color: AppColors.greyLight),
                   textAlign: TextAlign.center,
                 ),
-              ),
-              const SizedBox(height: 60),
-              BlackButtonXL(
-                onClick: () {
-                  Clipboard.setData(ClipboardData(text: privateKeyHex));
-                  _showCustomToast(
-                    context,
-                  );
-                },
-                title: 'Copy Private Key',
-                margin: EdgeInsets.zero,
-              ),
-            ],
+                const SizedBox(height: 20),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.greyVeryLight,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    privateKeyHex,
+                    style: const TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                BlackButtonXL(
+                  onClick: () {
+                    Clipboard.setData(ClipboardData(text: privateKeyHex));
+                    _showCustomToast(
+                      context,
+                    );
+                  },
+                  title: 'Copy Private Key',
+                  margin: EdgeInsets.zero,
+                ),
+              ],
+            ),
           ),
         ),
       );

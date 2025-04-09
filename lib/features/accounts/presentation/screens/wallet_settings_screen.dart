@@ -10,6 +10,7 @@ import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../../shared/blockchain/account/domain/entities/aptos_account_with_metadata.dart';
 import '../components/wallet_settings_delete_wallet_dialog.dart';
+// import '../components/wallet_swiper.dart';
 import '../components/wallet_swiper.dart';
 import '../provider/choose_wallet_screen_provider.dart';
 import '../provider/wallet_settings_provider.dart';
@@ -100,54 +101,64 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
     bool showDialogAndButton,
     bool isRemoving,
     bool isCardRemoving,
-  ) =>
-      Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: showDeleteConfirmation ? 1.0 : 0.0,
-            child: _buildRemoveTextSection(
-              context,
-              ref,
-              account,
-              showDeleteConfirmation,
-            ),
-          ),
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: showDeleteConfirmation ? 0.0 : 1.0,
-            child: _buildWalletSettings(context, ref, account),
-          ),
-          _buildWalletCard(
-            account,
-            context,
-            showDeleteConfirmation,
-            isCardRemoving,
-          ),
-          if (showDeleteConfirmation && showDialogAndButton && !isRemoving)
-            Positioned(
-              bottom: 24,
-              left: 0,
-              right: 0,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: showDialogAndButton ? 1.0 : 0.0,
-                child: DeleteWalletDialog(
-                  onCancel: () => _handleCancelDelete(ref),
-                  currentAccount: widget.account,
-                ),
-              ),
-            ),
-          _buildRemoveButton(
+  ) {
+    if (showDeleteConfirmation && !showDialogAndButton) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          ref.read(showDialogAndButtonProvider.notifier).state = true;
+        }
+      });
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: showDeleteConfirmation ? 1.0 : 0.0,
+          child: _buildRemoveTextSection(
             context,
             ref,
+            account,
             showDeleteConfirmation,
-            showDialogAndButton,
-            isRemoving,
           ),
-        ],
-      );
+        ),
+        AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: showDeleteConfirmation ? 0.0 : 1.0,
+          child: _buildWalletSettings(context, ref, account),
+        ),
+        _buildWalletCard(
+          account,
+          context,
+          showDeleteConfirmation,
+          isCardRemoving,
+        ),
+        if (showDeleteConfirmation && showDialogAndButton && !isRemoving)
+          Positioned(
+            bottom: 24,
+            left: 0,
+            right: 0,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: showDialogAndButton ? 1.0 : 0.0,
+              child: DeleteWalletDialog(
+                onCancel: () => _handleCancelDelete(ref),
+                currentAccount: widget.account,
+              ),
+            ),
+          ),
+        _buildRemoveButton(
+          context,
+          ref,
+          showDeleteConfirmation,
+          showDialogAndButton,
+          isRemoving,
+        ),
+      ],
+    );
+  }
+
   void _handleCancelDelete(WidgetRef ref) {
     ref.read(showDeleteConfirmationProvider.notifier).state = false;
     ref.read(showDialogAndButtonProvider.notifier).state = false;
@@ -195,32 +206,27 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 500),
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      tween: Tween<double>(
-        begin: showDeleteConfirmation ? 24 : screenHeight * 0.2,
-        end: showDeleteConfirmation ? screenHeight * 0.15 : 24,
-      ),
-      builder: (BuildContext context, double value, Widget? child) =>
-          AnimatedPositioned(
+      top: isCardRemoving
+          ? screenHeight - 100
+          : showDeleteConfirmation
+              ? screenHeight * 0.15 // Adjust this value to center the card
+              : 24,
+      left: isCardRemoving ? screenWidth - 100 : 0,
+      right: isCardRemoving ? 20 : 0,
+      child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        top: isCardRemoving ? screenHeight - 100 : value,
-        left: isCardRemoving ? screenWidth - 100 : 0,
-        right: isCardRemoving ? 20 : 0,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-          height: isCardRemoving ? 6 : 184,
-          width: isCardRemoving ? 6 : screenWidth,
-          margin: const EdgeInsets.symmetric(horizontal: 24),
-          child: buildWalletCard(
-            account,
-            context,
-            showDeleteConfirmation: showDeleteConfirmation,
-            isCardRemoving: isCardRemoving,
-          ),
+        height: isCardRemoving ? 6 : 184,
+        width: isCardRemoving ? 6 : screenWidth,
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        child: buildWalletCard(
+          account,
+          context,
+          showDeleteConfirmation: showDeleteConfirmation,
+          isCardRemoving: isCardRemoving,
         ),
       ),
     );
@@ -257,7 +263,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
             _buildWalletSettingsItem(
               title: 'Customize Wallet',
               icon: PhosphorIconsRegular.palette,
-              onTap: () => _navigateToCustomize(context, ref, account),
+              onTap: () {},
             ),
             _buildReceivingNFTItem(),
           ],
@@ -451,186 +457,6 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
         ),
       );
 
-  //      Widget buildWalletCard(
-  //   AptosAccountWithMetadata account,
-  //   BuildContext context, {
-  //   required bool showDeleteConfirmation,
-  // }) =>
-  //     Hero(
-  //       tag: getWalletCardHeroTag(account.accountAddress.toHex()),
-  //       flightShuttleBuilder: (
-  //         BuildContext flightContext,
-  //         Animation<double> animation,
-  //         HeroFlightDirection flightDirection,
-  //         BuildContext fromHeroContext,
-  //         BuildContext toHeroContext,
-  //       ) =>
-  //           ScaleTransition(
-  //         scale: animation.drive(
-  //           Tween<double>(begin: 1, end: 1.1)
-  //               .chain(CurveTween(curve: Curves.easeInOut)),
-  //         ),
-  //         child: fromHeroContext.widget,
-  //       ),
-  //       child: Center(
-  //         child: Container(
-  //           height: 184,
-  //           width: MediaQuery.of(context).size.width - 52,
-  //           decoration: BoxDecoration(
-  //             color: showDeleteConfirmation ? null : account.backgroundColor,
-  //             gradient: showDeleteConfirmation
-  //                 ? const LinearGradient(
-  //                     colors: <Color>[
-  //                       Color(0xffFF6767),
-  //                       Color(0xffF23545),
-  //                     ],
-  //                     begin: Alignment.bottomLeft,
-  //                     end: Alignment.topRight,
-  //                   )
-  //                 : null,
-  //             boxShadow: <BoxShadow>[
-  //               BoxShadow(
-  //                 color: AppColors.greyDark.withOpacity(0.5),
-  //                 spreadRadius: 1,
-  //                 blurRadius: 2,
-  //                 offset: const Offset(0, 3),
-  //               ),
-  //             ],
-  //             borderRadius: BorderRadius.circular(20),
-  //           ),
-  //           child: Stack(
-  //             children: <Widget>[
-  //               AnimatedPositioned(
-  //                 duration: const Duration(milliseconds: 300),
-  //                 curve: Curves.easeInOut,
-  //                 bottom: 20,
-  //                 left: 20,
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: <Widget>[
-  //                     Text(
-  //                       'Total Balance',
-  //                       style: GoogleFonts.urbanist(
-  //                         fontSize: 14,
-  //                         color: AppColors.white,
-  //                       ),
-  //                     ),
-  //                     const Text(
-  //                       '---------',
-  //                       style: TextStyle(
-  //                         fontSize: 24,
-  //                         fontWeight: FontWeight.w600,
-  //                         color: AppColors.white,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               AnimatedPositioned(
-  //                 duration: const Duration(
-  //                   milliseconds: 300,
-  //                 ),
-  //                 curve: Curves.easeInOut,
-  //                 bottom: 24,
-  //                 right: 24,
-  //                 child: Text(
-  //                   'Profile',
-  //                   style: GoogleFonts.urbanist(
-  //                     fontSize: 16,
-  //                     fontWeight: FontWeight.w600,
-  //                     color: AppColors.white,
-  //                   ),
-  //                 ),
-  //               ),
-  //               const AnimatedPositioned(
-  //                 duration: Duration(
-  //                   milliseconds: 300,
-  //                 ),
-  //                 curve: Curves.easeInOut,
-  //                 top: 26,
-  //                 right: 26,
-  //                 child: Icon(
-  //                   PhosphorIconsRegular.qrCode,
-  //                   color: AppColors.white,
-  //                   size: 24,
-  //                 ),
-  //               ),
-  //               AnimatedPositioned(
-  //                 duration: const Duration(milliseconds: 300),
-  //                 curve: Curves.easeInOut,
-  //                 top: 10,
-  //                 child: SvgPicture.asset(
-  //                   Assets.images.cardTopLeft,
-  //                   height: 56,
-  //                   width: 56,
-  //                 ),
-  //               ),
-  //               AnimatedPositioned(
-  //                 duration: const Duration(milliseconds: 300),
-  //                 curve: Curves.easeInOut,
-  //                 right: -6,
-  //                 top: -8,
-  //                 child: SvgPicture.asset(
-  //                   Assets.images.cardTopRight,
-  //                   height: 48,
-  //                   width: 48,
-  //                 ),
-  //               ),
-  //               AnimatedPositioned(
-  //                 duration: const Duration(milliseconds: 300),
-  //                 curve: Curves.easeInOut,
-  //                 right: 88,
-  //                 bottom: -8,
-  //                 child: SvgPicture.asset(
-  //                   Assets.images.cardBottom,
-  //                   height: 88,
-  //                   width: 88,
-  //                 ),
-  //               ),
-  //               AnimatedPositioned(
-  //                 duration: const Duration(milliseconds: 300),
-  //                 curve: Curves.easeInOut,
-  //                 top: 27,
-  //                 left: 24,
-  //                 child: CachedNetworkImage(
-  //                   imageUrl: account.iconUri.toString(),
-  //                   height: 36,
-  //                 ),
-  //               ),
-  //               AnimatedPositioned(
-  //                 duration: const Duration(milliseconds: 300),
-  //                 curve: Curves.easeInOut,
-  //                 left: 100,
-  //                 top: 10,
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: <Widget>[
-  //                     Text(
-  //                       account.label,
-  //                       style: const TextStyle(
-  //                         fontSize: 20,
-  //                         fontWeight: FontWeight.w600,
-  //                         color: AppColors.white,
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 4),
-  //                     Text(
-  //                       truncateAddress(account.accountAddress.toHex()),
-  //                       style: const TextStyle(
-  //                         fontSize: 16,
-  //                         fontWeight: FontWeight.w400,
-  //                         color: AppColors.white,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     );
-
   Widget buildWalletCard(
     AptosAccountWithMetadata account,
     BuildContext context, {
@@ -648,7 +474,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
         ) =>
             ScaleTransition(
           scale: animation.drive(
-            Tween<double>(begin: 1, end: 1.1)
+            Tween<double>(begin: 1, end: 1)
                 .chain(CurveTween(curve: Curves.easeInOut)),
           ),
           child: fromHeroContext.widget,

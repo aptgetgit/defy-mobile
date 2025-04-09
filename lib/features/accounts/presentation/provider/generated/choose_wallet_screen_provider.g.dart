@@ -7,7 +7,7 @@ part of '../choose_wallet_screen_provider.dart';
 // **************************************************************************
 
 String _$chooseWalletScreenNotifierHash() =>
-    r'991afc9dd451c3daf195437cfe6799bdf534d1a4';
+    r'26e6a83ae19a65ba0d6f9f5e216d074cf335734c';
 
 /// See also [ChooseWalletScreenNotifier].
 @ProviderFor(ChooseWalletScreenNotifier)

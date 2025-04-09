@@ -21,7 +21,7 @@ mixin _$CreateWalletState {
   bool get isAccountGenerated => throw _privateConstructorUsedError;
   String get accountName => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
-  Color get selectedWalletColor => throw _privateConstructorUsedError;
+  LinearGradient get selectedWalletColor => throw _privateConstructorUsedError;
   double get walletColorSliderPosition => throw _privateConstructorUsedError;
   int get walletColorSelectedIndex => throw _privateConstructorUsedError;
   int get selectedEmojiIndex => throw _privateConstructorUsedError;
@@ -46,7 +46,7 @@ abstract class $CreateWalletStateCopyWith<$Res> {
       bool isAccountGenerated,
       String accountName,
       String? error,
-      Color selectedWalletColor,
+      LinearGradient selectedWalletColor,
       double walletColorSliderPosition,
       int walletColorSelectedIndex,
       int selectedEmojiIndex,
@@ -103,7 +103,7 @@ class _$CreateWalletStateCopyWithImpl<$Res, $Val extends CreateWalletState>
       selectedWalletColor: null == selectedWalletColor
           ? _value.selectedWalletColor
           : selectedWalletColor // ignore: cast_nullable_to_non_nullable
-              as Color,
+              as LinearGradient,
       walletColorSliderPosition: null == walletColorSliderPosition
           ? _value.walletColorSliderPosition
           : walletColorSliderPosition // ignore: cast_nullable_to_non_nullable
@@ -138,7 +138,7 @@ abstract class _$$CreateWalletStateImplCopyWith<$Res>
       bool isAccountGenerated,
       String accountName,
       String? error,
-      Color selectedWalletColor,
+      LinearGradient selectedWalletColor,
       double walletColorSliderPosition,
       int walletColorSelectedIndex,
       int selectedEmojiIndex,
@@ -193,7 +193,7 @@ class __$$CreateWalletStateImplCopyWithImpl<$Res>
       selectedWalletColor: null == selectedWalletColor
           ? _value.selectedWalletColor
           : selectedWalletColor // ignore: cast_nullable_to_non_nullable
-              as Color,
+              as LinearGradient,
       walletColorSliderPosition: null == walletColorSliderPosition
           ? _value.walletColorSliderPosition
           : walletColorSliderPosition // ignore: cast_nullable_to_non_nullable
@@ -223,7 +223,10 @@ class _$CreateWalletStateImpl implements _CreateWalletState {
       this.isAccountGenerated = false,
       this.accountName = 'Business',
       this.error = '',
-      this.selectedWalletColor = AppColors.blue,
+      this.selectedWalletColor = const LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: <Color>[Color(0xff2071EE), Color(0xff0051CF)]),
       this.walletColorSliderPosition = 0.0,
       this.walletColorSelectedIndex = 0,
       this.selectedEmojiIndex = -1,
@@ -253,7 +256,7 @@ class _$CreateWalletStateImpl implements _CreateWalletState {
   final String? error;
   @override
   @JsonKey()
-  final Color selectedWalletColor;
+  final LinearGradient selectedWalletColor;
   @override
   @JsonKey()
   final double walletColorSliderPosition;
@@ -330,7 +333,7 @@ abstract class _CreateWalletState implements CreateWalletState {
       final bool isAccountGenerated,
       final String accountName,
       final String? error,
-      final Color selectedWalletColor,
+      final LinearGradient selectedWalletColor,
       final double walletColorSliderPosition,
       final int walletColorSelectedIndex,
       final int selectedEmojiIndex,
@@ -347,7 +350,7 @@ abstract class _CreateWalletState implements CreateWalletState {
   @override
   String? get error;
   @override
-  Color get selectedWalletColor;
+  LinearGradient get selectedWalletColor;
   @override
   double get walletColorSliderPosition;
   @override

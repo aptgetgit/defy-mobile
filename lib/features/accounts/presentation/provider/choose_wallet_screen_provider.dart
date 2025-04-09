@@ -15,7 +15,7 @@ class ChooseWalletScreenNotifier extends _$ChooseWalletScreenNotifier {
     state = state.copyWith(currentIndex: index);
   }
 
-  void updateIsUpdated(bool isUpdated) {
-    state = state.copyWith(isUpdated: isUpdated);
+void updateIsUpdated() {
+    state = state.copyWith(isUpdated: !state.isUpdated);
   }
 }

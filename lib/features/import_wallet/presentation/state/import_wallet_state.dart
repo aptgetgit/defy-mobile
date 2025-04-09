@@ -1,8 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../../config/theme/colors.dart';
 
 part 'generated/import_wallet_state.freezed.dart';
 
@@ -16,7 +15,17 @@ class ImportWalletState with _$ImportWalletState {
     @Default(false) bool isAccountGenerated,
     @Default('Business') String accountName,
     @Default('') String? error,
-    @Default(AppColors.blue) Color selectedWalletColor,
+    @Default(
+      LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: <Color>[
+          Color(0xff2071EE),
+          Color(0xff0051CF),
+        ],
+      ),
+    )
+    LinearGradient selectedWalletColor,
     @Default(0.0) double walletColorSliderPosition,
     @Default(0) int walletColorSelectedIndex,
     @Default(-1) int selectedEmojiIndex,

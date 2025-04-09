@@ -39,7 +39,30 @@ sealed class KeySource with _$KeySource {
     required Option<int> accountIndex,
   }) = KeySourceMnemonic;
 
-  const factory KeySource.privateKey({
+  const factory KeySource.privateKey({required Uint8List jwkThumbprint}) =
+      KeySourcePrivateKey;
+}
+
+@freezed
+sealed class AccountGenerationParams with _$AccountGenerationParams {
+  const factory AccountGenerationParams.importMnemonic({
+    required String mnemonic,
+  }) = AccountGenerationParamsImportMnemonic;
+
+  const factory AccountGenerationParams.generateMnemonic({
+    required int strength,
+  }) = AccountGenerationParamsGenerateMnemonic;
+
+  const factory AccountGenerationParams.generateFromEntropy({
+    required Uint8List entropyHash,
+    required Option<int> accountIndex,
+  }) = AccountGenerationParamsGenerateFromEntropy;
+
+  const factory AccountGenerationParams.importPrivateKey({
+    required Uint8List privateKey,
+  }) = AccountGenerationParamsImportPrivateKey;
+
+  const factory AccountGenerationParams.generateFromPrivateKey({
     required Uint8List jwkThumbprint,
-  }) = KeySourcePrivateKey;
+  }) = AccountGenerationParamsGenerateFromPrivateKey;
 }

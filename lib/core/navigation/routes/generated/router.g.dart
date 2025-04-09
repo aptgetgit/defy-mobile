@@ -10,18 +10,16 @@ List<RouteBase> get $appRoutes => [
       $welcomeAgainScreenRoute,
       $chooseWalletScreenRoute,
       $chooseWalletUserScreenRoute,
-      $walletSettingsManageScreenRoute,
       $homeRoute,
       $splashScreenRoute,
       $onboardingRoute,
       $diveInPageRoute,
-      $waitlistScreenRoute,
+      $waitlistPrimaryScreenRoute,
       $walletCreationScreenRoute,
       $walletCreationWalletNameScreenRoute,
       $walletCreationWalletBackgroundScreenRoute,
       $importWalletScreenRoute,
       $createdWalletScreenRoute,
-      $createWalletScreenRoute,
       $createWalletSelectSeedPhraseScreenRoute,
     ];
 
@@ -82,30 +80,6 @@ extension $ChooseWalletUserScreenRouteExtension on ChooseWalletUserScreenRoute {
 
   String get location => GoRouteData.$location(
         '/choose-wallet-user',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $walletSettingsManageScreenRoute => GoRouteData.$route(
-      path: '/wallet-settings/manage',
-      factory: $WalletSettingsManageScreenRouteExtension._fromState,
-    );
-
-extension $WalletSettingsManageScreenRouteExtension
-    on WalletSettingsManageScreenRoute {
-  static WalletSettingsManageScreenRoute _fromState(GoRouterState state) =>
-      const WalletSettingsManageScreenRoute();
-
-  String get location => GoRouteData.$location(
-        '/wallet-settings/manage',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -209,14 +183,14 @@ extension $DiveInPageRouteExtension on DiveInPageRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $waitlistScreenRoute => GoRouteData.$route(
+RouteBase get $waitlistPrimaryScreenRoute => GoRouteData.$route(
       path: '/waitlist',
-      factory: $WaitlistScreenRouteExtension._fromState,
+      factory: $WaitlistPrimaryScreenRouteExtension._fromState,
     );
 
-extension $WaitlistScreenRouteExtension on WaitlistScreenRoute {
-  static WaitlistScreenRoute _fromState(GoRouterState state) =>
-      const WaitlistScreenRoute();
+extension $WaitlistPrimaryScreenRouteExtension on WaitlistPrimaryScreenRoute {
+  static WaitlistPrimaryScreenRoute _fromState(GoRouterState state) =>
+      const WaitlistPrimaryScreenRoute();
 
   String get location => GoRouteData.$location(
         '/waitlist',
@@ -338,29 +312,6 @@ extension $CreatedWalletScreenRouteExtension on CreatedWalletScreenRoute {
 
   String get location => GoRouteData.$location(
         '/wallet-creation/created-wallet',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $createWalletScreenRoute => GoRouteData.$route(
-      path: '/create-wallet',
-      factory: $CreateWalletScreenRouteExtension._fromState,
-    );
-
-extension $CreateWalletScreenRouteExtension on CreateWalletScreenRoute {
-  static CreateWalletScreenRoute _fromState(GoRouterState state) =>
-      const CreateWalletScreenRoute();
-
-  String get location => GoRouteData.$location(
-        '/create-wallet',
       );
 
   void go(BuildContext context) => context.go(location);

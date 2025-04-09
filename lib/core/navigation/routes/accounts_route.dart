@@ -74,16 +74,4 @@ class ChooseWalletUserScreenRoute extends GoRouteData {
 //   );
 // }
 
-@TypedGoRoute<WalletSettingsManageScreenRoute>(path: '/wallet-settings/manage')
-class WalletSettingsManageScreenRoute extends GoRouteData {
-  const WalletSettingsManageScreenRoute();
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const WalletSettingsManageScreen();
-
-  static final AppRoute route = AppRoute.public(
-    builder: (BuildContext context, GoRouterState state) =>
-        const WalletSettingsManageScreen(),
-  );
-}

@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fpdart/src/either.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/animated_emoji.dart';
 import '../../../../core/constants/bip39_wordlist.dart';
@@ -154,7 +157,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     }
   }
 
-  void _animateSlider(int index, Color newColor) {
+  void _animateSlider(int index, LinearGradient newColor) {
     ref.read(importWalletNotifierProvider.notifier)
       ..updateSliderPosition(index.toDouble())
       ..updateColor(newColor)
@@ -245,7 +248,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
                     textAlign: TextAlign.center,
                   ),
                 ).animate().fadeIn(delay: 350.ms, duration: 300.ms),
-
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
@@ -423,28 +425,33 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
         onClick: () async {
           if (state.words.isEmpty) {
             AppLogger.debug(
-                'State words are empty, attempting to paste from clipboard.');
+              'State words are empty, attempting to paste from clipboard.',
+            );
             await _pasteFromClipboard(context, notifier);
-          } 
+          }
 
           if (state.words.isEmpty) {
             AppLogger.debug(
-                'State words are empty, attempting to paste from clipboard.');
+              'State words are empty, attempting to paste from clipboard.',
+            );
             await _pasteFromClipboard(context, notifier);
           } else if (state.showWalletColor || state.showEmojiPicker) {
             AppLogger.debug(
-                'Navigating to the next section: showWalletColor or showEmojiPicker is true.');
+              'Navigating to the next section: showWalletColor or showEmojiPicker is true.',
+            );
             await notifier.navigateToNextSection();
           } else if (state.showWalletName) {
             AppLogger.debug('Checking for duplicate wallet names.');
             if (existingWalletNames
                 .contains(nameTextFieldController.text.trim())) {
               AppLogger.debug(
-                  'Duplicate wallet name found, showing duplicate name dialog.');
+                'Duplicate wallet name found, showing duplicate name dialog.',
+              );
               await _showDuplicateNameDialog(context);
             } else {
               AppLogger.debug(
-                  'No duplicate wallet name found, navigating to the next section.');
+                'No duplicate wallet name found, navigating to the next section.',
+              );
               await notifier.navigateToNextSection();
             }
           } else {
@@ -553,7 +560,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
             const Spacer(),
             ..._buildProgressIndicators(state.currentStep),
             const Spacer(),
-            _buildCoinIndicator(),
           ],
         ),
       );
@@ -576,28 +582,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
               ? AppColors.greenLight
               : AppColors.greyVeryLight,
           borderRadius: BorderRadius.circular(40),
-        ),
-      );
-
-  Widget _buildCoinIndicator() => Container(
-        padding: const EdgeInsets.only(top: 4, bottom: 4, right: 12, left: 4),
-        decoration: BoxDecoration(
-          color: AppColors.greyVeryLight,
-          borderRadius: BorderRadius.circular(60),
-        ),
-        child: Row(
-          children: <Widget>[
-            Image.asset('assets/icons/coin-yellow.png', width: 16, height: 16),
-            const SizedBox(width: 8),
-            const Text(
-              '20',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppColors.greyDark,
-              ),
-            ),
-          ],
         ),
       );
 
@@ -669,13 +653,8 @@ class WalletCard extends StatelessWidget {
             height: ImportWalletConstants.cardHeight,
             width: MediaQuery.of(context).size.width - 40,
             decoration: BoxDecoration(
-              color: state.selectedWalletColor,
-              image: const DecorationImage(
-                image: AssetImage(
-                  'assets/images/wallet-creation-wallet-background-wallet-component.png',
-                ),
-                fit: BoxFit.cover,
-              ),
+              // color: AppColors.blue,
+              gradient: state.selectedWalletColor,
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: AppColors.greyDark.withOpacity(0.5),
@@ -692,20 +671,120 @@ class WalletCard extends StatelessWidget {
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  top: 30,
-                  left: 34,
-                  child: getAnimatedEmoji(state.selectedEmojiIndex),
+                  bottom: 20,
+                  left: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Total Balance',
+                        style: GoogleFonts.urbanist(
+                          fontSize: 14,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      const Text(
+                        '---------',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: const Duration(
+                    milliseconds: 300,
+                  ),
+                  curve: Curves.easeInOut,
+                  bottom: 24,
+                  right: 24,
+                  child: Text(
+                    'Profile',
+                    style: GoogleFonts.urbanist(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
+                const AnimatedPositioned(
+                  duration: Duration(
+                    milliseconds: 300,
+                  ),
+                  curve: Curves.easeInOut,
+                  top: 26,
+                  right: 26,
+                  child: Icon(
+                    PhosphorIconsRegular.qrCode,
+                    color: AppColors.white,
+                    size: 32,
+                  ),
                 ),
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  left: 110,
-                  top: 12,
+                  top: 10,
+                  child: SvgPicture.asset(
+                    Assets.images.cardTopLeft,
+                    height: 64,
+                    width: 64,
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  right: 0,
+                  top: -4,
+                  child: SvgPicture.asset(
+                    Assets.images.cardTopRight,
+                    height: 48,
+                    width: 48,
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  right: 88,
+                  bottom: -8,
+                  child: SvgPicture.asset(
+                    Assets.images.cardBottom,
+                    height: 88,
+                    width: 88,
+                  ),
+                ),
+                if (state.selectedEmojiIndex == -1)
+                  const AnimatedPositioned(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    top: 34,
+                    left: 36,
+                    child: Icon(
+                      PhosphorIconsRegular.user,
+                      color: AppColors.greyVeryLight,
+                    ),
+                  )
+                else
+                  AnimatedPositioned(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    top: 28,
+                    left: 28,
+                    child: getAnimatedEmoji(state.selectedEmojiIndex),
+                  ),
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  left: 100,
+                  top: 4,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
                         width: 200,
+                        height: 30,
                         child: TextField(
                           enabled: state.showWalletName,
                           cursorHeight: 16,
@@ -714,15 +793,18 @@ class WalletCard extends StatelessWidget {
                           controller: controller,
                           focusNode: focusNode,
                           onChanged: onTextChanged,
-                          decoration:
-                              const InputDecoration(border: InputBorder.none),
-                          style: const TextStyle(
-                            fontSize: 20,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                          style: TextStyle(
+                            fontSize: !state.showWalletName ? 16 : 20,
                             fontWeight: FontWeight.w600,
                             color: AppColors.white,
                           ),
                         ),
                       ),
+                      const SizedBox(height: 4),
                       const Text(
                         'Wallet Address',
                         style: TextStyle(

@@ -5,16 +5,17 @@ class WalletCreationScreenRoute extends GoRouteData {
   const WalletCreationScreenRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const WalletCreationScreen();
+  Page<void> buildPage(BuildContext context, GoRouterState state) =>
+      FadeTransitionPage<void>(
+        key: state.pageKey,
+        child: const WalletCreationScreen(),
+      );
 
-  static final AppRoute route = AppRoute.public(
+  static final AppRoute route = AppRoute.protected(
     builder: (BuildContext context, GoRouterState state) =>
         const WalletCreationScreen(),
   );
 }
-
-
 
 @TypedGoRoute<WalletCreationWalletNameScreenRoute>(
   path: '/wallet-creation/wallet-name',

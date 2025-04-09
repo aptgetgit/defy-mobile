@@ -28,8 +28,9 @@ class WalletNameSection extends StatelessWidget {
             const SizedBox(height: 20),
             const Text(
               'Name Your Wallet',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
             ),
+            const SizedBox(height: 16),
             const Text(
               'Ex: Business, Personal, etc',
               style: TextStyle(

@@ -72,7 +72,7 @@ class BlackButtonXL extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                   color: textColor,
                 ),
               ),

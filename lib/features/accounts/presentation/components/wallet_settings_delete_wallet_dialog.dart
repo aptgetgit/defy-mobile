@@ -13,6 +13,7 @@ import '../../../../shared/blockchain/account/domain/usecases/delete_aptos_accou
 import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
 import '../../../common/presentation/widgets/black_button.dart';
 import '../../../common/presentation/widgets/custom_checkbox.dart';
+import '../provider/choose_wallet_screen_provider.dart';
 
 class DeleteWalletDialog extends ConsumerStatefulWidget {
   const DeleteWalletDialog(
@@ -27,7 +28,9 @@ class DeleteWalletDialog extends ConsumerStatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(ObjectFlagProperty<void Function()>.has('onCancel', onCancel));
+      ..add(ObjectFlagProperty<void Function()>.has('onCancel', onCancel))
+      ..add(DiagnosticsProperty<AptosAccountWithMetadata>(
+          'currentAccount', currentAccount));
   }
 }
 
@@ -63,6 +66,7 @@ class DeleteWalletDialogState extends ConsumerState<DeleteWalletDialog> {
       await deleteAptosAccountUseCase.call(
         accountAddress: widget.currentAccount.accountAddress,
       );
+      ref.read(chooseWalletScreenNotifierProvider.notifier).updateIsUpdated();
       Navigator.of(context).pop();
       widget.onCancel();
     }
@@ -249,12 +253,13 @@ class DeleteWalletDialogState extends ConsumerState<DeleteWalletDialog> {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: BlackButtonXL(
-                  margin: EdgeInsets.zero,
-                  onClick: deleteAccount,
-                  title: 'Remove',
-                  color: AppColors.red,
-                ),
+                child: SizedBox(),
+                // child: BlackButtonXL(
+                //   margin: EdgeInsets.zero,
+                //   onClick: deleteAccount,
+                //   title: 'Remove',
+                //   color: AppColors.red,
+                // ),
               ),
             ],
           ),

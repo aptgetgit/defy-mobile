@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:fpdart/src/either.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -54,7 +55,7 @@ class CreateWalletScreenState extends ConsumerState<CreateWalletScreen>
       duration: const Duration(milliseconds: 300),
     );
     nameTextFieldFocusNode.requestFocus();
-    Future<void>.microtask(_generateMnemonic);
+    Future<void>.microtask(_generateAccount);
     Future<void>.microtask(_initializeWalletNames);
   }
 
@@ -179,7 +180,7 @@ class CreateWalletScreenState extends ConsumerState<CreateWalletScreen>
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0,
+                        letterSpacing: 1,
                       ),
                     ),
                   ),
@@ -198,13 +199,15 @@ class CreateWalletScreenState extends ConsumerState<CreateWalletScreen>
     );
   }
 
-Future<void> _generateMnemonic() async {
+Future<void> _generateAccount() async {
   if (widget.entropy != null) {
-    // Use the provided entropy
-    await ref.watch(generateAccountFlowProvider.notifier).importMnemonic(widget.entropy!);
+    await ref.watch(generateAccountFlowProvider.notifier).generateAccount(
+      AccountGenerationParams.generateFromEntropy(entropyHash: widget.entropy!, accountIndex: const Option<int>.none(),),
+      );
   } else {
-    // Generate a new mnemonic
-    await ref.watch(generateAccountFlowProvider.notifier).generateMnemonic();
+    await ref.watch(generateAccountFlowProvider.notifier).generateAccount(
+      const AccountGenerationParams.generateMnemonic(strength: 128),
+    );
   }
 }
 
@@ -346,7 +349,7 @@ Future<void> _generateMnemonic() async {
       _buildAnimatedSection(
         condition: state.currentStep == 1,
         child: CreateWalletColorSection(
-          animateSlider: (int index, Color color) {
+          animateSlider: (int index, LinearGradient color) {
             notifier
               ..updateSliderPosition(index.toDouble())
               ..updateColor(color)

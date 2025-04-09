@@ -13,16 +13,7 @@ class CreateWalletNotifier extends _$CreateWalletNotifier {
   @override
   CreateWalletState build() => const CreateWalletState();
 
-  Future<void> generateMnemonic() async {
-    state = state.copyWith(error: null);
-    try {
-      await ref.read(generateAccountFlowProvider.notifier).generateMnemonic();
-    } on Exception catch (e) {
-      state = state.copyWith(error: e.toString());
-    }
-  }
-
-  void updateColor(Color color) {
+  void updateColor(LinearGradient color) {
     state = state.copyWith(selectedWalletColor: color);
   }
 
@@ -38,25 +29,26 @@ class CreateWalletNotifier extends _$CreateWalletNotifier {
     state = state.copyWith(selectedEmojiIndex: index);
   }
 
-  
-
   Future<void> generateAccount() async {
     state = state.copyWith(error: null);
     try {
       final GenerateAccountFlow generateAccountFlow =
           ref.read(generateAccountFlowProvider.notifier);
-      final GenerateAccountFlowState currentState = ref.read(generateAccountFlowProvider);
+      final GenerateAccountFlowState currentState =
+          ref.read(generateAccountFlowProvider);
 
       if (currentState is GenerateAccountFlowStateWaitingForMetadata) {
         await generateAccountFlow.completeWithMetadata(
           label: state.accountName,
           iconUri: Uri.parse(
-              EmojiUtils.getEmojiByIndex(state.selectedEmojiIndex)?.getEmoji ??
-                  EmojiUtils.getEmojiByIndex(1)!.getEmoji,),
-          backgroundColor: state.selectedWalletColor,
+            EmojiUtils.getEmojiByIndex(state.selectedEmojiIndex)?.getEmoji ??
+                EmojiUtils.getEmojiByIndex(1)!.getEmoji,
+          ),
+          backgroundColor: state.selectedWalletColor.colors.first,
         );
       } else {
-        throw Exception('Account is not in the correct state for adding metadata');
+        throw Exception(
+            'Account is not in the correct state for adding metadata');
       }
 
       state = state.copyWith(isAccountGenerated: true, currentStep: 3);

@@ -21,9 +21,67 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
   @override
   GenerateAccountFlowState build() => const GenerateAccountFlowState.idle();
 
-  Future<void> generateMnemonic({int strength = 128}) async {
+  Future<void> generateAccount(AccountGenerationParams params) async {
     state = const GenerateAccountFlowState.importing();
 
+    final TaskEither<ExceptionWithStackTrace, KeySource> task =
+        switch (params) {
+          AccountGenerationParamsGenerateMnemonic(:final int strength) =>
+            _generateMnemonic(
+              strength: strength,
+            ).map((KeySourceMnemonic keySource) => keySource),
+
+          AccountGenerationParamsImportMnemonic(:final String mnemonic) =>
+            _importMnemonic(
+              mnemonic: mnemonic,
+            ).map((KeySourceMnemonic keySource) => keySource),
+
+          AccountGenerationParamsGenerateFromEntropy(
+            :final Uint8List entropyHash,
+            :final Option<int> accountIndex,
+          ) =>
+            _generateFromEntropy(
+              entropyHash: entropyHash,
+              accountIndex: accountIndex,
+            ).map((KeySourceMnemonic keySource) => keySource),
+
+          AccountGenerationParamsImportPrivateKey(
+            :final Uint8List privateKey,
+          ) =>
+            _importPrivateKey(
+              privateKey: privateKey,
+            ).map((KeySourcePrivateKey keySource) => keySource),
+
+          AccountGenerationParamsGenerateFromPrivateKey(
+            :final Uint8List jwkThumbprint,
+          ) =>
+            TaskEither<ExceptionWithStackTrace, KeySource>.right(
+              KeySourcePrivateKey(jwkThumbprint: jwkThumbprint),
+            ),
+        };
+
+    final Either<ExceptionWithStackTrace, KeySource> result = await task.run();
+
+    result.fold(
+      (ExceptionWithStackTrace error) {
+        AppLogger.error(
+          'Account generation failed',
+          error: error.exception,
+          stackTrace: error.stackTrace,
+        );
+        state = const GenerateAccountFlowState.error('Account generation failed');
+      },
+      (KeySource keySource) {
+        state = GenerateAccountFlowState.waitingForMetadata(
+          keySource: keySource,
+        );
+      },
+    );
+  }
+
+  TaskEither<ExceptionWithStackTrace, KeySourceMnemonic> _generateMnemonic({
+    required int strength,
+  }) => TaskEither<ExceptionWithStackTrace, KeySourceMnemonic>(() async {
     try {
       final Either<ExceptionWithStackTrace, Uint8List> entropyEither = await ref
           .read(generateMnemonicUseCaseProvider)
@@ -38,35 +96,30 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
           stackTrace: exceptionWithStackTrace.stackTrace,
         );
 
-        state = const GenerateAccountFlowState.error(
-          'Failed to generate mnemonic',
-        );
+        return left(exceptionWithStackTrace);
       }
-
-      final Uint8List entropyHash = entropyEither.getRight().toNullable()!;
-
-      state = GenerateAccountFlowState.waitingForMetadata(
-        keySource: KeySource.mnemonic(
-          entropyHash: entropyHash,
-          accountIndex: const Option<int>.none(),
+      return right(
+        KeySourceMnemonic(
+          entropyHash: entropyEither.getRight().toNullable()!,
+          accountIndex: const Option<int>.of(0),
         ),
       );
-    } on Exception catch (e) {
-      state = GenerateAccountFlowState.error(e.toString());
+    } on Exception catch (error, stackTrace) {
+      return left(ExceptionWithStackTrace(error, stackTrace));
     }
-  }
+  });
 
-  Future<void> importMnemonic(String mnemonic) async {
-    state = const GenerateAccountFlowState.importing();
-
+  TaskEither<ExceptionWithStackTrace, KeySourceMnemonic> _importMnemonic({
+    required String mnemonic,
+  }) => TaskEither<ExceptionWithStackTrace, KeySourceMnemonic>(() async {
     try {
       final Uint8List entropy = mnemonicToEntropy(mnemonic);
       final Uint8List entropyHash = computeSha256Hash(entropy);
 
       final Either<ExceptionWithStackTrace, Option<String>>
-          mnemonicExistEither = await ref
-              .read(getMnemonicUseCaseProvider)
-              .call(entropyHash: entropyHash);
+      mnemonicExistEither = await ref
+          .read(getMnemonicUseCaseProvider)
+          .call(entropyHash: entropyHash);
 
       if (mnemonicExistEither.isLeft()) {
         final ExceptionWithStackTrace exceptionWithStackTrace =
@@ -77,9 +130,7 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
           stackTrace: exceptionWithStackTrace.stackTrace,
         );
 
-        state = const GenerateAccountFlowState.error(
-          'Failed to check if mnemonic exists',
-        );
+        return left(exceptionWithStackTrace);
       }
 
       if (mnemonicExistEither.getRight().toNullable()!.isNone()) {
@@ -95,26 +146,56 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
             error: exceptionWithStackTrace.exception,
             stackTrace: exceptionWithStackTrace.stackTrace,
           );
-
-          state = const GenerateAccountFlowState.error(
-            'Failed to import mnemonic',
-          );
+          return left(exceptionWithStackTrace);
         }
       }
-      state = GenerateAccountFlowState.waitingForMetadata(
-        keySource: KeySource.mnemonic(
+      return right(
+        KeySourceMnemonic(
           entropyHash: entropyHash,
           accountIndex: const Option<int>.none(),
         ),
       );
-    } on Exception catch (e) {
-      state = GenerateAccountFlowState.error(e.toString());
+    } on Exception catch (error, stackTrace) {
+      return left(ExceptionWithStackTrace(error, stackTrace));
     }
-  }
+  });
 
-  Future<void> importPrivateKey(Uint8List privateKey) async {
-    state = const GenerateAccountFlowState.importing();
+  TaskEither<ExceptionWithStackTrace, KeySourceMnemonic> _generateFromEntropy({
+    required Uint8List entropyHash,
+    required Option<int> accountIndex,
+  }) => TaskEither<ExceptionWithStackTrace, KeySourceMnemonic>(() async {
+    try {
+      final Either<ExceptionWithStackTrace, Option<String>>
+      mnemonicExistEither = await ref
+          .read(getMnemonicUseCaseProvider)
+          .call(entropyHash: entropyHash);
 
+      if (mnemonicExistEither.isLeft()) {
+        final ExceptionWithStackTrace exceptionWithStackTrace =
+            mnemonicExistEither.getLeft().toNullable()!;
+        AppLogger.error(
+          'Failed to check if mnemonic exists',
+          error: exceptionWithStackTrace.exception,
+          stackTrace: exceptionWithStackTrace.stackTrace,
+        );
+        return left(exceptionWithStackTrace);
+      }
+
+      if (mnemonicExistEither.getRight().toNullable()!.isNone()) {
+        throw StateError('Mnemonic not found');
+      }
+
+      return right(
+        KeySourceMnemonic(entropyHash: entropyHash, accountIndex: accountIndex),
+      );
+    } on Exception catch (error, stackTrace) {
+      return left(ExceptionWithStackTrace(error, stackTrace));
+    }
+  });
+
+  TaskEither<ExceptionWithStackTrace, KeySourcePrivateKey> _importPrivateKey({
+    required Uint8List privateKey,
+  }) => TaskEither<ExceptionWithStackTrace, KeySourcePrivateKey>(() async {
     try {
       final Uint8List privateKeyBytes = expandSecretKey(privateKey);
 
@@ -135,13 +216,15 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
           error: exceptionWithStackTrace.exception,
           stackTrace: exceptionWithStackTrace.stackTrace,
         );
+
+        return left(exceptionWithStackTrace);
       }
 
       if (privateKeyExistEither.getRight().toNullable()!.isNone()) {
         final Either<ExceptionWithStackTrace, Uint8List>
-            importPrivateKeyEither = await ref
-                .read(importPrivateKeyUseCaseProvider)
-                .call(privateKeyBytes: privateKey);
+        importPrivateKeyEither = await ref
+            .read(importPrivateKeyUseCaseProvider)
+            .call(privateKeyBytes: privateKey);
 
         if (importPrivateKeyEither.isLeft()) {
           final ExceptionWithStackTrace exceptionWithStackTrace =
@@ -151,19 +234,15 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
             error: exceptionWithStackTrace.exception,
             stackTrace: exceptionWithStackTrace.stackTrace,
           );
-          state = const GenerateAccountFlowState.error(
-            'Failed to import private key',
-          );
+          return left(exceptionWithStackTrace);
         }
       }
 
-      state = GenerateAccountFlowState.waitingForMetadata(
-        keySource: KeySource.privateKey(jwkThumbprint: jwkKeyId),
-      );
-    } on Exception catch (e) {
-      state = GenerateAccountFlowState.error(e.toString());
+      return right(KeySourcePrivateKey(jwkThumbprint: jwkKeyId));
+    } on Exception catch (error, stackTrace) {
+      return left(ExceptionWithStackTrace(error, stackTrace));
     }
-  }
+  });
 
   Future<void> completeWithMetadata({
     required String label,
@@ -172,9 +251,10 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
   }) async {
     final GenerateAccountFlowState currentState = state;
     if (currentState is! GenerateAccountFlowStateWaitingForMetadata) {
-      throw StateError(
-        'Cannot add metadata: wrong state ${currentState.runtimeType}',
+      state = const GenerateAccountFlowState.error(
+        'Cannot add metadata: account source not prepared',
       );
+      return;
     }
 
     state = GenerateAccountFlowState.generating(
@@ -185,8 +265,8 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
     );
 
     try {
-      final AptosAccountWithMetadata account =
-          await switch (currentState.keySource) {
+      final AptosAccountWithMetadata account = await switch (currentState
+          .keySource) {
         KeySourceMnemonic(
           :final Uint8List entropyHash,
           :final Option<int> accountIndex,
@@ -208,10 +288,19 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
       };
 
       state = GenerateAccountFlowState.generated(account: account);
-      await ref
+
+      final Either<ExceptionWithStackTrace, Unit> setActiveResult = await ref
           .read(setActiveAccountUseCaseProvider)
           .call(accountAddress: account.accountAddress);
+
+      if (setActiveResult.isLeft()) {
+        AppLogger.warning(
+          'Account created but could not be set as active',
+          error: setActiveResult.getLeft().toNullable()!.exception,
+        );
+      }
     } on Exception catch (e) {
+      AppLogger.error('Failed to complete account creation', error: e);
       state = GenerateAccountFlowState.error(e.toString());
     }
   }
@@ -235,10 +324,9 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
         error: exceptionWithStackTrace.exception,
         stackTrace: exceptionWithStackTrace.stackTrace,
       );
-      state = const GenerateAccountFlowState.error(
-        'Failed to generate private key',
-      );
+      throw exceptionWithStackTrace.exception;
     }
+
     final Uint8List keyId = keyIdEither.getRight().toNullable()!;
     return _generateFromPrivateKey(label, iconUri, backgroundColor, keyId);
   }
@@ -250,15 +338,16 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
     Uint8List jwkThumbprint,
   ) async {
     final Either<ExceptionWithStackTrace, AptosAccountWithMetadata>
-        accountCreationEither =
-        await ref.read(createAptosAccountUseCaseProvider).call(
-              label: label,
-              iconUri: iconUri,
-              backgroundColor: backgroundColor,
-              authenticatorConfig: AuthenticatorConfig.ed25519(
-                keyId: jwkThumbprint,
-              ),
-            );
+    accountCreationEither = await ref
+        .read(createAptosAccountUseCaseProvider)
+        .call(
+          label: label,
+          iconUri: iconUri,
+          backgroundColor: backgroundColor,
+          authenticatorConfig: AuthenticatorConfig.ed25519(
+            keyId: jwkThumbprint,
+          ),
+        );
 
     if (accountCreationEither.isLeft()) {
       final ExceptionWithStackTrace exceptionWithStackTrace =
@@ -268,7 +357,7 @@ class GenerateAccountFlow extends _$GenerateAccountFlow {
         error: exceptionWithStackTrace.exception,
         stackTrace: exceptionWithStackTrace.stackTrace,
       );
-      state = const GenerateAccountFlowState.error('Failed to create account');
+      throw exceptionWithStackTrace.exception;
     }
 
     return accountCreationEither.getRight().toNullable()!;

@@ -33,48 +33,48 @@ class SplashScreen extends HookConsumerWidget {
 
       unawaited(initializeVideo());
 
-     Future<void> handleVideoCompletion() async {
-  isVideoCompleted.value = true;
-  await Future<void>.delayed(const Duration(seconds: 3));
+      Future<void> handleVideoCompletion() async {
+        isVideoCompleted.value = true;
+        await Future<void>.delayed(const Duration(seconds: 3));
 
-  if (context.mounted) {
-    final ListAptosAccountsUseCase listAptosAccountsUseCase =
-        ref.read(listAptosAccountsUseCaseProvider);
-    final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>> accounts =
-        await listAptosAccountsUseCase.call();
-
-    accounts.fold(
-      (ExceptionWithStackTrace exception) {
         if (context.mounted) {
-          showDialog<void>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text('Error'),
-              content: Text(exception.toString()),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
+          final ListAptosAccountsUseCase listAptosAccountsUseCase =
+              ref.read(listAptosAccountsUseCaseProvider);
+          final Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>
+              accounts = await listAptosAccountsUseCase.call();
+
+          accounts.fold(
+            (ExceptionWithStackTrace exception) {
+              if (context.mounted) {
+                showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Error'),
+                    content: Text(exception.toString()),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            (Set<AptosAccountWithMetadata> accountSet) {
+              if (accountSet.isNotEmpty) {
+                if (context.mounted) {
+                  const ChooseWalletUserScreenRoute().go(context);
+                }
+              } else {
+                if (context.mounted) {
+                  const WaitlistPrimaryScreenRoute().go(context);
+                }
+              }
+            },
           );
         }
-      },
-      (Set<AptosAccountWithMetadata> accountSet) {
-        if (accountSet.isNotEmpty) {
-          if (context.mounted) {
-            const ChooseWalletUserScreenRoute().go(context);
-          }
-        } else {
-          if (context.mounted) {
-            const DiveInPageRoute().go(context);
-          }
-        }
-      },
-    );
-  }
-}
+      }
 
       videoController.addListener(() async {
         if (videoController.value.isInitialized &&

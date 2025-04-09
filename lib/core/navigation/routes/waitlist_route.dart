@@ -1,30 +1,20 @@
 part of 'router.dart';
 
-@TypedGoRoute<WaitlistScreenRoute>(path: '/waitlist')
-class WaitlistScreenRoute extends GoRouteData {
-  const WaitlistScreenRoute();
+@TypedGoRoute<WaitlistPrimaryScreenRoute>(path: '/waitlist')
+
+class WaitlistPrimaryScreenRoute extends GoRouteData {
+  const WaitlistPrimaryScreenRoute();
 
   @override
-  Page<void> buildPage(BuildContext context, GoRouterState state) =>
-      CustomTransitionPage<void>(
-        key: state.pageKey,
-        child: const WaitlistScreen(),
-        transitionsBuilder: (
-          BuildContext context,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-          Widget child,
-        ) =>
-            SmoothBottomUpTransition(
-          animation: animation,
-          child: child,
-        ),
-        transitionDuration: const Duration(milliseconds: 600),
-        reverseTransitionDuration: const Duration(milliseconds: 600),
-      );
+  Widget build(BuildContext context, GoRouterState state) =>
+      const WaitlistPrimaryScreen();
 
-  static final AppRoute route = AppRoute.protected(
+  static final AppRoute route = AppRoute.public(
+    redirectIfAuthenticated: const HomeRoute().location,
     builder: (BuildContext context, GoRouterState state) =>
-        const WaitlistScreen(),
+        const WaitlistPrimaryScreen(),
   );
 }
+
+
+

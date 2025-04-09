@@ -118,7 +118,7 @@ class _WalletSettingsCustomizeWalletScreenState
 
       if (state.selectedWalletColor != initialColor) {
         notifier.updateAccountBackgroundColor(
-            state.selectedWalletColor, accountAddress);
+            state.selectedWalletColor, accountAddress,);
       }
 
       if (state.selectedEmoji != initialIconUri) {
@@ -175,7 +175,14 @@ class _WalletSettingsCustomizeWalletScreenState
                                             state.walletColorSelectedIndex == 0,
                                         updateSliderPosition:
                                             notifier.updateSliderPosition,
-                                        color: AppColors.blue,
+                                        color: const LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: <Color>[
+                                            Color(0xff2071EE),
+                                            Color(0xff0051CF),
+                                          ],
+                                        ),
                                         index: 0,
                                         onTap: (int index) => animateSlider(
                                           index,
@@ -188,7 +195,14 @@ class _WalletSettingsCustomizeWalletScreenState
                                             state.walletColorSelectedIndex == 1,
                                         updateSliderPosition:
                                             notifier.updateSliderPosition,
-                                        color: AppColors.greenLight,
+                                        color: const LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: <Color>[
+                                            Color(0xff58BB47),
+                                            Color(0xff3A9D29),
+                                          ],
+                                        ),
                                         index: 1,
                                         onTap: (int index) => animateSlider(
                                           index,
@@ -201,7 +215,14 @@ class _WalletSettingsCustomizeWalletScreenState
                                             state.walletColorSelectedIndex == 2,
                                         updateSliderPosition:
                                             notifier.updateSliderPosition,
-                                        color: AppColors.orange,
+                                        color: const LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: <Color>[
+                                            Color(0xffFFAD29),
+                                            Color(0xffE18F1E),
+                                          ],
+                                        ),
                                         index: 2,
                                         onTap: (int index) => animateSlider(
                                           index,
@@ -214,7 +235,14 @@ class _WalletSettingsCustomizeWalletScreenState
                                             state.walletColorSelectedIndex == 3,
                                         updateSliderPosition:
                                             notifier.updateSliderPosition,
-                                        color: AppColors.yellow,
+                                        color: const LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: <Color>[
+                                            Color(0xffF0B90B),
+                                            Color(0xffD99A0A),
+                                          ],
+                                        ),
                                         index: 3,
                                         onTap: (int index) => animateSlider(
                                           index,
@@ -227,7 +255,14 @@ class _WalletSettingsCustomizeWalletScreenState
                                             state.walletColorSelectedIndex == 4,
                                         updateSliderPosition:
                                             notifier.updateSliderPosition,
-                                        color: AppColors.pink,
+                                        color: const LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: <Color>[
+                                            Color(0xffFA7AA2),
+                                            Color(0xffF07098),
+                                          ],
+                                        ),
                                         index: 4,
                                         onTap: (int index) => animateSlider(
                                           index,

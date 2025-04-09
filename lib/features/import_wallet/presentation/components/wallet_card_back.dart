@@ -11,7 +11,7 @@ class WalletCardBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          final Color cardColor = ref.watch(
+          final LinearGradient cardColor = ref.watch(
             importWalletNotifierProvider
                 .select((ImportWalletState state) => state.selectedWalletColor),
           );
@@ -19,7 +19,7 @@ class WalletCardBack extends StatelessWidget {
             width: 342,
             height: 185,
             decoration: BoxDecoration(
-              color: cardColor,
+              gradient: cardColor,
               borderRadius: BorderRadius.circular(24),
               boxShadow: const <BoxShadow>[
                 BoxShadow(

@@ -30,6 +30,7 @@ class _CreateWalletSelectSeedPhraseScreenState
   @override
   void initState() {
     super.initState();
+    // ignore: discarded_futures
     mnemonicsFuture = _getAllMnemonics();
   }
 
@@ -85,8 +86,10 @@ class _CreateWalletSelectSeedPhraseScreenState
                       .expand((List<AptosAccountWithMetadata> list) => list)
                       .length;
 
-                  seedPhrasesWithCounts
-                      .add(('Seed Phrase', walletCount, entropy));
+                  if (walletCount > 0) {
+                    seedPhrasesWithCounts
+                        .add(('Seed Phrase', walletCount, entropy));
+                  }
                 },
               );
             } on Exception catch (e, stackTrace) {
@@ -198,60 +201,73 @@ class _CreateWalletSelectSeedPhraseScreenState
     required int walletCount,
     required Uint8List entropy,
   }) =>
-      Container(
-        padding: const EdgeInsets.all(8),
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: AppColors.greyVeryLight,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: <Widget>[
-            Image.asset(Assets.images.selectSeedPhraseScreen.path, height: 54),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  seedPhrase,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  walletCount == 1
-                      ? '$walletCount wallet'
-                      : '$walletCount wallets',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.greyLight,
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            const Text(
-              r'$2320.02',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: AppColors.blue,
+      GestureDetector(
+        onTap: () async {
+          await Navigator.of(context).push<void>(
+            MaterialPageRoute<void>(
+              builder: (BuildContext context) => CreateWalletScreen(
+                entropy: entropy,
               ),
             ),
-          ],
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.greyVeryLight,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: <Widget>[
+              Image.asset(Assets.images.selectSeedPhraseScreen.path,
+                  height: 54),
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    seedPhrase,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    walletCount == 1
+                        ? '$walletCount wallet'
+                        : '$walletCount wallets',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyLight,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              const Text(
+                r'$2320.02',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.blue,
+                ),
+              ),
+            ],
+          ),
         ),
       );
 
   Widget createNewTile() => GestureDetector(
-    onTap: () {
-      Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const CreateWalletScreen(),
-      ),);
-    },
-    child: Container(
+        onTap: () async {
+          await Navigator.of(context).push<void>(
+            MaterialPageRoute<void>(
+              builder: (BuildContext context) => const CreateWalletScreen(),
+            ),
+          );
+        },
+        child: Container(
           padding: const EdgeInsets.all(8),
           margin: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
@@ -297,7 +313,7 @@ class _CreateWalletSelectSeedPhraseScreenState
             ],
           ),
         ),
-  );
+      );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

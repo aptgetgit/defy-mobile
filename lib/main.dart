@@ -11,7 +11,6 @@ Future<void> main() async {
       observers: <ProviderObserver>[
         ProviderLogger(
           logger: AppLogger().logger,
-          reportErrorsToSentry: true,
         ),
       ],
       child: const DefyApp(),

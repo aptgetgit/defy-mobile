@@ -24,9 +24,8 @@ class ImportWalletNotifier extends _$ImportWalletNotifier {
     state = state.copyWith(isImporting: true, error: null);
     try {
       final String mnemonic = state.words.join(' ');
-      await ref
-          .read(generateAccountFlowProvider.notifier)
-          .importMnemonic(mnemonic);
+      await ref.read(generateAccountFlowProvider.notifier).generateAccount(
+          AccountGenerationParams.importMnemonic(mnemonic: mnemonic));
     } on Exception catch (e) {
       state = state.copyWith(error: e.toString());
     } finally {
@@ -34,7 +33,7 @@ class ImportWalletNotifier extends _$ImportWalletNotifier {
     }
   }
 
-  void updateColor(Color color) {
+  void updateColor(LinearGradient color) {
     state = state.copyWith(selectedWalletColor: color);
   }
 
@@ -64,7 +63,7 @@ class ImportWalletNotifier extends _$ImportWalletNotifier {
           iconUri: Uri.parse(
               EmojiUtils.getEmojiByIndex(state.selectedEmojiIndex)?.getEmoji ??
                   EmojiUtils.getEmojiByIndex(1)!.getEmoji),
-          backgroundColor: state.selectedWalletColor,
+          backgroundColor: state.selectedWalletColor.colors.first,
         );
       } else {
         throw Exception(

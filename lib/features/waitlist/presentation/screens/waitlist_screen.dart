@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../config/theme/colors.dart';
@@ -23,7 +25,13 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
   late AnimationController _logoRotationController;
   late Animation<double> _logoRotationAnimation;
   bool _isTextFieldFocused = false;
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode otpFocusNode = FocusNode();
+  int selectedIndex = 0;
+  final List<TextEditingController> controllers =
+      List<TextEditingController>.generate(
+    6,
+    (int index) => TextEditingController(),
+  );
 
   @override
   void initState() {
@@ -66,7 +74,7 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
       ),
     );
 
-    _focusNode.addListener(_onFocusChange);
+    otpFocusNode.addListener(_onFocusChange);
 
     Future<void>.delayed(const Duration(milliseconds: 300), () {
       if (mounted) {
@@ -75,11 +83,17 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
             .then((_) async => _startLogoRotationAnimation());
       }
     });
+
+    Future<void>.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) {
+        FocusScope.of(context).requestFocus(otpFocusNode);
+      }
+    });
   }
 
   void _onFocusChange() {
     setState(() {
-      _isTextFieldFocused = _focusNode.hasFocus;
+      _isTextFieldFocused = otpFocusNode.hasFocus;
     });
     if (_isTextFieldFocused) {
       _logoRotationController
@@ -107,121 +121,187 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
   void dispose() {
     _logoRotationController.dispose();
     _logoEntranceController.dispose();
-    _focusNode
+    otpFocusNode
       ..removeListener(_onFocusChange)
       ..dispose();
+    for (final TextEditingController controller in controllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: GestureDetector(
-          onTap: () {
-            if (_focusNode.hasFocus) {
-              _focusNode.unfocus();
-            }
-          },
-          child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Column(
-              children: <Widget>[
-                Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/waitlist-screen-header-gradient-component.png',
-                      width: double.infinity,
-                    ),
-                    const Positioned(
-                      bottom: 20,
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            'Welcome',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            'on your first Defy journey',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.greyLight,
-                            ),
-                          ),
-                        ],
+  Widget build(BuildContext context) => PopScope(
+        canPop: true,
+        onPopInvoked: (bool didPop) {
+          if (didPop) {
+            FocusScope.of(context).unfocus();
+          }
+        },
+        child: Scaffold(
+          body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Column(
+                children: <Widget>[
+                  Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/images/waitlist-screen-header-gradient-component.png',
+                        width: double.infinity,
                       ),
-                    ),
-                  ],
-                ),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: 20,
-                ),
-                AnimatedBuilder(
-                  animation: Listenable.merge(
-                      [_logoRotationAnimation, _logoEntranceController]),
-                  builder: (BuildContext context, Widget? child) =>
-                      Transform.translate(
-                    offset: Offset(0, _logoPositionAnimation.value),
-                    child: Transform.rotate(
-                      angle:
-                          _logoInitialRotationAnimation.value * -2 * math.pi +
-                              _logoRotationAnimation.value * math.pi,
-                      child: Transform.scale(
-                        scale: _logoSizeAnimation.value,
-                        child: Image.asset(
-                          'assets/icons/app-logo-dark-3d.png',
-                          width: _isTextFieldFocused ? 105 : 145,
-                          height: _isTextFieldFocused ? 105 : 145,
+                      const Positioned(
+                        bottom: 20,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              'Welcome',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              'on your first Defy journey',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.greyLight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    height: 20,
+                  ),
+                  AnimatedBuilder(
+                    animation: Listenable.merge(<Listenable?>[
+                      _logoRotationAnimation,
+                      _logoEntranceController,
+                    ]),
+                    builder: (BuildContext context, Widget? child) =>
+                        Transform.translate(
+                      offset: Offset(0, _logoPositionAnimation.value),
+                      child: Transform.rotate(
+                        angle:
+                            _logoInitialRotationAnimation.value * -2 * math.pi +
+                                _logoRotationAnimation.value * math.pi,
+                        child: Transform.scale(
+                          scale: _logoSizeAnimation.value,
+                          child: Image.asset(
+                            'assets/icons/app-logo-dark-3d.png',
+                            width: _isTextFieldFocused ? 105 : 145,
+                            height: _isTextFieldFocused ? 105 : 145,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: _isTextFieldFocused ? 0 : 200,
-                ),
-                AnimatedContainer(
-                  height: _isTextFieldFocused ? 60 : 40,
-                  duration: const Duration(milliseconds: 300),
-                ),
-                Container(
-                  height: 50,
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: AppColors.greyVeryLight,
-                    borderRadius: BorderRadius.circular(10),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    height: _isTextFieldFocused ? 0 : 120,
                   ),
-                  child: TextField(
-                    keyboardAppearance: Brightness.dark,
-                    keyboardType: TextInputType.text,
-                    focusNode: _focusNode,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: AppColors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    decoration: const InputDecoration(
-                      hintText: 'Enter waitlist code',
-                      hintStyle: TextStyle(
-                        color: AppColors.greyLight,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                  AnimatedContainer(
+                    height: _isTextFieldFocused ? 60 : 40,
+                    duration: const Duration(milliseconds: 300),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List<Widget>.generate(7, (int index) {
+                        if (index == 3) {
+                          return Container(
+                            width: 20,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              '-',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }
+                        final int containerIndex =
+                            index > 3 ? index - 1 : index;
+                        return Container(
+                          width: 45,
+                          height: 50,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.greyVeryLight,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: selectedIndex == containerIndex
+                                  ? Colors.black
+                                  : Colors.transparent,
+                              width: 1.5,
+                            ),
+                          ),
+                          child: RawKeyboardListener(
+                            focusNode: otpFocusNode,
+                            onKey: (RawKeyEvent event) {
+                              if (event is RawKeyDownEvent &&
+                                  event.logicalKey ==
+                                      LogicalKeyboardKey.backspace) {
+                                _handleBackspace(containerIndex);
+                              }
+                            },
+                            child: TextField(
+                              controller: controllers[containerIndex],
+                              keyboardAppearance: Brightness.dark,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              maxLength: 1,
+                              showCursor: false,
+                              style: const TextStyle(
+                                color: AppColors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              decoration: const InputDecoration(
+                                counterText: '',
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                              onChanged: (String value) {
+                                setState(() {
+                                  selectedIndex = containerIndex;
+                                });
+                                if (value.isNotEmpty && containerIndex < 5) {
+                                  controllers[containerIndex + 1].clear();
+                                  controllers[containerIndex + 1].selection =
+                                      TextSelection.fromPosition(
+                                    const TextPosition(offset: 0),
+                                  );
+                                  FocusScope.of(context).nextFocus();
+                                }
+                              },
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(1),
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
                     ),
                   ),
-                ),
-                if (_isTextFieldFocused) const SizedBox(height: 24),
-                if (_isTextFieldFocused)
+                  AnimatedContainer(
+                    height: _isTextFieldFocused ? 60 : 140,
+                    duration: const Duration(milliseconds: 300),
+                  ),
                   GestureDetector(
                     onTap: () async {
                       await const WalletCreationScreenRoute()
@@ -246,33 +326,79 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                       ),
                     ),
                   ),
-                const SizedBox(height: 60),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: const TextSpan(
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.greyDark,
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.greyDark,
+                        ),
+                        children: <InlineSpan>[
+                          TextSpan(text: 'Defy is still in '),
+                          TextSpan(
+                            text: 'beta program',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text:
+                                ', we appreciate your patience on waiting for the release.',
+                          ),
+                        ],
                       ),
-                      children: <InlineSpan>[
-                        TextSpan(text: 'Defy is still in '),
-                        TextSpan(
-                          text: 'beta program',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              ', we appreciate your patience on waiting for the release.',
-                        ),
-                      ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       );
+  void _handleBackspace(int currentIndex) {
+    if (controllers[currentIndex].text.isEmpty && currentIndex > 0) {
+      int previousIndex = currentIndex - 1;
+      if (previousIndex == 3) {
+        previousIndex = 2;
+      }
+      setState(() {
+        selectedIndex = previousIndex;
+      });
+      controllers[previousIndex].clear();
+      controllers[previousIndex].selection = TextSelection.fromPosition(
+        const TextPosition(offset: 0),
+      );
+    } else {
+      controllers[currentIndex].clear();
+    }
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(IntProperty('selectedIndex', selectedIndex))
+      ..add(
+        IterableProperty<TextEditingController>('controllers', controllers),
+      );
+  }
+}
+
+class BackspaceTextInputFormatter extends TextInputFormatter {
+  BackspaceTextInputFormatter({required this.onBackspace});
+  final void Function({required bool isBackspace}) onBackspace;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (oldValue.text.isNotEmpty && newValue.text.isEmpty) {
+      onBackspace(isBackspace: true);
+    } else {
+      onBackspace(isBackspace: false);
+    }
+    return newValue;
+  }
 }

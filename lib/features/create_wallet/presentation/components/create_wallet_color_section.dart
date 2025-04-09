@@ -17,7 +17,7 @@ class CreateWalletColorSection extends StatelessWidget {
     required this.createWalletState,
     super.key,
   });
-  final void Function(int, Color) animateSlider;
+  final void Function(int, LinearGradient) animateSlider;
   final CreateWalletNotifier createWalletNotifier;
   final CreateWalletState createWalletState;
 
@@ -70,7 +70,7 @@ class CreateWalletColorSection extends StatelessWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(ObjectFlagProperty<void Function(int p1, Color p2)>.has(
+      ..add(ObjectFlagProperty<void Function(int p1, LinearGradient p2)>.has(
           'animateSlider', animateSlider))
       ..add(DiagnosticsProperty<CreateWalletNotifier>(
           'createWalletNotifier', createWalletNotifier));

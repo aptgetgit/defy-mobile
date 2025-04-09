@@ -190,7 +190,7 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: <Widget>[
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   const Text(
                     'Set up your Wallet',
                     style: TextStyle(
@@ -211,7 +211,7 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                       softWrap: true,
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 88),
                   GestureDetector(
                     onTap: () async {
                       await const ImportWalletScreenRoute().push<void>(context);
@@ -234,20 +234,6 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () async {
-                      await const CreateWalletScreenRoute().push<void>(context);
-                    },
-                    child: const Text(
-                      'Create Wallet',
-                      style: TextStyle(
-                        color: AppColors.blue,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),

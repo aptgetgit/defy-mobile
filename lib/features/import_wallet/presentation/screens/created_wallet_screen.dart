@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-
 import '../../../../config/theme/colors.dart';
-
 
 import '../../../../core/navigation/routes/router.dart';
 import '../../../../shared/blockchain/account/presentation/providers/generate_account_flow_provider.dart';
@@ -92,6 +90,7 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -187,13 +186,13 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
       Container(
         height: 200,
         decoration: BoxDecoration(
-          color: state.selectedWalletColor,
           image: const DecorationImage(
             image: AssetImage(
               'assets/images/wallet-creation-wallet-background-wallet-component.png',
             ),
             fit: BoxFit.cover,
           ),
+          gradient: state.selectedWalletColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(

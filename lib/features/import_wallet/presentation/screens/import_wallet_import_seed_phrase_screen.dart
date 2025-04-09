@@ -41,91 +41,51 @@ class _ImportWalletImportSeedPhraseScreenState
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
-    _controller
-      ..removeListener(_onTextChanged)
-      ..dispose();
+    _controller.dispose();
     _focusNode.dispose();
     super.dispose();
   }
 
-  void _onTextChanged() {
-    final String text = _controller.text.trim();
-    _processInput(text);
-  }
-
-  void _processInput(String input) {
-    final List<String> words =
-        input.split(RegExp(r'\s+')).map((word) => word.toLowerCase()).toList();
-    final List<String> validWords = [];
-
-    for (final String word in words) {
-      final String trimmedWord = word.trim();
-      if (trimmedWord.isNotEmpty && bip39Wordlist.contains(trimmedWord)) {
-        if (!widget.words.contains(trimmedWord) && validWords.length < 24) {
-          validWords.add(trimmedWord);
-        }
-      } else if (trimmedWord.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid word: $trimmedWord')),
-        );
-        return;
-      }
-    }
-
-    if (validWords.isNotEmpty) {
+  void _addWord(String word) {
+    if (!widget.words.contains(word) && widget.words.length < 24) {
       final List<String> updatedWords = List<String>.from(widget.words)
-        ..addAll(validWords);
+        ..add(word);
       widget.onWordsUpdated(updatedWords);
-      _controller.clear();
       if (updatedWords.length < 24) {
         _focusNode.requestFocus();
       }
-    }
-  }
-
-  void _addWord(String word) {
-    final String trimmedWord = word.trim().toLowerCase();
-
-    if (word.isEmpty || !bip39Wordlist.contains(trimmedWord)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid word: $trimmedWord')),
-      );
-      _controller.clear();
-      return;
-    }
-
-    if (widget.words.contains(trimmedWord)) {
+    } else if (widget.words.contains(word)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Word already added')),
       );
-      _controller.clear();
-      return;
-    }
-
-    if (widget.words.length >= 24) {
-      if (!mounted) {
-        return;
-      }
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Seed phrase cannot exceed 24 words')),
       );
-      _controller.clear();
-      _focusNode.unfocus();
-      return;
     }
+  }
 
-    final List<String> updatedWords = List<String>.from(widget.words)
-      ..add(trimmedWord);
-    widget.onWordsUpdated(updatedWords);
-    _controller.clear();
+  void _handleKeyPress(RawKeyEvent event) {
+    if (event is RawKeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.space) {
+      final String currentText = _controller.text.trim();
+      final List<String> words = currentText.split(RegExp(r'\s+'));
+      final String lastWord = words.last.toLowerCase();
 
-    if (updatedWords.length < 24) {
-      _focusNode.requestFocus();
+      if (lastWord.isNotEmpty) {
+        if (bip39Wordlist.contains(lastWord)) {
+          _addWord(lastWord);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Invalid word: $lastWord')),
+          );
+        }
+        _controller.clear();
+      }
     }
   }
 
@@ -136,13 +96,13 @@ class _ImportWalletImportSeedPhraseScreenState
         baseHeight + (widget.words.length / 3).ceil() * 40;
 
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const Text(
             'Import Seed Phrase 🤫',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -232,31 +192,33 @@ class _ImportWalletImportSeedPhraseScreenState
 
   Widget _buildTextField(List<String> words) => SizedBox(
         width: words.isEmpty ? 220 : 100,
-        child: TextField(
-          controller: _controller,
+        child: RawKeyboardListener(
           focusNode: _focusNode,
-          decoration: InputDecoration(
-            hintText: words.isEmpty ? 'Enter Seed Phrase here ...' : '',
-            hintStyle: const TextStyle(
-              fontSize: 16,
-              color: AppColors.greyLight,
-              fontWeight: FontWeight.w500,
+          onKey: _handleKeyPress,
+          child: TextField(
+            controller: _controller,
+            decoration: InputDecoration(
+              hintText: words.isEmpty ? 'Enter Seed Phrase here ...' : '',
+              hintStyle: const TextStyle(
+                fontSize: 16,
+                color: AppColors.greyLight,
+                fontWeight: FontWeight.w500,
+              ),
+              filled: true,
+              fillColor: AppColors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
+              isDense: true,
             ),
-            filled: true,
-            fillColor: AppColors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
-            isDense: true,
+            style: const TextStyle(fontSize: 14),
+            cursorWidth: 1,
+            cursorHeight: 16,
+            textAlignVertical: TextAlignVertical.top,
+            textInputAction: TextInputAction.done,
           ),
-          style: const TextStyle(fontSize: 14),
-          cursorWidth: 1,
-          cursorHeight: 16,
-          textAlignVertical: TextAlignVertical.top,
-          textInputAction: TextInputAction.done,
-          onSubmitted: _addWord,
         ).animate().fadeIn(),
       );
 }

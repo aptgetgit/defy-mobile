@@ -12,6 +12,10 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/app-icon-dark.png
+  AssetGenImage get appIconDark =>
+      const AssetGenImage('assets/icons/app-icon-dark.png');
+
   /// File path: assets/icons/app-icon.png
   AssetGenImage get appIcon => const AssetGenImage('assets/icons/app-icon.png');
 
@@ -36,8 +40,15 @@ class $AssetsIconsGen {
       const AssetGenImage('assets/icons/splash-app-icon.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [appIcon, appLogoDark3d, branding, coinWhite, coinYellow, splashAppIcon];
+  List<AssetGenImage> get values => [
+        appIconDark,
+        appIcon,
+        appLogoDark3d,
+        branding,
+        coinWhite,
+        coinYellow,
+        splashAppIcon
+      ];
 }
 
 class $AssetsImagesGen {
@@ -46,6 +57,15 @@ class $AssetsImagesGen {
   /// File path: assets/images/beaming-face-with-smiling-eyes.gif
   AssetGenImage get beamingFaceWithSmilingEyes =>
       const AssetGenImage('assets/images/beaming-face-with-smiling-eyes.gif');
+
+  /// File path: assets/images/card-bottom.svg
+  String get cardBottom => 'assets/images/card-bottom.svg';
+
+  /// File path: assets/images/card-top-left.svg
+  String get cardTopLeft => 'assets/images/card-top-left.svg';
+
+  /// File path: assets/images/card-top-right.svg
+  String get cardTopRight => 'assets/images/card-top-right.svg';
 
   /// File path: assets/images/dive-in-1.png
   AssetGenImage get diveIn1 =>
@@ -196,6 +216,9 @@ class $AssetsImagesGen {
   /// List of all assets
   List<dynamic> get values => [
         beamingFaceWithSmilingEyes,
+        cardBottom,
+        cardTopLeft,
+        cardTopRight,
         diveIn1,
         diveIn2,
         diveIn3,

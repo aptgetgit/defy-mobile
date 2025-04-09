@@ -7,7 +7,7 @@ part of '../create_wallet_provider.dart';
 // **************************************************************************
 
 String _$createWalletNotifierHash() =>
-    r'544af3fa3e74cd26384dee045e3f80765fa75c8c';
+    r'2b398d4253cd3fee38890cfeb585e9ba086cf477';
 
 /// See also [CreateWalletNotifier].
 @ProviderFor(CreateWalletNotifier)

@@ -34,7 +34,7 @@ class CreateWalletCard extends StatelessWidget {
           height: CreateWalletConstants.cardHeight,
           width: MediaQuery.of(context).size.width - 40,
           decoration: BoxDecoration(
-            color: state.selectedWalletColor,
+            gradient: state.selectedWalletColor,
             image: const DecorationImage(
               image: AssetImage(
                 'assets/images/wallet-creation-wallet-background-wallet-component.png',

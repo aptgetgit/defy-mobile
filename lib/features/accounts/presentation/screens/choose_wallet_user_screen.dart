@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -14,7 +16,7 @@ import '../components/new_wallet_bottom_sheet.dart';
 import '../components/wallet_pagination_indicator.dart';
 import '../components/wallet_swiper.dart';
 import '../provider/choose_wallet_screen_provider.dart';
-import '../util/helpers.dart';
+import '../state/choose_wallet_screen_state.dart';
 
 class ChooseWalletUserScreen extends ConsumerStatefulWidget {
   const ChooseWalletUserScreen({super.key});
@@ -32,9 +34,10 @@ class _ChooseWalletUserScreenState
         accountsFuture = ref.watch(listAptosAccountsUseCaseProvider).call();
 
     ref.listen<bool>(
-      chooseWalletScreenNotifierProvider.select((state) => state.isUpdated),
-      (previous, next) {
-        if (next) {
+      chooseWalletScreenNotifierProvider
+          .select((ChooseWalletScreenState state) => state.isUpdated),
+      (bool? previous, bool next) {
+        if (previous != next) {
           ref.invalidate(listAptosAccountsUseCaseProvider);
         }
       },
@@ -131,6 +134,8 @@ class _ChooseWalletUserScreenState
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(20)),
                     ),
+                    isScrollControlled: true, // Add this line
+                    backgroundColor: Colors.transparent, // Add this line
                     builder: (BuildContext context) =>
                         const NewWalletBottomSheet(),
                   ),
@@ -181,7 +186,6 @@ class _ChooseWalletUserScreenState
                   return const Center(child: Text('No data available'));
                 }
 
-                // Handle the Either
                 return snapshot.data!.fold(
                   (ExceptionWithStackTrace error) {
                     AppLogger.error(
@@ -301,60 +305,152 @@ class _ChooseWalletUserScreenState
     );
   }
 
-  Widget buildWalletCard(AptosAccountWithMetadata account) => Container(
-        height: 200,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: account.backgroundColor,
-          image: const DecorationImage(
-            image: AssetImage(
-              'assets/images/wallet-creation-wallet-background-wallet-component.png',
-            ),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Stack(
-          children: <Widget>[
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              top: 30,
-              left: 34,
-              child: CachedNetworkImage(
-                imageUrl: account.iconUri.toString(),
-                height: 40,
+  Widget buildWalletCard(AptosAccountWithMetadata account) => Center(
+        child: Container(
+          height: 200,
+          width: MediaQuery.of(context).size.width - 40,
+          decoration: BoxDecoration(
+            color: account.backgroundColor,
+            // gradient: account.backgroundColor,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: AppColors.greyDark.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: const Offset(0, 3),
               ),
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 110, top: 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        account.label,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
+            ],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Stack(
+            children: <Widget>[
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                bottom: 20,
+                left: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Total Balance',
+                      style: GoogleFonts.urbanist(
+                        fontSize: 14,
+                        color: AppColors.white,
                       ),
-                      Text(
-                        truncateAddress(account.accountAddress.toHex()),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.white,
-                        ),
+                    ),
+                    const Text(
+                      '---------',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white,
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(
+                  milliseconds: 300,
+                ),
+                curve: Curves.easeInOut,
+                bottom: 24,
+                right: 24,
+                child: Text(
+                  'Profile',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.white,
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const AnimatedPositioned(
+                duration: Duration(
+                  milliseconds: 300,
+                ),
+                curve: Curves.easeInOut,
+                top: 26,
+                right: 26,
+                child: Icon(
+                  PhosphorIconsRegular.qrCode,
+                  color: AppColors.white,
+                  size: 32,
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                top: 10,
+                child: SvgPicture.asset(
+                  Assets.images.cardTopLeft,
+                  height: 64,
+                  width: 64,
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                right: 0,
+                top: -4,
+                child: SvgPicture.asset(
+                  Assets.images.cardTopRight,
+                  height: 48,
+                  width: 48,
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                right: 88,
+                bottom: -8,
+                child: SvgPicture.asset(
+                  Assets.images.cardBottom,
+                  height: 88,
+                  width: 88,
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                top: 28,
+                left: 28,
+                child: CachedNetworkImage(
+                  imageUrl: account.iconUri.toString(),
+                  height: 40,
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                left: 100,
+                top: 4,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      account.label,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Wallet Address',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       );
 }

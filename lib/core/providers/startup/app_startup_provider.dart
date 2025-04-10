@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -6,6 +8,7 @@ import '../../error/exception_with_stack_trace.dart';
 import '../../logging/app_logger.dart';
 import '../../navigation/deep_link/deep_link_handler.dart';
 import '../../navigation/routes/router.dart';
+import '../device/device_info_provider.dart';
 import '../locale/locale_provider.dart';
 import '../services/secure_storage_service_provider.dart';
 import '../services/shared_preferences_service_provider.dart';
@@ -26,7 +29,9 @@ class AppStartupNotifier extends _$AppStartupNotifier {
         ..invalidate(localeNotifierProvider)
         ..invalidate(themeNotifierProvider)
         ..invalidate(routerProvider)
-        ..invalidate(connectivityStatusProvider);
+        ..invalidate(connectivityStatusProvider)
+        ..invalidate(androidDeviceInfoProvider)
+        ..invalidate(iosDeviceInfoProvider);
 
       DeepLinkHandler().dispose().run().fold((ExceptionWithStackTrace error) {
         AppLogger.error(
@@ -90,6 +95,7 @@ class AppStartupNotifier extends _$AppStartupNotifier {
             ref.read(sharedPreferencesServiceProvider.future),
             ref.read(objectBoxStoreProvider.future),
             ref.read(connectivityStatusProvider.future),
+            if (Platform.isAndroid) ref.read(androidDeviceInfoProvider.future) else ref.read(iosDeviceInfoProvider.future),
           ]);
 
           ref.read(routerProvider);

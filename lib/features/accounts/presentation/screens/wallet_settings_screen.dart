@@ -502,134 +502,138 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
             ],
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Stack(
-            children: <Widget>[
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                bottom: 20,
-                left: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Total Balance',
-                      style: GoogleFonts.urbanist(
-                        fontSize: 14,
-                        color: AppColors.white,
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            child: Stack(
+              children: <Widget>[
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  bottom: 20,
+                  left: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Total Balance',
+                        style: GoogleFonts.urbanist(
+                          fontSize: 14,
+                          color: AppColors.white,
+                        ),
                       ),
-                    ),
-                    const Text(
-                      '---------',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
+                      const Text(
+                        '---------',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(
-                  milliseconds: 300,
-                ),
-                curve: Curves.easeInOut,
-                bottom: 24,
-                right: 24,
-                child: Text(
-                  'Profile',
-                  style: GoogleFonts.urbanist(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.white,
+                    ],
                   ),
                 ),
-              ),
-              const AnimatedPositioned(
-                duration: Duration(
-                  milliseconds: 300,
-                ),
-                curve: Curves.easeInOut,
-                top: 26,
-                right: 26,
-                child: Icon(
-                  PhosphorIconsRegular.qrCode,
-                  color: AppColors.white,
-                  size: 24,
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                top: 10,
-                child: SvgPicture.asset(
-                  Assets.images.cardTopLeft,
-                  height: 56,
-                  width: 56,
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                right: -6,
-                top: -8,
-                child: SvgPicture.asset(
-                  Assets.images.cardTopRight,
-                  height: 48,
-                  width: 48,
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                right: 88,
-                bottom: -8,
-                child: SvgPicture.asset(
-                  Assets.images.cardBottom,
-                  height: 88,
-                  width: 88,
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                top: 27,
-                left: 24,
-                child: CachedNetworkImage(
-                  imageUrl: account.iconUri.toString(),
-                  height: 36,
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                left: 100,
-                top: 10,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      account.label,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
-                      ),
+                AnimatedPositioned(
+                  duration: const Duration(
+                    milliseconds: 300,
+                  ),
+                  curve: Curves.easeInOut,
+                  bottom: 24,
+                  right: 24,
+                  child: Text(
+                    'Profile',
+                    style: GoogleFonts.urbanist(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.white,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      truncateAddress(account.accountAddress.toHex()),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                const AnimatedPositioned(
+                  duration: Duration(
+                    milliseconds: 300,
+                  ),
+                  curve: Curves.easeInOut,
+                  top: 26,
+                  right: 26,
+                  child: Icon(
+                    PhosphorIconsRegular.qrCode,
+                    color: AppColors.white,
+                    size: 24,
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  top: 10,
+                  child: SvgPicture.asset(
+                    Assets.images.cardTopLeft,
+                    height: 56,
+                    width: 56,
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  right: -6,
+                  top: -8,
+                  child: SvgPicture.asset(
+                    Assets.images.cardTopRight,
+                    height: 48,
+                    width: 48,
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  right: 88,
+                  bottom: -8,
+                  child: SvgPicture.asset(
+                    Assets.images.cardBottom,
+                    height: 88,
+                    width: 88,
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  top: 27,
+                  left: 24,
+                  child: CachedNetworkImage(
+                    imageUrl: account.iconUri.toString(),
+                    height: 36,
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  left: 100,
+                  top: 10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        account.label,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        truncateAddress(account.accountAddress.toHex()),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );

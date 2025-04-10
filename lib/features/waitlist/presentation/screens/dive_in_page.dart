@@ -15,6 +15,7 @@ class DiveInPage extends ConsumerStatefulWidget {
 
 class DiveInPageState extends ConsumerState<DiveInPage> {
   bool _showContent = false;
+  bool _showDelayedText = false;
 
   @override
   void initState() {
@@ -26,6 +27,11 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
 
   void _triggerExitAnimation() {
     ref.read(exitAnimationProvider.notifier).state = true;
+
+    Future<void>.delayed(const Duration(milliseconds: 500), () {
+      setState(() => _showDelayedText = true);
+    });
+
     AppLogger.debug(
       'Exit animation triggered : ${ref.read(exitAnimationProvider)}',
     );
@@ -151,7 +157,7 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                       ),
                       const SizedBox(height: 6),
                       _buildAnimatedText(
-                        showExitAnimation
+                        (_showDelayedText && showExitAnimation)
                             ? 'Entering Defy Beta App'
                             : 'Welcome to Defy App',
                         style: const TextStyle(
@@ -162,11 +168,18 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
                         showExitAnimation: showExitAnimation,
                       ),
                       const Spacer(),
-                      GestureDetector(
-                        onTap: _triggerExitAnimation,
-                        child: _buildLoginButton(
-                          'Dive In',
-                          showExitAnimation: showExitAnimation,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 64),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(40),
+                            onTap: _triggerExitAnimation,
+                            child: _buildLoginButton(
+                              'Dive In',
+                              showExitAnimation: showExitAnimation,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -222,7 +235,7 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
         )
             .animate()
             .custom(
-              duration: 600.ms,
+              duration: 1000.ms,
               curve: Curves.easeOutBack,
               begin: 0,
               end: 1,
@@ -239,8 +252,8 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
             )
             .animate(target: showExitAnimation ? 1 : 0)
             .custom(
-              duration: 600.ms,
-              curve: Curves.easeInBack,
+              duration: 1000.ms,
+              curve: Curves.easeOutBack,
               begin: 0,
               end: 1,
               builder: (BuildContext context, double value, Widget child) =>
@@ -288,7 +301,7 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
         )
             .animate()
             .custom(
-              duration: 600.ms,
+              duration: 1000.ms,
               curve: Curves.easeOutBack,
               begin: 0,
               end: 1,
@@ -303,8 +316,8 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
             )
             .animate(target: showExitAnimation ? 1 : 0)
             .custom(
-              duration: 600.ms,
-              curve: Curves.easeInBack,
+              duration: 1000.ms,
+              curve: Curves.easeOutBack,
               begin: 0,
               end: 1,
               builder: (BuildContext context, double value, Widget child) =>
@@ -320,20 +333,21 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
 
   Widget _buildLoginButton(String text, {required bool showExitAnimation}) =>
       Container(
-        margin: const EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
           color: AppColors.black,
           borderRadius: BorderRadius.circular(40),
           border: Border.all(color: AppColors.greyMedium),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
+          child: GestureDetector(
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -352,7 +366,7 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
         duration: const Duration(milliseconds: 300),
         child: Text(
           text,
-          key: ValueKey<String>(text),
+          key: ValueKey<String>('text-$text-$_showDelayedText'),
           style: style,
           textAlign: TextAlign.center,
         ),
@@ -366,5 +380,5 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
           )
           .fadeIn(duration: 300.ms)
           .animate(target: showExitAnimation ? 1 : 0)
-          .fadeOut(delay: 1000.ms, duration: 300.ms);
+          .fadeOut(delay: 1500.ms, duration: 300.ms);
 }

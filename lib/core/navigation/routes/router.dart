@@ -45,7 +45,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const SplashScreenRoute().location,
+      initialLocation: const WaitlistPrimaryScreenRoute().location,
       routes: $appRoutes,
       redirectLimit: 0,
       errorBuilder: (BuildContext context, GoRouterState state) =>

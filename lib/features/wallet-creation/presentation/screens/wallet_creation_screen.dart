@@ -192,7 +192,7 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                 children: <Widget>[
                   const SizedBox(height: 30),
                   const Text(
-                    'Set up your Wallet',
+                    'Welcome Aboard!',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
@@ -202,7 +202,7 @@ class _WalletCreationScreenState extends ConsumerState<WalletCreationScreen> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      'Last Step before getting into the app. Importing wallet gives 10 extra coins.',
+                      'Access the beta version of Defy App by importing your pre-existing wallet.',
                       style: TextStyle(
                         fontSize: 16,
                         color: AppColors.greyLight,

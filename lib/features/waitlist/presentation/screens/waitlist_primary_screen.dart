@@ -17,8 +17,9 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<bool> showContent = useState(false);
     final ValueNotifier<bool> showOtpFields = useState(false);
-    final AnimationController controller =
-        useAnimationController(duration: const Duration(milliseconds: 300));
+    final AnimationController controller = useAnimationController(
+      duration: const Duration(milliseconds: 500),
+    );
     final TextEditingController pinController = useTextEditingController();
     final FocusNode pinFocusNode = useFocusNode();
     final ValueNotifier<bool> hasFocusedOnce = useState(false);
@@ -39,7 +40,7 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
     useEffect(
       () {
         if (showExitAnimation && !controller.isAnimating) {
-          Future<void>.delayed(const Duration(milliseconds: 1500), () async {
+          Future<void>.delayed(const Duration(milliseconds: 2000), () async {
             await controller.forward().then((_) {
               showOtpFields.value = true;
               if (!hasFocusedOnce.value) {
@@ -60,7 +61,7 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
     useEffect(
       () {
         if (showOtpFields.value) {
-          Future<void>.delayed(const Duration(seconds: 1), () {
+          Future<void>.delayed(const Duration(seconds: 2), () {
             showDontHaveCode.value = true;
           });
         } else {
@@ -75,19 +76,22 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Visibility(
-            visible: !showExitAnimation,
-            child: const DiveInPage(),
-          ),
+          const DiveInPage(),
           AnimatedBuilder(
             animation: controller,
             builder: (BuildContext context, Widget? child) {
-              final double topPosition =
-                  Tween<double>(begin: 240, end: 108).evaluate(controller);
+              const Curve curve = Curves.easeInOutQuad;
+
+              final double topPosition = Tween<double>(begin: 240, end: 108)
+                  .animate(CurvedAnimation(parent: controller, curve: curve))
+                  .value;
+
               final double leftPosition = Tween<double>(
                 begin: MediaQuery.of(context).size.width / 2 - 30,
                 end: 24,
-              ).evaluate(controller);
+              )
+                  .animate(CurvedAnimation(parent: controller, curve: curve))
+                  .value;
 
               return Positioned(
                 top: topPosition,
@@ -108,8 +112,10 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
                       ),
                       const SizedBox(height: 32),
                       Expanded(
-                        child: _buildAnimatedSection(
-                          condition: showOtpFields.value,
+                        child: AnimatedOpacity(
+                          opacity: showOtpFields.value ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -305,8 +311,8 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
             .fadeIn(duration: 300.ms)
             .animate(target: showExitAnimation ? 1 : 0)
             .custom(
-              curve: Curves.easeInOutBack,
-              duration: 300.ms,
+              curve: Curves.easeInOutQuad,
+              duration: 600.ms,
               delay: 1500.ms,
               builder: (BuildContext context, double value, Widget child) {
                 AppLogger.debug('Custom animation value: $value');
@@ -319,14 +325,4 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
       },
     );
   }
-
-  Widget _buildAnimatedSection({
-    required bool condition,
-    required Widget child,
-  }) =>
-      AnimatedOpacity(
-        duration: const Duration(milliseconds: 300),
-        opacity: condition ? 1.0 : 0.0,
-        child: Visibility(visible: condition, child: child),
-      );
 }

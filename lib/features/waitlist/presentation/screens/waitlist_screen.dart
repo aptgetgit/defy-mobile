@@ -288,7 +288,7 @@ class _WaitlistScreenState extends ConsumerState<WaitlistScreen>
                                   FocusScope.of(context).nextFocus();
                                 }
                               },
-                              inputFormatters: [
+                              inputFormatters: <TextInputFormatter>[
                                 LengthLimitingTextInputFormatter(1),
                                 FilteringTextInputFormatter.digitsOnly,
                               ],

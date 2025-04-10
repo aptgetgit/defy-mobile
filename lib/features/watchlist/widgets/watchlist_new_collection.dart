@@ -130,8 +130,6 @@ class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewColle
       _isCreating = false;
     });
 
-    // Remove background color reset since there's no animation to reset
-    // Removed: _tileKey.currentState?.resetBackgroundColor();
     
     ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
   }

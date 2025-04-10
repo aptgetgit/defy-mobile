@@ -122,61 +122,66 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
   // Rest of the class remains the same...
   Widget _buildContent() =>
     // Existing implementation
-    Card(
-      margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 0.h),
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(12.r),
-        child: Row(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Opacity(
-                      opacity: widget.isSelected && widget.isHiding ? 0.5 : 1,
-                      child: ClipOval(
-                        child: Image.asset(widget.token.imagePath, width: 44.w, height: 44.h),
+    GestureDetector(
+      onTap: () {
+        widget.onTap?.call();
+      },
+      child: Card(
+        margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 0.h),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(12.r),
+          child: Row(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      Opacity(
+                        opacity: widget.isSelected && widget.isHiding ? 0.5 : 1,
+                        child: ClipOval(
+                          child: Image.asset(widget.token.imagePath, width: 44.w, height: 44.h),
+                        ),
                       ),
-                    ),
-                    if (widget.isInWatchlist && widget.showSelection)
-                      Positioned(
-                        top: -4.h,
-                        left: -4.w,
-                        child: Image.asset('assets/icons/watchlist-logo2.png', width: 21.w, height: 21.h),
+                      if (widget.isInWatchlist && widget.showSelection)
+                        Positioned(
+                          top: -4.h,
+                          left: -4.w,
+                          child: Image.asset('assets/icons/watchlist-logo2.png', width: 21.w, height: 21.h),
+                        ),
+                    ],
+                  ),
+                  SizedBox(width: 16.w),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        widget.token.name,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                          color: widget.isSelected && widget.isHiding ? Colors.grey : Colors.black,
+                        ),
                       ),
-                  ],
-                ),
-                SizedBox(width: 16.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      widget.token.name,
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
-                        color: widget.isSelected && widget.isHiding ? Colors.grey : Colors.black,
+                      Text(
+                        '${widget.token.amount} ${widget.token.currency}',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: widget.isSelected && widget.isHiding ? Colors.grey : AppColors.greyLight,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${widget.token.amount} ${widget.token.currency}',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: widget.isSelected && widget.isHiding ? Colors.grey : AppColors.greyLight,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const Spacer(),
-            if (widget.showSelection) _buildSelectionTrailing() else _buildNormalTrailing(),
-          ],
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+              if (widget.showSelection) _buildSelectionTrailing() else _buildNormalTrailing(),
+            ],
+          ),
         ),
       ),
     );

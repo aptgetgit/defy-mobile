@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
@@ -133,23 +134,50 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
   const TabBarDelegate(this.tabBar);
   final Widget tabBar;
 
+  final double _height = 56.0;
+  
   @override
-  double get minExtent => kToolbarHeight;
+  double get minExtent => _height;
 
   @override
-  double get maxExtent => kToolbarHeight;
+  double get maxExtent => _height;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => Material(
     color: Colors.white,
     elevation: overlapsContent ? 4 : 0,
     shadowColor: Colors.black.withOpacity(0.1),
-    child: Padding(
-      padding: EdgeInsets.only(top: 10.h, left: 12.w, right: 12.w),
-      child: tabBar,
+    child: SizedBox(
+      height: _height,
+      child: Padding(
+        padding: EdgeInsets.only(top: 10.h, left: 12.w, right: 12.w),
+        child: tabBar,
+      ),
     ),
   );
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
+
+  @override
+  OverScrollHeaderStretchConfiguration? get stretchConfiguration => null;
+  
+  // This is the key fix - ensure that layoutExtent never exceeds paintExtent
+  @override
+  FloatingHeaderSnapConfiguration? get snapConfiguration => null;
+
+  SliverGeometry _adjustLayoutExtent(SliverGeometry geometry) {
+    // If the layoutExtent is slightly greater than paintExtent, adjust it
+    if (geometry.layoutExtent > geometry.paintExtent) {
+      return SliverGeometry(
+        scrollExtent: geometry.scrollExtent,
+        paintExtent: geometry.paintExtent,
+        layoutExtent: geometry.paintExtent, // Use paintExtent as layoutExtent
+        maxPaintExtent: geometry.maxPaintExtent,
+        hasVisualOverflow: geometry.hasVisualOverflow,
+        cacheExtent: geometry.cacheExtent,
+      );
+    }
+    return geometry;
+  }
 }

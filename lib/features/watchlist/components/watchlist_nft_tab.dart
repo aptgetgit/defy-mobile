@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../wallet/presentation/providers/wallet_provider.dart';
 import '../presentation/providers/watchlist_new_collection_model.dart';
 import '../presentation/providers/watchlist_new_collection_provider.dart';
-import '../presentation/watchlist_cute_nft_screen.dart';
+
+
 import '../widgets/watchlist_collection_tile.dart';
 import '../widgets/watchlist_cute_nft_tile.dart';
 import '../widgets/watchlist_grid_tile.dart';
@@ -35,11 +36,11 @@ class WatchlistNFTTab extends ConsumerWidget {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => const WatchlistCuteNFTScreen(),
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute<void>(
+                    //     builder: (BuildContext context) => const WatchlistTransitionScreen(),
+                    //   ),
+                    // );
                   },
                   child: Material(
                     color: Colors.transparent,

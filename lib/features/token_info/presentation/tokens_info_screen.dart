@@ -7,14 +7,15 @@ import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_bottom_nav_bar_with_holders.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
-import 'shared/staking_chart.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
 import 'about_page.dart';
-import 'activity_page.dart';
 import 'analytics_page.dart';
+import 'explore_page.dart';
+import 'history_page.dart';
 import 'price_alert_page.dart';
+import 'shared/staking_chart.dart';
 import 'shared/token_watchlist_bottom_sheet.dart';
 
 class TokensInfoScreen extends StatefulWidget {
@@ -25,6 +26,10 @@ class TokensInfoScreen extends StatefulWidget {
 }
 
 class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerProviderStateMixin {
+  // Add state variable for current price
+  double _currentPrice = 2212.21; // Initial value
+  
+  // Rest of your existing variables
   final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
   final double _investmentAmount = 10000;
@@ -43,7 +48,7 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _scrollController.addListener(() {
       setState(() {
         _scrollOffset = _scrollController.offset;
@@ -73,7 +78,7 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
     
     // Aptos text position
     final double startX = 16.w;
-    final double startY = screenHeight * 0.24; // Use percentage of screen height
+    final double startY = screenHeight * 0.24 - 26.h; // Moved 26px up (was 14px)
     final double endX = (screenWidth - 100.w) / 2 - 40.w;
     final double endY = safeTopPosition + 12.h; // Relative to safe top position
     
@@ -81,28 +86,14 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
     final double animatedY = startY - (startY - endY) * scrollProgress;
     final double textSize = (24 - (8 * scrollProgress)).sp;
 
-    // APT label position
+    // APT label position - make it fade out instead of moving
     final double investorsStartX = 16.w;
-    final double investorsStartY = screenHeight * 0.28; // Use percentage of screen height
-    final double investorsEndX = (screenWidth - 200.w) / 2 + 60.w;
-    final double investorsEndY = safeTopPosition + 16.h; // Align with main text
-
-    final double animatedInvestorsX = investorsStartX + (investorsEndX - investorsStartX) * scrollProgress;
-    final double animatedInvestorsY = investorsStartY - (investorsStartY - investorsEndY) * scrollProgress;
+    final double investorsStartY = screenHeight * 0.29 - 26.h; // Moved 26px up (was 14px)
     final double investorsTextSize = (14 - (2 * scrollProgress)).sp;
-
-    // Measure the width of the "APT" text for accurate positioning
-    final TextPainter investorsTextPainter = TextPainter(
-      text: TextSpan(
-        text: 'APT',
-        style: TextStyle(fontSize: investorsTextSize, color: Colors.grey[600]),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
 
     // Amount text position
     final double amountStartX = screenWidth - 120.w;
-    final double amountStartY = screenHeight * 0.24; // Use percentage of screen height
+    final double amountStartY = screenHeight * 0.24 - 26.h; // Moved 26px up (was 14px)
     final double amountEndX = (screenWidth - 200.w) / 2 + 11.w;
     final double amountEndY = safeTopPosition + 33.h; // Position below title
 
@@ -110,25 +101,21 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
     final double animatedAmountY = amountStartY - (amountStartY - amountEndY) * scrollProgress;
     final double amountTextSize = (24 - (12 * scrollProgress)).sp;
 
-    // Percentage indicator position
+    // Percentage indicator position - make it fade out instead of moving
     final double percentageStartX = screenWidth - 67.w;
-    final double percentageStartY = screenHeight * 0.28; // Use percentage of screen height
-    final double percentageEndX = investorsStartX + investorsTextPainter.width + 127.w;
-    final double percentageEndY = safeTopPosition + 33.h; // Align with amount text
+    final double percentageStartY = screenHeight * 0.29 - 26.h; // Moved 26px up (was 14px)
 
-    final double animatedPercentageX = percentageStartX + (percentageEndX - percentageStartX) * scrollProgress;
-    final double animatedPercentageY = percentageStartY - (percentageStartY - percentageEndY) * scrollProgress;
     final double percentageTextSize = (14 - (2 * scrollProgress)).sp;
 
     // Logo image position
     final double imageStartX = screenWidth / 2 - 180.w;
-    final double imageStartY = screenHeight * 0.18; // Use percentage of screen height
+    final double imageStartY = screenHeight * 0.18 - 26.h; // Moved 26px up (was 14px)
     final double imageEndX = 60.w;
     final double imageEndY = safeTopPosition + 15.h; // Relative to safe top position
 
     final double animatedImageX = imageStartX + (imageEndX - imageStartX) * scrollProgress;
     final double animatedImageY = imageStartY - (imageStartY - imageEndY) * scrollProgress;
-    final double imageSize = (40 - (10 * scrollProgress)).w;
+    final double imageSize = (40 - (8 * scrollProgress)).w;
 
 
     return Scaffold(
@@ -141,10 +128,13 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                 backgroundColor: Colors.white,
                 expandedHeight: 200.h,
                 leading: IconButton(
-                  icon: Icon(
-                    PhosphorIconsBold.caretLeft,
-                    color: Colors.black,
-                    size: 24.sp,
+                  icon: Padding(
+                    padding: EdgeInsets.only(top: 4.h),
+                    child: Icon(
+                      PhosphorIconsBold.caretLeft,
+                      color: Colors.black,
+                      size: 24.sp,
+                    ),
                   ),
                   onPressed: () {
                     Navigator.pop(context);
@@ -169,12 +159,19 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  padding: EdgeInsets.symmetric(vertical: 2.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const StakingChart(),
-                      Gap(16.h),
+                      // Pass the callback to update price
+                      StakingChart(
+                        onPriceChange: (double price) {
+                          setState(() {
+                            _currentPrice = price * 1000; // Scale to dollar range (2200-4400)
+                          });
+                        },
+                      ),
+                      Gap(38.h),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20.w),
                         child: Row(
@@ -185,7 +182,7 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                           ],
                         ),
                       ),
-                      SizedBox(height: 20.h),
+                      SizedBox(height: 10.h),
                     ],
                   ),
                 ),
@@ -196,7 +193,8 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                     tabController: _tabController,
                     tabs: const <String>[
                       'About',
-                      'Activity',
+                      'Explore',
+                      'History',
                       'Analytics',
                     ],
                   ),
@@ -204,16 +202,46 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
                 pinned: true,
               ),
               SliverToBoxAdapter(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height + 275.h,
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: const <Widget>[
-                      AboutPage(),
-                      ActivityPage(),
-                      AnalyticsPage(),
-                    ],
-                  ),
+                child: AnimatedBuilder(
+                  animation: _tabController,
+                  builder: (BuildContext context, Widget? child) {
+                    // Calculate the current tab index, including partial transitions
+                    final double index = _tabController.animation?.value ?? _tabController.index.toDouble();
+                    
+                    // Define different heights for each tab
+                    final List<double> tabHeights = <double>[
+                      MediaQuery.of(context).size.height + 100.h, // About page
+                      MediaQuery.of(context).size.height, // Explore page
+                      MediaQuery.of(context).size.height + 600.h,
+                      MediaQuery.of(context).size.height + 700.h, // Analytics page
+                    ];
+                    
+                    // Calculate height during tab transitions
+                    double height;
+                    if (index.floor() == index.ceil()) {
+                      // Not transitioning between tabs
+                      height = tabHeights[index.toInt()];
+                    } else {
+                      // Transitioning between tabs - interpolate heights
+                      final double lowerHeight = tabHeights[index.floor()];
+                      final double upperHeight = tabHeights[index.ceil()];
+                      final double t = index - index.floor();
+                      height = lowerHeight + (upperHeight - lowerHeight) * t;
+                    }
+                    
+                    return SizedBox(
+                      height: height,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: <Widget>[
+                          const AboutPage(),
+                          const ExplorePage(),
+                          HistoryPage(),
+                          const AnalyticsPage(),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -230,21 +258,25 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
             ),
           ),
           Positioned(
-            left: animatedInvestorsX,
-            top: animatedInvestorsY,
-            child: Text(
-              'APT',
-              style: TextStyle(
-                fontSize: investorsTextSize,
-                color: Colors.grey[600],
+            left: investorsStartX,
+            top: investorsStartY,
+            child: Opacity(
+              opacity: 1.0 - scrollProgress,
+              child: Text(
+                'APT',
+                style: TextStyle(
+                  fontSize: investorsTextSize,
+                  color: Colors.grey[600],
+                ),
               ),
             ),
           ),
+          // Replace hardcoded price text with dynamic value
           Positioned(
             left: animatedAmountX,
             top: animatedAmountY,
             child: Text(
-              r'$2,212.21',
+              '\$${_currentPrice.toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: amountTextSize,
                 color: Colors.black,
@@ -262,25 +294,28 @@ class _TokensInfoScreenState extends State<TokensInfoScreen> with SingleTickerPr
             ),
           ),
           Positioned(
-            left: animatedPercentageX,
-            top: animatedPercentageY,
-            child: Row(
-              children: <Widget>[
-                Text(
-                  '3.16%',
-                  style: TextStyle(
-                    fontSize: percentageTextSize,
-                    color: Colors.green,
-                    fontWeight: FontWeight.w500,
+            left: percentageStartX,
+            top: percentageStartY,
+            child: Opacity(
+              opacity: 1.0 - scrollProgress,
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    '3.16%',
+                    style: TextStyle(
+                      fontSize: percentageTextSize,
+                      color: Colors.green,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                Gap(4.w),
-                Icon(
-                  PhosphorIconsRegular.arrowDown,
-                  size: 14.sp,
-                  color: Colors.green,
-                ),
-              ],
+                  Gap(4.w),
+                  Icon(
+                    PhosphorIconsRegular.arrowDown,
+                    size: 14.sp,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

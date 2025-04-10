@@ -9,8 +9,9 @@ import '../../../shared/presentation/widgets/custom_bottom_nav_bar_with_holders.
 import '../../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../../../stake/widgets/stake_chart.dart';
 import '../../../token_info/presentation/about_page.dart';
-import '../../../token_info/presentation/activity_page.dart';
+import '../../../token_info/presentation/explore_page.dart';
 import '../../../token_info/presentation/analytics_page.dart';
+import '../../../token_info/presentation/history_page.dart';
 import 'explore_tokens_screen.dart';
 
 class ExploreTokenInfoScreen extends StatefulWidget {
@@ -148,7 +149,8 @@ class _ExploreTokenInfoScreenState extends State<ExploreTokenInfoScreen> with Si
                     tabController: _tabController,
                     tabs: const <String>[
                       'About',
-                      'Activity',
+                      'Explore',
+                      'History',
                       'Analytics',
                     ],
                   ),
@@ -158,10 +160,11 @@ class _ExploreTokenInfoScreenState extends State<ExploreTokenInfoScreen> with Si
               SliverFillRemaining(
                 child: TabBarView(
                   controller: _tabController,
-                  children: const <Widget>[
-                    AboutPage(),
-                    ActivityPage(),
-                    AnalyticsPage(),
+                  children: <Widget>[
+                    const AboutPage(),
+                    const ExplorePage(),
+                    HistoryPage(),
+                    const AnalyticsPage(),
                   ],
                 ),
               ),

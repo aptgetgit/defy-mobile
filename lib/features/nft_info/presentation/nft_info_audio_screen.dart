@@ -6,9 +6,9 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
+
+
 import '../../token_info/presentation/about_page.dart';
-import '../../token_info/presentation/activity_page.dart';
-import '../../token_info/presentation/analytics_page.dart';
 import '../../token_info/presentation/price_alert_page.dart';
 import '../../token_info/presentation/shared/token_watchlist_bottom_sheet.dart';
 import '../../token_info/providers/token_info_controller.dart';
@@ -18,6 +18,8 @@ import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
 import '../models/audio.dart';
 import '../models/audio_player_provider.dart';
 import '../shared/nft_info_bottom_navbar.dart';
+import 'analytics_page.dart';
+import 'order_page.dart';
 
 
 
@@ -57,7 +59,7 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
     _scrollController = ScrollController();
     controller = ref.read(tokensControllerProvider.notifier);
     _scrollController.addListener(_onScroll);
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this); // Changed to 3 tabs for About, Orders, Analytics
   }
 
   @override
@@ -102,265 +104,342 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
     final double imageHeight = 353.h;
     final double appBarImageSize = 32.w;
     final double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
+    final double safeTopPosition = statusBarHeight + 12.h;
     final AudioPlayerProvider audioProvider = ref.watch(audioPlayerProvider);
-
+    
+    // Calculate positions for NFT name text
+    final double nameStartX = 24.w;
+    final double nameStartY = appBarExpandedHeight - 65.h;
+    final double nameEndY = safeTopPosition - 6.h;
+    final double nameEndX = 100.w;
+    
+    // Calculate positions for Fantasy Ruins text
+    final double ownerStartX = 24.w;
+    final double ownerStartY = appBarExpandedHeight - 22.h;
+    final double ownerEndY = nameEndY + 20.h;
+    final double ownerEndX = nameEndX;
+  
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ColoredBox(
-        color: Colors.white,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            _buildSliverAppBar(context),
-            SliverToBoxAdapter(
-              child: ColoredBox(
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      alignment: Alignment.topCenter,
+      body: Stack(
+        children: <Widget>[
+          ColoredBox(
+            color: Colors.white,
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: <Widget>[
+                _buildSliverAppBar(context),
+                SliverToBoxAdapter(
+                  child: ColoredBox(
+                    color: Colors.white,
+                    child: Column(
                       children: <Widget>[
-                        // Image.asset(
-                        //   'assets/images/cyborg2.png',
-                        //   width: imageWidth,
-                        //   height: imageHeight,
-                        //   fit: BoxFit.cover,
-                        // ),
-                        SizedBox(
-                          width: double.infinity,
-                          height: imageHeight,
-                          child: AnimatedBuilder(
-                            animation: _scrollController,
-                            builder: (BuildContext context, Widget? child) {
-                              final double easeInProgress = _scrollController.hasClients
-                                ? Curves.easeInOut.transform(
-                                    (_scrollController.offset / (maxScrollExtent * 5))
-                                        .clamp(0.0, 1.0),
-                                  )
-                                : 0.0;
-                    
-                              final double animatedWidth =
-                                  imageWidth - (imageWidth - appBarImageSize) * easeInProgress;
-                              final double animatedHeight =
-                                  imageHeight - (imageHeight - appBarImageSize) * easeInProgress;
-                    
-                              final double imageXOffset = (353.w - imageWidth) / 2 + 18.w;
-                              final double targetXOffset = 16.w + 24.w; // Include the horizontal padding
-                    
-                              final double animatedX = imageXOffset +
-                                  (targetXOffset - imageXOffset) * easeInProgress;
-                    
-                              const double imageYOffset = 0;
-                              final double targetYOffset = 16.h;
-                    
-                              final double animatedY = imageYOffset +
-                                  (targetYOffset - imageYOffset) * easeInProgress;
-                    
-                              // Now AnimatedPositioned is a direct child of Stack
-                              return Stack(
+                        Gap(100.h),
+                        Stack(
+                          alignment: Alignment.topCenter,
+                          children: <Widget>[
+                            AnimatedBuilder(
+                              animation: _scrollController,
+                              builder: (BuildContext context, Widget? child) {
+                                final double scrollProgress = _scrollController.hasClients
+                                    ? (_scrollController.offset / maxScrollExtent)
+                                        .clamp(0.0, 1.0)
+                                    : 0.0;
+                        
+                                final double animatedWidth =
+                                    imageWidth - (imageWidth - appBarImageSize) * scrollProgress;
+                                final double animatedHeight =
+                                    imageHeight - (imageHeight - appBarImageSize) * scrollProgress;
+                        
+                                final double imageXOffset = (353.w - imageWidth) / 2;
+                                final double targetXOffset = 16.w;
+                        
+                                final double animatedX = imageXOffset +
+                                    (targetXOffset - imageXOffset) * scrollProgress;
+                        
+                                const double imageYOffset = 0;
+                                final double targetYOffset = 16.h;
+                        
+                                final double animatedY = imageYOffset +
+                                    (targetYOffset - imageYOffset) * scrollProgress;
+                        
+                                return SizedBox(
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                                      child: AnimatedPositioned(
+                                        duration: const Duration(milliseconds: 300),
+                                        top: animatedY,
+                                        left: animatedX,
+                                        child: Image.asset(
+                                          'assets/images/cyborg2.png',
+                                          width: animatedWidth,
+                                          height: animatedHeight,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        Gap(26.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Column(
+                            children: <Widget>[
+                              //song duration progress
+                              Column(
                                 children: <Widget>[
-                                  AnimatedPositioned(
-                                    duration: const Duration(milliseconds: 300),
-                                    top: animatedY,
-                                    left: animatedX,
-                                    child: Image.asset(
-                                      'assets/images/cyborg2.png',
-                                      width: animatedWidth,
-                                      height: animatedHeight,
-                                      fit: BoxFit.cover,
+                                  //song progress bar
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                    child: SliderTheme(
+                                      data: SliderThemeData(
+                                        overlayShape: SliderComponentShape.noOverlay,
+                                        trackHeight: 4.h,
+                                        trackShape: const RectangularSliderTrackShape(),
+                                        thumbShape:
+                                            RoundSliderThumbShape(enabledThumbRadius: 3.r),
+                                      ),
+                                      child: Slider(
+                                        max: audioProvider.totalDuration.inSeconds.toDouble(),
+                                        value: audioProvider.currentDuration.inSeconds.toDouble(),
+                                        onChanged: (double value) {
+                                          audioProvider.seekTo(Duration(seconds: value.toInt()));
+                                        },
+                                        activeColor: Colors.black,
+                                        inactiveColor: Colors.grey[100],
+                                        thumbColor: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 8.h),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        //start time
+                                        Text(
+                                          formatTime(audioProvider.currentDuration),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+    
+                                        //end time
+                                        Text(
+                                          formatTime(audioProvider.totalDuration),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Gap(12.h),
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 20.w),
-                                child: Text('Cyborg 2078 #5623',
-                                    style: TextStyle(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.black,
-                                    ),),
                               ),
-                            ),
-                            Gap(2.h),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Gap(26.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Column(
-                        children: <Widget>[
-                          //song duration progress
-                          Column(
-                            children: <Widget>[
-                              //song progress bar
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                child: SliderTheme(
-                                  data: SliderThemeData(
-                                    overlayShape: SliderComponentShape.noOverlay,
-                                    trackHeight: 4.h,
-                                    trackShape: const RectangularSliderTrackShape(),
-                                    thumbShape:
-                                        RoundSliderThumbShape(enabledThumbRadius: 3.r),
-                                  ),
-                                  child: Slider(
-                                    max: audioProvider.totalDuration.inSeconds.toDouble(),
-                                    value: audioProvider.currentDuration.inSeconds.toDouble(),
-                                    onChanged: (double value) {
-                                      audioProvider.seekTo(Duration(seconds: value.toInt()));
-                                    },
-                                    activeColor: Colors.black,
-                                    inactiveColor: Colors.grey[100],
-                                    thumbColor: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 8.h),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    //start time
-                                    Text(
-                                      formatTime(audioProvider.currentDuration),
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12.sp,
-                                      ),
-                                    ),
-
-                                    //end time
-                                    Text(
-                                      formatTime(audioProvider.totalDuration),
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          Gap(20.h),
-
-                          //playback controls
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: IconButton(
-                                  iconSize: 40.sp,
-                                  icon: Icon(Icons.replay_10, size: 40.sp),
-                                  onPressed: audioProvider.seekBackward,
-                                ),
-                              ),
-                              Gap(20.w),
-
-                              //play/pause button
-                              Expanded(
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.black,
-                                  foregroundColor: Colors.white,
-                                  radius: 27.r,
-                                  child: Center(
+    
+                              Gap(20.h),
+    
+                              //playback controls
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
                                     child: IconButton(
-                                      iconSize: 30.sp,
-                                      icon: Icon(
-                                        audioProvider.isPlaying
-                                          ? PhosphorIconsFill.pause
-                                          : PhosphorIconsFill.play,
-                                        size: 30.sp,
-                                      ),
-                                      onPressed: () {
-                                        if (!audioProvider.isPlaying) {
-                                          audioProvider.playAudio(song.audioPath);
-                                        } else {
-                                          audioProvider.pauseOrResume();
-                                        }
-                                      },
+                                      iconSize: 40.sp,
+                                      icon: Icon(Icons.replay_10, size: 40.sp),
+                                      onPressed: audioProvider.seekBackward,
                                     ),
                                   ),
-                                ),
-                              ),
-                              Gap(20.w),
-
-                              //+15 seconds
-                              Expanded(
-                                child: IconButton(
-                                  iconSize: 32.sp,
-                                  icon: Icon(PhosphorIconsRegular.shareNetwork, size: 32.sp),
-                                  onPressed: () {},
-                                ),
+                                  Gap(20.w),
+    
+                                  //play/pause button
+                                  Expanded(
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                      radius: 27.r,
+                                      child: Center(
+                                        child: IconButton(
+                                          iconSize: 30.sp,
+                                          icon: Icon(
+                                            audioProvider.isPlaying
+                                              ? PhosphorIconsFill.pause
+                                              : PhosphorIconsFill.play,
+                                            size: 30.sp,
+                                          ),
+                                          onPressed: () {
+                                            if (!audioProvider.isPlaying) {
+                                              audioProvider.playAudio(song.audioPath);
+                                            } else {
+                                              audioProvider.pauseOrResume();
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Gap(20.w),
+    
+                                  //+15 seconds
+                                  Expanded(
+                                    child: IconButton(
+                                      iconSize: 32.sp,
+                                      icon: Icon(PhosphorIconsRegular.shareNetwork, size: 32.sp),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
+                        Gap(35.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              _buildInfoContainer('100 APT', 'BOUGHT AT'),
+                              _buildInfoContainer('3', 'ACTIVE BIDS'),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverPersistentHeader(
+                  delegate: TabBarDelegate(
+                    CustomTabBar(
+                      tabController: _tabController,
+                      tabs: const <String>[
+                        'About',    // Keep the About tab
+                        'Orders',   // Add Orders tab
+                        'Analytics' // Add Analytics tab
+                      ],
+                    ),
+                  ),
+                  pinned: true,
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 1.3,
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: <Widget>[
+                        const AboutPage(), // Keep the About page
+                        OrderPage(),      // Add Orders page
+                        const AnalyticsOverviewPage(), // Add Analytics page
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          AnimatedBuilder(
+            animation: _scrollController,
+            builder: (BuildContext context, Widget? child) {
+              // Recalculate positions based on current scroll
+              final double scrollProgress = _scrollController.hasClients
+                  ? (_scrollController.offset / maxScrollExtent).clamp(0.0, 1.0)
+                  : 0.0;
+              
+              final double nameAnimatedX = nameStartX + (nameEndX - nameStartX) * scrollProgress;
+              final double nameAnimatedY = nameStartY + (nameEndY - nameStartY) * scrollProgress;
+              final double nameTextSize = (22 - (8 * scrollProgress)).sp;
+              
+              final double ownerAnimatedX = ownerStartX + (ownerEndX - ownerStartX) * scrollProgress;
+              final double ownerAnimatedY = ownerStartY + (ownerEndY - ownerStartY) * scrollProgress;
+              final double ownerTextSize = (14 - (2 * scrollProgress)).sp;
+              
+              return Stack(
+                children: <Widget>[
+                  Positioned(
+                    left: nameAnimatedX,
+                    top: nameAnimatedY,
+                    child: Text(
+                      'Monkey #1212',
+                      style: TextStyle(
+                        fontSize: nameTextSize,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.black,
                       ),
                     ),
-                    Gap(35.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          _buildInfoContainer('100 APT', 'BOUGHT AT'),
-                          _buildInfoContainer('3', 'ACTIVE BIDS'),
-                        ],
-                      ),
+                  ),
+                  Positioned(
+                    left: ownerAnimatedX,
+                    top: ownerAnimatedY,
+                    child: Row(
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/images/Fantasy-Ruins.png',
+                          width: 16.w,
+                          height: 16.h,
+                        ),
+                        Gap(4.w),
+                        Text(
+                          'Fantasy Ruins',
+                          style: TextStyle(
+                            fontSize: ownerTextSize,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.greyLight,
+                          ),
+                        ),
+                        Gap(4.w),
+                        Icon(
+                          PhosphorIconsFill.sealCheck,
+                          color: AppColors.blue,
+                          size: 16.sp,
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
-              ),
-            ),
-            SliverPersistentHeader(
-              delegate: TabBarDelegate(
-                CustomTabBar(
-                  tabController: _tabController,
-                  tabs: const <String>[
-                    'About',
-                    'Activity',
-                    'Analytics',
-                  ],
-                ),
-              ),
-              pinned: true,
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 1.3,
-                child: TabBarView(
-                  controller: _tabController,
-                  children: const <Widget>[
-                    SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: AboutPage(),
+                  ),
+                ],
+              );
+            },
+          ),
+          Positioned(
+            top: appBarExpandedHeight - 65.h, // Position below app bar
+            right: 24.w,
+            child: AnimatedOpacity(
+              opacity: _showTitle ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    r'$201.21',
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
                     ),
-                    ActivityPage(),
-                    AnalyticsPage(),
-                  ],
-                ),
+                  ),
+                  Gap(12.h),
+                  Text(
+                    'Floor Price',
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyLight,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: const NftInfoBottomNavBar(),
     );
@@ -416,54 +495,53 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
       collapsedHeight: 60.h,
       centerTitle: false,
       actions: <Widget>[
-        // Conditionally show icons based on scroll position
-        if (!_showTitle)
-          IconButton(
-            icon: const Icon(
-              PhosphorIconsRegular.star,
-              color: AppColors.black,
-            ),
-            onPressed: _showWatchlistBottomSheet,
+        IconButton(
+          icon: Icon(
+            PhosphorIconsRegular.star,
+            color: AppColors.black,
+            size: 24.sp,
           ),
-        if (!_showTitle)
-          Stack(
-            children: <Widget>[
-              IconButton(
-                icon: const Icon(
-                  PhosphorIconsRegular.bell,
-                  color: AppColors.black,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => PriceAlertPage(
-                        onAlertCreated: () {
-                          setState(() {
-                            _alertCreated = true;
-                          });
-                        },
-                      ),
-                    ),
-                  );
-                },
+          onPressed: _showWatchlistBottomSheet,
+        ),
+        Stack(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                PhosphorIconsRegular.bell,
+                color: AppColors.black,
+                size: 24.sp,
               ),
-              if (_alertCreated)
-                Positioned(
-                  top: 8.h,
-                  right: 8.w,
-                  child: Container(
-                    width: 8.w,
-                    height: 8.h,
-                    decoration: const BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => PriceAlertPage(
+                      onAlertCreated: () {
+                        setState(() {
+                          _alertCreated = true;
+                        });
+                      },
                     ),
                   ),
+                );
+              },
+            ),
+            if (_alertCreated)
+              Positioned(
+                top: 8.h,
+                right: 8.w,
+                child: Container(
+                  width: 8.w,
+                  height: 8.h,
+                  decoration: const BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-            ],
-          ),
-        // Play button that appears when scrolled (when _showTitle is true)
+              ),
+          ],
+        ),
+        // Play button that appears when scrolled
         if (_showTitle)
           AnimatedOpacity(
             opacity: _showTitle ? 1.0 : 0.0,
@@ -485,79 +563,18 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
               },
             ),
           ),
-        Gap(14.w),
+        Gap(8.w),
       ],
       titleSpacing: 0,
-      title: _showTitle
-          ? AnimatedOpacity(
-              opacity: _showTitle ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              child: Row(
-                children: <Widget>[
-                  _buildPoolLogo(),
-                  SizedBox(width: 10.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          nftName,
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.black,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Gap(4.h),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              owner,
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: AppColors.greyLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Gap(6.w),
-                            Icon(
-                              PhosphorIconsFill.sealCheck,
-                              color: AppColors.blue,
-                              size: 16.sp,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : Row(
-              children: <Widget>[
-                Image.asset(
-                  'assets/images/Fantasy-Ruins.png',
-                  width: 32.w,
-                  height: 32.h,
-                  fit: BoxFit.cover,
-                ),
-                Gap(8.w),
-                Text('Fantasy Ruins',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.black,
-                    ),),
-                Gap(4.w),
-                Icon(
-                  PhosphorIconsFill.sealCheck,
-                  color: AppColors.blue,
-                  size: 20.sp,
-                ),
-              ],
-            ),
+      title: AnimatedOpacity(
+        opacity: _showTitle ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 300),
+        child: Row(
+          children: <Widget>[
+            _buildPoolLogo(),
+          ],
+        ),
+      ),
     );
   }
 

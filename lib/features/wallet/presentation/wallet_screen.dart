@@ -563,11 +563,6 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
             child: AnimatedContainer(
               duration: Duration(milliseconds: _isAnimatingHeader ? 300 : 0),
               decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: AppColors.greyVeryLight,
-                  ),
-                ),
               ),
               padding: const EdgeInsets.only(),
               child: Row(
@@ -628,6 +623,8 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                               key: const ValueKey('tabs'),
                               tabController: _tabController,
                               tabs: const <String>['Token', 'NFT'],
+                              
+                              
                             ),
                     ),
                   ),

@@ -9,8 +9,9 @@ import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../../token_info/presentation/about_page.dart';
-import '../../token_info/presentation/activity_page.dart';
+import '../../token_info/presentation/explore_page.dart';
 import '../../token_info/presentation/analytics_page.dart';
+import '../../token_info/presentation/history_page.dart';
 import '../../token_info/presentation/price_alert_page.dart';
 import '../../token_info/presentation/shared/token_watchlist_bottom_sheet.dart';
 import '../../token_info/providers/token_info_controller.dart';
@@ -55,7 +56,7 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
     _scrollController = ScrollController();
     controller = ref.read(tokensControllerProvider.notifier);
     _scrollController.addListener(_onScroll);
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -194,7 +195,8 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
                   tabController: _tabController,
                   tabs: const <String>[
                     'About',
-                    'Activity',
+                    'Explore',
+                    'History',
                     'Analytics',
                   ],
                 ),
@@ -204,9 +206,10 @@ class _NftGifScreenState extends ConsumerState<NftGifScreen>
             SliverFillRemaining(
               child: TabBarView(
                 controller: _tabController,
-                children: const <Widget>[
+                children:  <Widget>[
                   AboutPage(),
-                  ActivityPage(),
+                  ExplorePage(),
+                  HistoryPage(),
                   AnalyticsPage(),
                 ],
               ),

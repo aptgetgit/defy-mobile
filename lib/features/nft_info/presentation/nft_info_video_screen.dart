@@ -7,9 +7,8 @@ import 'package:video_player/video_player.dart';
 
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
+
 import '../../token_info/presentation/about_page.dart';
-import '../../token_info/presentation/activity_page.dart';
-import '../../token_info/presentation/analytics_page.dart';
 import '../../token_info/presentation/price_alert_page.dart';
 import '../../token_info/presentation/shared/token_watchlist_bottom_sheet.dart';
 import '../../token_info/providers/token_info_controller.dart';
@@ -18,6 +17,8 @@ import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
 import '../models/video_player_provider.dart';
 import '../shared/nft_info_bottom_navbar.dart';
+import 'analytics_page.dart';
+import 'order_page.dart';
 
 // Create a provider for VideoPlayerProvider
 final ChangeNotifierProviderFamily<VideoPlayerProvider, String> videoPlayerProvider = ChangeNotifierProvider.family<VideoPlayerProvider, String>(
@@ -37,9 +38,9 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
   final double _miniPlayerHeight = 180.h;
   final double _miniPlayerWidth = 180.w;
   String coinLogoUrl = '';
-  String nftName = 'Cyborg 2078 #5623';
+  String nftName = 'Monkey #1212'; // Changed from Cyborg to Monkey
   String owner = 'Fantasy Ruins';
-  String priceUsd = '\$2,212.21';
+  String priceUsd = '\$201.21'; // Added price
   bool _showTitle = false;
   late ScrollController _scrollController;
   late TokensController controller;
@@ -64,7 +65,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
     _scrollController = ScrollController();
     controller = ref.read(tokensControllerProvider.notifier);
     _scrollController.addListener(_onScroll);
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this); // Changed to 3 tabs for About, Orders, Analytics
     
     // Initialize the video player early
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -108,10 +109,27 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
 
   @override
   Widget build(BuildContext context) {
+    final double appBarExpandedHeight = 188.h;
     final double imageWidth = 353.w;
     final double imageHeight = 353.h;
+    // final double appBarImageSize = 32.w;
+    final double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
+    final double safeTopPosition = statusBarHeight + 12.h;
     final VideoPlayerProvider videoProvider = ref.watch(videoPlayerProvider(_videoPath));
-
+    
+    // Calculate positions for NFT name text
+    final double monkeyStartX = 24.w;
+    final double monkeyStartY = appBarExpandedHeight - 65.h;
+    final double monkeyEndY = safeTopPosition - 6.h;
+    final double monkeyEndX = 100.w;
+    
+    // Calculate positions for Fantasy Ruins text
+    final double fantasyStartX = 24.w;
+    final double fantasyStartY = appBarExpandedHeight - 22.h;
+    final double fantasyEndY = monkeyEndY + 20.h;
+    final double fantasyEndX = monkeyEndX;
+  
     return Stack(
       children: [
         Scaffold(
@@ -141,6 +159,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                               Container(
                                 width: imageWidth,
                                 height: imageHeight,
+                                margin: EdgeInsets.only(top: 90.h), // Add padding at top for text
                                 decoration: BoxDecoration(
                                   color: Colors.black,
                                   borderRadius: BorderRadius.circular(8.r),
@@ -179,32 +198,8 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                             ],
                           ),
                         ),
-                        Gap(12.h),
-                        Row(
-                          children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 20.w),
-                                    child: Text('Cyborg 2078 #5623',
-                                        style: TextStyle(
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.black,
-                                        ),),
-                                  ),
-                                ),
-                                Gap(2.h),
-                              ],
-                            ),
-                          ],
-                        ),
                         Gap(26.h),
-                        
-                        // Replace info containers with video controls
+                        // Replace previous controls section with our controls
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           child: Column(
@@ -330,9 +325,9 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                     CustomTabBar(
                       tabController: _tabController,
                       tabs: const <String>[
-                        'About',
-                        'Activity',
-                        'Analytics',
+                        'About',    // Keep the About tab
+                        'Orders',   // Add Orders tab
+                        'Analytics' // Add Analytics tab
                       ],
                     ),
                   ),
@@ -343,13 +338,10 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                     height: MediaQuery.of(context).size.height * 1.3,
                     child: TabBarView(
                       controller: _tabController,
-                      children: const <Widget>[
-                        SingleChildScrollView(
-                          physics: NeverScrollableScrollPhysics(),
-                          child: AboutPage(),
-                        ),
-                        ActivityPage(),
-                        AnalyticsPage(),
+                      children: <Widget>[
+                        const AboutPage(), // Keep the About page
+                        OrderPage(),      // Add Orders page
+                        const AnalyticsOverviewPage(), // Add Analytics page
                       ],
                     ),
                   ),
@@ -359,10 +351,112 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
           ),
           bottomNavigationBar: const NftInfoBottomNavBar(),
         ),
+        // Add animated text elements for NFT name and creator
+        AnimatedBuilder(
+          animation: _scrollController,
+          builder: (BuildContext context, Widget? child) {
+            // Recalculate positions based on current scroll
+            final double scrollProgress = _scrollController.hasClients
+                ? (_scrollController.offset / maxScrollExtent).clamp(0.0, 1.0)
+                : 0.0;
+                
+            final double monkeyAnimatedX = monkeyStartX + (monkeyEndX - monkeyStartX) * scrollProgress;
+            final double monkeyAnimatedY = monkeyStartY + (monkeyEndY - monkeyStartY) * scrollProgress;
+            final double monkeyTextSize = (22 - (8 * scrollProgress)).sp;
+            
+            final double fantasyAnimatedX = fantasyStartX + (fantasyEndX - fantasyStartX) * scrollProgress;
+            final double fantasyAnimatedY = fantasyStartY + (fantasyEndY - fantasyStartY) * scrollProgress;
+            final double fantasyTextSize = (14 - (2 * scrollProgress)).sp;
+            
+            return Material(
+              type: MaterialType.transparency,
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    left: monkeyAnimatedX,
+                    top: monkeyAnimatedY,
+                    child: Text(
+                      nftName,
+                      style: TextStyle(
+                        fontSize: monkeyTextSize,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: fantasyAnimatedX,
+                    top: fantasyAnimatedY,
+                    child: Row(
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/images/Fantasy-Ruins.png',
+                          width: 16.w,
+                          height: 16.h,
+                        ),
+                        Gap(4.w),
+                        Text(
+                          owner,
+                          style: TextStyle(
+                            fontSize: fantasyTextSize,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.greyLight,
+                          ),
+                        ),
+                        Gap(4.w),
+                        Icon(
+                          PhosphorIconsFill.sealCheck,
+                          color: AppColors.blue,
+                          size: 16.sp,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        // Add price indicator on the right
+        Positioned(
+          top: appBarExpandedHeight - 65.h, // Position below app bar
+          right: 24.w,
+          child: Material(
+            type: MaterialType.transparency,
+            child: AnimatedOpacity(
+              opacity: _showTitle ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    priceUsd,
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  Gap(12.h),
+                  Text(
+                    'Floor Price',
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyLight,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // Keep the mini player code
         if (_showMiniPlayer)
           Positioned(
             right: 16.w,
-            bottom: 16.h + (_miniPlayerHeight / 2), // Adjust based on your bottom nav height
+            bottom: 16.h + (_miniPlayerHeight / 2),
             child: _buildMiniPlayer(context, videoProvider),
           ),
       ],
@@ -496,7 +590,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Cyborg 2078',
+                        'Monkey',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12.sp,
@@ -536,139 +630,104 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
   }
 
   Widget _buildSliverAppBar(BuildContext context) => SliverAppBar(
-      elevation: 4,
-      shadowColor: Colors.black,
-      surfaceTintColor: Colors.black,
-      pinned: true,
-      backgroundColor: Colors.white,
-      leading: GestureDetector(
-        onTap: () => Navigator.pop(context),
-        child: Icon(
-          PhosphorIconsBold.caretLeft,
+    elevation: 4,
+    shadowColor: Colors.black,
+    surfaceTintColor: Colors.black,
+    pinned: true,
+    backgroundColor: Colors.white,
+    leading: GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Icon(
+        PhosphorIconsBold.caretLeft,
+        color: AppColors.black,
+        size: 24.sp,
+      ),
+    ),
+    collapsedHeight: 60.h,
+    centerTitle: false,
+    actions: <Widget>[
+      IconButton(
+        icon: Icon(
+          PhosphorIconsRegular.star,
           color: AppColors.black,
           size: 24.sp,
         ),
+        onPressed: _showWatchlistBottomSheet,
       ),
-      collapsedHeight: 60.h,
-      centerTitle: false,
-      actions: <Widget>[
-        IconButton(
-          icon: const Icon(
-            PhosphorIconsRegular.star,
-            color: AppColors.black,
-          ),
-          onPressed: _showWatchlistBottomSheet,
-        ),
-        Stack(
-          children: <Widget>[
-            IconButton(
-              icon: const Icon(
-                PhosphorIconsRegular.bell,
-                color: AppColors.black,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => PriceAlertPage(
-                      onAlertCreated: () {
-                        setState(() {
-                          _alertCreated = true;
-                        });
-                      },
-                    ),
-                  ),
-                );
-              },
+      Stack(
+        children: <Widget>[
+          IconButton(
+            icon: Icon(
+              PhosphorIconsRegular.bell,
+              color: AppColors.black,
+              size: 24.sp,
             ),
-            if (_alertCreated)
-              Positioned(
-                top: 8.h,
-                right: 8.w,
-                child: Container(
-                  width: 8.w,
-                  height: 8.h,
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => PriceAlertPage(
+                    onAlertCreated: () {
+                      setState(() {
+                        _alertCreated = true;
+                      });
+                    },
                   ),
                 ),
+              );
+            },
+          ),
+          if (_alertCreated)
+            Positioned(
+              top: 8.h,
+              right: 8.w,
+              child: Container(
+                width: 8.w,
+                height: 8.h,
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
               ),
-          ],
+            ),
+        ],
+      ),
+      // Play button that appears when scrolled
+      if (_showTitle)
+        AnimatedOpacity(
+          opacity: _showTitle ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 300),
+          child: IconButton(
+            icon: Icon(
+              ref.watch(videoPlayerProvider(_videoPath)).isPlaying
+                ? PhosphorIconsFill.pause
+                : PhosphorIconsFill.play,
+              color: AppColors.black,
+              size: 20.sp,
+            ),
+            onPressed: () {
+              final videoProvider = ref.read(videoPlayerProvider(_videoPath));
+              if (!videoProvider.isPlaying) {
+                videoProvider.playVideo();
+              } else {
+                videoProvider.pauseOrResume();
+              }
+            },
+          ),
         ),
-        Gap(8.w),
-      ],
-      titleSpacing: 0,
-      title: _showTitle
-          ? AnimatedOpacity(
-              opacity: _showTitle ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              child: Row(
-                children: <Widget>[
-                  _buildPoolLogo(),
-                  SizedBox(width: 10.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          nftName,
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.black,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Gap(4.h),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              owner,
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: AppColors.greyLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Gap(6.w),
-                            Icon(
-                              PhosphorIconsFill.sealCheck,
-                              color: AppColors.blue,
-                              size: 16.sp,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : Row(
-              children: <Widget>[
-                Image.asset(
-                  'assets/images/Fantasy-Ruins.png',
-                  width: 32.w,
-                  height: 32.h,
-                  fit: BoxFit.cover,
-                ),
-                Gap(8.w),
-                Text('Fantasy Ruins',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.black,
-                    ),),
-                Gap(4.w),
-                Icon(
-                  PhosphorIconsFill.sealCheck,
-                  color: AppColors.blue,
-                  size: 20.sp,
-                ),
-              ],
-            ),);
+      Gap(8.w),
+    ],
+    titleSpacing: 0,
+    title: AnimatedOpacity(
+      opacity: _showTitle ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 300),
+      child: Row(
+        children: <Widget>[
+          _buildPoolLogo(),
+        ],
+      ),
+    ),
+  );
 
   void _showWatchlistBottomSheet() {
     showModalBottomSheet(

@@ -16,6 +16,9 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+  double _investmentAmount = 10000;
+  String _timePeriod = '1M';
+
   @override
   Widget build(BuildContext context) {
     // Static data
@@ -86,44 +89,21 @@ class _AboutPageState extends State<AboutPage> {
               ],
             ),
           ),
-          SizedBox(height: 20.h),
-          Text('PERKS (1)', style: TextStyle(
+          Gap(20.h),
+          Text('SIMILAR TOKENS', style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
           Gap(10.h),
-          Row(
-            children: <Widget>[
-              Text(
-                'Users helping us add perks will be rewarded  ',
-                style: context.bodySmall?.copyWith(
-                  color: Colors.black.withValues(alpha: 0.5),
-                ),
-              ),
-              Icon(
-                PhosphorIconsFill.info,
-                color: Colors.black.withValues(alpha: 0.5),
-                size: 16.sp,
-              ),
-            ],
-          ),
-          Gap(20.h),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(
-              parent: ClampingScrollPhysics(),
-            ),
             child: Row(
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.all(15.w),
-                  width: context.screenWidth * 0.55,
-                  height: context.screenWidth * 0.35,
+                  height: context.screenWidth * 0.3,
+                  width: context.screenWidth * 0.45,
                   decoration: BoxDecoration(
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/cosmos-bg.png'),
-                      fit: BoxFit.fill,
-                    ),
                     color: const Color(0xffF4F4F6),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
@@ -131,331 +111,385 @@ class _AboutPageState extends State<AboutPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Image.asset(
-                            'assets/images/rocket.png',
-                            height: context.screenHeight * 0.045,
+                            'assets/icons/gui-inu.png',
+                            height: context.screenWidth * 0.09,
+                          ),
+                          Text(
+                            '↑ 3.16%',
+                            style: context.titleMedium?.copyWith(
+                              color: const Color(0xff4EB13D),
+                            ),
                           ),
                         ],
                       ),
                       const Spacer(),
                       Text(
-                        'Cosmos',
-                        style: context.titleLarge
-                            ?.copyWith(color: Colors.white),
+                        'Gui Inu',
+                        style: context.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Text(
-                        'Free Entry for Virtual Cosmic \nEvent',
-                        style: context.bodySmall
-                            ?.copyWith(color: Colors.white),
+                        'GUI',
+                        style: context.bodyMedium?.copyWith(
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(width: 20.w),
-              ],
-            ),
-          ),
-          Gap(20.h),
-          Text('SIMILAR NFTS', style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-          ),),
-          Gap(10.h),
-          Container(
-            padding: EdgeInsets.all(15.w),
-            height: context.screenWidth * 0.3,
-            width: context.screenWidth * 0.45,
-            decoration: BoxDecoration(
-              color: const Color(0xffF4F4F6),
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/icons/gui-inu.png',
-                      height: context.screenWidth * 0.09,
-                    ),
-                    Text(
-                      '↑ 3.16%',
-                      style: context.titleMedium?.copyWith(
-                        color: const Color(0xff4EB13D),
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Text(
-                  'Gui Inu',
-                  style: context.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                Gap(16.w),
+                Container(
+                  padding: EdgeInsets.all(15.w),
+                  height: context.screenWidth * 0.3,
+                  width: context.screenWidth * 0.45,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF4F4F6),
+                    borderRadius: BorderRadius.circular(20.r),
                   ),
-                ),
-                Text(
-                  'GUI',
-                  style: context.bodyMedium?.copyWith(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20.h),
-          Text('PRICE SIMULATION', style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-          ),),
-          Gap(6.h),
-          Text(
-            'The Price of APT with the market cap of another assets',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.greyLight,
-            ),
-          ),
-          SizedBox(height: 20.h),
-          Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Image.asset(
-                        'assets/icons/gui-inu.png',
-                        height: 40.h,
-                      ),
-                      Gap(12.w),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(
-                            'Gui Inu',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          Image.asset(
+                            'assets/icons/bluemove.png',
+                            height: context.screenWidth * 0.09,
                           ),
                           Text(
-                            'GUI',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Text(
-                            r'$142.39',
+                            '↑ 3.16%',
                             style: context.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            'x0.10021',
-                            style: context.bodyMedium?.copyWith(
-                              color: Colors.red,
+                              color: const Color(0xff4EB13D),
                             ),
                           ),
                         ],
                       ),
+                      const Spacer(),
+                      Text(
+                        'Bluemove',
+                        style: context.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'MOVE ',
+                        style: context.bodyMedium?.copyWith(
+                          color: Colors.grey,
+                        ),
+                      ),
                     ],
                   ),
-                ],
-              ),
-            ],
+                ),
+                Gap(16.w),
+                Container(
+                  padding: EdgeInsets.all(15.w),
+                  height: context.screenWidth * 0.3,
+                  width: context.screenWidth * 0.45,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF4F4F6),
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/icons/pancake.png',
+                            height: context.screenWidth * 0.09,
+                          ),
+                          Text(
+                            '↑ 3.16%',
+                            style: context.titleMedium?.copyWith(
+                              color: const Color(0xff4EB13D),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Text(
+                        'Pancake',
+                        style: context.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'CAKE',
+                        style: context.bodyMedium?.copyWith(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           Gap(35.h),
           Text('CALCULATOR', style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          Gap(12.h),
-          Padding(
-            padding: EdgeInsets.only(left: 12.w),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Image.asset('assets/icons/aptos-logo.png',
-                            height: 24.h,),
-                        SizedBox(width: 10.w),
-                        Text(
-                          (coin['coin_defyapp_symbol'] as String?)?.toUpperCase() ?? '',
-                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+          Gap(16.h),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('Invested amount', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                  Text('\$${_investmentAmount.round()}', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              Gap(12.h),
+              SliderTheme(
+                data: SliderThemeData(
+                  trackHeight: 4.h,
+                  overlayShape: SliderComponentShape.noOverlay,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Slider(
+                    value: _investmentAmount,
+                    max: 50000,
+                    divisions: 500,
+                    label: '\$${_investmentAmount.round()}',
+                    onChanged: (double value) => setState(() => _investmentAmount = value),
+                    activeColor: AppColors.blue,
+                    inactiveColor: AppColors.blue.withOpacity(0.25),
+                  ),
+                ),
+              ),
+              Gap(24.h),
+              Text('Over the past', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+              Gap(21.h),
+              Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () => setState(() => _timePeriod = '1M'),
+                    child: Container(
+                      width: 54.w,
+                      height: 32.h,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: _timePeriod == '1M' ? AppColors.blue : AppColors.transparent),
+                        borderRadius: BorderRadius.circular(40.r),
+                        color: AppColors.greyVeryLight,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '1M',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: _timePeriod == '1M' ? Colors.blue : AppColors.greyLight,
+                            fontSize: 14.sp,
+                          ),
                         ),
-                      ],
+                      ),
                     ),
-                    const Spacer(),
-                    Container(
-                      padding: EdgeInsets.all(10.w),
-                      width: context.screenWidth * 0.45,
-                      height: context.screenWidth * 0.125,
+                  ),
+                  Gap(13.w),
+                  GestureDetector(
+                    onTap: () => setState(() => _timePeriod = '3M'),
+                    child: Container(
+                      width: 54.w,
+                      height: 32.h,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
                       decoration: BoxDecoration(
-                        color: const Color(0xffF4F4F6),
-                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(color: _timePeriod == '3M' ? AppColors.blue : AppColors.transparent),
+                        borderRadius: BorderRadius.circular(40.r),
+                        color: AppColors.greyVeryLight,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Text(
-                            '90.02',
-                            style: context.titleMedium?.copyWith(
-                              color: Colors.black.withValues(alpha: 0.5),
-                              fontWeight: FontWeight.w600,
-                            ),
+                      child: Center(
+                        child: Text(
+                          '3M',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: _timePeriod == '3M' ? Colors.blue : AppColors.greyLight,
+                            fontSize: 14.sp,
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-                Gap(10.h),
-                Row(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Image.asset('assets/icons/usdc.png',
-                            height: 24.h,),
-                        SizedBox(width: 10.w),
-                        Text('USDC', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: EdgeInsets.all(10.w),
-                      width: context.screenWidth * 0.45,
-                      height: context.screenWidth * 0.125,
+                  ),
+                  Gap(13.w),
+                  GestureDetector(
+                    onTap: () => setState(() => _timePeriod = '6M'),
+                    child: Container(
+                      width: 54.w,
+                      height: 32.h,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
                       decoration: BoxDecoration(
-                        color: const Color(0xffF4F4F6),
-                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(color: _timePeriod == '6M' ? AppColors.blue : AppColors.transparent),
+                        borderRadius: BorderRadius.circular(40.r),
+                        color: AppColors.greyVeryLight,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Text(
-                            '90.02',
-                            style: context.titleMedium?.copyWith(
-                              color: Colors.black.withValues(alpha: 0.5),
-                              fontWeight: FontWeight.w600,
-                            ),
+                      child: Center(
+                        child: Text(
+                          '6M',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: _timePeriod == '6M' ? Colors.blue : AppColors.greyLight,
+                            fontSize: 14.sp,
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  Gap(13.w),
+                  GestureDetector(
+                    onTap: () => setState(() => _timePeriod = '1Y'),
+                    child: Container(
+                      width: 54.w,
+                      height: 32.h,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: _timePeriod == '1Y' ? AppColors.blue : AppColors.transparent),
+                        borderRadius: BorderRadius.circular(40.r),
+                        color: AppColors.greyVeryLight,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '1Y',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: _timePeriod == '1Y' ? Colors.blue : AppColors.greyLight,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Gap(24.h),
+              Row(
+                children: <Widget>[
+                  Text('\$${_investmentAmount.round()}', style: TextStyle(fontSize: 14.sp, color: Colors.black, fontWeight: FontWeight.w500)),
+                  Gap(4.w),
+                  Text('would have become', style: TextStyle(fontSize: 14.sp, color: AppColors.greyLight)),
+                  Gap(4.w),
+                  Text(r'$432.23', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600, color: Colors.black)),
+                  Gap(4.w),
+                  Text('(+2.12%)', style: TextStyle(fontSize: 14.sp, color: Colors.green, fontWeight: FontWeight.w500)),
+                ],
+              ),
+            ],
           ),
-          SizedBox(height: 20.h),
+          Gap(35.h),
           Text('ADDITIONAL INFO', style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),),
-          SizedBox(height: 20.h),
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: const Color(0xffF4F4F6),
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      PhosphorIconsRegular.scroll,
-                      color: Colors.black.withValues(alpha: 0.5),
-                      size: 24.sp,
+          SizedBox(height: 10.h),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Contract Address',
+                    style: context.titleMedium?.copyWith(
+                      color: AppColors.greyLight,
+                      fontWeight: FontWeight.w600,
                     ),
-                    SizedBox(width: 5.w),
-                    Text(
-                      'Contract',
-                      style: context.titleMedium?.copyWith(
-                        color: Colors.black.withValues(alpha: 0.5),
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    truncateMiddle('0x1::aptos_coin::AptosCoin'),
+                    overflow: TextOverflow.ellipsis,
+                    style: context.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                    const Spacer(),
-                    Text(
-                      truncateMiddle('0x1::aptos_coin::AptosCoin'),
-                      overflow: TextOverflow.ellipsis,
-                      style: context.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                ],
+              ),
+              Gap(10.h),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'MCAP',
+                    style: context.titleMedium?.copyWith(
+                      color: AppColors.greyLight,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      PhosphorIconsRegular.link,
-                      color: Colors.black.withValues(alpha: 0.5),
-                      size: 24.sp,
+                  ),
+                  const Spacer(),
+                  Text(
+                    '\$12.54B',
+                    overflow: TextOverflow.ellipsis,
+                    style: context.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                    SizedBox(width: 5.w),
-                    Text(
-                      'Chain',
-                      style: context.titleMedium?.copyWith(
-                        color: Colors.black.withValues(alpha: 0.5),
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                ],
+              ),
+              Gap(10.h),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'FDV',
+                    style: context.titleMedium?.copyWith(
+                      color: AppColors.greyLight,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const Spacer(),
-                    Text(
-                      getChainName(coin['coin_name'] as String?),
-                      overflow: TextOverflow.ellipsis,
-                      style: context.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                  const Spacer(),
+                  Text(
+                     '\$23.25M',
+                    overflow: TextOverflow.ellipsis,
+                    style: context.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      PhosphorIconsRegular.asterisk,
-                      color: Colors.black.withValues(alpha: 0.5),
-                      size: 24.sp,
+                  ),
+                ],
+              ),
+              Gap(10.h),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Total Supply',
+                    style: context.titleMedium?.copyWith(
+                      color: AppColors.greyLight,
+                      fontWeight: FontWeight.w600,
                     ),
-                    SizedBox(width: 5.w),
-                    Text(
-                      'Token Standard',
-                      style: context.titleMedium?.copyWith(
-                        color: Colors.black.withValues(alpha: 0.5),
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                  const Spacer(),
+                  Text(
+                     '#4',
+                    overflow: TextOverflow.ellipsis,
+                    style: context.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                    const Spacer(),
-                    Text(
-                      'ERC-721',
-                      overflow: TextOverflow.ellipsis,
-                      style: context.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                ],
+              ),
+              Gap(10.h),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Circulating Supply',
+                    style: context.titleMedium?.copyWith(
+                      color: AppColors.greyLight,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  const Spacer(),
+                  Text(
+                     '\$23.25M',
+                    overflow: TextOverflow.ellipsis,
+                    style: context.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
           SizedBox(height: 20.h),
         ],

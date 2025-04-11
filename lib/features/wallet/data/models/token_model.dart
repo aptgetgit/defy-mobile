@@ -1,21 +1,23 @@
 class Token {
+  // final String id;       // Add this field
+  final String name;
+  final String currency;
+  final String imagePath;
+  final double amount;
+  final String price;
+  final double balance;
+  final double percentageChange;
+  final String change;
+
   Token({
-    required this.imagePath,
+    // required this.id,    // Add this to the constructor
     required this.name,
-    required this.balance,
-    required this.amount,
     required this.currency,
-    required this.percentageChange,
+    required this.imagePath,
+    required this.amount,
     required this.price,
+    required this.balance,
+    required this.percentageChange,
     required this.change,
   });
-  
-  final String imagePath;
-  final String name;
-  final dynamic balance; // Allow both double and String
-  final double amount;
-  final String currency;
-  final double percentageChange;
-  final String price;    // Price as formatted string (e.g., "$123.45")
-  final String change;   // Change as formatted string (e.g., "+4.5%")
 }

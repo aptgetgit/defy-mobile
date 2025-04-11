@@ -143,7 +143,10 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
                       Opacity(
                         opacity: widget.isSelected && widget.isHiding ? 0.5 : 1,
                         child: ClipOval(
-                          child: Image.asset(widget.token.imagePath, width: 44.w, height: 44.h),
+                          child: Hero(
+                            tag: 'token_image_${widget.token.imagePath}',
+                            child: Image.asset(widget.token.imagePath, width: 44.w, height: 44.h),
+                          ),
                         ),
                       ),
                       if (widget.isInWatchlist && widget.showSelection)

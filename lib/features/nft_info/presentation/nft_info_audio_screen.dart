@@ -6,8 +6,6 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
-
-
 import '../../token_info/presentation/about_page.dart';
 import '../../token_info/presentation/price_alert_page.dart';
 import '../../token_info/presentation/shared/token_watchlist_bottom_sheet.dart';
@@ -22,7 +20,6 @@ import 'analytics_page.dart';
 import 'order_page.dart';
 
 
-
 class NftAudioScreen extends ConsumerStatefulWidget {
   const NftAudioScreen({super.key});
 
@@ -33,7 +30,7 @@ class NftAudioScreen extends ConsumerStatefulWidget {
 class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
     with TickerProviderStateMixin {
   String coinLogoUrl = '';
-  String nftName = 'Cyborg 2078 #5623';
+  String nftName = 'Monkey #1212';
   String owner = 'Fantasy Ruins';
   String priceUsd = '\$2,212.21';
   bool _showTitle = false;
@@ -59,7 +56,7 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
     _scrollController = ScrollController();
     controller = ref.read(tokensControllerProvider.notifier);
     _scrollController.addListener(_onScroll);
-    _tabController = TabController(length: 3, vsync: this); // Changed to 3 tabs for About, Orders, Analytics
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -99,345 +96,290 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double appBarExpandedHeight = 188.h;
     final double imageWidth = 353.w;
     final double imageHeight = 353.h;
-    final double appBarImageSize = 32.w;
-    final double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-    final double safeTopPosition = statusBarHeight + 12.h;
     final AudioPlayerProvider audioProvider = ref.watch(audioPlayerProvider);
-    
-    // Calculate positions for NFT name text
-    final double nameStartX = 24.w;
-    final double nameStartY = appBarExpandedHeight - 65.h;
-    final double nameEndY = safeTopPosition - 6.h;
-    final double nameEndX = 100.w;
-    
-    // Calculate positions for Fantasy Ruins text
-    final double ownerStartX = 24.w;
-    final double ownerStartY = appBarExpandedHeight - 22.h;
-    final double ownerEndY = nameEndY + 20.h;
-    final double ownerEndX = nameEndX;
-  
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: <Widget>[
-          ColoredBox(
-            color: Colors.white,
-            child: CustomScrollView(
-              controller: _scrollController,
-              slivers: <Widget>[
-                _buildSliverAppBar(context),
-                SliverToBoxAdapter(
-                  child: ColoredBox(
-                    color: Colors.white,
-                    child: Column(
-                      children: <Widget>[
-                        Gap(100.h),
-                        Stack(
-                          alignment: Alignment.topCenter,
-                          children: <Widget>[
-                            AnimatedBuilder(
-                              animation: _scrollController,
-                              builder: (BuildContext context, Widget? child) {
-                                final double scrollProgress = _scrollController.hasClients
-                                    ? (_scrollController.offset / maxScrollExtent)
-                                        .clamp(0.0, 1.0)
-                                    : 0.0;
-                        
-                                final double animatedWidth =
-                                    imageWidth - (imageWidth - appBarImageSize) * scrollProgress;
-                                final double animatedHeight =
-                                    imageHeight - (imageHeight - appBarImageSize) * scrollProgress;
-                        
-                                final double imageXOffset = (353.w - imageWidth) / 2;
-                                final double targetXOffset = 16.w;
-                        
-                                final double animatedX = imageXOffset +
-                                    (targetXOffset - imageXOffset) * scrollProgress;
-                        
-                                const double imageYOffset = 0;
-                                final double targetYOffset = 16.h;
-                        
-                                final double animatedY = imageYOffset +
-                                    (targetYOffset - imageYOffset) * scrollProgress;
-                        
-                                return SizedBox(
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                                      child: AnimatedPositioned(
-                                        duration: const Duration(milliseconds: 300),
-                                        top: animatedY,
-                                        left: animatedX,
-                                        child: Image.asset(
-                                          'assets/images/cyborg2.png',
-                                          width: animatedWidth,
-                                          height: animatedHeight,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        Gap(26.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Column(
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: <Widget>[
+          _buildSliverAppBar(context),
+          SliverToBoxAdapter(
+            child: ColoredBox(
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  AnimatedOpacity(
+                    opacity: _showTitle ? 0.0 : 1.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 24.w,
+                        right: 24.w,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              //song duration progress
-                              Column(
-                                children: <Widget>[
-                                  //song progress bar
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                    child: SliderTheme(
-                                      data: SliderThemeData(
-                                        overlayShape: SliderComponentShape.noOverlay,
-                                        trackHeight: 4.h,
-                                        trackShape: const RectangularSliderTrackShape(),
-                                        thumbShape:
-                                            RoundSliderThumbShape(enabledThumbRadius: 3.r),
-                                      ),
-                                      child: Slider(
-                                        max: audioProvider.totalDuration.inSeconds.toDouble(),
-                                        value: audioProvider.currentDuration.inSeconds.toDouble(),
-                                        onChanged: (double value) {
-                                          audioProvider.seekTo(Duration(seconds: value.toInt()));
-                                        },
-                                        activeColor: Colors.black,
-                                        inactiveColor: Colors.grey[100],
-                                        thumbColor: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 8.h),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        //start time
-                                        Text(
-                                          formatTime(audioProvider.currentDuration),
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12.sp,
-                                          ),
-                                        ),
-    
-                                        //end time
-                                        Text(
-                                          formatTime(audioProvider.totalDuration),
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12.sp,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                              // NFT name
+                              Text(
+                                nftName,
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.black,
+                                ),
                               ),
-    
-                              Gap(20.h),
-    
-                              //playback controls
+                              Gap(8.h),
+                              // Creator info
                               Row(
                                 children: <Widget>[
-                                  Expanded(
-                                    child: IconButton(
-                                      iconSize: 40.sp,
-                                      icon: Icon(Icons.replay_10, size: 40.sp),
-                                      onPressed: audioProvider.seekBackward,
+                                  Image.asset(
+                                    'assets/images/Fantasy-Ruins.png',
+                                    width: 16.w,
+                                    height: 16.h,
+                                  ),
+                                  Gap(4.w),
+                                  Text(
+                                    owner,
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.greyLight,
                                     ),
                                   ),
-                                  Gap(20.w),
-    
-                                  //play/pause button
-                                  Expanded(
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.black,
-                                      foregroundColor: Colors.white,
-                                      radius: 27.r,
-                                      child: Center(
-                                        child: IconButton(
-                                          iconSize: 30.sp,
-                                          icon: Icon(
-                                            audioProvider.isPlaying
-                                              ? PhosphorIconsFill.pause
-                                              : PhosphorIconsFill.play,
-                                            size: 30.sp,
-                                          ),
-                                          onPressed: () {
-                                            if (!audioProvider.isPlaying) {
-                                              audioProvider.playAudio(song.audioPath);
-                                            } else {
-                                              audioProvider.pauseOrResume();
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Gap(20.w),
-    
-                                  //+15 seconds
-                                  Expanded(
-                                    child: IconButton(
-                                      iconSize: 32.sp,
-                                      icon: Icon(PhosphorIconsRegular.shareNetwork, size: 32.sp),
-                                      onPressed: () {},
-                                    ),
+                                  Gap(4.w),
+                                  Icon(
+                                    PhosphorIconsFill.sealCheck,
+                                    color: AppColors.blue,
+                                    size: 16.sp,
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                        ),
-                        Gap(35.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
-                              _buildInfoContainer('100 APT', 'BOUGHT AT'),
-                              _buildInfoContainer('3', 'ACTIVE BIDS'),
+                              Text(
+                                r'$201.21',
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                              Gap(12.h),
+                              Text(
+                                'Floor Price',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.greyLight,
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                        SizedBox(height: 20.h),
-                      ],
-                    ),
-                  ),
-                ),
-                SliverPersistentHeader(
-                  delegate: TabBarDelegate(
-                    CustomTabBar(
-                      tabController: _tabController,
-                      tabs: const <String>[
-                        'About',    // Keep the About tab
-                        'Orders',   // Add Orders tab
-                        'Analytics' // Add Analytics tab
-                      ],
-                    ),
-                  ),
-                  pinned: true,
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 1.3,
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: <Widget>[
-                        const AboutPage(), // Keep the About page
-                        OrderPage(),      // Add Orders page
-                        const AnalyticsOverviewPage(), // Add Analytics page
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          AnimatedBuilder(
-            animation: _scrollController,
-            builder: (BuildContext context, Widget? child) {
-              // Recalculate positions based on current scroll
-              final double scrollProgress = _scrollController.hasClients
-                  ? (_scrollController.offset / maxScrollExtent).clamp(0.0, 1.0)
-                  : 0.0;
-              
-              final double nameAnimatedX = nameStartX + (nameEndX - nameStartX) * scrollProgress;
-              final double nameAnimatedY = nameStartY + (nameEndY - nameStartY) * scrollProgress;
-              final double nameTextSize = (22 - (8 * scrollProgress)).sp;
-              
-              final double ownerAnimatedX = ownerStartX + (ownerEndX - ownerStartX) * scrollProgress;
-              final double ownerAnimatedY = ownerStartY + (ownerEndY - ownerStartY) * scrollProgress;
-              final double ownerTextSize = (14 - (2 * scrollProgress)).sp;
-              
-              return Stack(
-                children: <Widget>[
-                  Positioned(
-                    left: nameAnimatedX,
-                    top: nameAnimatedY,
-                    child: Text(
-                      'Monkey #1212',
-                      style: TextStyle(
-                        fontSize: nameTextSize,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.black,
+                        ],
                       ),
                     ),
                   ),
-                  Positioned(
-                    left: ownerAnimatedX,
-                    top: ownerAnimatedY,
-                    child: Row(
+                  Container(
+                    width: imageWidth,
+                    height: imageHeight,
+                    margin: EdgeInsets.only(top: 24.h),
+                    child: Image.asset(
+                      'assets/images/cyborg2.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Gap(26.h),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Column(
                       children: <Widget>[
-                        Image.asset(
-                          'assets/images/Fantasy-Ruins.png',
-                          width: 16.w,
-                          height: 16.h,
+                        //song duration progress
+                        Column(
+                          children: <Widget>[
+                            //song progress bar
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: SliderTheme(
+                                data: SliderThemeData(
+                                  overlayShape: SliderComponentShape.noOverlay,
+                                  trackHeight: 4.h,
+                                  trackShape: const RectangularSliderTrackShape(),
+                                  thumbShape:
+                                      RoundSliderThumbShape(enabledThumbRadius: 3.r),
+                                ),
+                                child: Slider(
+                                  max: audioProvider.totalDuration.inSeconds.toDouble(),
+                                  value: audioProvider.currentDuration.inSeconds.toDouble(),
+                                  onChanged: (double value) {
+                                    audioProvider.seekTo(Duration(seconds: value.toInt()));
+                                  },
+                                  activeColor: Colors.black,
+                                  inactiveColor: Colors.grey[100],
+                                  thumbColor: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 8.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  //start time
+                                  Text(
+                                    formatTime(audioProvider.currentDuration),
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+
+                                  //end time
+                                  Text(
+                                    formatTime(audioProvider.totalDuration),
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        Gap(4.w),
-                        Text(
-                          'Fantasy Ruins',
-                          style: TextStyle(
-                            fontSize: ownerTextSize,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.greyLight,
-                          ),
-                        ),
-                        Gap(4.w),
-                        Icon(
-                          PhosphorIconsFill.sealCheck,
-                          color: AppColors.blue,
-                          size: 16.sp,
+
+                        Gap(20.h),
+
+                        //playback controls
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: IconButton(
+                                iconSize: 40.sp,
+                                icon: Icon(Icons.replay_10, size: 40.sp),
+                                onPressed: audioProvider.seekBackward,
+                              ),
+                            ),
+                            Gap(20.w),
+
+                            //play/pause button
+                            Expanded(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                radius: 27.r,
+                                child: Center(
+                                  child: IconButton(
+                                    iconSize: 30.sp,
+                                    icon: Icon(
+                                      audioProvider.isPlaying
+                                        ? PhosphorIconsFill.pause
+                                        : PhosphorIconsFill.play,
+                                      size: 30.sp,
+                                    ),
+                                    onPressed: () {
+                                      if (!audioProvider.isPlaying) {
+                                        audioProvider.playAudio(song.audioPath);
+                                      } else {
+                                        audioProvider.pauseOrResume();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Gap(20.w),
+
+                            //share button
+                            Expanded(
+                              child: IconButton(
+                                iconSize: 32.sp,
+                                icon: Icon(PhosphorIconsRegular.shareNetwork, size: 32.sp),
+                                onPressed: () {},
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ],
-              );
-            },
-          ),
-          Positioned(
-            top: appBarExpandedHeight - 65.h, // Position below app bar
-            right: 24.w,
-            child: AnimatedOpacity(
-              opacity: _showTitle ? 0.0 : 1.0,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    r'$201.21',
-                    style: TextStyle(
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.black,
+                  Gap(35.h),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        _buildInfoContainer('100 APT', 'BOUGHT AT'),
+                        _buildInfoContainer('3', 'ACTIVE BIDS'),
+                      ],
                     ),
                   ),
-                  Gap(12.h),
-                  Text(
-                    'Floor Price',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.greyLight,
-                    ),
-                  ),
+                  SizedBox(height: 20.h),
                 ],
               ),
             ),
+          ),
+          SliverPersistentHeader(
+            delegate: TabBarDelegate(
+              CustomTabBar(
+                tabController: _tabController,
+                tabs: const <String>[
+                  'About',
+                  'Orders',
+                  'Analytics',
+                ],
+              ),
+            ),
+            pinned: true,
+          ),
+          SliverToBoxAdapter(
+            child: AnimatedBuilder(
+                animation: _tabController,
+                builder: (BuildContext context, Widget? child) {
+                  // Calculate the current tab index, including partial transitions
+                  final double index = _tabController.animation?.value ?? _tabController.index.toDouble();
+                  
+                  // Define different heights for each tab
+                  final List<double> tabHeights = <double>[
+                    MediaQuery.of(context).size.height + 100.h, // About page
+                    MediaQuery.of(context).size.height + 700.h, // Explore page
+                    MediaQuery.of(context).size.height + 100.h, // Analytics page
+                  ];
+                  
+                  // Calculate height during tab transitions
+                  double height;
+                  if (index.floor() == index.ceil()) {
+                    // Not transitioning between tabs
+                    height = tabHeights[index.toInt()];
+                  } else {
+                    // Transitioning between tabs - interpolate heights
+                    final double lowerHeight = tabHeights[index.floor()];
+                    final double upperHeight = tabHeights[index.ceil()];
+                    final double t = index - index.floor();
+                    height = lowerHeight + (upperHeight - lowerHeight) * t;
+                  }
+                  
+                  return SizedBox(
+                    height: height,
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: <Widget>[
+                        const AboutPage(),
+                        OrderPage(),
+                        const AnalyticsOverviewPage(),
+                      ],
+                    ),
+                  );
+                },
+              ),
           ),
         ],
       ),
@@ -571,7 +513,45 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
         duration: const Duration(milliseconds: 300),
         child: Row(
           children: <Widget>[
-            _buildPoolLogo(),
+            Image.asset(
+              'assets/images/cyborg2.png',
+              height: 36.h,
+              width: 36.w,
+            ),
+            Gap(12.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  nftName,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.black,
+                  ),
+                ),
+                Gap(4.h),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      owner,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.greyLight,
+                      ),
+                    ),
+                    Gap(4.w),
+                    Icon(
+                      PhosphorIconsFill.sealCheck,
+                      color: AppColors.blue,
+                      size: 14.sp,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -674,9 +654,4 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
       _overlayEntry = null;
     });
   }
-
-  Widget _buildPoolLogo({bool small = false}) => Image.asset(
-        'assets/images/cyborg2.png',
-        height: small ? 24.h : 32.h,
-      );
 }

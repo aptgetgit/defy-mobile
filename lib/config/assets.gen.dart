@@ -31,6 +31,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Frame.svg
   String get frame => 'assets/icons/Frame.svg';
 
+  /// File path: assets/icons/NFT-5.png
+  AssetGenImage get nft5 => const AssetGenImage('assets/icons/NFT-5.png');
+
+  /// File path: assets/icons/aave.png
+  AssetGenImage get aave => const AssetGenImage('assets/icons/aave.png');
+
   /// File path: assets/icons/addtoken-logo.png
   AssetGenImage get addtokenLogo =>
       const AssetGenImage('assets/icons/addtoken-logo.png');
@@ -59,6 +65,15 @@ class $AssetsIconsGen {
   /// File path: assets/icons/aries.png
   AssetGenImage get aries => const AssetGenImage('assets/icons/aries.png');
 
+  /// File path: assets/icons/avatar.png
+  AssetGenImage get avatar => const AssetGenImage('assets/icons/avatar.png');
+
+  /// File path: assets/icons/avatar2.png
+  AssetGenImage get avatar2 => const AssetGenImage('assets/icons/avatar2.png');
+
+  /// File path: assets/icons/avatar3.png
+  AssetGenImage get avatar3 => const AssetGenImage('assets/icons/avatar3.png');
+
   /// File path: assets/icons/binance.png
   AssetGenImage get binance => const AssetGenImage('assets/icons/binance.png');
 
@@ -79,6 +94,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/dai.png
   AssetGenImage get dai => const AssetGenImage('assets/icons/dai.png');
+
+  /// File path: assets/icons/dydx.png
+  AssetGenImage get dydx => const AssetGenImage('assets/icons/dydx.png');
 
   /// File path: assets/icons/ethereum-circular.png
   AssetGenImage get ethereumCircular =>
@@ -169,6 +187,10 @@ class $AssetsIconsGen {
   AssetGenImage get petraWalletLogo =>
       const AssetGenImage('assets/icons/petra-wallet-logo.png');
 
+  /// File path: assets/icons/planet_nft.png
+  AssetGenImage get planetNft =>
+      const AssetGenImage('assets/icons/planet_nft.png');
+
   /// File path: assets/icons/polygon.png
   AssetGenImage get polygon => const AssetGenImage('assets/icons/polygon.png');
 
@@ -187,12 +209,22 @@ class $AssetsIconsGen {
   AssetGenImage get receiveLogo =>
       const AssetGenImage('assets/icons/receive-logo.png');
 
+  /// File path: assets/icons/rocketpool.png
+  AssetGenImage get rocketpool =>
+      const AssetGenImage('assets/icons/rocketpool.png');
+
+  /// File path: assets/icons/roclet.png
+  AssetGenImage get roclet => const AssetGenImage('assets/icons/roclet.png');
+
+  /// File path: assets/icons/scifi.png
+  AssetGenImage get scifi => const AssetGenImage('assets/icons/scifi.png');
+
+  /// File path: assets/icons/scroll.png
+  AssetGenImage get scroll => const AssetGenImage('assets/icons/scroll.png');
+
   /// File path: assets/icons/send-logo.png
   AssetGenImage get sendLogo =>
       const AssetGenImage('assets/icons/send-logo.png');
-
-  /// File path: assets/icons/share_bg.png
-  AssetGenImage get shareBg => const AssetGenImage('assets/icons/share_bg.png');
 
   /// File path: assets/icons/sort-ascending.png
   AssetGenImage get sortAscending =>
@@ -254,6 +286,9 @@ class $AssetsIconsGen {
   AssetGenImage get watchlistLogo2 =>
       const AssetGenImage('assets/icons/watchlist-logo2.png');
 
+  /// File path: assets/icons/weirdos.png
+  AssetGenImage get weirdos => const AssetGenImage('assets/icons/weirdos.png');
+
   /// File path: assets/icons/whatsapp.png
   AssetGenImage get whatsapp =>
       const AssetGenImage('assets/icons/whatsapp.png');
@@ -266,6 +301,8 @@ class $AssetsIconsGen {
         buyLogo,
         cellana,
         frame,
+        nft5,
+        aave,
         addtokenLogo,
         amnis,
         appIcon,
@@ -274,12 +311,16 @@ class $AssetsIconsGen {
         aptosLogo,
         aptos,
         aries,
+        avatar,
+        avatar2,
+        avatar3,
         binance,
         bluemove,
         btc,
         coinLogo,
         coinbase,
         dai,
+        dydx,
         ethereumCircular,
         ethereum,
         exploreLeaderboardPodium,
@@ -304,13 +345,17 @@ class $AssetsIconsGen {
         pancake,
         petraDappLogo,
         petraWalletLogo,
+        planetNft,
         polygon,
         qrLogo,
         rainbowDappLogo,
         rainbowWalletLogo,
         receiveLogo,
+        rocketpool,
+        roclet,
+        scifi,
+        scroll,
         sendLogo,
-        shareBg,
         sortAscending,
         sortDescending,
         stakingDefault,
@@ -327,6 +372,7 @@ class $AssetsIconsGen {
         warning,
         watchlistLogo,
         watchlistLogo2,
+        weirdos,
         whatsapp,
         x
       ];
@@ -515,6 +561,10 @@ class $AssetsImagesGen {
   AssetGenImage get shareQr =>
       const AssetGenImage('assets/images/share-qr.png');
 
+  /// File path: assets/images/share_bg.png
+  AssetGenImage get shareBg =>
+      const AssetGenImage('assets/images/share_bg.png');
+
   /// File path: assets/images/trading.png
   AssetGenImage get trading => const AssetGenImage('assets/images/trading.png');
 
@@ -589,6 +639,7 @@ class $AssetsImagesGen {
         rocket,
         seed,
         shareQr,
+        shareBg,
         trading,
         watchlist1,
         watchlist2,

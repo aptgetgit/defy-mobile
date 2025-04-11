@@ -229,7 +229,7 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                 final Map<String, dynamic> alert = entry.value;
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                  height: 110.h,
+                  height: 100.h,
                   margin: EdgeInsets.only(bottom: 20.h),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFFFFF),
@@ -325,7 +325,6 @@ class _PriceAlertPageState extends State<PriceAlertPage> {
                           ),
                         ],
                       ),
-                      
                       Text(
                         alert['status'] == 'active' ? ' Created 10 mins ago ' : ' Last Triggered 10 mins ago ',
                         style: TextStyle(

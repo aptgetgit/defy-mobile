@@ -15,6 +15,7 @@ import '../../shared/presentation/widgets/base_screen_nav.dart';
 import '../../shared/presentation/widgets/custom_check_box.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../../shared/presentation/widgets/nft_item.dart';
+import '../../token_info/providers/token_selection_provider.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
@@ -217,8 +218,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
           return const QrScannerScreen();
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          // QR scanner comes from top (negative offset)
-          const begin = Offset(0, -1); // Start from top (changed from bottom)
+          const begin = Offset(0, 1); // Start from bottom
           const Offset end = Offset.zero;
           const Cubic curve = Curves.easeInOut;
 
@@ -563,6 +563,11 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
             child: AnimatedContainer(
               duration: Duration(milliseconds: _isAnimatingHeader ? 300 : 0),
               decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: AppColors.greyVeryLight,
+                  ),
+                ),
               ),
               padding: const EdgeInsets.only(),
               child: Row(
@@ -623,8 +628,6 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                               key: const ValueKey('tabs'),
                               tabController: _tabController,
                               tabs: const <String>['Token', 'NFT'],
-                              
-                              
                             ),
                     ),
                   ),
@@ -782,7 +785,11 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
               ? () {
                   ref.read(walletNotifierProvider.notifier).toggleTokenSelection(actualIndex);
                 }
-              : () => const TokensInfoRoute().push(context),
+              : () {
+                // Set the selected token first, then navigate
+                ref.read(selectedTokenNotifierProvider.notifier).selectTokenByIndex(actualIndex);
+                const TokensInfoRoute().push(context);
+              },
         );
       },
     );

@@ -185,15 +185,34 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
 
   final List<String> chartTimes = <String>['1M', '3M', '6M', '1Y', 'ALL'];
 
+  double _getXRangeMin(String index) {
+    switch (index) {
+      case '6M':
+        return spots2.map((spot) => spot.x).reduce((a, b) => a < b ? a : b);
+      default:
+        return 1.0; // Default min for spots and spots3
+    }
+  }
+
+  double _getXRangeMax(String index) {
+    switch (index) {
+      case '6M':
+        return spots2.map((spot) => spot.x).reduce((a, b) => a > b ? a : b);
+      default:
+        return 13.0; // Default max for spots and spots3
+    }
+  }
+
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    return Column(
       children: <Widget>[
         Stack(
           children: <Widget>[
             // Time indicator container
             if (_currentTime != null && _touchX != null)
               Positioned(
-                left: _touchX! * (MediaQuery.of(context).size.width / 13) - 50, // Adjust position based on x
+                left: (_touchX! - _getXRangeMin(index)) * (MediaQuery.of(context).size.width / (_getXRangeMax(index) - _getXRangeMin(index))) - 50,
                 top: 10.h, // Position above the chart
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -241,7 +260,6 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
                         getTouchLineStart: (_, __) => -double.infinity,
                         getTouchLineEnd: (_, __) => double.infinity,
                         touchTooltipData: LineTouchTooltipData(
-                          // Removed the old tooltip content
                           getTooltipColor: (_) => Colors.transparent,
                           getTooltipItems: (_) => [],
                         ),
@@ -321,7 +339,7 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
             ),
           ],
         ),
-        Gap(8.h),
+        Gap(32.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -368,4 +386,5 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
         ),
       ],
     );
+  }
 }

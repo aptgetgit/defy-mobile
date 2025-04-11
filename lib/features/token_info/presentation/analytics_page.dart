@@ -348,7 +348,6 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             SizedBox(height: context.screenHeight * 0.0250),
             Row(
               children: <Widget>[
-                Gap(16.w),
                 _buildCategory(context, r'$0-$1k', 2.36, AppColors.blue),
                 Gap(20.w),
                 _buildCategory(context, r'$1k-$100k', 8.6, AppColors.green),

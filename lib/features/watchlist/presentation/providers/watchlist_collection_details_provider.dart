@@ -31,7 +31,10 @@ class WatchlistCollectionDetails extends _$WatchlistCollectionDetails {
   }
   
   void toggleDeleteMode() {
-    state = state.copyWith(isDeleteMode: !state.isDeleteMode);
+    state = state.copyWith(
+      isDeleteMode: !state.isDeleteMode,
+      // Don't modify anything else here that might interfere with deletion
+    );
   }
   
   void setSortOption(SortOption option) {
@@ -49,7 +52,25 @@ class WatchlistCollectionDetails extends _$WatchlistCollectionDetails {
   }
   
   void deleteItem(String itemId) {
-    ref.read(watchlistProvider.notifier).removeItemFromCollection(state.collection.id, itemId);
+    // Preserve the current delete mode
+    final bool currentDeleteMode = state.isDeleteMode;
+
+    // Create a new list of items excluding the deleted one
+    final List<WatchlistItem> updatedItems = state.collection.items
+        .where((item) => item.id != itemId)
+        .toList();
+
+    // Update the collection with the new list of items
+    final WatchlistCollection updatedCollection = state.collection.copyWith(
+      items: updatedItems,
+      lastUpdated: DateTime.now(),
+    );
+
+    // Update the state without affecting the delete mode
+    state = state.copyWith(
+      collection: updatedCollection,
+      isDeleteMode: currentDeleteMode, // Ensure delete mode is preserved
+    );
   }
   
   void markItemAsDeleting(String itemId, bool isDeleting) {
@@ -59,6 +80,13 @@ class WatchlistCollectionDetails extends _$WatchlistCollectionDetails {
   void reorderItems(List<WatchlistItem> newOrder) {
     final updatedCollection = state.collection.copyWith(items: newOrder);
     state = state.copyWith(collection: updatedCollection);
+  }
+
+  // Add this method to ensure delete mode is preserved
+  void preserveDeleteMode() {
+    if (state.isDeleteMode) {
+      state = state.copyWith(isDeleteMode: true);
+    }
   }
 }
 

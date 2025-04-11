@@ -25,18 +25,40 @@ class WatchlistNewListTile extends ConsumerStatefulWidget {
   ConsumerState<WatchlistNewListTile> createState() => WatchlistNewListTileState();
 }
 
-class WatchlistNewListTileState extends ConsumerState<WatchlistNewListTile> {
+class WatchlistNewListTileState extends ConsumerState<WatchlistNewListTile> with SingleTickerProviderStateMixin {
+  late AnimationController _fillAnimationController;
+  late Animation<double> _fillAnimation;
+  bool _shouldFillCircle = false;
+
   @override
   void initState() {
     super.initState();
+    _fillAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    
+    _fillAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _fillAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
   void dispose() {
+    _fillAnimationController.dispose();
     super.dispose();
   }
 
   void resetBackgroundColor() {
+  }
+
+  void startFillAnimation() {
+    if (!_fillAnimationController.isAnimating) {
+      _fillAnimationController.forward();
+    }
   }
 
   @override
@@ -45,9 +67,16 @@ class WatchlistNewListTileState extends ConsumerState<WatchlistNewListTile> {
       return SizedBox(
         width: MediaQuery.of(context).size.width * 0.39,
         height: MediaQuery.of(context).size.width * 0.39,
-        child: CustomPaint(
-          painter: SimpleDashedCirclePainter(),
-          child: _buildEmptyState(),
+        child: AnimatedBuilder(
+          animation: _fillAnimation,
+          builder: (context, child) {
+            return CustomPaint(
+              painter: SimpleDashedCirclePainter(
+                fillPercent: _shouldFillCircle ? _fillAnimation.value : 0,
+              ),
+              child: _buildEmptyState(),
+            );
+          },
         ),
       );
     }
@@ -160,7 +189,7 @@ class WatchlistNewListTileState extends ConsumerState<WatchlistNewListTile> {
           borderRadius: BorderRadius.circular(40.r),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withAlpha(25),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -191,7 +220,7 @@ class WatchlistNewListTileState extends ConsumerState<WatchlistNewListTile> {
           borderRadius: BorderRadius.circular(40.r),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withAlpha(25),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -223,6 +252,10 @@ class WatchlistNewListTileState extends ConsumerState<WatchlistNewListTile> {
 }
 
 class SimpleDashedCirclePainter extends CustomPainter {
+  final double fillPercent;
+
+  SimpleDashedCirclePainter({this.fillPercent = 0});
+
   @override
   void paint(Canvas canvas, Size size) {
     final double radius = size.width / 2;
@@ -233,44 +266,57 @@ class SimpleDashedCirclePainter extends CustomPainter {
       ..style = PaintingStyle.fill;
     
     canvas.drawCircle(center, radius, backgroundPaint);
+    
+    if (fillPercent > 0) {
+      final Paint fillPaint = Paint()
+        ..color = AppColors.greyVeryLight
+        ..style = PaintingStyle.fill;
+      
+      canvas.drawCircle(center, radius * fillPercent, fillPaint);
+    }
 
-    // Make dash width and spacing proportional to radius
-    const double dashWidth = 8;  // 5% of radius
-    const double dashSpace = 8;  // 5% of radius
+    const double dashWidth = 8;
+    const double dashSpace = 8;
     
     final Paint dashPaint = Paint()
       ..color = AppColors.greyMedium
-      ..strokeWidth = 3 // Stroke width proportional to radius
+      ..strokeWidth = 3
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
     final double circumference = 2 * 3.141592653589793 * radius;
-    
-    // Calculate dash count based on circumference and desired dash+space size
     final int dashCount = (circumference / (dashWidth + dashSpace)).round();
-    
-    // Ensure at least 16 dashes for small circles
     final int finalDashCount = dashCount < 16 ? 16 : dashCount;
-    
-    // Recalculate dash width and space to ensure even distribution
     const double adjustedTotalLength = dashWidth + dashSpace;
     final double adjustedAngleStep = (2 * 3.141592653589793) / finalDashCount;
-    
-    // Draw the dashes
+
     for (int i = 0; i < finalDashCount; i++) {
       final double startAngle = i * adjustedAngleStep;
       final double sweepAngle = adjustedAngleStep * (dashWidth / adjustedTotalLength);
       
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: radius),
-        startAngle,
-        sweepAngle,
-        false,
-        dashPaint,
-      );
+      if (fillPercent > 0) {
+        final double fillAngle = 2 * 3.141592653589793 * fillPercent;
+        if (startAngle < fillAngle) {
+          canvas.drawArc(
+            Rect.fromCircle(center: center, radius: radius),
+            startAngle,
+            sweepAngle,
+            false,
+            dashPaint,
+          );
+        }
+      } else {
+        canvas.drawArc(
+          Rect.fromCircle(center: center, radius: radius),
+          startAngle,
+          sweepAngle,
+          false,
+          dashPaint,
+        );
+      }
     }
   }
 
   @override
-  bool shouldRepaint(SimpleDashedCirclePainter oldDelegate) => false;
+  bool shouldRepaint(SimpleDashedCirclePainter oldDelegate) => oldDelegate.fillPercent != fillPercent;
 }

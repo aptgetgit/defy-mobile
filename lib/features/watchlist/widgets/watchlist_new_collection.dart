@@ -21,9 +21,14 @@ enum CollectionSource {
 }
 
 class WatchListNewCollectionScreen extends ConsumerStatefulWidget {
-  const WatchListNewCollectionScreen({super.key, this.source = CollectionSource.token});
-
   final CollectionSource source;
+  final GlobalKey? newListTileKey;
+
+  const WatchListNewCollectionScreen({
+    Key? key,
+    this.source = CollectionSource.token,
+    this.newListTileKey,
+  }) : super(key: key);
 
   @override
   ConsumerState<WatchListNewCollectionScreen> createState() => _WatchListNewCollectionScreenState();
@@ -45,6 +50,13 @@ class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewColle
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _listenKeyboardVisibility();
+
+      // Add this to trigger the fill animation after the position animation completes
+      Future.delayed(const Duration(milliseconds: 650), () {
+        if (mounted && _tileKey.currentState != null) {
+          _tileKey.currentState?.startFillAnimation();
+        }
+      });
 
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {

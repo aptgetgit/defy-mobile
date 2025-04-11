@@ -20,6 +20,8 @@ class ReceiveFlowScreen extends ConsumerStatefulWidget {
 }
 
 class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
+  static const Duration _animationDuration = Duration(milliseconds: 300);
+
   int _currentPage = 1;
 
   // Header text for each page
@@ -129,10 +131,11 @@ class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Gap(_headerText == 'Select Asset' ? 2.h : 10.h),
+                      Gap(_headerText == 'Select Asset' ? 5.h : 10.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
+                          // Static header text with no animation
                           Text(
                             _headerText,
                             style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w600),
@@ -140,7 +143,7 @@ class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
                           if (_currentPage == 1)
                             AnimatedOpacity(
                               opacity: showSearchIcon ? 1.0 : 0.0,
-                              duration: const Duration(milliseconds: 300),
+                              duration: _animationDuration,
                               child: IconButton(
                                 icon: Icon(
                                   PhosphorIconsBold.magnifyingGlass,
@@ -157,7 +160,8 @@ class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
                             ),
                         ],
                       ),
-                      Gap(8.h),
+                      Gap(_headerText == 'Select Asset' ? 4.h : 8.h),
+                      // Static subtitle text with no animation
                       Text(
                         _subtitleText,
                         style: TextStyle(fontSize: 16.sp, color: Colors.grey),
@@ -179,21 +183,64 @@ class _ReceiveFlowScreenState extends ConsumerState<ReceiveFlowScreen> {
   }
 
   Widget _buildContent() {
+    return AnimatedSwitcher(
+      duration: _animationDuration,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        // Determine the direction of the slide based on page number
+        final bool forward = (child.key as ValueKey<int>).value >= _currentPage;
+        
+        // Create offset for sliding effect
+        final Offset beginOffset = forward 
+            ? const Offset(1.0, 0.0)  // Right to left (new page slides in from right)
+            : const Offset(-1.0, 0.0); // Left to right (new page slides in from left)
+            
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: beginOffset,
+            end: Offset.zero,
+          ).animate(CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeInOutCubic,
+          )),
+          child: FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
+      },
+      layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
+        return Stack(
+          alignment: Alignment.topCenter,
+          children: <Widget>[
+            ...previousChildren,
+            if (currentChild != null) currentChild,
+          ],
+        );
+      },
+      child: _getContentWithKey(),
+    );
+  }
+
+  Widget _getContentWithKey() {
     switch (_currentPage) {
       case 1:
         return ReceiveSelectContent(
+          key: const ValueKey<int>(1),
           onAssetSelected: _nextPage,
         );
       case 2:
         return ReceiveAmountContent(
+          key: const ValueKey<int>(2),
           onNextPressed: _nextPage,
         );
       case 3:
         return ReceiveShareContent(
+          key: const ValueKey<int>(3),
           onSharePressed: _completeFlow,
         );
       default:
         return ReceiveSelectContent(
+          key: const ValueKey<int>(1),
           onAssetSelected: _nextPage,
         );
     }

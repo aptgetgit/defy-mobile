@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
@@ -203,6 +204,11 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
               fontWeight: FontWeight.w600,
               color: widget.isSelected && widget.isHiding ? Colors.grey : Colors.black,
             ),
+          ).animate().slideX(
+            duration: const Duration(milliseconds: 300),
+            begin: 0.3,
+            end: 0,
+            curve: Curves.easeOut,
           ),
           Text(
             '${widget.token.percentageChange}%',
@@ -211,6 +217,11 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
             ),
+          ).animate().slideX(
+            duration: const Duration(milliseconds: 300),
+            begin: 0.3,
+            end: 0,
+            curve: Curves.easeOut,
           ),
         ],
       ),
@@ -219,7 +230,8 @@ class _TokenItemState extends State<TokenItem> with SingleTickerProviderStateMix
         isChecked: widget.isSelected,
         isRound: true,
         onTap: widget.onCheckboxTap,
-      ),
+      ).animate()
+        .fadeIn(duration: const Duration(milliseconds: 400), curve: Curves.easeOut)
     ],
   );
 

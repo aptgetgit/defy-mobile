@@ -418,13 +418,13 @@ void toggleSort24hr() {
       count: 2,
       nfts: <NFT>[
         NFT(
-          id: '#4147', 
-          price: '0.02', 
+          id: 'Aptos Manekin', 
+          price: '10 APT', 
           imageUrl: 'assets/images/Mask group.png',
         ),
         NFT(
-          id: '#4148', 
-          price: '0.02', 
+          id: 'Aptos Monkeys', 
+          price: '8 APT', 
           imageUrl: 'assets/images/Mask group (1).png',
           type: NFTType.audio,
         ),
@@ -435,14 +435,14 @@ void toggleSort24hr() {
       count: 2,
       nfts: <NFT>[
         NFT(
-          id: '#4149', 
-          price: '0.02', 
+          id: 'Aptos #121', 
+          price: '10 APT', 
           imageUrl: 'assets/images/Mask group (2).png',
           type: NFTType.video,
         ),
         NFT(
-          id: '#4150', 
-          price: '0.02', 
+          id: 'Aptos Monkey', 
+          price: '10 APT', 
           imageUrl: 'assets/images/Mask group (3).png',
         ),
       ],

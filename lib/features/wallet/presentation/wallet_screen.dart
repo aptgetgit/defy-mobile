@@ -56,6 +56,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
   bool _isAnimatingHeader = false;
   late AnimationController _walletSlideController;
   late Animation<Offset> _walletSlideAnimation;
+  bool _isDoneFadingOut = false;
 
   final Map<int, Widget> _collectionScreens = <int, Widget>{
     0: const WatchlistSafetyTokensScreen(),
@@ -649,17 +650,42 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                                 key: const ValueKey('done'),
                                 children: [
                                   TextButton(
-                                    onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
+                                    onPressed: () {
+                                        // Create temporary fade out animation before applying changes
+                                        // We'll animate the opacity to 0 first, then apply changes
+                                        setState(() {
+                                          _isDoneFadingOut = true;
+                                        });
+                                        
+                                        // Delay the actual state change to allow animation to complete
+                                        Future.delayed(const Duration(milliseconds: 300), () {
+                                          ref.read(walletNotifierProvider.notifier).applyChanges();
+                                          setState(() {
+                                            _isDoneFadingOut = false;
+                                          });
+                                        });
+                                    },
+                                    // Update style properties to use the non-deprecated WidgetStateProperty
+                                    style: TextButton.styleFrom(
+                                      splashFactory: NoSplash.splashFactory,
+                                      overlayColor: Colors.transparent,
+                                      backgroundColor: Colors.transparent,
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: Size.zero,
+                                    ),
                                     child: TweenAnimationBuilder<double>(
-                                      tween: Tween<double>(begin: 0, end: 1),
+                                      tween: Tween<double>(begin: 0, end: _isDoneFadingOut ? 0.0 : 1.0),
                                       duration: const Duration(milliseconds: 350),
                                       builder: (context, value, child) => Opacity(
                                         opacity: value,
                                         child: child,
                                       ),
-                                      child: Text(
-                                        'Done',
-                                        style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(right: 9.w),
+                                        child: Text(
+                                          'Done',
+                                          style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -937,7 +963,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       height: isExpanded || walletState.isMoreButtonSelected
-          ? (collection.nfts.length / 2).ceil() * 215.h
+          ? (collection.nfts.length / 2).ceil() * 225.h
           : 0,
       child: ClipRect(
         child: AnimatedOpacity(

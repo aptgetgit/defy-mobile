@@ -304,26 +304,20 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
 
     final FlSpot lastSpot = _animatedSpots.last;
 
-    // Update UI immediately
-    setState(() {
-      _touchX = lastSpot.x;
-      _currentTime = _getTimeFromSpot(lastSpot.x, index);
-    });
-
-    // Trigger price animation without delay
+    // Trigger price animation without showing the time chip
     if (widget.onPriceChangeWithAnimation != null) {
       widget.onPriceChangeWithAnimation!(lastSpot.y);
     }
     
-    // Clear time indicator after a brief delay
-    Future.delayed(const Duration(milliseconds: 2500), () {
-      if (!_isUserTouching && mounted) {
-        setState(() {
-          _currentTime = null;
-          _touchX = null;
-        });
-      }
-    });
+    // Don't show the time chip at all after user interaction
+    // This prevents the cursor from reappearing at the end after touching
+    if (_lastTouchTime == null) {
+      // Only show time chip on initial load if we want to
+      // Currently we don't want to show it, so this block is effectively disabled
+    }
+    
+    // Clear any existing time indicator
+    _clearTimeIndicator();
   }
 
   // Add a method to hide time indicator when not touching

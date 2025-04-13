@@ -38,6 +38,7 @@ analyzer:
     unused_import: error
     unused_local_variable: error
     avoid_print: warning
+    prefer_expression_function_bodies: ignore
 
 linter:
   rules:

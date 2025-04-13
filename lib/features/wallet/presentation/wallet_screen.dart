@@ -783,24 +783,26 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                 // Set the selected token first, then navigate
                 ref.read(selectedTokenNotifierProvider.notifier).selectTokenByIndex(actualIndex);
                 
-                // Replace direct navigation with custom page route
+                // Enhanced transition with both slide up and fade animations
                 Navigator.of(context).push(
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) => const TokensInfoScreen(),
                     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                      const begin = Offset(0.0, 0.1); // Start slightly below target position
+                      const begin = Offset(0.0, 0.15); // Start slightly below target position
                       const end = Offset.zero;
                       const curve = Curves.easeOutCubic;
                       
-                      // Create combined slide-up and fade-in transition
-                      final Animation<Offset> slideAnimation = Tween(begin: begin, end: end).animate(
+                      // Create slide-up animation
+                      var slideAnimation = Tween(begin: begin, end: end).animate(
                         CurvedAnimation(parent: animation, curve: curve),
                       );
                       
-                      final Animation<double> fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(
-                        CurvedAnimation(parent: animation, curve: curve),
+                      // Add fade animation
+                      var fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+                        CurvedAnimation(parent: animation, curve: Curves.easeInOut),
                       );
                       
+                      // Combine both animations
                       return FadeTransition(
                         opacity: fadeAnimation,
                         child: SlideTransition(
@@ -809,7 +811,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                         ),
                       );
                     },
-                    transitionDuration: const Duration(milliseconds: 350),
+                    transitionDuration: const Duration(milliseconds: 400),
                   ),
                 );
               },

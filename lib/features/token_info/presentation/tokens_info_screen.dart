@@ -213,160 +213,149 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
     }
 
     return Scaffold(
-      body: TweenAnimationBuilder<double>(
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOutCubic,
-        tween: Tween<double>(begin: 0.0, end: 1.0),
-        builder: (context, value, child) {
-          return Opacity(
-            opacity: value,
-            child: Transform.translate(
-              offset: Offset(0, 20 * (1.0 - value)),
-              child: child,
-            ),
-          );
-        },
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            SliverAppBar(
-              backgroundColor: Colors.white,
-              expandedHeight: 60.h,
-              leading: IconButton(
-                icon: Padding(
-                  padding: EdgeInsets.only(top: 4.h),
-                  child: Icon(
-                    PhosphorIconsBold.caretLeft,
-                    color: Colors.black,
-                    size: 24.sp,
-                  ),
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: <Widget>[
+          SliverAppBar(
+            backgroundColor: Colors.white,
+            expandedHeight: 60.h,
+            leading: IconButton(
+              icon: Padding(
+                padding: EdgeInsets.only(top: 4.h),
+                child: Icon(
+                  PhosphorIconsBold.caretLeft,
+                  color: Colors.black,
+                  size: 24.sp,
                 ),
-                onPressed: () => Navigator.pop(context),
               ),
-              pinned: true,
-              title: AnimatedOpacity(
-                opacity: _scrollProgress,
-                duration: const Duration(milliseconds: 300),
-                child: _buildAppBarTitle(selectedToken),
-              ),
-              actions: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 2.w),
-                  child: IconButton(
-                    icon: Icon(PhosphorIconsRegular.star, size: 24.sp),
-                    onPressed: _showWatchlistBottomSheet,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 8.w),
-                  child: IconButton(
-                    icon: Icon(PhosphorIconsRegular.bell, size: 24.sp),
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
-                      );
-                    },
-                  ),
-                ),
-              ],
+              onPressed: () {
+                // Use pop with smooth animation
+                Navigator.of(context).pop();
+              },
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 2.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            pinned: true,
+            title: AnimatedOpacity(
+              opacity: _scrollProgress,
+              duration: const Duration(milliseconds: 300),
+              child: _buildAppBarTitle(selectedToken),
+            ),
+            actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 2.w),
+                child: IconButton(
+                  icon: Icon(PhosphorIconsRegular.star, size: 24.sp),
+                  onPressed: _showWatchlistBottomSheet,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 8.w),
+                child: IconButton(
+                  icon: Icon(PhosphorIconsRegular.bell, size: 24.sp),
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 2.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  AnimatedOpacity(
+                    opacity: 1.0 - _scrollProgress,
+                    duration: const Duration(milliseconds: 300),
+                    child: _scrollProgress < 1.0 ? _buildHeaderContent(selectedToken) : const SizedBox.shrink(),
+                  ),
+                  Transform.translate(
+                    offset: Offset(0, -50.h * _scrollProgress),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      child: StakingChart(
+                        onPriceChange: (double price) {
+                          _updatePrice(price, animate: false); // Non-animated update
+                        },
+                        onPriceChangeWithAnimation: (double price) {
+                          _updatePrice(price, animate: true); // Animated update
+                        },
+                        onBaselineValueChange: (double baselineValue) {
+                          _updateBaseline(baselineValue);
+                        },
+                      ),
+                    ),
+                  ),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    height: 38.h - (10.h * _scrollProgress),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        _buildInfoContainer('100 ${selectedToken.currency}', 'BALANCE'),
+                        _buildInfoContainer(selectedToken.price, 'AVG BUY PRICE'),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                ],
+              ),
+            ),
+          ),
+          SliverPersistentHeader(
+            delegate: TabBarDelegate(
+              Material(
+                color: Colors.white,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
                   children: <Widget>[
-                    AnimatedOpacity(
-                      opacity: 1.0 - _scrollProgress,
-                      duration: const Duration(milliseconds: 300),
-                      child: _scrollProgress < 1.0 ? _buildHeaderContent(selectedToken) : const SizedBox.shrink(),
-                    ),
-                    Transform.translate(
-                      offset: Offset(0, -50.h * _scrollProgress),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        child: StakingChart(
-                          onPriceChange: (double price) {
-                            _updatePrice(price, animate: false); // Non-animated update
-                          },
-                          onPriceChangeWithAnimation: (double price) {
-                            _updatePrice(price, animate: true); // Animated update
-                          },
-                          onBaselineValueChange: (double baselineValue) {
-                            _updateBaseline(baselineValue);
-                          },
-                        ),
+                    // Full width tab bar without border
+                    SizedBox(
+                      width: double.infinity,
+                      child: CustomTabBar(
+                        tabController: _tabController,
+                        tabs: const <String>['About', 'Explore', 'History', 'Analytics'],
+                        // ignore: avoid_redundant_argument_values
+                        isScrollable: true,
                       ),
                     ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      height: 38.h - (10.h * _scrollProgress),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          _buildInfoContainer('100 ${selectedToken.currency}', 'BALANCE'),
-                          _buildInfoContainer(selectedToken.price, 'AVG BUY PRICE'),
-                        ],
+                    // Centered shorter grey underline
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        width: 350.w, // Custom width for the underline only
+                        height: 1,
+                        color: AppColors.greyVeryLight,
                       ),
                     ),
-                    SizedBox(height: 10.h),
                   ],
                 ),
               ),
             ),
-            SliverPersistentHeader(
-              delegate: TabBarDelegate(
-                Material(
-                  color: Colors.white,
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: <Widget>[
-                      // Full width tab bar without border
-                      SizedBox(
-                        width: double.infinity,
-                        child: CustomTabBar(
-                          tabController: _tabController,
-                          tabs: const <String>['About', 'Explore', 'History', 'Analytics'],
-                          // ignore: avoid_redundant_argument_values
-                          isScrollable: true,
-                        ),
-                      ),
-                      // Centered shorter grey underline
-                      Positioned(
-                        bottom: 0,
-                        child: Container(
-                          width: 350.w, // Custom width for the underline only
-                          height: 1,
-                          color: AppColors.greyVeryLight,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              pinned: true,
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 1.5,
-                child: TabBarView(
-                  controller: _tabController,
-                  children: <Widget>[
-                    const AboutPage(),
-                    const ExplorePage(),
-                    HistoryPage(),
-                    const AnalyticsPage(),
-                  ],
-                ),
+            pinned: true,
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 1.5,
+              child: TabBarView(
+                controller: _tabController,
+                children: <Widget>[
+                  const AboutPage(),
+                  const ExplorePage(),
+                  HistoryPage(),
+                  const AnalyticsPage(),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

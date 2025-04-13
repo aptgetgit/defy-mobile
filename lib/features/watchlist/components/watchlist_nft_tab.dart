@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../wallet/presentation/providers/wallet_provider.dart';
 import '../presentation/providers/watchlist_new_collection_model.dart';
 import '../presentation/providers/watchlist_new_collection_provider.dart';
-import '../presentation/watchlist_cute_nft_screen.dart';
+
+import '../utils/custom_route.dart';
 import '../widgets/watchlist_collection_tile.dart';
 import '../widgets/watchlist_cute_nft_tile.dart';
 import '../widgets/watchlist_grid_tile.dart';

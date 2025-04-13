@@ -10,15 +10,16 @@ import '../../token_info/presentation/about_page.dart';
 import '../../token_info/presentation/price_alert_page.dart';
 import '../../token_info/presentation/shared/token_watchlist_bottom_sheet.dart';
 import '../../token_info/providers/token_info_controller.dart';
+import '../../wallet/data/models/nft_model.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
 import '../models/audio.dart';
 import '../models/audio_player_provider.dart';
+import '../models/nft_selection_provider.dart';
 import '../shared/nft_info_bottom_navbar.dart';
 import 'analytics_page.dart';
 import 'order_page.dart';
-
 
 class NftAudioScreen extends ConsumerStatefulWidget {
   const NftAudioScreen({super.key});
@@ -30,16 +31,13 @@ class NftAudioScreen extends ConsumerStatefulWidget {
 class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
     with TickerProviderStateMixin {
   String coinLogoUrl = '';
-  String nftName = 'Monkey #1212';
-  String owner = 'Fantasy Ruins';
-  String priceUsd = '\$2,212.21';
-  bool _showTitle = false;
   late ScrollController _scrollController;
   late TokensController controller;
   final List<String> timePeriods = <String>['1M', '3M', '6M', '1Y', '5Y', 'ALL'];
   String selectedPeriod = '1M';
   late TabController _tabController;
   bool _alertCreated = false;
+  bool _showTitle = false;
   OverlayEntry? _overlayEntry;
   final Set<int> _watchlistTokens = <int>{};
   final Set<int> _selectedTokens = <int>{};
@@ -88,17 +86,28 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
     return '$minutes:$seconds';
   }
 
-  Audio get song => Audio(
+  Audio get song {
+    final NFT? selectedNft = ref.watch(selectedNftNotifierProvider);
+    
+    return Audio(
       audioName: 'Cyborg',
       authorName: 'Fantasy Ruins',
-      nftArtPath: 'assets/images/cyborg2.png',
-      audioPath: 'audios/cyborg.mp3',);
+      nftArtPath: selectedNft?.imageUrl ?? 'assets/images/cyborg2.png',
+      audioPath: 'audios/cyborg.mp3',
+    );
+  }
+
+  String get nftName => 'Monkey #1212';
+  String get owner => 'Fantasy Ruins';
+  String get priceUsd => '\$2,212.21';
+  String get nftImageUrl => ref.watch(selectedNftNotifierProvider)?.imageUrl ?? 'assets/images/cyborg2.png';
 
   @override
   Widget build(BuildContext context) {
     final double imageWidth = 353.w;
     final double imageHeight = 353.h;
     final AudioPlayerProvider audioProvider = ref.watch(audioPlayerProvider);
+    final NFT? selectedNft = ref.watch(selectedNftNotifierProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -138,6 +147,7 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
                               // Creator info
                               Row(
                                 children: <Widget>[
+                                  // Use creator's profile image if available
                                   Image.asset(
                                     'assets/images/Fantasy-Ruins.png',
                                     width: 16.w,
@@ -166,7 +176,7 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
                               Text(
-                                r'$201.21',
+                                 r'$201.21',
                                 style: TextStyle(
                                   fontSize: 22.sp,
                                   fontWeight: FontWeight.w600,
@@ -192,10 +202,22 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
                     width: imageWidth,
                     height: imageHeight,
                     margin: EdgeInsets.only(top: 24.h),
-                    child: Image.asset(
-                      'assets/images/cyborg2.png',
-                      fit: BoxFit.cover,
-                    ),
+                    child: selectedNft?.imageUrl.startsWith('http') == true
+                        ? Image.network(
+                            selectedNft!.imageUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) => Image.asset(
+                              'assets/images/cyborg2.png',
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Hero(
+                            tag: 'nft-image-${selectedNft?.id ?? "default"}',
+                            child: Image.asset(
+                              nftImageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                   ),
                   Gap(26.h),
                   Padding(
@@ -419,6 +441,7 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
 
   Widget _buildSliverAppBar(BuildContext context) {
     final AudioPlayerProvider audioProvider = ref.watch(audioPlayerProvider);
+    final NFT? selectedNft = ref.watch(selectedNftNotifierProvider);
     
     return SliverAppBar(
       elevation: 4,
@@ -513,11 +536,21 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
         duration: const Duration(milliseconds: 300),
         child: Row(
           children: <Widget>[
-            Image.asset(
-              'assets/images/cyborg2.png',
-              height: 36.h,
-              width: 36.w,
-            ),
+            if (selectedNft?.imageUrl.startsWith('http') == true) Image.network(
+                    selectedNft!.imageUrl!,
+                    height: 36.h,
+                    width: 36.w,
+                    fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) => Image.asset(
+                      'assets/images/cyborg2.png',
+                      height: 36.h,
+                      width: 36.w,
+                    ),
+                  ) else Image.asset(
+                    nftImageUrl,
+                    height: 36.h,
+                    width: 36.w,
+                  ),
             Gap(12.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

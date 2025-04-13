@@ -7,8 +7,10 @@ import 'package:video_player/video_player.dart';
 
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
-
 import '../../token_info/presentation/about_page.dart';
+import '../../token_info/presentation/analytics_page.dart';
+import '../../token_info/presentation/explore_page.dart';
+import '../../token_info/presentation/history_page.dart';
 import '../../token_info/presentation/price_alert_page.dart';
 import '../../token_info/presentation/shared/token_watchlist_bottom_sheet.dart';
 import '../../token_info/providers/token_info_controller.dart';
@@ -17,8 +19,6 @@ import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
 import '../models/video_player_provider.dart';
 import '../shared/nft_info_bottom_navbar.dart';
-import 'analytics_page.dart';
-import 'order_page.dart';
 
 // Create a provider for VideoPlayerProvider
 final ChangeNotifierProviderFamily<VideoPlayerProvider, String> videoPlayerProvider = ChangeNotifierProvider.family<VideoPlayerProvider, String>(
@@ -65,7 +65,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
     _scrollController = ScrollController();
     controller = ref.read(tokensControllerProvider.notifier);
     _scrollController.addListener(_onScroll);
-    _tabController = TabController(length: 3, vsync: this); // Changed to 3 tabs for About, Orders, Analytics
+    _tabController = TabController(length: 4, vsync: this);
     
     // Initialize the video player early
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -109,29 +109,12 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double appBarExpandedHeight = 188.h;
     final double imageWidth = 353.w;
     final double imageHeight = 353.h;
-    // final double appBarImageSize = 32.w;
-    final double maxScrollExtent = appBarExpandedHeight - kToolbarHeight;
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-    final double safeTopPosition = statusBarHeight + 12.h;
     final VideoPlayerProvider videoProvider = ref.watch(videoPlayerProvider(_videoPath));
     
-    // Calculate positions for NFT name text
-    final double monkeyStartX = 24.w;
-    final double monkeyStartY = appBarExpandedHeight - 65.h;
-    final double monkeyEndY = safeTopPosition - 6.h;
-    final double monkeyEndX = 100.w;
-    
-    // Calculate positions for Fantasy Ruins text
-    final double fantasyStartX = 24.w;
-    final double fantasyStartY = appBarExpandedHeight - 22.h;
-    final double fantasyEndY = monkeyEndY + 20.h;
-    final double fantasyEndX = monkeyEndX;
-  
     return Stack(
-      children: [
+      children: <Widget>[
         Scaffold(
           backgroundColor: Colors.white,
           body: ColoredBox(
@@ -145,7 +128,90 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                     color: Colors.white,
                     child: Column(
                       children: <Widget>[
-                        // Video player instead of static image
+                        // Text section above video
+                        AnimatedOpacity(
+                          opacity: _showTitle ? 0.0 : 1.0,
+                          duration: const Duration(milliseconds: 200),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              left: 24.w,
+                              right: 24.w,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    // NFT name
+                                    Text(
+                                      nftName,
+                                      style: TextStyle(
+                                        fontSize: 22.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.black,
+                                      ),
+                                    ),
+                                    Gap(8.h),
+                                    // Creator info
+                                    Row(
+                                      children: <Widget>[
+                                        Image.asset(
+                                          'assets/images/Fantasy-Ruins.png',
+                                          width: 16.w,
+                                          height: 16.h,
+                                        ),
+                                        Gap(4.w),
+                                        Text(
+                                          owner,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.greyLight,
+                                          ),
+                                        ),
+                                        Gap(4.w),
+                                        Icon(
+                                          PhosphorIconsFill.sealCheck,
+                                          color: AppColors.blue,
+                                          size: 16.sp,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                AnimatedOpacity(
+                                  opacity: _showTitle ? 0.0 : 1.0,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeInOut,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: <Widget>[
+                                      Text(
+                                        priceUsd,
+                                        style: TextStyle(
+                                          fontSize: 22.sp,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.black,
+                                        ),
+                                      ),
+                                      Gap(12.h),
+                                      Text(
+                                        'Floor Price',
+                                        style: TextStyle(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.greyLight,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Video player
                         GestureDetector(
                           onTap:() {
                             Navigator.push(context, MaterialPageRoute(
@@ -159,7 +225,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                               Container(
                                 width: imageWidth,
                                 height: imageHeight,
-                                margin: EdgeInsets.only(top: 90.h), // Add padding at top for text
+                                margin: EdgeInsets.only(top: 24.h),
                                 decoration: BoxDecoration(
                                   color: Colors.black,
                                   borderRadius: BorderRadius.circular(8.r),
@@ -189,7 +255,11 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                                       ),
                                       child: IconButton(
                                         iconSize: 50.sp,
-                                        icon: Icon(PhosphorIconsFill.play, size: 50.sp),
+                                        icon: Icon(
+                                          PhosphorIconsFill.play, 
+                                          size: 50.sp,
+                                          color: Colors.white,
+                                        ),
                                         onPressed: videoProvider.pauseOrResume,
                                       ),
                                     ),
@@ -325,9 +395,10 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                     CustomTabBar(
                       tabController: _tabController,
                       tabs: const <String>[
-                        'About',    // Keep the About tab
-                        'Orders',   // Add Orders tab
-                        'Analytics' // Add Analytics tab
+                        'About',
+                        'Explore',
+                        'History',
+                        'Analytics',
                       ],
                     ),
                   ),
@@ -339,9 +410,13 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                     child: TabBarView(
                       controller: _tabController,
                       children: <Widget>[
-                        const AboutPage(), // Keep the About page
-                        OrderPage(),      // Add Orders page
-                        const AnalyticsOverviewPage(), // Add Analytics page
+                        const SingleChildScrollView(
+                          physics: NeverScrollableScrollPhysics(),
+                          child: AboutPage(),
+                        ),
+                        const ExplorePage(),
+                        HistoryPage(),
+                        const AnalyticsPage(),
                       ],
                     ),
                   ),
@@ -350,107 +425,6 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
             ),
           ),
           bottomNavigationBar: const NftInfoBottomNavBar(),
-        ),
-        // Add animated text elements for NFT name and creator
-        AnimatedBuilder(
-          animation: _scrollController,
-          builder: (BuildContext context, Widget? child) {
-            // Recalculate positions based on current scroll
-            final double scrollProgress = _scrollController.hasClients
-                ? (_scrollController.offset / maxScrollExtent).clamp(0.0, 1.0)
-                : 0.0;
-                
-            final double monkeyAnimatedX = monkeyStartX + (monkeyEndX - monkeyStartX) * scrollProgress;
-            final double monkeyAnimatedY = monkeyStartY + (monkeyEndY - monkeyStartY) * scrollProgress;
-            final double monkeyTextSize = (22 - (8 * scrollProgress)).sp;
-            
-            final double fantasyAnimatedX = fantasyStartX + (fantasyEndX - fantasyStartX) * scrollProgress;
-            final double fantasyAnimatedY = fantasyStartY + (fantasyEndY - fantasyStartY) * scrollProgress;
-            final double fantasyTextSize = (14 - (2 * scrollProgress)).sp;
-            
-            return Material(
-              type: MaterialType.transparency,
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    left: monkeyAnimatedX,
-                    top: monkeyAnimatedY,
-                    child: Text(
-                      nftName,
-                      style: TextStyle(
-                        fontSize: monkeyTextSize,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.black,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: fantasyAnimatedX,
-                    top: fantasyAnimatedY,
-                    child: Row(
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/images/Fantasy-Ruins.png',
-                          width: 16.w,
-                          height: 16.h,
-                        ),
-                        Gap(4.w),
-                        Text(
-                          owner,
-                          style: TextStyle(
-                            fontSize: fantasyTextSize,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.greyLight,
-                          ),
-                        ),
-                        Gap(4.w),
-                        Icon(
-                          PhosphorIconsFill.sealCheck,
-                          color: AppColors.blue,
-                          size: 16.sp,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-        // Add price indicator on the right
-        Positioned(
-          top: appBarExpandedHeight - 65.h, // Position below app bar
-          right: 24.w,
-          child: Material(
-            type: MaterialType.transparency,
-            child: AnimatedOpacity(
-              opacity: _showTitle ? 0.0 : 1.0,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    priceUsd,
-                    style: TextStyle(
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.black,
-                    ),
-                  ),
-                  Gap(12.h),
-                  Text(
-                    'Floor Price',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.greyLight,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ),
         // Keep the mini player code
         if (_showMiniPlayer)
@@ -511,7 +485,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
           decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(8.r),
-            boxShadow: [
+            boxShadow: <BoxShadow>[
               BoxShadow(
                 color: Colors.black.withOpacity(0.3),
                 blurRadius: 10.r,
@@ -576,7 +550,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
+                      colors: <Color>[
                         Colors.transparent,
                         Colors.black.withOpacity(0.7),
                       ],
@@ -706,7 +680,7 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
               size: 20.sp,
             ),
             onPressed: () {
-              final videoProvider = ref.read(videoPlayerProvider(_videoPath));
+              final VideoPlayerProvider videoProvider = ref.read(videoPlayerProvider(_videoPath));
               if (!videoProvider.isPlaying) {
                 videoProvider.playVideo();
               } else {
@@ -723,7 +697,56 @@ class _NftInfoVideoScreenState extends ConsumerState<NftVideoScreen>
       duration: const Duration(milliseconds: 300),
       child: Row(
         children: <Widget>[
-          _buildPoolLogo(),
+          Container(
+            height: 36.h,
+            width: 36.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4.r),
+              image: ref.watch(videoPlayerProvider(_videoPath)).thumbnailImage != null
+                  ? DecorationImage(
+                      image: ref.watch(videoPlayerProvider(_videoPath)).thumbnailImage!,
+                      fit: BoxFit.cover,
+                    )
+                  : const DecorationImage(
+                      image: AssetImage('assets/images/cyborg2.png'),
+                      fit: BoxFit.cover,
+                    ),
+            ),
+          ),
+          Gap(12.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                nftName,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.black,
+                ),
+              ),
+              Gap(4.h),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    owner,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyLight,
+                    ),
+                  ),
+                  Gap(4.w),
+                  Icon(
+                    PhosphorIconsFill.sealCheck,
+                    color: AppColors.blue,
+                    size: 14.sp,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ],
       ),
     ),

@@ -15,6 +15,7 @@ import '../../shared/presentation/widgets/base_screen_nav.dart';
 import '../../shared/presentation/widgets/custom_check_box.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../../shared/presentation/widgets/nft_item.dart';
+import '../../token_info/presentation/tokens_info_screen.dart';
 import '../../token_info/providers/token_selection_provider.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
@@ -24,9 +25,6 @@ import '../data/models/token_model.dart';
 import 'providers/wallet_provider.dart';
 import '../widgets/balance_sheet.dart';
 import '../widgets/filter_sheet.dart';
-
-
-
 import '../widgets/sort_sheet.dart';
 import '../widgets/token_item.dart';
 import '../widgets/wallet_header.dart';
@@ -562,137 +560,133 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
             color: Colors.white,
             child: AnimatedContainer(
               duration: Duration(milliseconds: _isAnimatingHeader ? 300 : 0),
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: AppColors.greyVeryLight,
-                  ),
-                ),
-              ),
               padding: const EdgeInsets.only(),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
-                      child: walletState.isMoreButtonSelected
-                          ? Container(
-                              key: const ValueKey('sort'),
-                              height: 48.h,
-                              alignment: Alignment.centerLeft,
-                              padding: EdgeInsets.symmetric(horizontal: 12.w),
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: AppColors.greyVeryLight,
-                                  ),
-                                ),
-                              ),
-                              child: GestureDetector(
-                                onTap: _showSortSheet,
-                                child: TweenAnimationBuilder<double>(
-                                  // Add a fade animation for sort type changes
-                                  tween: Tween<double>(begin: 0, end: 1),
-                                  duration: const Duration(milliseconds: 150),
-                                  key: ValueKey(sortTypeText), // Change key when sort type changes
-                                  builder: (context, value, child) => Opacity(
-                                      opacity: value,
-                                      child: child,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
+                          child: walletState.isMoreButtonSelected
+                              ? Container(
+                                  key: const ValueKey('sort'),
+                                  height: 48.h,
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                  child: GestureDetector(
+                                    onTap: _showSortSheet,
+                                    child: TweenAnimationBuilder<double>(
+                                      tween: Tween<double>(begin: 0, end: 1),
+                                      duration: const Duration(milliseconds: 150),
+                                      key: ValueKey(sortTypeText),
+                                      builder: (context, value, child) => Opacity(
+                                        opacity: value,
+                                        child: child,
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            (walletState.isSortAscending
+                                                ? 'assets/icons/sort-ascending.png'
+                                                : 'assets/icons/sort-descending.png'),
+                                            width: 18.sp,
+                                            height: 18.sp,
+                                          ),
+                                          Gap(8.w),
+                                          Text(
+                                            sortTypeText,
+                                            style: TextStyle(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColors.greyDark,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Image.asset(
-                                        (walletState.isSortAscending
-                                            ? 'assets/icons/sort-ascending.png'
-                                            : 'assets/icons/sort-descending.png'),
-                                        width: 18.sp,
-                                        height: 18.sp,
-                                      ),
-                                      Gap(8.w),
-                                      Text(
-                                        sortTypeText,
-                                        style: TextStyle(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.greyDark,
-                                        ),
-                                      ),
-                                    ],
                                   ),
+                                )
+                              : CustomTabBar(
+                                  key: const ValueKey('tabs'),
+                                  tabController: _tabController,
+                                  tabs: const <String>['Token', 'NFT'],
                                 ),
-                              ),
-                            )
-                          : CustomTabBar(
-                              key: const ValueKey('tabs'),
-                              tabController: _tabController,
-                              tabs: const <String>['Token', 'NFT'],
-                            ),
-                    ),
-                  ),
-                  if (!walletState.isMoreButtonSelected)
-                    TweenAnimationBuilder<double>(
-                      // This will run whenever isBalanceHidden changes
-                      tween: Tween<double>(
-                        begin: 0.0, 
-                        end: walletState.isBalanceHidden ? 1.0 : 0.0
-                      ),
-                      duration: const Duration(milliseconds: 900),
-                      builder: (context, value, child) => Opacity(
-                        opacity: value,
-                        child: child,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.w),
-                        child: Text(
-                          r'$1,038.56',
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.black,
-                          ),
                         ),
                       ),
-                    ),
-                  Gap(9.w),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
-                    child: walletState.isMoreButtonSelected
-                        ? Row(
-                            key: const ValueKey('done'),
-                            children: [
-                              TextButton(
-                                onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
-                                child: TweenAnimationBuilder<double>(
-                                  // Add fade animation for the Done button
-                                  tween: Tween<double>(begin: 0, end: 1),
-                                  duration: const Duration(milliseconds: 350),
-                                  builder: (context, value, child) => Opacity(
-                                      opacity: value,
-                                      child: child,
-                                    ),
-                                  child: Text(
-                                    'Done',
-                                    style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Padding(
-                            key: const ValueKey('more'),
-                            padding: EdgeInsets.only(right: 3.w),
-                            child: GestureDetector(
-                              onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
-                              child: Icon(
-                                PhosphorIconsBold.dotsThreeVertical,
-                                color: AppColors.greyLight,
-                                size: 22.sp,
+                      if (!walletState.isMoreButtonSelected)
+                        TweenAnimationBuilder<double>(
+                          tween: Tween<double>(
+                            begin: 0.0, 
+                            end: walletState.isBalanceHidden ? 1.0 : 0.0
+                          ),
+                          duration: const Duration(milliseconds: 900),
+                          builder: (context, value, child) => Opacity(
+                            opacity: value,
+                            child: child,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10.w),
+                            child: Text(
+                              r'$1,038.56',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.black,
                               ),
                             ),
                           ),
+                        ),
+                      Gap(9.w),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
+                        child: walletState.isMoreButtonSelected
+                            ? Row(
+                                key: const ValueKey('done'),
+                                children: [
+                                  TextButton(
+                                    onPressed: () => ref.read(walletNotifierProvider.notifier).applyChanges(),
+                                    child: TweenAnimationBuilder<double>(
+                                      tween: Tween<double>(begin: 0, end: 1),
+                                      duration: const Duration(milliseconds: 350),
+                                      builder: (context, value, child) => Opacity(
+                                        opacity: value,
+                                        child: child,
+                                      ),
+                                      child: Text(
+                                        'Done',
+                                        style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Padding(
+                                key: const ValueKey('more'),
+                                padding: EdgeInsets.only(right: 3.w),
+                                child: GestureDetector(
+                                  onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
+                                  child: Icon(
+                                    PhosphorIconsBold.dotsThreeVertical,
+                                    color: AppColors.greyLight,
+                                    size: 22.sp,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      width: 350.w,
+                      height: 1,
+                      color: AppColors.greyVeryLight,
+                    ),
                   ),
                 ],
               ),
@@ -788,7 +782,36 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
               : () {
                 // Set the selected token first, then navigate
                 ref.read(selectedTokenNotifierProvider.notifier).selectTokenByIndex(actualIndex);
-                const TokensInfoRoute().push(context);
+                
+                // Replace direct navigation with custom page route
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => const TokensInfoScreen(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(0.0, 0.1); // Start slightly below target position
+                      const end = Offset.zero;
+                      const curve = Curves.easeOutCubic;
+                      
+                      // Create combined slide-up and fade-in transition
+                      final Animation<Offset> slideAnimation = Tween(begin: begin, end: end).animate(
+                        CurvedAnimation(parent: animation, curve: curve),
+                      );
+                      
+                      final Animation<double> fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(
+                        CurvedAnimation(parent: animation, curve: curve),
+                      );
+                      
+                      return FadeTransition(
+                        opacity: fadeAnimation,
+                        child: SlideTransition(
+                          position: slideAnimation,
+                          child: child,
+                        ),
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 350),
+                  ),
+                );
               },
         );
       },

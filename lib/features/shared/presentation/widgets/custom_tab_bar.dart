@@ -28,15 +28,15 @@ class CustomTabBar extends StatelessWidget {
           clipBehavior: Clip.none, // Allow content to overflow
           children: [
             // Grey bottom line that spans the entire width
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                height: 1.h,
-                color: AppColors.greyVeryLight,
-              ),
-            ),
+            // Positioned(
+            //   left: 0,
+            //   right: 0,
+            //   bottom: 0,
+            //   child: Container(
+            //     height: 1.h,
+            //     color: AppColors.greyVeryLight,
+            //   ),
+            // ),
             // Custom TabBar with modified indicator
             TabBar(
               controller: tabController,
@@ -47,15 +47,26 @@ class CustomTabBar extends StatelessWidget {
                 height: 2.h, // Make this slightly thicker than the grey line
                 insets: EdgeInsets.zero,
               ),
-              tabAlignment: TabAlignment.start,
+              tabAlignment: isScrollable ? TabAlignment.start : null,
               labelColor: Colors.black,
               unselectedLabelColor: AppColors.greyLight,
-              labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
-              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+              // Update the text styles to match the app's styling
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+                fontFamily: 'SFCompactRounded', // Match your app's font family
+                letterSpacing: -0.5, // Adjust if needed for your design
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontWeight: FontWeight.w500, // Slightly lighter weight for unselected
+                fontSize: 16.sp,
+                fontFamily: 'SFCompactRounded', // Match your app's font family
+                letterSpacing: -0.5, // Adjust if needed for your design
+              ),
               labelPadding: EdgeInsets.symmetric(horizontal: 10.w),
               padding: EdgeInsets.symmetric(horizontal: 0.w),
               dividerHeight: 0, // No built-in divider
-              dividerColor: Colors.transparent,
+              dividerColor: AppColors.transparent,
               indicatorWeight: 0, // No default indicator
               splashFactory: NoSplash.splashFactory,
               tabs: tabs.map((String text) => Tab(text: text)).toList(),

@@ -1,16 +1,21 @@
+// ignore_for_file: avoid_redundant_argument_values
+
+import 'dart:math' show pi;
+
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart'; // Add this import
 
 import '../../../config/theme/colors.dart';
-import '../providers/token_selection_provider.dart'; // Import the new provider
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
-import '../../wallet/data/models/token_model.dart'; // Import token model
+import '../../wallet/data/models/token_model.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
+import '../providers/token_selection_provider.dart';
 import 'about_page.dart';
 import 'analytics_page.dart';
 import 'explore_page.dart';
@@ -20,12 +25,12 @@ import 'shared/staking_chart.dart';
 import 'shared/token_watchlist_bottom_sheet.dart';
 
 class TokensInfoScreen extends ConsumerStatefulWidget {
-  final String tokenId; // Keep this for direct deep links
-  
+
   const TokensInfoScreen({
     super.key,
-    this.tokenId = 'aptos', // Default value
+    this.tokenId = 'aptos',
   });
+  final String tokenId;
 
   @override
   ConsumerState<TokensInfoScreen> createState() => _TokensInfoScreenState();
@@ -34,7 +39,11 @@ class TokensInfoScreen extends ConsumerStatefulWidget {
 class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with TickerProviderStateMixin {
   double _currentPrice = 2212.21;
   double _previousPrice = 2212.21;
-  bool _isPriceIncreasing = true;
+  double _baselinePrice = 2212.21;
+  double _arrowAngle = 0;
+  Color _arrowColor = Colors.green;
+  bool _isAboveBaseline = true;
+  bool _useAnimatedPrice = false; // Flag to toggle between animated and static price display
   final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
   double _scrollOffset = 0;
@@ -42,10 +51,9 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
   final Set<int> _watchlistTokens = <int>{};
   final Set<int> _selectedTokens = <int>{};
   bool _showInAppBar = false;
-  double _scrollProgress = 0.0;
+  double _scrollProgress = 0;
   late Token _displayedToken;
 
-  // Add a controller for the rotation animation
   late AnimationController _arrowAnimationController;
   late Animation<double> _arrowRotationAnimation;
 
@@ -60,72 +68,144 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     _scrollController.addListener(_handleScroll);
-    
-    // Initialize arrow animation controller
+
     _arrowAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    
-    // Create the rotation animation
+
     _arrowRotationAnimation = Tween<double>(
       begin: 0,
-      end: 3.14159, // 180 degrees in radians
+      end: 0,
     ).animate(CurvedAnimation(
       parent: _arrowAnimationController,
       curve: Curves.easeInOut,
-    ));
+    ),);
+
+    _isAboveBaseline = _currentPrice >= _baselinePrice;
+    _arrowAngle = _isAboveBaseline ? 0.0 : pi;
+    _arrowColor = _isAboveBaseline ? Colors.green : Colors.red;
   }
 
-  @override 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
-    // Check if we're coming from a direct link or selection
-    final selectedToken = ref.read(selectedTokenNotifierProvider);
-    
-    // If we have a selected token from provider, use it
-    // Otherwise, select token based on tokenId parameter
+    final Token? selectedToken = ref.read(selectedTokenNotifierProvider);
     if (selectedToken == null) {
       ref.read(selectedTokenNotifierProvider.notifier).selectToken(widget.tokenId);
     }
   }
 
   void _handleScroll() {
-    // Create a wider, more gradual transition zone (0-200px instead of 50-150px)
     final double scrollProgress = (_scrollController.offset / 200.0).clamp(0.0, 1.0);
-    
-    // Use this progress value to update _showInAppBar with a smoother transition
     final bool newShowInAppBar = scrollProgress >= 0.5;
-    
+
     setState(() {
       _scrollOffset = _scrollController.offset;
-      
-      // Only update the boolean if it changed, to avoid unnecessary rebuilds
       if (newShowInAppBar != _showInAppBar) {
         _showInAppBar = newShowInAppBar;
       }
-      
-      // Store the scroll progress for animation interpolation
       _scrollProgress = scrollProgress;
     });
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_handleScroll);
-    _scrollController.dispose();
+    _scrollController..removeListener(_handleScroll)
+    ..dispose();
     _tabController.dispose();
     _arrowAnimationController.dispose();
     super.dispose();
   }
 
+  void _updateArrowAngle(double newPrice) {
+    final double difference = newPrice - _baselinePrice;
+    const double threshold = 0.01;
+    final double switchZone = _baselinePrice * threshold;
+    final bool newIsAboveBaseline = newPrice >= _baselinePrice;
+    double newAngle;
+    Color newColor;
+
+    if (_baselinePrice == 0) {
+      newAngle = 0.0;
+      newColor = Colors.green;
+    } else {
+      newAngle = newIsAboveBaseline ? 0.0 : pi;
+      newColor = newIsAboveBaseline ? Colors.green : Colors.red;
+
+      final bool inSwitchZone = difference.abs() < switchZone;
+      final bool stateChanged = newIsAboveBaseline != _isAboveBaseline;
+
+      if (inSwitchZone || stateChanged) {
+        newColor = inSwitchZone ? Colors.grey : newColor;
+        setState(() {
+          _arrowRotationAnimation = Tween<double>(
+            begin: _arrowAngle,
+            end: newAngle,
+          ).animate(CurvedAnimation(
+            parent: _arrowAnimationController,
+            curve: Curves.easeInOut,
+          ),);
+          _arrowAngle = newAngle;
+          _arrowColor = newColor;
+          _isAboveBaseline = newIsAboveBaseline;
+        });
+
+        if (_arrowAnimationController.isAnimating) {
+          _arrowAnimationController.forward(from: _arrowAnimationController.value);
+        } else {
+          _arrowAnimationController.forward(from: 0);
+        }
+      } else {
+        setState(() {
+          _arrowAngle = newAngle;
+          _arrowColor = newColor;
+          _isAboveBaseline = newIsAboveBaseline;
+        });
+      }
+    }
+  }
+
+  void _updatePrice(double price, {bool animate = false}) {
+    final double newPrice = price * 1000;
+    
+    setState(() {
+      _previousPrice = _currentPrice;
+      _currentPrice = newPrice;
+      
+      // Always turn on animation if explicitly requested
+      if (animate) {
+        _useAnimatedPrice = true;
+        
+        // Turn off animation after a short delay so it's ready for next animation
+        // ignore: always_specify_types
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          if (mounted) {
+            setState(() {
+              _useAnimatedPrice = false;
+            });
+          }
+        });
+      } else {
+        _useAnimatedPrice = false;
+      }
+    });
+    
+    _updateArrowAngle(newPrice);
+  }
+
+  void _updateBaseline(double baselineValue) {
+    final double newBaseline = baselineValue * 1000;
+    setState(() {
+      _baselinePrice = newBaseline;
+    });
+    _updateArrowAngle(_currentPrice);
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Get the selected token from the provider
-    final selectedToken = ref.watch(selectedTokenNotifierProvider);
-    
-    // If no token is selected yet, show a loading indicator
+    final Token? selectedToken = ref.watch(selectedTokenNotifierProvider);
+
     if (selectedToken == null) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -133,304 +213,382 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
     }
 
     return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverAppBar(
-            backgroundColor: Colors.white,
-            expandedHeight: 60.h,
-            leading: IconButton(
-              icon: Padding(
-                padding: EdgeInsets.only(top: 4.h),
-                child: Icon(
-                  PhosphorIconsBold.caretLeft,
-                  color: Colors.black,
-                  size: 24.sp,
-                ),
-              ),
-              onPressed: () => Navigator.pop(context),
+      body: TweenAnimationBuilder<double>(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+        tween: Tween<double>(begin: 0.0, end: 1.0),
+        builder: (context, value, child) {
+          return Opacity(
+            opacity: value,
+            child: Transform.translate(
+              offset: Offset(0, 20 * (1.0 - value)),
+              child: child,
             ),
-            pinned: true,
-            // Use AnimatedOpacity for smooth fade effect
-            title: AnimatedOpacity(
-              opacity: _scrollProgress,
-              duration: const Duration(milliseconds: 300),
-              child: _buildAppBarTitle(selectedToken),
-            ),
-            actions: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 2.w),
-                child: IconButton(
-                  icon: Icon(PhosphorIconsRegular.star, size: 24.sp),
-                  onPressed: _showWatchlistBottomSheet,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 8.w),
-                child: IconButton(
-                  icon: Icon(PhosphorIconsRegular.bell, size: 24.sp),
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 2.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // Use AnimatedOpacity for smooth fade effect for the header
-                  AnimatedOpacity(
-                    opacity: 1.0 - _scrollProgress,
-                    duration: const Duration(milliseconds: 300),
-                    child: _scrollProgress < 1.0 ? _buildHeaderContent(selectedToken) : const SizedBox.shrink(),
+          );
+        },
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: <Widget>[
+            SliverAppBar(
+              backgroundColor: Colors.white,
+              expandedHeight: 60.h,
+              leading: IconButton(
+                icon: Padding(
+                  padding: EdgeInsets.only(top: 4.h),
+                  child: Icon(
+                    PhosphorIconsBold.caretLeft,
+                    color: Colors.black,
+                    size: 24.sp,
                   ),
-                  
-                  // Use Transform.translate instead of negative margins for smooth animation
-                  Transform.translate(
-                    offset: Offset(0, -50.h * _scrollProgress),
-                    child: AnimatedContainer(
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+              pinned: true,
+              title: AnimatedOpacity(
+                opacity: _scrollProgress,
+                duration: const Duration(milliseconds: 300),
+                child: _buildAppBarTitle(selectedToken),
+              ),
+              actions: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(right: 2.w),
+                  child: IconButton(
+                    icon: Icon(PhosphorIconsRegular.star, size: 24.sp),
+                    onPressed: _showWatchlistBottomSheet,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 8.w),
+                  child: IconButton(
+                    icon: Icon(PhosphorIconsRegular.bell, size: 24.sp),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (BuildContext context) => const PriceAlertPage()),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 2.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    AnimatedOpacity(
+                      opacity: 1.0 - _scrollProgress,
                       duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      child: StakingChart(
-                        onPriceChange: (double price) {
-                          _updatePrice(price);
-                        },
+                      child: _scrollProgress < 1.0 ? _buildHeaderContent(selectedToken) : const SizedBox.shrink(),
+                    ),
+                    Transform.translate(
+                      offset: Offset(0, -50.h * _scrollProgress),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: StakingChart(
+                          onPriceChange: (double price) {
+                            _updatePrice(price, animate: false); // Non-animated update
+                          },
+                          onPriceChangeWithAnimation: (double price) {
+                            _updatePrice(price, animate: true); // Animated update
+                          },
+                          onBaselineValueChange: (double baselineValue) {
+                            _updateBaseline(baselineValue);
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                  
-                  // Add a vertical space that reduces as you scroll to maintain layout
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    height: 38.h - (10.h * _scrollProgress),
-                  ),
-                  
-                  // Rest of the content unchanged
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        _buildInfoContainer('100 ${selectedToken.currency}', 'Balance'),
-                        _buildInfoContainer(selectedToken.price, 'AVG BUY PRICE'),
-                      ],
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      height: 38.h - (10.h * _scrollProgress),
                     ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          _buildInfoContainer('100 ${selectedToken.currency}', 'BALANCE'),
+                          _buildInfoContainer(selectedToken.price, 'AVG BUY PRICE'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                  ],
+                ),
+              ),
+            ),
+            SliverPersistentHeader(
+              delegate: TabBarDelegate(
+                Material(
+                  color: Colors.white,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      // Full width tab bar without border
+                      SizedBox(
+                        width: double.infinity,
+                        child: CustomTabBar(
+                          tabController: _tabController,
+                          tabs: const <String>['About', 'Explore', 'History', 'Analytics'],
+                          // ignore: avoid_redundant_argument_values
+                          isScrollable: true,
+                        ),
+                      ),
+                      // Centered shorter grey underline
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+                          width: 350.w, // Custom width for the underline only
+                          height: 1,
+                          color: AppColors.greyVeryLight,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10.h),
-                ],
+                ),
+              ),
+              pinned: true,
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 1.5,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    const AboutPage(),
+                    const ExplorePage(),
+                    HistoryPage(),
+                    const AnalyticsPage(),
+                  ],
+                ),
               ),
             ),
-          ),
-          SliverPersistentHeader(
-            delegate: TabBarDelegate(
-              CustomTabBar(
-                tabController: _tabController,
-                tabs: const <String>['About', 'Explore', 'History', 'Analytics'],
-              ),
-            ),
-            pinned: true,
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 1.5,
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  const AboutPage(),
-                  const ExplorePage(),
-                  HistoryPage(),
-                  const AnalyticsPage(),
-                ],
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildAppBarTitle(Token token) => Row(
-    children: <Widget>[
-      // Display the selected token's image
-      if (_showInAppBar) Hero(
-            tag: 'token_image_${token.imagePath}',
-            child: Image.asset(token.imagePath, height: 32.h, width: 32.h),
-          ) else Image.asset(token.imagePath, height: 32.h, width: 32.h),
-      Gap(10.w),
-      
-      // Column with token name and price
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          // Token name
-          Text(
-            token.name,
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          
-          // USD value below the token name
-          Text(
-            '\$${_currentPrice.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-              color: AppColors.greyDark,
-            ),
+          if (_showInAppBar)
+            Hero(
+              tag: 'token_image_${token.imagePath}',
+              child: Image.asset(token.imagePath, height: 32.h, width: 32.h),
+            )
+          else
+            Image.asset(token.imagePath, height: 32.h, width: 32.h),
+          Gap(10.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                token.name,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+              Text(
+                '\$${_currentPrice.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.greyDark,
+                ),
+              ),
+            ],
           ),
         ],
-      ),
-    ],
-  );
+      );
 
   Widget _buildHeaderContent(Token token) => Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.w),
-    child: Column(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.centerLeft,
-          child: _showInAppBar 
-            ? Image.asset(token.imagePath, height: 44.w, width: 44.w)
-            : Hero(
-                tag: 'token_image_${token.imagePath}',
-                child: Image.asset(token.imagePath, height: 44.w, width: 44.w),
-              ),
-        ),
-        Gap(12.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Column(
           children: <Widget>[
-            Text(
-              token.name,
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
+            Padding(
+              // Add extra padding at the top to accommodate the bounce animation 
+              padding: EdgeInsets.only(top: 12.h), // Increased from 8.h to 16.h
+              child: Align(
+                alignment: Alignment.centerLeft,
+                // Add a SizedBox with fixed height to reserve space for the animation
+                child: SizedBox(
+                  height: 50.h, // Make sure this is tall enough for the bounce (-15px)
+                  width: 32.w,
+                  child: _showInAppBar
+                    ? Image.asset(token.imagePath, height: 32.w, width: 32.w)
+                    : Hero(
+                        tag: 'token_image_${token.imagePath}',
+                        flightShuttleBuilder: (
+                          BuildContext flightContext,
+                          Animation<double> animation,
+                          HeroFlightDirection direction,
+                          BuildContext fromContext,
+                          BuildContext toContext,
+                        // ignore: prefer_expression_function_bodies
+                        ) {
+                          // Custom flight animation for an extra bounce during transition
+                          return AnimatedBuilder(
+                            animation: animation,
+                            child: Image.asset(token.imagePath, height: 32.w, width: 32.w),
+                            builder: (BuildContext context, Widget? child) {
+                              // Calculate bounce value with clamping to prevent out-of-range errors
+                              final double inputValue = (animation.value < 0.7 
+                                ? 0.0 
+                                : (animation.value - 0.7) / 0.3).clamp(0.0, 1.0);
+                                
+                              final double bounceValue = Curves.elasticOut.transform(inputValue);
+                              
+                              return Transform.scale(
+                                scale: 0.8 + (animation.value * 0.2) + (bounceValue * 0.15), 
+                                child: child,
+                              );
+                            },
+                          );
+                        },
+                        // Add clipBehavior to ensure the Hero doesn't get clipped
+                        child: Material(
+                          color: Colors.transparent,
+                          // ignore: avoid_redundant_argument_values
+                          clipBehavior: Clip.none, 
+                          child: TweenAnimationBuilder<double>(
+                            duration: const Duration(milliseconds: 1000),
+                            curve: Curves.bounceOut,
+                            tween: Tween<double>(begin: -15, end: 0),
+                            builder: (BuildContext context, double value, Widget? child) => Transform.translate(
+                                offset: Offset(0, value),
+                                child: child,
+                              ),
+                            child: Image.asset(token.imagePath, height: 32.w, width: 32.w),
+                          ),
+                        ),
+                      ),
+                ),
               ),
             ),
-            Text(
-              '\$${_currentPrice.toStringAsFixed(2)}',
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        Gap(4.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              token.currency,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Gap(10.h),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${token.percentageChange}%',
+                  token.name,
+                  style: TextStyle(
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (_useAnimatedPrice) AnimatedFlipCounter(
+                        value: _currentPrice,
+                        prefix: r'$',
+                        fractionDigits: 2,
+                        textStyle: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ) else Text(
+                        '\$${_currentPrice.toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+              ],
+            ),
+            Gap(8.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  token.currency,
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: token.percentageChange >= 0 ? Colors.green : Colors.red,
+                    color: Colors.grey[600],
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Gap(4.w),
-                // Use AnimatedBuilder to rebuild when animation value changes
-                AnimatedBuilder(
-                  animation: _arrowAnimationController,
-                  builder: (BuildContext context, Widget? child) => Transform.rotate(
-                      angle: _isPriceIncreasing ? 0 : _arrowRotationAnimation.value,
-                      child: Icon(
-                        _isPriceIncreasing 
-                          ? PhosphorIconsRegular.arrowUp
-                          : PhosphorIconsRegular.arrowDown,
-                        size: 14.sp,
-                        color: _isPriceIncreasing ? Colors.green : Colors.red,
+                Row(
+                  children: <Widget>[
+                    // Arrow moved to the beginning of the row
+                    SizedBox(
+                      height: 20.h, // Fixed height for consistent positioning
+                      child: Center(
+                        child: AnimatedBuilder(
+                          animation: _arrowAnimationController,
+                          builder: (BuildContext context, Widget? child) => Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.identity()
+                              ..rotateZ(_arrowRotationAnimation.value),
+                            child: Icon(
+                              PhosphorIconsRegular.arrowUp,
+                              size: 14.sp,
+                              color: _arrowColor,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
+                    Gap(4.w),
+                    // Percentage text follows the arrow
+                    if (_useAnimatedPrice) AnimatedFlipCounter(
+                            value: _baselinePrice > 0 ? ((_currentPrice - _baselinePrice) / _baselinePrice * 100) : 0.0,
+                            fractionDigits: 2,
+                            suffix: '%',
+                            textStyle: TextStyle(
+                              fontSize: 14.sp,
+                              color: _arrowColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ) else Text(
+                            '${(_baselinePrice > 0 ? ((_currentPrice - _baselinePrice) / _baselinePrice * 100) : 0.0).toStringAsFixed(2)}%',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: _arrowColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                  ],
                 ),
               ],
             ),
           ],
         ),
-      ],
-    ),
-  );
+      );
 
-  // Rest of the implementation remains the same
-  
-  // ...
-  
-  void _updatePrice(double price) {
-    final double newPrice = price * 1000;
-    
-    // Determine if price is increasing or decreasing
-    final bool isIncreasing = newPrice >= _currentPrice;
-    
-    // Only animate if direction changed
-    if (isIncreasing != _isPriceIncreasing) {
-      _isPriceIncreasing = isIncreasing;
-      
-      // Animate to appropriate rotation
-      if (isIncreasing) {
-        _arrowAnimationController.reverse(); // Point up
-      } else {
-        _arrowAnimationController.forward(); // Point down
-      }
-    }
-    
-    setState(() {
-      _previousPrice = _currentPrice;
-      _currentPrice = newPrice;
-    });
-  }
-  
-  // Other methods remain unchanged...
   Widget _buildInfoContainer(String value, String label) => Container(
-    height: 65.h,
-    width: 170.w,
-    decoration: BoxDecoration(
-      color: AppColors.greyVeryLight,
-      borderRadius: BorderRadius.circular(12.r),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
-          ),
+        height: 65.h,
+        width: 170.w,
+        decoration: BoxDecoration(
+          color: AppColors.greyVeryLight,
+          borderRadius: BorderRadius.circular(12.r),
         ),
-        Gap(4.h),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w600,
-            color: AppColors.greyLight,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Gap(4.h),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.greyLight,
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
 
   void _showWatchlistBottomSheet() {
     showModalBottomSheet(
@@ -450,6 +608,6 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
   }
 
   void _showWatchlistAddedMessage(int? collectionIndex) {
-    // Existing implementation...
+    // Implementation for watchlist message
   }
 }

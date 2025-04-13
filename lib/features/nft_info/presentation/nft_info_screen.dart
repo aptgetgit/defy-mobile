@@ -10,9 +10,11 @@ import '../../token_info/presentation/about_page.dart';
 import '../../token_info/presentation/price_alert_page.dart';
 import '../../token_info/presentation/shared/token_watchlist_bottom_sheet.dart';
 import '../../token_info/providers/token_info_controller.dart';
+import '../../wallet/data/models/nft_model.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_safety_tokens_screen.dart';
+import '../models/nft_selection_provider.dart';
 import '../shared/nft_info_bottom_navbar.dart';
 import 'analytics_page.dart';
 import 'order_page.dart';
@@ -27,8 +29,6 @@ class NftInfoScreen extends ConsumerStatefulWidget {
 class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
     with TickerProviderStateMixin {
   String coinLogoUrl = '';
-  String nftName = 'Monkey #1212';
-  String owner = 'Fantasy Ruins';
   String priceUsd = '\$2,212.21';
   bool _showTitle = false;
   late ScrollController _scrollController;
@@ -80,7 +80,14 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
   Widget build(BuildContext context) {
     final double imageWidth = 353.w;
     final double imageHeight = 353.h;
-
+    
+    // Get the selected NFT from the provider
+    final NFT? selectedNft = ref.watch(selectedNftNotifierProvider);
+    
+    // Use default values if no NFT is selected
+    final String nftName = 'Monkey #1212';
+    const String owner = 'Fantasy Ruins';
+    final String nftImagePath = selectedNft?.imageUrl ?? 'assets/images/cyborg2.png';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -91,7 +98,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
             child: CustomScrollView(
               controller: _scrollController,
               slivers: <Widget>[
-                _buildSliverAppBar(context),
+                _buildSliverAppBar(context, nftName, owner, nftImagePath),
                 SliverToBoxAdapter(
                   child: ColoredBox(
                     color: Colors.white,
@@ -156,7 +163,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: <Widget>[
                                         Text(
-                                          r'$201.21',
+                                          selectedNft?.price != null ? '\$${selectedNft!.price}' : r'$201.21',
                                           style: TextStyle(
                                             fontSize: 22.sp,
                                             fontWeight: FontWeight.w600,
@@ -179,29 +186,36 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                             ),
                           ),
                         ),
-                        Container(
-                          width: imageWidth,
-                          height: imageHeight,
-                          margin: EdgeInsets.only(top: 24.h),
-                          child: Image.asset(
-                            'assets/images/cyborg2.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                          Gap(26.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                _buildInfoContainer('100 APT', 'BOUGHT AT'),
-                                _buildInfoContainer('3', 'ACTIVE BIDS'),
-                              ],
+                        // NFT image with Hero animation
+                        Hero(
+                          tag: 'nft-image-${selectedNft?.id ?? "default"}',
+                          child: Container(
+                            width: imageWidth,
+                            height: imageHeight,
+                            margin: EdgeInsets.only(top: 24.h),
+                            child: Image.asset(
+                              nftImagePath,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          SizedBox(height: 20.h),
-                        ],
-                      ),
+                        ),
+                        Gap(26.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              _buildInfoContainer(
+                                selectedNft?.price != null ? '\$${selectedNft!.price}' : '100 APT', 
+                                'BOUGHT AT'
+                              ),
+                              _buildInfoContainer('3', 'ACTIVE BIDS'),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                      ],
+                    ),
                   ),
                 ),
                 SliverPersistentHeader(
@@ -219,44 +233,44 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                 ),
                 SliverToBoxAdapter(
                   child: AnimatedBuilder(
-                      animation: _tabController,
-                      builder: (BuildContext context, Widget? child) {
-                        // Calculate the current tab index, including partial transitions
-                        final double index = _tabController.animation?.value ?? _tabController.index.toDouble();
-                        
-                        // Define different heights for each tab
-                        final List<double> tabHeights = <double>[
-                          MediaQuery.of(context).size.height + 100.h, // About page
-                          MediaQuery.of(context).size.height + 700.h, // Explore page
-                          MediaQuery.of(context).size.height + 100.h, // Analytics page
-                        ];
-                        
-                        // Calculate height during tab transitions
-                        double height;
-                        if (index.floor() == index.ceil()) {
-                          // Not transitioning between tabs
-                          height = tabHeights[index.toInt()];
-                        } else {
-                          // Transitioning between tabs - interpolate heights
-                          final double lowerHeight = tabHeights[index.floor()];
-                          final double upperHeight = tabHeights[index.ceil()];
-                          final double t = index - index.floor();
-                          height = lowerHeight + (upperHeight - lowerHeight) * t;
-                        }
-                        
-                        return SizedBox(
-                          height: height,
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: <Widget>[
-                              const AboutPage(),
-                              OrderPage(),
-                              const AnalyticsOverviewPage(),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    animation: _tabController,
+                    builder: (BuildContext context, Widget? child) {
+                      // Calculate the current tab index, including partial transitions
+                      final double index = _tabController.animation?.value ?? _tabController.index.toDouble();
+                      
+                      // Define different heights for each tab
+                      final List<double> tabHeights = <double>[
+                        MediaQuery.of(context).size.height + 100.h, // About page
+                        MediaQuery.of(context).size.height + 700.h, // Explore page
+                        MediaQuery.of(context).size.height + 100.h, // Analytics page
+                      ];
+                      
+                      // Calculate height during tab transitions
+                      double height;
+                      if (index.floor() == index.ceil()) {
+                        // Not transitioning between tabs
+                        height = tabHeights[index.toInt()];
+                      } else {
+                        // Transitioning between tabs - interpolate heights
+                        final double lowerHeight = tabHeights[index.floor()];
+                        final double upperHeight = tabHeights[index.ceil()];
+                        final double t = index - index.floor();
+                        height = lowerHeight + (upperHeight - lowerHeight) * t;
+                      }
+                      
+                      return SizedBox(
+                        height: height,
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: <Widget>[
+                            const AboutPage(),
+                            OrderPage(),
+                            const AnalyticsOverviewPage(),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -268,150 +282,153 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
   }
 
   Widget _buildInfoContainer(String value, String label) => Container(
-        height: 65.h,
-        width: 170.w,
-        decoration: BoxDecoration(
-          color: AppColors.greyVeryLight,
-          borderRadius: BorderRadius.circular(12.r),
+    height: 65.h,
+    width: 170.w,
+    decoration: BoxDecoration(
+      color: AppColors.greyVeryLight,
+      borderRadius: BorderRadius.circular(12.r),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Gap(4.h),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.greyLight,
-              ),
-            ),
-          ],
+        Gap(4.h),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.greyLight,
+          ),
         ),
-      );
+      ],
+    ),
+  );
 
-  Widget _buildSliverAppBar(BuildContext context) => SliverAppBar(
-      elevation: 4,
-      shadowColor: Colors.black,
-      surfaceTintColor: Colors.black,
-      pinned: true,
-      backgroundColor: Colors.white,
-      leading: GestureDetector(
-        onTap: () => Navigator.pop(context),
-        child: Icon(
-          PhosphorIconsBold.caretLeft,
+  Widget _buildSliverAppBar(BuildContext context, String nftName, String owner, String nftImagePath) => SliverAppBar(
+    elevation: 4,
+    shadowColor: Colors.black,
+    surfaceTintColor: Colors.black,
+    pinned: true,
+    backgroundColor: Colors.white,
+    leading: GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Icon(
+        PhosphorIconsBold.caretLeft,
+        color: AppColors.black,
+        size: 24.sp,
+      ),
+    ),
+    collapsedHeight: 60.h,
+    centerTitle: false,
+    actions: <Widget>[
+      IconButton(
+        icon: Icon(
+          PhosphorIconsRegular.star,
           color: AppColors.black,
           size: 24.sp,
         ),
+        onPressed: _showWatchlistBottomSheet,
       ),
-      collapsedHeight: 60.h,
-      centerTitle: false,
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(
-            PhosphorIconsRegular.star,
-            color: AppColors.black,
-            size: 24.sp,
-          ),
-          onPressed: _showWatchlistBottomSheet,
-        ),
-        Stack(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(
-                PhosphorIconsRegular.bell,
-                color: AppColors.black,
-                size: 24.sp,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => PriceAlertPage(
-                      onAlertCreated: () {
-                        setState(() {
-                          _alertCreated = true;
-                        });
-                      },
-                    ),
-                  ),
-                );
-              },
+      Stack(
+        children: <Widget>[
+          IconButton(
+            icon: Icon(
+              PhosphorIconsRegular.bell,
+              color: AppColors.black,
+              size: 24.sp,
             ),
-            if (_alertCreated)
-              Positioned(
-                top: 8.h,
-                right: 8.w,
-                child: Container(
-                  width: 8.w,
-                  height: 8.h,
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => PriceAlertPage(
+                    onAlertCreated: () {
+                      setState(() {
+                        _alertCreated = true;
+                      });
+                    },
                   ),
                 ),
+              );
+            },
+          ),
+          if (_alertCreated)
+            Positioned(
+              top: 8.h,
+              right: 8.w,
+              child: Container(
+                width: 8.w,
+                height: 8.h,
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
               ),
-          ],
-        ),
-        Gap(8.w),
-      ],
-      titleSpacing: 0,
-      title: AnimatedOpacity(
-        opacity: _showTitle ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 300),
-        child: Row(
-          children: <Widget>[
-            Image.asset(
-              'assets/images/cyborg2.png',
+            ),
+        ],
+      ),
+      Gap(8.w),
+    ],
+    titleSpacing: 0,
+    title: AnimatedOpacity(
+      opacity: _showTitle ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 300),
+      child: Row(
+        children: <Widget>[
+          // Small image in app bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4.r),
+            child: Image.asset(
+              nftImagePath,
               height: 36.h,
               width: 36.w,
             ),
-            Gap(12.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  nftName,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.black,
+          ),
+          Gap(12.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                nftName,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.black,
+                ),
+              ),
+              Gap(4.h),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    owner,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyLight,
+                    ),
                   ),
-                ),
-                Gap(4.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      owner,
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.greyLight,
-                      ),
-                    ),
-                    Gap(4.w),
-                    Icon(
-                      PhosphorIconsFill.sealCheck,
-                      color: AppColors.blue,
-                      size: 14.sp,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+                  Gap(4.w),
+                  Icon(
+                    PhosphorIconsFill.sealCheck,
+                    color: AppColors.blue,
+                    size: 14.sp,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
-    );
-
+    ),
+  );
 
   void _showWatchlistBottomSheet() {
     showModalBottomSheet(
@@ -506,9 +523,4 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
       _overlayEntry = null;
     });
   }
-
-  Widget _buildPoolLogo({bool small = false}) => Image.asset(
-        'assets/images/cyborg2.png',
-        height: small ? 24.h : 32.h,
-      );
 }

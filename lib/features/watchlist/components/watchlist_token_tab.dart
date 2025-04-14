@@ -7,14 +7,14 @@ import '../../wallet/presentation/providers/wallet_provider.dart';
 import '../presentation/providers/watchlist_new_collection_model.dart';
 import '../presentation/providers/watchlist_new_collection_provider.dart';
 import '../presentation/watchlist_safety_tokens_screen.dart';
-import '../utils/custom_route.dart';
 import '../widgets/watchlist_collection_tile.dart';
 import '../widgets/watchlist_newList_tile.dart';
 import '../widgets/watchlist_new_collection.dart';
 import '../widgets/watchlist_safety_token_tile.dart';
 
 class WatchlistTokensTab extends ConsumerWidget {
-  const WatchlistTokensTab({Key? key}) : super(key: key);
+  const WatchlistTokensTab({super.key, this.newCollectionHeroTag});
+  final String? newCollectionHeroTag;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,6 +49,7 @@ class WatchlistTokensTab extends ConsumerWidget {
                 // Otherwise, show the first collection
                 if (collections.isEmpty) _buildNewListTile(context, ref) else WatchlistCollectionTile(
                   collection: collections[0],
+                  heroTag: newCollectionHeroTag,
                 ),
               ],
             ),
@@ -89,6 +90,7 @@ class WatchlistTokensTab extends ConsumerWidget {
                 // First column
                 WatchlistCollectionTile(
                   collection: remainingCollections[firstItemIndex],
+                  heroTag: newCollectionHeroTag,
                 ),
                 
                 // Second column
@@ -110,6 +112,7 @@ class WatchlistTokensTab extends ConsumerWidget {
                 // Show the odd collection
                 WatchlistCollectionTile(
                   collection: remainingCollections.last,
+                  heroTag: newCollectionHeroTag,
                 ),
                 
                 // Show New List tile in second position
@@ -138,45 +141,60 @@ class WatchlistTokensTab extends ConsumerWidget {
   
   // Extract the New List tile creation into a separate method
   Widget _buildNewListTile(BuildContext context, WidgetRef ref) {
-    // Create keys to track positions
-    final GlobalKey tileKey = GlobalKey();
-    final GlobalKey destinationKey = GlobalKey();
+    final List<WatchlistNewCollection> collections = ref.watch(tokenCollectionsProvider);
     
-    return KeyedSubtree(
-      key: tileKey,
-      child: GestureDetector(
-        onTap: () {
-          // Clear any existing selections
-          ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
-          
-          // Get the current position of the tile
-          final RenderBox renderBox = tileKey.currentContext!.findRenderObject() as RenderBox;
-          final Offset position = renderBox.localToGlobal(Offset.zero);
-          final Size size = renderBox.size;
-          
-          // Calculate source rectangle
-          final Rect sourceRect = Rect.fromLTWH(
-            position.dx,
-            position.dy,
-            size.width,
-            size.height,
-          );
-          
-          // Use custom route
-          Navigator.push(
-            context,
-            NewListTilePageRoute(
-              sourceRect: sourceRect,
-              destinationKey: destinationKey,
-              page: WatchListNewCollectionScreen(
-                source: CollectionSource.token,
-                newListTileKey: destinationKey,
+    // Only apply directional animation if there are collections
+    final bool hasCollections = collections.isNotEmpty;
+    final bool isOddCollections = hasCollections && collections.length % 2 == 1;
+    final String direction = isOddCollections ? 'right' : 'left';
+    final String heroTag = 'new_list_${direction}_${DateTime.now().millisecondsSinceEpoch}';
+    
+    return Padding(
+      padding: EdgeInsets.only(bottom: 38.h),  // Match the padding of other tiles
+      child: hasCollections 
+        // Apply animation only if there are collections
+        ? TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: isOddCollections ? 1.0 : -1.0, end: 0.0),
+            duration: const Duration(milliseconds: 500),
+            builder: (BuildContext context, double value, Widget? child) => Transform.translate(
+                offset: Offset(value * 100, 0),
+                child: child,
               ),
-            ),
-          );
-        },
-        child: const WatchlistNewListTile(),
-      ),
+            child: _buildNewListTileContent(context, ref, heroTag),
+          )
+        // No animation if there are no collections
+        : _buildNewListTileContent(context, ref, heroTag),
     );
   }
+
+  // Helper method to build the actual content of the new list tile
+  Widget _buildNewListTileContent(BuildContext context, WidgetRef ref, String heroTag) => GestureDetector(
+      onTap: () {
+        // Clear any existing selections
+        ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
+        
+        // Navigate to create screen specifically for Tokens
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 500),
+            pageBuilder: (_, __, ___) => WatchListNewCollectionScreen(
+              source: CollectionSource.token,
+              returnHeroTag: heroTag,
+            ),
+            transitionsBuilder: (_, Animation<double> animation, __, Widget child) => FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          ),
+        );
+      },
+      child: Hero(
+        tag: heroTag,
+        child: const Material(
+          type: MaterialType.transparency,
+          child: WatchlistNewListTile(forceEmptyState: true),
+        ),
+      ),
+    );
 }

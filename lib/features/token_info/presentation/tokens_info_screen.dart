@@ -337,9 +337,7 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
                                 }
                               },
                               onBaselineValueBalance: (double baselineValue) {
-                                if (_isChartInteractable) {
-                                  _updateBaseline(baselineValue);
-                                }
+                                if (_isChartInteractable) _updateBaseline(baselineValue);
                               },
                             ),
                           ),

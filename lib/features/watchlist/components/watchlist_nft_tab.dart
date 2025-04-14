@@ -7,8 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../wallet/presentation/providers/wallet_provider.dart';
 import '../presentation/providers/watchlist_new_collection_model.dart';
 import '../presentation/providers/watchlist_new_collection_provider.dart';
-
-import '../utils/custom_route.dart';
+import '../presentation/watchlist_cute_nft_screen.dart';
 import '../widgets/watchlist_collection_tile.dart';
 import '../widgets/watchlist_cute_nft_tile.dart';
 import '../widgets/watchlist_grid_tile.dart';
@@ -37,11 +36,11 @@ class WatchlistNFTTab extends ConsumerWidget {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute<void>(
-                    //     builder: (BuildContext context) => const WatchlistTransitionScreen(),
-                    //   ),
-                    // );
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => const WatchlistCuteNFTScreen(),
+                      ),
+                    );
                   },
                   child: Material(
                     color: Colors.transparent,
@@ -69,14 +68,12 @@ class WatchlistNFTTab extends ConsumerWidget {
   Widget _buildNFTCollectionGrid(BuildContext context, WidgetRef ref, List<WatchlistNewCollection> collections) {
     if (collections.isEmpty) {
       return Padding(
-        // Adjust this padding to be consistent with other layouts
-        padding: EdgeInsets.only(top: 20.h),
+        padding: EdgeInsets.only(top: 20.h, bottom: 40.h),
         child: Center(
           child: _buildNewListTile(context, ref),
         ),
       );
     }
-    
     // Calculate collection pairs (how many complete rows of two items)
     final int completePairs = collections.length ~/ 2;
     final bool hasOddCollection = collections.length % 2 == 1;
@@ -121,7 +118,6 @@ class WatchlistNFTTab extends ConsumerWidget {
         else
           // If collections count is even, add a new row with the New List tile
           Padding(
-            // Use a consistent padding
             padding: EdgeInsets.only(bottom: 20.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,11 +125,8 @@ class WatchlistNFTTab extends ConsumerWidget {
                 // Show New List tile in first position
                 _buildNewListTile(context, ref),
                 
-                // Maintain balance with an invisible placeholder the same size as a tile
-                SizedBox(
-                  width: (MediaQuery.of(context).size.width - 32.w) / 2,
-                  height: 200.h, // Match the approximate height of the collection tiles
-                ),
+                // Empty space for second position
+                SizedBox(width: MediaQuery.of(context).size.width * 0.4),
               ],
             ),
           ),
@@ -141,47 +134,63 @@ class WatchlistNFTTab extends ConsumerWidget {
     );
   }
   
-  // Update the _buildNewListTile method
+  // Extract the New List tile creation into a separate method - similar to tokens tab
+  // Update in watchlist_nft_tab.dart _buildNewListTile method
   Widget _buildNewListTile(BuildContext context, WidgetRef ref) {
-    // Create keys to track positions
-    final GlobalKey tileKey = GlobalKey();
-    final GlobalKey destinationKey = GlobalKey();
+    final List<WatchlistNewCollection> collections = ref.watch(nftCollectionsProvider);
     
-    return KeyedSubtree(
-      key: tileKey,
-      child: GestureDetector(
-        onTap: () {
-          // Clear any existing selections
-          ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
-          
-          // Get the current position of the tile
-          final RenderBox renderBox = tileKey.currentContext!.findRenderObject() as RenderBox;
-          final Offset position = renderBox.localToGlobal(Offset.zero);
-          final Size size = renderBox.size;
-          
-          // Calculate source rectangle
-          final Rect sourceRect = Rect.fromLTWH(
-            position.dx,
-            position.dy,
-            size.width,
-            size.height,
-          );
-          
-          // Use custom route
-          Navigator.push(
-            context,
-            NewListTilePageRoute(
-              sourceRect: sourceRect,
-              destinationKey: destinationKey,
-              page: WatchListNewCollectionScreen(
-                source: CollectionSource.nft,
-                newListTileKey: destinationKey,
+    // Only apply directional animation if there are collections
+    final bool hasCollections = collections.isNotEmpty;
+    final bool isOddCollections = hasCollections && collections.length % 2 == 1;
+    final String direction = isOddCollections ? 'right' : 'left';
+    final String heroTag = 'new_list_${direction}_${DateTime.now().millisecondsSinceEpoch}';
+    
+    return Padding(
+      padding: EdgeInsets.only(bottom: 38.h),
+      child: hasCollections 
+        // Apply animation only if there are collections
+        ? TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: isOddCollections ? 1.0 : -1.0, end: 0.0),
+            duration: const Duration(milliseconds: 500),
+            builder: (BuildContext context, double value, Widget? child) => Transform.translate(
+                offset: Offset(value * 100, 0),
+                child: child,
               ),
-            ),
-          );
-        },
-        child: const WatchlistNewListTile(forceEmptyState: true),
-      ),
+            child: _buildNewListTileContent(context, ref, heroTag),
+          )
+        // No animation if there are no collections
+        : _buildNewListTileContent(context, ref, heroTag),
     );
   }
+
+  // Helper method to build the actual content of the new list tile
+  Widget _buildNewListTileContent(BuildContext context, WidgetRef ref, String heroTag) => GestureDetector(
+      onTap: () {
+        // Clear any existing selections
+        ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
+        
+        // Navigate to create screen specifically for NFTs
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 500),
+            pageBuilder: (_, __, ___) => WatchListNewCollectionScreen(
+              source: CollectionSource.nft,
+              returnHeroTag: heroTag,
+            ),
+            transitionsBuilder: (_, Animation<double> animation, __, Widget child) => FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          ),
+        );
+      },
+      child: Hero(
+        tag: heroTag,
+        child: const Material(
+          type: MaterialType.transparency,
+          child: WatchlistNewListTile(forceEmptyState: true),
+        ),
+      ),
+    );
 }

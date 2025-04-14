@@ -102,8 +102,6 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
   bool _isDragging = false;
   DateTime? _lastTouchTime;
 
-  late LineChartData _lineChartData;
-
   @override
   void initState() {
     super.initState();
@@ -121,31 +119,14 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
         });
       });
 
-    _animatedSpots = [];
-    _lineChartData = LineChartData(
-      lineBarsData: <LineChartBarData>[
-        LineChartBarData(
-          color: Colors.black,
-          spots: _animatedSpots,
-          isCurved: true,
-          isStrokeCapRound: true,
-          barWidth: 3.w,
-          belowBarData: BarAreaData(),
-          dotData: const FlDotData(show: false),
-        ),
-      ],
-      minY: index == '1Y' || index == 'All' ? 1 : 1,
-      maxY: index == '1Y' || index == 'All' ? 2.5 : 2.5,
-      titlesData: const FlTitlesData(show: false),
-      gridData: const FlGridData(show: false),
-      borderData: FlBorderData(show: false),
-    );
-
+    // Immediate initialization of price value
     WidgetsBinding.instance.addPostFrameCallback((_) {
       List<FlSpot> initialSpots = _getCurrentSpots();
       if (initialSpots.isNotEmpty) {
         widget.onBaselineValueChange?.call(initialSpots.first.y);
+        // Use non-animated update for initial value
         widget.onPriceChange?.call(initialSpots.last.y); 
+        // Schedule animated update after chart is fully displayed
         Future.delayed(const Duration(milliseconds: 1600), () {
           if (!_isUserTouching && mounted) {
             widget.onPriceChangeWithAnimation?.call(initialSpots.last.y);
@@ -180,143 +161,14 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
     }
   }
 
+  @override
   void updateAnimatedSpots() {
     if (widget.freezeUpdates) return;
-
+    
     List<FlSpot> currentSpots = _getCurrentSpots();
     int totalSpots = currentSpots.length;
     int spotsToShow = (totalSpots * _animation.value).ceil();
     _animatedSpots = currentSpots.take(spotsToShow).toList();
-
-    _lineChartData = LineChartData(
-      lineTouchData: LineTouchData(
-        enabled: !widget.freezeUpdates,
-        touchCallback: (FlTouchEvent event, LineTouchResponse? response) {
-          if (widget.freezeUpdates) return;
-
-          if (event is FlTapDownEvent || event is FlPanStartEvent || event is FlLongPressStart) {
-            _endPointTimer?.cancel();
-            setState(() {
-              _isUserTouching = true;
-              _isDragging = false;
-              _lastTouchTime = DateTime.now();
-            });
-          } else if (event is FlPanUpdateEvent) {
-            _endPointTimer?.cancel();
-            setState(() {
-              _isUserTouching = true;
-              _isDragging = true;
-            });
-          } else if (event is FlTapUpEvent || event is FlPanEndEvent || event is FlLongPressEnd || event is FlPointerExitEvent) {
-            setState(() {
-              _isUserTouching = false;
-              _isDragging = false;
-            });
-            
-            _endPointTimer?.cancel();
-            _endPointTimer = Timer(const Duration(milliseconds: 1000), () {
-              _moveToEndPoint();
-            });
-            
-            Timer(const Duration(milliseconds: 100), _clearTimeIndicator);
-          }
-
-          if (response == null || response.lineBarSpots == null || response.lineBarSpots!.isEmpty) {
-            if (!_isUserTouching) {
-              _clearTimeIndicator();
-            }
-            return;
-          }
-
-          final LineBarSpot touchedSpot = response.lineBarSpots!.first;
-          final double price = touchedSpot.y;
-
-          if (event is FlTapDownEvent && widget.onPriceChangeWithAnimation != null) {
-            widget.onPriceChangeWithAnimation!(price);
-          } else if (event is FlPanUpdateEvent && widget.onPriceChange != null) {
-            widget.onPriceChange!(price);
-          } else if ((event is FlTapUpEvent || event is FlPanEndEvent) && widget.onPriceChangeWithAnimation != null) {
-            widget.onPriceChangeWithAnimation!(price);
-          }
-
-          setState(() {
-            _currentTime = _getTimeFromSpot(touchedSpot.x, index);
-            _touchX = touchedSpot.x;
-          });
-        },
-        getTouchLineStart: (_, __) => -double.infinity,
-        getTouchLineEnd: (_, __) => double.infinity,
-        touchTooltipData: LineTouchTooltipData(
-          getTooltipColor: (_) => Colors.transparent,
-          getTooltipItems: (touchedSpots) => List.generate(touchedSpots.length, (_) => null),
-        ),
-        getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
-          if (spotIndexes.isEmpty) return [];
-          return spotIndexes.map((spotIndex) => TouchedSpotIndicatorData(
-              FlLine(
-                color: Colors.black,
-                strokeWidth: 1.5.w,
-                dashArray: null,
-              ),
-              FlDotData(
-                getDotPainter: (FlSpot spot, double percent, LineChartBarData barData, int index) =>
-                    FlDotCirclePainter(
-                  radius: 6.r,
-                  color: Colors.black,
-                  strokeColor: Colors.black,
-                ),
-              ),
-            )).toList();
-        },
-      ),
-      lineBarsData: <LineChartBarData>[
-        LineChartBarData(
-          color: Colors.black,
-          spots: _animatedSpots,
-          isCurved: true,
-          isStrokeCapRound: true,
-          barWidth: 3.w,
-          belowBarData: BarAreaData(),
-          dotData: const FlDotData(show: false),
-        ),
-      ],
-      minY: index == '1Y' || index == 'All' ? 1 : 1,
-      maxY: index == '1Y' || index == 'All' ? 2.5 : 2.5,
-      titlesData: FlTitlesData(
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            getTitlesWidget: (double value, TitleMeta meta) =>
-                leftTitleWidgets(value, meta, 300),
-            reservedSize: 56.w,
-          ),
-        ),
-        rightTitles: const AxisTitles(),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            getTitlesWidget: (double value, TitleMeta meta) =>
-                bottomTitleWidgets(value, meta, 300),
-            reservedSize: 36.h,
-            interval: 1,
-          ),
-        ),
-        topTitles: const AxisTitles(),
-      ),
-      gridData: FlGridData(
-        horizontalInterval: 1.5,
-        verticalInterval: 5,
-        checkToShowHorizontalLine: (double value) => value.toInt() == 0,
-        getDrawingHorizontalLine: (_) => FlLine(
-          color: Colors.transparent,
-          strokeWidth: 0.8.w,
-        ),
-        getDrawingVerticalLine: (_) => FlLine(
-          color: Colors.transparent,
-          strokeWidth: 0.8.w,
-        ),
-        checkToShowVerticalLine: (double value) => false,
-      ),
-      borderData: FlBorderData(show: false),
-    );
 
     if (_animation.value >= 0.99 && !_isUserTouching && _endPointTimer == null) {
       _endPointTimer = Timer(const Duration(milliseconds: 300), () {
@@ -338,25 +190,6 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
       if (currentSpots.isNotEmpty) {
         widget.onBaselineValueChange?.call(currentSpots.first.y);
       }
-      
-      _lineChartData = LineChartData(
-        lineBarsData: <LineChartBarData>[
-          LineChartBarData(
-            color: Colors.black,
-            spots: _animatedSpots,
-            isCurved: true,
-            isStrokeCapRound: true,
-            barWidth: 3.w,
-            belowBarData: BarAreaData(),
-            dotData: const FlDotData(show: false),
-          ),
-        ],
-        minY: index == '1Y' || index == 'All' ? 1 : 1,
-        maxY: index == '1Y' || index == 'All' ? 2.5 : 2.5,
-        titlesData: const FlTitlesData(show: false),
-        gridData: const FlGridData(show: false),
-        borderData: FlBorderData(show: false),
-      );
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -477,16 +310,23 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
 
     final FlSpot lastSpot = _animatedSpots.last;
 
+    // Trigger price animation without showing the time chip
     if (widget.onPriceChangeWithAnimation != null) {
       widget.onPriceChangeWithAnimation!(lastSpot.y);
     }
     
+    // Don't show the time chip at all after user interaction
+    // This prevents the cursor from reappearing at the end after touching
     if (_lastTouchTime == null) {
+      // Only show time chip on initial load if we want to
+      // Currently we don't want to show it, so this block is effectively disabled
     }
     
+    // Clear any existing time indicator
     _clearTimeIndicator();
   }
 
+  // Add a method to hide time indicator when not touching
   void _clearTimeIndicator() {
     if (!_isUserTouching && mounted) {
       setState(() {
@@ -516,7 +356,25 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
             child: AspectRatio(
               aspectRatio: 2,
               child: LineChart(
-                _lineChartData,
+                LineChartData(
+                  lineTouchData: const LineTouchData(enabled: false),
+                  lineBarsData: <LineChartBarData>[
+                    LineChartBarData(
+                      color: Colors.black,
+                      spots: _animatedSpots,
+                      isCurved: true,
+                      isStrokeCapRound: true,
+                      barWidth: 3.w,
+                      belowBarData: BarAreaData(),
+                      dotData: const FlDotData(show: false),
+                    ),
+                  ],
+                  minY: index == '1Y' || index == 'All' ? 1 : 1,
+                  maxY: index == '1Y' || index == 'All' ? 2.5 : 2.5,
+                  titlesData: const FlTitlesData(show: false),
+                  gridData: const FlGridData(show: false),
+                  borderData: FlBorderData(show: false),
+                ),
               ),
             ),
           ),
@@ -594,7 +452,135 @@ class _StakingChartState extends State<StakingChart> with SingleTickerProviderSt
                   aspectRatio: 2,
                   child: LayoutBuilder(
                     builder: (BuildContext context, BoxConstraints constraints) => LineChart(
-                      _lineChartData,
+                      LineChartData(
+                        lineTouchData: LineTouchData(
+                          enabled: !widget.freezeUpdates,
+                          touchCallback: (FlTouchEvent event, LineTouchResponse? response) {
+                            if (widget.freezeUpdates) return;
+
+                            if (event is FlTapDownEvent || event is FlPanStartEvent || event is FlLongPressStart) {
+                              _endPointTimer?.cancel();
+                              setState(() {
+                                _isUserTouching = true;
+                                _isDragging = false;
+                                _lastTouchTime = DateTime.now();
+                              });
+                            } else if (event is FlPanUpdateEvent) {
+                              _endPointTimer?.cancel();
+                              setState(() {
+                                _isUserTouching = true;
+                                _isDragging = true;
+                              });
+                            } else if (event is FlTapUpEvent || event is FlPanEndEvent || event is FlLongPressEnd || event is FlPointerExitEvent) {
+                              setState(() {
+                                _isUserTouching = false;
+                                _isDragging = false;
+                              });
+                              
+                              _endPointTimer?.cancel();
+                              _endPointTimer = Timer(const Duration(milliseconds: 1000), () {
+                                _moveToEndPoint();
+                              });
+                              
+                              Timer(const Duration(milliseconds: 100), _clearTimeIndicator);
+                            }
+
+                            if (response == null || response.lineBarSpots == null || response.lineBarSpots!.isEmpty) {
+                              if (!_isUserTouching) {
+                                _clearTimeIndicator();
+                              }
+                              return;
+                            }
+
+                            final LineBarSpot touchedSpot = response.lineBarSpots!.first;
+                            final double price = touchedSpot.y;
+
+                            if (event is FlTapDownEvent && widget.onPriceChangeWithAnimation != null) {
+                              widget.onPriceChangeWithAnimation!(price);
+                            } else if (event is FlPanUpdateEvent && widget.onPriceChange != null) {
+                              widget.onPriceChange!(price);
+                            } else if ((event is FlTapUpEvent || event is FlPanEndEvent) && widget.onPriceChangeWithAnimation != null) {
+                              widget.onPriceChangeWithAnimation!(price);
+                            }
+
+                            setState(() {
+                              _currentTime = _getTimeFromSpot(touchedSpot.x, index);
+                              _touchX = touchedSpot.x;
+                            });
+                          },
+                          getTouchLineStart: (_, __) => -double.infinity,
+                          getTouchLineEnd: (_, __) => double.infinity,
+                          touchTooltipData: LineTouchTooltipData(
+                            getTooltipColor: (_) => Colors.transparent,
+                            getTooltipItems: (touchedSpots) => List.generate(touchedSpots.length, (_) => null),
+                          ),
+                          getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+                            if (spotIndexes.isEmpty) return [];
+                            return spotIndexes.map((spotIndex) => TouchedSpotIndicatorData(
+                                FlLine(
+                                  color: Colors.black,
+                                  strokeWidth: 1.5.w,
+                                  dashArray: null,
+                                ),
+                                FlDotData(
+                                  getDotPainter: (FlSpot spot, double percent, LineChartBarData barData, int index) =>
+                                      FlDotCirclePainter(
+                                    radius: 6.r,
+                                    color: Colors.black,
+                                    strokeColor: Colors.black,
+                                  ),
+                                ),
+                              )).toList();
+                          },
+                        ),
+                        lineBarsData: <LineChartBarData>[
+                          LineChartBarData(
+                            color: Colors.black,
+                            spots: _animatedSpots,
+                            isCurved: true,
+                            isStrokeCapRound: true,
+                            barWidth: 3.w,
+                            belowBarData: BarAreaData(),
+                            dotData: const FlDotData(show: false),
+                          ),
+                        ],
+                        minY: index == '1Y' || index == 'All' ? 1 : 1,
+                        maxY: index == '1Y' || index == 'All' ? 2.5 : 2.5,
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              getTitlesWidget: (double value, TitleMeta meta) =>
+                                  leftTitleWidgets(value, meta, constraints.maxWidth),
+                              reservedSize: 56.w,
+                            ),
+                          ),
+                          rightTitles: const AxisTitles(),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              getTitlesWidget: (double value, TitleMeta meta) =>
+                                  bottomTitleWidgets(value, meta, constraints.maxWidth),
+                              reservedSize: 36.h,
+                              interval: 1,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(),
+                        ),
+                        gridData: FlGridData(
+                          horizontalInterval: 1.5,
+                          verticalInterval: 5,
+                          checkToShowHorizontalLine: (double value) => value.toInt() == 0,
+                          getDrawingHorizontalLine: (_) => FlLine(
+                            color: Colors.transparent,
+                            strokeWidth: 0.8.w,
+                          ),
+                          getDrawingVerticalLine: (_) => FlLine(
+                            color: Colors.transparent,
+                            strokeWidth: 0.8.w,
+                          ),
+                          checkToShowVerticalLine: (double value) => false,
+                        ),
+                        borderData: FlBorderData(show: false),
+                      ),
                       duration: const Duration(milliseconds: 150),
                     ),
                   ),

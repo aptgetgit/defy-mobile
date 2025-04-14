@@ -21,14 +21,10 @@ enum CollectionSource {
 }
 
 class WatchListNewCollectionScreen extends ConsumerStatefulWidget {
-  final CollectionSource source;
-  final GlobalKey? newListTileKey;
+  const WatchListNewCollectionScreen({super.key, this.source = CollectionSource.token, this.returnHeroTag,});
 
-  const WatchListNewCollectionScreen({
-    Key? key,
-    this.source = CollectionSource.token,
-    this.newListTileKey,
-  }) : super(key: key);
+  final CollectionSource source;
+  final String? returnHeroTag;
 
   @override
   ConsumerState<WatchListNewCollectionScreen> createState() => _WatchListNewCollectionScreenState();
@@ -37,6 +33,7 @@ class WatchListNewCollectionScreen extends ConsumerStatefulWidget {
 // Update in WatchListNewCollectionScreen
 class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewCollectionScreen> {
   final TextEditingController _controller = TextEditingController();
+  late final LifecycleEventHandler _lifecycleEventHandler;
   bool _isKeyboardOpen = false;
   bool _isButtonEnabled = false;
   bool _isCreating = false;
@@ -47,16 +44,20 @@ class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewColle
   @override
   void initState() {
     super.initState();
+    _lifecycleEventHandler = LifecycleEventHandler(
+      onChange: () {
+        if (mounted) {
+          final bool isOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+          setState(() {
+            _isKeyboardOpen = isOpen;
+          });
+        }
+      },
+    );
+
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _listenKeyboardVisibility();
-
-      // Add this to trigger the fill animation after the position animation completes
-      Future.delayed(const Duration(milliseconds: 650), () {
-        if (mounted && _tileKey.currentState != null) {
-          _tileKey.currentState?.startFillAnimation();
-        }
-      });
 
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
@@ -76,16 +77,7 @@ class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewColle
   }
 
   void _listenKeyboardVisibility() {
-    WidgetsBinding.instance.addObserver(
-      LifecycleEventHandler(
-        onChange: () {
-          final bool isOpen = MediaQuery.of(context).viewInsets.bottom > 0;
-          setState(() {
-            _isKeyboardOpen = isOpen;
-          });
-        },
-      ),
-    );
+    WidgetsBinding.instance.addObserver(_lifecycleEventHandler);
   }
 
   @override
@@ -93,6 +85,7 @@ class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewColle
     _controller.removeListener(_checkTextField);
     _controller.dispose();
     _textFieldFocusNode.dispose();
+    WidgetsBinding.instance.removeObserver(_lifecycleEventHandler);
     super.dispose();
   }
 
@@ -101,15 +94,12 @@ class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewColle
     setState(() {
       _isCreating = true;
     });
-
-    // Remove animation call - just add a delay
-    // Removed: _tileKey.currentState?.startAnimation();
     
     // Keep a small delay to allow for state changes
     await Future.delayed(const Duration(milliseconds: 300));
 
     final WalletState walletState = ref.read(walletNotifierProvider);
-
+    // Create a unique collection ID that won't be used for hero animations when returning
     
     final WatchlistNewCollection newCollection = WatchlistNewCollection(
       name: _controller.text,
@@ -127,21 +117,18 @@ class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewColle
     // Add the new collection to the appropriate provider
     ref.read(watchlistCollectionsProvider.notifier).addCollection(newCollection);
 
-    // Navigate with the hero tag to allow for continuous animation
+    // Navigate with no hero animation on return
     await Navigator.pushReplacement(
       context,
       PageRouteBuilder<void>(
         transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (_, __, ___) => WatchListScreen(
-          // Pass hero tag to WatchListScreen
-        ),
+        pageBuilder: (_, __, ___) => WatchListScreen(),
       ),
     );
 
     setState(() {
       _isCreating = false;
     });
-
     
     ref.read(walletNotifierProvider.notifier).clearSelectedTokens();
   }
@@ -712,16 +699,22 @@ class _WatchListNewCollectionScreenState extends ConsumerState<WatchListNewColle
               style: TextStyle(fontSize: 21.sp, fontWeight: FontWeight.w600),
             ),
             Gap(20.h),
-            Hero(
-              tag: 'new_list',
-              child: Material(
-                color: Colors.transparent,
-                child: WatchlistNewListTile(
-                  key: _tileKey,
-                  selectedTokens: selectedTokens,
-                  selectedNFTs: selectedNFTs,
-                ),
-              ),
+            // Important fix: Use the passed returnHeroTag directly rather than conditional rendering
+            Builder(
+              builder: (context) {
+                print('Using hero tag: ${widget.returnHeroTag}');
+                return Hero(
+                  tag: widget.returnHeroTag ?? 'new_list_fallback',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: WatchlistNewListTile(
+                      key: _tileKey,
+                      selectedTokens: selectedTokens,
+                      selectedNFTs: selectedNFTs,
+                    ),
+                  ),
+                );
+              },
             ),
             if (totalSelectedItems > 0)
               Padding(

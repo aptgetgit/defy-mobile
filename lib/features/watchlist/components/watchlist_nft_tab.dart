@@ -135,22 +135,19 @@ class WatchlistNFTTab extends ConsumerWidget {
   }
   
   // Extract the New List tile creation into a separate method - similar to tokens tab
-  // Update in watchlist_nft_tab.dart _buildNewListTile method
   Widget _buildNewListTile(BuildContext context, WidgetRef ref) {
     final List<WatchlistNewCollection> collections = ref.watch(nftCollectionsProvider);
     
-    // Only apply directional animation if there are collections
     final bool hasCollections = collections.isNotEmpty;
     final bool isOddCollections = hasCollections && collections.length % 2 == 1;
     final String direction = isOddCollections ? 'right' : 'left';
-    final String heroTag = 'new_list_${direction}_${DateTime.now().millisecondsSinceEpoch}';
+    final String heroTag = 'new_list_nft_${direction}'; // Stable tag for NFTs
     
     return Padding(
       padding: EdgeInsets.only(bottom: 38.h),
       child: hasCollections 
-        // Apply animation only if there are collections
         ? TweenAnimationBuilder<double>(
-            tween: Tween<double>(begin: isOddCollections ? 1.0 : -1.0, end: 0.0),
+            tween: Tween<double>(begin: 0.0, end: 0.0), // Start at 0 to prevent animation
             duration: const Duration(milliseconds: 500),
             builder: (BuildContext context, double value, Widget? child) => Transform.translate(
                 offset: Offset(value * 100, 0),
@@ -158,7 +155,6 @@ class WatchlistNFTTab extends ConsumerWidget {
               ),
             child: _buildNewListTileContent(context, ref, heroTag),
           )
-        // No animation if there are no collections
         : _buildNewListTileContent(context, ref, heroTag),
     );
   }

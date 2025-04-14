@@ -46,6 +46,22 @@ class NFTItem extends ConsumerWidget {
             // NFT Image with Hero animation and opacity based on selection and hiding mode
             Hero(
               tag: 'nft-image-${nft.id}',
+              flightShuttleBuilder: (
+                BuildContext flightContext,
+                Animation<double> animation,
+                HeroFlightDirection direction,
+                BuildContext fromContext,
+                BuildContext toContext,
+              ) {
+                // Custom flight shuttle that maintains aspect ratio and prevents clipping
+                return Material(
+                  color: Colors.transparent, // Important to prevent white background
+                  child: Image.asset(
+                    nft.imageUrl,
+                    fit: BoxFit.contain, // Use contain during transition to prevent cropping
+                  ),
+                );
+              },
               child: Opacity(
                 // Only apply opacity when both selected AND in hiding mode
                 opacity: isSelected && isHiding ? 0.5 : 1.0,

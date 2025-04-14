@@ -147,10 +147,10 @@ class WatchlistNFTTab extends ConsumerWidget {
       padding: EdgeInsets.only(bottom: 38.h),
       child: hasCollections 
         ? TweenAnimationBuilder<double>(
-            tween: Tween<double>(begin: 0.0, end: 0.0), // Start at 0 to prevent animation
+            tween: Tween<double>(begin: 100.0, end: 0.0), // Change begin value to enable animation
             duration: const Duration(milliseconds: 500),
             builder: (BuildContext context, double value, Widget? child) => Transform.translate(
-                offset: Offset(value * 100, 0),
+                offset: Offset(value, 0), // Now value goes from 100 to 0
                 child: child,
               ),
             child: _buildNewListTileContent(context, ref, heroTag),

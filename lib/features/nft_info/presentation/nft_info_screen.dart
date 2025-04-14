@@ -78,8 +78,8 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double imageWidth = 353.w;
-    final double imageHeight = 353.h;
+    final double imageWidth = 368.w;
+    final double imageHeight = 368.h;
     
     // Get the selected NFT from the provider
     final NFT? selectedNft = ref.watch(selectedNftNotifierProvider);
@@ -189,13 +189,17 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                         // NFT image with Hero animation
                         Hero(
                           tag: 'nft-image-${selectedNft?.id ?? "default"}',
-                          child: Container(
-                            width: imageWidth,
-                            height: imageHeight,
-                            margin: EdgeInsets.only(top: 24.h),
-                            child: Image.asset(
-                              nftImagePath,
-                              fit: BoxFit.cover,
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Container(
+                              width: imageWidth,
+                              height: imageHeight,
+                              margin: EdgeInsets.only(top: 24.h),
+                              clipBehavior: Clip.none,
+                              child: Image.asset(
+                                nftImagePath,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
                         ),

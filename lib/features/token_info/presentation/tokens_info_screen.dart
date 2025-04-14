@@ -120,8 +120,8 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
         if (mounted) setState(() => _isChartInteractable = true);
       });
     }
-
-    final double scrollProgress = (_scrollController.offset / 200.0).clamp(0.0, 1.0);
+    //fix scroll progress here
+    final double scrollProgress = (_scrollController.offset / 80.0).clamp(0.0, 1.0);
     final bool newShowInAppBar = scrollProgress >= 0.5;
 
     if (newShowInAppBar != _showInAppBar || scrollProgress != _scrollProgress) {

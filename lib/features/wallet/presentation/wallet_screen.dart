@@ -137,9 +137,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
       duration: const Duration(milliseconds: 300),
     );
 
+    // Change this: make wallet slide up (-1) instead of down (1)
     _walletSlideAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: const Offset(0, 1),
+      end: const Offset(0, -1), // Changed from (0, 1) to (0, -1)
     ).animate(CurvedAnimation(
       parent: _walletSlideController,
       curve: Curves.easeInOut,
@@ -193,16 +194,6 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     super.dispose();
   }
 
-  // void _toggleQrScanner() {
-  //   ref.read(walletNotifierProvider.notifier).toggleQrScanner();
-    
-  //   if (ref.read(walletNotifierProvider).isQrScannerOpen) {
-  //     _animationController.forward();
-  //   } else {
-  //     _animationController.reverse();
-  //   }
-  // }
-
   // Update the _toggleQrScanner method to use a full-screen approach
   void _toggleQrScanner() {
     // Create a full-screen page route that completely covers the entire screen
@@ -217,7 +208,8 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
           return const QrScannerScreen();
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0, 1); // Start from bottom
+          // Change this: Start from top instead of bottom
+          const begin = Offset(0, -1); // Start from top (-1)
           const Offset end = Offset.zero;
           const Cubic curve = Curves.easeInOut;
 

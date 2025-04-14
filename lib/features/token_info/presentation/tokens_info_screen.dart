@@ -63,11 +63,22 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
     2: const WatchlistCuteNFTScreen(),
   };
 
+  bool _isUserScrolling = false;
+  bool _wasScrolling = false;
+  bool _isChartInteractable = true;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     _scrollController.addListener(_handleScroll);
+    
+    // Add scroll status listener
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.position.isScrollingNotifier.addListener(_scrollStatusChanged);
+      }
+    });
 
     _arrowAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -97,22 +108,53 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
   }
 
   void _handleScroll() {
+    final bool isScrolling = _scrollController.position.isScrollingNotifier.value;
+    
+    // Disable chart interaction when scrolling starts
+    if (isScrolling && _isChartInteractable) {
+      setState(() => _isChartInteractable = false);
+    } 
+    // Re-enable chart interaction after scrolling stops with a small delay
+    else if (!isScrolling && !_isChartInteractable) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) setState(() => _isChartInteractable = true);
+      });
+    }
+
     final double scrollProgress = (_scrollController.offset / 200.0).clamp(0.0, 1.0);
     final bool newShowInAppBar = scrollProgress >= 0.5;
 
-    setState(() {
-      _scrollOffset = _scrollController.offset;
-      if (newShowInAppBar != _showInAppBar) {
+    if (newShowInAppBar != _showInAppBar || scrollProgress != _scrollProgress) {
+      setState(() {
+        _scrollOffset = _scrollController.offset;
         _showInAppBar = newShowInAppBar;
-      }
-      _scrollProgress = scrollProgress;
-    });
+        _scrollProgress = scrollProgress;
+      });
+    }
+  }
+
+  void _scrollStatusChanged() {
+    final bool isScrolling = _scrollController.position.isScrollingNotifier.value;
+    
+    if (isScrolling && !_wasScrolling) {
+      setState(() => _isUserScrolling = true);
+    } else if (!isScrolling && _wasScrolling) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) setState(() => _isUserScrolling = false);
+      });
+    }
+    
+    _wasScrolling = isScrolling;
   }
 
   @override
   void dispose() {
+    // Clean up scroll status listener
+    if (_scrollController.hasClients) {
+      _scrollController.position.isScrollingNotifier.removeListener(_scrollStatusChanged);
+    }
     _scrollController..removeListener(_handleScroll)
-    ..dispose();
+      ..dispose();
     _tabController.dispose();
     _arrowAnimationController.dispose();
     super.dispose();
@@ -214,6 +256,7 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
 
     return Scaffold(
       body: CustomScrollView(
+        physics: const ClampingScrollPhysics(),
         controller: _scrollController,
         slivers: <Widget>[
           SliverAppBar(
@@ -229,7 +272,7 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
                 ),
               ),
               onPressed: () {
-                // Use pop with smooth animation
+                // Use pop with no animations
                 Navigator.of(context).pop();
               },
             ),
@@ -267,44 +310,56 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  // Header content with animation
                   AnimatedOpacity(
                     opacity: 1.0 - _scrollProgress,
                     duration: const Duration(milliseconds: 300),
                     child: _scrollProgress < 1.0 ? _buildHeaderContent(selectedToken) : const SizedBox.shrink(),
                   ),
-                  Transform.translate(
-                    offset: Offset(0, -50.h * _scrollProgress),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      child: StakingChart(
-                        onPriceChange: (double price) {
-                          _updatePrice(price, animate: false); // Non-animated update
-                        },
-                        onPriceChangeWithAnimation: (double price) {
-                          _updatePrice(price, animate: true); // Animated update
-                        },
-                        onBaselineValueChange: (double baselineValue) {
-                          _updateBaseline(baselineValue);
-                        },
+                  Column(
+                    children: [
+                      // Staking chart with improved interaction handling
+                      RepaintBoundary(
+                        child: AbsorbPointer(
+                          absorbing: !_isChartInteractable,
+                          child: IgnorePointer(
+                            ignoring: !_isChartInteractable,
+                            child: StakingChart(
+                              freezeUpdates: !_isChartInteractable,
+                              onPriceChange: (double price) {
+                                if (_isChartInteractable) {
+                                  _updatePrice(price, animate: false);
+                                }
+                              },
+                              onPriceChangeWithAnimation: (double price) {
+                                if (_isChartInteractable) {
+                                  _updatePrice(price, animate: true);
+                                }
+                              },
+                              onBaselineValueBalance: (double baselineValue) {
+                                if (_isChartInteractable) {
+                                  _updateBaseline(baselineValue);
+                                }
+                              },
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 20.h),
+                      // Balance containers
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            _buildInfoContainer('100 ${selectedToken.currency}', 'BALANCE'),
+                            _buildInfoContainer(selectedToken.price, 'AVG BUY PRICE'),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                    ],
                   ),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    height: 38.h - (10.h * _scrollProgress),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        _buildInfoContainer('100 ${selectedToken.currency}', 'BALANCE'),
-                        _buildInfoContainer(selectedToken.price, 'AVG BUY PRICE'),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
                 ],
               ),
             ),
@@ -400,13 +455,13 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
         child: Column(
           children: <Widget>[
             Padding(
-              // Add extra padding at the top to accommodate the bounce animation 
-              padding: EdgeInsets.only(top: 12.h), // Increased from 8.h to 16.h
+              // Reduce the top padding from 12.h to 8.h
+              padding: EdgeInsets.only(top: 8.h),
               child: Align(
                 alignment: Alignment.centerLeft,
-                // Add a SizedBox with fixed height to reserve space for the animation
+                // Make sure this is tall enough for the reduced bounce animation
                 child: SizedBox(
-                  height: 50.h, // Make sure this is tall enough for the bounce (-15px)
+                  height: 45.h, // Reduced from 50.h
                   width: 32.w,
                   child: _showInAppBar
                     ? Image.asset(token.imagePath, height: 32.w, width: 32.w)
@@ -418,36 +473,36 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
                           HeroFlightDirection direction,
                           BuildContext fromContext,
                           BuildContext toContext,
-                        // ignore: prefer_expression_function_bodies
                         ) {
-                          // Custom flight animation for an extra bounce during transition
+                          // Custom flight animation with reduced bounce
                           return AnimatedBuilder(
                             animation: animation,
                             child: Image.asset(token.imagePath, height: 32.w, width: 32.w),
                             builder: (BuildContext context, Widget? child) {
-                              // Calculate bounce value with clamping to prevent out-of-range errors
+                              // Calculate bounce value with reduced effect
                               final double inputValue = (animation.value < 0.7 
                                 ? 0.0 
                                 : (animation.value - 0.7) / 0.3).clamp(0.0, 1.0);
                                 
+                              // Reduce bounce multiplier from 0.15 to 0.08
                               final double bounceValue = Curves.elasticOut.transform(inputValue);
                               
                               return Transform.scale(
-                                scale: 0.8 + (animation.value * 0.2) + (bounceValue * 0.15), 
+                                // Reduce the bounce multiplier from 0.15 to 0.08
+                                scale: 0.8 + (animation.value * 0.2) + (bounceValue * 0.08), 
                                 child: child,
                               );
                             },
                           );
                         },
-                        // Add clipBehavior to ensure the Hero doesn't get clipped
                         child: Material(
                           color: Colors.transparent,
-                          // ignore: avoid_redundant_argument_values
-                          clipBehavior: Clip.none, 
+                          clipBehavior: Clip.none,
                           child: TweenAnimationBuilder<double>(
                             duration: const Duration(milliseconds: 1000),
                             curve: Curves.bounceOut,
-                            tween: Tween<double>(begin: -15, end: 0),
+                            // Reduce the bounce distance from -15 to -8
+                            tween: Tween<double>(begin: -8, end: 0),
                             builder: (BuildContext context, double value, Widget? child) => Transform.translate(
                                 offset: Offset(0, value),
                                 child: child,

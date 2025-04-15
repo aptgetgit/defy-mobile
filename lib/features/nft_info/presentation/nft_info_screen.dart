@@ -189,54 +189,31 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                         // NFT image with Hero animation
                         Hero(
                           tag: 'nft-image-${selectedNft?.id ?? "default"}',
-                          flightShuttleBuilder: (
-                            BuildContext flightContext,
-                            Animation<double> animation,
-                            HeroFlightDirection flightDirection,
-                            BuildContext fromHeroContext,
-                            BuildContext toHeroContext,
-                          ) {
-                            // AnimatedBuilder for smoother transitions
-                            return AnimatedBuilder(
-                              animation: animation,
-                              builder: (context, child) {
-                                // Use consistent border radius and opacity animations
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                    flightDirection == HeroFlightDirection.push
-                                        ? Tween<double>(begin: 24.r, end: 16.r).evaluate(animation)
-                                        : Tween<double>(begin: 16.r, end: 24.r).evaluate(animation),
-                                  ),
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween<double>(begin: 0.85, end: 1.0),
+                            duration: const Duration(milliseconds: 400),
+                            builder: (context, opacity, child) {
+                              return Material(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(16.r),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width - 40.w,
+                                  height: MediaQuery.of(context).size.width - 40.w,
+                                  margin: EdgeInsets.only(top: 24.h),
+                                  clipBehavior: Clip.none,
                                   child: Opacity(
-                                    opacity: flightDirection == HeroFlightDirection.push
-                                        ? Tween<double>(begin: 1.0, end: 0.85).evaluate(animation)
-                                        : Tween<double>(begin: 0.85, end: 1.0).evaluate(animation),
-                                    child: Image.asset(
-                                      nftImagePath,
-                                      fit: BoxFit.contain, // Change to contain for consistent scaling
+                                    opacity: opacity,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16.r),
+                                      child: Image.asset(
+                                        nftImagePath,
+                                        fit: BoxFit.contain, // Use contain for consistent aspect ratio
+                                      ),
                                     ),
                                   ),
-                                );
-                              },
-                            );
-                          },
-                          child: Material(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(16.r),
-
-                            child: Container(
-                              width: MediaQuery.of(context).size.width - 40.w,
-                              height: MediaQuery.of(context).size.width - 40.w,
-                              margin: EdgeInsets.only(top: 24.h),
-                              clipBehavior: Clip.none,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16.r),
-                                child: Image.asset(
-                                  nftImagePath,
-                                  fit: BoxFit.fill,
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                         ),
                         Gap(26.h),

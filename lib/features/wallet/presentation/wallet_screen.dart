@@ -865,7 +865,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
     final WalletState walletState = ref.watch(walletNotifierProvider);
     
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -967,7 +967,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16.w,
+                crossAxisSpacing: 20.w,
                 mainAxisSpacing: 16.h,
                 mainAxisExtent: 250.h,
               ),

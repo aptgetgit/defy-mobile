@@ -7,6 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../app/routes/router.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../nft_info/models/nft_selection_provider.dart';
+
+import '../../../nft_info/presentation/nft_info_video_screen.dart';
 import '../../../wallet/data/models/nft_model.dart';
 import 'custom_check_box.dart';
 
@@ -46,44 +48,22 @@ class NFTItem extends ConsumerWidget {
             // NFT Image with Hero animation and opacity based on selection and hiding mode
             Hero(
               tag: 'nft-image-${nft.id}',
-              flightShuttleBuilder: (
-                BuildContext flightContext,
-                Animation<double> animation,
-                HeroFlightDirection flightDirection,
-                BuildContext fromHeroContext,
-                BuildContext toHeroContext,
-              ) {
-                // Create a ClipRRect with the same border radius for the transition
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                    // Animate from 24.r to 16.r during the transition
-                    flightDirection == HeroFlightDirection.push
-                        ? Tween<double>(begin: 24.r, end: 16.r).evaluate(animation)
-                        : Tween<double>(begin: 16.r, end: 24.r).evaluate(animation),
-                  ),
-                  child: Opacity(
-                    // Add fade transition effect
-                    opacity: flightDirection == HeroFlightDirection.push
-                        ? Tween<double>(begin: 1.0, end: 0.85).evaluate(animation)
-                        : Tween<double>(begin: 0.85, end: 1.0).evaluate(animation),
-                    child: Image.asset(
-                      nft.imageUrl,
-                      fit: BoxFit.fill,
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0.85, end: 1.0),
+                duration: const Duration(milliseconds: 400),
+                builder: (context, opacity, child) {
+                  return Opacity(
+                    opacity: isSelected && isHiding ? 0.5 : opacity,
+                    child: Material(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(16.r),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.r),
+                        child: _buildNftImage(ref),
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Opacity(
-                opacity: isSelected && isHiding ? 0.5 : 1.0,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24.r),
-                  child: Image.asset(
-                    nft.imageUrl,
-                    width: 168.h,
-                    height: 168.h,
-                    fit: BoxFit.fill,
-                  ),
-                ),
+                  );
+                },
               ),
             ),
             
@@ -125,7 +105,7 @@ class NFTItem extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Floor Price',
+                    'Floor',
                     style: TextStyle(
                       fontSize: 14.sp,
                       color: AppColors.greyLight,
@@ -148,12 +128,66 @@ class NFTItem extends ConsumerWidget {
     ),
   );
 
+  Widget _buildNftImage(WidgetRef ref) {
+    if (nft.type == NFTType.video) {
+      // For video NFTs, try to get the thumbnail from the video provider
+      // Use a constant path for the demo video - in production this would come from nft.videoUrl
+      const String videoPath = 'assets/videos/nft_video.mp4';
+      
+      // Check if the provider has been initialized and has a thumbnail
+      try {
+        final videoProvider = ref.watch(videoPlayerProvider(videoPath));
+        
+        if (videoProvider.isInitialized == true && videoProvider.thumbnailImage != null) {
+          return Container(
+            width: 168.h,
+            height: 168.h,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: videoProvider.thumbnailImage! as ImageProvider<Object>,
+                fit: BoxFit.cover,
+              ),
+            ),
+            // Add a play button overlay to indicate this is a video
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.all(8.r),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.play_arrow,
+                  color: Colors.white,
+                  size: 32.r,
+                ),
+              ),
+            ),
+          );
+        }
+      } catch (e) {
+        // If provider isn't ready yet, fall back to the default image
+        print('Video thumbnail not available yet: $e');
+      }
+    }
+    
+    // Default image for non-video NFTs or when thumbnail isn't available
+    return Image.asset(
+      nft.imageUrl,
+      width: 168.h,
+      height: 168.h,
+      fit: BoxFit.contain, // Use contain for consistent aspect ratio
+    );
+  }
+
   void _navigateToNFTInfo(BuildContext context) {
     switch (nft.type) {
       case NFTType.audio:
         const NftInfoAudioRoute().push(context);
       case NFTType.video:
-        const NftInfoVideoRoute().push(context);
+        // Initialize the video provider before navigating to ensure thumbnail is ready
+        // const videoPath = 'assets/videos/nft_video.mp4';
+         NftInfoVideoRoute().push(context);
       case NFTType.image:
         const NftInfoRoute().push(context);
     }

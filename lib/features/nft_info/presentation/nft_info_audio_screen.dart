@@ -104,8 +104,8 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double imageWidth = 353.w;
-    final double imageHeight = 353.h;
+    // final double imageWidth = 353.w;
+    // final double imageHeight = 353.h;
     final AudioPlayerProvider audioProvider = ref.watch(audioPlayerProvider);
     final NFT? selectedNft = ref.watch(selectedNftNotifierProvider);
 
@@ -143,11 +143,10 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
                                   color: AppColors.black,
                                 ),
                               ),
-                              Gap(8.h),
+                              Gap(16.h),
                               // Creator info
                               Row(
                                 children: <Widget>[
-                                  // Use creator's profile image if available
                                   Image.asset(
                                     'assets/images/Fantasy-Ruins.png',
                                     width: 16.w,
@@ -172,52 +171,65 @@ class _NftInfoAudioScreenState extends ConsumerState<NftAudioScreen>
                               ),
                             ],
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Text(
-                                 r'$201.21',
-                                style: TextStyle(
-                                  fontSize: 22.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.black,
+                          AnimatedOpacity(
+                            opacity: _showTitle ? 0.0 : 1.0,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  selectedNft?.price != null ? '\$${selectedNft!.price}' : r'$201.21',
+                                  style: TextStyle(
+                                    fontSize: 22.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.black,
+                                  ),
                                 ),
-                              ),
-                              Gap(12.h),
-                              Text(
-                                'Floor Price',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.greyLight,
+                                Gap(12.h),
+                                Text(
+                                  'Floor Price',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.greyLight,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  Container(
-                    width: imageWidth,
-                    height: imageHeight,
-                    margin: EdgeInsets.only(top: 24.h),
-                    child: selectedNft?.imageUrl.startsWith('http') == true
-                        ? Image.network(
-                            selectedNft!.imageUrl!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) => Image.asset(
-                              'assets/images/cyborg2.png',
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : Hero(
-                            tag: 'nft-image-${selectedNft?.id ?? "default"}',
-                            child: Image.asset(
-                              nftImageUrl,
-                              fit: BoxFit.cover,
+                  Hero(
+                    tag: 'nft-image-${selectedNft?.id ?? "default"}',
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0.85, end: 1.0),
+                      duration: const Duration(milliseconds: 400),
+                      builder: (context, opacity, child) {
+                        return Material(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(16.r),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width - 40.w,
+                            height: MediaQuery.of(context).size.width - 40.w,
+                            margin: EdgeInsets.only(top: 24.h),
+                            clipBehavior: Clip.none,
+                            child: Opacity(
+                              opacity: opacity,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16.r),
+                                child: Image.asset(
+                                  nftImageUrl,
+                                  fit: BoxFit.contain, // Use contain for consistent aspect ratio
+                                ),
+                              ),
                             ),
                           ),
+                        );
+                      },
+                    ),
                   ),
                   Gap(26.h),
                   Padding(

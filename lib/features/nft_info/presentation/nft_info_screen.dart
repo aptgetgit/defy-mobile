@@ -196,24 +196,28 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                             BuildContext fromHeroContext,
                             BuildContext toHeroContext,
                           ) {
-                            // Create a ClipRRect with the same border radius for the transition
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                // Animate from 24.r to 16.r during the transition
-                                flightDirection == HeroFlightDirection.push
-                                    ? Tween<double>(begin: 24.r, end: 16.r).evaluate(animation)
-                                    : Tween<double>(begin: 16.r, end: 24.r).evaluate(animation),
-                              ),
-                              child: Opacity(
-                                // Add fade transition effect
-                                opacity: flightDirection == HeroFlightDirection.push
-                                    ? Tween<double>(begin: 1.0, end: 0.85).evaluate(animation)
-                                    : Tween<double>(begin: 0.85, end: 1.0).evaluate(animation),
-                                child: Image.asset(
-                                  nftImagePath,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
+                            // AnimatedBuilder for smoother transitions
+                            return AnimatedBuilder(
+                              animation: animation,
+                              builder: (context, child) {
+                                // Use consistent border radius and opacity animations
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                    flightDirection == HeroFlightDirection.push
+                                        ? Tween<double>(begin: 24.r, end: 16.r).evaluate(animation)
+                                        : Tween<double>(begin: 16.r, end: 24.r).evaluate(animation),
+                                  ),
+                                  child: Opacity(
+                                    opacity: flightDirection == HeroFlightDirection.push
+                                        ? Tween<double>(begin: 1.0, end: 0.85).evaluate(animation)
+                                        : Tween<double>(begin: 0.85, end: 1.0).evaluate(animation),
+                                    child: Image.asset(
+                                      nftImagePath,
+                                      fit: BoxFit.contain, // Change to contain for consistent scaling
+                                    ),
+                                  ),
+                                );
+                              },
                             );
                           },
                           child: Material(
@@ -222,7 +226,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
 
                             child: Container(
                               width: MediaQuery.of(context).size.width - 40.w,
-                              height: MediaQuery.of(context).size.width - 40.h,
+                              height: MediaQuery.of(context).size.width - 40.w,
                               margin: EdgeInsets.only(top: 24.h),
                               clipBehavior: Clip.none,
                               child: ClipRRect(

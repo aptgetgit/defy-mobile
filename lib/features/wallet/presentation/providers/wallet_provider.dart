@@ -420,12 +420,12 @@ void toggleSort24hr() {
         NFT(
           id: 'Aptos Manekin', 
           price: '10 APT', 
-          imageUrl: 'assets/images/Mask group.png',
+          imageUrl: 'assets/images/nft_image1.png',
         ),
         NFT(
           id: 'Aptos Monkeys', 
           price: '8 APT', 
-          imageUrl: 'assets/images/Mask group (1).png',
+          imageUrl: 'assets/images/nft_image1.png',
           type: NFTType.audio,
         ),
       ],
@@ -437,13 +437,13 @@ void toggleSort24hr() {
         NFT(
           id: 'Aptos #121', 
           price: '10 APT', 
-          imageUrl: 'assets/images/Mask group (2).png',
+          imageUrl: 'assets/images/nft_image1.png',
           type: NFTType.video,
         ),
         NFT(
           id: 'Aptos Monkey', 
           price: '10 APT', 
-          imageUrl: 'assets/images/Mask group (3).png',
+          imageUrl: 'assets/images/nft_image1.png',
         ),
       ],
     ),

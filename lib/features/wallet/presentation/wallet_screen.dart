@@ -15,7 +15,7 @@ import '../../shared/presentation/widgets/base_screen_nav.dart';
 import '../../shared/presentation/widgets/custom_check_box.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../../shared/presentation/widgets/nft_item.dart';
-import '../../token_info/presentation/tokens_info_screen.dart';
+import '../../token_info/presentation/tokens_info_screen.dart' hide TabBarDelegate;
 import '../../token_info/providers/token_selection_provider.dart';
 import '../../watchlist/presentation/watchlist_avatar_nft_screen.dart';
 import '../../watchlist/presentation/watchlist_cute_nft_screen.dart';
@@ -548,7 +548,7 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
       ),
       SliverPersistentHeader(
         pinned: true,
-        delegate: TabBarDelegate(
+        delegate: TabBarDelegate( // Removed the 'shared' prefix
           Material(
             color: Colors.white,
             child: AnimatedContainer(

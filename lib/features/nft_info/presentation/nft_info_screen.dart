@@ -78,8 +78,8 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double imageWidth = 368.w;
-    final double imageHeight = 368.h;
+    // final double imageWidth = 368.w;
+    // final double imageHeight = 368.h;
     
     // Get the selected NFT from the provider
     final NFT? selectedNft = ref.watch(selectedNftNotifierProvider);
@@ -127,7 +127,7 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                                           color: AppColors.black,
                                         ),
                                       ),
-                                      Gap(8.h),
+                                      Gap(16.h),
                                       // Creator info
                                       Row(
                                         children: <Widget>[
@@ -189,16 +189,48 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                         // NFT image with Hero animation
                         Hero(
                           tag: 'nft-image-${selectedNft?.id ?? "default"}',
+                          flightShuttleBuilder: (
+                            BuildContext flightContext,
+                            Animation<double> animation,
+                            HeroFlightDirection flightDirection,
+                            BuildContext fromHeroContext,
+                            BuildContext toHeroContext,
+                          ) {
+                            // Create a ClipRRect with the same border radius for the transition
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                // Animate from 24.r to 16.r during the transition
+                                flightDirection == HeroFlightDirection.push
+                                    ? Tween<double>(begin: 24.r, end: 16.r).evaluate(animation)
+                                    : Tween<double>(begin: 16.r, end: 24.r).evaluate(animation),
+                              ),
+                              child: Opacity(
+                                // Add fade transition effect
+                                opacity: flightDirection == HeroFlightDirection.push
+                                    ? Tween<double>(begin: 1.0, end: 0.85).evaluate(animation)
+                                    : Tween<double>(begin: 0.85, end: 1.0).evaluate(animation),
+                                child: Image.asset(
+                                  nftImagePath,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            );
+                          },
                           child: Material(
                             color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(16.r),
+
                             child: Container(
-                              width: imageWidth,
-                              height: imageHeight,
+                              width: MediaQuery.of(context).size.width - 40.w,
+                              height: MediaQuery.of(context).size.width - 40.h,
                               margin: EdgeInsets.only(top: 24.h),
                               clipBehavior: Clip.none,
-                              child: Image.asset(
-                                nftImagePath,
-                                fit: BoxFit.contain,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16.r),
+                                child: Image.asset(
+                                  nftImagePath,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           ),

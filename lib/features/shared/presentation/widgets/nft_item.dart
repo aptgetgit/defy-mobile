@@ -49,24 +49,34 @@ class NFTItem extends ConsumerWidget {
               flightShuttleBuilder: (
                 BuildContext flightContext,
                 Animation<double> animation,
-                HeroFlightDirection direction,
-                BuildContext fromContext,
-                BuildContext toContext,
+                HeroFlightDirection flightDirection,
+                BuildContext fromHeroContext,
+                BuildContext toHeroContext,
               ) {
-                // Custom flight shuttle that maintains aspect ratio and prevents clipping
-                return Material(
-                  color: Colors.transparent, // Important to prevent white background
-                  child: Image.asset(
-                    nft.imageUrl,
-                    fit: BoxFit.contain, // Use contain during transition to prevent cropping
+                // Create a ClipRRect with the same border radius for the transition
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    // Animate from 24.r to 16.r during the transition
+                    flightDirection == HeroFlightDirection.push
+                        ? Tween<double>(begin: 24.r, end: 16.r).evaluate(animation)
+                        : Tween<double>(begin: 16.r, end: 24.r).evaluate(animation),
+                  ),
+                  child: Opacity(
+                    // Add fade transition effect
+                    opacity: flightDirection == HeroFlightDirection.push
+                        ? Tween<double>(begin: 1.0, end: 0.85).evaluate(animation)
+                        : Tween<double>(begin: 0.85, end: 1.0).evaluate(animation),
+                    child: Image.asset(
+                      nft.imageUrl,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 );
               },
               child: Opacity(
-                // Only apply opacity when both selected AND in hiding mode
                 opacity: isSelected && isHiding ? 0.5 : 1.0,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                  borderRadius: BorderRadius.circular(24.r),
                   child: Image.asset(
                     nft.imageUrl,
                     width: 168.h,

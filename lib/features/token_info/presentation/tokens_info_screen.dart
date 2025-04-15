@@ -110,25 +110,24 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
   void _handleScroll() {
     final bool isScrolling = _scrollController.position.isScrollingNotifier.value;
     
-    // Disable chart interaction when scrolling starts
+    // Handle chart interaction
     if (isScrolling && _isChartInteractable) {
       setState(() => _isChartInteractable = false);
-    } 
-    // Re-enable chart interaction after scrolling stops with a small delay
-    else if (!isScrolling && !_isChartInteractable) {
+    } else if (!isScrolling && !_isChartInteractable) {
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) setState(() => _isChartInteractable = true);
       });
     }
-    //fix scroll progress here
-    final double scrollProgress = (_scrollController.offset / 80.0).clamp(0.0, 1.0);
-    final bool newShowInAppBar = scrollProgress >= 0.5;
+
+    // Simple scroll progress calculation based on fixed threshold
+    final double threshold = 56.h; // Standard app bar height
+    final double scrollProgress = (_scrollController.offset / threshold).clamp(0.0, 1.0);
+    final bool newShowInAppBar = scrollProgress > 0.5;
 
     if (newShowInAppBar != _showInAppBar || scrollProgress != _scrollProgress) {
       setState(() {
-        _scrollOffset = _scrollController.offset;
-        _showInAppBar = newShowInAppBar;
         _scrollProgress = scrollProgress;
+        _showInAppBar = newShowInAppBar;
       });
     }
   }

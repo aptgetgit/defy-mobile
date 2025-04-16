@@ -8,7 +8,12 @@ import '../../../app/routes/router.dart';
 import '../widgets/qr_scanner_overlay.dart';
 
 class QrScannerScreen extends StatefulWidget {
-  const QrScannerScreen({super.key});
+  final VoidCallback? onClose;
+
+  const QrScannerScreen({
+    super.key,
+    this.onClose,
+  });
 
   @override
   State<QrScannerScreen> createState() => _QrScannerScreenState();
@@ -109,7 +114,13 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                             color: Colors.white,
                             size: 22.sp,
                           ),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            if (widget.onClose != null) {
+                              widget.onClose!();
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          },
                         ),
                         Text(
                           'Scan a QR',

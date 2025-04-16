@@ -59,7 +59,7 @@ class CustomTabBar extends StatelessWidget {
               ),
               unselectedLabelStyle: TextStyle(
                 fontWeight: FontWeight.w500, // Slightly lighter weight for unselected
-                fontSize: 16.sp,
+                fontSize: 18.sp,
                 fontFamily: 'SFCompactRounded', // Match your app's font family
                 letterSpacing: -0.5, // Adjust if needed for your design
               ),

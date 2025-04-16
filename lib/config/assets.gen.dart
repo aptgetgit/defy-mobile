@@ -521,6 +521,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/nft1.png
   AssetGenImage get nft1 => const AssetGenImage('assets/images/nft1.png');
 
+  /// File path: assets/images/nft_image1.png
+  AssetGenImage get nftImage1 =>
+      const AssetGenImage('assets/images/nft_image1.png');
+
   /// File path: assets/images/onboarding-nft-1.png
   AssetGenImage get onboardingNft1 =>
       const AssetGenImage('assets/images/onboarding-nft-1.png');
@@ -628,6 +632,7 @@ class $AssetsImagesGen {
         nftBgHeader,
         nft,
         nft1,
+        nftImage1,
         onboardingNft1,
         onboardingNft2,
         onboardingNft3,

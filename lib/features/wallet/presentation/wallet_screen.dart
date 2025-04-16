@@ -54,9 +54,11 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
   bool _hideSmallBalances = false;
   bool _filterSpamTokens = false;
   bool _isAnimatingHeader = false;
-  late AnimationController _walletSlideController;
+  late AnimationController _qrAnimationController;
   late Animation<Offset> _walletSlideAnimation;
+  late Animation<Offset> _qrSlideAnimation;
   bool _isDoneFadingOut = false;
+  bool _showQrScanner = false;
 
   final Map<int, Widget> _collectionScreens = <int, Widget>{
     0: const WatchlistSafetyTokensScreen(),
@@ -127,32 +129,40 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     _tabController = TabController(length: 2, vsync: this);
     _scrollController2 = ScrollController();
 
-    _walletSlideController = AnimationController(
+    // Initialize QR animation controller
+    _qrAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+
+    _walletSlideAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(0, 1), // Wallet slides down
+    ).animate(CurvedAnimation(
+      parent: _qrAnimationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _qrSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, -1), // QR starts above screen
+      end: Offset.zero, // QR ends at normal position
+    ).animate(CurvedAnimation(
+      parent: _qrAnimationController,
+      curve: Curves.easeInOut,
+    ));
 
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
 
-    // Change this: make wallet slide up (-1) instead of down (1)
-    _walletSlideAnimation = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(0, -1), // Changed from (0, 1) to (0, -1)
-    ).animate(CurvedAnimation(
-      parent: _walletSlideController,
-      curve: Curves.easeInOut,
-    ),);
-
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 1),
+      begin: const Offset(0, -1),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
-    ),);
+    ));
   }
   
   void _setupScrollListeners() {
@@ -190,44 +200,25 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
     _tabController.dispose();
     _scrollController.dispose();
     _scrollController2.dispose();
+    _qrAnimationController.dispose();
     _animationController.dispose();
     super.dispose();
   }
 
   // Update the _toggleQrScanner method to use a full-screen approach
   void _toggleQrScanner() {
-    // Create a full-screen page route that completely covers the entire screen
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        opaque: true, // Make the route opaque to completely cover the screen
-        pageBuilder: (context, animation, secondaryAnimation) {
-          // Start the wallet slide animation when push begins
-          _walletSlideController.forward();
-          
-          return const QrScannerScreen();
-        },
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          // Change this: Start from top instead of bottom
-          const begin = Offset(0, -1); // Start from top (-1)
-          const Offset end = Offset.zero;
-          const Cubic curve = Curves.easeInOut;
-
-          // Create a tween for the slide transition
-          final Animatable<Offset> tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          final Animation<Offset> offsetAnimation = animation.drive(tween);
-
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 250),
-      ),
-    ).then((_) {
-      // Reverse wallet slide animation when returning
-      _walletSlideController.reverse();
-    });
+    if (_showQrScanner) {
+      _qrAnimationController.reverse().then((_) {
+        setState(() {
+          _showQrScanner = false;
+        });
+      });
+    } else {
+      setState(() {
+        _showQrScanner = true;
+      });
+      _qrAnimationController.forward();
+    }
   }
 
   void _showBalanceSheet() {
@@ -428,37 +419,39 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
       }
     });
     
-    return BaseScreenWithNav(
-      currentIndex: 2,
-      onHidePressed: () {
-        ref.read(walletNotifierProvider.notifier).activateHiding();
-      },
-      onSortPressed: _showFilterSheet,
-      onWatchlistPressed: _showWatchlistBottomSheet,
-      isMoreOptionsSelected: walletState.isMoreButtonSelected,
-      onMoreOptionsChanged: (bool value) {
-        if (value) {
-          ref.read(walletNotifierProvider.notifier).toggleMoreButton();
-        } else {
-          ref.read(walletNotifierProvider.notifier).applyChanges();
-        }
-      },
-      child: Stack(
-        children: <Widget>[
-          SlideTransition(
-            position: _walletSlideAnimation,
+    return Stack(
+      children: <Widget>[
+        SlideTransition(
+          position: _walletSlideAnimation,
+          child: BaseScreenWithNav(
+            currentIndex: 2,
+            onHidePressed: () {
+              ref.read(walletNotifierProvider.notifier).activateHiding();
+            },
+            onSortPressed: _showFilterSheet,
+            onWatchlistPressed: _showWatchlistBottomSheet,
+            isMoreOptionsSelected: walletState.isMoreButtonSelected,
+            onMoreOptionsChanged: (bool value) {
+              if (value) {
+                ref.read(walletNotifierProvider.notifier).toggleMoreButton();
+              } else {
+                ref.read(walletNotifierProvider.notifier).applyChanges();
+              }
+            },
             child: Scaffold(
               appBar: _buildAppBar(),
-              body: Stack(
-                children: <Widget>[
-                  _buildMainContent(screenSize, appBarHeight),
-                  // _buildQrScannerOverlay(screenSize, appBarHeight),
-                ],
-              ),
+              body: _buildMainContent(screenSize, appBarHeight),
             ),
           ),
-        ],
-      ),
+        ),
+        if (_showQrScanner)
+          SlideTransition(
+            position: _qrSlideAnimation,
+            child: QrScannerScreen(
+              onClose: _toggleQrScanner,
+            ),
+          ),
+      ],
     );
   }
 

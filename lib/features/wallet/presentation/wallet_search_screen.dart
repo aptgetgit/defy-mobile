@@ -70,24 +70,24 @@ class _WalletSearchScreenState extends State<WalletSearchScreen> with TickerProv
       name: 'Cyberpunk kids',
       count: 121,
       nfts: [
-        NFT(id: 'Cyberpunk #123', price: r'$142.39', imageUrl: 'assets/images/Mask group.png'),
-        NFT(id: 'Cyberpunk #124', price: r'$142.39', imageUrl: 'assets/images/Mask group.png'),
+        NFT(id: 'Cyberpunk #123', price: r'$142.39', imageUrl: 'assets/images/nft_image1.png'),
+        NFT(id: 'Cyberpunk #124', price: r'$142.39', imageUrl: 'assets/images/nft_image1.png'),
       ],
     ),
     NFTCollection(
       name: 'Doodles',
       count: 521,
       nfts: [
-        NFT(id: 'Doodle #456', price: r'$142.39', imageUrl: 'assets/images/Mask group.png'),
-        NFT(id: 'Doodle #457', price: r'$142.39', imageUrl: 'assets/images/Mask group.png'),
+        NFT(id: 'Doodle #456', price: r'$142.39', imageUrl: 'assets/images/nft_image1.png'),
+        NFT(id: 'Doodle #457', price: r'$142.39', imageUrl: 'assets/images/nft_image1.png'),
       ],
     ),
     NFTCollection(
       name: 'Bored Ape Yacht Club',
       count: 42,
       nfts: [
-        NFT(id: 'BAYC #789', price: r'$142.39', imageUrl: 'assets/images/Mask group.png'),
-        NFT(id: 'BAYC #790', price: r'$142.39', imageUrl: 'assets/images/Mask group.png'),
+        NFT(id: 'BAYC #789', price: r'$142.39', imageUrl: 'assets/images/nft_image1.png'),
+        NFT(id: 'BAYC #790', price: r'$142.39', imageUrl: 'assets/images/nft_image1.png'),
       ],
     ),
   ];
@@ -462,12 +462,26 @@ void _onTextChange() {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(left: 8.w),
-                      child: CustomTabBar(
-                        tabController: _tabController,
-                        tabs: const <String>[
-                          'All(12)',
-                          'Token(23)',
-                          'NFT(20)',
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          CustomTabBar(
+                            tabController: _tabController,
+                            tabs: const <String>[
+                              'All(12)',
+                              'Token(23)',
+                              'NFT(20)',
+                            ],
+                          ),
+                          // Add the divider line
+                          Positioned(
+                            bottom: 0,
+                            child: Container(
+                              width: 350.w,
+                              height: 1,
+                              color: AppColors.greyVeryLight,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -691,7 +705,7 @@ Widget _buildAllTab() {
                 padding: EdgeInsets.only(left: 17.w, top: 6.h),
                 child: Text(
                   'Tokens',
-                  style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500, color: AppColors.black),
                 ),
               ),
               Padding(
@@ -709,7 +723,7 @@ Widget _buildAllTab() {
                     'See All(${_tokens.length})',
                     style: TextStyle(
                       color: AppColors.blue,
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -772,7 +786,7 @@ Widget _buildAllTab() {
                 padding: EdgeInsets.only(left: 17.w, top: 6.h),
                 child: Text(
                   'NFTs',
-                  style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500, color: AppColors.black),
                 ),
               ),
               Padding(
@@ -790,7 +804,7 @@ Widget _buildAllTab() {
                     'See All(${_nftCollections.length})',
                     style: TextStyle(
                       color: AppColors.blue,
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -816,7 +830,7 @@ Widget _buildAllTab() {
               return ListTile(
                 dense: true,
                 contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
-                leading: Image.asset(nft['imagePath'] as String, width: 40.w, height: 40.h),
+                leading: Image.asset(nft['imagePath'] as String, width: 44.w, height: 44.h),
                 title: Text(
                   nft['name'] as String,
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
@@ -914,7 +928,7 @@ Widget _buildAllTab() {
                               padding: EdgeInsets.only(left: 17.w),
                               child: Text(
                                 'Tokens (${_filteredTokens.length})',
-                                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.greyLight),
+                                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.black),
                               ),
                             ),
                             Padding(

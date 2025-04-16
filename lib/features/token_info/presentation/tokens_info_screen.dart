@@ -108,9 +108,14 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
   }
 
   void _handleScroll() {
+    // Calculate scroll progress based on a dynamic threshold
+    final double maxScrollExtent = _scrollController.position.maxScrollExtent > 0
+        ? _scrollController.position.maxScrollExtent
+        : MediaQuery.of(context).size.height * 0.2; // Fallback threshold
+    final double scrollProgress = (_scrollController.offset / maxScrollExtent).clamp(0.0, 1.0);
+
+    // Update chart interaction
     final bool isScrolling = _scrollController.position.isScrollingNotifier.value;
-    
-    // Handle chart interaction
     if (isScrolling && _isChartInteractable) {
       setState(() => _isChartInteractable = false);
     } else if (!isScrolling && !_isChartInteractable) {
@@ -119,15 +124,11 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
       });
     }
 
-    // Simple scroll progress calculation based on fixed threshold
-    final double threshold = 56.h; // Standard app bar height
-    final double scrollProgress = (_scrollController.offset / threshold).clamp(0.0, 1.0);
-    final bool newShowInAppBar = scrollProgress > 0.5;
-
-    if (newShowInAppBar != _showInAppBar || scrollProgress != _scrollProgress) {
+    // Smoothly update scroll progress without abrupt toggles
+    if (scrollProgress != _scrollProgress) {
       setState(() {
         _scrollProgress = scrollProgress;
-        _showInAppBar = newShowInAppBar;
+        _showInAppBar = scrollProgress > 0.5; // Still toggle for app bar title visibility
       });
     }
   }

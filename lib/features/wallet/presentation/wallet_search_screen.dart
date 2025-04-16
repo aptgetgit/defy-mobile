@@ -462,8 +462,7 @@ void _onTextChange() {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(left: 8.w),
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
+                      child: Column(
                         children: [
                           CustomTabBar(
                             tabController: _tabController,
@@ -473,14 +472,10 @@ void _onTextChange() {
                               'NFT(20)',
                             ],
                           ),
-                          // Add the divider line
-                          Positioned(
-                            bottom: 0,
-                            child: Container(
-                              width: 350.w,
-                              height: 1,
-                              color: AppColors.greyVeryLight,
-                            ),
+                          Container(
+                            width: 350.w,
+                            height: 1,
+                            color: AppColors.greyVeryLight,
                           ),
                         ],
                       ),

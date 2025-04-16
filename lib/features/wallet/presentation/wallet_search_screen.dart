@@ -617,7 +617,10 @@ void _onTextChange() {
                                         return ListTile(
                                           dense: true,
                                           contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
-                                          leading: Image.asset(nft['imagePath'] as String, width: 40.w, height: 40.h),
+                                          leading: ClipRRect(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            child: Image.asset(nft['imagePath'] as String, width: 40.w, height: 40.h),
+                                          ),
                                           title: Text(
                                             nft['name'] as String,
                                             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),
@@ -830,7 +833,10 @@ Widget _buildAllTab() {
               return ListTile(
                 dense: true,
                 contentPadding: EdgeInsets.only(left: 16.w, right: 16.w),
-                leading: Image.asset(nft['imagePath'] as String, width: 44.w, height: 44.h),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.asset(nft['imagePath'] as String, width: 44.w, height: 44.h),
+                ),
                 title: Text(
                   nft['name'] as String,
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: AppColors.black),

@@ -216,12 +216,12 @@ class _ExplorePageState extends State<ExplorePage> {
                 Expanded(
                   child: Text(
                     investment.type,
-                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                   ),
                 ),
                 Text(
                   investment.count.toString(),
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black87),
+                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18, color: Colors.black87),
                 ),
                 const Gap(8),
                 // Show arrow icon only if row is expandable
@@ -276,12 +276,12 @@ class _ExplorePageState extends State<ExplorePage> {
                   children: <Widget>[
                     Text(
                       asset.name,
-                      style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                     ),
                     const Gap(2),
                     Text(
                       asset.amount,
-                      style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                      style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: AppColors.greyLight),
                     ),
                   ],
                 ),
@@ -290,7 +290,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 asset.value,
                 style: const TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 18,
                     color: Colors.green,), // Green color for value
               ),
            ],
@@ -325,7 +325,7 @@ class _ExplorePageState extends State<ExplorePage> {
                    ),
                    Text(
                      opportunity.subtitle,
-                     style: const TextStyle(fontSize: 14, color: AppColors.greyLight),
+                     style: const TextStyle(fontSize: 14, color: AppColors.greyLight, fontWeight: FontWeight.w500),
                    ),
                  ],
                ),

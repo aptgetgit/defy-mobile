@@ -41,6 +41,7 @@ import '../../features/stake/presentation/stake_screen.dart';
 import '../../features/swap/presentation/screens/swap_amount_screen.dart';
 import '../../features/swap/presentation/screens/swap_screen.dart';
 import '../../features/token_info/presentation/tokens_info_screen.dart';
+
 import '../../features/wallet/presentation/fade_slide.dart';
 import '../../features/wallet/presentation/wallet_more_screen.dart';
 import '../../features/wallet/presentation/wallet_screen.dart';

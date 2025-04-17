@@ -84,26 +84,42 @@ class _PriceRangeSectionState extends State<PriceRangeSection> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
+                 const Text(
                     '1 Day Low',
-                    style: context.bodySmall?.copyWith(color: AppColors.greyLight),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyLight,
+                    ),
                   ),
                   Text(
                     '\$${widget.lowPrice.toStringAsFixed(2)}',
-                    style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                    style:const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
                   ),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  Text(
+                const  Text(
                     '1 Day High',
-                    style: context.bodySmall?.copyWith(color: AppColors.greyLight),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyLight,
+                    ),
                   ),
                   Text(
                     '\$${widget.highPrice.toStringAsFixed(2)}',
-                    style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                    style:const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
                   ),
                 ],
               ),
@@ -127,14 +143,22 @@ class _PriceRangeSectionState extends State<PriceRangeSection> {
             children: <Widget>[
               const Icon(PhosphorIconsFill.lightning, size: 16, color: Colors.black),
               SizedBox(width: context.screenWidth * 0.025),
-              Text(
+             const Text(
                 'Last Traded price (LTP)',
-                style: context.bodyMedium?.copyWith(color: AppColors.greyDark),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.greyDark,
+                ),
               ),
               const Spacer(),
               Text(
                 '\$${_currentPrice.toStringAsFixed(2)}',
-                style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                style:const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
               ),
             ],
           ),

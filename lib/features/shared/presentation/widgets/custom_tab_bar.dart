@@ -69,6 +69,7 @@ class CustomTabBar extends StatelessWidget {
               dividerColor: AppColors.transparent,
               indicatorWeight: 0, // No default indicator
               splashFactory: NoSplash.splashFactory,
+              overlayColor: MaterialStateProperty.all(Colors.transparent), // Add this line
               tabs: tabs.map((String text) => Tab(text: text)).toList(),
             ),
           ],

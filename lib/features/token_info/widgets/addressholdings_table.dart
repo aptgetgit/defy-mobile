@@ -26,11 +26,32 @@ class AddressHoldingsTable extends StatelessWidget {
           Row(
             children: <Widget>[
               Gap(12.w),
-              Text('ADDRESS', style: context.bodySmall?.copyWith(color: AppColors.greyDark)),
+              Text(
+                'ADDRESS',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.greyDark,
+                ),
+              ),
               Gap(90.w),
-              Text('TOKENS HELD', style: context.bodySmall?.copyWith(color: AppColors.greyDark)),
+              Text(
+                'TOKENS HELD',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.greyDark,
+                ),
+              ),
               Gap(60.w),
-              Text('%HOLDING', style: context.bodySmall?.copyWith(color: AppColors.greyDark)),
+              Text(
+                '%HOLDING',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.greyDark,
+                ),
+              ),
             ],
           ),
           const Divider(color: AppColors.greyMedium, height: 1),
@@ -51,18 +72,41 @@ class AddressHoldingsTable extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           item['emoji']!.toString(),
-                          style: context.bodySmall?.copyWith(fontSize: 20),
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                          ),
                         ),
                         Gap(8.w),
                         Column(
                           children: <Widget>[
-                            Text(item['address']!.toString(), style: context.bodySmall?.copyWith(color: AppColors.greyDark)),
+                            Text(
+                              item['address']!.toString(),
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.greyDark,
+                              ),
+                            ),
                           ],
                         ),
                       ],
                     ),
-                    Text(item['value']!.toString(), style: context.bodyMedium?.copyWith(color: statusColor)),
-                    Text(item['price']!.toString(), style: context.bodyMedium?.copyWith(color: statusColor)),
+                    Text(
+                      item['value']!.toString(),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: statusColor,
+                      ),
+                    ),
+                    Text(
+                      item['price']!.toString(),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: statusColor,
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -77,8 +121,15 @@ class AddressHoldingsTable extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('See all', style: context.bodyMedium?.copyWith(color: AppColors.greyLight)),
-                  const Icon(PhosphorIconsRegular.caretRight, size: 12, color: AppColors.greyLight),
+                  Text(
+                    'See all',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.greyLight,
+                    ),
+                  ),
+                  const Icon(PhosphorIconsRegular.caretRight, size: 16, color: AppColors.greyLight),
                 ],
               ),
             ),

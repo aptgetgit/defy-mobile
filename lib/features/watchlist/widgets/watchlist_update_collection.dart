@@ -31,7 +31,9 @@ class _WatchListUpdateCollectionScreenState extends ConsumerState<WatchListUpdat
   late TextEditingController _controller;
   bool _isKeyboardOpen = false;
   bool _isButtonEnabled = false;
-  late WatchlistCollection _collection; // Add this to store the collection details
+  late WatchlistCollection _collection;
+  // Add a field to store the handler reference
+  late LifecycleEventHandler _lifecycleEventHandler;
 
   @override
   void initState() {
@@ -40,18 +42,34 @@ class _WatchListUpdateCollectionScreenState extends ConsumerState<WatchListUpdat
     _controller = TextEditingController(text: widget.initialName);
     _isButtonEnabled = _controller.text.isNotEmpty;
     
+    // Create the lifecycle handler with proper mounted check
+    _lifecycleEventHandler = LifecycleEventHandler(
+      onChange: () {
+        if (mounted) {
+          final bool isOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+          setState(() {
+            _isKeyboardOpen = isOpen;
+          });
+        }
+      },
+    );
+    
     // Fetch collection details
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final collection = ref.read(watchlistCollectionDetailsProvider(widget.collectionId)).collection;
-      setState(() {
-        _collection = collection;
-      });
+      if (mounted) {
+        final collection = ref.read(watchlistCollectionDetailsProvider(widget.collectionId)).collection;
+        setState(() {
+          _collection = collection;
+        });
+      }
     });
     
     // Listen for keyboard visibility changes
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _listenKeyboardVisibility();
+      if (mounted) {
+        _listenKeyboardVisibility();
+      }
     });
 
     _controller.addListener(_checkTextField);
@@ -64,20 +82,14 @@ class _WatchListUpdateCollectionScreenState extends ConsumerState<WatchListUpdat
   }
 
   void _listenKeyboardVisibility() {
-    WidgetsBinding.instance.addObserver(
-      LifecycleEventHandler(
-        onChange: () {
-          final bool isOpen = MediaQuery.of(context).viewInsets.bottom > 0;
-          setState(() {
-            _isKeyboardOpen = isOpen;
-          });
-        },
-      ),
-    );
+    // Add the observer using the class field
+    WidgetsBinding.instance.addObserver(_lifecycleEventHandler);
   }
 
   @override
   void dispose() {
+    // Important: Remove the observer in dispose
+    WidgetsBinding.instance.removeObserver(_lifecycleEventHandler);
     _controller.removeListener(_checkTextField); 
     _controller.dispose();
     super.dispose();

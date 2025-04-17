@@ -48,22 +48,25 @@ class NFTItem extends ConsumerWidget {
             // NFT Image with Hero animation and opacity based on selection and hiding mode
             Hero(
               tag: 'nft-image-${nft.id}',
-              child: TweenAnimationBuilder<double>(
-                tween: Tween<double>(begin: 0.85, end: 1.0),
-                duration: const Duration(milliseconds: 400),
-                builder: (context, opacity, child) {
-                  return Opacity(
-                    opacity: isSelected && isHiding ? 0.5 : opacity,
-                    child: Material(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(16.r),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16.r),
-                        child: _buildNftImage(ref),
-                      ),
-                    ),
-                  );
-                },
+              child: Material(
+                type: MaterialType.transparency,
+                borderRadius: BorderRadius.circular(16.r),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16.r),
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0.85, end: 1.0),
+                    duration: const Duration(milliseconds: 400),
+                    builder: (context, opacity, child) {
+                      return Opacity(
+                        opacity: isSelected && isHiding ? 0.5 : opacity,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: _buildNftImage(ref),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
             

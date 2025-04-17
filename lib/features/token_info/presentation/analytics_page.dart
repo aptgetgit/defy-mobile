@@ -33,114 +33,302 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   @override
   Widget build(BuildContext context) => Padding(
     padding: EdgeInsets.all(context.screenWidth * 0.04),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text('LISTED AT (${exchanges.length})', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-          ],
-        ),
-        SizedBox(height: context.screenHeight * 0.0125),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ...visibleExchanges.map((Map<String, String> type) => Padding(
-              padding: EdgeInsets.only(bottom: context.screenHeight * 0.025),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Image.asset(type['assets']!, height: 32.h, width: 32.w),
-                  SizedBox(width: context.screenWidth * 0.05),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(type['dex']!, style: context.bodyMedium),
-                      Row(
-                        children: <Widget>[
-                          Text('VOL ', style: context.bodyMedium?.copyWith(color: Colors.black.withValues(alpha: 0.5))),
-                          Text(type['vol']!, style: context.bodyMedium),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Text(type['price']!, style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-                ],
+    child: SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'LISTED AT (${exchanges.length})', 
+                style: context.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600, 
+                  fontSize: 14.sp
+                )
               ),
-            ),),
-            if (visibleExchanges.length < exchanges.length)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: context.screenHeight * 0.025),
-                    child: Opacity(
-                      opacity: 0.4, // Fade effect for the fourth item
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Image.asset(visibleExchanges.last['assets']!, height: 32.h, width: 32.w),
-                          SizedBox(width: context.screenWidth * 0.05),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+            ],
+          ),
+          SizedBox(height: context.screenHeight * 0.0125),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ...visibleExchanges.map((Map<String, String> type) => Padding(
+                padding: EdgeInsets.only(bottom: context.screenHeight * 0.025),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Image.asset(type['assets']!, height: 32.h, width: 32.w),
+                    SizedBox(width: context.screenWidth * 0.05),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          type['dex']!, 
+                          style: context.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.sp
+                          )
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              'VOL ', 
+                              style: context.bodyMedium?.copyWith(
+                                color: Colors.black.withValues(alpha: 0.5),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.sp
+                              ),
+                            ),
+                            Text(
+                              type['vol']!, 
+                              style: context.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.sp
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    Text(
+                      type['price']!, 
+                      style: context.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp
+                      )
+                    ),
+                  ],
+                ),
+              ),),
+              if (visibleExchanges.length < exchanges.length)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: context.screenHeight * 0.025),
+                      child: Opacity(
+                        opacity: 0.4, // Fade effect for the fourth item
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Image.asset(visibleExchanges.last['assets']!, height: 32.h, width: 32.w),
+                            SizedBox(width: context.screenWidth * 0.05),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  visibleExchanges.last['dex']!, 
+                                  style: context.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.sp
+                                  )
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'VOL ', 
+                                      style: context.bodyMedium?.copyWith(
+                                        color: Colors.black.withValues(alpha: 0.5),
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12.sp
+                                      )
+                                    ),
+                                    Text(
+                                      visibleExchanges.last['vol']!, 
+                                      style: context.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12.sp
+                                      )
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Text(
+                              visibleExchanges.last['price']!, 
+                              style: context.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.sp
+                              )
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: context.screenHeight * 0.025),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _showAllExchanges = true;
+                          });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'See all',
+                              style: context.labelLarge?.copyWith(
+                                color: AppColors.blue,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14.sp
+                              ),
+                            ),
+                            const Icon(PhosphorIconsRegular.caretRight, size: 16, color: AppColors.blue),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                '24 HR TRADING ACTIVITY', 
+                style: context.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp
+                )
+              ),
+            ],
+          ),
+          SizedBox(height: context.screenHeight * 0.025),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: context.screenWidth * 0.05,
+                      vertical: context.screenHeight * 0.01,
+                    ),
+                    height: context.screenHeight * 0.195,
+                    width: context.screenWidth * 0.58,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xFFFFFFFF),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.grey[300]!,
+                          blurRadius: 5,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'TXN', 
+                                  style: context.titleMedium?.copyWith(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16.sp
+                                  )
+                                ),
+                                Text(
+                                  '5,034', 
+                                  style: context.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20.sp
+                                  )
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Container(
+                              height: context.screenHeight * 0.04,
+                              width: context.screenHeight * 0.04,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey[300]!),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              child: const Icon(PhosphorIconsRegular.bank, color: Colors.grey, size: 24),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: context.screenHeight * 0.0125),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: context.screenHeight * 0.01),
+                          height: context.screenHeight * 0.1,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300]!.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey[300]!),
+                          ),
+                          child: Column(
                             children: <Widget>[
-                              Text(visibleExchanges.last['dex']!, style: context.bodyMedium),
-                              Row(
-                                children: <Widget>[
-                                  Text('VOL ', style: context.bodyMedium?.copyWith(color: Colors.black.withValues(alpha: 0.5))),
-                                  Text(visibleExchanges.last['vol']!, style: context.bodyMedium),
-                                ],
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.0375),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Buy', 
+                                      style: context.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black.withValues(alpha: 0.5),
+                                        fontSize: 16.sp
+                                      )
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      '5,034', 
+                                      style: context.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.green,
+                                        fontSize: 16.sp
+                                      )
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Divider(color: AppColors.greyMedium),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.0375),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Sell', 
+                                      style: context.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black.withValues(alpha: 0.5),
+                                        fontSize: 16.sp
+                                      )
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      '5,034', 
+                                      style: context.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.red,
+                                        fontSize: 14.sp
+                                      )
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                          const Spacer(),
-                          Text(visibleExchanges.last['price']!, style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: context.screenHeight * 0.025),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showAllExchanges = true;
-                        });
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'See all',
-                            style: context.labelLarge?.copyWith(
-                              color: AppColors.blue,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const Icon(PhosphorIconsRegular.caretRight, size: 16, color: AppColors.blue),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            Text('24 HR TRADING ACTIVITY', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-          ],
-        ),
-        SizedBox(height: context.screenHeight * 0.025),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(2),
-                child: Container(
+                ),
+                Gap(10.w),
+                Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: context.screenWidth * 0.05,
                     vertical: context.screenHeight * 0.01,
@@ -165,8 +353,21 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text('TXN', style: context.titleMedium?.copyWith(color: Colors.grey)),
-                              Text('5,034', style: context.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
+                              Text(
+                                'VOLUME', 
+                                style: context.titleMedium?.copyWith(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16.sp
+                                )
+                              ),
+                              Text(
+                                '5,034', 
+                                style: context.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20.sp
+                                )
+                              ),
                             ],
                           ),
                           const Spacer(),
@@ -197,20 +398,48 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                               padding: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.0375),
                               child: Row(
                                 children: <Widget>[
-                                  Text('Buy', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.black.withValues(alpha: 0.5))),
+                                  Text(
+                                    'Buy', 
+                                    style: context.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black.withValues(alpha: 0.5),
+                                      fontSize: 16.sp
+                                    )
+                                  ),
                                   const Spacer(),
-                                  Text('5,034', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.green)),
+                                  Text(
+                                    '5,034', 
+                                    style: context.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.green,
+                                      fontSize: 16.sp
+                                    )
+                                  ),
                                 ],
                               ),
                             ),
-                            const Divider(color: AppColors.greyLight),
+                            const Divider(color: AppColors.greyMedium),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.0375),
                               child: Row(
                                 children: <Widget>[
-                                  Text('Sell', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.black.withValues(alpha: 0.5))),
+                                  Text(
+                                    'Sell', 
+                                    style: context.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black.withValues(alpha: 0.5),
+                                      fontSize: 16.sp
+                                    )
+                                  ),
                                   const Spacer(),
-                                  Text('5,034', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.red)),
+                                  Text(
+                                    '5,034', 
+                                    style: context.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.red,
+                                      fontSize: 14.sp
+                                    )
+                                  ),
                                 ],
                               ),
                             ),
@@ -220,146 +449,92 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                     ],
                   ),
                 ),
+              ],
+            ),
+          ),
+          SizedBox(height: context.screenHeight * 0.025),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'PRICE RANGE',
+                style: context.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp
+                ),
               ),
-              Gap(10.w),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: context.screenWidth * 0.05,
-                  vertical: context.screenHeight * 0.01,
-                ),
-                height: context.screenHeight * 0.195,
-                width: context.screenWidth * 0.58,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xFFFFFFFF),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.grey[300]!,
-                      blurRadius: 5,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('VOLUME', style: context.titleMedium?.copyWith(color: Colors.grey)),
-                            Text('5,034', style: context.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                        const Spacer(),
-                        Container(
-                          height: context.screenHeight * 0.04,
-                          width: context.screenHeight * 0.04,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey[300]!),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          child: const Icon(PhosphorIconsRegular.bank, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: context.screenHeight * 0.0125),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: context.screenHeight * 0.01),
-                      height: context.screenHeight * 0.1,
+              Row(
+                children: <String>['ALL', '1D', '1M', '1Y'].map((String period) => Padding(
+                    padding: EdgeInsets.only(left: context.screenWidth * 0.002),
+                    child: Container(
+                      width: 40, // Fixed width
+                      height: 32, // Fixed height
+                      alignment: Alignment.center, // Centers the text
                       decoration: BoxDecoration(
-                        color: Colors.grey[300]!.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey[300]!),
+                        color: period == 'ALL' ? AppColors.greyVeryLight : Colors.transparent,
+                        borderRadius: BorderRadius.circular(40),
                       ),
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.0375),
-                            child: Row(
-                              children: <Widget>[
-                                Text('Buy', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.black.withValues(alpha: 0.5))),
-                                const Spacer(),
-                                Text('5,034', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.green)),
-                              ],
-                            ),
-                          ),
-                          const Divider(color: AppColors.greyLight),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.0375),
-                            child: Row(
-                              children: <Widget>[
-                                Text('Sell', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.black.withValues(alpha: 0.5))),
-                                const Spacer(),
-                                Text('5,034', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.red)),
-                              ],
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        period,
+                        textAlign: TextAlign.center,
+                        style: context.labelMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14.sp,
+                          color: period == 'ALL' ? Colors.black : AppColors.greyLight,
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),).toList(),
               ),
             ],
           ),
-        ),
-        SizedBox(height: context.screenHeight * 0.025),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              'PRICE RANGE',
-              style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            Row(
-              children: <String>['ALL', '1D', '1M', '1Y'].map((String period) => Padding(
-                  padding: EdgeInsets.only(left: context.screenWidth * 0.050),
-                  child: Text(
-                    period,
-                    style: context.labelMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: period == 'ALL' ? Colors.black : AppColors.greyLight,
-                    ),
-                  ),
-                ),).toList(),
-            ),
-          ],
-        ),
-        SizedBox(height: context.screenHeight * 0.0250),
-        const PriceRangeSection(
-          lowPrice: 14000.00,
-          highPrice: 23000.00,
-          lastTradedPrice: 18500.54,
-        ),
-        SizedBox(height: context.screenHeight * 0.025),
-        Text('24 HR TRANSACTIONS', style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-        SizedBox(height: context.screenHeight * 0.025),
-        TransactionsTable(),
-        SizedBox(height: context.screenHeight * 0.025),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'ADDRESS BY HOLDINGS (5202)',
-              style: context.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: context.screenHeight * 0.0250),
-            Row(
-              children: <Widget>[
-                _buildCategory(context, r'$0-$1k', 2.36, AppColors.blue),
-                Gap(20.w),
-                _buildCategory(context, r'$1k-$100k', 8.6, AppColors.green),
-                Gap(20.w),
-                _buildCategory(context, r'$100k+', 0.85, AppColors.orange),
-              ],
-            ),
-            SizedBox(height: context.screenHeight * 0.025),
-            AddressHoldingsTable(),
-          ],
-        ),
-      ],
+          SizedBox(height: context.screenHeight * 0.0250),
+          const PriceRangeSection(
+            lowPrice: 14000.00,
+            highPrice: 23000.00,
+            lastTradedPrice: 18500.54,
+          ),
+          SizedBox(height: context.screenHeight * 0.025),
+          Text(
+            '24 HR TRANSACTIONS', 
+            style: context.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: 14.sp
+            )
+          ),
+          SizedBox(height: context.screenHeight * 0.025),
+          TransactionsTable(),
+          SizedBox(height: context.screenHeight * 0.025),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'ADDRESS BY HOLDINGS (5202)',
+                style: context.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp
+                ),
+              ),
+              SizedBox(height: context.screenHeight * 0.0250),
+              Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 16.w),
+                child: Row(
+                  children: <Widget>[
+                    _buildCategory(context, r'$0-$1k', 2.36, AppColors.blue),
+                    Gap(20.w),
+                    _buildCategory(context, r'$1k-$100k', 8.6, AppColors.green),
+                    Gap(20.w),
+                    _buildCategory(context, r'$100k+', 0.85, AppColors.orange),
+                  ],
+                ),
+              ),
+              SizedBox(height: context.screenHeight * 0.03),
+              AddressHoldingsTable(),
+              SizedBox(height: context.screenHeight * 1), // 10% of screen height for bottom padding
+            ],
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -388,13 +563,20 @@ Widget _buildCategory(BuildContext context, String range, double percentage, Col
           SizedBox(width: context.screenHeight * 0.01),
           Text(
             range,
-            style: context.bodySmall?.copyWith(color: AppColors.greyDark),
+            style: context.bodySmall?.copyWith(
+              color: AppColors.greyDark,
+              fontWeight: FontWeight.w500,
+              fontSize: 12.sp
+            ),
           ),
         ],
       ),
       Text(
         '${percentage.toStringAsFixed(2)}%',
-        style: context.bodyMedium,
+        style: context.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w500,
+          fontSize: 14.sp
+        ),
       ),
     ],
   ),

@@ -187,33 +187,30 @@ class _NftInfoScreenState extends ConsumerState<NftInfoScreen>
                           ),
                         ),
                         // NFT image with Hero animation
+                        Gap(20.h),
                         Hero(
                           tag: 'nft-image-${selectedNft?.id ?? "default"}',
-                          child: TweenAnimationBuilder<double>(
-                            tween: Tween<double>(begin: 0.85, end: 1.0),
-                            duration: const Duration(milliseconds: 400),
-                            builder: (context, opacity, child) {
-                              return Material(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(16.r),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width - 40.w,
-                                  height: MediaQuery.of(context).size.width - 40.w,
-                                  margin: EdgeInsets.only(top: 24.h),
-                                  clipBehavior: Clip.none,
-                                  child: Opacity(
+                          child: Material(
+                            type: MaterialType.transparency,
+                            borderRadius: BorderRadius.circular(16.r),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16.r),
+                              child: TweenAnimationBuilder<double>(
+                                tween: Tween<double>(begin: 0.85, end: 1.0),
+                                duration: const Duration(milliseconds: 400),
+                                builder: (context, opacity, child) {
+                                  return Opacity(
                                     opacity: opacity,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(16.r),
-                                      child: Image.asset(
-                                        nftImagePath,
-                                        fit: BoxFit.contain, // Use contain for consistent aspect ratio
-                                      ),
+                                    child: Image.asset(
+                                      nftImagePath,
+                                      width: MediaQuery.of(context).size.width - 40.w,
+                                      height: MediaQuery.of(context).size.width - 40.w,
+                                      fit: BoxFit.contain,
                                     ),
-                                  ),
-                                ),
-                              );
-                            },
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
                         Gap(26.h),

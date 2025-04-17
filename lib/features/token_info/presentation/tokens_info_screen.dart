@@ -111,7 +111,7 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
     // Calculate scroll progress based on a dynamic threshold
     final double maxScrollExtent = _scrollController.position.maxScrollExtent > 0
         ? _scrollController.position.maxScrollExtent
-        : MediaQuery.of(context).size.height * 0.2; // Fallback threshold
+        : MediaQuery.of(context).size.height * 0.15; // Reduced threshold for faster response
     final double scrollProgress = (_scrollController.offset / maxScrollExtent).clamp(0.0, 1.0);
 
     // Update chart interaction
@@ -124,11 +124,11 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
       });
     }
 
-    // Smoothly update scroll progress without abrupt toggles
+    // Smoothly update scroll progress with faster threshold
     if (scrollProgress != _scrollProgress) {
       setState(() {
         _scrollProgress = scrollProgress;
-        _showInAppBar = scrollProgress > 0.5; // Still toggle for app bar title visibility
+        _showInAppBar = scrollProgress > 0.3; // Lower threshold for earlier visibility
       });
     }
   }
@@ -279,7 +279,7 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
             pinned: true,
             title: AnimatedOpacity(
               opacity: _scrollProgress,
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 150), // Reduced from 300ms to 150ms
               child: _buildAppBarTitle(selectedToken),
             ),
             actions: <Widget>[
@@ -394,18 +394,17 @@ class _TokensInfoScreenState extends ConsumerState<TokensInfoScreen> with Ticker
             ),
             pinned: true,
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 1.5,
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  const AboutPage(),
-                  const ExplorePage(),
-                  HistoryPage(),
-                  const AnalyticsPage(),
-                ],
-              ),
+          SliverFillRemaining(
+            hasScrollBody: true,
+            child: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),  // Prevent nested scrolling
+              controller: _tabController,
+              children: <Widget>[
+                const AboutPage(),
+                const ExplorePage(),
+                HistoryPage(),
+                const AnalyticsPage(),
+              ],
             ),
           ),
         ],

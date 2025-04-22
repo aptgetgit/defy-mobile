@@ -10,22 +10,22 @@ part 'generated/swap_provider.g.dart';
 class Swap extends _$Swap {
   @override
   SwapState build() => SwapState(
-      tokens: <Token>[
-        Token(name: 'Aptos', symbol: 'APT', icon: 'assets/icons/aptos.png', amount: 117.8, usdValue: 142.39),
-        Token(name: 'Gui Inu', symbol: 'GUI', icon: 'assets/icons/gui-inu.png', amount: 10000200.10, usdValue: 142.39),
-        Token(name: 'Bluemove', symbol: 'MOVE', icon: 'assets/icons/bluemove.png', amount: 12760.34, usdValue: 142.39),
-        Token(name: 'Pancake', symbol: 'CAKE', icon: 'assets/icons/pancake.png', amount: 3758.00, usdValue: 142.39),
-        Token(name: 'Thala', symbol: 'THL', icon: 'assets/icons/thala.png', amount: 3758.00, usdValue: 142.39),
-        Token(name: 'Aptos', symbol: 'APT', icon: 'assets/icons/aptos.png', amount: 117.8, usdValue: 142.39),
-        Token(name: 'Gui Inu', symbol: 'GUI', icon: 'assets/icons/gui-inu.png', amount: 10000200.10, usdValue: 142.39),
-      ],
-      fromAmount: '0.00',
-      toAmount: '0.00',
-      fromToken: null,
-      toToken: null,
-      isFromLarge: true,
-      isLimit: false,
-    );
+        tokens: <Token>[
+          Token(name: 'Aptos', symbol: 'APT', icon: 'assets/icons/aptos.png', amount: 117.8, usdValue: 142.39),
+          Token(name: 'Gui Inu', symbol: 'GUI', icon: 'assets/icons/gui-inu.png', amount: 10000200.10, usdValue: 142.39),
+          Token(name: 'Bluemove', symbol: 'MOVE', icon: 'assets/icons/bluemove.png', amount: 12760.34, usdValue: 142.39),
+          Token(name: 'Pancake', symbol: 'CAKE', icon: 'assets/icons/pancake.png', amount: 3758.00, usdValue: 142.39),
+          Token(name: 'Thala', symbol: 'THL', icon: 'assets/icons/thala.png', amount: 3758.00, usdValue: 142.39),
+          Token(name: 'Aptos', symbol: 'APT', icon: 'assets/icons/aptos.png', amount: 117.8, usdValue: 142.39),
+          Token(name: 'Gui Inu', symbol: 'GUI', icon: 'assets/icons/gui-inu.png', amount: 10000200.10, usdValue: 142.39),
+        ],
+        fromAmount: '0.00',
+        toAmount: '0.00',
+        fromToken: null,
+        toToken: null,
+        isFromLarge: true,
+        isLimit: false,
+      );
 
   void setFromToken(Token token) {
     state = state.copyWith(fromToken: token);
@@ -39,6 +39,52 @@ class Swap extends _$Swap {
     state = state.copyWith(activeBox: box);
   }
 
+  void clearFromToken() {
+    print('Clearing fromToken'); // Debug log
+    
+    // Force a new state object creation by creating a completely new state
+    final newState = SwapState(
+      tokens: state.tokens,
+      fromAmount: '0.00',
+      toAmount: state.toAmount,
+      fromToken: null, // Clear this token
+      toToken: state.toToken,
+      isFromLarge: state.isFromLarge,
+      isLimit: state.isLimit,
+      activeBox: 'from',
+      convertAmounts: state.convertAmounts,
+    );
+    
+    // Set the new state directly
+    state = newState;
+    
+    // Debug logging to verify state update
+    print('FromToken after clear: ${state.fromToken}');
+  }
+
+  void clearToToken() {
+    print('Clearing toToken'); // Debug log
+    
+    // Force a new state object creation by creating a completely new state
+    final newState = SwapState(
+      tokens: state.tokens,
+      fromAmount: state.fromAmount,
+      toAmount: '0.00',
+      fromToken: state.fromToken,
+      toToken: null, // Clear this token
+      isFromLarge: state.isFromLarge,
+      isLimit: state.isLimit,
+      activeBox: 'to',
+      convertAmounts: state.convertAmounts,
+    );
+    
+    // Set the new state directly
+    state = newState;
+    
+    // Debug logging to verify state update
+    print('ToToken after clear: ${state.toToken}');
+  }
+
   void swapContainerSizes() {
     state = state.copyWith(isFromLarge: !state.isFromLarge);
   }
@@ -46,12 +92,9 @@ class Swap extends _$Swap {
   void toggleLimit() {
     state = state.copyWith(isLimit: !state.isLimit);
   }
-  
-  // The setAmount method should be removed or replaced
+
   void setFromAmount(String amount) {
     state = state.copyWith(fromAmount: amount);
-    
-    // Only update toAmount if conversion is enabled
     if (state.convertAmounts && state.fromToken != null && state.toToken != null) {
       final double ratio = state.toToken!.usdValue / state.fromToken!.usdValue;
       final double fromAmountValue = double.tryParse(amount) ?? 0;
@@ -59,11 +102,9 @@ class Swap extends _$Swap {
       state = state.copyWith(toAmount: calculatedToAmount);
     }
   }
-  
+
   void setToAmount(String amount) {
     state = state.copyWith(toAmount: amount);
-    
-    // Only update fromAmount if conversion is enabled
     if (state.convertAmounts && state.fromToken != null && state.toToken != null) {
       final double ratio = state.fromToken!.usdValue / state.toToken!.usdValue;
       final double toAmountValue = double.tryParse(amount) ?? 0;
@@ -71,8 +112,7 @@ class Swap extends _$Swap {
       state = state.copyWith(fromAmount: calculatedFromAmount);
     }
   }
-  
-  // Add a flag to control whether amounts should convert automatically
+
   void setConvertAmounts(bool convert) {
     state = state.copyWith(convertAmounts: convert);
   }
@@ -111,14 +151,14 @@ class SwapState {
     bool? isLimit,
     bool? convertAmounts,
   }) => SwapState(
-      tokens: tokens ?? this.tokens,
-      fromAmount: fromAmount ?? this.fromAmount,
-      toAmount: toAmount ?? this.toAmount,
-      fromToken: fromToken ?? this.fromToken,
-      toToken: toToken ?? this.toToken,
-      activeBox: activeBox ?? this.activeBox,
-      isFromLarge: isFromLarge ?? this.isFromLarge,
-      isLimit: isLimit ?? this.isLimit,
-      convertAmounts: convertAmounts ?? this.convertAmounts,
-    );
+        tokens: tokens ?? this.tokens,
+        fromAmount: fromAmount ?? this.fromAmount,
+        toAmount: toAmount ?? this.toAmount,
+        fromToken: fromToken ?? this.fromToken,
+        toToken: toToken ?? this.toToken,
+        activeBox: activeBox ?? this.activeBox,
+        isFromLarge: isFromLarge ?? this.isFromLarge,
+        isLimit: isLimit ?? this.isLimit,
+        convertAmounts: convertAmounts ?? this.convertAmounts,
+      );
 }

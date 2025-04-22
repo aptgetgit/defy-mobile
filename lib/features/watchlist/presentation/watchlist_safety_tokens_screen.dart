@@ -15,7 +15,6 @@ import 'providers/watchlist_provider.dart';
 class WatchlistSafetyTokensScreen extends ConsumerStatefulWidget {
   const WatchlistSafetyTokensScreen({this.collectionId, super.key});
   
-  // Collection ID parameter
   final String? collectionId;
 
   @override
@@ -33,13 +32,9 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
   bool _showCancelButton = false;
   bool _isSortDescending = false;
   bool _isSorting = false;
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
-  // Animation variables
   List<WatchlistItem> _sortedItems = <WatchlistItem>[];
   bool _isAnimatingSorting = false;
-  Map<String, Offset> _itemPositions = <String, Offset>{};
-  Map<String, GlobalKey> _itemKeys = <String, GlobalKey<State<StatefulWidget>>>{};
   List<WatchlistItem> _currentItems = <WatchlistItem>[];
 
   @override
@@ -50,7 +45,6 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
       vsync: this,
     );
     
-    // Animation for delete mode
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(1, 0),
       end: Offset.zero,
@@ -59,7 +53,6 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
       curve: Curves.easeInOut,
     ));
 
-    // Animation for delete button
     _deleteButtonAnimation = Tween<Offset>(
       begin: const Offset(0, 1),
       end: Offset.zero,
@@ -68,11 +61,9 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
       curve: Curves.easeOutCubic,
     ));
 
-    // Handle collection ID
     if (widget.collectionId != null) {
       collectionId = widget.collectionId;
     } else {
-      // Find Safety Tokens collection if not provided
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final List<WatchlistCollection> safetyCollections = ref.read(watchlistProvider.notifier)
             .getCollectionsByType(CollectionType.token)
@@ -94,17 +85,13 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
     super.dispose();
   }
 
-  // Toggle delete button
   void _toggleDeleteButton() {
-    if (collectionId == null) {
-      return;
-    }
+    if (collectionId == null) return;
     
     final bool currentDeleteMode = ref.read(watchlistCollectionDetailsProvider(collectionId!)).isDeleteMode;
     
     setState(() {
       _showDeleteMode = !_showDeleteMode;
-      
       if (!currentDeleteMode) {
         _navBarExpanded = true;
       } else {
@@ -133,100 +120,69 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
     });
   }
 
-  void _captureItemPositions() {
-    _itemPositions.clear();
-    
-    _itemKeys.forEach((String id, GlobalKey<State<StatefulWidget>> key) {
-      final RenderBox? renderBox = key.currentContext?.findRenderObject() as RenderBox?;
-      if (renderBox != null) {
-        final Offset position = renderBox.localToGlobal(Offset.zero);
-        final RenderObject? scrollableParent = context.findRenderObject();
-        final Offset parentPosition = scrollableParent != null 
-            ? (scrollableParent as RenderBox).localToGlobal(Offset.zero) 
-            : Offset.zero;
-            
-        _itemPositions[id] = Offset(
-          position.dx - parentPosition.dx,
-          position.dy - parentPosition.dy
-        );
-      }
-    });
-  }
-
-  // Sorting function
   void _sortItemsByNativeValue() {
     if (collectionId == null) return;
-
-    final WatchlistCollection collection = ref.read(watchlistCollectionDetailsProvider(collectionId!)).collection;
     
+    final collection = ref.read(watchlistCollectionDetailsProvider(collectionId!)).collection;
     _currentItems = List<WatchlistItem>.from(collection.items);
     _sortedItems = List<WatchlistItem>.from(_currentItems);
     
-    _captureItemPositions();
+    double _extractNumericValue(String? nativeValue) {
+      if (nativeValue == null || nativeValue.isEmpty) return 0;
+      try {
+        final String numericPart = nativeValue.split(' ')[0].replaceAll(',', '');
+        return double.tryParse(numericPart) ?? 0.0;
+      } catch (e) {
+        return 0;
+      }
+    }
     
-    // Sort the items
-    _sortedItems.sort((WatchlistItem a, WatchlistItem b) {
+    _sortedItems.sort((a, b) {
       final double valueA = _extractNumericValue(a.nativeValue);
       final double valueB = _extractNumericValue(b.nativeValue);
       return _isSortDescending ? valueB.compareTo(valueA) : valueA.compareTo(valueB);
     });
-
-    // Toggle sort direction for next time
-    _isSortDescending = !_isSortDescending;
-
-    // Start animation
+    
     setState(() {
       _isAnimatingSorting = true;
       _isSorting = true;
     });
-
-    // Update the list after animation
-    Future<void>.delayed(const Duration(milliseconds: 600), () {
+    
+    // Important: Only update the state after the animation completes
+    Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) {
         ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
            .reorderItems(_sortedItems);
-        
+           
         setState(() {
           _isAnimatingSorting = false;
           _isSorting = false;
+          _currentItems = List<WatchlistItem>.from(_sortedItems);
+        });
+      }
+    });
+    
+    // Toggle sort direction after the animation completes
+    Future.delayed(const Duration(milliseconds: 650), () {
+      if (mounted) {
+        setState(() {
+          _isSortDescending = !_isSortDescending;
         });
       }
     });
   }
 
-  // Add the helper method for numeric value extraction
-  double _extractNumericValue(String? nativeValue) {
-    if (nativeValue == null || nativeValue.isEmpty) return 0;
-    try {
-      final String numericPart = nativeValue.split(' ')[0].replaceAll(',', '');
-      return double.tryParse(numericPart) ?? 0.0;
-    } catch (e) {
-      return 0;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Show loading while finding collection
     if (collectionId == null) {
       return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+        body: Center(child: CircularProgressIndicator()),
       );
     }
     
-    // Get collection data
-    final CollectionDetailsState collectionDetails = ref.watch(watchlistCollectionDetailsProvider(collectionId!));
-    final WatchlistCollection collection = collectionDetails.collection;
+    final collectionDetails = ref.watch(watchlistCollectionDetailsProvider(collectionId!));
+    final collection = collectionDetails.collection;
     final bool showDeleteButton = collectionDetails.isDeleteMode;
-    
-    if (_itemKeys.length != collection.items.length) {
-      _itemKeys = <String, GlobalKey<State<StatefulWidget>>>{
-        for (WatchlistItem item in collection.items)
-          item.id: GlobalKey(),
-      };
-    }
     
     return Scaffold(
       appBar: AppBar(
@@ -237,12 +193,10 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
             color: Colors.black,
             size: 22.sp,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         title: Column(
-          children: <Widget>[
+          children: [
             Text(
               collection.name,
               style: TextStyle(
@@ -254,13 +208,12 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Token images preview
+              children: [
                 SizedBox(
                   width: 45.w,
                   height: 20.h,
                   child: Stack(
-                    children: <Widget>[
+                    children: [
                       for (int i = 0; i < (collection.items.length > 3 ? 3 : collection.items.length); i++)
                         Positioned(
                           right: i * 5.w,
@@ -294,60 +247,57 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
             ),
           ],
         ),
-        actions: <Widget>[
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            margin: EdgeInsets.only(right: 8.w),
-            padding: EdgeInsets.symmetric(
-              horizontal: 12.w, 
-              vertical: 6.h
-            ),
-            decoration: BoxDecoration(
-              color: showDeleteButton ? AppColors.red.withValues(alpha: 0.2) : AppColors.greyVeryLight,
-              borderRadius: BorderRadius.circular(16.r),
-            ),
-            child: GestureDetector(
-              onTap: showDeleteButton 
-                ? () {
-                    // Remove All functionality
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: Text('Remove All', style: TextStyle(fontSize: 22.sp)),
-                        content: Text('Are you sure? This action cannot be undone.', style: TextStyle(fontSize: 16.sp)),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text('Cancel', style: TextStyle(fontSize: 16.sp)),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              ref.read(watchlistProvider.notifier).deleteCollection(collectionId!);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                            child: Text('Remove', style: TextStyle(color: AppColors.red, fontSize: 16.sp)),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                : () async {
-                    // Edit functionality
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => WatchListUpdateCollectionScreen(
-                          initialName: collection.name,
-                          collectionId: collectionId!,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 11.w),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              margin: EdgeInsets.only(right: 8.w),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+              decoration: BoxDecoration(
+                color: showDeleteButton ? AppColors.red.withValues(alpha: 0.2) : AppColors.greyVeryLight,
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: GestureDetector(
+                onTap: showDeleteButton 
+                  ? () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text('Remove All', style: TextStyle(fontSize: 22.sp)),
+                          content: Text('Are you sure? This action cannot be undone.', style: TextStyle(fontSize: 16.sp)),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('Cancel', style: TextStyle(fontSize: 16.sp)),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ref.read(watchlistProvider.notifier).deleteCollection(collectionId!);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              child: Text('Remove', style: TextStyle(color: AppColors.red, fontSize: 16.sp)),
+                            ),
+                          ],
                         ),
-                      ),
-                    );
-                  },
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(
+                      );
+                    }
+                  : () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WatchListUpdateCollectionScreen(
+                            initialName: collection.name,
+                            collectionId: collectionId!,
+                          ),
+                        ),
+                      );
+                    },
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) => FadeTransition(
                     opacity: animation,
                     child: SlideTransition(
                       position: Tween<Offset>(
@@ -357,13 +307,14 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                       child: child,
                     ),
                   ),
-                child: Text(
-                  showDeleteButton ? 'Remove All' : 'Edit',
-                  key: ValueKey<String>(showDeleteButton ? 'remove_all' : 'edit'),
-                  style: TextStyle(
-                    color: showDeleteButton ? AppColors.red : AppColors.grey,
-                    fontSize: 14.sp,
-                    fontWeight: showDeleteButton ? FontWeight.w600 : FontWeight.w500,
+                  child: Text(
+                    showDeleteButton ? 'Remove All' : 'Edit',
+                    key: ValueKey(showDeleteButton ? 'remove_all' : 'edit'),
+                    style: TextStyle(
+                      color: showDeleteButton ? AppColors.red : AppColors.grey,
+                      fontSize: 14.sp,
+                      fontWeight: showDeleteButton ? FontWeight.w600 : FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
@@ -376,7 +327,7 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.h),
           child: Column(
-            children: <Widget>[
+            children: [
               Gap(8.h), 
               Container(
                 color: AppColors.greyVeryLight,
@@ -390,92 +341,40 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
 
       body: SafeArea(
         child: Column(
-          children: <Widget>[
+          children: [
             Gap(12.h),
             Expanded(
               child: collection.items.isEmpty
                 ? Center(child: Text('No tokens in this collection', style: TextStyle(fontSize: 16.sp)))
-                : Stack(
-                  alignment: Alignment.topLeft,
-                    children: <Widget>[
-                      ListView.builder(
-                        itemCount: collection.items.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final WatchlistItem item = collection.items[index];
-                          return SortableItemWrapper(
-                            key: _itemKeys[item.id],
-                            itemId: item.id,
-                            isAnimating: _isAnimatingSorting,
-                            sortedItems: _sortedItems,
-                            currentItems: _currentItems,
-                            child: WatchlistTokenTile(
-                              tokenData: <String, String>{
-                                'id': item.id,
-                                'name': item.name,
-                                'imagePath': item.imagePath,
-                                'usdValue': item.usdValue ?? '',
-                                'nativeValue': item.nativeValue ?? '',
-                              },
-                              deleteNft: showDeleteButton,
-                              onDelete: () {
-                                // Create a local copy of the item before deletion
-                                final itemToDelete = item;
-                                
-                                // Use a direct, synchronous update
-                                ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
-                                    .deleteItem(itemToDelete.id);
-                                    
-                                // Explicitly maintain delete mode
-                                ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier).preserveDeleteMode();
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      
-                      if (_isAnimatingSorting)
-                        ...collection.items.map((WatchlistItem item) {
-                          final int currentIndex = _currentItems.indexWhere((WatchlistItem i) => i.id == item.id);
-                          final int targetIndex = _sortedItems.indexWhere((WatchlistItem i) => i.id == item.id);
-                          
-                          if (currentIndex == targetIndex) {
-                            return const SizedBox.shrink();
-                          }
-                          
-                          final Offset startPosition = _itemPositions[item.id] ?? Offset(0, currentIndex * 70.h);
-                          final double verticalOffset = (targetIndex - currentIndex) * 70.h;
-                          
-                          return Positioned(
-                            key: ValueKey('animated_${item.id}'),
-                            top: startPosition.dy,
-                            left: 0,
-                            right: 0,
-                            height: 70.h,
-                            child: TweenAnimationBuilder<double>(
-                              tween: Tween<double>(begin: 0, end: 1),
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
-                              builder: (BuildContext context, double value, Widget? child) => Transform.translate(
-                                  offset: Offset(0, verticalOffset * value),
-                                  child: Opacity(
-                                    opacity: 1.0 - (value * 0.2),
-                                    child: WatchlistTokenTile(
-                                      tokenData: <String, String>{
-                                        'id': item.id,
-                                        'name': item.name,
-                                        'imagePath': item.imagePath,
-                                        'usdValue': item.usdValue ?? '',
-                                        'nativeValue': item.nativeValue ?? '',
-                                      },
-                                      deleteNft: showDeleteButton,
-                                      onDelete: () {},
-                                    ),
-                                  ),
-                                ),
-                            ),
-                          );
-                        }).toList(),
-                    ],
+                : ListView.builder(
+                    itemCount: collection.items.length,
+                    itemBuilder: (context, index) {
+                      final item = collection.items[index];
+                      return SortableItemWrapper(
+                        key: ValueKey(item.id),
+                        itemId: item.id,
+                        isAnimating: _isAnimatingSorting,
+                        sortedItems: _sortedItems,
+                        currentItems: _currentItems,
+                        child: WatchlistTokenTile(
+                          tokenData: {
+                            'id': item.id,
+                            'name': item.name,
+                            'imagePath': item.imagePath,
+                            'usdValue': item.usdValue ?? '',
+                            'nativeValue': item.nativeValue ?? '',
+                          },
+                          deleteNft: showDeleteButton,
+                          onDelete: () {
+                            final itemToDelete = item;
+                            ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
+                                .deleteItem(itemToDelete.id);
+                            ref.read(watchlistCollectionDetailsProvider(collectionId!).notifier)
+                                .preserveDeleteMode();
+                          },
+                        ),
+                      );
+                    },
                   ),
             ),
             
@@ -484,7 +383,6 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Sort Button - Only show when not in delete mode
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
                     opacity: showDeleteButton ? 0.0 : 1.0,
@@ -530,14 +428,13 @@ class _WatchlistSafetyTokensScreenState extends ConsumerState<WatchlistSafetyTok
                     ),
                   ),
                   
-                  // Remove/Delete Button
                   Expanded(
                     child: AnimatedPadding(
                       duration: const Duration(milliseconds: 300),
                       padding: EdgeInsets.only(left: showDeleteButton ? 0 : 12.w),
                       child: FilledButton(
                         onPressed: showDeleteButton 
-                          ? _toggleDeleteButton 
+                          ? _toggleDeleteButton
                           : _toggleDeleteButton,
                         style: FilledButton.styleFrom(
                           backgroundColor: showDeleteButton ? AppColors.black : Colors.black,
@@ -589,16 +486,20 @@ class SortableItemWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isAnimating) {
-      return SizedBox(
-        height: 70.h,
-        child: Opacity(
-          opacity: 0,
-          child: child,
-        ),
-      );
-    }
-
-    return child;
+    final int currentIndex = currentItems.indexWhere((i) => i.id == itemId);
+    final int targetIndex = sortedItems.indexWhere((i) => i.id == itemId);
+    final bool shouldAnimate = isAnimating && currentIndex != targetIndex;
+    
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      transform: shouldAnimate 
+          ? Matrix4.translationValues(0, (targetIndex - currentIndex) * 72.h, 0)
+          : Matrix4.translationValues(0, 0, 0),
+      child: Opacity(
+        opacity: isAnimating ? 0.8 : 1.0,
+        child: child,
+      ),
+    );
   }
 }

@@ -12,12 +12,14 @@ class CustomTabBar extends StatelessWidget {
     super.key,
     this.trailing,
     this.isScrollable = true,
+    this.withPositionedIndicator = false, // Add this parameter
   });
   
   final TabController tabController;
   final List<String> tabs;
   final Widget? trailing;
   final bool isScrollable;
+  final bool withPositionedIndicator; // Add this field
 
   @override
   Widget build(BuildContext context) => Row(
@@ -27,26 +29,33 @@ class CustomTabBar extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none, // Allow content to overflow
           children: [
-            // Grey bottom line that spans the entire width
-            // Positioned(
-            //   left: 0,
-            //   right: 0,
-            //   bottom: 0,
-            //   child: Container(
-            //     height: 1.h,
-            //     color: AppColors.greyVeryLight,
-            //   ),
-            // ),
+            // Positioned bottom grey divider (only add if using positioned indicator)
+            if (withPositionedIndicator)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  height: 1.h,
+                  color: AppColors.greyVeryLight,
+                ),
+              ),
             // Custom TabBar with modified indicator
             TabBar(
               controller: tabController,
               isScrollable: isScrollable,
-              // Use custom indicator painter that will completely cover the grey line
-              indicator: _CustomIndicator(
-                color: Colors.black,
-                height: 2.h, // Make this slightly thicker than the grey line
-                insets: EdgeInsets.zero,
-              ),
+              // Use custom indicator painter that completely covers the grey line
+              indicator: withPositionedIndicator 
+                ? _SlideableIndicator(
+                    color: Colors.black,
+                    height: 2.h, // Slightly thicker than the grey divider
+                    insets: EdgeInsets.zero,
+                  )
+                : _CustomIndicator(
+                    color: Colors.black,
+                    height: 2.h,
+                    insets: EdgeInsets.zero,
+                  ),
               tabAlignment: isScrollable ? TabAlignment.start : null,
               labelColor: Colors.black,
               unselectedLabelColor: AppColors.greyLight,
@@ -131,6 +140,71 @@ class _CustomIndicatorPainter extends BoxPainter {
       rect.left + resolvedInsets.left,
       indicatorY,
       rect.width - resolvedInsets.horizontal,
+      height,
+    );
+    
+    final Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    
+    canvas.drawRect(indicator, paint);
+  }
+}
+
+// New slideable indicator class
+class _SlideableIndicator extends Decoration {
+  const _SlideableIndicator({
+    required this.color,
+    required this.height,
+    required this.insets,
+  });
+
+  final Color color;
+  final double height;
+  final EdgeInsetsGeometry insets;
+
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+    return _SlideableIndicatorPainter(
+      color: color,
+      height: height,
+      insets: insets,
+      onChanged: onChanged,
+    );
+  }
+}
+
+class _SlideableIndicatorPainter extends BoxPainter {
+  _SlideableIndicatorPainter({
+    required this.color,
+    required this.height,
+    required this.insets,
+    VoidCallback? onChanged,
+  }) : super(onChanged);
+
+  final Color color;
+  final double height;
+  final EdgeInsetsGeometry insets;
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    assert(configuration.size != null);
+    
+    final Rect rect = offset & configuration.size!;
+    final EdgeInsets resolvedInsets = insets.resolve(TextDirection.ltr);
+    
+    // Get the tab text width for the indicator (subtract some padding)
+    final double tabWidth = rect.width - resolvedInsets.horizontal;
+    
+    // Calculate indicator position to completely cover the grey line
+    // Position at the bottom of the tab
+    final double indicatorY = rect.bottom - height;
+    
+    // Create indicator rect with calculated width and position
+    final Rect indicator = Rect.fromLTWH(
+      rect.left + resolvedInsets.left,
+      indicatorY,
+      tabWidth,
       height,
     );
     

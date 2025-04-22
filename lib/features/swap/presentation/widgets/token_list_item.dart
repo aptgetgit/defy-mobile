@@ -4,20 +4,24 @@ import '../../../../config/theme/colors.dart';
 import '../../data/models/token.dart';
 
 class TokenListItem extends StatelessWidget {
-
-  const TokenListItem({
-    super.key,
-    required this.token,
-    required this.onTap,
-  });
   final Token token;
   final VoidCallback onTap;
+  final bool isSelected; // Add this parameter to track selection state
+
+  const TokenListItem({
+    Key? key,
+    required this.token,
+    required this.onTap,
+    this.isSelected = false, // Default to not selected
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 8),
     child: GestureDetector(
-        onTap: onTap,
+      onTap: onTap,
+      child: Opacity(
+        opacity: isSelected ? 0.5 : 1.0, // Make opaque if selected
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
@@ -69,5 +73,6 @@ class TokenListItem extends StatelessWidget {
           ),
         ),
       ),
+    ),
   );
 }

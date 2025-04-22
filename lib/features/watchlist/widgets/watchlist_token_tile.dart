@@ -24,10 +24,13 @@ class WatchlistTokenTile extends StatefulWidget {
 class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTickerProviderStateMixin {
   bool clickDelete = false;
   bool isDeleted = false;
+  bool _previousDeleteState = false;
+  static bool _globalDeleteMode = false; // Track global delete mode state
 
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   late Animation<double> _opacityAnimation;
+  late Animation<double> _deleteProgressAnimation;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
       vsync: this,
     );
     
+    // Reduce the horizontal movement to make it less extreme
     _offsetAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(-0.2, 0),
@@ -50,8 +54,48 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
       end: 1,
     ).animate(CurvedAnimation(
       parent: _controller,
-      curve: const Interval(0.3, 1, curve: Curves.easeOut),
+      curve: Curves.easeInOut,
     ));
+    
+    // Add progress animation for the delete action
+    _deleteProgressAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.linear,
+    ));
+    
+    // Initialize state
+    _previousDeleteState = widget.deleteNft;
+    
+    // Track global delete mode - only trigger animations on initial toggle
+    if (widget.deleteNft && !_globalDeleteMode) {
+      _globalDeleteMode = true;
+      // Only forward animation when we first enter delete mode
+      _controller.forward();
+    }
+  }
+
+  @override
+  void didUpdateWidget(WatchlistTokenTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    
+    // Important: Only handle animation when the MODE changes, not individual tile changes
+    if (oldWidget.deleteNft != widget.deleteNft) {
+      _previousDeleteState = oldWidget.deleteNft;
+      
+      // Update global state
+      _globalDeleteMode = widget.deleteNft;
+      
+      if (widget.deleteNft) {
+        // Entering delete mode - all tiles show delete icon without animation
+        _controller.value = 1.0; // Skip animation, just set the end value
+      } else {
+        // Exiting delete mode - all tiles hide delete icon without animation
+        _controller.value = 0.0; // Skip animation, just set the start value
+      }
+    }
   }
 
   @override
@@ -61,18 +105,19 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
   }
 
   void delete() {
-    _controller.forward(from: 0);
-
+    // No animation trigger here, just handle state
     setState(() {
       clickDelete = !clickDelete;
     });
 
-    Future.delayed(const Duration(seconds: 6), () {
-      if (clickDelete) {
+    // Reduced to 2 seconds for faster response
+    Future.delayed(const Duration(seconds: 2), () {
+      if (clickDelete && mounted) {
         setState(() {
           isDeleted = true;
         });
-        
+
+        // Call onDelete callback
         if (widget.onDelete != null) {
           widget.onDelete!();
         }
@@ -82,12 +127,6 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    if (widget.deleteNft) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
-    
     final String name = widget.tokenData['name'] ?? 'Funky Monkey';
     final String imagePath = widget.tokenData['imagePath'] ?? 'assets/images/watchlist2.png';
     final String usdValue = widget.tokenData['usdValue'] ?? r'$123.39';
@@ -103,6 +142,7 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
             height: 70.h,
             child: Stack(
               children: <Widget>[
+                // Main tile content
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   right: clickDelete ? 1.sw : 0,
@@ -115,6 +155,7 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Row(
                         children: <Widget>[
+                          // Token image
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -128,10 +169,12 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                             ],
                           ),
                           Gap(12.w),
+                          // Token details
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
+                                // First row: name and value
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
@@ -163,6 +206,7 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                   ],
                                 ),
                                 Gap(4.h),
+                                // Second row: USD value and native value
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
@@ -204,51 +248,28 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                             ),
                           ),
                           Gap(12.w),
-                          AnimatedBuilder(
-                            animation: _controller,
-                            builder: (BuildContext context, Widget? child) {
-                              final bool isFadingOut = !widget.deleteNft && _controller.value > 0;
-                              
-                              return Opacity(
-                                opacity: isFadingOut 
-                                    ? _controller.value
-                                    : _opacityAnimation.value,
-                                child: Visibility(
-                                  visible: widget.deleteNft || isFadingOut,
-                                  child: TweenAnimationBuilder<double>(
-                                    duration: const Duration(milliseconds: 500),
-                                    tween: Tween<double>(
-                                      begin: 0.8,
-                                      end: 1,
-                                    ),
-                                    curve: Curves.elasticOut,
-                                    builder: (BuildContext context, double value, Widget? child) => Transform.scale(
-                                      scale: value,
-                                      child: child,
-                                    ),
-                                    child: GestureDetector(
-                                      onTap: delete,
-                                      child: Icon(
-                                        PhosphorIconsFill.minusCircle,
-                                        color: AppColors.red,
-                                        size: 20.sp,
-                                      ),
-                                    ),
+                          // Delete button - simplified as in NFT tile
+                          widget.deleteNft
+                              ? GestureDetector(
+                                  onTap: delete,
+                                  child: Icon(
+                                    PhosphorIconsFill.minusCircle,
+                                    color: AppColors.red,
+                                    size: 20.sp,
                                   ),
-                                ),
-                              );
-                            },
-                          ),
+                                )
+                              : SizedBox(width: 0),
                         ],
                       ),
                     ),
                   ),
                 ),
+                // Delete confirmation UI - simplified as in NFT tile
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   left: clickDelete ? 0 : 1.sw,
                   child: AnimatedContainer(
-                    duration: const Duration(seconds: 6),
+                    duration: const Duration(seconds: 2),
                     height: clickDelete ? 45.h : 65.h,
                     width: 1.sw,
                     child: Container(
@@ -265,13 +286,13 @@ class _WatchlistTokenTileState extends State<WatchlistTokenTile> with SingleTick
                                   animation: _controller,
                                   builder: (BuildContext context, Widget? child) => ShaderMask(
                                     shaderCallback: (Rect bounds) => LinearGradient(
-                                      colors: <Color>[AppColors.greyDark, AppColors.greyLight.withValues(alpha: 0.6)],
+                                      colors: <Color>[AppColors.greyDark, AppColors.greyLight.withOpacity(0.6)],
                                       stops: <double>[_controller.value, _controller.value],
                                     ).createShader(bounds),
                                     child: Text(
                                       'Removing from collection',
                                       style: TextStyle(
-                                        color: AppColors.greyLight.withValues(alpha: 0.6),
+                                        color: AppColors.greyLight.withOpacity(0.6),
                                         fontWeight: FontWeight.w600,
                                         fontSize: 16.sp,
                                       ),

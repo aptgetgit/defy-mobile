@@ -254,12 +254,12 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
   }
 
   Widget _buildDappModalSheet(BuildContext context) {
-    final List<String> coinsLogos = <String>[
-      'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
-      'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
-      'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
-      'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
-    ];
+    // final List<String> coinsLogos = <String>[
+    //   'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
+    //   'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
+    //   'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
+    //   'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
+    // ];
     
     return Container(
       padding: EdgeInsets.all(16.w), // Updated to use screenutil
@@ -283,42 +283,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w), // Updated to use screenutil
-                        margin: EdgeInsets.symmetric(horizontal: 3.w), // Updated to use screenutil
-                        decoration: BoxDecoration(
-                          color: AppColors.greyVeryLight2,
-                          borderRadius: BorderRadius.circular(30.r), // Updated to use screenutil
-                        ),
-                        child: Text(
-                          'DeFi',
-                          style: TextStyle(
-                            fontSize: 14.sp, // Updated to use screenutil
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.greyDark,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w), // Updated to use screenutil
-                        margin: EdgeInsets.symmetric(horizontal: 3.w), // Updated to use screenutil
-                        decoration: BoxDecoration(
-                          color: AppColors.greyVeryLight2,
-                          borderRadius: BorderRadius.circular(30.r), // Updated to use screenutil
-                        ),
-                        child: Text(
-                          'Staking',
-                          style: TextStyle(
-                            fontSize: 14.sp, // Updated to use screenutil
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.greyDark,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  
                 ],
               ),
               const Spacer(),
@@ -360,7 +325,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
               ),
               Gap(12.w), // Updated to use screenutil
               Text(
-                'Network',
+                'Category',
                 style: TextStyle(
                   fontSize: 16.sp, // Updated to use screenutil
                   fontWeight: FontWeight.w500,
@@ -370,28 +335,36 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
               const Spacer(),
               Row(
                 children: <Widget>[
-                  SizedBox(
-                    height: 0.06.sw, // Updated to use screenutil
-                    width: 0.2.sw, // Updated to use screenutil
-                    child: Stack(
-                      children: <Widget>[
-                        for (int i = 0; i < 4; i++)
-                          Positioned(
-                            left: i * 0.04.sw, // Updated to use screenutil
-                            child: Image.network(
-                              coinsLogos[i],
-                              width: 0.06.sw, // Updated to use screenutil
-                            ),
-                          ),
-                      ],
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w), // Updated to use screenutil
+                    margin: EdgeInsets.symmetric(horizontal: 3.w), // Updated to use screenutil
+                    decoration: BoxDecoration(
+                      color: AppColors.greyVeryLight2,
+                      borderRadius: BorderRadius.circular(30.r), // Updated to use screenutil
+                    ),
+                    child: Text(
+                      'DeFi',
+                      style: TextStyle(
+                        fontSize: 14.sp, // Updated to use screenutil
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.greyDark,
+                      ),
                     ),
                   ),
-                  Text(
-                    '+2',
-                    style: TextStyle(
-                      fontSize: 16.sp, // Updated to use screenutil
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.greyLight,
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w), // Updated to use screenutil
+                    margin: EdgeInsets.symmetric(horizontal: 3.w), // Updated to use screenutil
+                    decoration: BoxDecoration(
+                      color: AppColors.greyVeryLight2,
+                      borderRadius: BorderRadius.circular(30.r), // Updated to use screenutil
+                    ),
+                    child: Text(
+                      'Staking',
+                      style: TextStyle(
+                        fontSize: 14.sp, // Updated to use screenutil
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.greyDark,
+                      ),
                     ),
                   ),
                 ],
@@ -484,7 +457,7 @@ class _ExploreDappsScreenState extends State<ExploreDappsScreen> with SingleTick
               Gap(4.w), // Updated to use screenutil
               Flexible(
                 child: Text(
-                  'Skip this page next time and go directly to Uniswap',
+                  'Skip the popup next time for this app.',
                   style: TextStyle(
                     fontSize: 14.sp, // Updated to use screenutil
                     fontWeight: FontWeight.w500,

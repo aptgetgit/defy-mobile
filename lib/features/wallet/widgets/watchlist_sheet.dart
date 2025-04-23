@@ -341,6 +341,7 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
               const Spacer(),
               Theme(
                 data: Theme.of(context).copyWith(
+                  
                   unselectedWidgetColor: AppColors.blue,
                   checkboxTheme: CheckboxThemeData(
                     fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {

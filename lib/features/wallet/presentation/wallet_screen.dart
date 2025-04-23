@@ -337,8 +337,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       builder: (BuildContext context) => WatchlistBottomSheet(
-        onAddToWatchlist: (int? collectionIndex) {
+        onAddToWatchlist: (Set<int> selectedCollections) {
           ref.read(walletNotifierProvider.notifier).addSelectedTokensToWatchlist();
+          // Pass the first selected collection index if any
+          int? collectionIndex = selectedCollections.isNotEmpty ? selectedCollections.first : null;
           _showWatchlistAddedMessage(collectionIndex);
         },
       ),
@@ -547,159 +549,185 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
             child: AnimatedContainer(
               duration: Duration(milliseconds: _isAnimatingHeader ? 300 : 0),
               padding: const EdgeInsets.only(),
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
-                          child: walletState.isMoreButtonSelected
-                              ? Container(
-                                  key: const ValueKey('sort'),
-                                  height: 48.h,
-                                  alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                  child: GestureDetector(
-                                    onTap: _showSortSheet,
-                                    child: TweenAnimationBuilder<double>(
-                                      tween: Tween<double>(begin: 0, end: 1),
-                                      duration: const Duration(milliseconds: 150),
-                                      key: ValueKey(sortTypeText),
-                                      builder: (context, value, child) => Opacity(
-                                        opacity: value,
-                                        child: child,
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Image.asset(
-                                            (walletState.isSortAscending
-                                                ? 'assets/icons/sort-ascending.png'
-                                                : 'assets/icons/sort-descending.png'),
-                                            width: 18.sp,
-                                            height: 18.sp,
-                                          ),
-                                          Gap(8.w),
-                                          Text(
-                                            sortTypeText,
-                                            style: TextStyle(
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.greyDark,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+              child: SizedBox(
+                
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Stack(
+                            alignment: Alignment.centerRight,
+                            children: [
+                              // Tab option
+                              AnimatedOpacity(
+                                opacity: walletState.isMoreButtonSelected ? 0.0 : 1.0,
+                                duration: const Duration(milliseconds: 200),
+                                child: Visibility(
+                                  visible: !walletState.isMoreButtonSelected,
+                                  maintainState: true,
+                                  maintainAnimation: true,
+                                  maintainSize: true,
+                                  child: CustomTabBar(
+                                    key: const ValueKey('tabs'),
+                                    tabController: _tabController,
+                                    tabs: const <String>['Token', 'NFT'],
                                   ),
-                                )
-                              : CustomTabBar(
-                                  key: const ValueKey('tabs'),
-                                  tabController: _tabController,
-                                  tabs: const <String>['Token', 'NFT'],
                                 ),
-                        ),
-                      ),
-                      if (!walletState.isMoreButtonSelected)
-                        TweenAnimationBuilder<double>(
-                          tween: Tween<double>(
-                            begin: 0.0, 
-                            end: walletState.isBalanceHidden ? 1.0 : 0.0
-                          ),
-                          duration: const Duration(milliseconds: 900),
-                          builder: (context, value, child) => Opacity(
-                            opacity: value,
-                            child: child,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.w),
-                            child: Text(
-                              r'$1,038.56',
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.black,
                               ),
-                            ),
-                          ),
-                        ),
-                      Gap(9.w),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 250),
-                        transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
-                        child: walletState.isMoreButtonSelected
-                            ? Row(
-                                key: const ValueKey('done'),
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                        // Create temporary fade out animation before applying changes
-                                        // We'll animate the opacity to 0 first, then apply changes
-                                        setState(() {
-                                          _isDoneFadingOut = true;
-                                        });
-                                        
-                                        // Delay the actual state change to allow animation to complete
-                                        Future.delayed(const Duration(milliseconds: 300), () {
-                                          ref.read(walletNotifierProvider.notifier).applyChanges();
-                                          setState(() {
-                                            _isDoneFadingOut = false;
-                                          });
-                                        });
-                                    },
-                                    // Update style properties to use the non-deprecated WidgetStateProperty
-                                    style: TextButton.styleFrom(
-                                      splashFactory: NoSplash.splashFactory,
-                                      overlayColor: Colors.transparent,
-                                      backgroundColor: Colors.transparent,
-                                      padding: EdgeInsets.zero,
-                                      minimumSize: Size.zero,
-                                    ),
-                                    child: TweenAnimationBuilder<double>(
-                                      tween: Tween<double>(begin: 0, end: _isDoneFadingOut ? 0.0 : 1.0),
-                                      duration: const Duration(milliseconds: 350),
-                                      builder: (context, value, child) => Opacity(
-                                        opacity: value,
-                                        child: child,
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.only(right: 9.w),
-                                        child: Text(
-                                          'Done',
-                                          style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+                              
+                              // Sort option
+                              AnimatedOpacity(
+                                opacity: walletState.isMoreButtonSelected ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 200),
+                                child: Visibility(
+                                  visible: walletState.isMoreButtonSelected,
+                                  maintainState: true,
+                                  maintainAnimation: true,
+                                  maintainSize: true,
+                                  child: Container(
+                                    key: const ValueKey('sort'),
+                                    height: 48.h,
+                                    alignment: Alignment.centerLeft,
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                    child: GestureDetector(
+                                      onTap: _showSortSheet,
+                                      child: TweenAnimationBuilder<double>(
+                                        tween: Tween<double>(begin: 0, end: 1),
+                                        duration: const Duration(milliseconds: 150),
+                                        key: ValueKey(sortTypeText),
+                                        builder: (context, value, child) => Opacity(
+                                          opacity: value,
+                                          child: child,
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Image.asset(
+                                              (walletState.isSortAscending
+                                                  ? 'assets/icons/sort-ascending.png'
+                                                  : 'assets/icons/sort-descending.png'),
+                                              width: 18.sp,
+                                              height: 18.sp,
+                                            ),
+                                            Gap(8.w),
+                                            Text(
+                                              sortTypeText,
+                                              style: TextStyle(
+                                                fontSize: 16.sp,
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColors.greyDark,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                ],
-                              )
-                            : Padding(
-                                key: const ValueKey('more'),
-                                padding: EdgeInsets.only(right: 3.w),
-                                child: GestureDetector(
-                                  onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
-                                  child: Icon(
-                                    PhosphorIconsBold.dotsThreeVertical,
-                                    color: AppColors.greyLight,
-                                    size: 22.sp,
-                                  ),
                                 ),
                               ),
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      width: 350.w,
-                      height: 1,
-                      color: AppColors.greyVeryLight,
+                            ],
+                          ),
+                        ),
+                        if (!walletState.isMoreButtonSelected)
+                          TweenAnimationBuilder<double>(
+                            tween: Tween<double>(
+                              begin: 0.0, 
+                              end: walletState.isBalanceHidden ? 1.0 : 0.0
+                            ),
+                            duration: const Duration(milliseconds: 900),
+                            builder: (context, value, child) => Opacity(
+                              opacity: value,
+                              child: child,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10.w),
+                              child: Text(
+                                r'$1,038.56',
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        Gap(9.w),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(opacity: animation, child: child),
+                          child: walletState.isMoreButtonSelected
+                              ? Row(
+                                  key: const ValueKey('done'),
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                          // Create temporary fade out animation before applying changes
+                                          // We'll animate the opacity to 0 first, then apply changes
+                                          setState(() {
+                                            _isDoneFadingOut = true;
+                                          });
+                                          
+                                          // Delay the actual state change to allow animation to complete
+                                          Future.delayed(const Duration(milliseconds: 300), () {
+                                            ref.read(walletNotifierProvider.notifier).applyChanges();
+                                            setState(() {
+                                              _isDoneFadingOut = false;
+                                            });
+                                          });
+                                      },
+                                      // Update style properties to use the non-deprecated WidgetStateProperty
+                                      style: TextButton.styleFrom(
+                                        splashFactory: NoSplash.splashFactory,
+                                        overlayColor: Colors.transparent,
+                                        backgroundColor: Colors.transparent,
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: Size.zero,
+                                      ),
+                                      child: TweenAnimationBuilder<double>(
+                                        tween: Tween<double>(begin: 0, end: _isDoneFadingOut ? 0.0 : 1.0),
+                                        duration: const Duration(milliseconds: 350),
+                                        builder: (context, value, child) => Opacity(
+                                          opacity: value,
+                                          child: child,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(right: 9.w),
+                                          child: Text(
+                                            'Done',
+                                            style: TextStyle(color: AppColors.blue, fontSize: 18.sp),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Padding(
+                                  key: const ValueKey('more'),
+                                  padding: EdgeInsets.only(right: 3.w),
+                                  child: GestureDetector(
+                                    onTap: () => ref.read(walletNotifierProvider.notifier).toggleMoreButton(),
+                                    child: Icon(
+                                      PhosphorIconsBold.dotsThreeVertical,
+                                      color: AppColors.greyLight,
+                                      size: 22.sp,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        width: 350.w,
+                        height: 1,
+                        color: AppColors.greyVeryLight,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -7,7 +7,7 @@ import '../../../config/theme/colors.dart';
 import '../../watchlist/widgets/watchlist_new_collection.dart';
 
 class WatchlistBottomSheet extends StatefulWidget {
-  final Function(int?) onAddToWatchlist;
+  final Function(Set<int>) onAddToWatchlist;
 
   const WatchlistBottomSheet({super.key, required this.onAddToWatchlist});
 
@@ -16,8 +16,8 @@ class WatchlistBottomSheet extends StatefulWidget {
 }
 
 class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
-  // Add your selection logic here.  For example:
-  int? _selectedCollectionIndex; // Track the selected collection
+  // Add your selection logic here
+  Set<int> _selectedCollections = {}; // Track multiple selected collections
   bool _isCreatingCollection = false;
 
   @override
@@ -101,7 +101,11 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                       index: 0, // Add an index for each collection
                       onTap: () {
                         setState(() {
-                          _selectedCollectionIndex = 0;
+                          if (_selectedCollections.contains(0)) {
+                            _selectedCollections.remove(0);
+                          } else {
+                            _selectedCollections.add(0);
+                          }
                         });
                       },
                     ),
@@ -111,7 +115,11 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                       index: 1,
                       onTap: () {
                         setState(() {
-                          _selectedCollectionIndex = 1;
+                          if (_selectedCollections.contains(1)) {
+                            _selectedCollections.remove(1);
+                          } else {
+                            _selectedCollections.add(1);
+                          }
                         });
                       },
                     ),
@@ -121,7 +129,11 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                       index: 2,
                       onTap: () {
                         setState(() {
-                          _selectedCollectionIndex = 2;
+                          if (_selectedCollections.contains(2)) {
+                            _selectedCollections.remove(2);
+                          } else {
+                            _selectedCollections.add(2);
+                          }
                         });
                       },
                     ),
@@ -173,14 +185,14 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
                       padding: const EdgeInsets.only(right: 10),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Implement add to watchlist logic, using _selectedCollectionIndex
-                          if (_selectedCollectionIndex != null) {
-                            widget.onAddToWatchlist(_selectedCollectionIndex);
+                          // Implement add to watchlist logic, using _selectedCollections
+                          if (_selectedCollections.isNotEmpty) {
+                            widget.onAddToWatchlist(_selectedCollections);
                             Navigator.pop(context);
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _selectedCollectionIndex != null
+                          backgroundColor: _selectedCollections.isNotEmpty
                               ? AppColors.blue // Updated to match balance sheet
                               : AppColors.greyMedium,
                           elevation: 0,
@@ -297,7 +309,7 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
   Widget _buildCollectionItem({
     required String title,
     required int count,
-    required int index, // Add an index parameter
+    required int index,
     required VoidCallback onTap,
   }) =>
       InkWell(
@@ -329,27 +341,30 @@ class _WatchlistBottomSheetState extends State<WatchlistBottomSheet> {
               const Spacer(),
               Theme(
                 data: Theme.of(context).copyWith(
-                  unselectedWidgetColor: AppColors.greyLight, // Set inactive color to grey
-                  radioTheme: RadioThemeData(
+                  unselectedWidgetColor: AppColors.blue,
+                  checkboxTheme: CheckboxThemeData(
                     fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
                       if (states.contains(WidgetState.selected)) {
                         return AppColors.blue; // Active color
                       }
-                      return AppColors.greyLight; // Inactive color
+                      return AppColors.white; // Inactive color
                     }),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
                   ),
                 ),
-                child: Radio<int>(
+                child: Checkbox(
                   activeColor: AppColors.blue,
-                  visualDensity: VisualDensity.compact,
-                  value: index,
-                  groupValue: _selectedCollectionIndex,
-                  onChanged: (int? value) {
-                    if (value != null) {
-                      setState(() {
-                        _selectedCollectionIndex = value;
-                      });
-                    }
+                  value: _selectedCollections.contains(index),
+                  onChanged: (bool? value) {
+                    setState(() {
+                      if (value == true) {
+                        _selectedCollections.add(index);
+                      } else {
+                        _selectedCollections.remove(index);
+                      }
+                    });
                   },
                 ),
               ),

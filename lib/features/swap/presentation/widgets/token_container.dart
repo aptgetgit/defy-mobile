@@ -244,7 +244,7 @@ class TokenContainer extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            token.symbol,
+                            '${token.amount.toStringAsFixed(2)} ${token.symbol}',
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: AppColors.greyLight,

@@ -365,13 +365,21 @@ class _SwapScreenState extends ConsumerState<SwapScreen> with TickerProviderStat
                                                               height: 28.h, // Larger tap area
                                                               padding: EdgeInsets.all(4.w),
                                                               decoration: BoxDecoration(
-                                                                color: AppColors.greyLight.withOpacity(0.5),
+                                                                color: AppColors.greyLightest,
                                                                 shape: BoxShape.circle,
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors.black.withOpacity(0.1),
+                                                                    spreadRadius: 1,
+                                                                    blurRadius: 3,
+                                                                    offset: const Offset(0, 2),
+                                                                  ),
+                                                                ],
                                                               ),
                                                               child: Icon(
                                                                 PhosphorIconsRegular.x,
                                                                 size: 14.sp,
-                                                                color: AppColors.white,
+                                                                color: AppColors.black,
                                                               ),
                                                             ),
                                                           ),
@@ -502,13 +510,21 @@ class _SwapScreenState extends ConsumerState<SwapScreen> with TickerProviderStat
                                                               height: 28.h, // Larger tap area
                                                               padding: EdgeInsets.all(4.w),
                                                               decoration: BoxDecoration(
-                                                                color: AppColors.greyLight.withOpacity(0.5),
-                                                                shape: BoxShape.circle,
+                                                              color: AppColors.greyLightest,
+                                                              shape: BoxShape.circle,
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                color: Colors.black.withOpacity(0.1),
+                                                                spreadRadius: 1,
+                                                                blurRadius: 3,
+                                                                offset: const Offset(0, 2),
+                                                                ),
+                                                              ],
                                                               ),
                                                               child: Icon(
-                                                                PhosphorIconsRegular.x,
-                                                                size: 14.sp,
-                                                                color: AppColors.white,
+                                                              PhosphorIconsRegular.x,
+                                                              size: 14.sp,
+                                                                color: AppColors.black,
                                                               ),
                                                             ),
                                                           ),

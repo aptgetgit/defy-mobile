@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../app/routes/router.dart';
 import '../../../config/theme/colors.dart';
+import '../../explore/presentation/scrceens/explore_screen.dart';
 import '../../shared/presentation/widgets/base_screen_nav.dart';
 import '../../shared/presentation/widgets/custom_check_box.dart';
 import '../../shared/presentation/widgets/custom_tab_bar.dart';
@@ -427,6 +429,20 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
           position: _walletSlideAnimation,
           child: BaseScreenWithNav(
             currentIndex: 2,
+            onTabChange: (int index) {
+              print("Tab changed to: $index"); // Debug print
+              if (index == 1) {
+                print("Navigating to explore");
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const ExploreScreen()),
+                );
+              } else if (index == 2) {
+                print("Navigating to wallet");
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const WalletScreen()),
+                );
+              }
+            },
             onHidePressed: () {
               ref.read(walletNotifierProvider.notifier).activateHiding();
             },
@@ -453,6 +469,35 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with TickerProvider
               onClose: _toggleQrScanner,
             ),
           ),
+        Positioned(
+          bottom: 120.h,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  print("EMERGENCY: Navigating to explore");
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const ExploreScreen()),
+                  );
+                },
+                child: Text("Go to Explore"),
+              ),
+              SizedBox(width: 20.w),
+              ElevatedButton(
+                onPressed: () {
+                  print("EMERGENCY: Navigating to wallet");
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const WalletScreen()),
+                  );
+                },
+                child: Text("Go to Wallet"),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

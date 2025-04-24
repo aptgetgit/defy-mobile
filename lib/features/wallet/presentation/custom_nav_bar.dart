@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../app/routes/router.dart';
+
 import '../../../config/theme/colors.dart';
 import '../../shared/presentation/dashboard-floating-action-button.dart';
 
@@ -62,11 +62,21 @@ class CustomNavBar extends ConsumerWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            IconButton(
-                              onPressed: !isMoreOptionsSelected ? () {
-                                const ExploreScreenRoute().go(context);
-                              } : null,
-                              icon: Icon(
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                elevation: 0,
+                                minimumSize: Size(60.w, 60.h),
+                                shape: CircleBorder(),
+                              ),
+                              onPressed: !isMoreOptionsSelected 
+                                ? () {
+                                    print("DIRECT: Tab 1 pressed"); // Debug print
+                                    onTabChange(1); // Explore tab index
+                                  } 
+                                : null,
+                              child: Icon(
                                 pageIndex == 1
                                     ? PhosphorIconsFill.magnifyingGlass
                                     : PhosphorIconsBold.magnifyingGlass,
@@ -75,16 +85,28 @@ class CustomNavBar extends ConsumerWidget {
                               ),
                             ),
                             Gap(20.w),
-                            IconButton(
-                              onPressed: !isMoreOptionsSelected ? () {
-                                const WalletScreenRoute().go(context);
-                              } : null,
-                              icon: Icon(
-                                pageIndex == 2
-                                    ? PhosphorIconsFill.storefront
-                                    : PhosphorIconsBold.storefront,
-                                color: AppColors.greyDark,
-                                size: 24.sp,
+                            Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(30),
+                                splashColor: Colors.white.withOpacity(0.1),
+                                highlightColor: Colors.white.withOpacity(0.1),
+                                onTap: !isMoreOptionsSelected 
+                                  ? () {
+                                      print("Tab 2 pressed"); // Debug print
+                                      onTabChange(2); // Wallet tab index
+                                    }
+                                  : null,
+                                child: Container(
+                                  padding: EdgeInsets.all(12.w),
+                                  child: Icon(
+                                    pageIndex == 2
+                                        ? PhosphorIconsFill.storefront
+                                        : PhosphorIconsBold.storefront,
+                                    color: AppColors.greyDark,
+                                    size: 24.sp,
+                                  ),
+                                ),
                               ),
                             ),
                           ],

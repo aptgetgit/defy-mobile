@@ -78,7 +78,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const ExploreScreenRoute().location,
+      initialLocation: const WalletScreenRoute().location,
       routes: $appRoutes,
       errorBuilder: (BuildContext context, GoRouterState state) =>
           const Scaffold(

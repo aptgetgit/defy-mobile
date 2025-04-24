@@ -12,6 +12,7 @@ class BaseScreenWithNav extends ConsumerWidget {
     this.onWatchlistPressed,
     this.isMoreOptionsSelected = false,
     this.onMoreOptionsChanged,
+    this.onTabChange,
     super.key,
   });
 
@@ -22,6 +23,7 @@ class BaseScreenWithNav extends ConsumerWidget {
   final VoidCallback? onSortPressed;
   final VoidCallback? onWatchlistPressed;
   final Function(bool)? onMoreOptionsChanged;
+  final void Function(int)? onTabChange;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Stack(
@@ -30,16 +32,30 @@ class BaseScreenWithNav extends ConsumerWidget {
       Positioned(
         left: 24.w,
         right: 24.w,
-        bottom: MediaQuery.of(context).padding.bottom - 12.h,
-        child: CustomNavBar(
-          pageIndex: currentIndex,
-          onTabChange: (int index) => index == 3 && onMoreOptionsChanged != null 
-              ? onMoreOptionsChanged!(!isMoreOptionsSelected)
-              : null,
-          isMoreOptionsSelected: isMoreOptionsSelected,
-          onHidePressed: onHidePressed ?? () {},
-          onSortPressed: onSortPressed ?? () {},
-          onWatchlistPressed: onWatchlistPressed ?? () {},
+        bottom: MediaQuery.of(context).padding.bottom,
+        // Add this critical line - forces the nav bar to be drawn on top
+        child: IgnorePointer(
+          ignoring: false, // Set to false to ensure events reach the nav bar
+          child: Material(
+            type: MaterialType.transparency,
+            child: CustomNavBar(
+              pageIndex: currentIndex,
+              onTabChange: (int index) {
+                print("BASE: Tab changed to $index");
+                if (index == 1 || index == 2) {
+                  if (onTabChange != null) {
+                    onTabChange!(index);
+                  }
+                } else if (index == 3 && onMoreOptionsChanged != null) {
+                  onMoreOptionsChanged!(!isMoreOptionsSelected);
+                }
+              },
+              isMoreOptionsSelected: isMoreOptionsSelected,
+              onHidePressed: onHidePressed ?? () {},
+              onSortPressed: onSortPressed ?? () {},
+              onWatchlistPressed: onWatchlistPressed ?? () {},
+            ),
+          ),
         ),
       ),
     ],

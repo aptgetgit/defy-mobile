@@ -6,7 +6,7 @@ part of '../swap_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$swapHash() => r'8678191071d3853ff12aaf49234abd0275174eea';
+String _$swapHash() => r'eeeea5615c89d463c02d18fb27f978d09ca9d1c5';
 
 /// See also [Swap].
 @ProviderFor(Swap)

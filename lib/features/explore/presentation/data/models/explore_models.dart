@@ -124,38 +124,42 @@ class ExploreToken {
   final String id;
   final String name;
   final String symbol;
-  final String imagePath;
   final double priceUsd;
-  final double priceChange;
-  final bool isFavorite;
+  final double changePercentage;
+  final int investors;
+  final String returnPeriod;
+  final String? logo;
 
   ExploreToken({
     required this.id,
     required this.name,
     required this.symbol,
-    required this.imagePath,
     required this.priceUsd,
-    this.priceChange = 0.0,
-    this.isFavorite = false,
+    required this.changePercentage,
+    required this.investors,
+    required this.returnPeriod,
+    this.logo,
   });
 
   ExploreToken copyWith({
     String? id,
     String? name,
     String? symbol,
-    String? imagePath,
     double? priceUsd,
-    double? priceChange,
-    bool? isFavorite,
+    double? changePercentage,
+    int? investors,
+    String? returnPeriod,
+    String? logo,
   }) {
     return ExploreToken(
       id: id ?? this.id,
       name: name ?? this.name,
       symbol: symbol ?? this.symbol,
-      imagePath: imagePath ?? this.imagePath,
       priceUsd: priceUsd ?? this.priceUsd,
-      priceChange: priceChange ?? this.priceChange,
-      isFavorite: isFavorite ?? this.isFavorite,
+      changePercentage: changePercentage ?? this.changePercentage,
+      investors: investors ?? this.investors,
+      returnPeriod: returnPeriod ?? this.returnPeriod,
+      logo: logo ?? this.logo,
     );
   }
 }

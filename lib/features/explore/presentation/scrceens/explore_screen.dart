@@ -14,16 +14,17 @@ import '../../../../config/theme/colors.dart';
 import '../../../../config/theme/font.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../shared/presentation/widgets/base_screen_nav.dart';
-import '../providers/explore_ui_provider.dart';
+import '../providers/explore_provider.dart';
 
-class ExploreScreen extends StatefulWidget {
+
+class ExploreScreen extends ConsumerStatefulWidget {
   const ExploreScreen({super.key});
 
   @override
-  State<ExploreScreen> createState() => _ExploreScreenState();
+  ConsumerState<ExploreScreen> createState() => _ExploreScreenState();
 }
 
-class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProviderStateMixin {
+class _ExploreScreenState extends ConsumerState<ExploreScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   Animation<Offset> slideAnimation({
@@ -55,8 +56,6 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     final double height = context.screenHeight;
-    // const double appBarHeight = kToolbarHeight;
-    // final Size screenSize = MediaQuery.of(context).size;
 
     return Stack(
       children: <Widget>[
@@ -253,45 +252,38 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
   Widget _buildCoins(BuildContext context) {
     final Animation<Offset> slideAnimation1 = slideAnimation(begin: Offset.zero, end: const Offset(-1, 0.3));
     final double width = context.screenWidth;
-    final List<String> coinsLogos = <String>[
-      'https://res.coinpaper.com/coinpaper/Aptos_mark_BLK_02443605a1.png',
-      'https://res.coinpaper.com/coinpaper/usd_coin_usdc_logo_3e68fafa38.png',
-      'https://res.coinpaper.com/coinpaper/tether_usdt_logo_0231fbcde8.png',
-      'https://res.coinpaper.com/coinpaper/dogecoin_doge_logo_f18d59aae4.png',
-    ];
-    return Consumer(
-      builder: (BuildContext ctx, WidgetRef ref, Widget? child) {
-        final int index = ref.watch(coinsAnimationIndexProvider);
-        return GestureDetector(
-          onTap: () {
-            const ExploreTokensScreenRoute().push(context);
-          },
-          child: SlideTransition(
-            position: slideAnimation1,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  child: Image.network(
-                    coinsLogos[index],
-                    width: width * .15,
-                  ),
-                ),
-                Gap(6.h),
-                Text(
-                  'Coins',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.greyLight,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+    final  exploreState = ref.watch(exploreNotifierProvider);
+
+    return GestureDetector(
+      onTap: () {
+        const ExploreTokensScreenRoute().push(context);
       },
+      child: SlideTransition(
+        position: slideAnimation1,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              child: Image.network(
+                exploreState.allTokens.isNotEmpty
+                    ? exploreState.allTokens.first.logo ?? 'default_image_url'
+                    : 'default_image_url',
+                width: width * .15,
+              ),
+            ),
+            Gap(6.h),
+            Text(
+              'Coins',
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColors.greyLight,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

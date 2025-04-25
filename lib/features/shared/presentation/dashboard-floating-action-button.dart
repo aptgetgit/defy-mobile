@@ -42,6 +42,8 @@ class _DashboardFloatingActionButtonState
   @override
   Widget build(BuildContext context) => Align(
         child: GestureDetector(
+          // Add this to improve touch response
+          behavior: HitTestBehavior.opaque,
           onTap: () async {
             await _controller.forward();
             setState(() {
@@ -50,6 +52,7 @@ class _DashboardFloatingActionButtonState
             await showDialog(
               context: context,
               useSafeArea: false,
+              barrierDismissible: true, // Make sure this is true
               builder: (BuildContext dialogContext) => DashboardActionButtonDialog(
                 parentContext: context, // Pass the parent context that has GoRouter
               ),
@@ -333,6 +336,8 @@ class _IconButton extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             onTap: onTap,
+            // Adding hit test area for better touch response
+            behavior: HitTestBehavior.opaque,
             child: Row(
               children: <Widget>[
                 CircleAvatar(
@@ -340,7 +345,7 @@ class _IconButton extends StatelessWidget {
                   backgroundColor: backgroundColor,
                   child: child,
                 ),
-                if (label != null) Gap(5.w),
+                // Fix the duplicate gaps
                 if (label != null) Gap(10.w),
                 Text(
                   label!,

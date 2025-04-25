@@ -26,38 +26,35 @@ class BaseScreenWithNav extends ConsumerWidget {
   final void Function(int)? onTabChange;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Stack(
-    children: [
-      child,
-      Positioned(
-        left: 24.w,
-        right: 24.w,
-        bottom: MediaQuery.of(context).padding.bottom,
-        // Add this critical line - forces the nav bar to be drawn on top
-        child: IgnorePointer(
-          ignoring: false, // Set to false to ensure events reach the nav bar
-          child: Material(
-            type: MaterialType.transparency,
-            child: CustomNavBar(
-              pageIndex: currentIndex,
-              onTabChange: (int index) {
-                print("BASE: Tab changed to $index");
-                if (index == 1 || index == 2) {
-                  if (onTabChange != null) {
-                    onTabChange!(index);
-                  }
-                } else if (index == 3 && onMoreOptionsChanged != null) {
-                  onMoreOptionsChanged!(!isMoreOptionsSelected);
+  Widget build(BuildContext context, WidgetRef ref) {
+    print('BaseScreenWithNav build: currentIndex=$currentIndex');
+    return Stack(
+      children: [
+        child,
+        Positioned(
+          left: 24.w,
+          right: 24.w,
+          bottom: MediaQuery.of(context).padding.bottom + 16.h, // Add padding to avoid overlap with system UI
+          child: CustomNavBar(
+            pageIndex: currentIndex,
+            onTabChange: (int index) {
+              print('BaseScreenWithNav: onTabChange called with index=$index');
+              if (index == 1 || index == 2) {
+                if (onTabChange != null) {
+                  onTabChange!(index);
                 }
-              },
-              isMoreOptionsSelected: isMoreOptionsSelected,
-              onHidePressed: onHidePressed ?? () {},
-              onSortPressed: onSortPressed ?? () {},
-              onWatchlistPressed: onWatchlistPressed ?? () {},
-            ),
+              } else if (index == 3 && onMoreOptionsChanged != null) {
+                print('Toggling more options: $isMoreOptionsSelected -> ${!isMoreOptionsSelected}');
+                onMoreOptionsChanged!(!isMoreOptionsSelected);
+              }
+            },
+            isMoreOptionsSelected: isMoreOptionsSelected,
+            onHidePressed: onHidePressed ?? () {},
+            onSortPressed: onSortPressed ?? () {},
+            onWatchlistPressed: onWatchlistPressed ?? () {},
           ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }

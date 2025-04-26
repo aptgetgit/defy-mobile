@@ -1,3 +1,4 @@
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -40,7 +41,7 @@ android {
     defaultConfig {
         applicationId = "id.avex.defy"
         minSdk = 29
-        targetSdkVersion 34
+        targetSdk = 35  // CHANGE THIS LINE: Change targetSdkVersion 35 to targetSdk = 35
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }

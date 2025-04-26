@@ -1,5 +1,6 @@
-// lib/app/app.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,36 +17,51 @@ class DefyApp extends ConsumerWidget {
   const DefyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => StartupHandlerWidget(
-    onStartupComplete: (BuildContext context) {
-      final GoRouter router = ref.watch(routerProvider);
-      final ThemeMode themeMode = ref.watch(themeNotifierProvider).requireValue;
-      final Locale locale = ref.watch(localeNotifierProvider).requireValue;
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Set the system UI to be edge-to-edge
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ),);
 
-      return MaterialApp.router(
-        routerConfig: router,
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: locale,
-        title: AppConstant.appName,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: themeMode,
-        builder: (BuildContext context, Widget? child) {
-          if (child == null) {
-            return const SizedBox.shrink();
-          }
-          return Overlay(
-            initialEntries: <OverlayEntry>[
-              OverlayEntry(
-                builder:
-                    (BuildContext context) => ConnectivityOverlay(child: child),
-              ),
-            ],
-          );
-        },
-      );
-    },
-  );
+    return StartupHandlerWidget(
+      onStartupComplete: (BuildContext context) {
+        final GoRouter router = ref.watch(routerProvider);
+        final ThemeMode themeMode = ref.watch(themeNotifierProvider).requireValue;
+        final Locale locale = ref.watch(localeNotifierProvider).requireValue;
+
+        return ScreenUtilInit(
+          designSize: const Size(393, 853),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (BuildContext context, Widget? child) => MaterialApp.router(
+            routerConfig: router,
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: locale,
+            title: AppConstant.appName,
+            theme: AppTheme.lightTheme.copyWith(
+              scaffoldBackgroundColor: Colors.white, // Ensure full white background
+            ),
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeMode,
+            builder: (BuildContext context, Widget? child) {
+              if (child == null) {
+                return const SizedBox.shrink();
+              }
+              return Overlay(
+                initialEntries: <OverlayEntry>[
+                  OverlayEntry(
+                    builder: (BuildContext context) => ConnectivityOverlay(child: child),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 }

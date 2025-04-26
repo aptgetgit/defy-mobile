@@ -104,3 +104,39 @@ class SmoothBottomUpTransition extends StatelessWidget {
         .add(DiagnosticsProperty<Animation<double>>('animation', animation));
   }
 }
+
+
+class FadeSlideTransition extends CustomTransitionPage<void> {
+  FadeSlideTransition({
+    required super.child,
+    super.transitionDuration,
+    super.reverseTransitionDuration,
+  }) : super(
+          
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) {
+            const Offset begin = Offset(0, 0.1);
+            const Offset end = Offset.zero;
+            
+            // Create curve animations
+            final Tween<Offset> tween = Tween<Offset>(begin: begin, end: end);
+            final CurvedAnimation curvedAnimation = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+            );
+            
+            // Combine slide and fade transitions
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: tween.animate(curvedAnimation),
+                child: child,
+              ),
+            );
+          },
+        );
+}

@@ -16,7 +16,7 @@
 // import 'import_wallet_emoji_selection_screen.dart';
 // import 'import_wallet_import_seed_phrase_screen.dart';
 // import 'import_wallet_wallet_color_selection_screen.dart';
-// // import '../../../../app/routes/router.dart';
+// // import '../../../../core/navigation/routes/router.dart';
 // // import '../../../../config/theme/colors.dart';
 // // import '../../../../core/logging/app_logger.dart';
 // // import '../../../../shared/account/presentation/providers/generate_account_flow_provider.dart';

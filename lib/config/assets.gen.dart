@@ -9,8 +9,40 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsAudiosGen {
+  const $AssetsAudiosGen();
+
+  /// File path: assets/audios/cyborg.mp3
+  String get cyborg => 'assets/audios/cyborg.mp3';
+
+  /// List of all assets
+  List<String> get values => [cyborg];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
+
+  /// File path: assets/icons/Buy-logo.png
+  AssetGenImage get buyLogo => const AssetGenImage('assets/icons/Buy-logo.png');
+
+  /// File path: assets/icons/Cellana.png
+  AssetGenImage get cellana => const AssetGenImage('assets/icons/Cellana.png');
+
+  /// File path: assets/icons/Frame.svg
+  String get frame => 'assets/icons/Frame.svg';
+
+  /// File path: assets/icons/NFT-5.png
+  AssetGenImage get nft5 => const AssetGenImage('assets/icons/NFT-5.png');
+
+  /// File path: assets/icons/aave.png
+  AssetGenImage get aave => const AssetGenImage('assets/icons/aave.png');
+
+  /// File path: assets/icons/addtoken-logo.png
+  AssetGenImage get addtokenLogo =>
+      const AssetGenImage('assets/icons/addtoken-logo.png');
+
+  /// File path: assets/icons/amnis.png
+  AssetGenImage get amnis => const AssetGenImage('assets/icons/amnis.png');
 
   /// File path: assets/icons/app-icon-dark.png
   AssetGenImage get appIconDark =>
@@ -23,9 +55,42 @@ class $AssetsIconsGen {
   AssetGenImage get appLogoDark3d =>
       const AssetGenImage('assets/icons/app-logo-dark-3d.png');
 
+  /// File path: assets/icons/aptos-logo.png
+  AssetGenImage get aptosLogo =>
+      const AssetGenImage('assets/icons/aptos-logo.png');
+
+  /// File path: assets/icons/aptos.png
+  AssetGenImage get aptos => const AssetGenImage('assets/icons/aptos.png');
+
+  /// File path: assets/icons/aries.png
+  AssetGenImage get aries => const AssetGenImage('assets/icons/aries.png');
+
+  /// File path: assets/icons/avatar.png
+  AssetGenImage get avatar => const AssetGenImage('assets/icons/avatar.png');
+
+  /// File path: assets/icons/avatar2.png
+  AssetGenImage get avatar2 => const AssetGenImage('assets/icons/avatar2.png');
+
+  /// File path: assets/icons/avatar3.png
+  AssetGenImage get avatar3 => const AssetGenImage('assets/icons/avatar3.png');
+
+  /// File path: assets/icons/binance.png
+  AssetGenImage get binance => const AssetGenImage('assets/icons/binance.png');
+
+  /// File path: assets/icons/bluemove.png
+  AssetGenImage get bluemove =>
+      const AssetGenImage('assets/icons/bluemove.png');
+
   /// File path: assets/icons/branding.png
   AssetGenImage get branding =>
       const AssetGenImage('assets/icons/branding.png');
+
+  /// File path: assets/icons/btc.png
+  AssetGenImage get btc => const AssetGenImage('assets/icons/btc.png');
+
+  /// File path: assets/icons/coin-logo.png
+  AssetGenImage get coinLogo =>
+      const AssetGenImage('assets/icons/coin-logo.png');
 
   /// File path: assets/icons/coin-white.png
   AssetGenImage get coinWhite =>
@@ -35,24 +100,396 @@ class $AssetsIconsGen {
   AssetGenImage get coinYellow =>
       const AssetGenImage('assets/icons/coin-yellow.png');
 
+  /// File path: assets/icons/coinbase.png
+  AssetGenImage get coinbase =>
+      const AssetGenImage('assets/icons/coinbase.png');
+
+  /// File path: assets/icons/dai.png
+  AssetGenImage get dai => const AssetGenImage('assets/icons/dai.png');
+
+  /// File path: assets/icons/dydx.png
+  AssetGenImage get dydx => const AssetGenImage('assets/icons/dydx.png');
+
+  /// File path: assets/icons/ethereum-circular.png
+  AssetGenImage get ethereumCircular =>
+      const AssetGenImage('assets/icons/ethereum-circular.png');
+
+  /// File path: assets/icons/ethereum.png
+  AssetGenImage get ethereum =>
+      const AssetGenImage('assets/icons/ethereum.png');
+
+  /// File path: assets/icons/explore-leaderboard-podium.png
+  AssetGenImage get exploreLeaderboardPodium =>
+      const AssetGenImage('assets/icons/explore-leaderboard-podium.png');
+
+  /// File path: assets/icons/explore-nft-example.png
+  AssetGenImage get exploreNftExample =>
+      const AssetGenImage('assets/icons/explore-nft-example.png');
+
+  /// File path: assets/icons/explore-rankings-banner.png
+  AssetGenImage get exploreRankingsBanner =>
+      const AssetGenImage('assets/icons/explore-rankings-banner.png');
+
+  /// File path: assets/icons/face-blowing-kiss.png
+  AssetGenImage get faceBlowingKiss =>
+      const AssetGenImage('assets/icons/face-blowing-kiss.png');
+
+  /// File path: assets/icons/female-emoji.png
+  AssetGenImage get femaleEmoji =>
+      const AssetGenImage('assets/icons/female-emoji.png');
+
+  /// File path: assets/icons/google.png
+  AssetGenImage get google => const AssetGenImage('assets/icons/google.png');
+
+  /// File path: assets/icons/gui-inu.png
+  AssetGenImage get guiInu => const AssetGenImage('assets/icons/gui-inu.png');
+
+  /// File path: assets/icons/invitefriend-logo.png
+  AssetGenImage get invitefriendLogo =>
+      const AssetGenImage('assets/icons/invitefriend-logo.png');
+
+  /// File path: assets/icons/koinly.png
+  AssetGenImage get koinly => const AssetGenImage('assets/icons/koinly.png');
+
+  /// File path: assets/icons/kraken.png
+  AssetGenImage get kraken => const AssetGenImage('assets/icons/kraken.png');
+
+  /// File path: assets/icons/ledborrow-logo.png
+  AssetGenImage get ledborrowLogo =>
+      const AssetGenImage('assets/icons/ledborrow-logo.png');
+
+  /// File path: assets/icons/lock.png
+  AssetGenImage get lock => const AssetGenImage('assets/icons/lock.png');
+
+  /// File path: assets/icons/male-emoji.png
+  AssetGenImage get maleEmoji =>
+      const AssetGenImage('assets/icons/male-emoji.png');
+
+  /// File path: assets/icons/marble.png
+  AssetGenImage get marble => const AssetGenImage('assets/icons/marble.png');
+
+  /// File path: assets/icons/market-explore-logo.png
+  AssetGenImage get marketExploreLogo =>
+      const AssetGenImage('assets/icons/market-explore-logo.png');
+
+  /// File path: assets/icons/mints-logo.png
+  AssetGenImage get mintsLogo =>
+      const AssetGenImage('assets/icons/mints-logo.png');
+
+  /// File path: assets/icons/more-logo.png
+  AssetGenImage get moreLogo =>
+      const AssetGenImage('assets/icons/more-logo.png');
+
+  /// File path: assets/icons/offramp-logo.png
+  AssetGenImage get offrampLogo =>
+      const AssetGenImage('assets/icons/offramp-logo.png');
+
+  /// File path: assets/icons/onramp-logo.png
+  AssetGenImage get onrampLogo =>
+      const AssetGenImage('assets/icons/onramp-logo.png');
+
+  /// File path: assets/icons/pancake.png
+  AssetGenImage get pancake => const AssetGenImage('assets/icons/pancake.png');
+
+  /// File path: assets/icons/petra-dapp-logo.png
+  AssetGenImage get petraDappLogo =>
+      const AssetGenImage('assets/icons/petra-dapp-logo.png');
+
+  /// File path: assets/icons/petra-wallet-logo.png
+  AssetGenImage get petraWalletLogo =>
+      const AssetGenImage('assets/icons/petra-wallet-logo.png');
+
+  /// File path: assets/icons/planet_nft.png
+  AssetGenImage get planetNft =>
+      const AssetGenImage('assets/icons/planet_nft.png');
+
+  /// File path: assets/icons/polygon.png
+  AssetGenImage get polygon => const AssetGenImage('assets/icons/polygon.png');
+
+  /// File path: assets/icons/qr-logo.png
+  AssetGenImage get qrLogo => const AssetGenImage('assets/icons/qr-logo.png');
+
+  /// File path: assets/icons/rainbow-dapp-logo.png
+  AssetGenImage get rainbowDappLogo =>
+      const AssetGenImage('assets/icons/rainbow-dapp-logo.png');
+
+  /// File path: assets/icons/rainbow-wallet-logo.png
+  AssetGenImage get rainbowWalletLogo =>
+      const AssetGenImage('assets/icons/rainbow-wallet-logo.png');
+
+  /// File path: assets/icons/receive-logo.png
+  AssetGenImage get receiveLogo =>
+      const AssetGenImage('assets/icons/receive-logo.png');
+
+  /// File path: assets/icons/rocketpool.png
+  AssetGenImage get rocketpool =>
+      const AssetGenImage('assets/icons/rocketpool.png');
+
+  /// File path: assets/icons/roclet.png
+  AssetGenImage get roclet => const AssetGenImage('assets/icons/roclet.png');
+
+  /// File path: assets/icons/scifi.png
+  AssetGenImage get scifi => const AssetGenImage('assets/icons/scifi.png');
+
+  /// File path: assets/icons/scroll.png
+  AssetGenImage get scroll => const AssetGenImage('assets/icons/scroll.png');
+
+  /// File path: assets/icons/send-logo.png
+  AssetGenImage get sendLogo =>
+      const AssetGenImage('assets/icons/send-logo.png');
+
+  /// File path: assets/icons/sort-ascending.png
+  AssetGenImage get sortAscending =>
+      const AssetGenImage('assets/icons/sort-ascending.png');
+
+  /// File path: assets/icons/sort-descending.png
+  AssetGenImage get sortDescending =>
+      const AssetGenImage('assets/icons/sort-descending.png');
+
   /// File path: assets/icons/splash-app-icon.png
   AssetGenImage get splashAppIcon =>
       const AssetGenImage('assets/icons/splash-app-icon.png');
 
+  /// File path: assets/icons/staking-default.png
+  AssetGenImage get stakingDefault =>
+      const AssetGenImage('assets/icons/staking-default.png');
+
+  /// File path: assets/icons/star-struck.gif
+  AssetGenImage get starStruckGif =>
+      const AssetGenImage('assets/icons/star-struck.gif');
+
+  /// File path: assets/icons/star-struck.png
+  AssetGenImage get starStruckPng =>
+      const AssetGenImage('assets/icons/star-struck.png');
+
+  /// File path: assets/icons/support-logo.png
+  AssetGenImage get supportLogo =>
+      const AssetGenImage('assets/icons/support-logo.png');
+
+  /// File path: assets/icons/swap-logo.png
+  AssetGenImage get swapLogo =>
+      const AssetGenImage('assets/icons/swap-logo.png');
+
+  /// File path: assets/icons/telegram.png
+  AssetGenImage get telegram =>
+      const AssetGenImage('assets/icons/telegram.png');
+
+  /// File path: assets/icons/thala.png
+  AssetGenImage get thala => const AssetGenImage('assets/icons/thala.png');
+
+  /// File path: assets/icons/uniswap-dapp-logo.png
+  AssetGenImage get uniswapDappLogo =>
+      const AssetGenImage('assets/icons/uniswap-dapp-logo.png');
+
+  /// File path: assets/icons/uniswap-dex-logo.png
+  AssetGenImage get uniswapDexLogo =>
+      const AssetGenImage('assets/icons/uniswap-dex-logo.png');
+
+  /// File path: assets/icons/unkown.png
+  AssetGenImage get unkown => const AssetGenImage('assets/icons/unkown.png');
+
+  /// File path: assets/icons/usdc.png
+  AssetGenImage get usdc => const AssetGenImage('assets/icons/usdc.png');
+
+  /// File path: assets/icons/warning.png
+  AssetGenImage get warning => const AssetGenImage('assets/icons/warning.png');
+
+  /// File path: assets/icons/watchlist-logo.png
+  AssetGenImage get watchlistLogo =>
+      const AssetGenImage('assets/icons/watchlist-logo.png');
+
+  /// File path: assets/icons/watchlist-logo2.png
+  AssetGenImage get watchlistLogo2 =>
+      const AssetGenImage('assets/icons/watchlist-logo2.png');
+
+  /// File path: assets/icons/weirdos.png
+  AssetGenImage get weirdos => const AssetGenImage('assets/icons/weirdos.png');
+
+  /// File path: assets/icons/whatsapp.png
+  AssetGenImage get whatsapp =>
+      const AssetGenImage('assets/icons/whatsapp.png');
+
+  /// File path: assets/icons/x.png
+  AssetGenImage get x => const AssetGenImage('assets/icons/x.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [
+  List<dynamic> get values => [
+        buyLogo,
+        cellana,
+        frame,
+        nft5,
+        aave,
+        addtokenLogo,
+        amnis,
         appIconDark,
         appIcon,
         appLogoDark3d,
+        aptosLogo,
+        aptos,
+        aries,
+        avatar,
+        avatar2,
+        avatar3,
+        binance,
+        bluemove,
         branding,
+        btc,
+        coinLogo,
         coinWhite,
         coinYellow,
-        splashAppIcon
+        coinbase,
+        dai,
+        dydx,
+        ethereumCircular,
+        ethereum,
+        exploreLeaderboardPodium,
+        exploreNftExample,
+        exploreRankingsBanner,
+        faceBlowingKiss,
+        femaleEmoji,
+        google,
+        guiInu,
+        invitefriendLogo,
+        koinly,
+        kraken,
+        ledborrowLogo,
+        lock,
+        maleEmoji,
+        marble,
+        marketExploreLogo,
+        mintsLogo,
+        moreLogo,
+        offrampLogo,
+        onrampLogo,
+        pancake,
+        petraDappLogo,
+        petraWalletLogo,
+        planetNft,
+        polygon,
+        qrLogo,
+        rainbowDappLogo,
+        rainbowWalletLogo,
+        receiveLogo,
+        rocketpool,
+        roclet,
+        scifi,
+        scroll,
+        sendLogo,
+        sortAscending,
+        sortDescending,
+        splashAppIcon,
+        stakingDefault,
+        starStruckGif,
+        starStruckPng,
+        supportLogo,
+        swapLogo,
+        telegram,
+        thala,
+        uniswapDappLogo,
+        uniswapDexLogo,
+        unkown,
+        usdc,
+        warning,
+        watchlistLogo,
+        watchlistLogo2,
+        weirdos,
+        whatsapp,
+        x
       ];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/Blue-Check.png
+  AssetGenImage get blueCheck =>
+      const AssetGenImage('assets/images/Blue-Check.png');
+
+  /// File path: assets/images/Carousel-Placeholder.png
+  AssetGenImage get carouselPlaceholder =>
+      const AssetGenImage('assets/images/Carousel-Placeholder.png');
+
+  /// File path: assets/images/Doodle-Left.svg
+  String get doodleLeft => 'assets/images/Doodle-Left.svg';
+
+  /// File path: assets/images/Doodle-Right.svg
+  String get doodleRight => 'assets/images/Doodle-Right.svg';
+
+  /// File path: assets/images/Fantasy-Ruins.png
+  AssetGenImage get fantasyRuins =>
+      const AssetGenImage('assets/images/Fantasy-Ruins.png');
+
+  /// File path: assets/images/Mask group (1).png
+  AssetGenImage get maskGroup1 =>
+      const AssetGenImage('assets/images/Mask group (1).png');
+
+  /// File path: assets/images/Mask group (2).png
+  AssetGenImage get maskGroup2 =>
+      const AssetGenImage('assets/images/Mask group (2).png');
+
+  /// File path: assets/images/Mask group (3).png
+  AssetGenImage get maskGroup3 =>
+      const AssetGenImage('assets/images/Mask group (3).png');
+
+  /// File path: assets/images/Mask group.png
+  AssetGenImage get maskGroup =>
+      const AssetGenImage('assets/images/Mask group.png');
+
+  /// File path: assets/images/NFT-Content-Section-Header.png
+  AssetGenImage get nFTContentSectionHeader =>
+      const AssetGenImage('assets/images/NFT-Content-Section-Header.png');
+
+  /// File path: assets/images/Nft-Placeholder.png
+  AssetGenImage get nftPlaceholder =>
+      const AssetGenImage('assets/images/Nft-Placeholder.png');
+
+  /// File path: assets/images/Spiderman.png
+  AssetGenImage get spiderman =>
+      const AssetGenImage('assets/images/Spiderman.png');
+
+  /// File path: assets/images/Sprinkle-bottom.svg
+  String get sprinkleBottom => 'assets/images/Sprinkle-bottom.svg';
+
+  /// File path: assets/images/Sprinkle.svg
+  String get sprinkle => 'assets/images/Sprinkle.svg';
+
+  /// File path: assets/images/aptos-logo.png
+  AssetGenImage get aptosLogo =>
+      const AssetGenImage('assets/images/aptos-logo.png');
+
+  /// File path: assets/images/aptos.png
+  AssetGenImage get aptos => const AssetGenImage('assets/images/aptos.png');
+
+  /// File path: assets/images/avatar-1.png
+  AssetGenImage get avatar1 =>
+      const AssetGenImage('assets/images/avatar-1.png');
+
+  /// File path: assets/images/avatar-2.png
+  AssetGenImage get avatar2 =>
+      const AssetGenImage('assets/images/avatar-2.png');
+
+  /// File path: assets/images/avatar-3.png
+  AssetGenImage get avatar3 =>
+      const AssetGenImage('assets/images/avatar-3.png');
+
+  /// File path: assets/images/avatar-4.png
+  AssetGenImage get avatar4 =>
+      const AssetGenImage('assets/images/avatar-4.png');
+
+  /// File path: assets/images/avatar-5.png
+  AssetGenImage get avatar5 =>
+      const AssetGenImage('assets/images/avatar-5.png');
+
+  /// File path: assets/images/avatar-6.png
+  AssetGenImage get avatar6 =>
+      const AssetGenImage('assets/images/avatar-6.png');
+
+  /// File path: assets/images/avatar-7.png
+  AssetGenImage get avatar7 =>
+      const AssetGenImage('assets/images/avatar-7.png');
+
+  /// File path: assets/images/avatar.png
+  AssetGenImage get avatar => const AssetGenImage('assets/images/avatar.png');
 
   /// File path: assets/images/beaming-face-with-smiling-eyes.gif
   AssetGenImage get beamingFaceWithSmilingEyes =>
@@ -66,6 +503,19 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/card-top-right.svg
   String get cardTopRight => 'assets/images/card-top-right.svg';
+
+  /// File path: assets/images/cosmos-bg.png
+  AssetGenImage get cosmosBg =>
+      const AssetGenImage('assets/images/cosmos-bg.png');
+
+  /// File path: assets/images/cyborg.png
+  AssetGenImage get cyborg => const AssetGenImage('assets/images/cyborg.png');
+
+  /// File path: assets/images/cyborg2.png
+  AssetGenImage get cyborg2 => const AssetGenImage('assets/images/cyborg2.png');
+
+  /// File path: assets/images/dai.png
+  AssetGenImage get dai => const AssetGenImage('assets/images/dai.png');
 
   /// File path: assets/images/dive-in-1.png
   AssetGenImage get diveIn1 =>
@@ -99,11 +549,12 @@ class $AssetsImagesGen {
   AssetGenImage get diveIn8 =>
       const AssetGenImage('assets/images/dive-in-8.png');
 
-  /// File path: assets/images/doodle-left.svg
-  String get doodleLeft => 'assets/images/doodle-left.svg';
+  /// File path: assets/images/emo.png
+  AssetGenImage get emo => const AssetGenImage('assets/images/emo.png');
 
-  /// File path: assets/images/doodle-right.svg
-  String get doodleRight => 'assets/images/doodle-right.svg';
+  /// File path: assets/images/ethereum.png
+  AssetGenImage get ethereum =>
+      const AssetGenImage('assets/images/ethereum.png');
 
   /// File path: assets/images/face-blowing-a-kiss.gif
   AssetGenImage get faceBlowingAKiss =>
@@ -133,9 +584,56 @@ class $AssetsImagesGen {
   AssetGenImage get grinningSquintingFace =>
       const AssetGenImage('assets/images/grinning-squinting-face.gif');
 
+  /// File path: assets/images/invest.png
+  AssetGenImage get invest => const AssetGenImage('assets/images/invest.png');
+
   /// File path: assets/images/kissing-face.gif
   AssetGenImage get kissingFace =>
       const AssetGenImage('assets/images/kissing-face.gif');
+
+  /// File path: assets/images/market-phone.png
+  AssetGenImage get marketPhone =>
+      const AssetGenImage('assets/images/market-phone.png');
+
+  /// File path: assets/images/marketplace.png
+  AssetGenImage get marketplace =>
+      const AssetGenImage('assets/images/marketplace.png');
+
+  /// File path: assets/images/mint.png
+  AssetGenImage get mint => const AssetGenImage('assets/images/mint.png');
+
+  /// File path: assets/images/mint_header.png
+  AssetGenImage get mintHeader =>
+      const AssetGenImage('assets/images/mint_header.png');
+
+  /// File path: assets/images/mint_widget.png
+  AssetGenImage get mintWidget =>
+      const AssetGenImage('assets/images/mint_widget.png');
+
+  /// File path: assets/images/mobile-frame-notch.png
+  AssetGenImage get mobileFrameNotch =>
+      const AssetGenImage('assets/images/mobile-frame-notch.png');
+
+  /// File path: assets/images/mobile-frame.png
+  AssetGenImage get mobileFrame =>
+      const AssetGenImage('assets/images/mobile-frame.png');
+
+  /// File path: assets/images/nft-bg-header.png
+  AssetGenImage get nftBgHeader =>
+      const AssetGenImage('assets/images/nft-bg-header.png');
+
+  /// File path: assets/images/nft.gif
+  AssetGenImage get nftGif => const AssetGenImage('assets/images/nft.gif');
+
+  /// File path: assets/images/nft.png
+  AssetGenImage get nftPng => const AssetGenImage('assets/images/nft.png');
+
+  /// File path: assets/images/nft1.png
+  AssetGenImage get nft1 => const AssetGenImage('assets/images/nft1.png');
+
+  /// File path: assets/images/nft_image1.png
+  AssetGenImage get nftImage1 =>
+      const AssetGenImage('assets/images/nft_image1.png');
 
   /// File path: assets/images/onboarding-1.gif
   AssetGenImage get onboarding1 =>
@@ -153,13 +651,60 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding4 =>
       const AssetGenImage('assets/images/onboarding-4.gif');
 
+  /// File path: assets/images/onboarding-nft-1.png
+  AssetGenImage get onboardingNft1 =>
+      const AssetGenImage('assets/images/onboarding-nft-1.png');
+
+  /// File path: assets/images/onboarding-nft-2.png
+  AssetGenImage get onboardingNft2 =>
+      const AssetGenImage('assets/images/onboarding-nft-2.png');
+
+  /// File path: assets/images/onboarding-nft-3.png
+  AssetGenImage get onboardingNft3 =>
+      const AssetGenImage('assets/images/onboarding-nft-3.png');
+
+  /// File path: assets/images/onboarding-nft-4.png
+  AssetGenImage get onboardingNft4 =>
+      const AssetGenImage('assets/images/onboarding-nft-4.png');
+
+  /// File path: assets/images/onboarding-nft-5.png
+  AssetGenImage get onboardingNft5 =>
+      const AssetGenImage('assets/images/onboarding-nft-5.png');
+
+  /// File path: assets/images/onboarding-nft-6.png
+  AssetGenImage get onboardingNft6 =>
+      const AssetGenImage('assets/images/onboarding-nft-6.png');
+
+  /// File path: assets/images/polygon.png
+  AssetGenImage get polygon => const AssetGenImage('assets/images/polygon.png');
+
+  /// File path: assets/images/qr.png
+  AssetGenImage get qr => const AssetGenImage('assets/images/qr.png');
+
+  /// File path: assets/images/qr2.png
+  AssetGenImage get qr2 => const AssetGenImage('assets/images/qr2.png');
+
+  /// File path: assets/images/rocket.png
+  AssetGenImage get rocket => const AssetGenImage('assets/images/rocket.png');
+
   /// File path: assets/images/rolling-on-the-floor-laughing.gif
   AssetGenImage get rollingOnTheFloorLaughing =>
       const AssetGenImage('assets/images/rolling-on-the-floor-laughing.gif');
 
+  /// File path: assets/images/seed.png
+  AssetGenImage get seed => const AssetGenImage('assets/images/seed.png');
+
   /// File path: assets/images/select-seed-phrase-screen.png
   AssetGenImage get selectSeedPhraseScreen =>
       const AssetGenImage('assets/images/select-seed-phrase-screen.png');
+
+  /// File path: assets/images/share-qr.png
+  AssetGenImage get shareQr =>
+      const AssetGenImage('assets/images/share-qr.png');
+
+  /// File path: assets/images/share_bg.png
+  AssetGenImage get shareBg =>
+      const AssetGenImage('assets/images/share_bg.png');
 
   /// File path: assets/images/slightly-smiling-face.gif
   AssetGenImage get slightlySmilingFace =>
@@ -181,19 +726,19 @@ class $AssetsImagesGen {
   AssetGenImage get smilingFaceWithSmilingEyes =>
       const AssetGenImage('assets/images/smiling-face-with-smiling-eyes.gif');
 
-  /// File path: assets/images/sprinkle-bottom.svg
-  String get sprinkleBottom => 'assets/images/sprinkle-bottom.svg';
-
-  /// File path: assets/images/sprinkle.svg
-  String get sprinkle => 'assets/images/sprinkle.svg';
-
   /// File path: assets/images/star-struck.gif
   AssetGenImage get starStruck =>
       const AssetGenImage('assets/images/star-struck.gif');
 
+  /// File path: assets/images/trading.png
+  AssetGenImage get trading => const AssetGenImage('assets/images/trading.png');
+
   /// File path: assets/images/upside-down-face.gif
   AssetGenImage get upsideDownFace =>
       const AssetGenImage('assets/images/upside-down-face.gif');
+
+  /// File path: assets/images/usdc.png
+  AssetGenImage get usdc => const AssetGenImage('assets/images/usdc.png');
 
   /// File path: assets/images/waitlist-screen-header-gradient-component.png
   AssetGenImage get waitlistScreenHeaderGradientComponent =>
@@ -209,16 +754,64 @@ class $AssetsImagesGen {
       const AssetGenImage(
           'assets/images/wallet-creation-wallet-background-wallet-component.png');
 
+  /// File path: assets/images/watchlist1.png
+  AssetGenImage get watchlist1 =>
+      const AssetGenImage('assets/images/watchlist1.png');
+
+  /// File path: assets/images/watchlist2.png
+  AssetGenImage get watchlist2 =>
+      const AssetGenImage('assets/images/watchlist2.png');
+
+  /// File path: assets/images/watchlist3.png
+  AssetGenImage get watchlist3 =>
+      const AssetGenImage('assets/images/watchlist3.png');
+
+  /// File path: assets/images/watchlist4.png
+  AssetGenImage get watchlist4 =>
+      const AssetGenImage('assets/images/watchlist4.png');
+
+  /// File path: assets/images/watchlist5.png
+  AssetGenImage get watchlist5 =>
+      const AssetGenImage('assets/images/watchlist5.png');
+
   /// File path: assets/images/winking-face.gif
   AssetGenImage get winkingFace =>
       const AssetGenImage('assets/images/winking-face.gif');
 
   /// List of all assets
   List<dynamic> get values => [
+        blueCheck,
+        carouselPlaceholder,
+        doodleLeft,
+        doodleRight,
+        fantasyRuins,
+        maskGroup1,
+        maskGroup2,
+        maskGroup3,
+        maskGroup,
+        nFTContentSectionHeader,
+        nftPlaceholder,
+        spiderman,
+        sprinkleBottom,
+        sprinkle,
+        aptosLogo,
+        aptos,
+        avatar1,
+        avatar2,
+        avatar3,
+        avatar4,
+        avatar5,
+        avatar6,
+        avatar7,
+        avatar,
         beamingFaceWithSmilingEyes,
         cardBottom,
         cardTopLeft,
         cardTopRight,
+        cosmosBg,
+        cyborg,
+        cyborg2,
+        dai,
         diveIn1,
         diveIn2,
         diveIn3,
@@ -227,8 +820,8 @@ class $AssetsImagesGen {
         diveIn6,
         diveIn7,
         diveIn8,
-        doodleLeft,
-        doodleRight,
+        emo,
+        ethereum,
         faceBlowingAKiss,
         faceWithTearsOfJoy,
         grinningFaceWithBigEyes,
@@ -236,25 +829,56 @@ class $AssetsImagesGen {
         grinningFaceWithSweat,
         grinningFace,
         grinningSquintingFace,
+        invest,
         kissingFace,
+        marketPhone,
+        marketplace,
+        mint,
+        mintHeader,
+        mintWidget,
+        mobileFrameNotch,
+        mobileFrame,
+        nftBgHeader,
+        nftGif,
+        nftPng,
+        nft1,
+        nftImage1,
         onboarding1,
         onboarding2,
         onboarding3,
         onboarding4,
+        onboardingNft1,
+        onboardingNft2,
+        onboardingNft3,
+        onboardingNft4,
+        onboardingNft5,
+        onboardingNft6,
+        polygon,
+        qr,
+        qr2,
+        rocket,
         rollingOnTheFloorLaughing,
+        seed,
         selectSeedPhraseScreen,
+        shareQr,
+        shareBg,
         slightlySmilingFace,
         smilingFaceWithHalo,
         smilingFaceWithHeartEyes,
         smilingFaceWithHearts,
         smilingFaceWithSmilingEyes,
-        sprinkleBottom,
-        sprinkle,
         starStruck,
+        trading,
         upsideDownFace,
+        usdc,
         waitlistScreenHeaderGradientComponent,
         walletCreationBg,
         walletCreationWalletBackgroundWalletComponent,
+        watchlist1,
+        watchlist2,
+        watchlist3,
+        watchlist4,
+        watchlist5,
         winkingFace
       ];
 }
@@ -272,16 +896,20 @@ class $AssetsJsGen {
 class $AssetsVideosGen {
   const $AssetsVideosGen();
 
+  /// File path: assets/videos/nft_video.mp4
+  String get nftVideo => 'assets/videos/nft_video.mp4';
+
   /// File path: assets/videos/splash_video.mp4
   String get splashVideo => 'assets/videos/splash_video.mp4';
 
   /// List of all assets
-  List<String> get values => [splashVideo];
+  List<String> get values => [nftVideo, splashVideo];
 }
 
 class Assets {
   const Assets._();
 
+  static const $AssetsAudiosGen audios = $AssetsAudiosGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsJsGen js = $AssetsJsGen();

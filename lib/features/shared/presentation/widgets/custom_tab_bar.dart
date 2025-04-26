@@ -1,0 +1,269 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+
+import '../../../../config/theme/colors.dart';
+
+class CustomTabBar extends StatelessWidget {
+  const CustomTabBar({
+    required this.tabController, 
+    required this.tabs, 
+    super.key,
+    this.trailing,
+    this.isScrollable = true,
+    this.withPositionedIndicator = false, // Add this parameter
+  });
+  
+  final TabController tabController;
+  final List<String> tabs;
+  final Widget? trailing;
+  final bool isScrollable;
+  final bool withPositionedIndicator; // Add this field
+
+  @override
+  Widget build(BuildContext context) => Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: <Widget>[
+      Flexible(
+        child: Stack(
+          clipBehavior: Clip.none, // Allow content to overflow
+          children: [
+            // Positioned bottom grey divider (only add if using positioned indicator)
+            if (withPositionedIndicator)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  height: 1.h,
+                  color: AppColors.greyVeryLight,
+                ),
+              ),
+            // Custom TabBar with modified indicator
+            TabBar(
+              controller: tabController,
+              isScrollable: isScrollable,
+              // Use custom indicator painter that completely covers the grey line
+              indicator: withPositionedIndicator 
+                ? _SlideableIndicator(
+                    color: Colors.black,
+                    height: 2.h, // Slightly thicker than the grey divider
+                    insets: EdgeInsets.zero,
+                  )
+                : _CustomIndicator(
+                    color: Colors.black,
+                    height: 2.h,
+                    insets: EdgeInsets.zero,
+                  ),
+              tabAlignment: isScrollable ? TabAlignment.start : null,
+              labelColor: Colors.black,
+              unselectedLabelColor: AppColors.greyLight,
+              // Update the text styles to match the app's styling
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+                fontFamily: 'SFCompactRounded', // Match your app's font family
+                letterSpacing: -0.5, // Adjust if needed for your design
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontWeight: FontWeight.w500, // Slightly lighter weight for unselected
+                fontSize: 18.sp,
+                fontFamily: 'SFCompactRounded', // Match your app's font family
+                letterSpacing: -0.5, // Adjust if needed for your design
+              ),
+              labelPadding: EdgeInsets.symmetric(horizontal: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 0.w),
+              dividerHeight: 0, // No built-in divider
+              dividerColor: AppColors.transparent,
+              indicatorWeight: 0, // No default indicator
+              splashFactory: NoSplash.splashFactory,
+              overlayColor: MaterialStateProperty.all(Colors.transparent), // Add this line
+              tabs: tabs.map((String text) => Tab(text: text)).toList(),
+            ),
+          ],
+        ),
+      ),
+      if (trailing != null) const Gap(8),
+      if (trailing != null) trailing!,
+    ],
+  );
+}
+
+// Custom indicator that draws directly on top of the grey line
+class _CustomIndicator extends Decoration {
+  const _CustomIndicator({
+    required this.color,
+    required this.height,
+    required this.insets,
+  });
+
+  final Color color;
+  final double height;
+  final EdgeInsetsGeometry insets;
+
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+    return _CustomIndicatorPainter(
+      color: color,
+      height: height,
+      insets: insets,
+    );
+  }
+}
+
+class _CustomIndicatorPainter extends BoxPainter {
+  _CustomIndicatorPainter({
+    required this.color,
+    required this.height,
+    required this.insets,
+  });
+
+  final Color color;
+  final double height;
+  final EdgeInsetsGeometry insets;
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    assert(configuration.size != null);
+    
+    final Rect rect = offset & configuration.size!;
+    
+    // Since ImageConfiguration doesn't have direction, use a default TextDirection
+    // or pass it as a parameter if needed
+    final EdgeInsets resolvedInsets = insets.resolve(TextDirection.ltr);
+    
+    // Calculate indicator position to exactly cover the grey line
+    final double indicatorY = rect.bottom - height;
+    
+    final Rect indicator = Rect.fromLTWH(
+      rect.left + resolvedInsets.left,
+      indicatorY,
+      rect.width - resolvedInsets.horizontal,
+      height,
+    );
+    
+    final Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    
+    canvas.drawRect(indicator, paint);
+  }
+}
+
+// New slideable indicator class
+class _SlideableIndicator extends Decoration {
+  const _SlideableIndicator({
+    required this.color,
+    required this.height,
+    required this.insets,
+  });
+
+  final Color color;
+  final double height;
+  final EdgeInsetsGeometry insets;
+
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+    return _SlideableIndicatorPainter(
+      color: color,
+      height: height,
+      insets: insets,
+      onChanged: onChanged,
+    );
+  }
+}
+
+class _SlideableIndicatorPainter extends BoxPainter {
+  _SlideableIndicatorPainter({
+    required this.color,
+    required this.height,
+    required this.insets,
+    VoidCallback? onChanged,
+  }) : super(onChanged);
+
+  final Color color;
+  final double height;
+  final EdgeInsetsGeometry insets;
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    assert(configuration.size != null);
+    
+    final Rect rect = offset & configuration.size!;
+    final EdgeInsets resolvedInsets = insets.resolve(TextDirection.ltr);
+    
+    // Get the tab text width for the indicator (subtract some padding)
+    final double tabWidth = rect.width - resolvedInsets.horizontal;
+    
+    // Calculate indicator position to completely cover the grey line
+    // Position at the bottom of the tab
+    final double indicatorY = rect.bottom - height;
+    
+    // Create indicator rect with calculated width and position
+    final Rect indicator = Rect.fromLTWH(
+      rect.left + resolvedInsets.left,
+      indicatorY,
+      tabWidth,
+      height,
+    );
+    
+    final Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    
+    canvas.drawRect(indicator, paint);
+  }
+}
+
+class TabBarDelegate extends SliverPersistentHeaderDelegate {
+  const TabBarDelegate(this.tabBar);
+  final Widget tabBar;
+
+  final double _height = 56.0;
+  
+  @override
+  double get minExtent => _height;
+
+  @override
+  double get maxExtent => _height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => Material(
+    color: Colors.white,
+    elevation: overlapsContent ? 4 : 0,
+    shadowColor: Colors.black.withOpacity(0.1),
+    child: SizedBox(
+      height: _height,
+      child: Padding(
+        padding: EdgeInsets.only(top: 10.h, left: 12.w, right: 12.w),
+        child: tabBar,
+      ),
+    ),
+  );
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
+
+  @override
+  OverScrollHeaderStretchConfiguration? get stretchConfiguration => null;
+  
+  // This is the key fix - ensure that layoutExtent never exceeds paintExtent
+  @override
+  FloatingHeaderSnapConfiguration? get snapConfiguration => null;
+
+  SliverGeometry _adjustLayoutExtent(SliverGeometry geometry) {
+    // If the layoutExtent is slightly greater than paintExtent, adjust it
+    if (geometry.layoutExtent > geometry.paintExtent) {
+      return SliverGeometry(
+        scrollExtent: geometry.scrollExtent,
+        paintExtent: geometry.paintExtent,
+        layoutExtent: geometry.paintExtent, // Use paintExtent as layoutExtent
+        maxPaintExtent: geometry.maxPaintExtent,
+        hasVisualOverflow: geometry.hasVisualOverflow,
+        cacheExtent: geometry.cacheExtent,
+      );
+    }
+    return geometry;
+  }
+}

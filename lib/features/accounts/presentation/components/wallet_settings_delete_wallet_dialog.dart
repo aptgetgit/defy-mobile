@@ -252,7 +252,7 @@ class DeleteWalletDialogState extends ConsumerState<DeleteWalletDialog> {
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
+              const Expanded(
                 child: SizedBox(),
                 // child: BlackButtonXL(
                 //   margin: EdgeInsets.zero,

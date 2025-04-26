@@ -8,20 +8,20 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../features/borrow/presentation/screens/borrow_screen.dart';
 import '../../features/borrow/presentation/screens/borrow_amount_screen.dart';
-import '../../features/explore/presentation/scrceens/create_token_screen.dart';
+import '../../features/explore/presentation/screens/create_token_screen.dart';
 
-import '../../features/explore/presentation/scrceens/explore_coins_screen.dart';
-import '../../features/explore/presentation/scrceens/explore_dapps_screen.dart';
-import '../../features/explore/presentation/scrceens/explore_leaderboard.dart';
-import '../../features/explore/presentation/scrceens/explore_market_screen.dart';
-import '../../features/explore/presentation/scrceens/explore_nft_screen.dart';
-import '../../features/explore/presentation/scrceens/explore_pump_fun_screen.dart';
-import '../../features/explore/presentation/scrceens/explore_pump_fun_token_transactions_screen.dart';
-import '../../features/explore/presentation/scrceens/explore_screen.dart';
+import '../../features/explore/presentation/screens/explore_coins_screen.dart';
+import '../../features/explore/presentation/screens/explore_dapps_screen.dart';
+import '../../features/explore/presentation/screens/explore_leaderboard.dart';
+import '../../features/explore/presentation/screens/explore_market_screen.dart';
+import '../../features/explore/presentation/screens/explore_nft_screen.dart';
+import '../../features/explore/presentation/screens/explore_pump_fun_screen.dart';
+import '../../features/explore/presentation/screens/explore_pump_fun_token_transactions_screen.dart';
+import '../../features/explore/presentation/screens/explore_screen.dart';
 
-import '../../features/explore/presentation/scrceens/explore_tokens_screen.dart';
-import '../../features/explore/presentation/scrceens/pump_fun_token_preview_screen.dart';
-import '../../features/explore/presentation/scrceens/search_screen.dart';
+import '../../features/explore/presentation/screens/explore_tokens_screen.dart';
+import '../../features/explore/presentation/screens/pump_fun_token_preview_screen.dart';
+import '../../features/explore/presentation/screens/search_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/lend/presentation/screens/lend_screen.dart';
 import '../../features/lend/presentation/screens/lend_amount_screen.dart';

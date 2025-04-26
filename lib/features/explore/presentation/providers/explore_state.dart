@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../data/models/explore_models.dart';
+import '../data/models/explore_dapp.dart';
+
+import '../data/models/explore_token.dart';
 
 
 

@@ -24,6 +24,7 @@ class ExploreTokenInfoScreen extends StatefulWidget {
     required this.investors,
     required this.returnPeriod,
     this.isDelegate = false,
+    this.emoji, // Add this parameter
   });
   final String name;
   final String logoPath;
@@ -31,6 +32,7 @@ class ExploreTokenInfoScreen extends StatefulWidget {
   final String investors;
   final String returnPeriod;
   final bool isDelegate;
+  final String? emoji; // Add this field
 
   @override
   State<ExploreTokenInfoScreen> createState() => _ExploreTokenInfoScreenState();

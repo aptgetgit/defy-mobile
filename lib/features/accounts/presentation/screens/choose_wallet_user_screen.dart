@@ -48,6 +48,7 @@ class _ChooseWalletUserScreenState
         backgroundColor: Colors.white,
         title: Row(
           children: <Widget>[
+            const SizedBox(width: 5),
             CircleAvatar(
               backgroundColor: AppColors.pink,
               child: Image.asset(
@@ -99,6 +100,7 @@ class _ChooseWalletUserScreenState
                 ),
               ],
             ),
+            const SizedBox(width: 5),
           ],
         ),
         automaticallyImplyLeading: false,
@@ -109,7 +111,7 @@ class _ChooseWalletUserScreenState
         children: <Widget>[
           const SizedBox(height: 16),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: <Widget>[
                 const Text(
@@ -151,10 +153,9 @@ class _ChooseWalletUserScreenState
             ),
           ),
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              'Long Press on cards to open Wallet info',
-              textAlign: TextAlign.center,
+              'You can change them here anytime',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -162,7 +163,7 @@ class _ChooseWalletUserScreenState
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 50),
           Expanded(
             child: FutureBuilder<
                 Either<ExceptionWithStackTrace, Set<AptosAccountWithMetadata>>>(
@@ -212,28 +213,6 @@ class _ChooseWalletUserScreenState
                         const SizedBox(height: 20),
                         WalletPaginationIndicator(accounts: accounts),
                         const SizedBox(height: 32),
-                        Consumer(
-                          builder: (
-                            BuildContext context,
-                            WidgetRef ref,
-                            Widget? child,
-                          ) {
-                            final int currentIndex = ref
-                                .watch(chooseWalletScreenNotifierProvider)
-                                .currentIndex;
-
-                            return Text(
-                              currentIndex == 0
-                                  ? ''
-                                  : 'You can shift from these wallet anytime',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.greyLight,
-                              ),
-                            );
-                          },
-                        ),
                         const SizedBox(height: 16),
                         Consumer(
                           builder: (

@@ -30,7 +30,9 @@ mixin _$ImportWalletState {
   bool get showWalletName => throw _privateConstructorUsedError;
   bool get showWalletColor => throw _privateConstructorUsedError;
   bool get showEmojiPicker => throw _privateConstructorUsedError;
+  bool get showCreatedWallet => throw _privateConstructorUsedError;
   bool get isWalletNameEntered => throw _privateConstructorUsedError;
+  bool get isNavigatingBack => throw _privateConstructorUsedError;
 
   /// Create a copy of ImportWalletState
   /// with the given fields replaced by the non-null parameter values.
@@ -60,7 +62,9 @@ abstract class $ImportWalletStateCopyWith<$Res> {
       bool showWalletName,
       bool showWalletColor,
       bool showEmojiPicker,
-      bool isWalletNameEntered});
+      bool showCreatedWallet,
+      bool isWalletNameEntered,
+      bool isNavigatingBack});
 }
 
 /// @nodoc
@@ -92,7 +96,9 @@ class _$ImportWalletStateCopyWithImpl<$Res, $Val extends ImportWalletState>
     Object? showWalletName = null,
     Object? showWalletColor = null,
     Object? showEmojiPicker = null,
+    Object? showCreatedWallet = null,
     Object? isWalletNameEntered = null,
+    Object? isNavigatingBack = null,
   }) {
     return _then(_value.copyWith(
       currentStep: null == currentStep
@@ -151,9 +157,17 @@ class _$ImportWalletStateCopyWithImpl<$Res, $Val extends ImportWalletState>
           ? _value.showEmojiPicker
           : showEmojiPicker // ignore: cast_nullable_to_non_nullable
               as bool,
+      showCreatedWallet: null == showCreatedWallet
+          ? _value.showCreatedWallet
+          : showCreatedWallet // ignore: cast_nullable_to_non_nullable
+              as bool,
       isWalletNameEntered: null == isWalletNameEntered
           ? _value.isWalletNameEntered
           : isWalletNameEntered // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isNavigatingBack: null == isNavigatingBack
+          ? _value.isNavigatingBack
+          : isNavigatingBack // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -182,7 +196,9 @@ abstract class _$$ImportWalletStateImplCopyWith<$Res>
       bool showWalletName,
       bool showWalletColor,
       bool showEmojiPicker,
-      bool isWalletNameEntered});
+      bool showCreatedWallet,
+      bool isWalletNameEntered,
+      bool isNavigatingBack});
 }
 
 /// @nodoc
@@ -212,7 +228,9 @@ class __$$ImportWalletStateImplCopyWithImpl<$Res>
     Object? showWalletName = null,
     Object? showWalletColor = null,
     Object? showEmojiPicker = null,
+    Object? showCreatedWallet = null,
     Object? isWalletNameEntered = null,
+    Object? isNavigatingBack = null,
   }) {
     return _then(_$ImportWalletStateImpl(
       currentStep: null == currentStep
@@ -271,9 +289,17 @@ class __$$ImportWalletStateImplCopyWithImpl<$Res>
           ? _value.showEmojiPicker
           : showEmojiPicker // ignore: cast_nullable_to_non_nullable
               as bool,
+      showCreatedWallet: null == showCreatedWallet
+          ? _value.showCreatedWallet
+          : showCreatedWallet // ignore: cast_nullable_to_non_nullable
+              as bool,
       isWalletNameEntered: null == isWalletNameEntered
           ? _value.isWalletNameEntered
           : isWalletNameEntered // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isNavigatingBack: null == isNavigatingBack
+          ? _value.isNavigatingBack
+          : isNavigatingBack // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -288,7 +314,7 @@ class _$ImportWalletStateImpl implements _ImportWalletState {
       this.isImporting = false,
       this.isGenerating = false,
       this.isAccountGenerated = false,
-      this.accountName = 'Business',
+      this.accountName = '',
       this.error = '',
       this.selectedWalletColor = const LinearGradient(
           begin: Alignment.topRight,
@@ -300,7 +326,9 @@ class _$ImportWalletStateImpl implements _ImportWalletState {
       this.showWalletName = false,
       this.showWalletColor = false,
       this.showEmojiPicker = false,
-      this.isWalletNameEntered = false})
+      this.showCreatedWallet = false,
+      this.isWalletNameEntered = false,
+      this.isNavigatingBack = false})
       : _words = words;
 
   @override
@@ -353,11 +381,17 @@ class _$ImportWalletStateImpl implements _ImportWalletState {
   final bool showEmojiPicker;
   @override
   @JsonKey()
+  final bool showCreatedWallet;
+  @override
+  @JsonKey()
   final bool isWalletNameEntered;
+  @override
+  @JsonKey()
+  final bool isNavigatingBack;
 
   @override
   String toString() {
-    return 'ImportWalletState(currentStep: $currentStep, words: $words, isImporting: $isImporting, isGenerating: $isGenerating, isAccountGenerated: $isAccountGenerated, accountName: $accountName, error: $error, selectedWalletColor: $selectedWalletColor, walletColorSliderPosition: $walletColorSliderPosition, walletColorSelectedIndex: $walletColorSelectedIndex, selectedEmojiIndex: $selectedEmojiIndex, showWalletName: $showWalletName, showWalletColor: $showWalletColor, showEmojiPicker: $showEmojiPicker, isWalletNameEntered: $isWalletNameEntered)';
+    return 'ImportWalletState(currentStep: $currentStep, words: $words, isImporting: $isImporting, isGenerating: $isGenerating, isAccountGenerated: $isAccountGenerated, accountName: $accountName, error: $error, selectedWalletColor: $selectedWalletColor, walletColorSliderPosition: $walletColorSliderPosition, walletColorSelectedIndex: $walletColorSelectedIndex, selectedEmojiIndex: $selectedEmojiIndex, showWalletName: $showWalletName, showWalletColor: $showWalletColor, showEmojiPicker: $showEmojiPicker, showCreatedWallet: $showCreatedWallet, isWalletNameEntered: $isWalletNameEntered, isNavigatingBack: $isNavigatingBack)';
   }
 
   @override
@@ -393,8 +427,12 @@ class _$ImportWalletStateImpl implements _ImportWalletState {
                 other.showWalletColor == showWalletColor) &&
             (identical(other.showEmojiPicker, showEmojiPicker) ||
                 other.showEmojiPicker == showEmojiPicker) &&
+            (identical(other.showCreatedWallet, showCreatedWallet) ||
+                other.showCreatedWallet == showCreatedWallet) &&
             (identical(other.isWalletNameEntered, isWalletNameEntered) ||
-                other.isWalletNameEntered == isWalletNameEntered));
+                other.isWalletNameEntered == isWalletNameEntered) &&
+            (identical(other.isNavigatingBack, isNavigatingBack) ||
+                other.isNavigatingBack == isNavigatingBack));
   }
 
   @override
@@ -414,7 +452,9 @@ class _$ImportWalletStateImpl implements _ImportWalletState {
       showWalletName,
       showWalletColor,
       showEmojiPicker,
-      isWalletNameEntered);
+      showCreatedWallet,
+      isWalletNameEntered,
+      isNavigatingBack);
 
   /// Create a copy of ImportWalletState
   /// with the given fields replaced by the non-null parameter values.
@@ -442,7 +482,9 @@ abstract class _ImportWalletState implements ImportWalletState {
       final bool showWalletName,
       final bool showWalletColor,
       final bool showEmojiPicker,
-      final bool isWalletNameEntered}) = _$ImportWalletStateImpl;
+      final bool showCreatedWallet,
+      final bool isWalletNameEntered,
+      final bool isNavigatingBack}) = _$ImportWalletStateImpl;
 
   @override
   int get currentStep;
@@ -473,7 +515,11 @@ abstract class _ImportWalletState implements ImportWalletState {
   @override
   bool get showEmojiPicker;
   @override
+  bool get showCreatedWallet;
+  @override
   bool get isWalletNameEntered;
+  @override
+  bool get isNavigatingBack;
 
   /// Create a copy of ImportWalletState
   /// with the given fields replaced by the non-null parameter values.

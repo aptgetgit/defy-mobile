@@ -103,7 +103,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
     bool isCardRemoving,
   ) {
     if (showDeleteConfirmation && !showDialogAndButton) {
-      Future.delayed(const Duration(milliseconds: 300), () {
+      Future<void>.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
           ref.read(showDialogAndButtonProvider.notifier).state = true;
         }
@@ -207,7 +207,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return AnimatedPositioned(
-      duration: const Duration(milliseconds: 300),
+      duration: Duration(milliseconds: showDeleteConfirmation ? 500 : 800),
       curve: Curves.easeInOut,
       top: isCardRemoving
           ? screenHeight - 100
@@ -245,7 +245,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
           children: <Widget>[
             const SizedBox(height: 232),
             const Text(
-              'Wallet Settings',
+              'Settings',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -253,7 +253,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            const Divider(color: AppColors.divider, thickness: 2),
+            const Divider(color: AppColors.divider, thickness: 1),
             const SizedBox(height: 16),
             _buildWalletSettingsItem(
               title: 'Security',
@@ -263,7 +263,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
             _buildWalletSettingsItem(
               title: 'Customize Wallet',
               icon: PhosphorIconsRegular.palette,
-              onTap: () {},
+              onTap: () => _navigateToCustomize(context, ref, account),
             ),
             _buildReceivingNFTItem(),
           ],
@@ -424,7 +424,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
   Widget _buildReceivingNFTItem() => GestureDetector(
         onTap: () {},
         child: const Padding(
-          padding: EdgeInsets.only(left: 4, right: 4, bottom: 28),
+          padding: EdgeInsets.only(bottom: 28),
           child: Row(
             children: <Widget>[
               Icon(PhosphorIconsRegular.atom, color: AppColors.black, size: 24),
@@ -511,7 +511,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                   bottom: 20,
-                  left: 20,
+                  left: 24,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -539,7 +539,7 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
                   ),
                   curve: Curves.easeInOut,
                   bottom: 24,
-                  right: 24,
+                  right: 30,
                   child: Text(
                     'Profile',
                     style: GoogleFonts.urbanist(
@@ -565,11 +565,11 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  top: 10,
+                  top: 8,
                   child: SvgPicture.asset(
                     Assets.images.cardTopLeft,
-                    height: 56,
-                    width: 56,
+                    height: 60,
+                    width: 60,
                   ),
                 ),
                 AnimatedPositioned(
@@ -597,8 +597,8 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  top: 27,
-                  left: 24,
+                  top: 29,
+                  left: 27,
                   child: CachedNetworkImage(
                     imageUrl: account.iconUri.toString(),
                     height: 36,
@@ -607,25 +607,24 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  left: 100,
-                  top: 10,
+                  left: 92,
+                  top: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         account.label,
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: AppColors.white,
                         ),
                       ),
-                      const SizedBox(height: 4),
                       Text(
                         truncateAddress(account.accountAddress.toHex()),
                         style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
                           color: AppColors.white,
                         ),
                       ),
@@ -645,27 +644,29 @@ class WalletSettingsScreenState extends ConsumerState<WalletSettingsScreen> {
   }) =>
       GestureDetector(
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 4, right: 4, bottom: 28),
-          child: Row(
-            children: <Widget>[
-              Icon(icon, color: AppColors.black, size: 24),
-              const SizedBox(width: 12),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.black,
+        child: InkWell(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 28),
+            child: Row(
+              children: <Widget>[
+                Icon(icon, color: AppColors.black, size: 24),
+                const SizedBox(width: 12),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.black,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              const Icon(
-                PhosphorIconsBold.caretRight,
-                size: 18,
-                color: AppColors.greyLight,
-              ),
-            ],
+                const Spacer(),
+                const Icon(
+                  PhosphorIconsBold.caretRight,
+                  size: 18,
+                  color: AppColors.greyLight,
+                ),
+              ],
+            ),
           ),
         ),
       );

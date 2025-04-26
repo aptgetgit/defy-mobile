@@ -10,17 +10,21 @@ List<RouteBase> get $appRoutes => [
       $welcomeAgainScreenRoute,
       $chooseWalletScreenRoute,
       $chooseWalletUserScreenRoute,
+      $createWalletSelectSeedPhraseScreenRoute,
       $homeRoute,
       $splashScreenRoute,
       $onboardingRoute,
       $diveInPageRoute,
+      $sendScreenRoute,
+      $sendToSelfScreenRoute,
+      $sendToContactsScreenRoute,
+      $sendToFriendsScreenRoute,
       $waitlistPrimaryScreenRoute,
       $walletCreationScreenRoute,
       $walletCreationWalletNameScreenRoute,
       $walletCreationWalletBackgroundScreenRoute,
       $importWalletScreenRoute,
       $createdWalletScreenRoute,
-      $createWalletSelectSeedPhraseScreenRoute,
     ];
 
 RouteBase get $welcomeAgainScreenRoute => GoRouteData.$route(
@@ -80,6 +84,31 @@ extension $ChooseWalletUserScreenRouteExtension on ChooseWalletUserScreenRoute {
 
   String get location => GoRouteData.$location(
         '/choose-wallet-user',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $createWalletSelectSeedPhraseScreenRoute => GoRouteData.$route(
+      path: '/create-wallet-select-seed-phrase',
+      factory: $CreateWalletSelectSeedPhraseScreenRouteExtension._fromState,
+    );
+
+extension $CreateWalletSelectSeedPhraseScreenRouteExtension
+    on CreateWalletSelectSeedPhraseScreenRoute {
+  static CreateWalletSelectSeedPhraseScreenRoute _fromState(
+          GoRouterState state) =>
+      const CreateWalletSelectSeedPhraseScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/create-wallet-select-seed-phrase',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -171,6 +200,98 @@ extension $DiveInPageRouteExtension on DiveInPageRoute {
 
   String get location => GoRouteData.$location(
         '/dive-in',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sendScreenRoute => GoRouteData.$route(
+      path: '/send',
+      factory: $SendScreenRouteExtension._fromState,
+    );
+
+extension $SendScreenRouteExtension on SendScreenRoute {
+  static SendScreenRoute _fromState(GoRouterState state) =>
+      const SendScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/send',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sendToSelfScreenRoute => GoRouteData.$route(
+      path: '/send/send-to-self',
+      factory: $SendToSelfScreenRouteExtension._fromState,
+    );
+
+extension $SendToSelfScreenRouteExtension on SendToSelfScreenRoute {
+  static SendToSelfScreenRoute _fromState(GoRouterState state) =>
+      const SendToSelfScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/send/send-to-self',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sendToContactsScreenRoute => GoRouteData.$route(
+      path: '/send/send-to-contacts',
+      factory: $SendToContactsScreenRouteExtension._fromState,
+    );
+
+extension $SendToContactsScreenRouteExtension on SendToContactsScreenRoute {
+  static SendToContactsScreenRoute _fromState(GoRouterState state) =>
+      const SendToContactsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/send/send-to-contacts',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sendToFriendsScreenRoute => GoRouteData.$route(
+      path: '/send/send-to-friends',
+      factory: $SendToFriendsScreenRouteExtension._fromState,
+    );
+
+extension $SendToFriendsScreenRouteExtension on SendToFriendsScreenRoute {
+  static SendToFriendsScreenRoute _fromState(GoRouterState state) =>
+      const SendToFriendsScreenRoute();
+
+  String get location => GoRouteData.$location(
+        '/send/send-to-friends',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -324,36 +445,11 @@ extension $CreatedWalletScreenRouteExtension on CreatedWalletScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $createWalletSelectSeedPhraseScreenRoute => GoRouteData.$route(
-      path: '/create-wallet-select-seed-phrase',
-      factory: $CreateWalletSelectSeedPhraseScreenRouteExtension._fromState,
-    );
-
-extension $CreateWalletSelectSeedPhraseScreenRouteExtension
-    on CreateWalletSelectSeedPhraseScreenRoute {
-  static CreateWalletSelectSeedPhraseScreenRoute _fromState(
-          GoRouterState state) =>
-      const CreateWalletSelectSeedPhraseScreenRoute();
-
-  String get location => GoRouteData.$location(
-        '/create-wallet-select-seed-phrase',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'2d92de56ac5dd69374fe1246c8e5ca9c01261423';
+String _$routerHash() => r'3673e31173ceda775d6f499e3d4391179cef31d6';
 
 /// See also [router].
 @ProviderFor(router)

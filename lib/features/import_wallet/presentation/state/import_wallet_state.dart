@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,7 +11,7 @@ class ImportWalletState with _$ImportWalletState {
     @Default(false) bool isImporting,
     @Default(false) bool isGenerating,
     @Default(false) bool isAccountGenerated,
-    @Default('Business') String accountName,
+    @Default('') String accountName,
     @Default('') String? error,
     @Default(
       LinearGradient(
@@ -32,6 +30,8 @@ class ImportWalletState with _$ImportWalletState {
     @Default(false) bool showWalletName,
     @Default(false) bool showWalletColor,
     @Default(false) bool showEmojiPicker,
+    @Default(false) bool showCreatedWallet,
     @Default(false) bool isWalletNameEntered,
+     @Default(false) bool isNavigatingBack,
   }) = _ImportWalletState;
 }

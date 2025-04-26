@@ -19,6 +19,7 @@ mixin _$CustomizeWalletState {
   bool get showEmojiSection => throw _privateConstructorUsedError;
   bool get showNameSection => throw _privateConstructorUsedError;
   bool get showColorSection => throw _privateConstructorUsedError;
+  bool get showInitialScreen => throw _privateConstructorUsedError;
   Color get selectedWalletColor => throw _privateConstructorUsedError;
   String get selectedEmoji => throw _privateConstructorUsedError;
   String get selectedWalletName => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $CustomizeWalletStateCopyWith<$Res> {
       {bool showEmojiSection,
       bool showNameSection,
       bool showColorSection,
+      bool showInitialScreen,
       Color selectedWalletColor,
       String selectedEmoji,
       String selectedWalletName,
@@ -68,6 +70,7 @@ class _$CustomizeWalletStateCopyWithImpl<$Res,
     Object? showEmojiSection = null,
     Object? showNameSection = null,
     Object? showColorSection = null,
+    Object? showInitialScreen = null,
     Object? selectedWalletColor = null,
     Object? selectedEmoji = null,
     Object? selectedWalletName = null,
@@ -86,6 +89,10 @@ class _$CustomizeWalletStateCopyWithImpl<$Res,
       showColorSection: null == showColorSection
           ? _value.showColorSection
           : showColorSection // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showInitialScreen: null == showInitialScreen
+          ? _value.showInitialScreen
+          : showInitialScreen // ignore: cast_nullable_to_non_nullable
               as bool,
       selectedWalletColor: null == selectedWalletColor
           ? _value.selectedWalletColor
@@ -123,6 +130,7 @@ abstract class _$$CustomizeWalletStateImplCopyWith<$Res>
       {bool showEmojiSection,
       bool showNameSection,
       bool showColorSection,
+      bool showInitialScreen,
       Color selectedWalletColor,
       String selectedEmoji,
       String selectedWalletName,
@@ -146,6 +154,7 @@ class __$$CustomizeWalletStateImplCopyWithImpl<$Res>
     Object? showEmojiSection = null,
     Object? showNameSection = null,
     Object? showColorSection = null,
+    Object? showInitialScreen = null,
     Object? selectedWalletColor = null,
     Object? selectedEmoji = null,
     Object? selectedWalletName = null,
@@ -164,6 +173,10 @@ class __$$CustomizeWalletStateImplCopyWithImpl<$Res>
       showColorSection: null == showColorSection
           ? _value.showColorSection
           : showColorSection // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showInitialScreen: null == showInitialScreen
+          ? _value.showInitialScreen
+          : showInitialScreen // ignore: cast_nullable_to_non_nullable
               as bool,
       selectedWalletColor: null == selectedWalletColor
           ? _value.selectedWalletColor
@@ -195,7 +208,8 @@ class _$CustomizeWalletStateImpl implements _CustomizeWalletState {
   const _$CustomizeWalletStateImpl(
       {this.showEmojiSection = false,
       this.showNameSection = false,
-      this.showColorSection = true,
+      this.showColorSection = false,
+      this.showInitialScreen = false,
       this.selectedWalletColor = AppColors.blue,
       this.selectedEmoji = '',
       this.selectedWalletName = '',
@@ -211,6 +225,9 @@ class _$CustomizeWalletStateImpl implements _CustomizeWalletState {
   @override
   @JsonKey()
   final bool showColorSection;
+  @override
+  @JsonKey()
+  final bool showInitialScreen;
   @override
   @JsonKey()
   final Color selectedWalletColor;
@@ -229,7 +246,7 @@ class _$CustomizeWalletStateImpl implements _CustomizeWalletState {
 
   @override
   String toString() {
-    return 'CustomizeWalletState(showEmojiSection: $showEmojiSection, showNameSection: $showNameSection, showColorSection: $showColorSection, selectedWalletColor: $selectedWalletColor, selectedEmoji: $selectedEmoji, selectedWalletName: $selectedWalletName, walletColorSliderPosition: $walletColorSliderPosition, walletColorSelectedIndex: $walletColorSelectedIndex)';
+    return 'CustomizeWalletState(showEmojiSection: $showEmojiSection, showNameSection: $showNameSection, showColorSection: $showColorSection, showInitialScreen: $showInitialScreen, selectedWalletColor: $selectedWalletColor, selectedEmoji: $selectedEmoji, selectedWalletName: $selectedWalletName, walletColorSliderPosition: $walletColorSliderPosition, walletColorSelectedIndex: $walletColorSelectedIndex)';
   }
 
   @override
@@ -243,6 +260,8 @@ class _$CustomizeWalletStateImpl implements _CustomizeWalletState {
                 other.showNameSection == showNameSection) &&
             (identical(other.showColorSection, showColorSection) ||
                 other.showColorSection == showColorSection) &&
+            (identical(other.showInitialScreen, showInitialScreen) ||
+                other.showInitialScreen == showInitialScreen) &&
             (identical(other.selectedWalletColor, selectedWalletColor) ||
                 other.selectedWalletColor == selectedWalletColor) &&
             (identical(other.selectedEmoji, selectedEmoji) ||
@@ -263,6 +282,7 @@ class _$CustomizeWalletStateImpl implements _CustomizeWalletState {
       showEmojiSection,
       showNameSection,
       showColorSection,
+      showInitialScreen,
       selectedWalletColor,
       selectedEmoji,
       selectedWalletName,
@@ -285,6 +305,7 @@ abstract class _CustomizeWalletState implements CustomizeWalletState {
       {final bool showEmojiSection,
       final bool showNameSection,
       final bool showColorSection,
+      final bool showInitialScreen,
       final Color selectedWalletColor,
       final String selectedEmoji,
       final String selectedWalletName,
@@ -297,6 +318,8 @@ abstract class _CustomizeWalletState implements CustomizeWalletState {
   bool get showNameSection;
   @override
   bool get showColorSection;
+  @override
+  bool get showInitialScreen;
   @override
   Color get selectedWalletColor;
   @override

@@ -121,75 +121,76 @@ class _WalletSettingsSecurityScreenState
                   baseHeight + (words.length / 3).ceil() * wordHeight;
 
               return Dialog(
-                  insetPadding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height - calculatedHeight,
-                    left: 20,
-                    right: 20,
-                    bottom: 0,
+                insetPadding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height - calculatedHeight,
+                  left: 20,
+                  right: 20,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Container(
+                  height: calculatedHeight >
+                          MediaQuery.of(context).size.height * 0.9
+                      ? MediaQuery.of(context).size.height * 0.9
+                      : calculatedHeight,
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          const Text(
+                            'Seed Phrase',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Do not share this with anyone',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.greyLight,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.greyVeryLight,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: words.map(_buildWordChip).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      BlackButtonXL(
+                        onClick: () {
+                          Clipboard.setData(ClipboardData(text: mnemonic));
+                          AppLogger.debug('Mnemonic copied to clipboard');
+                          _showCustomToast(context);
+                        },
+                        title: 'Copy Seed Phrase',
+                        margin: EdgeInsets.zero,
+                      ),
+                    ],
                   ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Container(
-                    height: calculatedHeight >
-                            MediaQuery.of(context).size.height * 0.9
-                        ? MediaQuery.of(context).size.height * 0.9
-                        : calculatedHeight,
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            const Text(
-                              'Seed Phrase',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'Do not share this with anyone',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.greyLight,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: AppColors.greyVeryLight,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
-                            children: words.map(_buildWordChip).toList(),
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                        BlackButtonXL(
-                          onClick: () {
-                            Clipboard.setData(ClipboardData(text: mnemonic));
-                            AppLogger.debug('Mnemonic copied to clipboard');
-                            _showCustomToast(context);
-                          },
-                          title: 'Copy Seed Phrase',
-                          margin: EdgeInsets.zero,
-                        ),
-                      ],
-                    ),
-                  ));
+                ),
+              );
             },
           );
         },
@@ -267,7 +268,6 @@ class _WalletSettingsSecurityScreenState
             top: MediaQuery.of(context).size.height - 420,
             left: 20,
             right: 20,
-            bottom: 0,
           ),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -352,6 +352,7 @@ class _WalletSettingsSecurityScreenState
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
+          leadingWidth: 64,
           leading: GestureDetector(
             onTap: () => Navigator.of(context).pop(),
             child: const Icon(PhosphorIconsRegular.caretLeft),
@@ -363,6 +364,7 @@ class _WalletSettingsSecurityScreenState
               icon: const Icon(PhosphorIconsRegular.gear),
               onPressed: () {},
             ),
+            const SizedBox(width: 16),
           ],
         ),
         body: Padding(
@@ -389,7 +391,7 @@ class _WalletSettingsSecurityScreenState
               const SizedBox(height: 10),
               const Divider(
                 color: AppColors.divider,
-                thickness: 3,
+                thickness: 1,
               ),
               const SizedBox(height: 10),
               GestureDetector(

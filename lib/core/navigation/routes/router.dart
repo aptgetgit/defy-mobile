@@ -14,9 +14,13 @@ import '../../../features/create_wallet/presentation/screens/create_wallet_selec
 import '../../../features/home/presentation/screens/home_screen.dart';
 import '../../../features/import_wallet/presentation/screens/created_wallet_screen.dart';
 import '../../../features/import_wallet/presentation/screens/import_wallet_screen_primary.dart';
-import '../../../features/waitlist/presentation/screens/dive_in_page.dart';
 import '../../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../../features/send/presentation/screens/send_screen.dart';
+import '../../../features/send/presentation/screens/send_to_contacts.dart';
+import '../../../features/send/presentation/screens/send_to_friends.dart';
+import '../../../features/send/presentation/screens/send_to_self_screen.dart';
 import '../../../features/splash/presentation/screens/splash_screen.dart';
+import '../../../features/waitlist/presentation/screens/dive_in_page.dart';
 import '../../../features/waitlist/presentation/screens/waitlist_primary_screen.dart';
 import '../../../features/wallet-creation/presentation/screens/wallet_creation_screen.dart';
 import '../../../features/wallet-creation/presentation/screens/wallet_creation_wallet_background_screen.dart';
@@ -24,13 +28,14 @@ import '../../../features/wallet-creation/presentation/screens/wallet_creation_w
 import '../transitions.dart';
 
 part 'accounts_route.dart';
+part 'create_wallet_route.dart';
 part 'generated/router.freezed.dart';
 part 'generated/router.g.dart';
 part 'home_route.dart';
 part 'onboarding_route.dart';
+part 'send_route.dart';
 part 'waitlist_route.dart';
 part 'wallet_creation_route.dart';
-part 'create_wallet_route.dart';
 
 @freezed
 class AppRoute with _$AppRoute {
@@ -45,7 +50,7 @@ class AppRoute with _$AppRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) => GoRouter(
-      initialLocation: const WaitlistPrimaryScreenRoute().location,
+      initialLocation: const SendScreenRoute().location,
       routes: $appRoutes,
       redirectLimit: 0,
       errorBuilder: (BuildContext context, GoRouterState state) =>

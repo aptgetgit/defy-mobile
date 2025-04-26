@@ -57,6 +57,14 @@ class CustomizeWalletProvider extends _$CustomizeWalletProvider {
     );
   }
 
+  void hideSections() {
+    state = state.copyWith(
+      showEmojiSection: false,
+      showColorSection: false,
+      showNameSection: false,
+    );
+  }
+
   void updateAccountLabel(String name, AccountAddress accountAddress) {
     ref
         .watch(updateAccountLabelUseCaseProvider)

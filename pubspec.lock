@@ -109,6 +109,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.7.0"
+  assorted_layout_widgets:
+    dependency: "direct main"
+    description:
+      name: assorted_layout_widgets
+      sha256: "86c6942f569f7f70bfb03b9cb0ada9bf5aee72264aaefdb0e2be0fbee70cfb06"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.0.0"
   async:
     dependency: transitive
     description:
@@ -537,6 +545,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.2"
+  flutter_custom_carousel:
+    dependency: "direct main"
+    description:
+      name: flutter_custom_carousel
+      sha256: f5e09ea7c300dfa02210abb845d7bb2df01200a1e24040daf29ae5895ab46692
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0+1"
   flutter_gen_core:
     dependency: transitive
     description:
@@ -1136,6 +1152,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.1"
+  matrix4_transform:
+    dependency: transitive
+    description:
+      name: matrix4_transform
+      sha256: "1346e53517e3081d3e8362377be97e285e2bd348855c177eae2a18aa965cafa0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   meta:
     dependency: transitive
     description:
@@ -1589,6 +1613,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  smooth_page_indicator:
+    dependency: "direct main"
+    description:
+      name: smooth_page_indicator
+      sha256: b21ebb8bc39cf72d11c7cfd809162a48c3800668ced1c9da3aade13a32cf6c1c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   source_gen:
     dependency: transitive
     description:
@@ -1749,6 +1781,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  transformable_list_view:
+    dependency: "direct main"
+    description:
+      name: transformable_list_view
+      sha256: "1866b882d481d4441faeade3e04230c826e0fd092f806f82d3b95ad407eb147a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   typed_data:
     dependency: transitive
     description:

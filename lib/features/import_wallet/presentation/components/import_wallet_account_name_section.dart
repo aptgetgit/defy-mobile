@@ -20,18 +20,21 @@ class WalletNameSection extends StatelessWidget {
   final ImportWalletNotifier importWalletNotifier;
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+  Widget build(BuildContext context) => const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(
+              height: 16,
+              width: double.infinity,
+            ),
+            Text(
               'Name Your Wallet',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: 12),
+            Text(
               'Ex: Business, Personal, etc',
               style: TextStyle(
                 fontSize: 18,
@@ -39,19 +42,9 @@ class WalletNameSection extends StatelessWidget {
                 color: AppColors.greyLight,
               ),
             ),
-            const Spacer(),
+            Spacer(),
             Center(
-              child: TextButton(
-                onPressed: importWalletNotifier.navigateToNextSection,
-                child: const Text(
-                  'Skip for now',
-                  style: TextStyle(
-                    color: AppColors.blue,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              child: SizedBox.shrink(),
             ),
           ],
         ),

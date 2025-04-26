@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,11 +25,12 @@ class WalletColorSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             const Text(
               'Choose a Color',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
             ),
+            const SizedBox(height: 12),
             const Text(
               'Color your wallet',
               style: TextStyle(
@@ -55,12 +54,14 @@ class WalletColorSection extends StatelessWidget {
                       index,
                       ImportWalletConstants.walletColors[i],
                     ),
-                    updateSliderPosition: importWalletNotifier.updateSliderPosition,
+                    updateSliderPosition:
+                        importWalletNotifier.updateSliderPosition,
                     isSelected: importWalletState.walletColorSelectedIndex == i,
                   ),
                 ],
               ],
             ),
+            const SizedBox(height: 48),
           ],
         ),
       );

@@ -11,12 +11,12 @@ class CustomizeWalletState with _$CustomizeWalletState {
   const factory CustomizeWalletState({
     @Default(false) bool showEmojiSection,
     @Default(false) bool showNameSection,
-    @Default(true) bool showColorSection,
+    @Default(false) bool showColorSection,
+    @Default(false) bool showInitialScreen,
     @Default(AppColors.blue) Color selectedWalletColor,
     @Default('') String selectedEmoji,
     @Default('') String selectedWalletName,
     @Default(0.0) double walletColorSliderPosition,
     @Default(0) int walletColorSelectedIndex,
-    
   }) = _CustomizeWalletState;
 }

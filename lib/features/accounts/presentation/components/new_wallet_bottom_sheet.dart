@@ -73,13 +73,6 @@ class NewWalletBottomSheetState extends ConsumerState<NewWalletBottomSheet> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const NewWalletTile(
-                      color: AppColors.magenta,
-                      icon: PhosphorIconsRegular.key,
-                      heading: 'Import Private Key',
-                      subheading: 'Import existing wallet using private key',
-                    ),
-                    const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () async {
                         await const ImportWalletScreenRoute()

@@ -1,33 +1,30 @@
+import 'dart:async';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fpdart/src/either.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../../config/assets.gen.dart';
 import '../../../../config/theme/colors.dart';
-import '../../../../core/constants/animated_emoji.dart';
 import '../../../../core/constants/bip39_wordlist.dart';
 import '../../../../core/error/exception_with_stack_trace.dart';
 import '../../../../core/logging/app_logger.dart';
-import '../../../../core/navigation/routes/router.dart';
-import '../../../../core/utils/emoji_utils.dart';
 import '../../../../shared/blockchain/account/domain/entities/aptos_account_with_metadata.dart';
 import '../../../../shared/blockchain/account/domain/usecases/list_aptos_account_usecase.dart';
 import '../../../../shared/blockchain/account/presentation/providers/generate_account_flow_provider.dart';
 import '../../../../shared/blockchain/account/presentation/providers/usecase_provider.dart';
 import '../../../../shared/blockchain/account/presentation/states/generate_account_flow_state.dart';
+import '../../../accounts/presentation/util/helpers.dart';
 import '../../../common/presentation/widgets/black_button.dart';
 import '../components/import_wallet_account_name_section.dart';
+import '../components/import_wallet_created_wallet_section.dart';
 import '../components/import_wallet_emoji_selection_section.dart';
+import '../components/import_wallet_wallet_card.dart';
 import '../components/import_wallet_wallet_color_selection_section.dart';
 import '../constants/import_wallet_ui_constants.dart';
 import '../providers/import_wallet_provider.dart';
@@ -50,6 +47,10 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
   late ValueNotifier<bool> shouldRequestFocus;
   late AnimationController colorAnimationController;
   Set<String> existingWalletNames = <String>{};
+  bool _isFrontCard = true;
+  bool _isFlipping = false;
+  Timer? _flipTimer;
+  int _flipCount = 0;
 
   @override
   void initState() {
@@ -72,6 +73,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
 
     nameTextFieldController.addListener(_onNameTextFieldChanged);
     nameTextFieldFocusNode.addListener(_onFocusNodeChanged);
+
     Future<void>.microtask(_initializeWalletNames);
   }
 
@@ -119,23 +121,35 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     nameTextFieldFocusNode.dispose();
     colorAnimationController.dispose();
 
+    _flipTimer?.cancel();
+
     super.dispose();
   }
 
   void _handleStateChangesOutsideBuild(WidgetRef ref, BuildContext context) {
     final GenerateAccountFlowState accountFlowState =
-        ref.read(generateAccountFlowProvider);
+        ref.watch(generateAccountFlowProvider);
     final ImportWalletNotifier importWalletNotifier =
         ref.read(importWalletNotifierProvider.notifier);
 
     if (accountFlowState is GenerateAccountFlowStateError) {
       _showErrorSnackBar(context, accountFlowState.message);
     } else if (accountFlowState is GenerateAccountFlowStateWaitingForMetadata) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future<void>.microtask(() {
         importWalletNotifier.updateShowWalletName();
+        shouldRequestFocus.value = true;
       });
     } else if (accountFlowState is GenerateAccountFlowStateReady) {
-      _handleAccountGenerated(context, accountFlowState);
+      AppLogger.debug('Account generated successfully');
+      AppLogger.debug('Account ID: ${accountFlowState.account}');
+
+      Future<void>.microtask(importWalletNotifier.updateShowCreatedWallet);
+    }
+
+    if (shouldRequestFocus.value) {
+      AppLogger.debug('Requesting focus on nameTextField');
+      nameTextFieldFocusNode.requestFocus();
+      shouldRequestFocus.value = false;
     }
   }
 
@@ -146,12 +160,14 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     if (state is GenerateAccountFlowStateError) {
       _showErrorSnackBar(context, state.message);
     } else if (state is GenerateAccountFlowStateWaitingForMetadata) {
+      AppLogger.debug('shouldRequestFocus: ${shouldRequestFocus.value}');
       shouldRequestFocus.value = true;
     } else if (state is GenerateAccountFlowStateReady) {
-      _handleAccountGenerated(context, state);
+      AppLogger.debug('Account generated successfully');
     }
 
     if (shouldRequestFocus.value) {
+      AppLogger.debug('Requesting focus on nameTextField');
       nameTextFieldFocusNode.requestFocus();
       shouldRequestFocus.value = false;
     }
@@ -292,7 +308,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     final ImportWalletState importWalletState =
         ref.watch(importWalletNotifierProvider);
     final ImportWalletNotifier importWalletNotifier =
-        ref.read(importWalletNotifierProvider.notifier);
+        ref.watch(importWalletNotifierProvider.notifier);
     final GenerateAccountFlowState accountFlowState =
         ref.watch(generateAccountFlowProvider);
 
@@ -308,15 +324,9 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     return Scaffold(
       appBar: _buildAppBar(context, importWalletState, importWalletNotifier),
       body: PopScope(
-        canPop: !(importWalletState.showEmojiPicker ||
-            importWalletState.showWalletColor ||
-            importWalletState.showWalletName),
-        onPopInvoked: (bool didPop) {
-          if (didPop) {
-            return;
-          }
-          importWalletNotifier.navigateToPreviousSection();
-        },
+        canPop: _canPop(importWalletState),
+        onPopInvoked: (bool didPop) =>
+            _handlePopInvoked(didPop, importWalletNotifier),
         child: GestureDetector(
           onTap: nameTextFieldFocusNode.unfocus,
           child: Column(
@@ -336,7 +346,14 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
                       importWalletState,
                       importWalletNotifier,
                     ),
-                    _buildWalletCard(context, importWalletState),
+                    _buildCreatedWalletSection(
+                      importWalletState,
+                      importWalletNotifier,
+                    ),
+                    _buildWalletCard(
+                      context,
+                      importWalletState,
+                    ),
                     _buildEmojiPickerSection(
                       importWalletState,
                       importWalletNotifier,
@@ -354,14 +371,29 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     );
   }
 
+  bool _canPop(ImportWalletState state) =>
+      !(state.showEmojiPicker || state.showWalletColor || state.showWalletName);
+
+  void _handlePopInvoked(bool didPop, ImportWalletNotifier notifier) {
+    if (didPop) {
+      return;
+    }
+    if (nameTextFieldFocusNode.hasFocus) {
+      nameTextFieldFocusNode.unfocus();
+    }
+    notifier.navigateToPreviousSection();
+  }
+
   Widget _buildSeedPhraseSection(
     ImportWalletState state,
     ImportWalletNotifier notifier,
   ) =>
       _buildAnimatedSection(
         condition: !(state.showWalletName ||
-            state.showWalletColor ||
-            state.showEmojiPicker),
+                state.showWalletColor ||
+                state.showEmojiPicker ||
+                state.showCreatedWallet) &&
+            state.currentStep == 0,
         child: ImportWalletImportSeedPhraseScreen(
           key: const ValueKey<String>('importScreen'),
           words: state.words,
@@ -374,7 +406,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     ImportWalletNotifier notifier,
   ) =>
       _buildAnimatedSection(
-        condition: state.showWalletName,
+        condition: state.showWalletName && state.currentStep == 1,
         child: WalletNameSection(
           hasModifiedName: hasModifiedName.value,
           isEditing: isEditing.value,
@@ -388,7 +420,7 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     ImportWalletNotifier notifier,
   ) =>
       _buildAnimatedSection(
-        condition: state.showWalletColor,
+        condition: state.showWalletColor && state.currentStep == 2,
         child: WalletColorSection(
           animateSlider: _animateSlider,
           importWalletNotifier: notifier,
@@ -401,33 +433,53 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
     ImportWalletNotifier notifier,
   ) =>
       _buildAnimatedSection(
-        condition: state.showEmojiPicker,
+        condition: state.showEmojiPicker && state.currentStep == 3,
         child: WalletEmojiSection(
           importWalletNotifier: notifier,
           importWalletState: state,
         ),
       );
 
-  Widget _buildWalletCard(BuildContext context, ImportWalletState state) =>
-      WalletCard(
-        state: state,
-        controller: nameTextFieldController,
-        focusNode: nameTextFieldFocusNode,
-        onTextChanged: _onTextChanged,
-        context: context,
-      );
+  Widget _buildWalletCard(BuildContext context, ImportWalletState state) {
+    final GenerateAccountFlowState accountFlowState =
+        ref.watch(generateAccountFlowProvider);
+    String walletAddress = 'Wallet Address';
+    if (accountFlowState is GenerateAccountFlowStateReady) {
+      walletAddress =
+          truncateAddress(accountFlowState.account.accountAddress.toHex());
+    }
+    AppLogger.debug('Wallet Address: $walletAddress');
+    return WalletCard(
+      state: state,
+      controller: nameTextFieldController,
+      focusNode: nameTextFieldFocusNode,
+      onTextChanged: _onTextChanged,
+      context: context,
+      existingWalletNames: existingWalletNames,
+      isFrontCard: _isFrontCard,
+      walletAddress: walletAddress,
+      isFlipping: _isFlipping,
+    );
+  }
 
   Widget _buildBottomButton(
     ImportWalletState state,
     ImportWalletNotifier notifier,
   ) =>
       BlackButtonXL(
+        color: _getButtonColor(state),
         onClick: () async {
+          final GenerateAccountFlowState accountFlowState =
+              ref.watch(generateAccountFlowProvider);
           if (state.words.isEmpty) {
             AppLogger.debug(
               'State words are empty, attempting to paste from clipboard.',
             );
             await _pasteFromClipboard(context, notifier);
+          }
+          if (state.showEmojiPicker && state.selectedEmojiIndex == -1) {
+            _showErrorSnackBar(context, 'Please select an emoji');
+            return;
           }
 
           if (state.words.isEmpty) {
@@ -452,6 +504,18 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
               AppLogger.debug(
                 'No duplicate wallet name found, navigating to the next section.',
               );
+              if ((!state.isWalletNameEntered && state.accountName.isEmpty) ||
+                  state.accountName.isEmpty) {
+                notifier.updateWalletName(
+                  'Account ${existingWalletNames.length + 1}',
+                );
+              }
+              await notifier.navigateToNextSection();
+            }
+            if (state.words.isNotEmpty &&
+                accountFlowState
+                    is GenerateAccountFlowStateWaitingForMetadata &&
+                state.currentStep == 0) {
               await notifier.navigateToNextSection();
             }
           } else {
@@ -461,6 +525,45 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
         },
         title: state.words.isEmpty ? 'Paste from Clipboard' : 'Continue',
       );
+
+  Color _getButtonColor(ImportWalletState state) {
+    if (state.currentStep == 0) {
+      if (state.words.isEmpty) {
+        return AppColors.blue;
+      } else if (state.words.length != 12 && state.words.length != 24) {
+        return Colors.grey;
+      }
+    } else if (state.currentStep == 3 &&
+        state.showEmojiPicker &&
+        state.selectedEmojiIndex == -1) {
+      return Colors.grey;
+    }
+
+    return AppColors.black;
+  }
+
+  Widget _buildCreatedWalletSection(
+    ImportWalletState state,
+    ImportWalletNotifier notifier,
+  ) {
+    final GenerateAccountFlowState accountFlowState =
+        ref.watch(generateAccountFlowProvider);
+    String walletAddress = 'Wallet Address';
+    if (accountFlowState is GenerateAccountFlowStateReady) {
+      walletAddress =
+          truncateAddress(accountFlowState.account.accountAddress.toHex());
+    }
+    AppLogger.debug('Wallet Address: $walletAddress');
+    AppLogger.debug('Account Flow State: $accountFlowState');
+
+    return _buildAnimatedSection(
+      condition: state.showCreatedWallet,
+      child: ImportWalletCreatedWalletSection(
+        state: state,
+        notifier: notifier,
+      ),
+    );
+  }
 
   Widget _buildAnimatedSection({
     required bool condition,
@@ -472,17 +575,6 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
         opacity: condition ? 1.0 : 0.0,
         child: Visibility(visible: condition, child: child),
       );
-
-  void _handleAccountGenerated(
-    BuildContext context,
-    GenerateAccountFlowStateReady state,
-  ) {
-    AppLogger.debug('Account generated successfully');
-    AppLogger.debug('Account ID: ${state.account}');
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      const CreatedWalletScreenRoute().go(context);
-    });
-  }
 
   void _showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -555,7 +647,9 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
                   Navigator.of(context).pop();
                 }
               },
-              child: const Icon(PhosphorIconsBold.caretLeft),
+              child: state.currentStep != 4
+                  ? const Icon(PhosphorIconsBold.caretLeft)
+                  : const SizedBox.shrink(),
             ),
             const Spacer(),
             ..._buildProgressIndicators(state.currentStep),
@@ -623,247 +717,5 @@ class _ImportWalletScreenState extends ConsumerState<ImportWalletScreen>
       ..add(
         IterableProperty<String>('existingWalletNames', existingWalletNames),
       );
-  }
-}
-
-class WalletCard extends StatelessWidget {
-  const WalletCard({
-    required this.state,
-    required this.controller,
-    required this.focusNode,
-    required this.onTextChanged,
-    required this.context,
-    super.key,
-  });
-  final ImportWalletState state;
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final void Function(String) onTextChanged;
-  final BuildContext context;
-
-  @override
-  Widget build(BuildContext context) => AnimatedPositioned(
-        curve: Curves.easeInOutCubic,
-        duration: ImportWalletConstants.positionAnimationDuration,
-        right: _calculateWalletCardPosition(),
-        left: state.showWalletColor || state.showEmojiPicker ? 0 : null,
-        top: focusNode.hasFocus ? 110 : 200,
-        child: Center(
-          child: Container(
-            height: ImportWalletConstants.cardHeight,
-            width: MediaQuery.of(context).size.width - 40,
-            decoration: BoxDecoration(
-              // color: AppColors.blue,
-              gradient: state.selectedWalletColor,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: AppColors.greyDark.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 2,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-              borderRadius:
-                  BorderRadius.circular(ImportWalletConstants.borderRadius),
-            ),
-            child: Stack(
-              children: <Widget>[
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  bottom: 20,
-                  left: 20,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Total Balance',
-                        style: GoogleFonts.urbanist(
-                          fontSize: 14,
-                          color: AppColors.white,
-                        ),
-                      ),
-                      const Text(
-                        '---------',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: const Duration(
-                    milliseconds: 300,
-                  ),
-                  curve: Curves.easeInOut,
-                  bottom: 24,
-                  right: 24,
-                  child: Text(
-                    'Profile',
-                    style: GoogleFonts.urbanist(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ),
-                const AnimatedPositioned(
-                  duration: Duration(
-                    milliseconds: 300,
-                  ),
-                  curve: Curves.easeInOut,
-                  top: 26,
-                  right: 26,
-                  child: Icon(
-                    PhosphorIconsRegular.qrCode,
-                    color: AppColors.white,
-                    size: 32,
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  top: 10,
-                  child: SvgPicture.asset(
-                    Assets.images.cardTopLeft,
-                    height: 64,
-                    width: 64,
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  right: 0,
-                  top: -4,
-                  child: SvgPicture.asset(
-                    Assets.images.cardTopRight,
-                    height: 48,
-                    width: 48,
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  right: 88,
-                  bottom: -8,
-                  child: SvgPicture.asset(
-                    Assets.images.cardBottom,
-                    height: 88,
-                    width: 88,
-                  ),
-                ),
-                if (state.selectedEmojiIndex == -1)
-                  const AnimatedPositioned(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    top: 34,
-                    left: 36,
-                    child: Icon(
-                      PhosphorIconsRegular.user,
-                      color: AppColors.greyVeryLight,
-                    ),
-                  )
-                else
-                  AnimatedPositioned(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    top: 28,
-                    left: 28,
-                    child: getAnimatedEmoji(state.selectedEmojiIndex),
-                  ),
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  left: 100,
-                  top: 4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        width: 200,
-                        height: 30,
-                        child: TextField(
-                          enabled: state.showWalletName,
-                          cursorHeight: 16,
-                          cursorWidth: 1,
-                          cursorColor: AppColors.white,
-                          controller: controller,
-                          focusNode: focusNode,
-                          onChanged: onTextChanged,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.zero,
-                          ),
-                          style: TextStyle(
-                            fontSize: !state.showWalletName ? 16 : 20,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Wallet Address',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-
-  double _calculateWalletCardPosition() {
-    if (state.showWalletName) {
-      return -MediaQuery.of(context).size.width / 4;
-    }
-    if (state.showWalletColor) {
-      return 0;
-    }
-    if (state.showEmojiPicker) {
-      return -MediaQuery.of(context).size.width / 2;
-    }
-    return -MediaQuery.of(context).size.width;
-  }
-
-  Widget getAnimatedEmoji(int index) {
-    final AnimatedEmoji? emoji = EmojiUtils.getEmojiByIndex(index);
-    if (emoji == null) {
-      return const SizedBox.shrink();
-    }
-
-    return CachedNetworkImage(
-      imageUrl: emoji.getEmoji,
-      height: 40,
-      width: 40,
-      key: ValueKey<String>('emoji_${emoji.name}'),
-    );
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty<ImportWalletState>('state', state))
-      ..add(
-        DiagnosticsProperty<TextEditingController>('controller', controller),
-      )
-      ..add(DiagnosticsProperty<FocusNode>('focusNode', focusNode))
-      ..add(
-        ObjectFlagProperty<void Function(String p1)>.has(
-          'onTextChanged',
-          onTextChanged,
-        ),
-      )
-      ..add(DiagnosticsProperty<BuildContext>('context', context));
   }
 }

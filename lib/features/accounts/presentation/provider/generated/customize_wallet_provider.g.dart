@@ -7,7 +7,7 @@ part of '../customize_wallet_provider.dart';
 // **************************************************************************
 
 String _$customizeWalletProviderHash() =>
-    r'c4766e65d9c81d9d2d7699e3797b60e63fa9f29b';
+    r'62b33c960d6941e0824b59e2007a082e0664d505';
 
 /// See also [CustomizeWalletProvider].
 @ProviderFor(CustomizeWalletProvider)

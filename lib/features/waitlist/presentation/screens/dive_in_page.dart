@@ -252,8 +252,8 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
             )
             .animate(target: showExitAnimation ? 1 : 0)
             .custom(
-              duration: 1000.ms,
-              curve: Curves.easeOutBack,
+              duration: 2000.ms,
+              curve: Curves.easeOutExpo,
               begin: 0,
               end: 1,
               builder: (BuildContext context, double value, Widget child) =>
@@ -316,8 +316,8 @@ class DiveInPageState extends ConsumerState<DiveInPage> {
             )
             .animate(target: showExitAnimation ? 1 : 0)
             .custom(
-              duration: 1000.ms,
-              curve: Curves.easeOutBack,
+              duration: 2000.ms,
+              curve: Curves.easeOutExpo,
               begin: 0,
               end: 1,
               builder: (BuildContext context, double value, Widget child) =>

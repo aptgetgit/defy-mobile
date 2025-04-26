@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,7 +19,7 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
     final ValueNotifier<bool> showContent = useState(false);
     final ValueNotifier<bool> showOtpFields = useState(false);
     final AnimationController controller = useAnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 700),
     );
     final TextEditingController pinController = useTextEditingController();
     final FocusNode pinFocusNode = useFocusNode();
@@ -114,8 +115,8 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
                       Expanded(
                         child: AnimatedOpacity(
                           opacity: showOtpFields.value ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
+                          duration: const Duration(milliseconds: 600),
+                          curve: Curves.easeInOutQuad,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -229,6 +230,7 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
           focusedPinTheme: currentTheme,
           submittedPinTheme: currentTheme,
           separatorBuilder: (int index) => const SizedBox(width: 10),
+          closeKeyboardWhenCompleted: false,
           onCompleted: (String pin) {
             AppLogger.debug('OTP submitted: $pin');
           },
@@ -248,14 +250,15 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
           bottom: MediaQuery.of(context).viewInsets.bottom + 24,
         ),
         title: 'Confirm Code',
-        onClick: () {
+        onClick: () async {
           if (controller.text.isNotEmpty) {
             if (controller.text == '123456') {
               AppLogger.debug('Valid OTP submitted: ${controller.text}');
               codeState.value = 1; // Valid code
               focusNode.unfocus();
+              await HapticFeedback.heavyImpact();
 
-              Future<void>.delayed(const Duration(seconds: 2), () async {
+              Future<void>.delayed(const Duration(seconds: 1), () async {
                 // Reset the state
                 codeState.value = 0;
                 controller.clear();
@@ -267,8 +270,9 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
             } else {
               AppLogger.debug('Invalid OTP submitted: ${controller.text}');
               codeState.value = -1; // Invalid code
+              await HapticFeedback.heavyImpact();
 
-              Future<void>.delayed(const Duration(seconds: 2), () {
+              Future<void>.delayed(const Duration(seconds: 1), () {
                 codeState.value = 0;
                 controller.clear();
               });
@@ -276,53 +280,44 @@ class WaitlistPrimaryScreen extends HookConsumerWidget {
           }
         },
       );
-  Widget _buildAnimatedLogo(bool showContent, bool showExitAnimation) {
-    AppLogger.debug(
-      'Building animated logo: showContent=$showContent, showExitAnimation=$showExitAnimation',
-    );
+  Widget _buildAnimatedLogo(bool showContent, bool showExitAnimation) =>
+      Builder(
+        builder: (BuildContext context) {
+          final Image image = Image.asset(
+            'assets/icons/app-icon-dark.png',
+            width: 60,
+            height: 60,
+          );
 
-    return Builder(
-      builder: (BuildContext context) {
-        final image = Image.asset(
-          'assets/icons/app-icon-dark.png',
-          width: 60,
-          height: 60,
-        );
+          image.image.resolve(ImageConfiguration.empty).addListener(
+                ImageStreamListener(
+                  (ImageInfo info, bool _) {},
+                  onError: (dynamic exception, StackTrace? stackTrace) {
+                    AppLogger.debug('Error loading image: $exception');
+                  },
+                ),
+              );
 
-        image.image.resolve(ImageConfiguration()).addListener(
-              ImageStreamListener(
-                (ImageInfo info, bool _) {
-                  AppLogger.debug('Image loaded successfully');
-                },
-                onError: (dynamic exception, StackTrace? stackTrace) {
-                  AppLogger.debug('Error loading image: $exception');
-                },
-              ),
-            );
-
-        return image
-            .animate(target: showContent ? 1 : 0)
-            .slideY(
-              duration: 600.ms,
-              begin: 1,
-              end: 0,
-              curve: Curves.easeOutBack,
-            )
-            .fadeIn(duration: 300.ms)
-            .animate(target: showExitAnimation ? 1 : 0)
-            .custom(
-              curve: Curves.easeInOutQuad,
-              duration: 600.ms,
-              delay: 1500.ms,
-              builder: (BuildContext context, double value, Widget child) {
-                AppLogger.debug('Custom animation value: $value');
-                return Transform.scale(
+          return image
+              .animate(target: showContent ? 1 : 0)
+              .slideY(
+                duration: 600.ms,
+                begin: 1,
+                end: 0,
+                curve: Curves.easeOutBack,
+              )
+              .fadeIn(duration: 300.ms)
+              .animate(target: showExitAnimation ? 1 : 0)
+              .custom(
+                curve: Curves.easeInOutQuad,
+                duration: 600.ms,
+                delay: 1500.ms,
+                builder: (BuildContext context, double value, Widget child) =>
+                    Transform.scale(
                   scale: 1,
                   child: child,
-                );
-              },
-            );
-      },
-    );
-  }
+                ),
+              );
+        },
+      );
 }

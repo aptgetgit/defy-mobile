@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ImportWalletConstants {
   static const Duration animationDuration = Duration(milliseconds: 500);
   static const Duration positionAnimationDuration = Duration(milliseconds: 600);
-  static const double cardHeight = 200;
+  static const double cardHeight = 184;
   static const double emojiSize = 40;
   static const double borderRadius = 20;
   static const List<LinearGradient> walletColors = <LinearGradient>[

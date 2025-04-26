@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:confetti/confetti.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -149,7 +148,7 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
               duration: const Duration(milliseconds: 500),
               child: BlackButtonXL(
                 onClick: () {
-                  const WelcomeAgainScreenRoute().go(context);
+                  const ChooseWalletUserScreenRoute().go(context);
                 },
                 title: 'Continue',
               ),
@@ -224,57 +223,4 @@ class _CreatedWalletScreenState extends ConsumerState<CreatedWalletScreen>
           ],
         ),
       );
-}
-
-class FlipCard extends StatelessWidget {
-  const FlipCard({
-    required this.toggler,
-    required this.frontCard,
-    required this.backCard,
-    super.key,
-  });
-  final bool toggler;
-  final Widget frontCard;
-  final Widget backCard;
-
-  @override
-  Widget build(BuildContext context) => AnimatedSwitcher(
-        duration: const Duration(milliseconds: 800),
-        transitionBuilder: _transitionBuilder,
-        layoutBuilder: (Widget? widget, List<Widget> list) =>
-            Stack(children: <Widget>[widget!, ...list]),
-        switchInCurve: Curves.ease,
-        switchOutCurve: Curves.ease.flipped,
-        child: toggler
-            ? KeyedSubtree(
-                key: const ValueKey<String>('front'), child: frontCard)
-            : KeyedSubtree(
-                key: const ValueKey<String>('back'), child: backCard),
-      );
-
-  Widget _transitionBuilder(Widget widget, Animation<double> animation) {
-    final Animation<double> rotateAnimation =
-        Tween<double>(begin: pi, end: 0.0).animate(animation);
-    return AnimatedBuilder(
-      animation: rotateAnimation,
-      child: widget,
-      builder: (BuildContext context, Widget? widget) {
-        final bool isFront = ValueKey<bool>(toggler) == widget!.key;
-        final double rotationY = isFront
-            ? rotateAnimation.value
-            : min(rotateAnimation.value, pi * 0.5);
-        return Transform(
-          transform: Matrix4.rotationY(rotationY)..setEntry(3, 0, 0),
-          alignment: Alignment.center,
-          child: widget,
-        );
-      },
-    );
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<bool>('toggler', toggler));
-  }
 }

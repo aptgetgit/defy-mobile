@@ -22,7 +22,7 @@ class WalletEmojiSection extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
@@ -30,7 +30,7 @@ class WalletEmojiSection extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(

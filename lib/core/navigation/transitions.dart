@@ -10,10 +10,12 @@ class FadeTransitionPage<T> extends CustomTransitionPage<T> {
     super.restorationId,
     super.key,
   }) : super(
-          transitionsBuilder: (BuildContext context,
-                  Animation<double> animation,
-                  Animation<double> secondaryAnimation,
-                  Widget child) =>
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
               SmoothFadeTransition(
             animation: animation,
             child: child,
@@ -37,13 +39,13 @@ class SmoothFadeTransition extends StatelessWidget {
   Widget build(BuildContext context) {
     const double begin = 0;
     const double end = 1;
-    const Cubic curve = Curves.easeOutCubic;
+    const Cubic curve = Curves.easeInOutQuad;
 
     final Animatable<double> opacityTween =
         Tween<double>(begin: begin, end: end).chain(CurveTween(curve: curve));
 
     final Animatable<double> scaleTween =
-        Tween<double>(begin: 0.98, end: 1).chain(CurveTween(curve: curve));
+        Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: curve));
 
     return AnimatedBuilder(
       animation: animation,

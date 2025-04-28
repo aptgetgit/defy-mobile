@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gap/gap.dart';
+
 import '../../../../config/theme/colors.dart';
 
 class NFTListItem extends StatelessWidget {
@@ -18,67 +18,93 @@ class NFTListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
-      child: Row(
-        children: [
-          // NFT Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12.r),
-            child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              width: 70.w,
-              height: 70.w,
-              imageUrl: imageUrl,
-              errorWidget: (BuildContext ctx, String str, Object obj) => 
-                  Container(color: Colors.amber),
-              progressIndicatorBuilder: (BuildContext ctx, String str, 
-                  DownloadProgress download) =>
-                  CircularProgressIndicator(strokeWidth: 2.w),
-            ),
-          ),
-          
-          // NFT Details
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.greyDark,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Gap(6.h),
-                  Text(
-                    price,
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+    return Card(
+      margin: EdgeInsets.symmetric( vertical: 2.h),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+        child: Row(
+          children: <Widget>[
+            // NFT Image with rounded rectangle instead of circle
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.r), // Rounded rectangle
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                width: 44.w,
+                height: 44.h,
+                imageUrl: imageUrl,
+                errorWidget: (BuildContext ctx, String str, Object obj) => 
+                    Container(color: Colors.amber),
+                progressIndicatorBuilder: (BuildContext ctx, String str, 
+                    DownloadProgress download) =>
+                    CircularProgressIndicator(strokeWidth: 2.w),
               ),
             ),
-          ),
-          
-          // More options button
-          IconButton(
-            icon: Icon(
-              Icons.more_vert,
-              size: 22.sp,
-              color: AppColors.greyDark,
+            
+            SizedBox(width: 16.w),
+            
+            // NFT Details
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  'Floor Price',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.greyLight,
+                  ),
+                ),
+              ],
             ),
-            onPressed: () {
-              // Implement more options menu
-            },
-          ),
-        ],
+            
+            const Spacer(),
+            
+            // Right side - Price information with trailing decoration
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  price,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.arrow_drop_up,
+                      color: Colors.green,
+                      size: 16.sp,
+                    ),
+                    Text(
+                      '2.4%',  // Example percentage
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

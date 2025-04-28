@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../config/theme/colors.dart';
 import 'nft_grid_item.dart';
-import 'nft_list_item.dart';  // We'll create this file next
+import 'nft_list_item.dart';
 
 class NFTGrid extends StatelessWidget {
   final List<Map<String, String>> nftItems;
@@ -51,16 +50,11 @@ class NFTGrid extends StatelessWidget {
     
     return SizedBox(
       height: height * .285 * 2,
-      child: ListView.separated(
+      child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
+        padding: EdgeInsets.zero,
         itemCount: nftItems.length,
-        separatorBuilder: (context, index) => Divider(
-          height: 1.h,
-          indent: 16.w,
-          endIndent: 16.w,
-          color: AppColors.greyVeryLight,
-        ),
         itemBuilder: (BuildContext context, int index) => NFTListItem(
           imageUrl: nftItems[index]['imageUrl']!,
           name: nftItems[index]['name']!,

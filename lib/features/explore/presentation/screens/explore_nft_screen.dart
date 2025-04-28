@@ -9,8 +9,8 @@ import '../../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../providers/explore_provider.dart';
 import '../widgets/search_bar_toggle_widget.dart';
 import '../widgets/nft_hero_carousel.dart';
-
 import '../widgets/nft_grid.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class ExploreNFTScreen extends ConsumerStatefulWidget {
   const ExploreNFTScreen({super.key});
@@ -26,6 +26,7 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
   late Animation<Offset> _slideAnimation2;
   late TabController _tabController;
   bool _isGridView = true; // Track if view is grid or list
+  int _selectedNavIndex = 0; // Track selected nav item
   
   @override
   void initState() {
@@ -103,6 +104,13 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
       _isGridView = !_isGridView;
     });
   }
+  
+  void _onNavItemTapped(int index) {
+    setState(() {
+      _selectedNavIndex = index;
+    });
+    // Here you can implement navigation or screen changes based on the selected index
+  }
 
   @override
   void dispose() {
@@ -152,110 +160,121 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            SearchBarToggleWidget(
-              searchController: _searchController,
-              exploreState: exploreState,
-            ),
-            const NFTHeroCarousel(),
-            
-            // Custom Tab Bar with trailing action buttons
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Row(
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Column(
+              children: <Widget>[
+                SearchBarToggleWidget(
+                  searchController: _searchController,
+                  exploreState: exploreState,
+                ),
+                const NFTHeroCarousel(),
+                
+                // Custom Tab Bar with trailing action buttons
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
                     children: [
-                      // Tab Bar
-                      Expanded(
-                        child: CustomTabBar(
-                          tabController: _tabController,
-                          tabs: const ['Top', 'New', 'Trending', 'Mint'],
-                          isScrollable: true,
-                          withPositionedIndicator: false,
-                        ),
-                      ),
-                      
-                      // Action buttons
                       Row(
                         children: [
-                          // Filter icon
-                          IconButton(
-                            icon: Icon(
-                              PhosphorIcons.funnelSimple(),
-                              size: 22.sp,
-                              color: AppColors.greyDark,
+                          // Tab Bar
+                          Expanded(
+                            child: CustomTabBar(
+                              tabController: _tabController,
+                              tabs: const ['Top', 'New', 'Trending', 'Mint'],
+                              isScrollable: true,
+                              withPositionedIndicator: false,
                             ),
-                            onPressed: () {
-                              // Implement filter functionality
-                            },
                           ),
                           
-                          // Grid/List view toggle
-                          IconButton(
-                            icon: Icon(
-                              _isGridView 
-                                ? PhosphorIcons.squaresFour()
-                                : PhosphorIcons.rows(),
-                              size: 22.sp,
-                              color: AppColors.greyDark,
-                            ),
-                            onPressed: _toggleViewMode,
+                          // Action buttons
+                          Row(
+                            children: [
+                              // Filter icon
+                              IconButton(
+                                icon: Icon(
+                                  PhosphorIcons.funnelSimple(),
+                                  size: 22.sp,
+                                  color: AppColors.greyDark,
+                                ),
+                                onPressed: () {
+                                  // Implement filter functionality
+                                },
+                              ),
+                              
+                              // Grid/List view toggle
+                              IconButton(
+                                icon: Icon(
+                                  _isGridView 
+                                    ? PhosphorIcons.squaresFour()
+                                    : PhosphorIcons.rows(),
+                                  size: 22.sp,
+                                  color: AppColors.greyDark,
+                                ),
+                                onPressed: _toggleViewMode,
+                              ),
+                            ],
                           ),
                         ],
                       ),
+                      
+                      // Bottom divider
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+                          width: 350.w,
+                          height: 1,
+                          color: AppColors.greyVeryLight,
+                        ),
+                      ),
                     ],
                   ),
-                  
-                  // Bottom divider
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      width: 350.w,
-                      height: 1,
-                      color: AppColors.greyVeryLight,
-                    ),
+                ),
+                
+                // Tab content - add padding at the bottom to account for the nav bar
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      // Top NFTs Tab
+                      _buildNFTTabContent(
+                        nftItems: nftItems, 
+                        isGridView: _isGridView,
+                        title: 'Top NFTs',
+                      ),
+                      
+                      // New NFTs Tab
+                      _buildNFTTabContent(
+                        nftItems: nftItems, 
+                        isGridView: _isGridView,
+                        title: 'New NFTs',
+                      ),
+                      
+                      // Trending NFTs Tab
+                      _buildNFTTabContent(
+                        nftItems: nftItems, 
+                        isGridView: _isGridView,
+                        title: 'Trending NFTs',
+                      ),
+                      
+                      // Mint NFTs Tab
+                      _buildNFTTabContent(
+                        nftItems: nftItems, 
+                        isGridView: _isGridView,
+                        title: 'Mint NFTs',
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             
-            // Tab content
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  // Top NFTs Tab
-                  _buildNFTTabContent(
-                    nftItems: nftItems, 
-                    isGridView: _isGridView,
-                    title: 'Top NFTs',
-                  ),
-                  
-                  // New NFTs Tab
-                  _buildNFTTabContent(
-                    nftItems: nftItems, 
-                    isGridView: _isGridView,
-                    title: 'New NFTs',
-                  ),
-                  
-                  // Trending NFTs Tab
-                  _buildNFTTabContent(
-                    nftItems: nftItems, 
-                    isGridView: _isGridView,
-                    title: 'Trending NFTs',
-                  ),
-                  
-                  // Mint NFTs Tab
-                  _buildNFTTabContent(
-                    nftItems: nftItems, 
-                    isGridView: _isGridView,
-                    title: 'Mint NFTs',
-                  ),
-                ],
-              ),
+            // Custom Bottom Navigation Bar
+            CustomBottomNavBar(
+              selectedIndex: _selectedNavIndex,
+              onItemTapped: _onNavItemTapped,
             ),
           ],
         ),
@@ -270,22 +289,14 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
   }) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        // Add bottom padding to account for the custom nav bar
+        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 80.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SlideTransition(
-              position: _slideAnimation,
-              child: Column(
-                children: <Widget>[
-                  // We don't need the section title anymore since we have tabs
-                  // But we can show a section-specific card or feature here if needed
-                  NFTGrid(
-                    nftItems: nftItems, 
-                    isGridView: isGridView,
-                  ),
-                ],
-              ),
+            NFTGrid(
+              nftItems: nftItems, 
+              isGridView: isGridView,
             ),
           ],
         ),

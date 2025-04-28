@@ -1,34 +1,48 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
-import '../../../../core/extensions/context_extensions.dart';
+import '../../../shared/presentation/widgets/custom_tab_bar.dart';
+import '../providers/explore_provider.dart';
+import '../widgets/search_bar_toggle_widget.dart';
+import '../widgets/nft_hero_carousel.dart';
 
-class ExploreNFTScreen extends StatefulWidget {
+import '../widgets/nft_grid.dart';
+
+class ExploreNFTScreen extends ConsumerStatefulWidget {
   const ExploreNFTScreen({super.key});
 
   @override
-  State<ExploreNFTScreen> createState() => _ExploreNFTScreenState();
+  ConsumerState<ExploreNFTScreen> createState() => _ExploreNFTScreenState();
 }
 
-class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerProviderStateMixin {
-  final TextEditingController _searchConroller = TextEditingController();
+class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with TickerProviderStateMixin {
+  final TextEditingController _searchController = TextEditingController();
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
   late Animation<Offset> _slideAnimation2;
-
+  late TabController _tabController;
+  bool _isGridView = true; // Track if view is grid or list
+  
   @override
   void initState() {
     super.initState();
+
+    _searchController.addListener(_onSearchChanged);
+    
+    _tabController = TabController(
+      length: 4,
+      vsync: this,
+    );
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    
+
     _slideAnimation2 = TweenSequence<Offset>(<TweenSequenceItem<Offset>>[
       TweenSequenceItem(
         tween: Tween<Offset>(
@@ -76,20 +90,57 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
         weight: 20,
       ),
     ]).animate(_animationController);
-    
+
     _animationController.forward();
+  }
+
+  void _onSearchChanged() {
+    ref.read(exploreNotifierProvider.notifier).searchTokens(_searchController.text);
+  }
+
+  void _toggleViewMode() {
+    setState(() {
+      _isGridView = !_isGridView;
+    });
   }
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _animationController.dispose();
-    _searchConroller.dispose();
+    _searchController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-      backgroundColor: const Color(0xfff4f4f6),
+  Widget build(BuildContext context) {
+    final exploreState = ref.watch(exploreNotifierProvider);
+    final List<Map<String, String>> nftItems = [
+      {
+        'imageUrl': 'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
+        'name': 'Cyberpunk kid #6823',
+        'price': '0.0APT',
+      },
+      {
+        'imageUrl': 'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
+        'name': 'Cyberpunk kid #6823',
+        'price': '0.0APT',
+      },
+      {
+        'imageUrl': 'https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000',
+        'name': 'Cyberpunk kid #6823',
+        'price': '0.0APT',
+      },
+      {
+        'imageUrl': 'https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000',
+        'name': 'Cyberpunk kid #6823',
+        'price': '0.0APT',
+      },
+    ];
+
+    return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -101,298 +152,144 @@ class _ExploreNFTScreenState extends State<ExploreNFTScreen> with SingleTickerPr
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  height: 48.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(58.r),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Gap(16.w),
-                      Icon(
-                        PhosphorIconsBold.magnifyingGlass,
-                        color: AppColors.greyMedium,
-                        size: 18.sp,
-                      ),
-                      Gap(8.w),
+        child: Column(
+          children: <Widget>[
+            SearchBarToggleWidget(
+              searchController: _searchController,
+              exploreState: exploreState,
+            ),
+            const NFTHeroCarousel(),
+            
+            // Custom Tab Bar with trailing action buttons
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Row(
+                    children: [
+                      // Tab Bar
                       Expanded(
-                        child: TextField(
-                          controller: _searchConroller,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Search or paste URL',
-                            hintStyle: TextStyle(
-                              color: AppColors.greyMedium,
-                              fontSize: 14.sp,
-                            ),
-                          ),
+                        child: CustomTabBar(
+                          tabController: _tabController,
+                          tabs: const ['Top', 'New', 'Trending', 'Mint'],
+                          isScrollable: true,
+                          withPositionedIndicator: false,
                         ),
                       ),
-                      Icon(
-                        PhosphorIconsBold.cards,
-                        color: AppColors.greyMedium,
-                        size: 18.sp,
+                      
+                      // Action buttons
+                      Row(
+                        children: [
+                          // Filter icon
+                          IconButton(
+                            icon: Icon(
+                              PhosphorIcons.funnelSimple(),
+                              size: 22.sp,
+                              color: AppColors.greyDark,
+                            ),
+                            onPressed: () {
+                              // Implement filter functionality
+                            },
+                          ),
+                          
+                          // Grid/List view toggle
+                          IconButton(
+                            icon: Icon(
+                              _isGridView 
+                                ? PhosphorIcons.squaresFour()
+                                : PhosphorIcons.rows(),
+                              size: 22.sp,
+                              color: AppColors.greyDark,
+                            ),
+                            onPressed: _toggleViewMode,
+                          ),
+                        ],
                       ),
-                      Gap(16.w),
                     ],
                   ),
-                ),
-                Gap(16.h),
-
-                Text(
-                  'Minting now',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
+                  
+                  // Bottom divider
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      width: 350.w,
+                      height: 1,
+                      color: AppColors.greyVeryLight,
+                    ),
                   ),
-                ),
-                SlideTransition(
-                  position: _slideAnimation2,
-                  child: _buildMintingBanner(context),
-                ),
-                SlideTransition(
-                  position: _slideAnimation,
-                  child: Column(
-                    children: <Widget>[
-                      _buildCategoryHeader('Top NFTs', (){}),
-                      Gap(4.h),
-                      _buildNFTSGrid(context),
-                    ],
-                  ),
-                ),
-                
-                Gap(8.h),
-                _buildCategoryHeader('Top Volume', (){}),
-                Gap(4.h),
-                _buildNFTSGrid(context),
-
-                Gap(8.h),
-                _buildCategoryHeader('Highest gainers', (){}),
-                Gap(4.h),
-                _buildNFTSGrid(context),
-              ],
+                ],
+              ),
             ),
-          ),
+            
+            // Tab content
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  // Top NFTs Tab
+                  _buildNFTTabContent(
+                    nftItems: nftItems, 
+                    isGridView: _isGridView,
+                    title: 'Top NFTs',
+                  ),
+                  
+                  // New NFTs Tab
+                  _buildNFTTabContent(
+                    nftItems: nftItems, 
+                    isGridView: _isGridView,
+                    title: 'New NFTs',
+                  ),
+                  
+                  // Trending NFTs Tab
+                  _buildNFTTabContent(
+                    nftItems: nftItems, 
+                    isGridView: _isGridView,
+                    title: 'Trending NFTs',
+                  ),
+                  
+                  // Mint NFTs Tab
+                  _buildNFTTabContent(
+                    nftItems: nftItems, 
+                    isGridView: _isGridView,
+                    title: 'Mint NFTs',
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
-    );
-
-  Widget _buildMintingBanner(BuildContext context) {
-    final double height = context.screenHeight;
-    final double width = context.screenWidth;
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 12.h),
-      height: height * .28,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18.r),
-        color: Colors.grey,
-      ),
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            right: 16.w,
-            top: 22.h,
-            child: Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.r),
-                  color: AppColors.white.withValues(alpha: .2),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Icon(PhosphorIconsFill.sparkle, color: AppColors.green, size: 18.sp),
-                    Gap(2.w),
-                    Text(
-                      'Minting',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  ],
-                ),),
-          ),
-          Positioned(
-            bottom: 22.h,
-            left: 22.w,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: width * .11,
-                  height: width * .11,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.r), color: AppColors.white),
-                ),
-                Gap(4.h),
-                Text('Get Minecrafts', style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.white,
-                ),),
-                Gap(6.h),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text('By Jerrold', style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
-                    ),
-                    Gap(3.w),
-                    Icon(PhosphorIconsFill.sealCheck, color: AppColors.white, size: 24.sp),
-                  ],
-                ), 
-                Text('Open edition 0.22APT', style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),),
-            
-              ],
-            ),
-          ),
-          Positioned(
-            right: 16.w,
-            bottom: 22.h,
-            child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.r),
-                  color: AppColors.black,
-                ),
-                child: Text(
-                      'View Drop',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.white,
-                      ),
-                    ),),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCategoryHeader(String title, VoidCallback onTap) => Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          GestureDetector(
-            onTap: onTap,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  'See all',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: AppColors.blue,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Icon(PhosphorIcons.caretRight(), color: AppColors.blue, size: 18.sp),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-
-  Widget _buildNFTSGrid(BuildContext context) {
-    final List<String> nftImages = <String>[
-      'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
-      'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
-      'https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000',
-      'https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000',
-    ];
-    final double width = context.screenWidth;
-    final double height = context.screenHeight;
-    return SizedBox(
-      height: height * .285 * 2,
-      child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 4.h,
-                crossAxisSpacing: 4.w,
-                mainAxisExtent: height * .285,
-              ),
-              itemCount: nftImages.length,
-              itemBuilder: (BuildContext context, int index) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      _getNftAsset(
-                          context: context,
-                          imageUrl: nftImages[index],
-                          ),
-                      Gap(6.h),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: width / 3),
-                        child: Text(
-                          'Cyberpunk kid #6823',
-                          style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.greyDark,),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Gap(3.h),
-                      Text('0.0APT',
-                          style: TextStyle(
-                              fontSize: 16.sp, fontWeight: FontWeight.w500,),),
-                    ],
-                  ),
-                ),
-            ),
     );
   }
   
-  Widget _getNftAsset(
-      {required BuildContext context,
-      required String? imageUrl,}) {
-    final double width = context.screenWidth;
-    if (imageUrl == null) {
-      return CircleAvatar(radius: 22.r, backgroundColor: Colors.amber);
-    } else {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12.r),
-        child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          width: width * .5,
-          height: width * .45,
-          imageUrl: imageUrl,
-          errorWidget: (BuildContext ctx, String str, Object obj) => Container(color: Colors.amber),
-          progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-              CircularProgressIndicator(strokeWidth: 2.w),
+  Widget _buildNFTTabContent({
+    required List<Map<String, String>> nftItems,
+    required bool isGridView,
+    required String title,
+  }) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SlideTransition(
+              position: _slideAnimation,
+              child: Column(
+                children: <Widget>[
+                  // We don't need the section title anymore since we have tabs
+                  // But we can show a section-specific card or feature here if needed
+                  NFTGrid(
+                    nftItems: nftItems, 
+                    isGridView: isGridView,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 }

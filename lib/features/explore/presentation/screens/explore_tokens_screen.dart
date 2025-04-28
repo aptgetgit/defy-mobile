@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../shared/presentation/widgets/custom_tab_bar.dart';
 import '../providers/explore_provider.dart';
 
-import '../providers/explore_state.dart';
 import '../widgets/token_card_widgets.dart';
 import '../widgets/token_list_widget.dart';
-
+import '../widgets/search_bar_toggle_widget.dart';
 
 class ExploreTokensScreen extends ConsumerStatefulWidget {
   const ExploreTokensScreen({super.key});
@@ -133,8 +131,11 @@ class _ExploreTokensScreenState extends ConsumerState<ExploreTokensScreen> with 
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            // Search bar with toggle button
-            _buildSearchBarAndToggle(exploreState),
+            // Search bar with toggle button - Now using the extracted widget
+            SearchBarToggleWidget(
+              searchController: _searchController,
+              exploreState: exploreState,
+            ),
 
             // Hot Emoji Card Section
             Padding(
@@ -210,107 +211,4 @@ class _ExploreTokensScreenState extends ConsumerState<ExploreTokensScreen> with 
       ),
     );
   }
-
-  Widget _buildSearchBarAndToggle(ExploreState exploreState) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      child: Row(
-        children: <Widget>[
-          // Search Bar
-          Expanded(
-            child: Container(
-              height: 48.h,
-              decoration: BoxDecoration(
-                color: const Color(0xfff4f4f6),
-                borderRadius: BorderRadius.circular(58.r),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Gap(16.w),
-                  Icon(
-                    PhosphorIconsBold.magnifyingGlass,
-                    color: AppColors.greyMedium,
-                    size: 18.sp,
-                  ),
-                  Gap(8.w),
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search or paste URL',
-                        hintStyle: TextStyle(
-                          color: AppColors.greyMedium,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    PhosphorIconsBold.cards,
-                    color: AppColors.greyMedium,
-                    size: 18.sp,
-                  ),
-                  Gap(16.w),
-                ],
-              ),
-            ),
-          ),
-
-          // Custom Toggle Button with Label
-          Gap(8.w),
-          GestureDetector(
-            onTap: () {
-              ref.read(exploreNotifierProvider.notifier).toggleRocketMode();
-              // Don't recreate here - will be handled by didChangeDependencies
-            },
-            child: Column(
-              children: <Widget>[
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: 46.w,
-                  height: 26.h,
-                  decoration: BoxDecoration(
-                    color: exploreState.isToggled ? Colors.orange : AppColors.greyMedium,
-                    borderRadius: BorderRadius.circular(50.r),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.grey.withAlpha(51),
-                        spreadRadius: -2.r,
-                        offset: Offset(0, 2.h),
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  child: Align(
-                    alignment: exploreState.isToggled ? Alignment.centerRight : Alignment.centerLeft,
-                    child: Container(
-                      width: 22.w,
-                      height: 22.h,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                ),
-                Gap(2.h),
-                Text(
-                  '🚀 mode',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.orangeAccent,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
 }

@@ -11,6 +11,7 @@ import '../widgets/search_bar_toggle_widget.dart';
 import '../widgets/nft_hero_carousel.dart';
 import '../widgets/nft_grid.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
+import 'cart_screen.dart';
 
 class ExploreNFTScreen extends ConsumerStatefulWidget {
   const ExploreNFTScreen({super.key});
@@ -109,7 +110,17 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
     setState(() {
       _selectedNavIndex = index;
     });
-    // Here you can implement navigation or screen changes based on the selected index
+    
+    // Navigate based on the selected index
+    if (index == 1) { // Cart index
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CartScreen(),
+        ),
+      );
+    }
+    // Add other navigation options as needed
   }
 
   @override

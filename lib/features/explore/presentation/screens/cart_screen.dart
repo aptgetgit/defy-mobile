@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+
 
 import '../../../../config/theme/colors.dart';
 
@@ -391,17 +391,31 @@ class _CartItemTileState extends State<CartItemTile> with SingleTickerProviderSt
     if (widget.deleteMode) {
       _controller.value = 1.0;
     }
+    
+    // If item is already selected, set the animation value
+    if (widget.isSelected) {
+      _controller.value = 1.0;
+    }
   }
 
   @override
   void didUpdateWidget(CartItemTile oldWidget) {
     super.didUpdateWidget(oldWidget);
     
-    // Only handle animation when the MODE changes, not individual tile changes
+    // Handle animation when the MODE changes
     if (oldWidget.deleteMode != widget.deleteMode) {
       _globalDeleteMode = widget.deleteMode;
       
       if (widget.deleteMode) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    }
+    
+    // Handle animation when item selection changes
+    if (oldWidget.isSelected != widget.isSelected) {
+      if (widget.isSelected) {
         _controller.forward();
       } else {
         _controller.reverse();
@@ -451,7 +465,8 @@ class _CartItemTileState extends State<CartItemTile> with SingleTickerProviderSt
               // NFT Details
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
@@ -475,33 +490,38 @@ class _CartItemTileState extends State<CartItemTile> with SingleTickerProviderSt
               ),
               
               // Increase the gap between NFT details and price info
-              Gap(36.w),
+              const Spacer(),
               
               // Price info
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    widget.itemData['usdValue']!,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: widget.isSelected || widget.deleteMode ? null : 100.w,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      widget.itemData['usdValue']!,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                 Gap(4.h),
-                  Text(
-                    widget.itemData['price']!,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.greyLight,
+                   Gap(4.h),
+                    Text(
+                      widget.itemData['price']!,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.greyLight,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               
-              Gap(12.w),
+            
               
               // Selection/delete icon with slide animation
               if (widget.deleteMode)
@@ -522,25 +542,29 @@ class _CartItemTileState extends State<CartItemTile> with SingleTickerProviderSt
                   ),
                 )
               else
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: widget.isSelected ? 1.0 : 0.0,
-                  child: widget.isSelected
-                    ? Icon(
-                        PhosphorIconsFill.checkCircle,
-                        color: AppColors.blue,
-                        size: 22.sp,
-                      ).animate().slideX(
-                        duration: const Duration(milliseconds: 300), 
-                        begin: 0.5, 
-                        end: 0,
-                        curve: Curves.easeOutQuad
-                      )
-                    : Icon(
-                        PhosphorIconsFill.checkCircle,
-                        color: AppColors.blue.withOpacity(0),
-                        size: 22.sp,
-                      ),
+                SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1, 0),
+                    end: Offset.zero,
+                  ).animate(CurvedAnimation(
+                    parent: _controller,
+                    curve: Curves.easeOutQuad,
+                  )),
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 200),
+                    opacity: widget.isSelected ? 1.0 : 0.0,
+                    child: widget.isSelected
+                      ? Icon(
+                          PhosphorIconsFill.checkCircle,
+                          color: AppColors.blue,
+                          size: 22.sp,
+                        )
+                      : Icon(
+                          PhosphorIconsFill.checkCircle,
+                          color: AppColors.blue.withOpacity(0),
+                          size: 22.sp,
+                        ),
+                  ),
                 ),
             ],
           ),

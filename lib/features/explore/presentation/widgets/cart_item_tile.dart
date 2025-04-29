@@ -108,18 +108,21 @@ class _CartItemTileState extends State<CartItemTile> with SingleTickerProviderSt
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
           child: Row(
             children: <Widget>[
-              // NFT Image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.r),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  width: 44.w,
-                  height: 44.h,
-                  imageUrl: widget.itemData['imageUrl']!,
-                  errorWidget: (BuildContext ctx, String str, Object obj) =>
-                      Container(color: Colors.amber),
-                  progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                      CircularProgressIndicator(strokeWidth: 2.w),
+              // NFT Image with Hero tag
+              Hero(
+                tag: 'nft_image_${widget.itemData['name']}',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    width: 44.w,
+                    height: 44.h,
+                    imageUrl: widget.itemData['imageUrl']!,
+                    errorWidget: (BuildContext ctx, String str, Object obj) =>
+                        Container(color: Colors.amber),
+                    progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
+                        CircularProgressIndicator(strokeWidth: 2.w),
+                  ),
                 ),
               ),
               

@@ -4,8 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-
 import '../../../../config/theme/colors.dart';
+import 'explore_buy_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -274,7 +274,33 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                             ? null
                             : FilledButton(
                                 onPressed: () {
-                                  // Checkout functionality would go here
+                                  // Only navigate if at least one item is selected
+                                  if (_selectedItems.isNotEmpty) {
+                                    final selectedItemIndex = _selectedItems.first;
+                                    final selectedItem = cartItems[selectedItemIndex];
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ExploreBuyScreen(
+                                          selectedItem: selectedItem,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    // Show a snackbar or dialog to prompt user to select an item
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Please select an item first'),
+                                        duration: const Duration(seconds: 2),
+                                        behavior: SnackBarBehavior.floating,
+                                        margin: EdgeInsets.all(16.w),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8.r),
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 },
                                 style: FilledButton.styleFrom(
                                   backgroundColor: Colors.black,
@@ -434,7 +460,7 @@ class _CartItemTileState extends State<CartItemTile> with SingleTickerProviderSt
     return GestureDetector(
       onTap: widget.onTap,
       child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+        margin: EdgeInsets.only(top: 2.h, bottom: 2.h, left: 20.w, right: 2.w),
         elevation: 0,
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -442,21 +468,24 @@ class _CartItemTileState extends State<CartItemTile> with SingleTickerProviderSt
           side: BorderSide.none,
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
           child: Row(
             children: <Widget>[
-              // NFT Image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.r),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  width: 44.w,
-                  height: 44.h,
-                  imageUrl: widget.itemData['imageUrl']!,
-                  errorWidget: (BuildContext ctx, String str, Object obj) =>
-                      Container(color: Colors.amber),
-                  progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                      CircularProgressIndicator(strokeWidth: 2.w),
+              // NFT Image with Hero tag
+              Hero(
+                tag: 'nft_image_${widget.itemData['name']}',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    width: 44.w,
+                    height: 44.h,
+                    imageUrl: widget.itemData['imageUrl']!,
+                    errorWidget: (BuildContext ctx, String str, Object obj) =>
+                        Container(color: Colors.amber),
+                    progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
+                        CircularProgressIndicator(strokeWidth: 2.w),
+                  ),
                 ),
               ),
               

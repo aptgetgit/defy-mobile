@@ -276,14 +276,21 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                                 onPressed: () {
                                   // Only navigate if at least one item is selected
                                   if (_selectedItems.isNotEmpty) {
-                                    final selectedItemIndex = _selectedItems.first;
-                                    final selectedItem = cartItems[selectedItemIndex];
+                                    // Get the first selected item for the hero animation
+                                    final firstSelectedItemIndex = _selectedItems.first;
+                                    final firstSelectedItem = cartItems[firstSelectedItemIndex];
+                                    
+                                    // Get all selected items for the horizontal swiping
+                                    final List<Map<String, String>> allSelectedItems = _selectedItems
+                                        .map((index) => cartItems[index])
+                                        .toList();
 
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ExploreBuyScreen(
-                                          selectedItem: selectedItem,
+                                          selectedItem: firstSelectedItem, // For the hero animation
+                                          allSelectedItems: allSelectedItems, // For horizontal swiping
                                         ),
                                       ),
                                     );

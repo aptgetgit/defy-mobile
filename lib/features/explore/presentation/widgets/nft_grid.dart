@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../screens/nft_detail_screen.dart';
 import 'nft_grid_item.dart';
 import 'nft_list_item.dart';
 
@@ -36,12 +37,22 @@ class NFTGrid extends StatelessWidget {
           mainAxisExtent: height * .285,
         ),
         itemCount: nftItems.length,
-        itemBuilder: (BuildContext context, int index) => NFTGridItem(
-          imageUrl: nftItems[index]['imageUrl']!,
-          name: nftItems[index]['name']!,
-          price: nftItems[index]['price']!,
-        ),
+        itemBuilder: (BuildContext context, int index) => GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NFTDetailScreen(),
+              ),
+            );
+          },
+          child: NFTGridItem(
+            imageUrl: nftItems[index]['imageUrl']!,
+            name: nftItems[index]['name']!,
+            price: nftItems[index]['price']!,
+          ),
       ),
+    ),
     );
   }
   
@@ -55,10 +66,20 @@ class NFTGrid extends StatelessWidget {
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         itemCount: nftItems.length,
-        itemBuilder: (BuildContext context, int index) => NFTListItem(
-          imageUrl: nftItems[index]['imageUrl']!,
-          name: nftItems[index]['name']!,
-          price: nftItems[index]['price']!,
+         itemBuilder: (BuildContext context, int index) => GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NFTDetailScreen(),
+              ),
+            );
+          },
+          child: NFTListItem(
+            imageUrl: nftItems[index]['imageUrl']!,
+            name: nftItems[index]['name']!,
+            price: nftItems[index]['price']!,
+          ),
         ),
       ),
     );

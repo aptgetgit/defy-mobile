@@ -272,6 +272,113 @@ class _ExploreBuyScreenState extends State<ExploreBuyScreen> {
             ),
         ],
       ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 26.h, top: 20.h),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24.r),
+            topRight: Radius.circular(24.r),
+          ),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 20.r,
+              offset: Offset(0, -4.h),
+            ),
+          ],
+          color: Colors.white,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 4.w), // Add a bit of left padding
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Pay Using",
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/icons/aptos.png',
+                        width: 12.w,
+                        height: 12.h,
+                      ),
+                      Gap(8.w),
+                      Text(
+                        'APT',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Gap(8.w),
+                      Icon(
+                        PhosphorIcons.caretDown(),
+                        size: 16.sp,
+                        color: AppColors.greyLight,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Gap(14.h),
+            Divider(
+              color: AppColors.greyVeryLight,
+              thickness: 1,
+              height: 1,
+            ),
+            Gap(14.h),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // TODO: Implement checkout logic
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(95.w, 48.h),
+                  padding: EdgeInsets.symmetric(vertical: 14.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.r),
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Pay Now',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if ((_items[_currentPage]['price'] ?? '').isNotEmpty) ...[
+                      Gap(10.w),
+                      Text(
+                        _items[_currentPage]['price']!,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

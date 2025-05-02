@@ -845,12 +845,12 @@ Widget _buildMainContent(Size screenSize, double appBarHeight) {
                       const curve = Curves.easeOutCubic;
                       
                       // Create slide-up animation
-                      var slideAnimation = Tween(begin: begin, end: end).animate(
+                      final Animation<Offset> slideAnimation = Tween(begin: begin, end: end).animate(
                         CurvedAnimation(parent: animation, curve: curve),
                       );
                       
                       // Add fade animation
-                      var fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+                      final Animation<double> fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(parent: animation, curve: Curves.easeInOut),
                       );
                       

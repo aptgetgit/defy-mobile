@@ -256,117 +256,115 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                       },
                     ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(26.w, 16.h, 26.w, 12.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: _showDeleteMode ? 0.0 : 1.0,
-                    child: AnimatedSize(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      child: SizedBox(
-                        width: _showDeleteMode ? 0 : 160.w,
-                        height: 56.h,
-                        child: _showDeleteMode
-                            ? null
-                            : FilledButton(
-                                onPressed: () {
-                                  // Only navigate if at least one item is selected
-                                  if (_selectedItems.isNotEmpty) {
-                                    // Get the first selected item for the hero animation
-                                    final firstSelectedItemIndex = _selectedItems.first;
-                                    final firstSelectedItem = cartItems[firstSelectedItemIndex];
-                                    
-                                    // Get all selected items for the horizontal swiping
-                                    final List<Map<String, String>> allSelectedItems = _selectedItems
-                                        .map((index) => cartItems[index])
-                                        .toList();
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 26.h, top: 20.h),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24.r),
+            topRight: Radius.circular(24.r),
+          ),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 20.r,
+              offset: Offset(0, -4.h),
+            ),
+          ],
+          color: Colors.white,
+        ),
+        child: Row(
+          children: [
+            // Checkout button on the left
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Only navigate if at least one item is selected
+                  if (_selectedItems.isNotEmpty) {
+                    final firstSelectedItemIndex = _selectedItems.first;
+                    final firstSelectedItem = cartItems[firstSelectedItemIndex];
+                    final List<Map<String, String>> allSelectedItems = _selectedItems
+                        .map((index) => cartItems[index])
+                        .toList();
 
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ExploreBuyScreen(
-                                          selectedItem: firstSelectedItem, // For the hero animation
-                                          allSelectedItems: allSelectedItems, // For horizontal swiping
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    // Show a snackbar or dialog to prompt user to select an item
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Please select an item first'),
-                                        duration: const Duration(seconds: 2),
-                                        behavior: SnackBarBehavior.floating,
-                                        margin: EdgeInsets.all(16.w),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8.r),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                },
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(32.r),
-                                  ),
-                                  padding: EdgeInsets.symmetric(vertical: 16.h),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      PhosphorIconsRegular.shoppingCart,
-                                      color: Colors.white,
-                                      size: 22.sp,
-                                    ),
-                                    Gap(8.w),
-                                    Text(
-                                      'Checkout',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: AnimatedPadding(
-                      duration: const Duration(milliseconds: 300),
-                      padding: EdgeInsets.only(left: _showDeleteMode ? 0 : 12.w),
-                      child: FilledButton(
-                        onPressed: _toggleDeleteButton,
-                        style: FilledButton.styleFrom(
-                          backgroundColor: _showDeleteMode ? AppColors.black : Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32.r),
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 16.h),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              _showDeleteMode ? 'Cancel' : 'Remove',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.sp,
-                              ),
-                            ),
-                          ],
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExploreBuyScreen(
+                          selectedItem: firstSelectedItem,
+                          allSelectedItems: allSelectedItems,
                         ),
                       ),
-                    ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please select an item first'),
+                        duration: const Duration(seconds: 2),
+                        behavior: SnackBarBehavior.floating,
+                        margin: EdgeInsets.all(16.w),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(95.w, 45.h),
+                  maximumSize: Size(150.w, 48.h),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.r),
                   ),
-                ],
+                  backgroundColor: AppColors.green,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Icon(
+                    //   PhosphorIconsRegular.shoppingCart,
+                    //   color: Colors.white,
+                    //   size: 22.sp,
+                    // ),
+                    // Gap(8.w),
+                    Text(
+                      'Buy Now',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: 12.w),
+            // Remove button on the right
+            Expanded(
+              child: OutlinedButton(
+                onPressed: _toggleDeleteButton,
+                style: OutlinedButton.styleFrom(
+                  minimumSize: Size(95.w, 45.h),
+                  maximumSize: Size(150.w, 48.h),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.r),
+                  ),
+                  side: BorderSide(width: 1.w, color: AppColors.greyLight),
+                  foregroundColor: AppColors.greyLight,
+                ),
+                child: Text(
+                  _showDeleteMode ? 'Cancel' : 'Remove',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.sp,
+                    color: AppColors.greyLight,
+                  ),
+                ),
               ),
             ),
           ],

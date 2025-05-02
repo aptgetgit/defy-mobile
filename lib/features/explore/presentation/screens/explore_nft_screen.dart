@@ -12,6 +12,8 @@ import '../widgets/nft_hero_carousel.dart';
 import '../widgets/nft_grid.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import 'cart_screen.dart';
+import 'explore_order_screen.dart';
+import 'explore_sell_screen.dart';
 
 class ExploreNFTScreen extends ConsumerStatefulWidget {
   const ExploreNFTScreen({super.key});
@@ -119,6 +121,33 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
           builder: (context) => const CartScreen(),
         ),
       );
+    } else if (index == 2) { // Orders index
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ExploreOrderScreen(),
+        ),
+      );
+    }
+
+    else if (index == 3) { // Spins index
+      // Navigate to spins screen
+    }
+    else if (index == 0) { // Sell index
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ExploreSellScreen(),
+      ),
+    );
+    } else if (index == 4) { // Sell index
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CartScreen(),
+        ),
+    );
+      // Navigate to sell screen
     }
     // Add other navigation options as needed
   }

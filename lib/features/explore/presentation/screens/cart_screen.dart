@@ -537,8 +537,8 @@ class _CartItemTileState extends State<CartItemTile> with SingleTickerProviderSt
                     Text(
                       widget.itemData['usdValue']!,
                       style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
                         color: Colors.black,
                       ),
                     ),

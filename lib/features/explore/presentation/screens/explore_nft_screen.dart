@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:gap/gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../shared/presentation/widgets/custom_tab_bar.dart';
+import '../../../wallet/presentation/custom_nav_bar.dart';
 import '../providers/explore_provider.dart';
 import '../widgets/search_bar_toggle_widget.dart';
 import '../widgets/nft_hero_carousel.dart';
-import '../widgets/nft_grid.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
 import 'cart_screen.dart';
 import 'explore_order_screen.dart';
 import 'explore_sell_screen.dart';
+import 'nft_detail_screen.dart';
 
 class ExploreNFTScreen extends ConsumerStatefulWidget {
   const ExploreNFTScreen({super.key});
@@ -30,6 +30,7 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
   late TabController _tabController;
   bool _isGridView = true; // Track if view is grid or list
   int _selectedNavIndex = 0; // Track selected nav item
+  bool _isMoreOptionsSelected = false; // Track if more options are selected
   
   @override
   void initState() {
@@ -152,6 +153,18 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
     // Add other navigation options as needed
   }
 
+  void _onHidePressed() {
+    // Implement hide functionality
+  }
+
+  void _onSortPressed() {
+    // Implement sort functionality
+  }
+
+  void _onWatchlistPressed() {
+    // Implement watchlist functionality
+  }
+
   @override
   void dispose() {
     _searchController.removeListener(_onSearchChanged);
@@ -164,28 +177,6 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
   @override
   Widget build(BuildContext context) {
     final exploreState = ref.watch(exploreNotifierProvider);
-    final List<Map<String, String>> nftItems = [
-      {
-        'imageUrl': 'https://i.seadn.io/gcs/files/3a5633d4f4374535efe8760919229b0e.png?auto=format&dpr=1&w=1000',
-        'name': 'Cyberpunk kid #6823',
-        'price': '0.0APT',
-      },
-      {
-        'imageUrl': 'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
-        'name': 'Cyberpunk kid #6823',
-        'price': '0.0APT',
-      },
-      {
-        'imageUrl': 'https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000',
-        'name': 'Cyberpunk kid #6823',
-        'price': '0.0APT',
-      },
-      {
-        'imageUrl': 'https://i.seadn.io/s/raw/files/3469b206cc467c4d30a30d5fb01c3ed5.png?auto=format&dpr=1&w=1000',
-        'name': 'Cyberpunk kid #6823',
-        'price': '0.0APT',
-      },
-    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -248,8 +239,8 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
                               IconButton(
                                 icon: Icon(
                                   _isGridView 
-                                    ? PhosphorIcons.squaresFour()
-                                    : PhosphorIcons.rows(),
+                                    ? PhosphorIcons.rows()  // Show list icon when in grid view
+                                    : PhosphorIcons.squaresFour(),  // Show grid icon when in list view
                                   size: 22.sp,
                                   color: AppColors.greyDark,
                                 ),
@@ -279,32 +270,16 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
                     controller: _tabController,
                     children: [
                       // Top NFTs Tab
-                      _buildNFTTabContent(
-                        nftItems: nftItems, 
-                        isGridView: _isGridView,
-                        title: 'Top NFTs',
-                      ),
+                      _buildItemsTabContent(),
                       
                       // New NFTs Tab
-                      _buildNFTTabContent(
-                        nftItems: nftItems, 
-                        isGridView: _isGridView,
-                        title: 'New NFTs',
-                      ),
+                      _buildItemsTabContent(),
                       
                       // Trending NFTs Tab
-                      _buildNFTTabContent(
-                        nftItems: nftItems, 
-                        isGridView: _isGridView,
-                        title: 'Trending NFTs',
-                      ),
+                      _buildItemsTabContent(),
                       
                       // Mint NFTs Tab
-                      _buildNFTTabContent(
-                        nftItems: nftItems, 
-                        isGridView: _isGridView,
-                        title: 'Mint NFTs',
-                      ),
+                      _buildItemsTabContent(),
                     ],
                   ),
                 ),
@@ -312,9 +287,14 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
             ),
             
             // Custom Bottom Navigation Bar
-            CustomBottomNavBar(
-              selectedIndex: _selectedNavIndex,
-              onItemTapped: _onNavItemTapped,
+            CustomNavBar(
+              pageIndex: _selectedNavIndex,
+              onTabChange: _onNavItemTapped,
+              isMoreOptionsSelected: _isMoreOptionsSelected,
+              onHidePressed: _onHidePressed,
+              onSortPressed: _onSortPressed,
+              onWatchlistPressed: _onWatchlistPressed,
+              isNFTExplore: true, // <--- This flag switches the nav bar layout!
             ),
           ],
         ),
@@ -322,25 +302,262 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
     );
   }
   
-  Widget _buildNFTTabContent({
-    required List<Map<String, String>> nftItems,
-    required bool isGridView,
-    required String title,
-  }) {
-    return SingleChildScrollView(
-      child: Padding(
-        // Add bottom padding to account for the custom nav bar
-        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 80.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            NFTGrid(
-              nftItems: nftItems, 
-              isGridView: isGridView,
+  Widget _buildItemsTabContent() {
+    final List<NFTItemData> nftItems = List.generate(
+      6, 
+      (index) => NFTItemData(
+        id: 'NFT #${index + 1}',
+        imageUrl: 'assets/images/nft_image1.png',
+        price: '0.${(index + 1) * 5} ETH',
+      ),
+    );
+    
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+      child: _isGridView
+          ? GridView.builder(
+              padding: EdgeInsets.only(top: 16.h),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 20.w,
+                mainAxisSpacing: 2.h,
+                mainAxisExtent: 250.h,
+              ),
+              itemCount: nftItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                final NFTItemData nft = nftItems[index];
+                return NFTItemCard(
+                  nft: nft,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NFTDetailScreen()),
+                    );
+                  },
+                );
+              },
+            )
+          : ListView.builder(
+              padding: EdgeInsets.only(top: 16.h),
+              itemCount: nftItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                final NFTItemData nft = nftItems[index];
+                return NFTListItem(
+                  imageUrl: nft.imageUrl,
+                  name: nft.id,
+                  price: nft.price,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NFTDetailScreen()),
+                    );
+                  },
+                );
+              },
             ),
-          ],
+    );
+  }
+}
+
+class NFTItemCard extends StatelessWidget {
+  const NFTItemCard({
+    required this.nft,
+    this.onTap,
+    super.key,
+  });
+
+  final NFTItemData nft;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap ?? () {
+      print('Tapped on NFT: ${nft.id}');
+    },
+    child: Column(
+      children: <Widget>[
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16.r),
+          child: Image.asset(
+            nft.imageUrl,
+            width: 168.h,
+            height: 168.h, // <--- Updated height to match the width
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: 168.h,
+                height: 168.h,
+                color: Colors.grey[300],
+                child: Center(
+                  child: Icon(
+                    Icons.image_not_supported,
+                    color: Colors.grey[500],
+                    size: 40.r,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 4.w),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  nft.id,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.black,
+                  ),
+                ),
+                Gap(4.h),
+                Text(
+                  nft.price,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: AppColors.greyLight,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class NFTListItem extends StatelessWidget {
+  final String imageUrl;
+  final String name;
+  final String price;
+  final VoidCallback? onTap;
+
+  const NFTListItem({
+    Key? key,
+    required this.imageUrl,
+    required this.name,
+    required this.price,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        margin: EdgeInsets.symmetric(vertical: 2.h),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+          child: Row(
+            children: <Widget>[
+              // NFT Image with rounded rectangle
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.r),
+                child: Image.asset(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  width: 44.w,
+                  height: 44.h,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 44.w,
+                      height: 44.h,
+                      color: Colors.grey[300],
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey[500],
+                        size: 20.r,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              
+              SizedBox(width: 16.w),
+              
+              // NFT Details - explicitly set to start at the leading edge
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // Ensures left alignment
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      price,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.greyLight,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              // Right side - Price information with trailing decoration
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    price,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.arrow_drop_up,
+                        color: Colors.green,
+                        size: 16.sp,
+                      ),
+                      Text(
+                        '2.4%',  // Example percentage
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+class NFTItemData {
+  final String id;
+  final String imageUrl;
+  final String price;
+
+  NFTItemData({
+    required this.id,
+    required this.imageUrl,
+    required this.price,
+  });
 }

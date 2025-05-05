@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -291,11 +291,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with SingleTicker
   Widget _buildNFTs(BuildContext context) {
     final Animation<Offset> slideAnimation2 = slideAnimation(begin: Offset.zero, end: const Offset(1, -0.3));
     final double width = context.screenWidth;
-    final List<String> nftImages = <String>[
-      'https://i.seadn.io/s/raw/files/10ccabdfb75f075c6a86e80c2c8ab33b.png?auto=format&dpr=1&w=1000',
-      'https://i.seadn.io/s/raw/files/96008751ea35fab46c85f688f521054b.png?auto=format&dpr=1&w=1000',
-      'https://i.seadn.io/s/raw/files/6e8b6e53ca87016580ec4bb58a66466a.png?auto=format&dpr=1&w=1000',
-    ];
+    final double imageSize = width * 0.35; // Square size
 
     return SlideTransition(
       position: slideAnimation2,
@@ -313,40 +309,32 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with SingleTicker
                   angle: -math.pi / 14,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.r),
-                    child: CachedNetworkImage(
-                      width: width * 0.3,
-                      height: width * 0.45,
-                      imageUrl: nftImages[0],
-                      errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
-                      progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                          CircularProgressIndicator(strokeWidth: 2.w),
+                    child: Image.asset(
+                      'assets/images/nft_image1.png',
+                      width: imageSize * 0.85,
+                      height: imageSize * 0.85,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16.r),
-                  child: CachedNetworkImage(
-                    width: width * 0.35,
-                    height: width * 0.4,
-                    imageUrl: nftImages[1],
+                  child: Image.asset(
+                    'assets/images/nft_image1.png',
+                    width: imageSize,
+                    height: imageSize,
                     fit: BoxFit.cover,
-                    errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
-                    progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                        CircularProgressIndicator(strokeWidth: 2.w),
                   ),
                 ),
                 Transform.rotate(
                   angle: math.pi / 14,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.r),
-                    child: CachedNetworkImage(
-                      width: width * 0.35,
-                      height: width * 0.4,
-                      imageUrl: nftImages[2],
+                    child: Image.asset(
+                      'assets/images/nft_image1.png',
+                      width: imageSize,
+                      height: imageSize,
                       fit: BoxFit.cover,
-                      errorWidget: (BuildContext ctx, String str, Object obg) => Container(color: Colors.amber),
-                      progressIndicatorBuilder: (BuildContext ctx, String str, DownloadProgress download) =>
-                        CircularProgressIndicator(strokeWidth: 2.w),
                     ),
                   ),
                 ),

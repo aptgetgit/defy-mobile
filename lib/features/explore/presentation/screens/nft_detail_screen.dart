@@ -112,14 +112,14 @@ class _NFTDetailScreenState extends State<NFTDetailScreen> with TickerProviderSt
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
+                                  const Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      const Text(
+                                      Text(
                                         'NFT Title',
                                         style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ],
@@ -153,7 +153,7 @@ class _NFTDetailScreenState extends State<NFTDetailScreen> with TickerProviderSt
                               ),
                             ),
                             Row(
-                              children: [
+                              children: <Widget>[
                                 IconButton(
                                   icon: const Icon(Icons.star_border, size: 24, color: AppColors.greyDark),
                                   onPressed: () {},
@@ -169,20 +169,20 @@ class _NFTDetailScreenState extends State<NFTDetailScreen> with TickerProviderSt
                         Gap(16.h),
                         RichText(
                           text: const TextSpan(
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 14),
                             children: [
                               TextSpan(
                                 text: 'Description of the NFT goes here. You can add more details about ',
-                                style: TextStyle(color: Colors.grey),
+                                style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400, fontSize: 16),
                               ),
                               TextSpan(
                                 text: 'more',
-                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16),
                               ),
                             ],
                           ),
                         ),
-                        Gap(16.h),
+                        
                         Transform.translate(
                           offset: Offset(0, -30.h),
                           child: GridView.count(
@@ -218,30 +218,36 @@ class _NFTDetailScreenState extends State<NFTDetailScreen> with TickerProviderSt
                             ],
                           ),
                         ),
-                        CustomTabBar(
-                          tabController: _tabController,
-                          tabs: const ['Items', 'Activity', 'Analytics'],
-                          withPositionedIndicator: true,
+                        Transform.translate(
+                          offset: Offset(0, -30.h),
+                          child: CustomTabBar(
+                            tabController: _tabController,
+                            tabs: const ['Items', 'Activity', 'Analytics'],
+                            withPositionedIndicator: true,
+                          ),
                         ),
-                        SizedBox(
-                          height: 550.h,
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: [
-                              _buildItemsTabContent(),
-                              Center(
-                                child: Text(
-                                  'Activity content goes here',
-                                  style: TextStyle(color: Colors.grey),
+                        Transform.translate(
+                          offset: Offset(0, -30.h),
+                          child: SizedBox(
+                            height: 550.h,
+                            child: TabBarView(
+                              controller: _tabController,
+                              children: [
+                                _buildItemsTabContent(),
+                                Center(
+                                  child: Text(
+                                    'Activity content goes here',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
                                 ),
-                              ),
-                              Center(
-                                child: Text(
-                                  'Analytics content goes here',
-                                  style: TextStyle(color: Colors.grey),
+                                Center(
+                                  child: Text(
+                                    'Analytics content goes here',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -312,7 +318,7 @@ class _NFTDetailScreenState extends State<NFTDetailScreen> with TickerProviderSt
               value,
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
             ),
@@ -320,6 +326,7 @@ class _NFTDetailScreenState extends State<NFTDetailScreen> with TickerProviderSt
               label,
               style: const TextStyle(
                 fontSize: 14,
+                fontWeight: FontWeight.w400,
                 color: Colors.grey,
               ),
             ),
@@ -361,8 +368,8 @@ class NFTItemCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           child: Image.asset(
             nft.imageUrl,
-            width: 180.h,
-            height: 180.h,
+            width: 168.h,
+            height: 168.h,
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
               return Container(

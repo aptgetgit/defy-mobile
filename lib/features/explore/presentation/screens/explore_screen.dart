@@ -317,13 +317,16 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with SingleTicker
                     ),
                   ),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16.r),
-                  child: Image.asset(
-                    'assets/images/nft_image1.png',
-                    width: imageSize,
-                    height: imageSize,
-                    fit: BoxFit.cover,
+                Hero(
+                  tag: 'nft-hero-image',
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16.r),
+                    child: Image.asset(
+                      'assets/images/nft_image1.png',
+                      width: imageSize,
+                      height: imageSize,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Transform.rotate(

@@ -328,6 +328,7 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
                 final NFTItemData nft = nftItems[index];
                 return NFTItemCard(
                   nft: nft,
+                  heroTag: index == 0 ? 'nft-hero-image' : null, // Only first item gets the hero tag
                   onTap: () {
                     Navigator.push(
                       context,
@@ -363,11 +364,13 @@ class NFTItemCard extends StatelessWidget {
   const NFTItemCard({
     required this.nft,
     this.onTap,
+    this.heroTag,
     super.key,
   });
 
   final NFTItemData nft;
   final VoidCallback? onTap;
+  final String? heroTag;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -376,29 +379,56 @@ class NFTItemCard extends StatelessWidget {
     },
     child: Column(
       children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16.r),
-          child: Image.asset(
-            nft.imageUrl,
-            width: 168.h,
-            height: 168.h, // <--- Updated height to match the width
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                width: 168.h,
-                height: 168.h,
-                color: Colors.grey[300],
-                child: Center(
-                  child: Icon(
-                    Icons.image_not_supported,
-                    color: Colors.grey[500],
-                    size: 40.r,
+        heroTag != null
+            ? Hero(
+                tag: heroTag!,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16.r),
+                  child: Image.asset(
+                    nft.imageUrl,
+                    width: 168.h,
+                    height: 168.h,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 168.h,
+                        height: 168.h,
+                        color: Colors.grey[300],
+                        child: Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey[500],
+                            size: 40.r,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              );
-            },
-          ),
-        ),
+              )
+            : ClipRRect(
+                borderRadius: BorderRadius.circular(16.r),
+                child: Image.asset(
+                  nft.imageUrl,
+                  width: 168.h,
+                  height: 168.h,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 168.h,
+                      height: 168.h,
+                      color: Colors.grey[300],
+                      child: Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: Colors.grey[500],
+                          size: 40.r,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 4.w),
           child: Align(

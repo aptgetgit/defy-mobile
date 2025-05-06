@@ -201,7 +201,7 @@ class ExploreSellScreen extends ConsumerWidget {
         },
       ),
       bottomNavigationBar: Container(
-        height: 140.h, // Increased height to fit two buttons
+        height: 100.h, // Adjust height based on content
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -225,98 +225,123 @@ class ExploreSellScreen extends ConsumerWidget {
             final selectionState = ref.watch(sellSelectionProvider);
             final selectedCount = selectionState.selectedCount;
 
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    if (selectionState.isSelectionMode) {
-                      // Handle continue with selected NFTs
-                      if (selectedCount > 0) {
-                        // Navigate or perform action with selected NFTs
-                        print('Selected $selectedCount NFTs');
-                      }
-                    } else {
-                      // Toggle selection mode
-                      ref.read(sellSelectionProvider.notifier).toggleSelectionMode();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.black,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50.r),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
+            // Show one button initially, two buttons side by side in selection mode
+            if (!selectionState.isSelectionMode) {
+              // Initial state - only show "Select NFT" button
+              return ElevatedButton(
+                onPressed: () {
+                  ref.read(sellSelectionProvider.notifier).toggleSelectionMode();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.black,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.r),
                   ),
-                  child: Text(
-                    selectionState.isSelectionMode
-                      ? selectedCount > 0
-                        ? 'Continue with ${selectedCount} NFT${selectedCount > 1 ? 's' : ''}'
-                        : 'Select NFT'
-                      : 'Select NFT',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  padding: EdgeInsets.symmetric(vertical: 12.h),
+                ),
+                child: Text(
+                  'Select NFT',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                Gap(6.h),
-                ElevatedButton(
-                  onPressed: () {
-                    final selectionState = ref.read(sellSelectionProvider);
-                    final selectedNFTs = <Map<String, dynamic>>[];
+              );
+            } else {
+              // Selection mode - show Sell and List buttons side by side
+              return Row(
+                children: [
+                  // Sell button
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: selectedCount > 0 ? () {
+                        final selectedNFTs = <Map<String, dynamic>>[];
 
-                    // Collect selected NFTs
-                    for (final entry in selectionState.selectedNFTs.entries) {
-                      final collectionIndex = entry.key;
-                      final nftIndexes = entry.value;
-                      final collection = nftCollections[collectionIndex];
-                      for (final nftIndex in nftIndexes) {
-                        final nft = collection.nfts[nftIndex];
-                        selectedNFTs.add({
-                          'id': nft.id,
-                          'price': nft.price,
-                          'imageUrl': nft.imageUrl,
-                        });
-                      }
-                    }
+                        // Collect selected NFTs
+                        for (final entry in selectionState.selectedNFTs.entries) {
+                          final collectionIndex = entry.key;
+                          final nftIndexes = entry.value;
+                          final collection = nftCollections[collectionIndex];
+                          for (final nftIndex in nftIndexes) {
+                            final nft = collection.nfts[nftIndex];
+                            selectedNFTs.add({
+                              'id': nft.id,
+                              'price': nft.price,
+                              'imageUrl': nft.imageUrl,
+                            });
+                          }
+                        }
 
-                    if (selectedNFTs.isNotEmpty) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => NextSellScreen(
-                            selectedNFT: selectedNFTs.first,
-                            allSelectedNFTs: selectedNFTs,
-                          ),
+                        if (selectedNFTs.isNotEmpty) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => NextSellScreen(
+                                selectedNFT: selectedNFTs.first,
+                                allSelectedNFTs: selectedNFTs,
+                              ),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please select at least one NFT to sell')),
+                          );
+                        }
+                      } : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.black,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.r),
                         ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Please select at least one NFT to sell')),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.black, // Use your preferred color
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50.r),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
-                  ),
-                  child: Text(
-                    'Sell',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        // Disable button when no items selected
+                        disabledBackgroundColor: AppColors.black.withOpacity(0.3),
+                      ),
+                      child: Text(
+                        'Sell',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            );
+                  Gap(10.w),
+                  // List button
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: selectedCount > 0 ? () {
+                        // Implement List functionality here
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('List functionality to be implemented')),
+                        );
+                      } : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.black,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.r),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        // Disable button when no items selected
+                        disabledBackgroundColor: AppColors.black.withOpacity(0.3),
+                      ),
+                      child: Text(
+                        'List',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
           },
         ),
       ),

@@ -35,23 +35,26 @@ class BaseScreenWithNav extends ConsumerWidget {
           left: 24.w,
           right: 24.w,
           bottom: MediaQuery.of(context).padding.bottom + 16.h, // Add padding to avoid overlap with system UI
-          child: CustomNavBar(
-            pageIndex: currentIndex,
-            onTabChange: (int index) {
-              print('BaseScreenWithNav: onTabChange called with index=$index');
-              if (index == 1 || index == 2) {
-                if (onTabChange != null) {
-                  onTabChange!(index);
+          child: Hero(
+            tag: 'bottom-nav-bar-hero',
+            child: CustomNavBar(
+              pageIndex: currentIndex,
+              onTabChange: (int index) {
+                print('BaseScreenWithNav: onTabChange called with index=$index');
+                if (index == 1 || index == 2) {
+                  if (onTabChange != null) {
+                    onTabChange!(index);
+                  }
+                } else if (index == 3 && onMoreOptionsChanged != null) {
+                  print('Toggling more options: $isMoreOptionsSelected -> ${!isMoreOptionsSelected}');
+                  onMoreOptionsChanged!(!isMoreOptionsSelected);
                 }
-              } else if (index == 3 && onMoreOptionsChanged != null) {
-                print('Toggling more options: $isMoreOptionsSelected -> ${!isMoreOptionsSelected}');
-                onMoreOptionsChanged!(!isMoreOptionsSelected);
-              }
-            },
-            isMoreOptionsSelected: isMoreOptionsSelected,
-            onHidePressed: onHidePressed ?? () {},
-            onSortPressed: onSortPressed ?? () {},
-            onWatchlistPressed: onWatchlistPressed ?? () {},
+              },
+              isMoreOptionsSelected: isMoreOptionsSelected,
+              onHidePressed: onHidePressed ?? () {},
+              onSortPressed: onSortPressed ?? () {},
+              onWatchlistPressed: onWatchlistPressed ?? () {},
+            ),
           ),
         ),
       ],

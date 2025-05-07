@@ -77,8 +77,8 @@ class _NextSellScreenState extends State<NextSellScreen> {
                               border: Border.all(color: Colors.white, width: 1.w),
                               image: DecorationImage(
                                 image: _items[i]['imageUrl'].toString().startsWith('http')
-                                    ? NetworkImage(_items[i]['imageUrl'])
-                                    : AssetImage(_items[i]['imageUrl']) as ImageProvider,
+                                    ? NetworkImage(_items[i]['imageUrl'].toString())
+                                    : AssetImage(_items[i]['imageUrl'].toString()) as ImageProvider,
                                 fit: BoxFit.cover,
                               ),
                             ),

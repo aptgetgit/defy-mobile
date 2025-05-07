@@ -6,8 +6,9 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../shared/presentation/widgets/custom_tab_bar.dart';
-import '../../../wallet/presentation/custom_nav_bar.dart';
+
 import '../providers/explore_provider.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 import '../widgets/search_bar_toggle_widget.dart';
 import '../widgets/nft_hero_carousel.dart';
 import 'cart_screen.dart';
@@ -286,15 +287,12 @@ class _ExploreNFTScreenState extends ConsumerState<ExploreNFTScreen> with Ticker
               ],
             ),
             
-            // Custom Bottom Navigation Bar
-            CustomNavBar(
-              pageIndex: _selectedNavIndex,
-              onTabChange: _onNavItemTapped,
-              isMoreOptionsSelected: _isMoreOptionsSelected,
-              onHidePressed: _onHidePressed,
-              onSortPressed: _onSortPressed,
-              onWatchlistPressed: _onWatchlistPressed,
-              isNFTExplore: true, // <--- This flag switches the nav bar layout!
+            Hero(
+              tag: 'bottom-nav-bar-hero',
+              child: CustomBottomNavBar(
+                selectedIndex: _selectedNavIndex,
+                onItemTapped: _onNavItemTapped,
+              ),
             ),
           ],
         ),

@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../config/theme/colors.dart';
 import '../../../shared/presentation/widgets/custom_check_box.dart';
 import 'explore_next_sell_screen.dart';
+import 'list_amount_screen.dart';
 
 // Provider to track expanded state of NFT collections
 final expandedCollectionsProvider = StateNotifierProvider<ExpandedCollectionsNotifier, Map<int, bool>>((ref) {
@@ -315,9 +316,37 @@ class ExploreSellScreen extends ConsumerWidget {
                     child: ElevatedButton(
                       onPressed: selectedCount > 0 ? () {
                         // Implement List functionality here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('List functionality to be implemented')),
-                        );
+                        final selectedNFTs = <Map<String, dynamic>>[];
+
+                        // Collect selected NFTs
+                        for (final entry in selectionState.selectedNFTs.entries) {
+                          final collectionIndex = entry.key;
+                          final nftIndexes = entry.value;
+                          final collection = nftCollections[collectionIndex];
+                          for (final nftIndex in nftIndexes) {
+                            final nft = collection.nfts[nftIndex];
+                            selectedNFTs.add({
+                              'id': nft.id,
+                              'price': nft.price,
+                              'imageUrl': nft.imageUrl,
+                            });
+                          }
+                        }
+
+                        if (selectedNFTs.isNotEmpty) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ListAmountScreen(
+                                itemData: selectedNFTs.first,
+                                selectedItems: selectedNFTs,
+                              ),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please select at least one NFT to list')),
+                          );
+                        }
                       } : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.black,

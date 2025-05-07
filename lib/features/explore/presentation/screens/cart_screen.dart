@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../config/theme/colors.dart';
 import 'bid_amount_screen.dart';
 import 'explore_buy_screen.dart';
+import 'new_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -182,60 +183,12 @@ class _CartScreenState extends State<CartScreen> {
           ],
           color: Colors.white,
         ),
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Checkout button on the left
-            Expanded(
+            SizedBox(
+              width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExploreBuyScreen(
-                        selectedItem: cartItems[0],
-                        allSelectedItems: cartItems,
-                      ),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(95.w, 45.h),
-                  maximumSize: Size(150.w, 48.h),
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24.r),
-                  ),
-                  backgroundColor: AppColors.green,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Buy Now',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(width: 12.w),
-            // Bid button on the right
-            Expanded(
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(95.w, 45.h),
-                  maximumSize: Size(150.w, 48.h),
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24.r),
-                  ),
-                  side: BorderSide(width: 1.w, color: AppColors.blue),
-                  foregroundColor: AppColors.blue,
-                ),
                 onPressed: () {
                   // Find all selected items
                   final List<Map<String, String>> selectedItems = cartItems
@@ -245,39 +198,129 @@ class _CartScreenState extends State<CartScreen> {
                       .map((entry) => entry.value)
                       .toList();
 
-                  if (selectedItems.isNotEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BidAmountScreen(
-                          itemData: selectedItems.first, // First item for compatibility
-                          selectedItems: selectedItems, // All selected items
-                        ),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Please select an item to bid on'),
-                        duration: const Duration(seconds: 2),
-                        behavior: SnackBarBehavior.floating,
-                        margin: EdgeInsets.all(16.w),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                      ),
-                    );
-                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NewScreen(selectedItems: selectedItems), // Pass selected items
+                    ),
+                  );
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 14.h),
+                ),
                 child: Text(
-                  'Bid',
+                  'New Action',
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
                     fontSize: 16.sp,
-                    color: AppColors.blue,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
+            ),
+            SizedBox(height: 12.h),
+            Row(
+              children: [
+                // Checkout button on the left
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExploreBuyScreen(
+                            selectedItem: cartItems[0],
+                            allSelectedItems: cartItems,
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(95.w, 45.h),
+                      maximumSize: Size(150.w, 48.h),
+                      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24.r),
+                      ),
+                      backgroundColor: AppColors.green,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Buy Now',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                // Bid button on the right
+                Expanded(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(95.w, 45.h),
+                      maximumSize: Size(150.w, 48.h),
+                      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24.r),
+                      ),
+                      side: BorderSide(width: 1.w, color: AppColors.blue),
+                      foregroundColor: AppColors.blue,
+                    ),
+                    onPressed: () {
+                      // Find all selected items
+                      final List<Map<String, String>> selectedItems = cartItems
+                          .asMap()
+                          .entries
+                          .where((entry) => _selectedItems[entry.key])
+                          .map((entry) => entry.value)
+                          .toList();
+
+                      if (selectedItems.isNotEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BidAmountScreen(
+                              itemData: selectedItems.first, // First item for compatibility
+                              selectedItems: selectedItems, // All selected items
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Please select an item to bid on'),
+                            duration: const Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                            margin: EdgeInsets.all(16.w),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: Text(
+                      'Bid',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16.sp,
+                        color: AppColors.blue,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:math'; // Add this import for pi
 
 import '../../../../config/theme/colors.dart';
 
@@ -28,21 +29,12 @@ class _ExploreBuyScreenState extends State<ExploreBuyScreen> {
   @override
   void initState() {
     super.initState();
-    
-    // Initialize items list - use all selected items if provided, otherwise just the single item
     _items = widget.allSelectedItems ?? [widget.selectedItem];
-    
-    // Find the index of the selected item
-    _currentPage = _items.indexWhere((item) => 
-      item['name'] == widget.selectedItem['name'] && 
-      item['imageUrl'] == widget.selectedItem['imageUrl']
-    );
-    
-    // If for some reason the item isn't found, default to first item
+    _currentPage = _items.indexWhere((item) =>
+        item['name'] == widget.selectedItem['name'] &&
+        item['imageUrl'] == widget.selectedItem['imageUrl']);
     if (_currentPage < 0) _currentPage = 0;
-    
-    // Initialize page controller with the selected item's index
-    _pageController = PageController(initialPage: _currentPage);
+    _pageController = PageController(initialPage: _currentPage, viewportFraction: 0.8); // Use viewportFraction for carousel
   }
 
   @override
@@ -124,152 +116,26 @@ class _ExploreBuyScreenState extends State<ExploreBuyScreen> {
       body: Column(
         children: [
           Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: _items.length,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentPage = index;
-                });
-              },
-              itemBuilder: (context, index) {
-                final item = _items[index];
-                
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.all(16.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Selected item display
-                        Center(
-                          child: Column(
-                            children: [
-                              // Only apply Hero animation to the first selected item
-                              index == _items.indexWhere((i) => 
-                                i['name'] == widget.selectedItem['name'] && 
-                                i['imageUrl'] == widget.selectedItem['imageUrl']) 
-                              ? Hero(
-                                  tag: 'nft_image_${item['name']}',
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12.r),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: CachedNetworkImage(
-                                        imageUrl: item['imageUrl']!,
-                                        width: 350.w,
-                                        height: 350.w, // Square image
-                                        fit: BoxFit.cover,
-                                        errorWidget: (context, url, error) => Container(
-                                          color: Colors.grey[300],
-                                          child: Icon(
-                                            Icons.error,
-                                            color: Colors.grey[600],
-                                            size: 40.sp,
-                                          ),
-                                        ),
-                                        progressIndicatorBuilder: (context, url, progress) => Center(
-                                          child: CircularProgressIndicator(
-                                            value: progress.progress,
-                                            strokeWidth: 2.w,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  child: CachedNetworkImage(
-                                    imageUrl: item['imageUrl']!,
-                                    width: 350.w,
-                                    height: 350.w, // Square image
-                                    fit: BoxFit.cover,
-                                    errorWidget: (context, url, error) => Container(
-                                      color: Colors.grey[300],
-                                      child: Icon(
-                                        Icons.error,
-                                        color: Colors.grey[600],
-                                        size: 40.sp,
-                                      ),
-                                    ),
-                                    progressIndicatorBuilder: (context, url, progress) => Center(
-                                      child: CircularProgressIndicator(
-                                        value: progress.progress,
-                                        strokeWidth: 2.w,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              Gap(16.h),
-                              Text(
-                                item['name'] ?? 'Selected NFT',
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Gap(2.h),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Floor Price ",
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.greyLight,
-                                    ),
-                                  ),
-                                  Text(
-                                    item['price'] ?? '',
-                                    style: TextStyle(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Gap(8.h),
-                              Text(
-                                item['usdValue'] ?? '',
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+            child: _items.isEmpty
+                ? const Center(child: Text("No items selected"))
+                : AspectRatio(
+                    aspectRatio: 0.85,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: _items.length,
+                      physics: const ClampingScrollPhysics(),
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentPage = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        return _carouselView(index, _items);
+                      },
                     ),
                   ),
-                );
-              },
-            ),
           ),
-          
-          // Pagination indicator
-          if (_items.length > 1)
-            Padding(
-              padding: EdgeInsets.only(bottom: 16.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_items.length, (index) {
-                  return Container(
-                    width: 8.w,
-                    height: 8.h,
-                    margin: EdgeInsets.symmetric(horizontal: 4.w),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _currentPage == index 
-                          ? Colors.black 
-                          : Colors.grey.withOpacity(0.3),
-                    ),
-                  );
-                }),
-              ),
-            ),
+         
         ],
       ),
       bottomNavigationBar: Container(
@@ -330,7 +196,7 @@ class _ExploreBuyScreenState extends State<ExploreBuyScreen> {
               ),
             ),
             Gap(14.h),
-            Divider(
+           const Divider(
               color: AppColors.greyVeryLight,
               thickness: 1,
               height: 1,
@@ -340,7 +206,7 @@ class _ExploreBuyScreenState extends State<ExploreBuyScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Implement checkout logic
+
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(95.w, 48.h),
@@ -379,6 +245,75 @@ class _ExploreBuyScreenState extends State<ExploreBuyScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _carouselView(int index, List<Map<String, String>> items) {
+    return AnimatedBuilder(
+      animation: _pageController,
+      builder: (context, child) {
+        double value = 0.0;
+        if (_pageController.position.haveDimensions) {
+          value = index.toDouble() - (_pageController.page ?? 0);
+          value = (value * 0.038).clamp(-1, 1);
+        }
+        return Transform.rotate(
+          angle: pi * value,
+          child: _carouselCard(items[index]),
+        );
+      },
+    );
+  }
+
+  Widget _carouselCard(Map<String, String> data) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding:  EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
+          child: AspectRatio(
+            aspectRatio: 1, // Make the image square
+            child: Hero(
+              tag: 'nft_image_${data['name']}',
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(data['imageUrl']!),
+                    fit: BoxFit.cover,
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                        offset: Offset(0, 4),
+                        blurRadius: 4,
+                        color: Colors.black26)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            data['name'] ?? '',
+            style: const TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w500),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            data['price'] ?? '',
+            style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 15,
+                fontWeight: FontWeight.w500),
+          ),
+        )
+      ],
     );
   }
 }

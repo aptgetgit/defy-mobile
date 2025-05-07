@@ -186,43 +186,7 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Find all selected items
-                  final List<Map<String, String>> selectedItems = cartItems
-                      .asMap()
-                      .entries
-                      .where((entry) => _selectedItems[entry.key])
-                      .map((entry) => entry.value)
-                      .toList();
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NewScreen(selectedItems: selectedItems), // Pass selected items
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                ),
-                child: Text(
-                  'New Action',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 0), // Optionally, remove or adjust spacing
             Row(
               children: [
                 // Checkout button on the left
